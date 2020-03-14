@@ -86,12 +86,6 @@ lint/tmp/
 # lint/reports/
 
 #old rules
-#.gradle
-#/local.properties
-#/.idea/workspace.xml
-#/.idea/libraries
-#/build
-#/captures
 .DS_Store
 
 #custom
