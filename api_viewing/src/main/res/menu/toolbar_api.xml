@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/apiTBSearch"
+        android:title="@android:string/search_go"
+        android:icon="@drawable/ic_search_24"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="always|collapseActionView"/>
+    <item
+        android:id="@+id/apiTBSort"
+        android:title="@string/text_sort"
+        android:icon="@drawable/ic_sort_24"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/apiTBRefresh"
+        android:title="@string/text_refresh"
+        android:icon="@drawable/ic_refresh_24"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/apiTBManual"
+        android:icon="@drawable/ic_help_24"
+        android:title="@string/textManual"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/apiTBViewingTarget"
+        android:title="@string/avTBViewingTarget"
+        app:showAsAction="never"/>
+</menu>

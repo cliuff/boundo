@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="Main_WeChatLauncher_Toast_State_ShiftEnabled">เปิดใช้งานแล้วสองสามวินาทีที่จำเป็นสำหรับตัวเรียกใช้งาน</string>
+    <string name="Main_WeChatLauncher_Toast_State_ShiftDisabled">ตอนนี้ถูกปิดใช้งานสองสามวินาทีที่จำเป็นสำหรับตัวเรียกใช้งาน</string>
+</resources>

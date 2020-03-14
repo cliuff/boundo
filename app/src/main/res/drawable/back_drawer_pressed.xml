@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:end="20dp"
+        tools:targetApi="m">
+        <ripple android:radius="@dimen/radius"
+            android:color="?colorAccentBack">
+            <item android:id="@android:id/mask">
+                <shape android:shape="rectangle">
+                    <solid android:color="@android:color/transparent"/>
+                    <corners android:topRightRadius="50dp"
+                        android:bottomRightRadius="50dp"/>
+                </shape>
+            </item>
+            <item android:drawable="@drawable/back_drawer_basic"/>
+        </ripple>
+    </item>
+</layer-list>

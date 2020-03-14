@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mainFrame"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/mainNavHost"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/nav_main" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/mainTB"
+        android:layout_gravity="top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="@string/app_name" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        app:menu="@menu/drawer"
+        android:id="@+id/mainBottomNav"
+        app:layout_behavior="com.madness.collision.main.MyHideBottomViewOnScrollBehavior"
+        app:backgroundTint="?colorABackground"
+        app:elevation="0dp"
+        app:insetForeground="@null"
+        app:itemIconTint="@color/drawer_icon_states"
+        app:itemTextColor="@color/drawer_text_states"
+        android:layout_gravity="bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

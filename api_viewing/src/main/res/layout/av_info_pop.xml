@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:animateLayoutChanges="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/api_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/sdk_info_guideline_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="16dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/sdk_info_guideline_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="35dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/sdk_info_guideline_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="35dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/sdk_info_guideline_bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_end="0dp" />
+
+        <TextView
+            android:id="@+id/apiInfoVer"
+            android:textSize="10sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/sdk_info_guideline_bottom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:paddingTop="2dp"
+            android:textColor="?colorTextSub"
+            tools:text="v8.0"
+            tools:ignore="SmallSp" />
+
+        <include layout="@layout/av_info_pop_app"
+            android:id="@+id/avInfoPopApp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/sdk_info_guideline_start"
+            app:layout_constraintEnd_toStartOf="@id/sdk_info_guideline_end"
+            app:layout_constraintBottom_toTopOf="@id/apiInfoVer"/>
+
+        <include layout="@layout/av_info_pop_target"
+            android:id="@+id/sdk_info_api_min"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toTopOf="@id/avInfoPopApp"
+            app:layout_constraintEnd_toStartOf="@id/sdk_info_api_target"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="@id/sdk_info_guideline_start"
+            app:layout_constraintTop_toTopOf="@id/sdk_info_guideline_top"/>
+
+        <include layout="@layout/av_info_pop_target"
+            android:id="@+id/sdk_info_api_target"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toTopOf="@id/avInfoPopApp"
+            app:layout_constraintEnd_toEndOf="@id/sdk_info_guideline_end"
+            app:layout_constraintStart_toEndOf="@id/sdk_info_api_min"
+            app:layout_constraintTop_toTopOf="@id/sdk_info_guideline_top"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageButton
+        android:id="@+id/apiCapture"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:contentDescription="@null"
+        android:tint="?colorTextSub"
+        android:background="@drawable/res_circle"
+        android:backgroundTint="?colorAItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_share_24" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

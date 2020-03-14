@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- preference keys -->
+    <string name="avCategoryAPI" translatable="false">AVCategoryAPI</string>
+    <string name="avIncludeDisabled" translatable="false">AVIncludeDisabled</string>
+    <bool name="avIncludeDisabledDefault">false</bool>
+    <string name="avSweet" translatable="false">AVSweet</string>
+    <bool name="avSweetDefault">true</bool>
+    <!-- preference keys -->
+
+</resources>

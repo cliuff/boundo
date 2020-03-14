@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:scrollbarThumbVertical="@drawable/scrollbar_vertical"
+    android:requiresFadingEdge="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:id="@+id/instantContainer"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/instantIntroTile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/instantTileIntro"
+            android:textSize="18sp"
+            android:padding="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/instantRecyclerTile"
+            android:divider="@null"
+            android:scrollbars="none"
+            android:nestedScrollingEnabled="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/instantIntroShortcut"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/instant_manager_intro"
+            android:textSize="18sp"
+            android:padding="20dp"
+            android:layout_marginTop="35dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/instantRecyclerShortcut"
+            android:divider="@null"
+            android:scrollbars="none"
+            android:nestedScrollingEnabled="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

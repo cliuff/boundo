@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="Main_WeChatLauncher_Toast_State_ShiftEnabled">Bây giờ đã được bật, cần vài giây để launcher thực hiện</string>
+    <string name="Main_WeChatLauncher_Toast_State_ShiftDisabled">Bây giờ đã bị vô hiệu hóa, cần vài giây để launcher thực hiện</string>
+</resources>

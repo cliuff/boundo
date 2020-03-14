@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/apiContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/apiSwipeRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/avViewListContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <FrameLayout
+        android:id="@+id/apiDisplay"
+        app:layout_behavior="com.madness.collision.main.MyHideBottomViewOnScrollBehavior"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <HorizontalScrollView
+            android:scrollbars="none"
+            android:overScrollMode="never"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_gravity="end"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="10dp"
+                    app:cardBackgroundColor="?colorASurface"
+                    android:id="@+id/apiSpinnerDisplayBack"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <Spinner
+                        android:paddingTop="3dp"
+                        android:paddingBottom="3dp"
+                        android:paddingStart="18dp"
+                        android:paddingEnd="32dp"
+                        android:id="@+id/apiSpinnerDisplay"
+                        android:backgroundTint="?android:textColor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginEnd="10dp"
+                    app:cardBackgroundColor="?colorASurface"
+                    android:id="@+id/apiStatsBack"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:paddingTop="15dp"
+                        android:paddingBottom="15dp"
+                        android:paddingStart="18dp"
+                        android:paddingEnd="18dp"
+                        android:textAppearance="?attr/textAppearanceSubtitle1"
+                        android:text=""
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:gravity="center"
+                        android:id="@+id/apiStats"
+                        android:backgroundTint="?android:textColor"
+                        android:layout_width="75dp"
+                        android:layout_height="wrap_content"
+                        tools:ignore="HardcodedText" />
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
+
+    </FrameLayout>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

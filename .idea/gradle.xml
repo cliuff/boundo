@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="delegatedBuild" value="false" />
+        <option name="testRunner" value="PLATFORM" />
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/api_viewing" />
+            <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/audio_timer" />
+            <option value="$PROJECT_DIR$/buildSrc" />
+            <option value="$PROJECT_DIR$/cool_app" />
+            <option value="$PROJECT_DIR$/image_modifying" />
+            <option value="$PROJECT_DIR$/no_media" />
+            <option value="$PROJECT_DIR$/qq_contacts" />
+            <option value="$PROJECT_DIR$/school_timetable" />
+            <option value="$PROJECT_DIR$/themed_wallpaper" />
+            <option value="$PROJECT_DIR$/we_chat_evo" />
+            <option value="$PROJECT_DIR$/wearable" />
+          </set>
+        </option>
+        <option name="resolveModulePerSourceSet" value="false" />
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>

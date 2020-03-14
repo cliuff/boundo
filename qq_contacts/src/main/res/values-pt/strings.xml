@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="qc_manager_remove_all">Deletar tudo</string>
+    <string name="launcher_qqcontacts_getavatar_toast_fail">O carregamento da imagem falha</string>
+    <string name="launcher_qqcontacts_toast_input_notcomplete">Por favor, preencha todos os espaços em branco</string>
+    <string name="Launcher_QQContacts_Toast_Done_Text">Trabalho concluído, vá verificar por si mesmo</string>
+    <string name="launcher_qqcontacts_imageview_description_qq_contact_avatar">Foto do perfil de QQ Contact</string>
+    <string name="Launcher_QQContacts_EditText_Hint">Digite o número de QQ (inalterável)</string>
+    <string name="Launcher_QQContacts_EditText_LongLabel_Hint">Insira o nome</string>
+    <string name="Launcher_QQContacts_EditText_ShortLabel_Hint">Digite o nome para abreviar</string>
+</resources>

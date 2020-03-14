@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/CollisionBuild.iml" filepath="$PROJECT_DIR$/CollisionBuild.iml" group="CollisionBuild" />
+      <module fileurl="file://$PROJECT_DIR$/api_viewing/api_viewing.iml" filepath="$PROJECT_DIR$/api_viewing/api_viewing.iml" group="CollisionBuild/api_viewing" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="CollisionBuild/app" />
+      <module fileurl="file://$PROJECT_DIR$/audio_timer/audio_timer.iml" filepath="$PROJECT_DIR$/audio_timer/audio_timer.iml" group="CollisionBuild/audio_timer" />
+      <module fileurl="file://$PROJECT_DIR$/buildSrc/buildSrc.iml" filepath="$PROJECT_DIR$/buildSrc/buildSrc.iml" group="CollisionBuild/buildSrc" />
+      <module fileurl="file://$PROJECT_DIR$/cool_app/cool_app.iml" filepath="$PROJECT_DIR$/cool_app/cool_app.iml" group="CollisionBuild/cool_app" />
+      <module fileurl="file://$PROJECT_DIR$/image_modifying/image_modifying.iml" filepath="$PROJECT_DIR$/image_modifying/image_modifying.iml" group="CollisionBuild/image_modifying" />
+      <module fileurl="file://$PROJECT_DIR$/no_media/no_media.iml" filepath="$PROJECT_DIR$/no_media/no_media.iml" group="CollisionBuild/no_media" />
+      <module fileurl="file://$PROJECT_DIR$/qq_contacts/qq_contacts.iml" filepath="$PROJECT_DIR$/qq_contacts/qq_contacts.iml" group="CollisionBuild/qq_contacts" />
+      <module fileurl="file://$PROJECT_DIR$/school_timetable/school_timetable.iml" filepath="$PROJECT_DIR$/school_timetable/school_timetable.iml" group="CollisionBuild/school_timetable" />
+      <module fileurl="file://$PROJECT_DIR$/themed_wallpaper/themed_wallpaper.iml" filepath="$PROJECT_DIR$/themed_wallpaper/themed_wallpaper.iml" group="CollisionBuild/themed_wallpaper" />
+      <module fileurl="file://$PROJECT_DIR$/we_chat_evo/we_chat_evo.iml" filepath="$PROJECT_DIR$/we_chat_evo/we_chat_evo.iml" group="CollisionBuild/we_chat_evo" />
+      <module fileurl="file://$PROJECT_DIR$/wearable/wearable.iml" filepath="$PROJECT_DIR$/wearable/wearable.iml" group="CollisionBuild/wearable" />
+    </modules>
+  </component>
+</project>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="twWallpaperLight">Hình nền tươi sáng</string>
+    <string name="twWallpaperDark">Hình nền tối</string>
+    <string name="twDesc">Tính năng này được trình bày cho bạn dưới dạng hình nền sống.\nChuyển sang hình nền tối khi\n1. hệ thống Dark Theme được bật\n2. gói chủ đề tối trong cài đặt ứng dụng được đặt thành Lịch biểu và thời gian phù hợp</string>
+</resources>

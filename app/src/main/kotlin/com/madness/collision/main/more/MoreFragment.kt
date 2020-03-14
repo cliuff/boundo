@@ -1,0 +1,107 @@
+package com.madness.collision.main.more
+
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.LinearLayout
+import androidx.appcompat.widget.Toolbar
+import androidx.cardview.widget.CardView
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.observe
+import androidx.navigation.fragment.findNavController
+import com.google.android.material.card.MaterialCardView
+import com.madness.collision.Democratic
+import com.madness.collision.R
+import com.madness.collision.main.ImmortalActivity
+import com.madness.collision.main.MainViewModel
+import com.madness.collision.settings.SettingsFunc
+import com.madness.collision.util.*
+
+class MoreFragment : Fragment(), Democratic, View.OnClickListener {
+    companion object {
+        @JvmStatic
+        fun newInstance() = MoreFragment()
+    }
+
+    private val viewModel: MainViewModel by activityViewModels()
+    private val exterior = mainApplication.exterior
+    private var exteriorTransparency: Int = 0xFF
+
+    override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
+        toolbar.setTitle(R.string.app_name)
+        return true
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val context = context
+        var res = R.layout.fragment_more
+        if (context != null) {
+            SettingsFunc.updateLanguage(context)
+            val dp480 = X.size(context, 500f, X.DP)
+            val dimension = X.getCurrentAppResolution(context)
+            if (context.spanJustMore){
+                val occupiedWidth = viewModel.sideNavWidth
+                if (dimension.x - occupiedWidth >= dp480) res = R.layout.fragment_more_lm
+            } else if (dimension.x >= dp480) res = R.layout.fragment_more_lm
+        }
+        return inflater.inflate(res, container, false)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        val mViews = view ?: return
+        initData()
+        bindData(mViews)
+    }
+
+    private fun initData(){
+        if (exterior) exteriorTransparency = resources.getInteger(R.integer.exteriorTransparency)
+        democratize(viewModel)
+    }
+
+    private fun bindData(mViews: View){
+        viewModel.contentWidthTop.observe(viewLifecycleOwner){
+            mViews.findViewById<LinearLayout>(R.id.moreContainer)?.alterPadding(top = it)
+        }
+        viewModel.contentWidthBottom.observe(viewLifecycleOwner){
+            mViews.findViewById<LinearLayout>(R.id.moreContainer)?.alterPadding(bottom = it)
+        }
+        val cardInstant = mViews.findViewById<MaterialCardView>(R.id.moreInstant)
+        val isInstantUnavailable = X.belowOff(X.N)
+        if (isInstantUnavailable) cardInstant.visibility = View.GONE
+        val cardSettings = mViews.findViewById<MaterialCardView>(R.id.moreSettings)
+        val cardUnitManager = mViews.findViewById<MaterialCardView>(R.id.moreUnitsManager)
+        prepareCards(if (isInstantUnavailable) null else cardInstant, cardSettings, cardUnitManager)
+        cardSettings.setOnLongClickListener {
+            Intent(context, ImmortalActivity::class.java).run {
+                putExtra(P.IMMORTAL_EXTRA_LAUNCH_MODE, P.IMMORTAL_EXTRA_LAUNCH_MODE_MORTAL)
+                startActivity(this)
+            }
+            true
+        }
+    }
+
+    private fun prepareCards(vararg cards: CardView?){
+        for (it in cards) {
+            it ?: continue
+            it.setOnClickListener(this)
+            if (exterior) {
+                val c = it.cardBackgroundColor
+                it.setCardBackgroundColor(c.withAlpha(exteriorTransparency))
+            }
+        }
+    }
+
+    override fun onClick(v: View) {
+        when (v.id) {
+            R.id.moreInstant -> MoreFragmentDirections.actionMoreFragmentToInstantFragment()
+            R.id.moreUnitsManager -> MoreFragmentDirections.actionMoreFragmentToUnitsManagerFragment()
+            R.id.moreSettings -> MoreFragmentDirections.actionMoreFragmentToSettingsFragment()
+            else -> null
+        }?.let { findNavController().navigate(it) }
+    }
+}

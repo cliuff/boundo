@@ -1,0 +1,42 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="10dp"
+    android:id="@+id/appInfoWidgetRL"
+    android:background="@drawable/res_dialog_md2"
+    android:backgroundTint="@color/surfaceAWidget"
+    android:elevation="2dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_centerInParent="true"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ProgressBar
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:id="@+id/appInfoWidgetLoading"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/appInfoWidgetLogo"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/appInfoWidgetInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="15dp"
+            android:textSize="18sp"
+            android:textColor="@color/onSurfaceAWidget"
+            tools:text="@tools:sample/full_names" />
+    </LinearLayout>
+
+</RelativeLayout>

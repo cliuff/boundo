@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.preference.PreferenceCategory android:title="@string/prefExteriorBackgrounds">
+        <androidx.preference.Preference
+            android:key="@string/prefExteriorKeyBack"
+            android:title="@string/prefExteriorBack"/>
+        <androidx.preference.Preference
+            android:key="@string/prefExteriorKeyBackDark"
+            android:title="@string/prefExteriorBackDark"/>
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory android:title="@string/prefExteriorThemes">
+        <androidx.preference.Preference
+            android:key="@string/prefExteriorKeyLightTheme"
+            android:title="@string/prefExteriorLightTheme"/>
+
+        <androidx.preference.Preference
+            android:key="@string/prefExteriorKeyDarkTheme"
+            android:title="@string/prefExteriorDarkTheme"/>
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory android:title="@string/prefExteriorApplyDark">
+        <androidx.preference.Preference
+            android:key="@string/prefExteriorKeyDarkPlan"
+            android:title="@string/prefExteriorDarkPlan"/>
+        <androidx.preference.Preference
+            android:key="@string/prefExteriorKeyDarkPlanScheduleStart"
+            android:title="@string/prefExteriorDarkPlanScheduleStart"/>
+        <androidx.preference.Preference
+            android:key="@string/prefExteriorKeyDarkPlanScheduleEnd"
+            android:title="@string/prefExteriorDarkPlanScheduleEnd"/>
+
+        <androidx.preference.SwitchPreference
+            android:summaryOn="@string/prefExteriorDarkByBatterySaverSummaryOn"
+            android:summaryOff="@string/prefExteriorDarkByBatterySaverSummaryOff"
+            android:defaultValue="@bool/prefExteriorDefaultDarkByBatterySaver"
+            android:key="@string/prefExteriorKeyDarkByBatterySaver"
+            android:title="@string/prefExteriorDarkByBatterySaver"/>
+        <androidx.preference.Preference
+            android:key="@string/prefExteriorKeyForceDarkDesc"
+            android:icon="@drawable/ic_info_24_special"
+            app:title="@string/prefExteriorForceDarkDesc"/>
+    </androidx.preference.PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/ttTimeTBRestore"
+        android:icon="@drawable/ic_restore_24"
+        app:showAsAction="ifRoom"
+        android:title="@string/text_reset"/>
+
+    <item
+        android:id="@+id/ttTimeTBDone"
+        android:icon="@drawable/ic_done_24"
+        app:showAsAction="always"
+        android:title="@string/text_done"/>
+</menu>

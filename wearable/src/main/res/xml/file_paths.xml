@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <external-path
+        name="externalStorage"
+        path="."/>
+    <cache-path
+        name="privateCache"
+        path="."/>
+    <files-path
+        name="privateFiles"
+        path="."/>
+    <external-cache-path
+        name="publicCache"
+        path="."/>
+    <external-files-path
+        name="publicFiles"
+        path="."/>
+</paths>

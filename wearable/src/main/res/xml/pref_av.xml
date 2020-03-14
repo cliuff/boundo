@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <androidx.preference.PreferenceCategory
+        android:key="@string/avCategoryAPI"
+        android:title="@string/apiViewing">
+        <androidx.preference.SwitchPreference
+            android:defaultValue="@bool/avIncludeDisabledDefault"
+            android:key="@string/avIncludeDisabled"
+            android:title="@string/avPrefIncludeDisabled"/>
+        <androidx.preference.SwitchPreference
+            android:defaultValue="@bool/avSweetDefault"
+            android:key="@string/avSweet"
+            android:title="@string/avPrefSweet"/>
+    </androidx.preference.PreferenceCategory>
+</androidx.preference.PreferenceScreen>

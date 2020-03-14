@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list android:opacity="translucent" xmlns:android="http://schemas.android.com/apk/res/android">
+  <item>
+    <shape android:shape="rectangle">
+      <size android:width="100dp" android:height="100dp"/>
+      <solid android:color="@android:color/transparent"/>
+    </shape>
+  </item>
+  <item
+      android:left="15dp"
+      android:top="15dp"
+      android:right="15dp"
+      android:bottom="15dp">
+    <shape android:shape="oval" android:tint="?colorAccentBack"/>
+  </item>
+  <item
+      android:left="35dp"
+      android:top="40dp"
+      android:right="55dp"
+      android:bottom="50dp">
+    <shape android:shape="oval" android:tint="?colorAccent"/>
+  </item>
+  <item android:drawable="@drawable/ic_landscape_24_special"
+      android:left="15dp"
+      android:top="30dp"
+      android:right="15dp"
+      android:bottom="0dp">
+  </item>
+</layer-list>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nm_item_action_warning">确定要隐藏这些媒体文件？该操作不可撤销。</string>
+</resources>

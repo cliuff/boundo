@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="themeId" format="reference"/>
+<!--    Having a primary color that is close to black. Dark themes are tailored for use in low light environment-->
+    <attr name="isDarkTheme" format="boolean"/>
+<!--    Having a primary color that is nearly white. Pale themes use black text color, while other themes use white text color -->
+    <attr name="isPaleTheme" format="boolean"/>
+    <attr name="colorAPrimary" format="color"/>
+    <attr name="colorASecondary" format="color"/>
+    <attr name="colorABackground" format="color"/>
+    <attr name="colorASurface" format="color"/>
+    <attr name="colorAError" format="color"/>
+    <attr name="colorAItem" format="color"/>
+    <attr name="colorAOnPrimary" format="color"/>
+    <attr name="colorAOnSecondary" format="color"/>
+    <attr name="colorAOnBackground" format="color"/>
+    <attr name="colorAOnSurface" format="color"/>
+    <attr name="colorAOnError" format="color"/>
+    <attr name="colorAOnItem" format="color"/>
+    <attr name="colorIconStateful" format="color"/>
+    <attr name="colorIcon" format="color"/>
+    <attr name="colorIconDeactivated" format="color"/>
+    <attr name="colorAccentBack" format="color"/>
+    <attr name="colorTb" format="color"/>
+    <attr name="colorStroke" format="color"/>
+    <attr name="colorTextSub" format="color"/>
+    <attr name="colorApiPopItemBack" format="color"/>
+    <attr name="colorApiLegacyBack" format="color"/>
+    <attr name="colorTtAm" format="color"/>
+    <attr name="colorTtPm" format="color"/>
+    <attr name="colorTtEve" format="color"/>
+    <attr name="colorActionAlert" format="color"/>
+    <attr name="colorActionAlertBack" format="color"/>
+    <attr name="colorActionPass" format="color"/>
+    <attr name="colorScrollbar" format="color"/>
+</resources>

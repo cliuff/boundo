@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="@string/main_updates"
+        android:icon="@drawable/ic_update_24"
+        android:id="@id/updatesFragment"/>
+
+    <item android:title="@string/units"
+        android:icon="@drawable/ic_extension_24"
+        android:id="@id/unitsFragment"/>
+
+    <item
+        android:title="@string/main_more"
+        android:icon="@drawable/ic_more_horiz_24"
+        android:id="@id/moreFragment"/>
+</menu>

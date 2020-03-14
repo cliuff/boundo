@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/avUpdatesRecentsTitle"
+        android:visibility="gone"
+        android:text="@string/av_updates_recents"
+        android:drawableStart="@drawable/res_circle"
+        android:drawableTint="@color/androidRobotGreen"
+        android:drawablePadding="20dp"
+        android:padding="20dp"
+        android:textSize="18sp"
+        android:textColor="?android:textColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/avUpdatesRecentsListContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/avUpdatesRecentsMore"
+        android:visibility="gone"
+        android:text="@string/av_updates_view_more"
+        android:drawableStart="@drawable/ic_more_horiz_24"
+        android:drawableTint="?android:textColor"
+        android:drawablePadding="20dp"
+        android:foreground="?android:attr/selectableItemBackgroundBorderless"
+        android:padding="20dp"
+        android:textSize="15sp"
+        android:textColor="?android:textColor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</LinearLayout>

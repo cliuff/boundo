@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- config icon color res -->
+    <color name="shortcut_wechat_scanner_back">#ECF8FC</color>
+    <color name="logo_settings_back">#FF1A73E8</color>
+    <color name="shortcut_api_back">#FFF5F5F5</color>
+    <color name="ic_apk_sharing_back">#3DDC84</color>
+    <!-- config icon color res -->
+
+    <color name="backgroundAWidget">#FFFFFFFF</color>
+    <color name="surfaceAWidget">#FFFFFFFF</color>
+    <color name="onBackgroundAWidget">#FF000000</color>
+    <color name="onSurfaceAWidget">#FF000000</color>
+
+    <color name="androidRobotGreen">#FF3DDC84</color>
+    <color name="androidRobotGreenLight4AV">#FFF4FFDB</color>
+    <color name="androidRobotGreenLight">#FFE0FFD6</color>
+    <color name="androidRobotGreenBack">#FFF7FFE9</color>
+
+    <!-- default white theme -->
+    <color name="primaryAWhite">#FFBC9BFF</color>
+    <color name="primaryVBackAWhite">#FFFAF0FF</color>
+    <color name="secondaryAWhite">#FFBC9BFF</color>
+    <color name="backgroundAWhite">#FFFFFFFF</color>
+    <color name="surfaceAWhite">#FFFFFFFF</color>
+    <color name="errorAWhite">#FFB00020</color>
+    <color name="itemAWhite">#FFF5F5F5</color>
+    <color name="onPrimaryAWhite">#FF000000</color>
+    <color name="onSecondaryAWhite">#FF000000</color>
+    <color name="onBackgroundAWhite">#FF000000</color>
+    <color name="onSurfaceAWhite">#FF000000</color>
+    <color name="onErrorAWhite">#FFFFFFFF</color>
+    <color name="onItemAWhite">#FF000000</color>
+    <color name="apiLegacyBackAWhite">#A0FFFFFF</color>
+    <color name="toolbarBackAWhite">#F4FFFFFF</color>
+    <color name="iconAWhite">#FF80868B</color>
+    <color name="iconDeactivatedAWhite">#FFC0C3C9</color>
+    <color name="actionAlertAWhite">#FFF03030</color>
+    <color name="actionAlertVBackAWhite">#FFFFE9FA</color>
+    <color name="actionPassAWhite">#FF10A070</color>
+    <color name="hintAWhite">#FF707070</color>
+    <color name="strokeAWhite">#FFC0C0C0</color>
+    <color name="textAWhite">#FF303030</color>
+    <color name="textSubAWhite">#FF757575</color>
+    <color name="apiPopItemBackAWhite">@color/androidRobotGreenLight4AV</color>
+    <color name="ttAmAWhite">#FF7BCED5</color>
+    <color name="ttPmAWhite">#FFF8A070</color>
+    <color name="ttEveAWhite">#FFBC9BFF</color>
+    <color name="scrollbarAWhite">#90C0C0C0</color>
+
+    <!-- Chinese red theme -->
+    <color name="primaryACnRed">#FFF0E5E9</color>
+    <color name="primaryVBackACnRed">#FFC9806E</color>
+    <color name="secondaryACnRed">#FFC9806E</color>
+    <color name="backgroundACnRed">#FFAA381E</color>
+    <color name="surfaceACnRed">#FFB75E49</color>
+    <color name="errorACnRed">#FFFF0000</color>
+    <color name="itemACnRed">#FFA05040</color>
+    <color name="onPrimaryACnRed">#FFFFFFFF</color>
+    <color name="onSecondaryACnRed">#FFFFFFFF</color>
+    <color name="onBackgroundACnRed">#FFFFFFFF</color>
+    <color name="onSurfaceACnRed">#FFFFFFFF</color>
+    <color name="onErrorACnRed">#FFFFFFFF</color>
+    <color name="onItemACnRed">#FFFFFFFF</color>
+    <color name="apiLegacyBackACnRed">#A0FFFFFF</color>
+    <color name="toolbarBackACnRed">#F4AA381E</color>
+    <color name="iconACnRed">#FFCFCFCF</color>
+    <color name="iconDeactivatedACnRed">#FF909399</color>
+    <color name="actionAlertACnRed">#FFFF9090</color>
+    <color name="actionAlertVBackACnRed">#FFA01010</color>
+    <color name="actionPassACnRed">#FF80D0A0</color>
+    <color name="hintACnRed">#FFC0C0C0</color>
+    <color name="strokeACnRed">#FFB0502E</color>
+    <color name="textACnRed">#FFFFFFFF</color>
+    <color name="textSubACnRed">#FFDFDFDF</color>
+    <color name="apiPopItemBackACnRed">#FFC0806E</color>
+    <color name="ttAmACnRed">#FF5B8E95</color>
+    <color name="ttPmACnRed">#FFE07030</color>
+    <color name="ttEveACnRed">#FFB050E0</color>
+    <color name="scrollbarACnRed">#90C0C0C0</color>
+
+    <!-- black theme -->
+    <color name="primaryABlack">#FFD0B5FF</color>
+    <color name="primaryVBackABlack">#FF200540</color>
+    <color name="secondaryABlack">#FFD0B5FF</color>
+    <color name="backgroundABlack">#FF000000</color>
+    <color name="surfaceABlack">#FF212121</color>
+    <color name="errorABlack">#FFCF6679</color>
+    <color name="itemABlack">#FF151515</color>
+    <color name="onPrimaryABlack">#FFFFFFFF</color>
+    <color name="onSecondaryABlack">#FFFFFFFF</color>
+    <color name="onBackgroundABlack">#FFFFFFFF</color>
+    <color name="onSurfaceABlack">#FFFFFFFF</color>
+    <color name="onErrorABlack">#FF000000</color>
+    <color name="onItemABlack">#FFFFFFFF</color>
+    <color name="apiLegacyBackABlack">#A0000000</color>
+    <color name="toolbarBackABlack">#F4000000</color>
+    <color name="iconABlack">#FFC0C6CB</color>
+    <color name="iconDeactivatedABlack">#FF505965</color>
+    <color name="actionAlertABlack">#FFFFB5B5</color>
+    <color name="actionAlertVBackABlack">#4B0707</color>
+    <color name="actionPassABlack">#FF90F0B0</color>
+    <color name="hintABlack">#FF505050</color>
+    <color name="strokeABlack">#FF505050</color>
+    <color name="textABlack">#FFE0E0E0</color>
+    <color name="textSubABlack">#FFB6B6B6</color>
+    <color name="apiPopItemBackABlack">#FF353535</color>
+    <color name="ttAmABlack">#FF205060</color>
+    <color name="ttPmABlack">#FF904020</color>
+    <color name="ttEveABlack">#FF502060</color>
+    <color name="scrollbarABlack">#90404040</color>
+
+    <!-- Material Design dark  -->
+    <color name="primaryABlackGray">#FFD0A5FF</color>
+    <color name="primaryVBackABlackGray">#FF200540</color>
+    <color name="secondaryABlackGray">#FFD0A5FF</color>
+    <color name="backgroundABlackGray">#FF121212</color>
+    <color name="surfaceABlackGray">#FF313131</color>
+    <color name="errorABlackGray">#FFCF6679</color>
+    <color name="itemABlackGray">#FF212121</color>
+    <color name="onPrimaryABlackGray">#FFFFFFFF</color>
+    <color name="onSecondaryABlackGray">#FFFFFFFF</color>
+    <color name="onBackgroundABlackGray">#FFFFFFFF</color>
+    <color name="onSurfaceABlackGray">#FFFFFFFF</color>
+    <color name="onErrorABlackGray">#FF000000</color>
+    <color name="onItemABlackGray">#FFFFFFFF</color>
+    <color name="apiLegacyBackABlackGray">#A0000000</color>
+    <color name="toolbarBackABlackGray">#F4121212</color>
+    <color name="iconABlackGray">#FFA0A6AB</color>
+    <color name="iconDeactivatedABlackGray">#FF505965</color>
+    <color name="actionAlertABlackGray">#FFFFB5B5</color>
+    <color name="actionAlertVBackABlackGray">#4B0707</color>
+    <color name="actionPassABlackGray">#FFA0F3B7</color>
+    <color name="hintABlackGray">#FF707070</color>
+    <color name="strokeABlackGray">#FF707070</color>
+    <color name="textABlackGray">#FFE0E0E0</color>
+    <color name="textSubABlackGray">#FFB6B6B6</color>
+    <color name="apiPopItemBackABlackGray">#FF454545</color>
+    <color name="ttAmABlackGray">#FF205060</color>
+    <color name="ttPmABlackGray">#FF904020</color>
+    <color name="ttEveABlackGray">#FF502060</color>
+    <color name="scrollbarABlackGray">#90505050</color>
+
+</resources>

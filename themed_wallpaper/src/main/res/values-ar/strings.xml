@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="twWallpaperLight">خلفية مشرق</string>
+    <string name="twWallpaperDark">خلفية الظلام</string>
+    <string name="twDesc">يتم تقديم هذه الميزة لك كخلفية حية.\nقم بالتبديل إلى الخلفية المظلمة عندما\1n. نظام Dark Theme قيد التشغيل\2n. تم تعيين خطة سمة مظلمة في إعدادات التطبيق على الجدول الزمني والوقت المناسب</string>
+</resources>

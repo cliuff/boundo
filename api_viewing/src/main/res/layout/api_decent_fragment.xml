@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/apiDecentBack"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/apiDecentShade"
+        android:src="#A0000000"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <ImageView
+        android:id="@+id/apiDecentLogo"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintEnd_toEndOf="@id/apiDecentGE"
+        app:layout_constraintStart_toStartOf="@id/apiDecentGS"
+        app:layout_constraintTop_toTopOf="@id/apiDecentGT"
+        app:layout_constraintBottom_toTopOf="@id/apiDecentLabel"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:paddingStart="30dp"
+        android:paddingEnd="30dp"
+        android:gravity="center"
+        android:id="@+id/apiDecentLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/apiDecentGE"
+        app:layout_constraintStart_toStartOf="@id/apiDecentGS"
+        app:layout_constraintTop_toBottomOf="@id/apiDecentLogo"
+        app:layout_constraintBottom_toTopOf="@id/apiDecentVer"
+        tools:text="@tools:sample/full_names" />
+
+    <TextView
+        android:id="@+id/apiDecentVer"
+        android:paddingStart="30dp"
+        android:paddingEnd="30dp"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@id/apiDecentGE"
+        app:layout_constraintStart_toStartOf="@id/apiDecentGS"
+        app:layout_constraintTop_toBottomOf="@id/apiDecentLabel"
+        app:layout_constraintBottom_toTopOf="@id/apiDecentChipsScroll"
+        tools:text="v8.0" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/apiDecentGT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="5dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/apiDecentGB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="20dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/apiDecentGS"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="10dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/apiDecentGE"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="10dp" />
+
+    <HorizontalScrollView
+        android:id="@+id/apiDecentChipsScroll"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@id/apiDecentGB"
+        app:layout_constraintTop_toBottomOf="@id/apiDecentVer">
+
+        <LinearLayout
+            android:layout_gravity="center_horizontal"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.chip.ChipGroup
+                app:singleLine="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/apiDecentChipAPI"
+                    style="@style/apiDecentChipAPI"
+                    app:chipIcon="@drawable/ic_api_vector" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/apiDecentChipVer"
+                    style="@style/apiDecentChipAPI"
+                    app:chipIcon="@drawable/ic_android_robot_round" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/apiDecentChipCodeName"
+                    style="@style/apiDecentChipAPI" />
+
+            </com.google.android.material.chip.ChipGroup>
+
+        </LinearLayout>
+
+
+    </HorizontalScrollView>
+
+    <ImageView
+        android:id="@+id/apiDecentHeart"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:alpha="0.5"
+        android:src="@drawable/ic_logo_fore_vector"
+        android:tint="@android:color/white"
+        app:layout_constraintBottom_toTopOf="@id/apiDecentGB"
+        app:layout_constraintEnd_toStartOf="@id/apiDecentGE"
+        app:layout_constraintStart_toStartOf="@id/apiDecentGS" />
+
+    <TextView
+        android:id="@+id/apiDecentAPILabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:textSize="12sp"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toTopOf="@id/apiDecentHeart"
+        app:layout_constraintEnd_toStartOf="@id/apiDecentGE"
+        app:layout_constraintStart_toStartOf="@id/apiDecentGS" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="themeId" format="reference"/>
+    <attr name="colorAPrimary" format="color"/>
+    <attr name="colorASecondary" format="color"/>
+    <attr name="colorABackground" format="color"/>
+    <attr name="colorASurface" format="color"/>
+    <attr name="colorAError" format="color"/>
+    <attr name="colorAOnPrimary" format="color"/>
+    <attr name="colorAOnSecondary" format="color"/>
+    <attr name="colorAOnBackground" format="color"/>
+    <attr name="colorAOnSurface" format="color"/>
+    <attr name="colorAOnError" format="color"/>
+    <attr name="colorIconStateful" format="color"/>
+    <attr name="colorIcon" format="color"/>
+    <attr name="colorIconDeactivated" format="color"/>
+    <attr name="colorAccentBack" format="color"/>
+    <attr name="colorStroke" format="color"/>
+    <attr name="colorTextSub" format="color"/>
+    <attr name="colorActionAlert" format="color"/>
+    <attr name="colorActionAlertBack" format="color"/>
+    <attr name="colorActionPass" format="color"/>
+</resources>

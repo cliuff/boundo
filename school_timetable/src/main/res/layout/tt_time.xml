@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView android:animateLayoutChanges="true"
+    android:requiresFadingEdge="vertical"
+    android:scrollbarThumbVertical="@drawable/scrollbar_vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/ttTimeDisplayBack"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ttTimeContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="60dp">
+
+        <TextView
+            android:id="@+id/ttTimeTextDurationClass"
+            android:text="@string/ttTimeTextClassDuration"
+            android:textColor="?android:textColor"
+            android:textSize="20sp"
+            android:paddingStart="40dp"
+            android:paddingEnd="0dp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ttTimeInputLayoutDurationClass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/ttTimeTextDurationClass"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:boxStrokeColor="?colorStroke"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:textColorHint="?android:textColorHint"
+            android:hint="@string/ics_TextView_set_ClassTime_text">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ttTimeInputDurationClass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="200dp"
+                android:textColor="?android:textColor"
+                android:hint="@string/ics_TextView_set_ClassTime_text"
+                android:textColorHint="@android:color/transparent"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:selectAllOnFocus="true"
+                android:inputType="number" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/ttTimeTextDurationBreak"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ics_tv_break_duration"
+            android:textColor="?android:textColor"
+            android:textSize="20sp"
+            android:paddingStart="40dp"
+            android:paddingEnd="0dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/ttTimeInputLayoutDurationClass" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ttTimeInputLayoutDurationBreakShort"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/ttTimeTextDurationBreak"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/ttTimeInputLayoutDurationBreakLong"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:boxStrokeColor="?colorStroke"
+            android:textColorHint="?android:textColorHint"
+            android:hint="@string/ics_TextView_InferiorBreakTime">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ttTimeInputDurationBreakShort"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="130dp"
+                android:textColor="?android:textColor"
+                android:hint="@string/ics_TextView_InferiorBreakTime"
+                android:textColorHint="@android:color/transparent"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:selectAllOnFocus="true"
+                android:inputType="number" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ttTimeInputLayoutDurationBreakLong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/ttTimeTextDurationBreak"
+            app:layout_constraintStart_toEndOf="@id/ttTimeInputLayoutDurationBreakShort"
+            app:layout_constraintEnd_toEndOf="parent"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:boxStrokeColor="?colorStroke"
+            android:textColorHint="?android:textColorHint"
+            android:hint="@string/ics_TextView_SuperiorBreakTime">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ttTimeInputDurationBreakLong"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="130dp"
+                android:textColor="?android:textColor"
+                android:hint="@string/ics_TextView_SuperiorBreakTime"
+                android:textColorHint="@android:color/transparent"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:selectAllOnFocus="true"
+                android:inputType="number" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/ttTimeTextDurationBreakInstruction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:paddingStart="40dp"
+            android:paddingEnd="40dp"
+            android:textColor="?colorAccent"
+            android:text="@string/ics_TextView_ChooseBreakTime"
+            app:layout_constraintTop_toBottomOf="@id/ttTimeInputLayoutDurationBreakShort" />
+
+        <TextView
+            android:id="@+id/ttTimeTextDurationBreakMorning"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ics_TextView_MorningBreakTimeInstruction_Text"
+            android:textColor="?android:textColor"
+            android:textSize="18sp"
+            android:layout_marginTop="12dp"
+            android:paddingStart="40dp"
+            android:paddingEnd="0dp"
+            app:layout_constraintTop_toBottomOf="@id/ttTimeTextDurationBreakInstruction" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ttTimeInputLayoutDurationBreakMorningShort"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/ttTimeTextDurationBreakMorning"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/ttTimeInputLayoutDurationBreakMorningLong"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:boxStrokeColor="?colorStroke"
+            android:textColorHint="?android:textColorHint"
+            android:hint="@string/ics_TextView_InferiorBreakTime">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ttTimeInputDurationBreakMorningShort"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="130dp"
+                android:textColor="?android:textColor"
+                android:hint="@string/ics_TextView_InferiorBreakTime"
+                android:textColorHint="@android:color/transparent"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:selectAllOnFocus="true"
+                android:inputType="number" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ttTimeInputLayoutDurationBreakMorningLong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/ttTimeTextDurationBreakMorning"
+            app:layout_constraintStart_toEndOf="@id/ttTimeInputLayoutDurationBreakMorningShort"
+            app:layout_constraintEnd_toEndOf="parent"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:boxStrokeColor="?colorStroke"
+            android:textColorHint="?android:textColorHint"
+            android:hint="@string/ics_TextView_SuperiorBreakTime">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ttTimeInputDurationBreakMorningLong"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="130dp"
+                android:textColor="?android:textColor"
+                android:hint="@string/ics_TextView_SuperiorBreakTime"
+                android:textColorHint="@android:color/transparent"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:selectAllOnFocus="true"
+                android:inputType="number" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/ttTimeTextDurationBreakAfternoon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ics_TextView_AfternoonBreakTimeInstruction_Text"
+            android:textColor="?android:textColor"
+            android:textSize="18sp"
+            android:layout_marginTop="12dp"
+            android:paddingStart="40dp"
+            android:paddingEnd="0dp"
+            app:layout_constraintTop_toBottomOf="@id/ttTimeInputLayoutDurationBreakMorningShort" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ttTimeInputLayoutDurationBreakAfternoonShort"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/ttTimeTextDurationBreakAfternoon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/ttTimeInputLayoutDurationBreakAfternoonLong"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:boxStrokeColor="?colorStroke"
+            android:textColorHint="?android:textColorHint"
+            android:hint="@string/ics_TextView_InferiorBreakTime">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ttTimeInputDurationBreakAfternoonShort"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="130dp"
+                android:textColor="?android:textColor"
+                android:hint="@string/ics_TextView_InferiorBreakTime"
+                android:textColorHint="@android:color/transparent"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:selectAllOnFocus="true"
+                android:inputType="number" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ttTimeInputLayoutDurationBreakAfternoonLong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/ttTimeTextDurationBreakAfternoon"
+            app:layout_constraintStart_toEndOf="@id/ttTimeInputLayoutDurationBreakAfternoonShort"
+            app:layout_constraintEnd_toEndOf="parent"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:boxStrokeColor="?colorStroke"
+            android:textColorHint="?android:textColorHint"
+            android:hint="@string/ics_TextView_SuperiorBreakTime">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ttTimeInputDurationBreakAfternoonLong"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="130dp"
+                android:textColor="?android:textColor"
+                android:hint="@string/ics_TextView_SuperiorBreakTime"
+                android:textColorHint="@android:color/transparent"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:selectAllOnFocus="true"
+                android:inputType="number" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/ttTimeTextDurationBreakEvening"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ics_TextView_EveningBreakTimeInstruction_Text"
+            android:textColor="?android:textColor"
+            android:textSize="18sp"
+            android:layout_marginTop="12dp"
+            android:paddingStart="40dp"
+            android:paddingEnd="0dp"
+            app:layout_constraintTop_toBottomOf="@id/ttTimeInputLayoutDurationBreakAfternoonShort" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ttTimeInputLayoutDurationBreakEveningShort"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/ttTimeTextDurationBreakEvening"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/ttTimeInputLayoutDurationBreakEveningLong"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:boxStrokeColor="?colorStroke"
+            android:textColorHint="?android:textColorHint"
+            android:hint="@string/ics_TextView_InferiorBreakTime">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ttTimeInputDurationBreakEveningShort"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="130dp"
+                android:textColor="?android:textColor"
+                android:hint="@string/ics_TextView_InferiorBreakTime"
+                android:textColorHint="@android:color/transparent"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:selectAllOnFocus="true"
+                android:inputType="number" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ttTimeInputLayoutDurationBreakEveningLong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/ttTimeTextDurationBreakEvening"
+            app:layout_constraintStart_toEndOf="@id/ttTimeInputLayoutDurationBreakEveningShort"
+            app:layout_constraintEnd_toEndOf="parent"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:boxStrokeColor="?colorStroke"
+            android:textColorHint="?android:textColorHint"
+            android:hint="@string/ics_TextView_SuperiorBreakTime">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ttTimeInputDurationBreakEveningLong"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="130dp"
+                android:textColor="?android:textColor"
+                android:hint="@string/ics_TextView_SuperiorBreakTime"
+                android:textColorHint="@android:color/transparent"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:selectAllOnFocus="true"
+                android:inputType="number" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ttTimePickDateLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            app:boxStrokeColor="?colorStroke"
+            app:layout_constraintTop_toBottomOf="@id/ttTimeInputLayoutDurationBreakEveningShort"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:hint="@string/ics_Button_set_date"
+            android:textColorHint="?android:textColorHint">
+
+            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                android:id="@+id/ttTimePickDate"
+                android:editable="false"
+                android:hint="@string/ics_Button_set_date"
+                android:textColorHint="@android:color/transparent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ttTimePickTimeAmLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            app:boxStrokeColor="?colorStroke"
+            app:layout_constraintTop_toBottomOf="@id/ttTimePickDateLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:hint="@string/ics_Button_set_time_morning"
+            android:textColorHint="?android:textColorHint">
+
+            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                android:id="@+id/ttTimePickTimeAm"
+                android:editable="false"
+                android:hint="@string/ics_Button_set_time_morning"
+                android:textColorHint="@android:color/transparent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ttTimePickTimePmLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            app:boxStrokeColor="?colorStroke"
+            app:layout_constraintTop_toBottomOf="@id/ttTimePickTimeAmLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:hint="@string/ics_Button_set_time_afternoon"
+            android:textColorHint="?android:textColorHint">
+
+            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                android:id="@+id/ttTimePickTimePm"
+                android:editable="false"
+                android:hint="@string/ics_Button_set_time_afternoon"
+                android:textColorHint="@android:color/transparent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ttTimePickTimeEveLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            app:boxStrokeColor="?colorStroke"
+            app:layout_constraintTop_toBottomOf="@id/ttTimePickTimePmLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:hint="@string/ics_Button_set_time_evening"
+            android:textColorHint="?android:textColorHint">
+
+            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                android:id="@+id/ttTimePickTimeEve"
+                android:editable="false"
+                android:hint="@string/ics_Button_set_time_evening"
+                android:textColorHint="@android:color/transparent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

@@ -1,0 +1,136 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "159141a31bb637a4b0010f376ad6ef92",
+    "entities": [
+      {
+        "tableName": "apps",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`name` TEXT NOT NULL, `verName` TEXT NOT NULL, `targetAPI` INTEGER NOT NULL, `minAPI` INTEGER NOT NULL, `targetSDK` TEXT NOT NULL, `minSDK` TEXT NOT NULL, `targetSDKDisplay` TEXT NOT NULL, `minSDKDisplay` TEXT NOT NULL, `targetSDKDouble` REAL NOT NULL, `minSDKDouble` REAL NOT NULL, `targetSDKLetter` INTEGER NOT NULL, `minSDKLetter` INTEGER NOT NULL, `adaptiveIcon` INTEGER NOT NULL, `preload` INTEGER NOT NULL, `apiUnit` INTEGER NOT NULL, `apkPath` TEXT NOT NULL, `updateTime` INTEGER NOT NULL, `package` TEXT NOT NULL, PRIMARY KEY(`package`))",
+        "fields": [
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "verName",
+            "columnName": "verName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "targetAPI",
+            "columnName": "targetAPI",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "minAPI",
+            "columnName": "minAPI",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "targetSDK",
+            "columnName": "targetSDK",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "minSDK",
+            "columnName": "minSDK",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "targetSDKDisplay",
+            "columnName": "targetSDKDisplay",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "minSDKDisplay",
+            "columnName": "minSDKDisplay",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "targetSDKDouble",
+            "columnName": "targetSDKDouble",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "minSDKDouble",
+            "columnName": "minSDKDouble",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "targetSDKLetter",
+            "columnName": "targetSDKLetter",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "minSDKLetter",
+            "columnName": "minSDKLetter",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "adaptiveIcon",
+            "columnName": "adaptiveIcon",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "preload",
+            "columnName": "preload",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "apiUnit",
+            "columnName": "apiUnit",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "apkPath",
+            "columnName": "apkPath",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updateTime",
+            "columnName": "updateTime",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "packageName",
+            "columnName": "package",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "package"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '159141a31bb637a4b0010f376ad6ef92')"
+    ]
+  }
+}

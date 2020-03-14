@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- preference keys -->
+    <string name="avIncludeDisabled" translatable="false">AVIncludeDisabled</string>
+    <bool name="avIncludeDisabledDefault">false</bool>
+    <string name="avSweet" translatable="false">AVSweet</string>
+    <bool name="avSweetDefault">true</bool>
+    <string name="API_APK_PRELOAD" translatable="false">apiAPKPreload</string>
+    <bool name="API_APK_PRELOAD_DEFAULT">false</bool>
+    <string name="API_CIRCULAR_ICON" translatable="false">SDKCircularIcon</string>
+    <bool name="API_CIRCULAR_ICON_DEFAULT">true</bool>
+    <string name="API_PACKAGE_ROUND_ICON" translatable="false">APIPackageRoundIcon</string>
+    <bool name="API_PACKAGE_ROUND_ICON_DEFAULT">false</bool>
+    <string name="avClipRound" translatable="false">AVClip2Round</string>
+    <bool name="avClipRoundDefault">true</bool>
+
+    <string name="prefExteriorKeyBack" translatable="false">prefExteriorBack</string>
+    <string name="prefExteriorKeyBackDark" translatable="false">prefExteriorBackDark</string>
+    <string name="prefExteriorKeyDarkByBatterySaver" translatable="false">prefExteriorDarkByBatterySaver</string>
+    <bool name="prefExteriorDefaultDarkByBatterySaver">true</bool>
+    <string name="prefExteriorKeyDarkPlan" translatable="false">prefExteriorDarkPlan</string>
+    <string name="prefExteriorDefaultDarkPlan" translatable="false">@string/prefExteriorDarkPlanValueAuto</string>
+    <string name="prefExteriorKeyLightTheme" translatable="false">prefExteriorLightTheme</string>
+    <string name="prefExteriorDefaultLightTheme" translatable="false">@string/prefExteriorLightThemeValueWhite</string>
+    <string name="prefExteriorKeyDarkTheme" translatable="false">prefExteriorDarkTheme</string>
+    <string name="prefExteriorDefaultDarkTheme" translatable="false">@string/prefExteriorDarkThemeValueBlack</string>
+    <string name="prefExteriorKeyDarkPlanScheduleStart" translatable="false">prefExteriorDarkPlanScheduleStart</string>
+    <string name="prefExteriorDefaultDarkPlanScheduleStart" translatable="false">2100</string>
+    <string name="prefExteriorKeyDarkPlanScheduleEnd" translatable="false">prefExteriorDarkPlanScheduleEnd</string>
+    <string name="prefExteriorDefaultDarkPlanScheduleEnd" translatable="false">0600</string>
+    <string name="prefExteriorKeyForceDarkDesc" translatable="false">prefExteriorKeyForceDarkDesc</string>
+    <!-- preference keys -->
+
+    <array name="prefExteriorLightThemeRes">
+        <item>@style/AppTheme</item>
+        <item>@style/AppTheme.CnRed</item>
+    </array>
+    <string-array name="prefExteriorLightThemeEntries">
+        <item>@string/prefSettingsThemeDefault</item>
+        <item>@string/prefSettingsThemeCnRed</item>
+    </string-array>
+    <string-array name="prefExteriorLightThemeValues">
+        <item>@string/prefExteriorLightThemeValueWhite</item>
+        <item>@string/prefExteriorLightThemeValueCnRed</item>
+    </string-array>
+    <string name="prefExteriorLightThemeValueWhite" translatable="false">lightThemeValueWhite</string>
+    <string name="prefExteriorLightThemeValueCnRed" translatable="false">lightThemeValueCnRed</string>
+
+    <array name="prefExteriorDarkThemeRes">
+        <item>@style/AppTheme.Black</item>
+        <item>@style/AppTheme.BlackGray</item>
+    </array>
+    <string-array name="prefExteriorDarkThemeEntries">
+        <item>@string/prefSettingsThemeBlack</item>
+        <item>@string/prefSettingsThemeBlackGray</item>
+    </string-array>
+    <string-array name="prefExteriorDarkThemeValues">
+        <item>@string/prefExteriorDarkThemeValueBlack</item>
+        <item>@string/prefExteriorDarkThemeValueBlackGray</item>
+    </string-array>
+    <string name="prefExteriorDarkThemeValueBlack" translatable="false">darkThemeValueBlack</string>
+    <string name="prefExteriorDarkThemeValueBlackGray" translatable="false">darkThemeValueBlackGray</string>
+
+    <string-array name="prefExteriorDarkPlanEntries" tools:ignore="InconsistentArrays">
+        <item>@string/textAlways</item>
+        <item>@string/textNever</item>
+        <item>@string/prefExteriorDarkPlanSchedule</item>
+    </string-array>
+    <string-array name="prefExteriorDarkPlanValues" tools:ignore="InconsistentArrays">
+        <item>@string/prefExteriorDarkPlanValueAlways</item>
+        <item>@string/prefExteriorDarkPlanValueNever</item>
+        <item>@string/prefExteriorDarkPlanValueSchedule</item>
+    </string-array>
+    <string name="prefExteriorDarkPlanValueAuto" translatable="false">darkPlanValueAuto</string>
+    <string name="prefExteriorDarkPlanValueAlways" translatable="false">darkPlanValueAlways</string>
+    <string name="prefExteriorDarkPlanValueNever" translatable="false">darkPlanValueNever</string>
+    <string name="prefExteriorDarkPlanValueSchedule" translatable="false">darkPlanValueSchedule</string>
+
+</resources>

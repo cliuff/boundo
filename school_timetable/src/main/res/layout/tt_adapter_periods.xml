@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:overScrollMode="never"
+    android:scrollbars="none"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/ttAdapterPeriodsStart"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:inputType="number"
+            android:minWidth="25dp"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:selectAllOnFocus="true"
+            tools:text="32" />
+        <TextView
+            android:text="-"
+            android:gravity="center"
+            android:paddingStart="1dp"
+            android:paddingEnd="1dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="HardcodedText" />
+
+        <EditText
+            android:id="@+id/ttAdapterPeriodsEnd"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:inputType="number"
+            android:minWidth="25dp"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:selectAllOnFocus="true"
+            tools:text="22" />
+        <Switch
+            android:id="@+id/ttAdapterPeriodsFortnightly"
+            android:text="@string/ics_alter_periodswitch"
+            android:paddingStart="16dp"
+            android:paddingEnd="0dp"
+            android:scaleX="0.85"
+            android:scaleY="0.85"
+            android:textColor="?android:textColor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <ImageButton
+            android:id="@+id/ttAdapterPeriodsRemove"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_cancel_24"
+            android:tint="?android:textColor"
+            android:paddingStart="21dp"
+            android:paddingEnd="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+</HorizontalScrollView>

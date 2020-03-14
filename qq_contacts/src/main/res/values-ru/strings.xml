@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="qc_manager_remove_all">Удалить все</string>
+    <string name="Launcher_QQContacts_EditText_Hint">Введите ее / его номер QQ (неизменяемый)</string>
+    <string name="Launcher_QQContacts_EditText_LongLabel_Hint">Введите имя</string>
+    <string name="Launcher_QQContacts_EditText_ShortLabel_Hint">Введите имя для краткости</string>
+    <string name="Launcher_QQContacts_Toast_Done_Text">Работы завершены, иди проверь для себя</string>
+    <string name="launcher_qqcontacts_getavatar_toast_fail">Загрузка изображения не удалась</string>
+    <string name="launcher_qqcontacts_imageview_description_qq_contact_avatar">QQ Фото профиля контакта</string>
+    <string name="launcher_qqcontacts_toast_input_notcomplete">Пожалуйста, заполните все поля</string>
+</resources>

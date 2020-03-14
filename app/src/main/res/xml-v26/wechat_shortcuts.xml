@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="scanner"
+        android:enabled="true"
+        android:icon="@mipmap/shortcut_wechat_scanner"
+        android:shortcutShortLabel="@string/Shortcuts_WeChatScanner_ShortLabel"
+        android:shortcutLongLabel="@string/Shortcuts_WeChatScanner_LongLabel"
+        android:shortcutDisabledMessage="@string/Shortcuts_WeChatScanner_DisabledMessage">
+    <intent
+        android:action="android.intent.action.VIEW"
+        android:targetPackage="com.tencent.mm"
+        android:targetClass="com.tencent.mm.ui.LauncherUI">
+        <extra
+            android:name="LauncherUI.From.Scaner.Shortcut"
+            android:value="true"/>
+    </intent>
+    </shortcut>
+
+</shortcuts>

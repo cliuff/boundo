@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:overScrollMode="never"
+    android:scrollbars="none"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:paddingStart="20dp"
+        android:paddingTop="5dp"
+        android:paddingEnd="20dp"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            style="@style/IconActionContainer">
+            <com.google.android.material.card.MaterialCardView
+                style="@style/IconActionCard">
+                <ImageView
+                    android:id="@+id/ttExportCal"
+                    style="@style/IconActionIcon"
+                    android:src="@drawable/ic_open_in_new_24" />
+            </com.google.android.material.card.MaterialCardView>
+            <TextView
+                style="@style/IconActionText"
+                android:textColor="?colorAOnSurface"
+                android:text="@string/ttExportCal" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/IconActionContainer">
+            <com.google.android.material.card.MaterialCardView
+                style="@style/IconActionCard">
+                <ImageView
+                    android:id="@+id/ttExportFile"
+                    style="@style/IconActionIcon"
+                    android:src="@drawable/ic_file_24" />
+            </com.google.android.material.card.MaterialCardView>
+            <TextView
+                style="@style/IconActionText"
+                android:textColor="?colorAOnSurface"
+                android:text="@string/ttExportICalFile" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/IconActionContainer">
+            <com.google.android.material.card.MaterialCardView
+                app:cardBackgroundColor="?colorActionAlertBack"
+                style="@style/IconActionCard">
+                <ImageView
+                    android:id="@+id/ttExportUndo"
+                    style="@style/IconActionIcon"
+                    android:tint="?colorActionAlert"
+                    android:src="@drawable/ic_undo_24" />
+            </com.google.android.material.card.MaterialCardView>
+            <TextView
+                style="@style/IconActionText"
+                android:textColor="?colorAOnSurface"
+                android:text="@string/ttWeekIndicatorUndo" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</HorizontalScrollView>

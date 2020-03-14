@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:overScrollMode="never"
+    android:scrollbars="none"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:paddingStart="30dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="30dp"
+        android:paddingBottom="12dp"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            style="@style/IconActionContainer">
+            <com.google.android.material.card.MaterialCardView
+                style="@style/IconActionCard">
+                <ImageView
+                    android:id="@+id/fileActionsOpen"
+                    style="@style/IconActionIcon"
+                    android:src="@drawable/ic_open_in_new_24" />
+            </com.google.android.material.card.MaterialCardView>
+            <TextView
+                style="@style/IconActionText"
+                android:textColor="?colorAOnSurface"
+                android:text="@string/fileActionsOpen" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/IconActionContainer">
+            <com.google.android.material.card.MaterialCardView
+                style="@style/IconActionCard">
+                <ImageView
+                    android:id="@+id/fileActionsShare"
+                    style="@style/IconActionIcon"
+                    android:src="@drawable/ic_share_24" />
+            </com.google.android.material.card.MaterialCardView>
+            <TextView
+                style="@style/IconActionText"
+                android:textColor="?colorAOnSurface"
+                android:text="@string/fileActionsShare" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/IconActionContainer">
+            <com.google.android.material.card.MaterialCardView
+                style="@style/IconActionCard">
+                <ImageView
+                    android:id="@+id/fileActionsSave"
+                    style="@style/IconActionIcon"
+                    android:src="@drawable/ic_save_alt_24" />
+            </com.google.android.material.card.MaterialCardView>
+            <TextView
+                style="@style/IconActionText"
+                android:textColor="?colorAOnSurface"
+                android:text="@string/fileActionsSave" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</HorizontalScrollView>

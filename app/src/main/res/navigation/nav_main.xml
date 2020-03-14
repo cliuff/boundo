@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_main"
+    app:startDestination="@id/updatesFragment">
+
+    <fragment
+        android:id="@+id/instantFragment"
+        android:name="com.madness.collision.instant.InstantFragment"/>
+    <fragment
+        android:id="@+id/featheringFragment"
+        android:name="com.madness.collision.FeatheringFragment"
+         />
+    <fragment
+        android:id="@+id/adviceFragment"
+        android:name="com.madness.collision.settings.AdviceFragment">
+        <action
+            android:id="@+id/action_adviceFragment_to_ossActivity"
+            app:destination="@id/ossActivity" />
+    </fragment>
+    <activity android:id="@+id/ossActivity"
+        android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"/>
+    <fragment
+        android:id="@+id/exteriorFragment"
+        android:name="com.madness.collision.settings.ExteriorFragment"
+         >
+        <argument
+            android:name="mode"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
+    <fragment
+        android:id="@+id/unitsFragment"
+        android:name="com.madness.collision.unit.UnitsFragment"/>
+    <fragment
+        android:id="@+id/unitsManagerFragment"
+        android:name="com.madness.collision.unit.UnitsManagerFragment"/>
+    <fragment
+        android:id="@+id/updatesFragment"
+        android:name="com.madness.collision.main.updates.UpdatesFragment"/>
+    <fragment
+        android:id="@+id/moreFragment"
+        android:name="com.madness.collision.main.more.MoreFragment">
+        <action
+            android:id="@+id/action_moreFragment_to_instantFragment"
+            app:destination="@id/instantFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:popEnterAnim="@anim/fragment_fade_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
+        <action
+            android:id="@+id/action_moreFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:popEnterAnim="@anim/fragment_fade_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
+        <action
+            android:id="@+id/action_moreFragment_to_unitsManagerFragment"
+            app:destination="@id/unitsManagerFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:popEnterAnim="@anim/fragment_fade_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.madness.collision.settings.SettingsFragment">
+        <action
+            android:id="@+id/action_settingsFragment_to_adviceFragment"
+            app:destination="@id/adviceFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:popEnterAnim="@anim/fragment_fade_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
+        <action
+            android:id="@+id/action_settingsFragment_to_exteriorSettingsFragment"
+            app:destination="@id/exteriorSettingsFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:popEnterAnim="@anim/fragment_fade_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
+    </fragment>
+    <fragment
+        android:id="@+id/exteriorSettingsFragment"
+        android:name="com.madness.collision.settings.ExteriorSettingsFragment">
+        <action
+            android:id="@+id/action_exteriorSettingsFragment_to_exteriorFragment"
+            app:destination="@id/exteriorFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:popEnterAnim="@anim/fragment_fade_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
+    </fragment>
+</navigation>

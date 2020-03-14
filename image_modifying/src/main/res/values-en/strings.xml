@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="im_edit_width">Width</string>
+    <string name="im_edit_height">Height</string>
+    <string name="im_image_select">Select image</string>
+    <string name="im_toast_finish">Saved in gallery</string>
+</resources>

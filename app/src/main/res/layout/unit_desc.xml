@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:scrollbars="vertical"
+    android:scrollbarThumbVertical="@drawable/scrollbar_vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/unitDescContainer"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:paddingTop="40dp"
+            android:paddingBottom="20dp"
+            android:orientation="vertical"
+            android:background="?colorAItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/unitDescIcon"
+                android:tint="?colorAOnItem"
+                android:alpha="@fraction/surfaceAlpha"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="200dp"
+                android:layout_height="200dp"/>
+
+            <TextView
+                android:id="@+id/unitDescInstallStatus"
+                tools:text="Installed"
+                android:textSize="20sp"
+                android:drawableStart="@drawable/res_circle"
+                android:drawablePadding="10dp"
+                android:padding="10dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/unitDescAvailability"
+            tools:text="Available"
+            android:textSize="20sp"
+            android:drawableStart="@drawable/res_circle"
+            android:drawablePadding="20dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="12dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:id="@+id/unitDescCheckers"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/unitDescAction"
+            app:cornerRadius="5dp"
+            tools:text="Uninstall"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/unitDescDesc"
+            tools:text="Description"
+            android:textSize="15sp"
+            android:textColor="?colorAOnBackground"
+            android:padding="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</ScrollView>

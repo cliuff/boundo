@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="backgroundAWidget">#FF121212</color>
+    <color name="surfaceAWidget">#FF313131</color>
+    <color name="onBackgroundAWidget">#FFFFFFFF</color>
+    <color name="onSurfaceAWidget">#FFFFFFFF</color>
+</resources>

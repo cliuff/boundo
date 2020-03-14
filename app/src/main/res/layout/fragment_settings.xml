@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:requiresFadingEdge="vertical"
+    android:scrollbarThumbVertical="@drawable/scrollbar_vertical"
+    android:scrollbars="vertical">
+
+    <LinearLayout
+        android:id="@+id/settingsUnits"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/settingsItemStyle"
+            android:drawableStart="@drawable/ic_palette_24_special"
+            android:text="@string/settings_exterior"
+            android:textColor="?colorAOnBackground"
+            android:textSize="18sp"
+            android:drawablePadding="20dp"
+            android:drawableTint="?colorAOnBackground"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/settingsItemAbout"
+            android:drawableStart="@drawable/ic_info_24"
+            android:text="@string/Main_TextView_Advice_Text"
+            android:textColor="?colorAOnBackground"
+            android:textSize="18sp"
+            android:drawablePadding="20dp"
+            android:drawableTint="?colorAOnBackground"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <ViewStub
+            android:id="@+id/settingsItemLanguagesStub"
+            android:inflatedId="@+id/settingsItemLanguagesContainer"
+            android:layout="@layout/settings_unit_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

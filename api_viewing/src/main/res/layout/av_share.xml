@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<HorizontalScrollView android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_gravity="center_horizontal"
+    android:overScrollMode="never"
+    android:scrollbars="none"
+    android:background="?colorAItem"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="15dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/avShareFullImage"
+                android:contentDescription="@null"
+                android:layout_margin="20dp"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/av_share_full" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/avShareStrokedImage"
+                android:contentDescription="@null"
+                android:layout_margin="20dp"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/av_share_stroked" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</HorizontalScrollView>

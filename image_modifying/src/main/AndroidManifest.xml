@@ -1,0 +1,16 @@
+<manifest xmlns:dist="http://schemas.android.com/apk/distribution"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.madness.collision.unit.image_modifying">
+
+    <uses-sdk tools:overrideLibrary="androidx.heifwriter"/>
+
+    <dist:module
+        dist:instant="false"
+        dist:title="@string/title_image_modifying">
+        <dist:delivery>
+            <dist:install-time />
+        </dist:delivery>
+        <dist:fusing dist:include="false" />
+    </dist:module>
+</manifest>
+

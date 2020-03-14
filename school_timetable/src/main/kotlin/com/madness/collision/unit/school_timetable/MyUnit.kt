@@ -1,0 +1,448 @@
+package com.madness.collision.unit.school_timetable
+
+import android.content.*
+import android.os.Bundle
+import android.provider.CalendarContract
+import android.text.InputType
+import android.util.Log
+import android.util.TypedValue
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.core.content.edit
+import androidx.lifecycle.observe
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.madness.collision.R
+import com.madness.collision.settings.SettingsFunc
+import com.madness.collision.unit.Unit
+import com.madness.collision.unit.school_timetable.calendar.ICal
+import com.madness.collision.unit.school_timetable.calendar.getCalendar
+import com.madness.collision.unit.school_timetable.calendar.getTime4Calendar
+import com.madness.collision.unit.school_timetable.data.CourseSingleton
+import com.madness.collision.unit.school_timetable.data.Timetable
+import com.madness.collision.unit.school_timetable.parser.Parser
+import com.madness.collision.util.*
+import kotlinx.android.synthetic.main.unit_school_timetable.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import java.io.File
+import java.io.FileNotFoundException
+import java.io.FileReader
+import java.io.IOException
+import java.util.*
+import kotlin.collections.ArrayList
+import com.madness.collision.unit.school_timetable.R as MyR
+
+class MyUnit: Unit(), View.OnClickListener{
+    companion object {
+
+        fun setTable(context: Context, timetable: Timetable){
+            if (context !is AppCompatActivity) return
+            val rvTable: RecyclerView = context.findViewById(MyR.id.ttRecyclerView) ?: return
+            (rvTable.layoutManager as GridLayoutManager).spanCount = if (timetable.columns > 0) timetable.columns else 1
+            val adapter = rvTable.adapter as TimetableAdapter
+            adapter.timetable = timetable
+            adapter.notifyDataSetChanged()
+        }
+    }
+
+    private lateinit var settingsPreferences: SharedPreferences
+    private lateinit var iCalendarPreferences: SharedPreferences
+    private lateinit var mRecyclerView: RecyclerView
+    private lateinit var mAdapter: TimetableAdapter
+
+    private var isTimeInformed = false
+    private lateinit var mTimetable: Timetable
+
+    override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
+        toolbar.setTitle(R.string.unit_school_timetable)
+        inflateAndTint(MyR.menu.toolbar_tt, toolbar, iconColor)
+        return true
+    }
+
+    override fun selectOption(item: MenuItem): Boolean {
+        when (item.itemId) {
+            MyR.id.ttTBManual -> {
+                mainViewModel.displayFragment(TTManualFragment.newInstance())
+                return true
+            }
+            MyR.id.ttTBRemove -> {
+                mTimetable = Timetable()
+                val context = context ?: return false
+                setTable(context, mTimetable)
+                GlobalScope.launch {
+                    if (Timetable.hasPersistence(context)) {
+                        X.deleteFolder(Timetable.getPersistenceFolder(context))
+                        val file = File(F.valFilePubTtCurrent(context))
+                        if (file.exists()) file.delete()
+                    }
+                }
+                return true
+            }
+        }
+        return false
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val context = context
+        if (context != null) SettingsFunc.updateLanguage(context)
+        return inflater.inflate(MyR.layout.unit_school_timetable, container, false)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        val context = context ?: return
+        iCalendarPreferences = context.getSharedPreferences(P.PREF_TIMETABLE, Context.MODE_PRIVATE)
+        settingsPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
+        democratize()
+        mainViewModel.contentWidthTop.observe(viewLifecycleOwner) {
+            ttContainer.alterPadding(top = it)
+        }
+        mainViewModel.contentWidthBottom.observe(viewLifecycleOwner) {
+            val layoutParams = ttImport.layoutParams as ViewGroup.MarginLayoutParams
+            layoutParams.bottomMargin = it + X.size(context, 20f, X.DP).toInt()
+        }
+
+        mTimetable = Timetable.fromPersistence(context)
+        mAdapter = TimetableAdapter(context, mTimetable)
+        mRecyclerView = ttRecyclerView
+        mRecyclerView.isNestedScrollingEnabled = false
+        mRecyclerView.layoutManager = GridLayoutManager(context, if (mTimetable.columns > 0) mTimetable.columns else 1)
+        mRecyclerView.adapter = mAdapter
+
+        if (settingsPreferences.getBoolean(P.TT_CAL_DEFAULT_GOOGLE, true))
+            ttCalendarDefault.isChecked = true
+        ttCalendarDefault.setOnCheckedChangeListener{ _, isChecked ->
+            settingsPreferences.edit { putBoolean(P.TT_CAL_DEFAULT_GOOGLE, isChecked) }
+        }
+
+        if (iCalendarPreferences.getBoolean(P.TT_APP_MODE, true))
+            ttAppMode.isChecked = true
+        ttAppMode.setOnCheckedChangeListener { _, isChecked ->
+            iCalendarPreferences.edit { putBoolean(P.TT_APP_MODE, isChecked) }
+            mTimetable.produceICal(context)
+        }
+
+        val v: Array<View> = arrayOf(ttTime, ttImport, ttExport, ttWeekIndicator, ttCodeHtml)
+        v.forEach {
+            it.setOnClickListener(this)
+        }
+        if (settingsPreferences.getBoolean(P.TT_MANUAL, true)) {
+            mainViewModel.displayFragment(TTManualFragment.newInstance())
+            settingsPreferences.edit { putBoolean(P.TT_MANUAL, false) }
+        }
+    }
+
+    private fun openIcsFile(context: Context, file: File){
+        try{
+            val intent = Intent()
+            intent.action = Intent.ACTION_VIEW
+            val type = "text/calendar"
+            val flags: Int = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION
+            intent.flags = flags
+            intent.setDataAndType(file.getProviderUri(context), type)
+            if (settingsPreferences.getBoolean(P.TT_CAL_DEFAULT_GOOGLE, true))
+                intent.component = ComponentName("com.google.android.calendar", "com.google.android.calendar.ICalLauncher")
+            context.startActivity(intent)
+        }catch ( e: ActivityNotFoundException) {
+            X.toast(context, MyR.string.ics_Toast_open_fail, Toast.LENGTH_SHORT)
+        }
+    }
+
+    override fun onClick(view: View) {
+        val context = context ?: return
+        when(view.id) {
+            MyR.id.ttExport -> {
+                val popExport = CollisionDialog(context, R.string.text_cancel).apply {
+                    setTitleCollision(MyR.string.ttExport, 0, 0)
+                    setContent(0)
+                    setCustomContent(MyR.layout.tt_pop_export)
+                    setListener { dismiss() }
+                    show()
+                }
+                val dateStart = iCalendarPreferences.getString(P.TT_DATE_START, P.TT_DATE_START_DEFAULT)
+                // button export to calendar
+                popExport.findViewById<View>(MyR.id.ttExportCal).setOnClickListener {
+                    if (!isTimeInformed && dateStart == P.TT_DATE_START_DEFAULT){
+                        popExport.dismiss()
+                        CollisionDialog.alert(context, MyR.string.ttTimeNotice).show()
+                        isTimeInformed = true
+                    }else{
+                        popExport.dismiss()
+                        export2Cal()
+                    }
+                }
+                // button export to iCalendar file
+                popExport.findViewById<View>(MyR.id.ttExportFile).setOnClickListener {
+                    if (!isTimeInformed && dateStart == P.TT_DATE_START_DEFAULT){
+                        popExport.dismiss()
+                        CollisionDialog.alert(context, MyR.string.ttTimeNotice).show()
+                        isTimeInformed = true
+                    }else{
+                        popExport.dismiss()
+                        export2ICalFile()
+                    }
+                }
+                // button export to iCalendar file
+                popExport.findViewById<View>(MyR.id.ttExportUndo).setOnClickListener {
+                    popExport.dismiss()
+                    undoImports()
+                }
+            }
+            MyR.id.ttImport -> {
+                val dialog = CollisionDialog(context, R.string.text_cancel).apply {
+                    setTitleCollision(0, 0, 0)
+                    setContent(0)
+                    setCustomContent(MyR.layout.tt_pop_import)
+                    setListener { dismiss() }
+                    show()
+                }
+                dialog.findViewById<View>(MyR.id.ttImportParse).setOnClickListener {
+                    dialog.dismiss()
+                    val parser = Parser(context)
+                    if (parser.parseFromClipboard()) {
+                        mTimetable = parser.timetable
+                    }
+                }
+                dialog.findViewById<View>(MyR.id.ttImportNew).setOnClickListener {
+                    dialog.dismiss()
+                    GlobalScope.launch {
+                        val course = CourseSingleton()
+                        course.name = getString(MyR.string.ics_alter_cname)
+                        course.legacyClassPhase = "11"
+                        course.legacyClassPeriod = 'b'
+                        course.legacyTemplate = 'a'
+                        mTimetable.courses.add(0, course)
+                        mTimetable.persist(context, true)
+                        mTimetable.renderTimetable()
+                        launch(Dispatchers.Main){
+                            setTable(context, mTimetable)
+                        }
+                    }
+                }
+            }
+            MyR.id.ttWeekIndicator -> {
+                val popExport = CollisionDialog(context, R.string.text_cancel).apply {
+                    setTitleCollision(0, R.string.ttWeekIndicatorHint, InputType.TYPE_CLASS_NUMBER)
+                    setContent(0)
+                    setCustomContent(MyR.layout.tt_pop_export)
+                    setListener { dismiss() }
+                    show()
+                }
+                // button export to calendar
+                popExport.findViewById<View>(MyR.id.ttExportCal).setOnClickListener {
+                    var n = popExport.title.text?.toString() ?: "20"
+                    if (n.isEmpty()) n = "20"
+                    popExport.dismiss()
+                    Timetable.produceWeekIndicator(context, n.toInt())
+                    exportIndicator2Cal()
+                }
+                // button export to iCalendar file
+                popExport.findViewById<View>(MyR.id.ttExportFile).setOnClickListener {
+                    popExport.dismiss()
+                    exportIndicator2ICalFile()
+                }
+                // button export to iCalendar file
+                popExport.findViewById<View>(MyR.id.ttExportUndo).setOnClickListener {
+                    popExport.dismiss()
+                    undoIndicatorImports()
+                }
+            }
+            MyR.id.ttTime -> mainViewModel.displayFragment(TimeFragment.newInstance())
+            MyR.id.ttCodeHtml -> {
+                val file = File(F.valFilePubTtCode(context))
+                if (file.exists()) {
+                    FilePop.by(context, file, "text/html", "").show(childFragmentManager, FilePop.TAG)
+                } else {
+                    CollisionDialog.alert(context, R.string.text_no_content).show()
+                }
+            }
+        }
+    }
+
+    private fun undoIndicatorImports(){
+        val context = context ?: return
+        val file = File(F.valFilePubTtIndicator(context))
+        if (!file.exists()){
+            X.toast(context, getString(R.string.text_error), Toast.LENGTH_SHORT)
+            return
+        }
+        val filesPath = F.valCachePubTtUndo(context)
+        val folder = File(filesPath)
+        F.prepareDir(folder)
+        folder.deleteRecursively()
+        folder.mkdirs()
+        undoByPause(file, filesPath)
+    }
+
+    private fun undoImports(){
+        val context = context ?: return
+        val file = File(F.valFilePubTtPrevious(context))
+        if (!file.exists()){
+            X.toast(context, MyR.string.ics_Import_Toast_Null, Toast.LENGTH_SHORT)
+            return
+        }
+        val filesPath = F.valCachePubTtUndo(context)
+        val folder = File(filesPath)
+        F.prepareDir(folder)
+        folder.deleteRecursively()
+        folder.mkdirs()
+        undoByPause(file, filesPath)
+    }
+
+    private fun undoByPause(previousICal: File, undoCacheDir: String){
+        val r = FileReader(previousICal)
+        val content = r.readText()
+        r.close()
+        val undoList: MutableList<String> = ArrayList()
+        val regex = "^BEGIN:VEVENT$(?<body>.+?)^END:VEVENT$".toRegex(setOf(RegexOption.DOT_MATCHES_ALL, RegexOption.MULTILINE))
+        for (re in regex.findAll(content)) undoList.add(ICal.getUndo(re.groups[1]?.value ?: ""))
+        val undoIterator = undoList.iterator().iterator()
+
+        val context = context ?: return
+        val popContinue = CollisionDialog(context, R.string.text_cancel, MyR.string.ics_Undo_AlertDialog_Button, true)
+        popContinue.setTitleCollision(0, 0, 0)
+        popContinue.setContent(MyR.string.ics_Undo_AlertDialog_Message)
+        popContinue.setListener({ popContinue.dismiss() }, { undoBySegment(undoIterator, undoCacheDir, popContinue) })
+        popContinue.show()
+        undoBySegment(undoIterator, undoCacheDir, popContinue)
+    }
+
+    private fun undoBySegment(undoIterator: Iterator<String>, undoCacheDir: String, pop: CollisionDialog){
+        if(!undoIterator.hasNext()) {
+            pop.dismiss()
+            val context = context ?: return
+            X.toast(context, MyR.string.ics_Undo_Toast_Nailed, Toast.LENGTH_SHORT)
+            return
+        }
+        val path = F.createPath(undoCacheDir, "${Calendar.getInstance().time.time}.ics")
+        val newOutPutFile: Formatter
+        try {
+            newOutPutFile = Formatter(path)
+        } catch (e: FileNotFoundException) {
+            val context = context ?: return
+            X.toast(context, "file $path got lost", Toast.LENGTH_LONG)
+            e.printStackTrace()
+            return
+        }
+        newOutPutFile.format(undoIterator.next())
+        newOutPutFile.close()
+        val context = context ?: return
+        openIcsFile(context, File(path))
+    }
+
+    private fun export2ICalFile(){
+        val context = context ?: return
+        val iCalFile = File(F.valFilePubTtCurrent(context))
+        if (iCalFile.exists()) {
+            FilePop.by(context, iCalFile, "text/calendar", "").show(childFragmentManager, FilePop.TAG)
+        } else {
+            CollisionDialog.alert(context, MyR.string.ics_Import_Toast_Null).show()
+        }
+    }
+
+    private fun exportIndicator2ICalFile(){
+        val context = context ?: return
+        val ultimatePath = F.valFilePubTtIndicator(context)
+        if (ultimatePath.isEmpty()) {
+            X.toast(context, getString(R.string.text_error), Toast.LENGTH_SHORT)
+            return
+        }
+        val iCalFile = File(ultimatePath)
+        if (iCalFile.exists()) {
+            FilePop.by(context, iCalFile, "text/calendar", "").show(childFragmentManager, FilePop.TAG)
+        } else {
+            CollisionDialog.alert(context, R.string.text_no_content).show()
+        }
+    }
+
+    private fun export2Cal(){
+        //todo export as calendar events
+        val context = context ?: return
+        val file = File(F.valFilePubTtCurrent(context))
+        if (file.exists()) {
+            openIcsFile(context, file)
+            val previousFile = File(F.valFilePubTtPrevious(context))
+            if (!F.prepare4(previousFile)) return
+            try { X.copyFileLessTwoGB(file, previousFile)
+            } catch ( e: IOException) { e.printStackTrace() }
+        } else {
+            CollisionDialog.alert(context, MyR.string.ics_Import_Toast_Null).show()
+        }
+    }
+
+    private fun exportIndicator2Cal(){
+        val context = context ?: return
+        val file = File(F.valFilePubTtIndicator(context))
+        if (file.exists()) openIcsFile(context, file)
+        else X.toast(context, R.string.text_error, Toast.LENGTH_SHORT)
+    }
+
+    @Suppress("unused")
+    private fun getCalendars(){
+        val context = context ?: return
+        val dialog = CollisionDialog.alert(context, 0)
+        val layout = LinearLayout(context)
+        layout.orientation = LinearLayout.VERTICAL
+        for (calendar in getCalendar(context)){
+            val button = Button(context)
+            button.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f)
+            button.isAllCaps = false
+            (button.layoutParams as ViewGroup.LayoutParams).run {
+                width = ViewGroup.LayoutParams.MATCH_PARENT
+                height = ViewGroup.LayoutParams.WRAP_CONTENT
+            }
+            button.text = calendar.name
+            val colorPro = ThemeUtil.getColor(context, R.attr.colorActionPass)
+            button.setTextColor(colorPro)
+            button.background = RippleUtil.getSelectableDrawablePure(
+                    ThemeUtil.getBackColor(colorPro, 0.2f),
+                    X.size(context, 5f, X.DP)
+            )
+            button.setOnClickListener {
+                dialog.dismiss()
+                var event: ContentValues
+                var baseEvent: ContentValues
+                for (co in mTimetable.courses){
+                    baseEvent = ContentValues()
+                    baseEvent.put(CalendarContract.Events.TITLE, co.name)
+                    baseEvent.put(CalendarContract.Events.EVENT_LOCATION, co.educating.location)
+                    baseEvent.put(CalendarContract.Events.DESCRIPTION, co.educating.educator)
+                    baseEvent.put(CalendarContract.Events.EVENT_TIMEZONE, TimeZone.getDefault().id)
+                    baseEvent.put(CalendarContract.Events.CALENDAR_ID, calendar.id)
+                    for (t4c in getTime4Calendar(context, co)){
+                        Log.d("TimetableActivity", "t4c.time:" + t4c.time[0])
+                        Log.d("TimetableActivity", "t4c.time:" + t4c.time[1])
+                        Log.d("TimetableActivity", "t4c.time:" + t4c.time[2])
+                        Log.d("TimetableActivity", t4c.week)
+                        event = ContentValues(baseEvent)
+                        event.put(CalendarContract.Events._ID, co.legacyUid + t4c.week)// todo correct uid
+                        event.put(CalendarContract.Events.DTSTART, t4c.time[0])
+                        event.put(CalendarContract.Events.DTEND, t4c.time[1])
+                        event.put(CalendarContract.Events.EXDATE, t4c.time[2])
+                        if (t4c.single)
+                            event.put(CalendarContract.Events.RRULE, "FREQ=WEEKLY;INTERVAL=2")
+                        else
+                            event.put(CalendarContract.Events.RRULE, "FREQ=WEEKLY")
+                        //val url: Uri? = context.contentResolver.insert(CalendarContract.Events.CONTENT_URI, event)
+                    }
+                }
+                X.toast(context, R.string.text_done, Toast.LENGTH_SHORT)
+            }
+            layout.addView(button)
+        }
+        if (layout.childCount == 0)
+            dialog.setContent(R.string.text_no_content)
+        else
+            dialog.setCustomContent(layout)
+        dialog.show()
+    }
+}

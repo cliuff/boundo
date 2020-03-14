@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- config icon color res -->
+    <!-- config icon color res -->
+
+    <color name="androidRobotGreen">#FF3DDC84</color>
+    <color name="androidRobotGreenLight4AV">#FFF4FFDB</color>
+    <color name="androidRobotGreenLight">#FFE0FFD6</color>
+    <color name="androidRobotGreenBack">#FFF7FFE9</color>
+
+    <!-- black theme -->
+    <color name="primaryABlack">#FFD0B5FF</color>
+    <color name="primaryVBackABlack">#FF200540</color>
+    <color name="secondaryABlack">#FFD0B5FF</color>
+    <color name="backgroundABlack">#FF000000</color>
+    <color name="surfaceABlack">#FF212121</color>
+    <color name="errorABlack">#FFCF6679</color>
+    <color name="onPrimaryABlack">#FFFFFFFF</color>
+    <color name="onSecondaryABlack">#FFFFFFFF</color>
+    <color name="onBackgroundABlack">#FFFFFFFF</color>
+    <color name="onSurfaceABlack">#FFFFFFFF</color>
+    <color name="onErrorABlack">#FF000000</color>
+    <color name="iconABlack">#FFC0C6CB</color>
+    <color name="iconDeactivatedABlack">#FF505965</color>
+    <color name="actionAlertABlack">#FFFFB5B5</color>
+    <color name="actionAlertVBackABlack">#4B0707</color>
+    <color name="actionPassABlack">#FF90F0B0</color>
+    <color name="hintABlack">#FF505050</color>
+    <color name="strokeABlack">#FF505050</color>
+    <color name="textABlack">#FFE0E0E0</color>
+    <color name="textSubABlack">#FFB6B6B6</color>
+
+</resources>

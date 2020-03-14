@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:overScrollMode="never"
+    android:scrollbars="none"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:paddingStart="20dp"
+        android:paddingTop="5dp"
+        android:paddingEnd="20dp"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            style="@style/IconActionContainer">
+            <com.google.android.material.card.MaterialCardView
+                style="@style/IconActionCard">
+                <ImageView
+                    android:id="@+id/ttAdapterActionsDuplicate"
+                    style="@style/IconActionIcon"
+                    android:src="@drawable/ic_file_copy_24" />
+            </com.google.android.material.card.MaterialCardView>
+            <TextView
+                style="@style/IconActionText"
+                android:textColor="?colorAOnSurface"
+                android:text="@string/textDuplicate" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/IconActionContainer">
+            <com.google.android.material.card.MaterialCardView
+                app:cardBackgroundColor="?colorActionAlertBack"
+                style="@style/IconActionCard">
+                <ImageView
+                    android:id="@+id/ttAdapterActionsRemove"
+                    style="@style/IconActionIcon"
+                    android:tint="?colorActionAlert"
+                    android:src="@drawable/ic_delete_24" />
+            </com.google.android.material.card.MaterialCardView>
+            <TextView
+                style="@style/IconActionText"
+                android:textColor="?colorAOnSurface"
+                android:text="@string/text_remove" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</HorizontalScrollView>

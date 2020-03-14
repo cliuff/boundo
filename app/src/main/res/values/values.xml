@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <bool name="spanLittleMore">false</bool>
+    <bool name="spanJustMore">false</bool>
+    <integer name="slideDuration">100</integer>
+    <integer name="popUpDuration">100</integer>
+    <dimen name="radius">20dp</dimen>
+    <dimen name="toolbarElevation">0dp</dimen>
+    <dimen name="toolbarElevated">5dp</dimen>
+    <dimen name="paddingLand">0dp</dimen>
+    <dimen name="toolbarPaddingLand">@dimen/paddingLand</dimen>
+    <dimen name="toolbarPaddingEnd">0dp</dimen>
+    <dimen name="toolbarPaddingEndLand">0dp</dimen>
+    <integer name="exteriorTransparency">244</integer>
+    <color name="exteriorTransparencyColor">#F4FFFFFF</color>
+    <fraction name="floatingAlpha">0.9</fraction>
+    <fraction name="surfaceAlpha">0.87</fraction>
+</resources>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:orientation="vertical"
+    android:animateLayoutChanges="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ScrollView
+        app:layout_constraintTop_toTopOf="parent"
+        android:requiresFadingEdge="vertical"
+        android:scrollbarThumbVertical="@drawable/scrollbar_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/ttManualContainer"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:paddingTop="20dp"
+                android:paddingBottom="5dp"
+                android:text="@string/ics_instruction_help"
+                android:textSize="15sp"
+                android:textColor="?colorError"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:text="@string/ics_manual_help_solution"
+                android:textSize="13sp"
+                android:textColor="?android:textColor"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:paddingTop="20dp"
+                android:paddingBottom="5dp"
+                android:text="@string/ics_TextView_instruction"
+                android:textSize="15sp"
+                android:textColor="?android:textColor"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/ttManualBrowsers"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:textAllCaps="false"
+                android:text="@string/timetable_manual_browser_support"
+                app:strokeColor="?colorStroke"
+                android:textColor="?colorAccent"
+                android:backgroundTint="?colorAccentBack"
+                android:textSize="15sp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/ttManualActions"
+        android:background="?colorABackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:layout_marginTop="20dp"
+        android:paddingTop="10dp">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/ttManualOK"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            app:strokeColor="?colorStroke"
+            android:text="@string/ics_Part1_Button_OK_Text"
+            android:textAllCaps="false"
+            android:backgroundTint="?colorAccentBack"
+            android:textColor="?colorAccent"/>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

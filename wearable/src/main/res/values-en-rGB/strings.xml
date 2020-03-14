@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Boundo</string>
+    <string name="apiViewing">App API</string>
+    <string name="avPrefIncludeDisabled">Include disabled apps</string>
+    <string name="avPrefSweet">Show desserts</string>
+</resources>

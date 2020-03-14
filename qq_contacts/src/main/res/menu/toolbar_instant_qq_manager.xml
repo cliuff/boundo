@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/instantQqManagerTbAdd"
+        android:icon="@drawable/ic_add_24"
+        app:showAsAction="always"
+        android:title="@string/text_add_new"/>
+    <item
+        android:id="@+id/instantQqManagerTbRemove"
+        android:icon="@drawable/ic_delete_24"
+        app:showAsAction="ifRoom"
+        android:title="@string/text_remove"/>
+</menu>

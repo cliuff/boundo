@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+        style="@style/InstantCard">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <FrameLayout
+                android:id="@+id/instantItemComplexTitleLayout"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/instantItemComplexTitle"
+                    style="@style/InstantSwitchText" />
+
+            </FrameLayout>
+
+            <View style="@style/InstantSwitchDivider"/>
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/instantItemComplexTitleSwitch"
+                style="@style/InstantSwitchAlone"/>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</layout>

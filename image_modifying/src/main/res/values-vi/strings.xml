@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="im_edit_width">Chiều rộng</string>
+    <string name="im_edit_height">Chiều cao</string>
+    <string name="im_image_select">Chọn ảnh</string>
+    <string name="im_toast_finish">Lưu trong bộ sưu tập</string>
+</resources>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbarThumbVertical="@drawable/scrollbar_vertical"
+    android:requiresFadingEdge="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:id="@+id/moreContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/moreSettings"
+            style="@style/MainCard">
+
+            <TextView
+                style="@style/MainText"
+                android:drawableStart="@drawable/ic_settings_24"
+                android:text="@string/Main_ToolBar_title_Settings" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/moreUnitsManager"
+            style="@style/MainCard">
+
+            <TextView
+                style="@style/MainText"
+                android:drawableStart="@drawable/ic_extension_24"
+                android:text="@string/unitsManager" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/moreInstant"
+            android:layout_marginBottom="20dp"
+            style="@style/MainCard">
+
+            <TextView
+                style="@style/MainText"
+                android:drawableStart="@drawable/ic_flash_24"
+                android:text="@string/Main_TextView_Launcher" />
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:overScrollMode="never"
+    android:scrollbars="none">
+
+    <LinearLayout
+        android:paddingStart="20dp"
+        android:paddingTop="5dp"
+        android:paddingEnd="20dp"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            style="@style/IconActionContainer">
+            <com.google.android.material.card.MaterialCardView
+                style="@style/IconActionCard">
+                <ImageView
+                    android:id="@+id/avAdapterActionsDetails"
+                    style="@style/IconActionIcon"
+                    android:src="@drawable/ic_info_24" />
+            </com.google.android.material.card.MaterialCardView>
+            <TextView
+                style="@style/IconActionText"
+                android:textColor="?colorAOnSurface"
+                android:text="@string/avAdapterActionsDetails" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/IconActionContainer">
+            <com.google.android.material.card.MaterialCardView
+                style="@style/IconActionCard">
+                <ImageView
+                    android:id="@+id/avAdapterActionsIcon"
+                    style="@style/IconActionIcon"
+                    android:src="@drawable/ic_landscape_24" />
+            </com.google.android.material.card.MaterialCardView>
+            <TextView
+                style="@style/IconActionText"
+                android:textColor="?colorAOnSurface"
+                android:text="@string/avAdapterActionsIcon" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/IconActionContainer">
+            <com.google.android.material.card.MaterialCardView
+                style="@style/IconActionCard">
+                <ImageView
+                    android:id="@+id/avAdapterActionsApk"
+                    style="@style/IconActionIcon"
+                    android:src="@drawable/ic_app_24" />
+            </com.google.android.material.card.MaterialCardView>
+            <TextView
+                style="@style/IconActionText"
+                android:textColor="?colorAOnSurface"
+                android:text="@string/avAdapterActionsApk" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</HorizontalScrollView>

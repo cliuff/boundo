@@ -1,0 +1,13 @@
+<manifest xmlns:dist="http://schemas.android.com/apk/distribution"
+    package="com.madness.collision.unit.we_chat_evo">
+
+    <dist:module
+        dist:instant="false"
+        dist:title="@string/title_we_chat_evo">
+        <dist:delivery>
+            <dist:install-time />
+        </dist:delivery>
+        <dist:fusing dist:include="false" />
+    </dist:module>
+</manifest>
+

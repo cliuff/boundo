@@ -1,0 +1,19 @@
+<manifest xmlns:dist="http://schemas.android.com/apk/distribution"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.madness.collision.unit.audio_timer">
+
+    <dist:module
+        dist:instant="false"
+        dist:title="@string/title_audio_timer">
+        <dist:delivery>
+            <dist:install-time />
+        </dist:delivery>
+        <dist:fusing dist:include="false" />
+    </dist:module>
+
+    <application>
+        <service android:name=".AudioTimerService"/>
+        <service android:name=".NotificationActions"/>
+    </application>
+</manifest>
+

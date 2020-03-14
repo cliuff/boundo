@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Boundo</string>
+    <string name="apiViewing">API ứng dụng</string>
+    <string name="avPrefIncludeDisabled">Bao gồm các ứng dụng bị vô hiệu hóa</string>
+    <string name="avPrefSweet">Hiển thị món tráng miệng</string>
+</resources>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppThemeBase" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">?colorAPrimary</item>
+        <item name="colorPrimaryDark">?colorAPrimary</item>
+        <item name="android:windowSoftInputMode">stateHidden|adjustPan</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:textColorSecondary">?colorTextSub</item>
+        <item name="android:colorForeground">?android:textColor</item>
+        <item name="colorIconStateful">@color/icon_stateful</item>
+        <item name="android:windowBackground">?colorABackground</item>
+        <item name="android:colorBackground">?colorABackground</item>
+    </style>
+
+    <style name="AppTheme" parent="AppThemeBase">
+        <item name="themeId">@style/AppTheme</item>
+        <item name="colorAPrimary">@color/primaryABlack</item>
+        <item name="colorASecondary">@color/secondaryABlack</item>
+        <item name="colorABackground">@color/backgroundABlack</item>
+        <item name="colorASurface">@color/surfaceABlack</item>
+        <item name="colorAError">@color/errorABlack</item>
+        <item name="colorAOnPrimary">@color/onPrimaryABlack</item>
+        <item name="colorAOnSecondary">@color/onSecondaryABlack</item>
+        <item name="colorAOnBackground">@color/onBackgroundABlack</item>
+        <item name="colorAOnSurface">@color/onSurfaceABlack</item>
+        <item name="colorAOnError">@color/onErrorABlack</item>
+        <item name="colorAccent">@color/primaryABlack</item>
+        <item name="colorAccentBack">@color/primaryVBackABlack</item>
+        <item name="colorIcon">@color/iconABlack</item>
+        <item name="colorIconDeactivated">@color/iconDeactivatedABlack</item>
+        <item name="colorStroke">@color/strokeABlack</item>
+        <item name="colorTextSub">@color/textSubABlack</item>
+        <item name="android:textColor">@color/textABlack</item>
+        <item name="android:textColorHint">@color/hintABlack</item>
+        <item name="colorActionAlert">@color/actionAlertABlack</item>
+        <item name="colorActionAlertBack">@color/actionAlertVBackABlack</item>
+        <item name="colorActionPass">@color/actionPassABlack</item>
+    </style>
+</resources>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="at_title">Régler le minuteur</string>
+    <string name="at_hour_hint">Heure</string>
+    <string name="at_minute_hint">Minute</string>
+</resources>

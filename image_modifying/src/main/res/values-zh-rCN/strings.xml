@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="im_edit_width">宽</string>
+    <string name="im_edit_height">高</string>
+    <string name="im_image_select">选择图片</string>
+    <string name="im_toast_finish">图片已保存至相册</string>
+</resources>

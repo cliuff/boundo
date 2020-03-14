@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="AppThemeBase" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">?colorAPrimary</item>
+        <item name="colorPrimaryDark">?colorAPrimary</item>
+        <item name="android:windowSoftInputMode">stateHidden|adjustPan</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="toolbarStyle">@style/AppTheme.Toolbar</item>
+        <!--        <item name="android:datePickerDialogTheme">@style/AppTheme.DatePickerDialog</item>-->
+        <!--        <item name="android:timePickerDialogTheme">@style/AppTheme.TimePickerDialog</item>-->
+        <item name="android:popupMenuStyle">@style/AppTheme.OverflowMenu</item>
+        <item name="android:dropDownSpinnerStyle">@style/AppTheme.Spinner</item>
+        <item name="android:actionOverflowButtonStyle">@style/AppTheme.OverflowButton</item>
+        <item name="actionOverflowMenuStyle">@style/AppTheme.OverflowMenu</item>
+        <item name="android:textColorSecondary">?colorTextSub</item>
+        <item name="android:colorForeground">?android:textColor</item>
+        <item name="colorIconStateful">@color/icon_stateful</item>
+        <item name="android:windowBackground">?colorABackground</item>
+        <item name="android:colorBackground">?colorABackground</item>
+        <!--<item name="drawerLayoutStyle">@style/AppTheme.Black</item>-->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:enforceNavigationBarContrast" tools:targetApi="29">false</item>
+    </style>
+
+    <style name="LaunchScreenBase" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="themeId">@style/LaunchScreen</item>
+        <item name="android:statusBarColor">?android:attr/colorBackground</item>
+        <item name="android:navigationBarColor">?android:attr/colorBackground</item>
+<!--        <item name="android:textColor">?android:attr/textColorPrimary</item>-->
+<!--        <item name="android:drawableTint" tools:targetApi="m">?attr/colorControlNormal</item>-->
+<!--        <item name="colorABackground">?android:attr/colorBackground</item>-->
+<!--        <item name="colorASurface">?android:attr/colorBackground</item>-->
+    </style>
+
+    <style name="LaunchScreen" parent="LaunchScreenBase">
+        <item name="isDarkTheme">false</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
+    </style>
+
+    <style name="AppTheme" parent="AppThemeBase">
+        <item name="themeId">@style/AppTheme</item>
+        <item name="isDarkTheme">false</item>
+        <item name="isPaleTheme">true</item>
+        <item name="colorAPrimary">@color/primaryAWhite</item>
+        <item name="colorASecondary">@color/secondaryAWhite</item>
+        <item name="colorABackground">@color/backgroundAWhite</item>
+        <item name="colorASurface">@color/surfaceAWhite</item>
+        <item name="colorAError">@color/errorAWhite</item>
+        <item name="colorAItem">@color/itemAWhite</item>
+        <item name="colorAOnPrimary">@color/onPrimaryAWhite</item>
+        <item name="colorAOnSecondary">@color/onSecondaryAWhite</item>
+        <item name="colorAOnBackground">@color/onBackgroundAWhite</item>
+        <item name="colorAOnSurface">@color/onSurfaceAWhite</item>
+        <item name="colorAOnError">@color/onErrorAWhite</item>
+        <item name="colorAOnItem">@color/onItemAWhite</item>
+        <item name="colorAccent">@color/primaryAWhite</item>
+        <item name="colorAccentBack">@color/primaryVBackAWhite</item>
+        <item name="colorIcon">@color/iconAWhite</item>
+        <item name="colorIconDeactivated">@color/iconDeactivatedAWhite</item>
+        <item name="colorTb">@color/toolbarBackAWhite</item>
+        <item name="colorStroke">@color/strokeAWhite</item>
+        <item name="colorTextSub">@color/textSubAWhite</item>
+        <item name="colorApiPopItemBack">@color/apiPopItemBackAWhite</item>
+        <item name="colorApiLegacyBack">@color/apiLegacyBackAWhite</item>
+        <item name="android:textColor">@color/textAWhite</item>
+        <item name="android:textColorHint">@color/hintAWhite</item>
+        <item name="colorTtAm">@color/ttAmAWhite</item>
+        <item name="colorTtPm">@color/ttPmAWhite</item>
+        <item name="colorTtEve">@color/ttEveAWhite</item>
+        <item name="colorActionAlert">@color/actionAlertAWhite</item>
+        <item name="colorActionAlertBack">@color/actionAlertVBackAWhite</item>
+        <item name="colorActionPass">@color/actionPassAWhite</item>
+        <item name="colorScrollbar">@color/scrollbarAWhite</item>
+    </style>
+
+    <style name="AppTheme.CnRed" parent="AppThemeBase">
+        <item name="themeId">@style/AppTheme.CnRed</item>
+        <item name="isDarkTheme">false</item>
+        <item name="isPaleTheme">false</item>
+        <item name="colorAPrimary">@color/primaryACnRed</item>
+        <item name="colorASecondary">@color/secondaryACnRed</item>
+        <item name="colorABackground">@color/backgroundACnRed</item>
+        <item name="colorASurface">@color/surfaceACnRed</item>
+        <item name="colorAError">@color/errorACnRed</item>
+        <item name="colorAItem">@color/itemACnRed</item>
+        <item name="colorAOnPrimary">@color/onPrimaryACnRed</item>
+        <item name="colorAOnSecondary">@color/onSecondaryACnRed</item>
+        <item name="colorAOnBackground">@color/onBackgroundACnRed</item>
+        <item name="colorAOnSurface">@color/onSurfaceACnRed</item>
+        <item name="colorAOnError">@color/onErrorACnRed</item>
+        <item name="colorAOnItem">@color/onItemACnRed</item>
+        <item name="colorAccent">@color/primaryACnRed</item>
+        <item name="colorAccentBack">@color/primaryVBackACnRed</item>
+        <item name="colorIcon">@color/iconACnRed</item>
+        <item name="colorIconDeactivated">@color/iconDeactivatedACnRed</item>
+        <item name="colorTb">@color/toolbarBackACnRed</item>
+        <item name="colorStroke">@color/strokeACnRed</item>
+        <item name="colorTextSub">@color/textSubACnRed</item>
+        <item name="colorApiPopItemBack">@color/apiPopItemBackACnRed</item>
+        <item name="colorApiLegacyBack">@color/apiLegacyBackACnRed</item>
+        <item name="android:textColor">@color/textACnRed</item>
+        <item name="android:textColorHint">@color/hintACnRed</item>
+        <item name="colorTtAm">@color/ttAmACnRed</item>
+        <item name="colorTtPm">@color/ttPmACnRed</item>
+        <item name="colorTtEve">@color/ttEveACnRed</item>
+        <item name="colorActionAlert">@color/actionAlertACnRed</item>
+        <item name="colorActionAlertBack">@color/actionAlertVBackACnRed</item>
+        <item name="colorActionPass">@color/actionPassACnRed</item>
+        <item name="colorScrollbar">@color/scrollbarACnRed</item>
+    </style>
+
+    <style name="AppTheme.Black" parent="AppThemeBase">
+        <item name="themeId">@style/AppTheme.Black</item>
+        <item name="isDarkTheme">true</item>
+        <item name="isPaleTheme">false</item>
+        <item name="colorAPrimary">@color/primaryABlack</item>
+        <item name="colorASecondary">@color/secondaryABlack</item>
+        <item name="colorABackground">@color/backgroundABlack</item>
+        <item name="colorASurface">@color/surfaceABlack</item>
+        <item name="colorAError">@color/errorABlack</item>
+        <item name="colorAItem">@color/itemABlack</item>
+        <item name="colorAOnPrimary">@color/onPrimaryABlack</item>
+        <item name="colorAOnSecondary">@color/onSecondaryABlack</item>
+        <item name="colorAOnBackground">@color/onBackgroundABlack</item>
+        <item name="colorAOnSurface">@color/onSurfaceABlack</item>
+        <item name="colorAOnError">@color/onErrorABlack</item>
+        <item name="colorAOnItem">@color/onItemABlack</item>
+        <item name="colorAccent">@color/primaryABlack</item>
+        <item name="colorAccentBack">@color/primaryVBackABlack</item>
+        <item name="colorIcon">@color/iconABlack</item>
+        <item name="colorIconDeactivated">@color/iconDeactivatedABlack</item>
+        <item name="colorTb">@color/toolbarBackABlack</item>
+        <item name="colorStroke">@color/strokeABlack</item>
+        <item name="colorTextSub">@color/textSubABlack</item>
+        <item name="colorApiPopItemBack">@color/apiPopItemBackABlack</item>
+        <item name="colorApiLegacyBack">@color/apiLegacyBackABlack</item>
+        <item name="android:textColor">@color/textABlack</item>
+        <item name="android:textColorHint">@color/hintABlack</item>
+        <item name="colorTtAm">@color/ttAmABlack</item>
+        <item name="colorTtPm">@color/ttPmABlack</item>
+        <item name="colorTtEve">@color/ttEveABlack</item>
+        <item name="colorActionAlert">@color/actionAlertABlack</item>
+        <item name="colorActionAlertBack">@color/actionAlertVBackABlack</item>
+        <item name="colorActionPass">@color/actionPassABlack</item>
+        <item name="colorScrollbar">@color/scrollbarABlack</item>
+    </style>
+
+    <style name="AppTheme.BlackGray" parent="AppThemeBase">
+        <item name="themeId">@style/AppTheme.BlackGray</item>
+        <item name="isDarkTheme">true</item>
+        <item name="isPaleTheme">false</item>
+        <item name="colorAPrimary">@color/primaryABlackGray</item>
+        <item name="colorASecondary">@color/secondaryABlackGray</item>
+        <item name="colorABackground">@color/backgroundABlackGray</item>
+        <item name="colorASurface">@color/surfaceABlackGray</item>
+        <item name="colorAError">@color/errorABlackGray</item>
+        <item name="colorAItem">@color/itemABlackGray</item>
+        <item name="colorAOnPrimary">@color/onPrimaryABlackGray</item>
+        <item name="colorAOnSecondary">@color/onSecondaryABlackGray</item>
+        <item name="colorAOnBackground">@color/onBackgroundABlackGray</item>
+        <item name="colorAOnSurface">@color/onSurfaceABlackGray</item>
+        <item name="colorAOnError">@color/onErrorABlackGray</item>
+        <item name="colorAOnItem">@color/onItemABlackGray</item>
+        <item name="colorAccent">@color/primaryABlackGray</item>
+        <item name="colorAccentBack">@color/primaryVBackABlackGray</item>
+        <item name="colorIcon">@color/iconABlackGray</item>
+        <item name="colorIconDeactivated">@color/iconDeactivatedABlackGray</item>
+        <item name="colorTb">@color/toolbarBackABlackGray</item>
+        <item name="colorStroke">@color/strokeABlackGray</item>
+        <item name="colorTextSub">@color/textSubABlackGray</item>
+        <item name="colorApiPopItemBack">@color/apiPopItemBackABlackGray</item>
+        <item name="colorApiLegacyBack">@color/apiLegacyBackABlackGray</item>
+        <item name="android:textColor">@color/textABlackGray</item>
+        <item name="android:textColorHint">@color/hintABlackGray</item>
+        <item name="colorTtAm">@color/ttAmABlackGray</item>
+        <item name="colorTtPm">@color/ttPmABlackGray</item>
+        <item name="colorTtEve">@color/ttEveABlackGray</item>
+        <item name="colorActionAlert">@color/actionAlertABlackGray</item>
+        <item name="colorActionAlertBack">@color/actionAlertVBackABlackGray</item>
+        <item name="colorActionPass">@color/actionPassABlackGray</item>
+        <item name="colorScrollbar">@color/scrollbarABlackGray</item>
+    </style>
+
+    <!--
+    <style name="AppTheme.PopupMenu" parent="Widget.AppCompat.Light.PopupMenu">
+        <item name="android:background">@drawable/res_dialog_md2</item>
+        <item name="android:colorBackground">@android:color/transparent</item>
+    </style>
+-->
+
+    <style name="AppTheme.Spinner" parent="Widget.AppCompat.Spinner.DropDown">
+        <item name="android:popupBackground">@drawable/res_dialog_md2</item>
+    </style>
+
+    <style name="AppTheme.OverflowButton" parent="Widget.AppCompat.Light.ActionButton.Overflow">
+        <item name="android:tint">?colorIcon</item>
+    </style>
+
+    <style name="AppTheme.OverflowMenu" parent="Widget.AppCompat.Light.PopupMenu.Overflow">
+        <item name="android:popupBackground">@drawable/res_dialog_md2</item>
+    </style>
+
+    <style name="LanguageItem">
+        <item name="android:textColor">?colorTextSub</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="apiDecentChipAPI" parent="Widget.MaterialComponents.Chip.Action">
+        <item name="chipIconSize">30dp</item>
+        <item name="android:clickable">false</item>
+        <item name="chipSurfaceColor">#60F0F0F0</item>
+        <item name="chipBackgroundColor">@android:color/transparent</item>
+        <item name="chipCornerRadius">20dp</item>
+        <item name="chipStartPadding">7dp</item>
+        <item name="chipEndPadding">10dp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:layout_marginStart">3dp</item>
+        <item name="android:layout_marginEnd">3dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="chipMinHeight">40dp</item>
+    </style>
+
+    <style name="AppTheme.FullScreenDialog" parent="Theme.MaterialComponents.Light.Dialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="colorAccent">@color/primaryAWhite</item>
+        <item name="colorPrimary">@color/primaryAWhite</item>
+        <item name="colorPrimaryDark">@color/primaryAWhite</item>
+        <item name="android:windowBackground">@color/backgroundAWhite</item>
+        <item name="actionMenuTextColor">@color/primaryAWhite</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="AppTheme.Slide">
+        <item name="android:windowEnterAnimation">@anim/slide_up</item>
+        <item name="android:windowExitAnimation">@anim/slide_down</item>
+    </style>
+
+    <style name="AppTheme.PopUp">
+        <item name="android:windowEnterAnimation">@anim/pop_up_in</item>
+        <item name="android:windowExitAnimation">@anim/pop_up_out</item>
+    </style>
+
+    <style name="AppTheme.BottomSheet.ShapeAppearance">
+        <item name="cornerSize">@dimen/radius</item>
+    </style>
+
+    <style name="AppTheme.BottomSheet" parent="Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="backgroundTint">?colorASurface</item>
+        <item name="android:elevation">0dp</item>
+        <item name="shapeAppearance">@style/AppTheme.BottomSheet.ShapeAppearance</item>
+    </style>
+
+    <style name="AppTheme.Pop" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="bottomSheetStyle">@style/AppTheme.BottomSheet</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="AppTheme.DatePickerDialog" parent="Theme.MaterialComponents.Light.Dialog">
+        <item name="colorPrimary">?colorAccentBack</item>
+        <item name="android:background">?colorABackground</item>
+        <item name="android:timePickerStyle">@style/AppTheme.TimePicker</item>
+    </style>
+
+    <style name="AppTheme.DatePicker" parent="android:Widget.Material.Light.DatePicker">
+        <item name="android:headerBackground">?colorABackground</item>
+    </style>
+
+    <style name="AppTheme.TimePickerDialog" parent="Theme.MaterialComponents.Light.Dialog">
+        <item name="colorAccent">?colorAPrimary</item>
+        <item name="android:backgroundTint">?colorABackground</item>
+<!--        <item name="android:background">?colorABackground</item>-->
+        <item name="android:timePickerStyle">@style/AppTheme.TimePicker</item>
+    </style>
+
+    <style name="AppTheme.TimePicker" parent="android:Widget.Material.Light.TimePicker">
+        <item name="android:headerTimeTextAppearance">@style/TextAppearance.TimePickerDialogStyle.TimeLabel</item>
+        <item name="android:headerBackground">?colorABackground</item>
+        <item name="android:numbersTextColor">?android:textColor</item>
+        <item name="android:numbersInnerTextColor" tools:targetApi="m">?colorTextSub</item>
+        <item name="android:numbersSelectorColor">?colorAPrimary</item>
+        <item name="android:numbersBackgroundColor">?colorASurface</item>
+        <item name="android:amPmTextColor">?colorTextSub</item>
+    </style>
+
+    <style name="TextAppearance.TimePickerDialogStyle.TimeLabel" parent="TextAppearance.MaterialComponents.Headline1">
+        <item name="android:textColor">?colorAOnBackground</item>
+    </style>
+
+    <style name="AppTheme.Toolbar" parent="Widget.MaterialComponents.Toolbar">
+        <item name="titleTextColor">?colorTextSub</item>
+        <item name="android:textColor">?colorTextSub</item>
+<!--        <item name="android:textColorHint">?android:textColorHint</item>-->
+        <item name="android:background">?colorTb</item>
+    </style>
+
+    <style name="AppTheme.Transparent" parent="AppTheme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+    <style name="InstantCard" parent="Widget.MaterialComponents.CardView">
+        <item name="android:layout_marginTop">15dp</item>
+        <item name="android:layout_marginStart">30dp</item>
+        <item name="android:layout_marginEnd">30dp</item>
+        <item name="cardCornerRadius">@dimen/radius</item>
+        <item name="cardBackgroundColor">?colorAItem</item>
+        <item name="cardElevation">0dp</item>
+        <item name="android:alpha">@fraction/surfaceAlpha</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="InstantSwitchText" parent="Widget.MaterialComponents.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingTop">25dp</item>
+        <item name="android:paddingBottom">25dp</item>
+        <item name="android:paddingStart">30dp</item>
+        <item name="android:paddingEnd">10dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">?colorAOnItem</item>
+        <item name="colorAccent">?colorAccent</item>
+    </style>
+
+    <style name="InstantSwitchDivider">
+        <item name="android:layout_marginTop">21dp</item>
+        <item name="android:layout_marginBottom">21dp</item>
+        <item name="android:layout_width">1dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">?colorStroke</item>
+    </style>
+
+    <style name="InstantSwitchAlone" parent="Widget.AppCompat.CompoundButton.Switch">
+        <item name="android:paddingStart">15dp</item>
+        <item name="android:paddingEnd">30dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="colorAccent">?colorAccent</item>
+    </style>
+
+    <style name="MainCard" parent="Widget.MaterialComponents.CardView">
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginStart">30dp</item>
+        <item name="android:layout_marginEnd">30dp</item>
+        <item name="cardCornerRadius">@dimen/radius</item>
+        <item name="cardBackgroundColor">?colorAItem</item>
+        <item name="cardElevation">0dp</item>
+        <item name="android:alpha">@fraction/surfaceAlpha</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="MainCardLand" parent="MainCard">
+        <item name="android:layout_marginBottom">20dp</item>
+        <item name="android:layout_marginStart">15dp</item>
+        <item name="android:layout_marginEnd">15dp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
+    <style name="MainText" parent="Widget.AppCompat.TextView">
+        <item name="android:paddingTop">25dp</item>
+        <item name="android:paddingBottom">25dp</item>
+        <item name="android:paddingStart">30dp</item>
+        <item name="android:paddingEnd">30dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">?colorAOnItem</item>
+        <item name="android:drawableTint" tools:targetApi="m">?android:textColor</item>
+        <item name="android:drawablePadding">18dp</item>
+        <item name="colorAccent">?colorAccent</item>
+    </style>
+
+    <style name="IconActionContainer">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:paddingTop">20dp</item>
+        <item name="android:paddingBottom">20dp</item>
+    </style>
+
+    <style name="IconActionCard" parent="MainCard">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_marginTop">0dp</item>
+        <item name="android:layout_marginStart">20dp</item>
+        <item name="android:layout_marginEnd">20dp</item>
+    </style>
+
+    <style name="IconActionIcon">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:padding">25dp</item>
+        <item name="android:tint">?colorAOnItem</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+    </style>
+
+    <style name="IconActionText" parent="Widget.MaterialComponents.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_marginTop">3dp</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:maxWidth">104dp</item>
+        <item name="android:gravity">center_horizontal</item>
+    </style>
+
+    <style name="TTRadio" parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="android:button">@android:color/transparent</item>
+        <item name="android:background">@drawable/res_radio_week</item>
+        <item name="android:textColor">@color/tt_radio_text_states</item>
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:gravity">center</item>
+    </style>
+</resources>

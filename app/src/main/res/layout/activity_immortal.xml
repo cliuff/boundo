@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/immortalRoot"
+    android:animateLayoutChanges="true"
+    android:background="?colorABackground"
+    tools:context="com.madness.collision.main.ImmortalActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbarThumbVertical="@drawable/scrollbar_vertical"
+        android:requiresFadingEdge="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="50dp">
+
+            <View
+                android:id="@+id/immortal_v1"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/immortalLogo"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/anim_vector_advice_logo"
+                android:tint="?android:textColor"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/immortal_v1" />
+
+            <TextView
+                android:id="@+id/immortalMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/immortalMessage"
+                android:textSize="18sp"
+                app:layout_constraintTop_toBottomOf="@id/immortalLogo" />
+
+            <TextView
+                android:id="@+id/immortalBag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_marginStart="20dp"
+                android:text="@string/immortalBag"
+                android:textSize="19sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/immortalMessage" />
+
+            <HorizontalScrollView
+                android:id="@+id/immortalBagOperations"
+                app:layout_constraintTop_toBottomOf="@id/immortalBag"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:overScrollMode="never"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:paddingStart="20dp"
+                    android:paddingTop="5dp"
+                    android:paddingEnd="20dp"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        style="@style/IconActionContainer">
+                        <com.google.android.material.card.MaterialCardView
+                            style="@style/IconActionCard">
+                            <ImageView
+                                android:id="@+id/immortalBagShare"
+                                android:onClick="onClick"
+                                style="@style/IconActionIcon"
+                                android:src="@drawable/ic_share_24" />
+                        </com.google.android.material.card.MaterialCardView>
+                        <TextView
+                            style="@style/IconActionText"
+                            android:textColor="?colorAOnBackground"
+                            android:text="@string/immortalShare" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/IconActionContainer">
+                        <com.google.android.material.card.MaterialCardView
+                            style="@style/IconActionCard">
+                            <ImageView
+                                android:id="@+id/immortalBagSend"
+                                android:onClick="onClick"
+                                style="@style/IconActionIcon"
+                                android:src="@drawable/ic_arrow_forward_24" />
+                        </com.google.android.material.card.MaterialCardView>
+                        <TextView
+                            style="@style/IconActionText"
+                            android:textColor="?colorAOnBackground"
+                            android:text="@string/immortalSend" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </HorizontalScrollView>
+
+            <TextView
+                android:id="@+id/immortalContact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/immortalContact"
+                android:textSize="19sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/immortalBagOperations" />
+
+            <HorizontalScrollView
+                android:id="@+id/immortalContactOperations"
+                app:layout_constraintTop_toBottomOf="@id/immortalContact"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:overScrollMode="never"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:paddingStart="20dp"
+                    android:paddingTop="5dp"
+                    android:paddingEnd="20dp"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        style="@style/IconActionContainer">
+                        <com.google.android.material.card.MaterialCardView
+                            style="@style/IconActionCard">
+                            <ImageView
+                                android:id="@+id/immortalContactEmail"
+                                android:onClick="onClick"
+                                style="@style/IconActionIcon"
+                                android:src="@drawable/ic_email_24" />
+                        </com.google.android.material.card.MaterialCardView>
+                        <TextView
+                            style="@style/IconActionText"
+                            android:textColor="?colorAOnBackground"
+                            android:text="@string/textEmail" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/IconActionContainer">
+                        <com.google.android.material.card.MaterialCardView
+                            style="@style/IconActionCard">
+                            <ImageView
+                                android:id="@+id/immortalContactQQ"
+                                android:onClick="onClick"
+                                style="@style/IconActionIcon"
+                                android:src="@drawable/ic_qq_24" />
+                        </com.google.android.material.card.MaterialCardView>
+                        <TextView
+                            style="@style/IconActionText"
+                            android:textColor="?colorAOnBackground"
+                            android:text="@string/textQQ" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </HorizontalScrollView>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/immortalRestart"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="8dp"
+                android:backgroundTint="?colorASurface"
+                android:onClick="onClick"
+                android:textSize="18sp"
+                android:text="@string/immortalRestart"
+                android:textColor="?android:textColor"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/immortalContactOperations" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

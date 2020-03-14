@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="im_edit_width">عرض</string>
+    <string name="im_edit_height">ارتفاع</string>
+    <string name="im_image_select">اختر صورة</string>
+    <string name="im_toast_finish">تم الحفظ في المعرض</string>
+</resources>
