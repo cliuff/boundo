@@ -5,7 +5,7 @@
 - Gradle 6.2.2
 
 **After check-out**
-- Add app.properties and wearable.properties, within each packageName, ...
+- Add app.properties, within add packageName, ...
 
 **After sync**
 - Edit configurations: configuration "app", change deploy to "APK from app bundle"

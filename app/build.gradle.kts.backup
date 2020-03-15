@@ -11,10 +11,10 @@ plugins {
     id("com.google.android.gms.oss-licenses-plugin")
 }
 
-// below: load the desired values from app.properties in order to be injected into BuildConfig and Res
-// the values in local.properties must not contain quotes otherwise the parsed values here will contain quotes
+// below: load the desired values from custom.properties in order to be injected into BuildConfig and Res
+// the values in custom.properties must not contain quotes otherwise the parsed values here will contain quotes
 val properties = Properties()
-properties.load(project.rootProject.file("app.properties").inputStream())
+properties.load(project.rootProject.file("custom.properties").inputStream())
 val buildPackage: String = properties.getProperty("packageName", "")
 val signingKeyStorePath: String = properties.getProperty("signingKeyStorePath", "")
 val signingKeyStorePassword: String = properties.getProperty("signingKeyStorePassword", "")

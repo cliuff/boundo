@@ -3,10 +3,10 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
-// below: load the desired values from local.properties in order to be injected into BuildConfig and Res
-// the values in local.properties must not contain quotes otherwise the parsed values here will contain quotes
+// below: load the desired values from custom.properties in order to be injected into BuildConfig and Res
+// the values in custom.properties must not contain quotes otherwise the parsed values here will contain quotes
 Properties properties = new Properties()
-properties.load(project.rootProject.file("wearable.properties").newDataInputStream())
+properties.load(project.rootProject.file("custom.properties").newDataInputStream())
 def buildPackage = properties.getProperty("packageName", "")
 def buildApplicationId = buildPackage
 def signingKeyStorePath = properties.getProperty("signingKeyStorePath", "")

@@ -89,5 +89,4 @@ lint/tmp/
 .DS_Store
 
 #custom
-/app.properties
-/wearable.properties
+/custom.properties
