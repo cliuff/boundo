@@ -1,6 +1,6 @@
 package com.madness.collision.unit.api_viewing
 
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.UnitAccess
 
@@ -19,7 +19,7 @@ object AccessAV: UnitAccess(Unit.UNIT_NAME_API_VIEWING) {
         invokeWithoutArg("clearSeals")
     }
 
-    fun clearApps(activity: AppCompatActivity) {
-        getMethod("clearApps", AppCompatActivity::class).invoke(activity)
+    fun clearApps(activity: ComponentActivity) {
+        getMethod("clearApps", ComponentActivity::class).invoke(activity)
     }
 }

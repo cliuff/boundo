@@ -11,6 +11,7 @@ import com.google.android.play.core.splitinstall.model.SplitInstallErrorCode
 import com.madness.collision.BuildConfig
 import com.madness.collision.R
 import com.madness.collision.util.X
+import com.madness.collision.versatile.AppInfoWidget
 
 internal class UnitManager(private val context: Context, private val splitInstallManager: SplitInstallManager) {
 
@@ -57,7 +58,7 @@ internal class UnitManager(private val context: Context, private val splitInstal
             PackageManager.COMPONENT_ENABLED_STATE_DISABLED
         else
             PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-        val componentName = ComponentName(context.packageName, "${ BuildConfig.BUILD_PACKAGE }.versatile.AppInfoWidget")
+        val componentName = ComponentName(context.packageName, AppInfoWidget::class.qualifiedName ?: "")
         context.packageManager.setComponentEnabledSetting(componentName, state, PackageManager.DONT_KILL_APP)
     }
 

@@ -121,6 +121,7 @@ internal class QqFragment : Fragment(), Democratic {
         val context = context ?: return
         if (requestCode == REQUEST_LOAD_IMAGE && resultCode == AppCompatActivity.RESULT_OK && data != null){
             val selectedImage = data.data ?: return
+            MemoryManager.clearSpace(activity)
             try {
                 avatar = ImageUtil.getBitmap(context, selectedImage)
             } catch ( e: IOException) {

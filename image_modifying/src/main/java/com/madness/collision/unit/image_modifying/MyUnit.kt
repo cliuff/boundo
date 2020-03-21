@@ -136,6 +136,7 @@ class MyUnit: Unit(){
         val activity = activity ?: return
         if (requestCode == REQUEST_GET_IMAGE && resultCode == Activity.RESULT_OK && data != null) {
             val dataUri = data.data ?: return
+            MemoryManager.clearSpace(activity)
             try {
                 image = ImageUtil.getBitmap(context, dataUri)
             } catch (e: IOException) { e.printStackTrace() }

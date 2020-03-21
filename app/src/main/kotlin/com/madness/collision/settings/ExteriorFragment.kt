@@ -214,6 +214,7 @@ class ExteriorFragment: Fragment(), Democratic, View.OnClickListener{
         val context = context ?: return
         if (requestCode == REQUEST_GET_IMAGE && resultCode == AppCompatActivity.RESULT_OK && data != null){
             val dataUri = data.data ?: return
+            MemoryManager.clearSpace(activity)
             try {
                 image = ImageUtil.getBitmap(context, dataUri)
             } catch ( e: IOException) {

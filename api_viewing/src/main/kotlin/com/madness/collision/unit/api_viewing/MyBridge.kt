@@ -1,8 +1,8 @@
 package com.madness.collision.unit.api_viewing
 
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.madness.collision.unit.Bridge
 import com.madness.collision.unit.Unit
@@ -30,7 +30,7 @@ object MyBridge: Bridge() {
         APIAdapter.sealBack.clear()
     }
 
-    fun clearApps(activity: AppCompatActivity) {
+    fun clearApps(activity: ComponentActivity) {
         val viewModel: ApiViewingViewModel by activity.viewModels()
         viewModel.clearCache()
     }
