@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.play.core.splitinstall.SplitInstallManager
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.main.MainViewModel
@@ -91,7 +93,7 @@ abstract class Unit: Fragment(), Democratic {
 
         fun getFrequencies(context: Context,
                            pref: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
-        ) = PrefsUtil.getCompoundItem<String, Int>(pref, P.UNIT_FREQUENCIES)
+        ) = PrefsUtil.getCompoundItem<String, String>(pref, P.UNIT_FREQUENCIES).mapValues { it.value.toInt() }
 
         fun increaseFrequency(context: Context, unitName: String,
                               pref: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
@@ -100,7 +102,7 @@ abstract class Unit: Fragment(), Democratic {
             val f = if (X.aboveOn(X.N)) frequencies.getOrDefault(unitName, 0)
             else frequencies[unitName] ?: 0
             frequencies[unitName] = f + 1
-            PrefsUtil.putCompoundItem(pref, P.UNIT_FREQUENCIES, frequencies)
+            PrefsUtil.putCompoundItem(pref, P.UNIT_FREQUENCIES, frequencies.mapValues { it.value.toString() })
         }
 
         fun getPinnedUnits(context: Context,
@@ -108,7 +110,7 @@ abstract class Unit: Fragment(), Democratic {
         ): Set<String> {
             val json = pref.getString(P.UNIT_PINNED, "")
             if (json.isNullOrEmpty()) return emptySet()
-            return json.jsonNestedTo() ?: emptySet()
+            return Gson().fromJson(json, TypeToken.getParameterized(Set::class.java, String::class.java).type) ?: emptySet()
         }
 
         fun getIsPinned(context: Context, unitName: String,
@@ -132,7 +134,7 @@ abstract class Unit: Fragment(), Democratic {
             val pinnedUnits = getPinnedUnits(context, pref).toMutableSet()
             if (pinnedUnits.contains(unitName)) return
             pinnedUnits.add(unitName)
-            pref.edit { putString(P.UNIT_PINNED, pinnedUnits.nestedToJson<Set<String>>()) }
+            pref.edit { putString(P.UNIT_PINNED, Gson().toJson(pinnedUnits, TypeToken.getParameterized(Set::class.java, String::class.java).type)) }
         }
 
         fun unpinUnit(context: Context, unitName: String,
@@ -141,7 +143,7 @@ abstract class Unit: Fragment(), Democratic {
             val pinnedUnits = getPinnedUnits(context, pref).toMutableSet()
             if (!pinnedUnits.contains(unitName)) return
             pinnedUnits.remove(unitName)
-            pref.edit { putString(P.UNIT_PINNED, pinnedUnits.nestedToJson<Set<String>>()) }
+            pref.edit { putString(P.UNIT_PINNED, Gson().toJson(pinnedUnits, TypeToken.getParameterized(Set::class.java, String::class.java).type)) }
         }
 
         @Suppress("UNCHECKED_CAST")

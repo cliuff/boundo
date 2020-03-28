@@ -9,6 +9,8 @@ import android.graphics.drawable.Drawable
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
 import androidx.core.content.edit
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.madness.collision.BuildConfig
 import com.madness.collision.instant.Instant
 import com.madness.collision.main.MainViewModel
@@ -60,12 +62,12 @@ internal object MiscMain {
         if (verOri in 0 until 19091423) {
             deleteDirs(F.cachePublicPath(context))
         }
-        if (verOri in 0 until 20032822) {
+        if (verOri in 0 until 20032901) {
             // covert to json
             val pref: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
             val data = pref.getStringSet(P.UNIT_FREQUENCIES, HashSet())!!
-            val originalData = data.associate { it.split(":").run { this[0] to this[1] } }.mapValues { it.value.toInt() }
             pref.edit { remove(P.UNIT_FREQUENCIES) }
+            val originalData = data.associate { it.split(":").run { this[0] to this[1] } }
             PrefsUtil.putCompoundItem(pref, P.UNIT_FREQUENCIES, originalData)
             // disable WeChat launcher icon
             if (Unit.getDescription(Unit.UNIT_NAME_WE_CHAT_EVO)?.isAvailable(context) == false) {
@@ -82,7 +84,7 @@ internal object MiscMain {
         }
     }
 
-    private fun initPinnedUnits(prefSettings: SharedPreferences) {
+    private fun initPinnedUnits(pref: SharedPreferences) {
         val pinnedUnits = mutableSetOf<String>()
         listOf(
                 Unit.UNIT_NAME_API_VIEWING,
@@ -92,7 +94,7 @@ internal object MiscMain {
         ).forEach {
             pinnedUnits.add(it)
         }
-        prefSettings.edit { putString(P.UNIT_PINNED, pinnedUnits.nestedToJson<Set<String>>()) }
+        pref.edit { putString(P.UNIT_PINNED, Gson().toJson(pinnedUnits, TypeToken.getParameterized(Set::class.java, String::class.java).type)) }
     }
 
     private fun deleteDirs(vararg paths: String){
