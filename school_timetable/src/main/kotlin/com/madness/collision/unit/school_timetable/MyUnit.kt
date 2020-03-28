@@ -13,12 +13,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.edit
 import androidx.lifecycle.observe
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.madness.collision.R
 import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.Unit
@@ -37,6 +34,7 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileReader
 import java.io.IOException
+import java.lang.ref.WeakReference
 import java.util.*
 import kotlin.collections.ArrayList
 import com.madness.collision.unit.school_timetable.R as MyR
@@ -44,20 +42,17 @@ import com.madness.collision.unit.school_timetable.R as MyR
 class MyUnit: Unit(), View.OnClickListener{
     companion object {
 
-        fun setTable(context: Context, timetable: Timetable){
-            if (context !is AppCompatActivity) return
-            val rvTable: RecyclerView = context.findViewById(MyR.id.ttRecyclerView) ?: return
-            (rvTable.layoutManager as GridLayoutManager).spanCount = if (timetable.columns > 0) timetable.columns else 1
-            val adapter = rvTable.adapter as TimetableAdapter
-            adapter.timetable = timetable
-            adapter.notifyDataSetChanged()
+        var ref: WeakReference<MyUnit>? = null
+
+        fun setTable(timetable: Timetable?){
+            val page = ref?.get() ?: return
+            page.timetableFragment.setTimetable(timetable)
         }
     }
 
     private lateinit var settingsPreferences: SharedPreferences
     private lateinit var iCalendarPreferences: SharedPreferences
-    private lateinit var mRecyclerView: RecyclerView
-    private lateinit var mAdapter: TimetableAdapter
+    private lateinit var timetableFragment: TimetableFragment
 
     private var isTimeInformed = false
     private lateinit var mTimetable: Timetable
@@ -76,8 +71,8 @@ class MyUnit: Unit(), View.OnClickListener{
             }
             MyR.id.ttTBRemove -> {
                 mTimetable = Timetable()
+                setTable(mTimetable)
                 val context = context ?: return false
-                setTable(context, mTimetable)
                 GlobalScope.launch {
                     if (Timetable.hasPersistence(context)) {
                         X.deleteFolder(Timetable.getPersistenceFolder(context))
@@ -91,10 +86,32 @@ class MyUnit: Unit(), View.OnClickListener{
         return false
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        ref = WeakReference(this)
+        timetableFragment = TimetableFragment.newInstance()
+    }
+
+    override fun onDestroy() {
+        ref = null
+        super.onDestroy()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val context = context
         if (context != null) SettingsFunc.updateLanguage(context)
         return inflater.inflate(MyR.layout.unit_school_timetable, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        ensureAdded(MyR.id.stTimetableContainer, timetableFragment, true)
+        val context = context ?: return
+        GlobalScope.launch {
+            mTimetable = Timetable.fromPersistence(context)
+            launch(Dispatchers.Main){
+                setTable(mTimetable)
+            }
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -110,13 +127,6 @@ class MyUnit: Unit(), View.OnClickListener{
             val layoutParams = ttImport.layoutParams as ViewGroup.MarginLayoutParams
             layoutParams.bottomMargin = it + X.size(context, 20f, X.DP).toInt()
         }
-
-        mTimetable = Timetable.fromPersistence(context)
-        mAdapter = TimetableAdapter(context, mTimetable)
-        mRecyclerView = ttRecyclerView
-        mRecyclerView.isNestedScrollingEnabled = false
-        mRecyclerView.layoutManager = GridLayoutManager(context, if (mTimetable.columns > 0) mTimetable.columns else 1)
-        mRecyclerView.adapter = mAdapter
 
         if (settingsPreferences.getBoolean(P.TT_CAL_DEFAULT_GOOGLE, true))
             ttCalendarDefault.isChecked = true
@@ -224,7 +234,7 @@ class MyUnit: Unit(), View.OnClickListener{
                         mTimetable.persist(context, true)
                         mTimetable.renderTimetable()
                         launch(Dispatchers.Main){
-                            setTable(context, mTimetable)
+                            setTable(mTimetable)
                         }
                     }
                 }

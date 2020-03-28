@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- preference keys -->
+    <string name="avIncludeDisabled" translatable="false">AVIncludeDisabled</string>
+    <bool name="avIncludeDisabledDefault">false</bool>
+    <string name="avSweet" translatable="false">AVSweet</string>
+    <bool name="avSweetDefault">true</bool>
+    <string name="API_APK_PRELOAD" translatable="false">apiAPKPreload</string>
+    <bool name="API_APK_PRELOAD_DEFAULT">false</bool>
+    <string name="API_CIRCULAR_ICON" translatable="false">SDKCircularIcon</string>
+    <bool name="API_CIRCULAR_ICON_DEFAULT">true</bool>
+    <string name="API_PACKAGE_ROUND_ICON" translatable="false">APIPackageRoundIcon</string>
+    <bool name="API_PACKAGE_ROUND_ICON_DEFAULT">false</bool>
+    <string name="avClipRound" translatable="false">AVClip2Round</string>
+    <bool name="avClipRoundDefault">true</bool>
+    <string name="avTags" translatable="false">AvTags</string>
+    <!-- preference keys -->
+
+    <string-array name="prefAvTagsEntries">
+        <item>@string/apiDetailsInstallGP</item>
+        <item>@string/apiDetailsInstallPI</item>
+        <item>Flutter</item>
+        <item>React Native</item>
+        <item>Xarmarin</item>
+        <item>ARM</item>
+        <item>x86</item>
+        <item>@string/av_settings_tags_system</item>
+    </string-array>
+    <string-array name="prefAvTagsValues">
+        <item>@string/prefAvTagsValuePackageInstallerGp</item>
+        <item>@string/prefAvTagsValuePackageInstallerPi</item>
+        <item>@string/prefAvTagsValueCrossPlatformFlu</item>
+        <item>@string/prefAvTagsValueCrossPlatformRn</item>
+        <item>@string/prefAvTagsValueCrossPlatformXar</item>
+        <item>@string/prefAvTagsValueNativeLibArm</item>
+        <item>@string/prefAvTagsValueNativeLibX86</item>
+        <item>@string/prefAvTagsValuePrivilegeSys</item>
+    </string-array>
+    <string name="prefAvTagsValuePackageInstallerGp" translatable="false">avTagsValPiGp</string>
+    <string name="prefAvTagsValuePackageInstallerPi" translatable="false">avTagsValPiPi</string>
+    <string name="prefAvTagsValueCrossPlatformFlu" translatable="false">avTagsValCpFlu</string>
+    <string name="prefAvTagsValueCrossPlatformRn" translatable="false">avTagsValCpRn</string>
+    <string name="prefAvTagsValueCrossPlatformXar" translatable="false">avTagsValCpXar</string>
+    <string name="prefAvTagsValueNativeLibArm" translatable="false">avTagsValNlArm</string>
+    <string name="prefAvTagsValueNativeLibX86" translatable="false">avTagsValNlX86</string>
+    <string name="prefAvTagsValuePrivilegeSys" translatable="false">avTagsValPriSys</string>
+
+</resources>

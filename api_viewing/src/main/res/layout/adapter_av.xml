@@ -34,54 +34,80 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
+        android:gravity="center_vertical"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/avAdapterInfoLogo"
-            android:layout_width="0dp"
-            android:layout_height="70dp"
-            android:layout_gravity="center"
-            android:layout_weight="2"
-            android:padding="10dp" />
-
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="6"
-            android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/avAdapterInfoLogo"
+                android:layout_width="0dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center"
+                android:layout_weight="2"
+                android:padding="10dp" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="6"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/avAdapterInfoName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:textColor="?colorAOnBackground"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/avAdapterInfoTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="?colorTextSub"
+                    android:textSize="8sp"
+                    tools:ignore="SmallSp" />
+
+            </LinearLayout>
 
             <TextView
-                android:id="@+id/avAdapterInfoName"
-                android:layout_width="wrap_content"
+                android:id="@+id/avAdapterInfoAPI"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="2"
+                android:layout_gravity="center"
+                android:layout_weight="2"
+                android:gravity="center"
                 android:textColor="?colorAOnBackground"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/avAdapterInfoTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:textColor="?colorTextSub"
-                android:textSize="8sp"
-                tools:ignore="SmallSp" />
+                android:textSize="25sp" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/avAdapterInfoAPI"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:textColor="?colorAOnBackground"
-            android:textSize="25sp" />
+        <HorizontalScrollView
+            android:scrollbars="none"
+            android:requiresFadingEdge="horizontal"
+            android:overScrollMode="never"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/avAdapterInfoTags"
+                app:singleLine="true"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </HorizontalScrollView>
+
     </LinearLayout>
+
 </com.google.android.material.card.MaterialCardView>
 

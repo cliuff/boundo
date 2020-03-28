@@ -226,4 +226,5 @@
     <string name="unit_manager_error_api_unavailable">API недоступен</string>
     <string name="unit_manager_uninstall_success">Удаление произойдет, когда простаивает</string>
     <string name="unit_desc_uninstall_notice">Отсрочка удаления</string>
+    <string name="unit_desc_pin">приколоть</string>
 </resources>

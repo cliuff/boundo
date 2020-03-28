@@ -35,7 +35,7 @@ internal class UpdatesFragment : Fragment(), Democratic {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mContext = context ?: return
-        updatesProviders = Unit.getSortedUnitNamesByFrequency(mContext).mapNotNull {
+        updatesProviders = Unit.getPinnedUnits(mContext).mapNotNull {
             Unit.getUpdates(it)?.run { it to this }
         }
         fragments = updatesProviders.mapNotNull {
@@ -48,9 +48,8 @@ internal class UpdatesFragment : Fragment(), Democratic {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        // todo support multiple updates fragments
         for ((unitName, f) in fragments) {
-            ensureAdded(R.id.updatesFragment, f)
+            ensureAdded(R.id.updatesContainer, f)
             val description = Unit.getDescription(unitName) ?: continue
             updatesPinned.setCompoundDrawablesRelativeWithIntrinsicBounds(description.getIcon(mContext), null, null, null)
             updatesPinned.text = description.getName(mContext)

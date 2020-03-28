@@ -20,7 +20,6 @@ import com.madness.collision.util.X;
 
 import java.util.HashMap;
 
-
 class TimetableParser {
 
     static final String ERROR_NO_CLIP_DATA = "ERROR_NO_CLIP_DATA";

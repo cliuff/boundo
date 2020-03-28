@@ -66,17 +66,19 @@ object MiscApp {
         return changedPackages?.packageNames ?: emptyList()
     }
 
-    fun getChangedPackages(context: Context): List<PackageInfo> {
+    fun getChangedPackages(context: Context, timestamp: Long = 0): List<PackageInfo> {
 //        return if (X.aboveOn(X.O)) {
 //            getChangedPackageNames(context).mapNotNull { getPackageInfo(context, it) }
 //        } else {
 //        }
-        val prefSettings = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
-        val timestamp = prefSettings.getLong(P.PACKAGE_CHANGED_TIMESTAMP, System.currentTimeMillis())
+        val shouldOverride = timestamp != 0L
+        val prefSettings = if (shouldOverride) null else context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
+        val finalTimestamp = if (shouldOverride) timestamp
+        else prefSettings!!.getLong(P.PACKAGE_CHANGED_TIMESTAMP, System.currentTimeMillis())
         val re = context.packageManager.getInstalledPackages(0).filter {
-            it.lastUpdateTime >= timestamp
+            it.lastUpdateTime >= finalTimestamp
         }
-        prefSettings.edit { putLong(P.PACKAGE_CHANGED_TIMESTAMP, System.currentTimeMillis()) }
+        if (!shouldOverride) prefSettings!!.edit { putLong(P.PACKAGE_CHANGED_TIMESTAMP, System.currentTimeMillis()) }
         return re
     }
 

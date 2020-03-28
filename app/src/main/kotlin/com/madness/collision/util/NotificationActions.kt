@@ -20,6 +20,7 @@ internal class NotificationActions : Service() {
                 SettingsFunc.update(this@NotificationActions)
             }
         }
+        stopSelf()
         return super.onStartCommand(intent, flags, startId)
     }
 

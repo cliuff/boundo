@@ -60,4 +60,7 @@
     <string name="av_share_full">พื้นหลังแบบเต็ม</string>
     <string name="av_share_stroked">ลากเส้น</string>
     <string name="av_updates_view_more">ดูเพิ่มเติม</string>
+    <string name="av_settings_tags">แท็ก</string>
+    <string name="av_settings_tags_system">แอประบบ</string>
+    <string name="av_adapter_tag_system">ระบบ</string>
 </resources>

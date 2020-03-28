@@ -81,8 +81,11 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
     private val viewModel: MainViewModel by viewModels()
     private lateinit var navController: NavController
     private lateinit var navHostFragment: NavHostFragment
-    private val backPressedCallbackStack: Stack<OnBackPressedCallback>
+    private val backPressedCallbackStack: Stack<BackwardOperation>
         get() = viewModel.backPressedCallbackStack
+    private var backupCallback: Stack<BackwardOperation>? = null
+    private var shouldKeepBackup: Boolean = false
+//    private var shouldCareBack: Boolean = false
     internal lateinit var background: View
     private lateinit var mContext: Context
     private lateinit var prefSettings: SharedPreferences
@@ -96,11 +99,24 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
 
         initData(mContext)
         mWindow = window
+        viewModel.updateTimestamp()
+        applyEssentials(mContext)
         applyUI()
         applyMisc(mContext)
     }
 
+    private fun applyEssentials(context: Context) {
+        GlobalScope.launch {
+            MiscMain.ensureUpdate(context, prefSettings)
+            Unit.loadUnitClasses(context)
+        }
+    }
+
     override fun onDestroy() {
+        backPressedCallbackStack.forEach {
+            it.cachedCallback?.remove()
+            it.cachedCallback = null
+        }
         GlobalScope.launch {
             MiscMain.clearCache(this@MainActivity)
         }
@@ -136,23 +152,88 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
         navHostFragment = supportFragmentManager.findFragmentById(R.id.mainNavHost) as NavHostFragment
         navController = navHostFragment.navController
 
-        setupOnBackPressedDispatcher()
-
         setupViewModel()
 
+        if (!backPressedCallbackStack.empty()) {
+            backupCallback = backPressedCallbackStack
+            viewModel.backPressedCallbackStack = Stack()
+            shouldKeepBackup = true
+        }
+        // invoke will clear stack
         applyResources()
+
         viewModel.background.observe(this) {
             applyExterior()
             if (isToolbarInflated || !mainApplication.exterior) applyColor()
         }
     }
 
-    // todo persist onBackPressedDispatcher state across configuration change
-    private fun setupOnBackPressedDispatcher() {
-        viewModel.backPressedCallbackStack.forEach {
-            it.remove()
-            onBackPressedDispatcher.addCallback(it)
+    override fun onBackPressed() {
+        // across configuration change
+        // fragment manager added callbacks but they do not work properly
+        if (backupCallback != null) {
+            viewModel.backPressedCallbackStack = backupCallback!!
+            backupCallback = null
+            setupOnBackPressedDispatcher()
+//            shouldCareBack = true
         }
+        // work around for those callbacks
+//        if (shouldCareBack && backPressedCallbackStack.empty()) {
+//            goAllTheWayBack()
+//            goAllTheWayBack()
+//            return
+//        }
+        super.onBackPressed()
+    }
+
+    private fun setupOnBackPressedDispatcher() {
+        if (backPressedCallbackStack.empty()) return
+        val last = backPressedCallbackStack.peek()
+        backPressedCallbackStack.forEach {
+            onBackPressedDispatcher.addCallback(it.makeCallback(it === last))
+        }
+    }
+
+    private fun BackwardOperation.makeCallback(isForwardTheTop: Boolean = false): OnBackPressedCallback {
+        val shouldShowNavAfterBack = operationFlags[0]
+        val shouldExitAppAfterBack = operationFlags[1]
+        val isMoreUnit = !backPressedCallbackStack.empty()
+        val navFm = navHostFragment.childFragmentManager
+        val forwardFragment = if (isForwardTheTop) navFm.fragments.find { f -> f.isVisible } else if (forwardPage.hasRef) forwardPage.fragment else null
+        val backwardFragment = backwardPage.fragment
+        cachedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                minusBackPressedCallback(this)
+                if (shouldExitAppAfterBack) {
+                    finish()
+                    return
+                }
+                navFm.beginTransaction().animRetreat.run {
+                    if (forwardFragment != null) remove(forwardFragment)
+                    if (backwardFragment.isAdded) show(backwardFragment)
+                    else add(navHostFragment.view?.id ?: 0, backwardFragment)
+                    commitNow()
+                }
+                if (backwardFragment is Democratic) backwardFragment.democratize(viewModel)
+                if (shouldShowNavAfterBack) showNav()
+                // make unit value matches reality
+                viewModel.unit.value = if (isMoreUnit) backwardFragment to booleanArrayOf(false, false) else null
+            }
+        }
+        return cachedCallback!!
+    }
+
+    private fun minusBackPressedCallback(callback: OnBackPressedCallback) {
+        if (backPressedCallbackStack.empty()) return
+        if (backPressedCallbackStack.peek().cachedCallback === callback)
+            backPressedCallbackStack.pop().cachedCallback?.remove()
+    }
+
+    private fun clearBackPressedCallback() {
+        backPressedCallbackStack.forEach {
+            it.cachedCallback?.remove()
+        }
+        backPressedCallbackStack.clear()
     }
 
     private fun applyMisc(context: Context) {
@@ -173,10 +254,6 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
      * update notification availability, notification channels and check app update
      */
     private fun applyUpdates(context: Context) {
-        Unit.loadUnitClasses(context)
-//        prHandler = PermissionRequestHandler(this)
-//        SettingsFunc.check4Update(this, null, prHandler)
-
         // enable notification
         mainApplication.notificationAvailable = NotificationManagerCompat.from(context).areNotificationsEnabled()
         if (!mainApplication.notificationAvailable && Random(System.currentTimeMillis()).nextInt(10) == 0) {
@@ -186,7 +263,9 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
         }
         MiscMain.registerNotificationChannels(context, prefSettings)
         MiscMain.clearCache(context)
-        MiscMain.ensureUpdate(context, prefSettings)
+
+//        prHandler = PermissionRequestHandler(this)
+//        SettingsFunc.check4Update(this, null, prHandler)
     }
 
     private fun initApplication(context: Context) {
@@ -204,7 +283,7 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
     }
 
     private val FragmentTransaction.animNew: FragmentTransaction
-        get() = setCustomAnimations(
+        get() = disallowAddToBackStack().setCustomAnimations(
                 R.anim.fragment_open_enter, R.anim.fragment_fade_exit,
                 R.anim.fragment_fade_enter, R.anim.fragment_close_exit
         )
@@ -226,25 +305,9 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
             navFm.fragments.find { f -> f.isVisible }?.also { topFragment ->
                 val (unitFragment, flags) = it
                 if (topFragment == unitFragment) return@also
-                val shouldShowNavAfterBack = flags[0]
-                val shouldExitAppAfterBack = flags[1]
-                val isMoreUnit = !backPressedCallbackStack.empty()
-                val callback = object : OnBackPressedCallback(true) {
-                    override fun handleOnBackPressed() {
-                        minusBackPressedCallback(this)
-                        if (shouldExitAppAfterBack) {
-                            finish()
-                            return
-                        }
-                        navFm.beginTransaction().animRetreat.remove(unitFragment).show(topFragment).commitNow()
-                        if (topFragment is Democratic) topFragment.democratize(viewModel)
-                        if (shouldShowNavAfterBack) showNav()
-                        // make unit value matches reality
-                        viewModel.unit.value = if (isMoreUnit) topFragment to booleanArrayOf() else null
-                    }
-                }
-                backPressedCallbackStack.push(callback)
-                onBackPressedDispatcher.addCallback(callback)
+                val operation = BackwardOperation(unitFragment, topFragment, flags)
+                backPressedCallbackStack.push(operation)
+                onBackPressedDispatcher.addCallback(operation.makeCallback())
                 navFm.beginTransaction().animNew.hide(topFragment).add(navHostFragment.view?.id ?: 0, unitFragment).commit()
                 hideNav()
             }
@@ -346,11 +409,19 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
             }
         }
 
+        // after this invoke, back stack will be cleared because destination gets changed right away when showing the primary page
         navController.addOnDestinationChangedListener { _, destination, _ ->
             viewModel.removeCurrentUnit()
             destinationChanged(destination.id)
             // Clear callback stack in case back pressing logic gets messed up
             clearBackPressedCallback()
+            // keep backup to be restored later in onBackPressed
+            // invoked when across configuration change
+            if (shouldKeepBackup) {
+                shouldKeepBackup = false
+            } else if (backupCallback != null) {
+                backupCallback = null
+            }
         }
 
         mainTB.setOnMenuItemClickListener(this)
@@ -389,17 +460,6 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
 //            e.printStackTrace()
 //        }
         }.run()
-    }
-
-    private fun minusBackPressedCallback(callback: OnBackPressedCallback) {
-        if (backPressedCallbackStack.empty()) return
-        if (backPressedCallbackStack.peek() == callback)
-            backPressedCallbackStack.pop().remove()
-    }
-
-    private fun clearBackPressedCallback() {
-        backPressedCallbackStack.forEach { it.remove() }
-        backPressedCallbackStack.clear()
     }
 
     private val navScrollBehavior: MyHideBottomViewOnScrollBehavior<View>?
@@ -471,6 +531,13 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
             setPopEnterAnim(R.anim.fragment_fade_enter)
             setPopExitAnim(R.anim.fragment_close_exit)
         }.also { navController.navigate(id, null, it.build()) }
+    }
+
+    private fun goAllTheWayBack() {
+        val mainDestinationId = R.id.updatesFragment
+        val isAlreadyDestination = navController.currentDestination?.id == mainDestinationId
+        if (isAlreadyDestination) finish()
+        else mainNav(mainDestinationId)
     }
 
     private fun applyInsets() {

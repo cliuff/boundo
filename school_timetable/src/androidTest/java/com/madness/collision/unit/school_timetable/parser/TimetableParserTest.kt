@@ -1,6 +1,5 @@
-package com.madness.collision.unit.school_timetable
+package com.madness.collision.unit.school_timetable.parser
 
-import com.madness.collision.unit.school_timetable.parser.TimetableParser
 import com.madness.collision.util.F
 import org.junit.jupiter.api.Test
 import java.nio.charset.Charset

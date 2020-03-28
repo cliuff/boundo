@@ -121,7 +121,7 @@
     <string name="apiDisplayFile">Choisir des APK</string>
     <string name="textRound">Ronde</string>
     <string name="textRounded">Rectangle arrondi</string>
-    <string name="textSquircle">Squircle</string>
+    <string name="textSquircle">Arrondi</string>
     <string name="textSelectFromGallery">Sélectionnez manuellement une image dans la galerie</string>
     <string name="textWeekNum">Semaine %d</string>
     <string name="ttWeekIndicator">Indicateur hebdomadaire</string>
@@ -176,7 +176,7 @@
     <string name="notifyChannelServiceDesc">Soyez informé de la demande du service de démarrer l\'activité</string>
     <string name="notifyChannelService">Service requests</string>
     <string name="prefExteriorForceDarkDesc">To get the best dark experience, you mustn\'t enable Override Force-dark in developer options</string>
-    <string name="prefExteriorForceDarkDescDetail">Force Dark is a feature for developers to quickly implement a dark theme. By setting forceDarkAllowed to true, an app gets a dark theme automatically. And the developer will further modify certain portions of the interface that are not ideal and set forceDarkAllowed to false on those portions. Enabling Override Force-dark will make the system ignore forceDarkAllowed value, causing a well implemented dark theme to malfunction.</string>
+    <string name="prefExteriorForceDarkDescDetail">Forcé le thème sombre (Force Dark) est une fonction permettant aux développeurs de mettre rapidement en œuvre un thème sombre. En réglant forceDarkAllowed sur true, une application obtient automatiquement un thème sombre. Le développeur modifiera en outre certaines parties de l\'interface qui ne sont pas idéales et fixera forceDarkAllowed à false sur ces parties. En activant forcé le thème sombre (Override Force-dark), le système ignorera la valeur de forceDarkAllowed, ce qui entraînera le dysfonctionnement d\'un thème sombre bien implémenté.</string>
     <string name="notifyChannelGroupApp">App</string>
     <string name="notifyChannelGroupAppDesc">Notifications relatives à l\'application</string>
     <string name="fileActionsOpen">Ouvrir</string>
@@ -225,4 +225,5 @@
     <string name="unit_manager_error_api_unavailable">API indisponible</string>
     <string name="unit_desc_uninstall_notice">Différer la désinstallation</string>
     <string name="unit_desc_install_notice">Essai d\'installation</string>
+    <string name="unit_desc_pin">Épingle</string>
 </resources>

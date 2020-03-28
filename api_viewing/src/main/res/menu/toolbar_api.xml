@@ -18,6 +18,11 @@
         android:icon="@drawable/ic_refresh_24"
         app:showAsAction="ifRoom"/>
     <item
+        android:id="@+id/apiTBSettings"
+        android:title="@string/Main_ToolBar_title_Settings"
+        android:icon="@drawable/ic_settings_24"
+        app:showAsAction="ifRoom"/>
+    <item
         android:id="@+id/apiTBManual"
         android:icon="@drawable/ic_help_24"
         android:title="@string/textManual"

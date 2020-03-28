@@ -14,10 +14,7 @@ import android.os.Build
 import android.os.Parcel
 import android.os.Parcelable
 import android.provider.Settings
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.Ignore
-import androidx.room.PrimaryKey
+import androidx.room.*
 import com.madness.collision.R
 import com.madness.collision.misc.MiscApp
 import com.madness.collision.settings.SettingsFunc
@@ -68,6 +65,8 @@ internal class ApiViewingApp(
     var apiUnit: Int = ApiUnit.NON
     var apkPath: String = ""
     var updateTime = 0L
+    var isNativeLibrariesRetrieved = false
+    var nativeLibraries: BooleanArray = BooleanArray(7) { false }
     @Ignore
     private var type: Int = TYPE_APP
     @Ignore
@@ -408,6 +407,11 @@ internal class ApiViewingApp(
         return logoCircular
     }
 
+    fun retrieveNativeLibraries() {
+        ApkUtil.getNativeLibSupport(apkPath).copyInto(nativeLibraries)
+        isNativeLibrariesRetrieved = true
+    }
+
     fun storePage(name: String, direct: Boolean = true): Intent = when (name) {
         packageCoolApk -> coolApkPage(direct)
         packagePlayStore -> playStorePage(direct)
@@ -477,6 +481,8 @@ internal class ApiViewingApp(
         preload = booleanArray[1]
         isLoadingIcon = booleanArray[2]
         _iconDetails = parIn.readParcelable(IconRetrievingDetails::class.java.classLoader)
+        isNativeLibrariesRetrieved = parIn.readInt() == 1
+        parIn.readBooleanArray(BooleanArray(7) { false })
     }
 
     override fun writeToParcel( dest: Parcel, flags: Int) {
@@ -499,6 +505,8 @@ internal class ApiViewingApp(
         dest.writeInt(type)
         dest.writeBooleanArray(booleanArrayOf(adaptiveIcon, preload, isLoadingIcon))
         dest.writeParcelable(_iconDetails, flags)
+        dest.writeInt(if (isNativeLibrariesRetrieved) 1 else 0)
+        dest.writeBooleanArray(nativeLibraries)
     }
 
     override fun describeContents(): Int {

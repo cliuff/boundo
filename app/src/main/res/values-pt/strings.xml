@@ -226,4 +226,5 @@
     <string name="unit_manager_error_network">Erro de rede</string>
     <string name="unit_manager_error_module_unavailable">Unidade indisponível</string>
     <string name="unit_manager_uninstall_success">A desinstalação ocorrerá quando estiver ociosa</string>
+    <string name="unit_desc_pin">fixar</string>
 </resources>

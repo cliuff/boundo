@@ -225,4 +225,5 @@
     <string name="unit_manager_error_api_unavailable">API unavailable</string>
     <string name="unit_desc_uninstall_notice">Deferring uninstall</string>
     <string name="unit_desc_install_notice">Trying to install</string>
+    <string name="unit_desc_pin">Pin</string>
 </resources>

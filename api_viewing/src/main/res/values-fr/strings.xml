@@ -19,7 +19,7 @@
     <string name="apiDetailsInstallPI">installateur de paquet</string>
     <string name="apiDetailsCert">Certificat</string>
     <string name="apiDetailsValiSince">"Valide depuis le: "</string>
-    <string name="apiDetailsValiUntil">"Validite jusqu'au: "</string>
+    <string name="apiDetailsValiUntil">"Validite jusqu\'au: "</string>
     <string name="apiDetailsIssuer">"Mandataire: "</string>
     <string name="apiDetailsSubject">"Objet: "</string>
     <string name="apiDetailsSigAlg">"Algorithme de signature: "</string>
@@ -60,4 +60,7 @@
     <string name="av_share_full">Complet</string>
     <string name="av_share_stroked">arrondi</string>
     <string name="av_updates_view_more">Plus d\'informations</string>
+    <string name="av_settings_tags">Mots clés</string>
+    <string name="av_settings_tags_system">Application système</string>
+    <string name="av_adapter_tag_system">Système</string>
 </resources>

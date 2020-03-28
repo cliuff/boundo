@@ -30,6 +30,7 @@ import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
+import com.madness.collision.unit.api_viewing.util.PrefUtil
 import com.madness.collision.util.*
 import kotlinx.android.synthetic.main.fragment_api.*
 import kotlinx.coroutines.Dispatchers
@@ -183,6 +184,11 @@ class MyUnit: com.madness.collision.unit.Unit(), AdapterView.OnItemSelectedListe
                 popSort!!.show()
                 return true
             }
+            MyR.id.apiTBSettings -> {
+                val settings = MyBridge.getSettings() ?: return false
+                mainViewModel.displayFragment(settings)
+                return true
+            }
             MyR.id.apiTBManual -> {
                 val context = context ?: return false
                 CollisionDialog.alert(context, MyR.string.avManual.leadingMargin(context)).show()
@@ -190,7 +196,7 @@ class MyUnit: com.madness.collision.unit.Unit(), AdapterView.OnItemSelectedListe
             }
             MyR.id.apiTBViewingTarget -> {
                 EasyAccess.isViewingTarget = !EasyAccess.isViewingTarget
-                settingsPreferences.edit { putBoolean(P.AV_VIEWING_TARGET, EasyAccess.isViewingTarget) }
+                settingsPreferences.edit { putBoolean(PrefUtil.AV_VIEWING_TARGET, EasyAccess.isViewingTarget) }
                 val textRes = if (EasyAccess.isViewingTarget) MyR.string.sdkcheck_dialog_targetsdktext else MyR.string.sdkcheck_dialog_minsdktext
                 val titleAffix = getString(textRes)
                 toolbar.title = getString(R.string.apiViewer) + " • $titleAffix"
@@ -213,7 +219,7 @@ class MyUnit: com.madness.collision.unit.Unit(), AdapterView.OnItemSelectedListe
             CollisionDialog.alert(context, R.string.api_viewer_initialize).show()
         }
 
-        EasyAccess.init(settingsPreferences)
+        EasyAccess.init(context, settingsPreferences)
 
         listFragment = AppListFragment.newInstance()
     }

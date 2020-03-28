@@ -303,7 +303,7 @@ internal class ApiFragment: Fragment(), AdapterView.OnItemSelectedListener, Menu
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long )  {
-        if (parent == spDisplayMethod){
+        if (parent === spDisplayMethod){
 //            refreshLayout.isRefreshing = true todo
             displayItem = position
             when (position){

@@ -60,4 +60,7 @@
     <string name="av_share_full">خلفية كاملة</string>
     <string name="av_share_stroked">السكتة الدماغية</string>
     <string name="av_updates_view_more">عرض المزيد</string>
+    <string name="av_settings_tags">العلامات</string>
+    <string name="av_settings_tags_system">تطبيق النظام</string>
+    <string name="av_adapter_tag_system">النظام</string>
 </resources>

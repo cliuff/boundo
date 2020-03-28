@@ -19,15 +19,10 @@
             android:layout_marginTop="10dp"
             android:paddingBottom="120dp">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/ttRecyclerView"
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/stTimetableContainer"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingStart="4dp"
-                android:paddingEnd="4dp"
-                android:requiresFadingEdge="vertical"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_height="wrap_content"/>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/ttTime"

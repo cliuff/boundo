@@ -28,7 +28,14 @@ class MainViewModel: ViewModel(){
         get() = navViewRef?.get()
     val unit: MutableLiveData<Pair<Fragment, BooleanArray>> = MutableLiveData()
     var popUpBackStackFun: ((isFromNav: Boolean, shouldShowNavAfterBack: Boolean) -> kotlin.Unit)? = null
-    var backPressedCallbackStack: Stack<OnBackPressedCallback> = Stack()
+    var backPressedCallbackStack: Stack<BackwardOperation> = Stack()
+    private var _timestamp = 0L
+    val timestamp: Long
+        get() = _timestamp
+
+    fun updateTimestamp() {
+        _timestamp = System.currentTimeMillis()
+    }
 
     val sideNavWidth: Int
         get() {

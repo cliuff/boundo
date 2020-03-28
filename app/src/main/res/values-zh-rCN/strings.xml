@@ -226,4 +226,5 @@
     <string name="unit_manager_error_api_unavailable">API 不可用</string>
     <string name="unit_desc_uninstall_notice">正在安排卸载</string>
     <string name="unit_desc_install_notice">正在尝试安装</string>
+    <string name="unit_desc_pin">固定</string>
 </resources>

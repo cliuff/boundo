@@ -9,6 +9,7 @@ object P {
     const val AT_TIME_MINUTE = "atTimeMinute"
 
     const val UNIT_FREQUENCIES = "unitFrequencies"
+    const val UNIT_PINNED = "unitPinned"
 
     const val PACKAGE_CHANGED_BOOT_COUNT = "changedPkgBootCount"
     const val PACKAGE_CHANGED_SEQUENCE_NO = "changedPkgSequenceNo"
@@ -38,20 +39,6 @@ object P {
     const val APP_INFO_PACKAGE = "toolsAppPackageName"
     const val APP_INFO_PACKAGE_DEFAULT = BuildConfig.BUILD_PACKAGE
     const val ADVANCED = "debug"
-    const val API_APK_PRELOAD = "apiAPKPreload"
-    const val API_APK_PRELOAD_DEFAULT = false
-    const val API_CIRCULAR_ICON = "SDKCircularIcon"
-    const val API_CIRCULAR_ICON_DEFAULT = true
-    const val API_PACKAGE_ROUND_ICON = "APIPackageRoundIcon"
-    const val API_PACKAGE_ROUND_ICON_DEFAULT = false
-    const val AV_CLIP_ROUND = "AVClip2Round"
-    const val AV_CLIP_ROUND_DEFAULT = true
-    const val AV_SWEET = "AVSweet"
-    const val AV_SWEET_DEFAULT = true
-    const val AV_VIEWING_TARGET = "AVViewingTarget"
-    const val AV_VIEWING_TARGET_DEFAULT = true
-    const val AV_INCLUDE_DISABLED = "AVIncludeDisabled"
-    const val AV_INCLUDE_DISABLED_DEFAULT = false
     const val SETTINGS_DARK_STATUS_ICON = "DarkStatusBarIcon"
     const val SETTINGS_DARK_NAV_ICON = "DarkNavigationBarIcon"
     const val SETTINGS_UPDATE_NOTIFY = "updateNotify"

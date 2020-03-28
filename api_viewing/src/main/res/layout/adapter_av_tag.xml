@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.chip.Chip xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/avAdapterInfoTag"
+    android:textColor="?colorAOnBackground"
+    tools:text="System"
+    android:clickable="false"
+    android:layout_marginEnd="2dp"
+    app:chipBackgroundColor="?colorABackground"
+    android:alpha="@fraction/surfaceAlpha"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    tools:ignore="SmallSp" />

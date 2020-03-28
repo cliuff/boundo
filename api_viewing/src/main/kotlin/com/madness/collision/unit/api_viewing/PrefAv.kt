@@ -1,4 +1,4 @@
-package com.madness.collision.pref
+package com.madness.collision.unit.api_viewing
 
 import android.os.Bundle
 import androidx.fragment.app.activityViewModels
@@ -7,8 +7,7 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.settings.SettingsFunc
-import com.madness.collision.unit.api_viewing.AccessAV
-import com.madness.collision.unit.api_viewing.R
+import com.madness.collision.unit.api_viewing.util.PrefUtil
 import com.madness.collision.util.F
 import com.madness.collision.util.P
 import com.madness.collision.util.X
@@ -29,20 +28,20 @@ internal class PrefAv: PreferenceFragmentCompat() {
         if (context != null) SettingsFunc.updateLanguage(context)
         setPreferencesFromResource(R.xml.pref_settings_av, rootKey)
         if (X.aboveOn(X.Q)) {
-            preferenceManager.findPreference<SwitchPreference>(P.API_APK_PRELOAD)?.isVisible = false
+            preferenceManager.findPreference<SwitchPreference>(PrefUtil.API_APK_PRELOAD)?.isVisible = false
         }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        preferenceManager.findPreference<SwitchPreference>(P.API_CIRCULAR_ICON)?.apply {
+        preferenceManager.findPreference<SwitchPreference>(PrefUtil.API_CIRCULAR_ICON)?.apply {
             updatePrefRound(this.isChecked)
             onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 if(newValue is Boolean) updatePrefRound(newValue)
                 true
             }
         }
-        preferenceManager.findPreference<SwitchPreference>(P.AV_SWEET)?.apply {
+        preferenceManager.findPreference<SwitchPreference>(PrefUtil.AV_SWEET)?.apply {
             updatePrefSweet(this.isChecked)
             onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 if(newValue is Boolean) updatePrefSweet(newValue)
@@ -52,10 +51,10 @@ internal class PrefAv: PreferenceFragmentCompat() {
     }
 
     private fun updatePrefRound(newValue: Boolean){
-        preferenceManager.findPreference<SwitchPreference>(P.API_PACKAGE_ROUND_ICON)?.apply {
+        preferenceManager.findPreference<SwitchPreference>(PrefUtil.API_PACKAGE_ROUND_ICON)?.apply {
             isEnabled = newValue
         }
-        preferenceManager.findPreference<SwitchPreference>(P.AV_CLIP_ROUND)?.apply {
+        preferenceManager.findPreference<SwitchPreference>(PrefUtil.AV_CLIP_ROUND)?.apply {
             isEnabled = newValue
         }
     }

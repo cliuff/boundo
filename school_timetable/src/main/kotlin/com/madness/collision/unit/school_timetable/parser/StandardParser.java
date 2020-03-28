@@ -86,7 +86,7 @@ class StandardParser {
                 else if (result.equals("done"))
                     X.INSTANCE.toast(context, com.madness.collision.unit.school_timetable.R.string.ics_Toast_generating_success, Toast.LENGTH_SHORT);
                 timetable.persist(context, true);
-                MyUnit.Companion.setTable(context, timetable);
+                MyUnit.Companion.setTable(timetable);
             });
         }else {
             String result = processBridgeFile();
@@ -97,7 +97,7 @@ class StandardParser {
             else if (result.equals("!"))
                 X.INSTANCE.toast(context, com.madness.collision.unit.school_timetable.R.string.ics_toast_errortobedelt, Toast.LENGTH_SHORT);
             timetable.persist(context, true);
-            MyUnit.Companion.setTable(context, timetable);
+            MyUnit.Companion.setTable(timetable);
         }
     }
 

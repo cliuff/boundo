@@ -2,6 +2,7 @@ package com.madness.collision.unit
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.play.core.splitinstall.SplitInstallManager
@@ -10,10 +11,7 @@ import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.misc.MiscApp
-import com.madness.collision.util.P
-import com.madness.collision.util.PrefsUtil
-import com.madness.collision.util.X
-import com.madness.collision.util.objectInstance
+import com.madness.collision.util.*
 
 /**
  * Dynamic feature
@@ -91,15 +89,59 @@ abstract class Unit: Fragment(), Democratic {
                     .sortedByDescending { it.second }.map { it.first }
         }
 
-        fun getFrequencies(context: Context, pref: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)) : Map<String, Int> {
-            return PrefsUtil.getCompoundItem(pref, P.UNIT_FREQUENCIES).mapValues { it.value.toInt() }
+        fun getFrequencies(context: Context,
+                           pref: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
+        ) = PrefsUtil.getCompoundItem<String, Int>(pref, P.UNIT_FREQUENCIES)
+
+        fun increaseFrequency(context: Context, unitName: String,
+                              pref: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
+        ) {
+            val frequencies = getFrequencies(context, pref).toMutableMap()
+            val f = if (X.aboveOn(X.N)) frequencies.getOrDefault(unitName, 0)
+            else frequencies[unitName] ?: 0
+            frequencies[unitName] = f + 1
+            PrefsUtil.putCompoundItem(pref, P.UNIT_FREQUENCIES, frequencies)
         }
 
-        fun increaseFrequency(context: Context, unitName: String, pref: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)) {
-            getFrequencies(context, pref).toMutableMap().apply {
-                val f = if (X.aboveOn(X.N)) getOrDefault(unitName, 0) else get(unitName) ?: 0
-                put(unitName, f + 1)
-            }.let { PrefsUtil.putCompoundItem(pref, P.UNIT_FREQUENCIES, it) }
+        fun getPinnedUnits(context: Context,
+                           pref: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
+        ): Set<String> {
+            val json = pref.getString(P.UNIT_PINNED, "")
+            if (json.isNullOrEmpty()) return emptySet()
+            return json.jsonNestedTo() ?: emptySet()
+        }
+
+        fun getIsPinned(context: Context, unitName: String,
+                           pref: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
+        ): Boolean {
+            val pinnedUnits = getPinnedUnits(context, pref)
+            return pinnedUnits.contains(unitName)
+        }
+
+        fun togglePinned(context: Context, unitName: String,
+                        pref: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE),
+                         isPinned: Boolean = getIsPinned(context, unitName, pref)
+        ) {
+            if (isPinned) unpinUnit(context, unitName, pref)
+            else pinUnit(context, unitName, pref)
+        }
+
+        fun pinUnit(context: Context, unitName: String,
+                              pref: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
+        ) {
+            val pinnedUnits = getPinnedUnits(context, pref).toMutableSet()
+            if (pinnedUnits.contains(unitName)) return
+            pinnedUnits.add(unitName)
+            pref.edit { putString(P.UNIT_PINNED, pinnedUnits.nestedToJson<Set<String>>()) }
+        }
+
+        fun unpinUnit(context: Context, unitName: String,
+                    pref: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
+        ) {
+            val pinnedUnits = getPinnedUnits(context, pref).toMutableSet()
+            if (!pinnedUnits.contains(unitName)) return
+            pinnedUnits.remove(unitName)
+            pref.edit { putString(P.UNIT_PINNED, pinnedUnits.nestedToJson<Set<String>>()) }
         }
 
         @Suppress("UNCHECKED_CAST")

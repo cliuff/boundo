@@ -33,4 +33,5 @@
     <attr name="colorActionAlertBack" format="color"/>
     <attr name="colorActionPass" format="color"/>
     <attr name="colorScrollbar" format="color"/>
+    <attr name="colorText" format="color"/>
 </resources>

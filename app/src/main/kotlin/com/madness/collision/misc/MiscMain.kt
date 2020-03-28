@@ -13,6 +13,7 @@ import com.madness.collision.BuildConfig
 import com.madness.collision.instant.Instant
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.Unit
+import com.madness.collision.unit.api_viewing.AccessAV
 import com.madness.collision.unit.we_chat_evo.InstantWeChatActivity
 import com.madness.collision.util.*
 import kotlinx.coroutines.Dispatchers
@@ -40,10 +41,14 @@ internal object MiscMain {
         // below: app gone through update process
         if (verOri == ver) return
         // below: app first launch or launch after erased data
+        // newly add operations must be add in the corresponding update section as well
+        // because this one will not be invoked during app update
+        // causing those devices unaffected
         if (verOri == verDefault) {
-            // disable WeChat launcher icon
-            val componentName = ComponentName(context.packageName, InstantWeChatActivity::class.qualifiedName ?: "")
-            context.packageManager.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP)
+            // init pinned units
+            initPinnedUnits(prefSettings)
+            // init tags
+            AccessAV.initTagSettings(context, prefSettings)
             return
         }
         // below: app in update process to the newest
@@ -55,13 +60,39 @@ internal object MiscMain {
         if (verOri in 0 until 19091423) {
             deleteDirs(F.cachePublicPath(context))
         }
-        if (verOri in 0 until 20032118) {
+        if (verOri in 0 until 20032822) {
+            // covert to json
+            val pref: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
+            val data = pref.getStringSet(P.UNIT_FREQUENCIES, HashSet())!!
+            val originalData = data.associate { it.split(":").run { this[0] to this[1] } }.mapValues { it.value.toInt() }
+            pref.edit { remove(P.UNIT_FREQUENCIES) }
+            PrefsUtil.putCompoundItem(pref, P.UNIT_FREQUENCIES, originalData)
+            // disable WeChat launcher icon
             if (Unit.getDescription(Unit.UNIT_NAME_WE_CHAT_EVO)?.isAvailable(context) == false) {
-                // disable WeChat launcher icon
                 val componentName = ComponentName(context.packageName, InstantWeChatActivity::class.qualifiedName ?: "")
-                context.packageManager.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP)
+                val isEnabled = context.packageManager.getComponentEnabledSetting(componentName) == PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+                if (isEnabled) {
+                    context.packageManager.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP)
+                }
             }
+            // init pinned units
+            initPinnedUnits(prefSettings)
+            // init tags
+            AccessAV.initTagSettings(context, prefSettings)
         }
+    }
+
+    private fun initPinnedUnits(prefSettings: SharedPreferences) {
+        val pinnedUnits = mutableSetOf<String>()
+        listOf(
+                Unit.UNIT_NAME_API_VIEWING,
+                Unit.UNIT_NAME_AUDIO_TIMER,
+                Unit.UNIT_NAME_COOL_APP,
+                Unit.UNIT_NAME_SCHOOL_TIMETABLE
+        ).forEach {
+            pinnedUnits.add(it)
+        }
+        prefSettings.edit { putString(P.UNIT_PINNED, pinnedUnits.nestedToJson<Set<String>>()) }
     }
 
     private fun deleteDirs(vararg paths: String){

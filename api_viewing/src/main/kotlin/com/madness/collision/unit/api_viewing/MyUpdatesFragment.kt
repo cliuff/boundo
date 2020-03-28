@@ -12,6 +12,7 @@ import com.madness.collision.main.MainViewModel
 import com.madness.collision.misc.MiscApp
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
+import com.madness.collision.util.P
 import com.madness.collision.util.X
 import com.madness.collision.util.ensureAdded
 import kotlinx.coroutines.Dispatchers
@@ -21,6 +22,11 @@ import kotlin.math.min
 import kotlin.math.roundToInt
 
 internal class MyUpdatesFragment : Fragment() {
+
+    companion object {
+        var appTimestamp: Long = 0L
+        var sessionTimestamp: Long = 0L
+    }
 
     private lateinit var mContext: Context
     private lateinit var mList: List<ApiViewingApp>
@@ -48,7 +54,19 @@ internal class MyUpdatesFragment : Fragment() {
             val space = X.size(mContext, 5f, X.DP).roundToInt()
             mAdapter.topCover = space
             mAdapter.bottomCover = space
-            val changedPackages = MiscApp.getChangedPackages(mContext)
+            val mainViewModel: MainViewModel by activityViewModels()
+            val prefSettings = mContext.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
+            val lastTimestamp = prefSettings.getLong(P.PACKAGE_CHANGED_TIMESTAMP, System.currentTimeMillis())
+            val shouldUpdate = (sessionTimestamp == 0L || sessionTimestamp != mainViewModel.timestamp) && lastTimestamp < mainViewModel.timestamp
+            val changedPackages = if (shouldUpdate) {
+                MiscApp.getChangedPackages(mContext)
+            } else {
+                MiscApp.getChangedPackages(mContext, appTimestamp)
+            }
+            if (shouldUpdate) {
+                appTimestamp = lastTimestamp
+                sessionTimestamp = mainViewModel.timestamp
+            }
             mList = if (changedPackages.isEmpty()) mList else changedPackages.subList(0, min(changedPackages.size, 10)) .mapIndexed { index, p ->
                 ApiViewingApp(mContext, p, preloadProcess = true, archive = false).setOnLoadedListener {
                     launch(Dispatchers.Main) {
@@ -63,7 +81,6 @@ internal class MyUpdatesFragment : Fragment() {
                 view.findViewById<TextView>(R.id.avUpdatesRecentsMore)?.run {
                     this.visibility = visibility
                     setOnClickListener {
-                        val mainViewModel: MainViewModel by activityViewModels()
                         mainViewModel.displayUnit(MyBridge.unitName, shouldShowNavAfterBack = true)
                     }
                 }

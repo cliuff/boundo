@@ -75,7 +75,7 @@ internal class ApiDecentFragment : DialogFragment() {
         arguments?.apply {
             viewModel.app = MutableLiveData(getParcelable(ARG_APP) ?: ApiViewingApp())
             viewModel.type = MutableLiveData(getInt(ARG_TYPE))
-            viewModel.back = MutableLiveData(getParcelable(ARG_BACK))
+            viewModel.back = MutableLiveData(getParcelable(ARG_BACK)!!)
         }
         viewModel.app.observe(viewLifecycleOwner) {
             it?.run {

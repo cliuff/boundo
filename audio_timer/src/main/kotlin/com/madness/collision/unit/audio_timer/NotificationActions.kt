@@ -16,6 +16,7 @@ internal class NotificationActions : Service() {
             val context = baseContext ?: return super.onStartCommand(intent, flags, startId)
             context.stopService(Intent(context, AudioTimerService::class.java))
         }
+        stopSelf()
         return super.onStartCommand(intent, flags, startId)
     }
 

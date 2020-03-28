@@ -116,7 +116,7 @@
 <!--        enabled by default to resolve desktop icon changed to app icon after restart issue-->
         <activity
             android:name=".unit.we_chat_evo.InstantWeChatActivity"
-            android:enabled="true"
+            android:enabled="false"
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"
             android:icon="@mipmap/ic_tencent_mm"

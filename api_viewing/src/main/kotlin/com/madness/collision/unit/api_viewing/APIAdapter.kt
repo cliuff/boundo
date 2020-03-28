@@ -33,12 +33,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.chip.ChipGroup
 import com.madness.collision.R
 import com.madness.collision.diy.SandwichAdapter
 import com.madness.collision.misc.MiscApp
+import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
+import com.madness.collision.unit.api_viewing.databinding.AdapterAvTagBinding
 import com.madness.collision.util.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -168,6 +171,7 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
         val logo: ImageView = itemView.findViewById(MyR.id.avAdapterInfoLogo)
         val name: AppCompatTextView = itemView.findViewById(MyR.id.avAdapterInfoName) as AppCompatTextView
         val updateTime: AppCompatTextView = itemView.findViewById(MyR.id.avAdapterInfoTime) as AppCompatTextView
+        val tags: ChipGroup = itemView.findViewById(MyR.id.avAdapterInfoTags)
         val api: AppCompatTextView = itemView.findViewById(MyR.id.avAdapterInfoAPI) as AppCompatTextView
         val seal: ImageView = itemView.findViewById(MyR.id.avAdapterSeal)
         val card: MaterialCardView = itemView.findViewById(MyR.id.avAdapterCard)
@@ -212,6 +216,12 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
         get() = sortMethod == MyUnit.SORT_POSITION_API_TIME
     private val itemLength: Int = X.size(context, 70f, X.DP).roundToInt()
     private val colorSurface = if (shouldShowDesserts) ThemeUtil.getColor(context, R.attr.colorASurface) else 0
+
+    private fun inflateTag(name: String, parent: ViewGroup): AdapterAvTagBinding {
+        return AdapterAvTagBinding.inflate(inflater, parent, true).apply {
+            avAdapterInfoTag.text = name
+        }
+    }
 
     fun setSortMethod(sortMethod: Int): APIAdapter {
         this.sortMethod = sortMethod
@@ -354,8 +364,70 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
             holder.updateTime.visibility = View.GONE
         }
 
+        holder.tags.removeAllViews()
+        if (EasyAccess.shouldShowTagPackageInstaller) {
+            context.packageManager.getInstallerPackageName(appInfo.packageName)?.let {
+                val installerGPlay = "com.android.vending"
+                val isGp = it == installerGPlay
+                val showGp = EasyAccess.shouldShowTagPackageInstallerGooglePlay && isGp
+                val showPi = EasyAccess.shouldShowTagPackageInstallerPackageInstaller && !isGp
+                if (!showGp && !showPi) return@let
+                val installerName = MiscApp.getApplicationInfo(context, packageName = it)
+                        ?.loadLabel(context.packageManager)?.toString() ?: ""
+                val name = if (installerName.isNotEmpty()) {
+                    installerName
+                } else {
+                    val installerAndroid = "com.google.android.packageinstaller"
+                    when (it) {
+                        installerGPlay -> context.getString(MyR.string.apiDetailsInstallGP)
+                        installerAndroid -> context.getString(MyR.string.apiDetailsInstallPI)
+                        "null" -> null
+                        else -> null
+                    }
+                }
+                if (name != null) inflateTag(name, holder.tags)
+            }
+        }
+        if (EasyAccess.shouldShowTagPrivilegeSystem && appInfo.apiUnit == ApiUnit.SYS) {
+            inflateTag(context.getString(MyR.string.av_adapter_tag_system), holder.tags)
+        }
+        if (EasyAccess.shouldShowTagCrossPlatform || EasyAccess.shouldShowTagNativeLib) {
+            val layoutNativeLib: () -> Unit = {
+                val nls = appInfo.nativeLibraries
+                if (EasyAccess.shouldShowTagNativeLib) {
+                    if (EasyAccess.shouldShowTagNativeLibArm) {
+                        if (nls[0]) inflateTag("arm32", holder.tags)
+                        if (nls[1]) inflateTag("arm64", holder.tags)
+                    }
+                    if (EasyAccess.shouldShowTagNativeLibX86) {
+                        if (nls[2]) inflateTag("x86", holder.tags)
+                        if (nls[3]) inflateTag("x64", holder.tags)
+                    }
+                }
+                if (EasyAccess.shouldShowTagCrossPlatform) {
+                    if (EasyAccess.shouldShowTagCrossPlatformFlutter && nls[4]) inflateTag("Flutter", holder.tags)
+                    if (EasyAccess.shouldShowTagCrossPlatformReactNative && nls[5]) inflateTag("React Native", holder.tags)
+                    if (EasyAccess.shouldShowTagCrossPlatformXarmarin && nls[6]) inflateTag("Xamarin", holder.tags)
+                }
+            }
+            if (appInfo.isNativeLibrariesRetrieved) {
+                layoutNativeLib.invoke()
+            } else {
+                GlobalScope.launch {
+                    appInfo.retrieveNativeLibraries()
+                    launch(Dispatchers.Main) {
+                        layoutNativeLib.invoke()
+                    }
+                }
+            }
+        }
+
         holder.card.setOnClickListener {
             ApiInfoPop.newInstance(appInfo).show(activity.supportFragmentManager, ApiInfoPop.TAG)
+        }
+
+        holder.tags.setOnClickListener {
+            holder.card.performClick()
         }
 
         holder.card.setOnLongClickListener {
@@ -425,15 +497,14 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
                         .append('\n')
                 builder.append(context.getString(MyR.string.apiDetailsInsatllFrom), StyleSpan(Typeface.BOLD), spanFlags)
                 val installer = context.packageManager.getInstallerPackageName(appInfo.packageName)
-                val installerAndroid = "com.google.android.packageinstaller"
-                val installerGPlay = "com.android.vending"
                 if (installer != null) {
-                    var installerName: String
-                    installerName = MiscApp.getApplicationInfo(context, packageName = installer)
+                    val installerName = MiscApp.getApplicationInfo(context, packageName = installer)
                             ?.loadLabel(context.packageManager)?.toString() ?: ""
                     if (installerName.isNotEmpty()) {
                         builder.append(installerName)
                     } else {
+                        val installerAndroid = "com.google.android.packageinstaller"
+                        val installerGPlay = "com.android.vending"
                         when (installer) {
                             installerGPlay ->
                                 builder.append(context.getString(MyR.string.apiDetailsInstallGP))
@@ -451,7 +522,8 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
                 builder.append('\n')
             }
 
-            val nls = ApkUtil.getNativeLibSupport(appInfo.apkPath)
+            if (!appInfo.isNativeLibrariesRetrieved) appInfo.retrieveNativeLibraries()
+            val nls = appInfo.nativeLibraries
             builder.append(context.getString(R.string.av_details_native_libs), StyleSpan(Typeface.BOLD), spanFlags)
                     .append("armeabi-v7a ").append(if (nls[0]) '✓' else '✗').append("  ")
                     .append("arm64-v8a ").append(if (nls[1]) '✓' else '✗').append("  ")

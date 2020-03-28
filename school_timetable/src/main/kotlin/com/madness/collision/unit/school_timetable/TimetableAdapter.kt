@@ -190,7 +190,7 @@ internal class TimetableAdapter(private var context: Context , var timetable: Ti
         courses.add(0, newCourse)
         timetable.persist(context, true)
         timetable.renderTimetable()
-        MyUnit.setTable(context, timetable)
+        MyUnit.setTable(timetable)
     }
 
     private fun actionRemove(course: CourseSingleton) {
@@ -198,7 +198,7 @@ internal class TimetableAdapter(private var context: Context , var timetable: Ti
         timetable.persist(context, true)
         timetable.renderTimetable()
         timetable.produceICal(context)
-        MyUnit.setTable(context, timetable)
+        MyUnit.setTable(timetable)
     }
 
     private fun popCourseInfo(course: CourseSingleton){
@@ -271,7 +271,7 @@ internal class TimetableAdapter(private var context: Context , var timetable: Ti
             timetable.persist(context, true)
             timetable.renderTimetable()
             timetable.produceICal(context)
-            MyUnit.setTable(context, timetable)
+            MyUnit.setTable(timetable)
         }
 
         // below: when adding new course or duplicating course

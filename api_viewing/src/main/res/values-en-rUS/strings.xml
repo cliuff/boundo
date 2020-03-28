@@ -60,4 +60,7 @@
     <string name="av_share_full">Full</string>
     <string name="av_share_stroked">Stroked</string>
     <string name="av_updates_view_more">View more</string>
+    <string name="av_settings_tags">Tags</string>
+    <string name="av_settings_tags_system">System app</string>
+    <string name="av_adapter_tag_system">System</string>
 </resources>

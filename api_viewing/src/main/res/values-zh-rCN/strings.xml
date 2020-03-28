@@ -60,4 +60,7 @@
     <string name="av_share_full">全景</string>
     <string name="av_share_stroked">描边</string>
     <string name="av_updates_view_more">查看更多</string>
+    <string name="av_settings_tags">标签</string>
+    <string name="av_settings_tags_system">系统应用</string>
+    <string name="av_adapter_tag_system">系统</string>
 </resources>

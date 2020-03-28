@@ -167,7 +167,7 @@ class Timetable(courses: List<CourseSingleton>) {
         }
 
         courses.sortWith(Comparator { o1, o2 ->
-            Integer.compare(o1.legacyClassSchedule, o2.legacyClassSchedule)
+            o1.legacyClassSchedule.compareTo(o2.legacyClassSchedule)
         })
     }
 
@@ -183,9 +183,11 @@ class Timetable(courses: List<CourseSingleton>) {
         if (period2 > 0) p2 = 2
         if (period3 > 0) p3 = 4
         val binary = p1 + p2 + p3
-        if (binary >= 4) return 3
-        else if (binary >= 2) return 2
-        else return binary
+        return when {
+            binary >= 4 -> 3
+            binary >= 2 -> 2
+            else -> binary
+        }
     }
 
     fun produceICal( context: Context): Boolean{

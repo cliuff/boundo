@@ -10,10 +10,13 @@ import android.view.ViewGroup
 import android.widget.CompoundButton
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.observe
 import com.madness.collision.R
 import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.Unit
 import com.madness.collision.util.X
+import com.madness.collision.util.alterPadding
+import com.madness.collision.util.setMarginText
 import kotlinx.android.synthetic.main.unit_we_chat_evo.*
 import com.madness.collision.unit.we_chat_evo.R as MyR
 
@@ -31,6 +34,7 @@ class MyUnit : Unit(), CompoundButton.OnCheckedChangeListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val context = context ?: return
+        weNote.setMarginText(context, MyR.string.we_note)
         weSwitch.isChecked = componentEnabled<InstantWeChatActivity>(context)
         weSwitch.setOnCheckedChangeListener(this)
     }
@@ -38,6 +42,9 @@ class MyUnit : Unit(), CompoundButton.OnCheckedChangeListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         democratize()
+        mainViewModel.contentWidthTop.observe(viewLifecycleOwner) {
+            weContainer.alterPadding(top = it)
+        }
     }
 
     private inline fun <reified K> componentEnabled(context: Context): Boolean {
@@ -60,7 +67,9 @@ class MyUnit : Unit(), CompoundButton.OnCheckedChangeListener {
     override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
         if (buttonView?.id != MyR.id.weSwitch) return
         val context = context ?: return
-        setComponentState<InstantWeChatActivity>(context, getCompState(isChecked))
+        if (componentEnabled<InstantWeChatActivity>(context) != isChecked) {
+            setComponentState<InstantWeChatActivity>(context, getCompState(isChecked))
+        }
         val toastRes = if (isChecked)
             MyR.string.Main_WeChatLauncher_Toast_State_ShiftEnabled
         else

@@ -4,14 +4,16 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 
 object PrefsUtil {
-    fun getCompoundItem(pref: SharedPreferences, key: String) : Map<String, String> {
-        val data = pref.getStringSet(key, HashSet())!!
-        return data.associate { it.split(":").run { this[0] to this[1] } }
+
+    // number values may default to Double when without reified
+    inline fun <reified K, reified V> getCompoundItem(pref: SharedPreferences, key: String) : Map<K, V> {
+        val json = pref.getString(key, "")
+        if (json.isNullOrEmpty()) return emptyMap()
+        return json.jsonNestedTo() ?: emptyMap()
     }
 
-    fun putCompoundItem(pref: SharedPreferences, key: String, data: Map<*, *>) {
-        val re = HashSet<String>(data.size)
-        data.forEach { re.add("${it.key}:${it.value}") }
-        pref.edit { putStringSet(key, re) }
+    // number values may default to Double when without reified
+    inline fun <reified K, reified V> putCompoundItem(pref: SharedPreferences, key: String, data: Map<K, V>) {
+        pref.edit { putString(key, data.nestedToJson<Map<K, V>>()) }
     }
 }

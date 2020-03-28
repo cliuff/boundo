@@ -1,7 +1,7 @@
 package com.madness.collision.unit.api_viewing.data
 
 import android.content.SharedPreferences
-import com.madness.collision.util.P
+import com.madness.collision.unit.api_viewing.util.PrefUtil
 
 class ApiUnit : ArrayList<Int>() {
     companion object {
@@ -81,7 +81,7 @@ class ApiUnit : ArrayList<Int>() {
     fun item2Load(prefSettings: SharedPreferences) : kotlin.Int{
         if (shouldLoad(USER)) return USER
         if (shouldLoad(SYS)) return SYS
-        if (shouldLoad(APK) && prefSettings.getBoolean(P.API_APK_PRELOAD, false)) return APK
+        if (shouldLoad(APK) && prefSettings.getBoolean(PrefUtil.API_APK_PRELOAD, false)) return APK
         return NON
     }
 

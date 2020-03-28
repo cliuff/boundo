@@ -226,4 +226,5 @@
     <string name="unit_manager_error_api_unavailable">API غير متوفر</string>
     <string name="unit_desc_uninstall_notice">تأجيل إلغاء التثبيت</string>
     <string name="unit_desc_install_notice">محاولة تثبيت</string>
+    <string name="unit_desc_pin">ثابت</string>
 </resources>

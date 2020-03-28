@@ -226,4 +226,5 @@
     <string name="unit_manager_error_api_unavailable">API ใช้งานไม่ได้</string>
     <string name="unit_manager_uninstall_success">ถอนการติดตั้งจะเกิดขึ้นเมื่อไม่ได้ใช้งาน</string>
     <string name="unit_desc_uninstall_notice">ยกเลิกการถอนการติดตั้ง</string>
+    <string name="unit_desc_pin">ปัก</string>
 </resources>

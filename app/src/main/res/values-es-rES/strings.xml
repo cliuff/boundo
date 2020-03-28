@@ -226,4 +226,5 @@
     <string name="unit_manager_error_api_unavailable">API no disponible</string>
     <string name="unit_manager_uninstall_success">La desinstalación ocurrirá cuando esté inactivo</string>
     <string name="unit_desc_uninstall_notice">Desinstalación diferida</string>
+    <string name="unit_desc_pin">prender con alfileres</string>
 </resources>

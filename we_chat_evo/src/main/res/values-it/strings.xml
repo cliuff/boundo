@@ -2,4 +2,5 @@
 <resources>
     <string name="Main_WeChatLauncher_Toast_State_ShiftEnabled">Ora abilitato, un paio di secondi necessari per l\'implementazione del launcher</string>
     <string name="Main_WeChatLauncher_Toast_State_ShiftDisabled">Ora disabilitato, un paio di secondi necessari per l\'implementazione del launcher</string>
+    <string name="we_note">Non provare questa funzione se stai usando un lanciatore di app che non ha il cassetto delle app (la maggior parte dei telefoni cinesi)\nSe trovi accidentalmente l\'icona di avvio di Boundo mancante, disinstalla prima quindi reinstalla l\'app\nSe abiliti questa unità, tieni presente che l\'icona di Boundo WeChat (quando inviata al desktop) cambia in icona Boundo dopo il riavvio del dispositivo e l\'icona di collegamento WeChat (quando fissata sul desktop) mancherà</string>
 </resources>

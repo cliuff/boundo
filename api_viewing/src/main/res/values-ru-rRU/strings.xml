@@ -60,4 +60,7 @@
     <string name="av_share_full">Полный фон</string>
     <string name="av_share_stroked">мазок</string>
     <string name="av_updates_view_more">Посмотреть больше</string>
+    <string name="av_settings_tags">Теги</string>
+    <string name="av_settings_tags_system">Системное приложение</string>
+    <string name="av_adapter_tag_system">система</string>
 </resources>

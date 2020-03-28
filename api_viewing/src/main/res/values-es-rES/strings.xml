@@ -60,4 +60,7 @@
     <string name="av_share_full">Fondo completo</string>
     <string name="av_share_stroked">Accidente cerebrovascular</string>
     <string name="av_updates_view_more">Ver más</string>
+    <string name="av_settings_tags">Etiquetas</string>
+    <string name="av_settings_tags_system">Aplicación del sistema</string>
+    <string name="av_adapter_tag_system">Sistema</string>
 </resources>

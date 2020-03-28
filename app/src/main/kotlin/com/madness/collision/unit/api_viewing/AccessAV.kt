@@ -1,8 +1,11 @@
 package com.madness.collision.unit.api_viewing
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.activity.ComponentActivity
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.UnitAccess
+import com.madness.collision.util.P
 
 object AccessAV: UnitAccess(Unit.UNIT_NAME_API_VIEWING) {
 
@@ -22,4 +25,9 @@ object AccessAV: UnitAccess(Unit.UNIT_NAME_API_VIEWING) {
     fun clearApps(activity: ComponentActivity) {
         getMethod("clearApps", ComponentActivity::class).invoke(activity)
     }
+
+    fun initTagSettings(context: Context, prefSettings: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)) {
+        getMethod("initTagSettings", Context::class, SharedPreferences::class).invoke(context, prefSettings)
+    }
+
 }

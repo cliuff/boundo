@@ -226,4 +226,5 @@
     <string name="unit_desc_uninstall_notice">Rinvio della disinstallazione</string>
     <string name="unit_manager_install_success">Play Store sta elaborando l\'installazione</string>
     <string name="unit_desc_install_notice">Prova di installare</string>
+    <string name="unit_desc_pin">fissare</string>
 </resources>

@@ -1,13 +1,12 @@
 package com.madness.collision.unit.api_viewing.database
 
 import android.content.Context
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
+import androidx.room.*
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import kotlinx.coroutines.CoroutineScope
 
 @Database(entities = [ApiViewingApp::class], version = 1)
+@TypeConverters(Converters::class)
 internal abstract class AppRoom: RoomDatabase(){
 
     abstract fun appDao(): AppDao

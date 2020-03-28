@@ -12,6 +12,7 @@ import com.madness.collision.util.ThemeUtil
 import com.madness.collision.util.X
 
 class InstantWeChatActivity: AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window?.let {

@@ -60,4 +60,7 @@
     <string name="av_share_full">Histórico completo</string>
     <string name="av_share_stroked">Stroke</string>
     <string name="av_updates_view_more">Veja mais</string>
+    <string name="av_settings_tags">Tag</string>
+    <string name="av_settings_tags_system">Aplicativo do sistema</string>
+    <string name="av_adapter_tag_system">Sistema</string>
 </resources>

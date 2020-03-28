@@ -60,4 +60,7 @@
     <string name="av_share_full">Toàn nền</string>
     <string name="av_share_stroked">Đột quỵ</string>
     <string name="av_updates_view_more">Xem thêm</string>
+    <string name="av_settings_tags">Thẻ</string>
+    <string name="av_settings_tags_system">Ứng dụng hệ thống</string>
+    <string name="av_adapter_tag_system">Hệ thống</string>
 </resources>

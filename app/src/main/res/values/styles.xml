@@ -7,14 +7,15 @@
         <item name="android:windowSoftInputMode">stateHidden|adjustPan</item>
         <item name="android:windowContentTransitions">true</item>
         <item name="toolbarStyle">@style/AppTheme.Toolbar</item>
-        <!--        <item name="android:datePickerDialogTheme">@style/AppTheme.DatePickerDialog</item>-->
-        <!--        <item name="android:timePickerDialogTheme">@style/AppTheme.TimePickerDialog</item>-->
+<!--        <item name="android:datePickerDialogTheme">@style/AppTheme.DatePickerDialog</item>-->
+<!--        <item name="android:timePickerDialogTheme">@style/AppTheme.TimePickerDialog</item>-->
         <item name="android:popupMenuStyle">@style/AppTheme.OverflowMenu</item>
         <item name="android:dropDownSpinnerStyle">@style/AppTheme.Spinner</item>
         <item name="android:actionOverflowButtonStyle">@style/AppTheme.OverflowButton</item>
         <item name="actionOverflowMenuStyle">@style/AppTheme.OverflowMenu</item>
+        <item name="android:textColorPrimary">?colorText</item>
         <item name="android:textColorSecondary">?colorTextSub</item>
-        <item name="android:colorForeground">?android:textColor</item>
+        <item name="android:colorForeground">?colorText</item>
         <item name="colorIconStateful">@color/icon_stateful</item>
         <item name="android:windowBackground">?colorABackground</item>
         <item name="android:colorBackground">?colorABackground</item>
@@ -22,6 +23,8 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:enforceNavigationBarContrast" tools:targetApi="29">false</item>
+        <item name="alertDialogTheme">@style/AppTheme.AlertDialog</item>
+        <item name="dialogTheme">@style/AppTheme.Dialog</item>
     </style>
 
     <style name="LaunchScreenBase" parent="Theme.MaterialComponents.DayNight.NoActionBar">
@@ -62,6 +65,7 @@
         <item name="colorIconDeactivated">@color/iconDeactivatedAWhite</item>
         <item name="colorTb">@color/toolbarBackAWhite</item>
         <item name="colorStroke">@color/strokeAWhite</item>
+        <item name="colorText">@color/textSubAWhite</item>
         <item name="colorTextSub">@color/textSubAWhite</item>
         <item name="colorApiPopItemBack">@color/apiPopItemBackAWhite</item>
         <item name="colorApiLegacyBack">@color/apiLegacyBackAWhite</item>
@@ -98,6 +102,7 @@
         <item name="colorIconDeactivated">@color/iconDeactivatedACnRed</item>
         <item name="colorTb">@color/toolbarBackACnRed</item>
         <item name="colorStroke">@color/strokeACnRed</item>
+        <item name="colorText">@color/textSubACnRed</item>
         <item name="colorTextSub">@color/textSubACnRed</item>
         <item name="colorApiPopItemBack">@color/apiPopItemBackACnRed</item>
         <item name="colorApiLegacyBack">@color/apiLegacyBackACnRed</item>
@@ -134,6 +139,7 @@
         <item name="colorIconDeactivated">@color/iconDeactivatedABlack</item>
         <item name="colorTb">@color/toolbarBackABlack</item>
         <item name="colorStroke">@color/strokeABlack</item>
+        <item name="colorText">@color/textSubABlack</item>
         <item name="colorTextSub">@color/textSubABlack</item>
         <item name="colorApiPopItemBack">@color/apiPopItemBackABlack</item>
         <item name="colorApiLegacyBack">@color/apiLegacyBackABlack</item>
@@ -170,6 +176,7 @@
         <item name="colorIconDeactivated">@color/iconDeactivatedABlackGray</item>
         <item name="colorTb">@color/toolbarBackABlackGray</item>
         <item name="colorStroke">@color/strokeABlackGray</item>
+        <item name="colorText">@color/textSubABlackGray</item>
         <item name="colorTextSub">@color/textSubABlackGray</item>
         <item name="colorApiPopItemBack">@color/apiPopItemBackABlackGray</item>
         <item name="colorApiLegacyBack">@color/apiLegacyBackABlackGray</item>
@@ -190,6 +197,30 @@
         <item name="android:colorBackground">@android:color/transparent</item>
     </style>
 -->
+
+    <style name="AppTheme.AlertDialog" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+        <item name="colorAccent">?colorAPrimary</item>
+        <item name="colorPrimary">?colorAPrimary</item>
+        <item name="colorPrimaryDark">?colorAPrimary</item>
+        <item name="android:textColor">?colorText</item>
+        <item name="android:textColorPrimary">?colorText</item>
+        <item name="android:textColorSecondary">?colorTextSub</item>
+        <item name="android:colorForeground">?colorText</item>
+        <item name="android:windowBackground">?colorASurface</item>
+        <item name="android:colorBackground">?colorASurface</item>
+    </style>
+
+    <style name="AppTheme.Dialog" parent="Theme.MaterialComponents.Light.Dialog">
+        <item name="colorAccent">?colorAPrimary</item>
+        <item name="colorPrimary">?colorAPrimary</item>
+        <item name="colorPrimaryDark">?colorAPrimary</item>
+        <item name="android:textColor">?colorText</item>
+        <item name="android:textColorPrimary">?colorText</item>
+        <item name="android:textColorSecondary">?colorTextSub</item>
+        <item name="android:colorForeground">?colorText</item>
+        <item name="android:windowBackground">?colorASurface</item>
+        <item name="android:colorBackground">?colorASurface</item>
+    </style>
 
     <style name="AppTheme.Spinner" parent="Widget.AppCompat.Spinner.DropDown">
         <item name="android:popupBackground">@drawable/res_dialog_md2</item>
@@ -268,8 +299,9 @@
 
     <style name="AppTheme.DatePickerDialog" parent="Theme.MaterialComponents.Light.Dialog">
         <item name="colorPrimary">?colorAccentBack</item>
-        <item name="android:background">?colorABackground</item>
-        <item name="android:timePickerStyle">@style/AppTheme.TimePicker</item>
+        <item name="android:backgroundTint">?colorASurface</item>
+        <!--        <item name="android:background">?colorABackground</item>-->
+        <item name="android:datePickerStyle">@style/AppTheme.TimePicker</item>
     </style>
 
     <style name="AppTheme.DatePicker" parent="android:Widget.Material.Light.DatePicker">
@@ -278,23 +310,22 @@
 
     <style name="AppTheme.TimePickerDialog" parent="Theme.MaterialComponents.Light.Dialog">
         <item name="colorAccent">?colorAPrimary</item>
-        <item name="android:backgroundTint">?colorABackground</item>
-<!--        <item name="android:background">?colorABackground</item>-->
+        <item name="android:backgroundTint">?colorASurface</item>
         <item name="android:timePickerStyle">@style/AppTheme.TimePicker</item>
     </style>
 
     <style name="AppTheme.TimePicker" parent="android:Widget.Material.Light.TimePicker">
         <item name="android:headerTimeTextAppearance">@style/TextAppearance.TimePickerDialogStyle.TimeLabel</item>
-        <item name="android:headerBackground">?colorABackground</item>
-        <item name="android:numbersTextColor">?android:textColor</item>
+        <item name="android:headerBackground">?colorASurface</item>
+        <item name="android:numbersTextColor">?colorAOnItem</item>
         <item name="android:numbersInnerTextColor" tools:targetApi="m">?colorTextSub</item>
         <item name="android:numbersSelectorColor">?colorAPrimary</item>
-        <item name="android:numbersBackgroundColor">?colorASurface</item>
+        <item name="android:numbersBackgroundColor">?colorAItem</item>
         <item name="android:amPmTextColor">?colorTextSub</item>
     </style>
 
     <style name="TextAppearance.TimePickerDialogStyle.TimeLabel" parent="TextAppearance.MaterialComponents.Headline1">
-        <item name="android:textColor">?colorAOnBackground</item>
+        <item name="android:textColor">?colorAOnSurface</item>
     </style>
 
     <style name="AppTheme.Toolbar" parent="Widget.MaterialComponents.Toolbar">
@@ -428,4 +459,5 @@
         <item name="android:layout_height">40dp</item>
         <item name="android:gravity">center</item>
     </style>
+
 </resources>

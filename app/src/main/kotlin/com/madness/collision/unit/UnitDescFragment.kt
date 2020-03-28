@@ -2,8 +2,11 @@ package com.madness.collision.unit
 
 import android.content.Context
 import android.content.res.ColorStateList
+import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -18,10 +21,7 @@ import com.madness.collision.R
 import com.madness.collision.databinding.UnitDescBinding
 import com.madness.collision.databinding.UnitDescCheckerBinding
 import com.madness.collision.main.MainViewModel
-import com.madness.collision.util.ThemeUtil
-import com.madness.collision.util.X
-import com.madness.collision.util.alterPadding
-import com.madness.collision.util.setMarginText
+import com.madness.collision.util.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -41,6 +41,9 @@ internal class UnitDescFragment : Fragment(), Democratic {
     private val viewBinding: UnitDescBinding
         get() = _viewBinding!!
     private val mViewModel: UnitDescViewModel by viewModels()
+    private var icStar: Drawable? = null
+    private var icStarred: Drawable? = null
+    private var toolbar: Toolbar? = null
 
     private lateinit var description: Description
 //        set(value) {
@@ -50,7 +53,40 @@ internal class UnitDescFragment : Fragment(), Democratic {
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
         toolbar.title = description.getName(context)
+        inflateAndTint(R.menu.toolbar_unit_desc, toolbar, iconColor)
+        this.toolbar = toolbar
         return true
+    }
+
+    override fun selectOption(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.unitDescToolbarPin -> {
+                val unitName = mViewModel.description.value?.unitName ?: return false
+                val context = context ?: return false
+                val isPinned = item.icon == icStarred
+                item.icon = getStarIcon(context, !isPinned)
+                GlobalScope.launch {
+                    Unit.togglePinned(context, unitName)
+                }
+                return true
+            }
+        }
+        return false
+    }
+
+    private fun getStarIcon(context: Context, isStarred: Boolean): Drawable? {
+        if (isStarred) {
+            if (icStarred == null) {
+                icStarred = context.getDrawable(R.drawable.ic_star_24)
+                if (icStarred == null) return null
+                icStarred!!.setTint(Color.parseColor("#A0FFC030"))
+            }
+            return icStarred
+        } else {
+            if (icStar == null) icStar = context.getDrawable(R.drawable.ic_star_border_24)
+            icStar!!.setTint(ThemeUtil.getColor(context, R.attr.colorIcon))
+            return icStar
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -142,6 +178,10 @@ internal class UnitDescFragment : Fragment(), Democratic {
             }
 
             viewBinding.unitDescDesc.setMarginText(context, it.descRes)
+
+            toolbar?.run {
+                menu.findItem(R.id.unitDescToolbarPin).icon = getStarIcon(context, Unit.getIsPinned(context, it.unitName))
+            }
         }
     }
 

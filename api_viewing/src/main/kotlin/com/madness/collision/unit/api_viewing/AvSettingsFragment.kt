@@ -12,7 +12,6 @@ import androidx.lifecycle.observe
 import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.main.MainViewModel
-import com.madness.collision.pref.PrefAv
 import com.madness.collision.util.alterPadding
 import com.madness.collision.util.ensureAdded
 import kotlinx.android.synthetic.main.fragment_settings_av.*

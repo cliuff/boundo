@@ -226,4 +226,5 @@
     <string name="unit_manager_error_api_unavailable">API không khả dụng</string>
     <string name="unit_manager_uninstall_success">Gỡ cài đặt sẽ xảy ra khi không hoạt động</string>
     <string name="unit_desc_uninstall_notice">Trì hoãn gỡ cài đặt</string>
+    <string name="unit_desc_pin">xỏ chốt</string>
 </resources>

@@ -60,4 +60,7 @@
     <string name="av_share_full">Sfondo completo</string>
     <string name="av_share_stroked">corsa</string>
     <string name="av_updates_view_more">Vedi di più</string>
+    <string name="av_settings_tags">tag</string>
+    <string name="av_settings_tags_system">App di sistema</string>
+    <string name="av_adapter_tag_system">Sistema</string>
 </resources>
