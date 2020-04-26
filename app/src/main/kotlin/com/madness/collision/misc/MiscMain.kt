@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Drawable
+import android.os.Environment
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
 import androidx.core.content.edit
@@ -22,6 +23,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.File
+import java.io.IOException
 import kotlin.random.Random
 
 internal object MiscMain {
@@ -59,9 +61,6 @@ internal object MiscMain {
             val sm = context.getSystemService(ShortcutManager::class.java)
             if (sm != null) Instant(context, sm).refreshDynamicShortcuts(P.SC_ID_API_VIEWER)
         }
-        if (verOri in 0 until 19091423) {
-            deleteDirs(F.cachePublicPath(context))
-        }
         if (verOri in 0 until 20032901) {
             // covert to json
             val pref: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
@@ -81,6 +80,31 @@ internal object MiscMain {
             initPinnedUnits(prefSettings)
             // init tags
             AccessAV.initTagSettings(context, prefSettings)
+        }
+        if (verOri in 0 until 20040323) {
+            // add new adaptive icon tag
+            AccessAV.updateTagSettingsAi(context, prefSettings)
+        }
+        if (verOri in 0 until 20042502) {
+            // move pics from cache to file
+            val valCachePubExterior = F.createPath(F.cachePublicPath(context), Environment.DIRECTORY_PICTURES, "Exterior")
+            listOf(
+                    F.createPath(valCachePubExterior, "back.webp") to F.valFilePubExteriorPortrait(context),
+                    F.createPath(valCachePubExterior, "backDark.webp") to F.valFilePubExteriorPortraitDark(context),
+                    F.createPath(valCachePubExterior, "twBack.webp") to F.valFilePubTwPortrait(context),
+                    F.createPath(valCachePubExterior, "twBackDark.webp") to F.valFilePubTwPortraitDark(context)
+            ).forEach {
+                val oriFile = File(it.first)
+                val newFile = File(it.second)
+                if (oriFile.exists() && F.prepare4(newFile)) {
+                    try {
+                        X.copyFileLessTwoGB(oriFile, newFile)
+                        oriFile.delete()
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+                }
+            }
         }
     }
 
@@ -118,7 +142,7 @@ internal object MiscMain {
 
     private fun loadExteriorBackgrounds(context: Context){
         val app = mainApplication
-        val backPath = if (app.isDarkTheme) F.valCachePubExteriorPortraitDark(context) else F.valCachePubExteriorPortrait(context)
+        val backPath = if (app.isDarkTheme) F.valFilePubExteriorPortraitDark(context) else F.valFilePubExteriorPortrait(context)
         (File(backPath).exists()).let {
             if (it) app.background = Drawable.createFromPath(backPath)
             app.exterior = it

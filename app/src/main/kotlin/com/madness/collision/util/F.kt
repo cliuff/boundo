@@ -13,13 +13,7 @@ object F {
     fun valCachePubLog(context: Context) = createPath(cachePublicPath(context), "Log")
     fun valCachePubAv(context: Context) = createPath(cachePublicPath(context), "App")
     fun valCachePubTt(context: Context) = createPath(cachePublicPath(context), "TT")
-    fun valCachePubExterior(context: Context) = createPath(cachePublicPath(context), Environment.DIRECTORY_PICTURES, "Exterior")
-    fun valCachePubExteriorPortrait(context: Context) = createPath(valCachePubExterior(context), "back.webp")
-    fun valCachePubExteriorPortraitDark(context: Context) = createPath(valCachePubExterior(context), "backDark.webp")
-    fun valCachePubTwPortrait(context: Context) = createPath(valCachePubExterior(context), "twBack.webp")
-    fun valCachePubTwPortraitDark(context: Context) = createPath(valCachePubExterior(context), "twBackDark.webp")
     fun valCachePubTtICal(context: Context) = createPath(valCachePubTt(context), "ICal")
-    fun valCachePubTtHtml(context: Context) = createPath(valCachePubTt(context), "Html")
     fun valCachePubTtMisc(context: Context) = createPath(valCachePubTt(context), "Misc")
     fun valCachePubTtBridge(context: Context) = createPath(valCachePubTtMisc(context), "bridge.txt")
     fun valCachePubTtUndo(context: Context) = createPath(valCachePubTtICal(context), "Undo")
@@ -35,6 +29,11 @@ object F {
     fun valFilePubTtIndicator(context: Context) = createPath(valFilePubTtICal(context), "indicator.ics")
     fun valFilePubTtPrevious(context: Context) = createPath(valFilePubTtICal(context), "previous.ics")
     fun valFilePubTtCurrent(context: Context) = createPath(valFilePubTtICal(context), "current.ics")
+    fun valFilePubExterior(context: Context) = createPath(filePublicPath(context), Environment.DIRECTORY_PICTURES, "Exterior")
+    fun valFilePubExteriorPortrait(context: Context) = createPath(valFilePubExterior(context), "back.webp")
+    fun valFilePubExteriorPortraitDark(context: Context) = createPath(valFilePubExterior(context), "backDark.webp")
+    fun valFilePubTwPortrait(context: Context) = createPath(valFilePubExterior(context), "twBack.webp")
+    fun valFilePubTwPortraitDark(context: Context) = createPath(valFilePubExterior(context), "twBackDark.webp")
 
     /**
      * the root of the primary shared storage

@@ -90,8 +90,8 @@ object ThemeUtil {
             val darkChanged = isDarkThemePrevious != isDarkTheme
             if (darkChanged) {
                 val app = ThemedWallpaperEasyAccess
-                val backPath = if (app.isDark) F.valCachePubTwPortraitDark(context)
-                else F.valCachePubTwPortrait(context)
+                val backPath = if (app.isDark) F.valFilePubTwPortraitDark(context)
+                else F.valFilePubTwPortrait(context)
                 app.background = if (File(backPath).exists()) Drawable.createFromPath(backPath)
                 else ColorDrawable(if (app.isDark) Color.BLACK else Color.WHITE)
                 ThemedWallpaperEasyAccess.wallpaperTimestamp = System.currentTimeMillis()

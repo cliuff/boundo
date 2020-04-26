@@ -53,10 +53,19 @@ object MyBridge: Bridge() {
                 R.string.prefAvTagsValueCrossPlatformXar,
                 R.string.prefAvTagsValueNativeLibArm,
                 R.string.prefAvTagsValueNativeLibX86,
-                R.string.prefAvTagsValuePrivilegeSys
+                R.string.prefAvTagsValuePrivilegeSys,
+                R.string.prefAvTagsValueIconAdaptive
         ).forEach {
             tagSettings.add(context.getString(it))
         }
+        prefSettings.edit {
+            putStringSet(PrefUtil.AV_TAGS, tagSettings)
+        }
+    }
+
+    fun updateTagSettingsAi(context: Context, prefSettings: SharedPreferences) {
+        val tagSettings = prefSettings.getStringSet(PrefUtil.AV_TAGS, emptySet())!!.toMutableSet()
+        tagSettings.add(context.getString(R.string.prefAvTagsValueIconAdaptive))
         prefSettings.edit {
             putStringSet(PrefUtil.AV_TAGS, tagSettings)
         }

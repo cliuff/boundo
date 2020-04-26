@@ -186,10 +186,10 @@ class ExteriorFragment: Fragment(), Democratic, View.OnClickListener{
             isTW = (mode == MODE_TW_LIGHT || mode == MODE_TW_DARK)
             isDarkMode = (mode == if (isTW) MODE_TW_DARK else MODE_DARK)
             backPath = when (mode) {
-                MODE_LIGHT -> F.valCachePubExteriorPortrait(context)
-                MODE_DARK -> F.valCachePubExteriorPortraitDark(context)
-                MODE_TW_LIGHT -> F.valCachePubTwPortrait(context)
-                MODE_TW_DARK -> F.valCachePubTwPortraitDark(context)
+                MODE_LIGHT -> F.valFilePubExteriorPortrait(context)
+                MODE_DARK -> F.valFilePubExteriorPortraitDark(context)
+                MODE_TW_LIGHT -> F.valFilePubTwPortrait(context)
+                MODE_TW_DARK -> F.valFilePubTwPortraitDark(context)
                 else -> ""
             }
 
@@ -301,7 +301,7 @@ class ExteriorFragment: Fragment(), Democratic, View.OnClickListener{
         val dialog = CollisionDialog.loading(context, progressBar)
         dialog.show()
         GlobalScope.launch {
-            val exteriorPath = F.valCachePubExterior(context)
+            val exteriorPath = F.valFilePubExterior(context)
 
             if (blurred == null){
                 val background = File(backPath)

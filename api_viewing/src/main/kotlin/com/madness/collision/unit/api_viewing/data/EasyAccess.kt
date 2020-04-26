@@ -33,6 +33,7 @@ internal object EasyAccess {
     val shouldShowTagNativeLib: Boolean
         get() = shouldShowTagNativeLibArm || shouldShowTagNativeLibX86
     var shouldShowTagPrivilegeSystem = false
+    var shouldShowTagIconAdaptive = false
 
     fun init(context: Context, prefSettings: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)) {
         isViewingTarget = prefSettings.getBoolean(PrefUtil.AV_VIEWING_TARGET, PrefUtil.AV_VIEWING_TARGET_DEFAULT)
@@ -51,5 +52,6 @@ internal object EasyAccess {
         shouldShowTagNativeLibArm = tagSettings.contains(context.getString(R.string.prefAvTagsValueNativeLibArm))
         shouldShowTagNativeLibX86 = tagSettings.contains(context.getString(R.string.prefAvTagsValueNativeLibX86))
         shouldShowTagPrivilegeSystem = tagSettings.contains(context.getString(R.string.prefAvTagsValuePrivilegeSys))
+        shouldShowTagIconAdaptive = tagSettings.contains(context.getString(R.string.prefAvTagsValueIconAdaptive))
     }
 }

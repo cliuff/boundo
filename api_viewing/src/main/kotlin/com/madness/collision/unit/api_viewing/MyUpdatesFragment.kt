@@ -76,6 +76,9 @@ internal class MyUpdatesFragment : Fragment() {
             }.let { ApiViewingViewModel.sortList(it, MyUnit.SORT_POSITION_API_TIME) }
             launch(Dispatchers.Main) {
                 mAdapter.apps = mList
+                val recycler = mListFragment.getRecyclerView()
+                recycler.setHasFixedSize(true)
+                recycler.setItemViewCacheSize(mAdapter.itemCount)
                 val visibility = if (mList.isEmpty()) View.GONE else View.VISIBLE
                 view.findViewById<TextView>(R.id.avUpdatesRecentsTitle)?.visibility = visibility
                 view.findViewById<TextView>(R.id.avUpdatesRecentsMore)?.run {

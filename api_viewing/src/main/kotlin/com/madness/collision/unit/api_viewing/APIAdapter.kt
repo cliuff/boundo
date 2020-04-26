@@ -308,6 +308,9 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
                 val itemApp = logoView.getTag(R.bool.tagKeyAvAdapterItemId) as ApiViewingApp
                 val iconApp = logoView.getTag(R.bool.tagKeyAvAdapterItemIconId) as ApiViewingApp?
                 if (itemApp !== iconApp && itemApp.hasIcon) {
+                    if (EasyAccess.shouldShowTagIconAdaptive && appInfo.adaptiveIcon) {
+                        inflateTag(context.getString(MyR.string.av_ai), holder.tags)
+                    }
                     holder.logo.setTag(R.bool.tagKeyAvAdapterItemIconId, appInfo)
                     animateLogo(logoView)
                     checkerHandler.removeCallbacks(this)
@@ -420,6 +423,10 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
                     }
                 }
             }
+        }
+
+        if (EasyAccess.shouldShowTagIconAdaptive && appInfo.adaptiveIcon) {
+            inflateTag(context.getString(MyR.string.av_ai), holder.tags)
         }
 
         holder.card.setOnClickListener {

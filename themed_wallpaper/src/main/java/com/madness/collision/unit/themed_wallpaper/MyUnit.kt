@@ -61,8 +61,8 @@ class MyUnit: Unit() {
         }
         val context = context ?: return
         GlobalScope.launch {
-            val pathLight = F.valCachePubTwPortrait(context)
-            val pathDark = F.valCachePubTwPortraitDark(context)
+            val pathLight = F.valFilePubTwPortrait(context)
+            val pathDark = F.valFilePubTwPortraitDark(context)
             val imgLight = ImageUtil.getBitmap(pathLight)
             val imgDark = ImageUtil.getBitmap(pathDark)
             val width: Int by lazy { X.size(context, 150f, X.DP).roundToInt() }
