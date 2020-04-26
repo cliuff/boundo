@@ -49,7 +49,7 @@ dependencies {
     implementation 'androidx.core:core:1.2.0'
     implementation 'androidx.core:core-ktx:1.2.0'
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.fragment:fragment-ktx:1.2.3'
+    implementation 'androidx.fragment:fragment-ktx:1.2.4'
     implementation 'androidx.heifwriter:heifwriter:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta4'
     def lifecycle_version = "2.2.0"
@@ -57,5 +57,5 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
     implementation 'com.google.android.material:material:1.1.0'
-    implementation 'com.google.android.play:core:1.7.1'
+    implementation 'com.google.android.play:core:1.7.2'
 }
