@@ -1,31 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:animateLayoutChanges="true"
-    android:background="?colorABackground"
-    android:id="@+id/avStatsRoot"
-    android:orientation="vertical"
+<androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/avStatsRecycler"
+    android:divider="@null"
+    android:scrollbars="vertical"
+    android:scrollbarThumbVertical="@drawable/scrollbar_vertical"
+    android:nestedScrollingEnabled="false"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/avStatsRecycler"
-        android:divider="@null"
-        android:scrollbars="vertical"
-        android:scrollbarThumbVertical="@drawable/scrollbar_vertical"
-        android:requiresFadingEdge="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-    <TextView
-        android:id="@+id/avStatsTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:textSize="20sp"
-        android:alpha="@fraction/floatingAlpha"
-        android:background="?colorABackground" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    android:layout_height="wrap_content"/>

@@ -4,26 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.util.forEach
-import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.observe
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.madness.collision.R
-import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.EasyAccess
-import com.madness.collision.util.SystemUtil
-import com.madness.collision.util.alterPadding
-import com.madness.collision.util.mainApplication
-import com.madness.collision.util.measure
+import com.madness.collision.util.ThemeUtil
 import kotlinx.android.synthetic.main.fragment_chart.*
 import com.madness.collision.unit.api_viewing.R as MyR
 
-internal class ChartFragment: DialogFragment(){
+internal class ChartFragment: Fragment(){
 
     companion object {
         const val ARG_TYPE = "type"
@@ -37,11 +31,6 @@ internal class ChartFragment: DialogFragment(){
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL, R.style.AppTheme_FullScreenDialog)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(MyR.layout.fragment_chart, container, false)
     }
@@ -51,26 +40,6 @@ internal class ChartFragment: DialogFragment(){
         val context = context ?: return
 
         val pieChart = avChartPieChart
-        avChartTitle.setText(if (EasyAccess.isViewingTarget) R.string.apiSdkTarget else R.string.apiSdkMin)
-        avChartTitle.setTag(R.bool.avStatsTitlePaddingTop, avChartTitle.paddingTop)
-        val mainViewModel: MainViewModel by activityViewModels()
-        mainViewModel.insetTop.observe(viewLifecycleOwner){
-            avChartTitle.alterPadding(top = avChartTitle.getTag(R.bool.avStatsTitlePaddingTop) as Int + it)
-            avChartTitle.measure(shouldLimitHor = true)
-            (pieChart.layoutParams as ConstraintLayout.LayoutParams).topMargin = avChartTitle.measuredHeight
-        }
-        mainViewModel.insetLeft.observe(viewLifecycleOwner){
-            avChartRoot.alterPadding(start = it)
-        }
-        mainViewModel.insetRight.observe(viewLifecycleOwner){
-            avChartRoot.alterPadding(end = it)
-        }
-        avChartRoot.alterPadding(bottom = mainApplication.insetBottom)
-
-        dialog?.window?.let {
-            SystemUtil.applyEdge2Edge(it)
-            SystemUtil.applyDefaultSystemUiVisibility(context, it, mainViewModel.insetBottom.value ?: 0)
-        }
 
         val unit: Int = arguments?.getInt(ARG_TYPE) ?: ApiUnit.ALL_APPS
         val viewModel: ApiViewingViewModel by activityViewModels()
@@ -83,7 +52,10 @@ internal class ChartFragment: DialogFragment(){
         val chartEntries = ArrayList<PieEntry>(stats.size())
         val chartEntryColors = ArrayList<Int>(stats.size())
         stats.forEach { key, value ->
-            chartEntries.add(PieEntry(value.toFloat(), Utils.getAndroidVersionByAPI(key, true)))
+            val apiVersion = Utils.getAndroidVersionByAPI(key, true)
+//            val apiName = Utils.getAndroidCodenameByAPI(context, key)
+//            val label = apiVersion + context.getString(R.string.textParentheses, apiName) // exclude apiName when entry value is small to decrease overlapping
+            chartEntries.add(PieEntry(value.toFloat(), apiVersion))
             chartEntryColors.add(APIAdapter.getItemColorAccent(context, key))
         }
         val chartDataSet = PieDataSet(chartEntries, null).apply {
@@ -94,19 +66,22 @@ internal class ChartFragment: DialogFragment(){
         pieChart.run {
 //            holeRadius = 40f
 //            transparentCircleRadius = 45f
+            setHoleColor(ThemeUtil.getColor(context, R.attr.colorABackground))
+            // decrease overlapping
+            minAngleForSlices = 13f
             setUsePercentValues(true)
+//            setOnChartValueSelectedListener(object : OnChartValueSelectedListener{
+//                override fun onNothingSelected() {
+//                }
+//
+//                override fun onValueSelected(e: Entry?, h: Highlight?) {
+//                }
+//            })
             description = null
+            legend.textColor = ThemeUtil.getColor(context, R.attr.colorAOnBackground)
+            legend.textSize = 12f
             data = chartData
         }
 
-    }
-
-    override fun onStart() {
-        super.onStart()
-        if (dialog == null) return
-        dialog!!.window?.run {
-            setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-            setWindowAnimations(R.style.AppTheme_PopUp)
-        }
     }
 }

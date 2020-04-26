@@ -670,8 +670,7 @@ class MyUnit: com.madness.collision.unit.Unit(), AdapterView.OnItemSelectedListe
             ApiTaskManager.join(task = rDisplay)
             ApiTaskManager.now(Dispatchers.Main){
                 val listener = if (isStatsAvailable) View.OnClickListener {
-                    StatsFragment.newInstance(loadItem).show(childFragmentManager, StatsFragment.TAG)
-//                    ChartFragment.newInstance(loadItem).show(childFragmentManager, ChartFragment.TAG)
+                    mainViewModel.displayFragment(StatisticsFragment.newInstance(loadItem))
                 } else null
                 apiStats.setOnClickListener(listener)
             }
