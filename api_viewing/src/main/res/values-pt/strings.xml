@@ -63,4 +63,5 @@
     <string name="av_settings_tags">Tag</string>
     <string name="av_settings_tags_system">Aplicativo do sistema</string>
     <string name="av_adapter_tag_system">Sistema</string>
+    <string name="av_ai">Ícone adaptável</string>
 </resources>

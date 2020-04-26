@@ -63,4 +63,5 @@
     <string name="av_settings_tags">Mots clés</string>
     <string name="av_settings_tags_system">Application système</string>
     <string name="av_adapter_tag_system">Système</string>
+    <string name="av_ai">Icône adaptative</string>
 </resources>

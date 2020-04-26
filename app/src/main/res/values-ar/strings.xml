@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Boundo</string>
+    <string name="app_name">&#1564;Boundo</string>
     <string name="appDesc">مجموعة أدوات ملزمة للقيام ببعض الأشياء نيابة عنك</string>
     <string name="ttExportCal">إلى التقويم</string>
     <string name="Main_ToolBar_title_Settings">الإعدادات</string>
@@ -11,11 +11,11 @@
     <string name="Settings_Language_Dialog_Title">اللغات</string>
     <string name="Settings_Button_Derive">اشتق النص العادي</string>
     <string name="ttExportICalFile">ملف iCalendar</string>
-    <string name="Launcher_WeChat">WeChat</string>
+    <string name="Launcher_WeChat">&#1564;WeChat</string>
     <string name="Shortcuts_WeChatScanner_ShortLabel">تفحص</string>
     <string name="Shortcuts_WeChatScanner_LongLabel">تفحص</string>
     <string name="Shortcuts_WeChatScanner_DisabledMessage">معاق</string>
-    <string name="WeChatLauncher_Launch_Fail">WeChat غير مثبت</string>
+    <string name="WeChatLauncher_Launch_Fail">&#1564;WeChat غير مثبت</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">تم العثور على نسخة جديدة</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">نسخة جديدة</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart2">التغييرات</string>
@@ -28,7 +28,7 @@
     <string name="text_forgetit">إلغاء</string>
     <string name="Main_TextView_Launcher">فوري</string>
     <string name="Main_TextView_Advice_Text">حول</string>
-    <string name="textQQ">QQ</string>
+    <string name="textQQ">&#1564;QQ</string>
     <string name="textEmail">البريد الإلكتروني</string>
     <string name="Advice_QQ_Toast_Text">أضف جهة اتصال قبل بدء محادثة ، وإلا لن يتم إرسال الرسالة إلي</string>
     <string name="Advice_Switch_Debug_Text">وضع الاستهلاك</string>
@@ -39,7 +39,7 @@
     <string name="developertools_appinfowidget">CoolApk معلومات التطبيق</string>
     <string name="developertools_cropimage">تعديل الصورة</string>
     <string name="toast_permission_storage_denied">يرجى منح الإذن حتى نتمكن من قراءة / كتابة البيانات</string>
-    <string name="apiViewer">API التطبيق</string>
+    <string name="apiViewer">&#1564;API التطبيق</string>
     <string name="settingsfunction_downloaddescription">تنزيل التحديث</string>
     <string name="text_OK">حسنا</string>
     <string name="text_cancel">إلغاء</string>
@@ -200,14 +200,14 @@
     <string name="prefExteriorForceDarkDescDetail">Force Dark هي ميزة للمطورين لتطبيق سمة غامقة بسرعة. من خلال ضبط forceDarkAllowed على true ، يحصل التطبيق على سمة داكنة تلقائيًا. وسيعمل المطور على تعديل أجزاء معينة من الواجهة ليست مثالية وتعيين forceDarkAllowed إلى false على هذه الأجزاء. يؤدي تمكين Override Force-dark إلى جعل النظام يتجاهل قيمة forceDarkAllowed ، مما يؤدي إلى تعطل سمة مظلمة تم تنفيذها بشكل جيد.</string>
     <string name="instantManual">الضغط لفترة طويلة على أيقونة التطبيق في المشغّل لإظهار اختصارات التطبيقات.\nاسحب ظل الإشعار إلى أسفل ، والإعدادات التي يتم تبديلها أعلى منطقة الإشعارات هي بلاط الإعدادات السريعة الذي تبحث عنه.</string>
     <string name="immortalMessage">لا لا!\nنحن غاضبون من خطأ.\nلا تقلق ، لقد تم التقاطها!\nتسليم السجل إلينا لإجراء البحوث على!</string>
-    <string name="unit_desc_av">• التحقق من مستوى Android API لجميع التطبيقات والتطبيقات على الجهاز\n• التحقق من دعم أيقونة التكيف من جميع التطبيقات\n• احصائيات API التطبيق\n• APK واستخراج الرمز\n• تفاصيل الحزمة وتفاصيل التوقيع</string>
+    <string name="unit_desc_av">• التحقق من مستوى Android API لجميع التطبيقات والتطبيقات على الجهاز\n• التحقق من دعم أيقونة التكيف من جميع التطبيقات\n• احصائيات API التطبيق\n• &#1564;APK واستخراج الرمز\n• تفاصيل الحزمة وتفاصيل التوقيع</string>
     <string name="unit_desc_st">للمستخدمين الصينيين\n• إضافة بالطبع يدويا\n• تحليل الجدول الزمني للمدرسة من موقع النظام التعليمي للمدرسة (بعض من نظام التعليم ZFSoft فقط)\n • إنشاء ملف iCalendar (.ics)\n• تصدير إلى تقويم Google إلخ.</string>
     <string name="unit_desc_im">• تعديل القرار• تعديل الشكل: png jpg webp heif• طمس الصورة</string>
     <string name="unit_desc_ca">• استرجع معلومات التطبيقات على CoolApk</string>
     <string name="unit_desc_nm">• إخفاء الصور وقت التشغيل التي تنتجها التطبيقات (.nomedia)</string>
     <string name="unit_desc_tw">• اجعل ورق الحائط الخاص بك يتوافق مع السمة المظلم لنظام Android 10 من خلال تطبيق ورق الحائط الداكن تلقائيًا</string>
     <string name="unit_desc_at">• إيقاف الصوت من اللعب</string>
-    <string name="unit_desc_we">• WeChat اختصار الماسح الضوئي</string>
+    <string name="unit_desc_we">• &#1564;WeChat اختصار الماسح الضوئي</string>
     <string name="unit_desc_qc">• اختصار اتصالات QQ</string>
     <string name="unit_desc_requirement_shortcut">أندرويد 7.1+</string>
     <string name="unit_desc_requirement_nm">أدناه Android 10</string>
@@ -217,7 +217,7 @@
     <string name="unit_desc_unavailable">غير متوفره</string>
     <string name="unit_desc_install">تثبيت</string>
     <string name="unit_desc_uninstall">الغاء التثبيت</string>
-    <string name="unit_desc_requirement_we">WeChat مثبتة</string>
+    <string name="unit_desc_requirement_we">&#1564;WeChat مثبتة</string>
     <string name="unit_desc_requirement_qc">ف ف تثبيت</string>
     <string name="unit_manager_install_success">متجر Play يقوم بمعالجة التثبيت</string>
     <string name="unit_manager_uninstall_success">سوف يحدث إلغاء التثبيت عند الخمول</string>

@@ -63,4 +63,5 @@
     <string name="av_settings_tags">标签</string>
     <string name="av_settings_tags_system">系统应用</string>
     <string name="av_adapter_tag_system">系统</string>
+    <string name="av_ai">自适应图标</string>
 </resources>

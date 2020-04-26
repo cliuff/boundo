@@ -63,4 +63,5 @@
     <string name="av_settings_tags">Теги</string>
     <string name="av_settings_tags_system">Системное приложение</string>
     <string name="av_adapter_tag_system">система</string>
+    <string name="av_ai">Адаптивный значок</string>
 </resources>

@@ -63,4 +63,5 @@
     <string name="av_settings_tags">แท็ก</string>
     <string name="av_settings_tags_system">แอประบบ</string>
     <string name="av_adapter_tag_system">ระบบ</string>
+    <string name="av_ai">ไอคอนการปรับตัว</string>
 </resources>
