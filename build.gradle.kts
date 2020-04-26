@@ -11,9 +11,9 @@ buildscript {
         jcenter()
     }
     val Versions = object {
-        val kotlin = "1.3.70"
+        val kotlin = "1.3.72"
         val dokka = "0.9.18"
-        val androidxNavigation = "2.2.1"
+        val androidxNavigation = "2.2.2"
         val googlePlayServicesOSSLicensesPlugin = "0.10.0"
         val androidGradlePlugin = "3.6.0"
     }
