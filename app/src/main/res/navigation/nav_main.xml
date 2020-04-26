@@ -1,4 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2020 Clifford Liu
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_main"
@@ -31,7 +47,7 @@
     </fragment>
     <fragment
         android:id="@+id/unitsFragment"
-        android:name="com.madness.collision.unit.UnitsFragment"/>
+        android:name="com.madness.collision.main.MainUnitsFragment"/>
     <fragment
         android:id="@+id/unitsManagerFragment"
         android:name="com.madness.collision.unit.UnitsManagerFragment"/>
@@ -74,18 +90,25 @@
             app:popEnterAnim="@anim/fragment_fade_enter"
             app:popExitAnim="@anim/fragment_close_exit" />
         <action
-            android:id="@+id/action_settingsFragment_to_exteriorSettingsFragment"
-            app:destination="@id/exteriorSettingsFragment"
+            android:id="@+id/action_settingsFragment_to_utilPage"
+            app:destination="@id/utilPage"
             app:enterAnim="@anim/fragment_open_enter"
             app:exitAnim="@anim/fragment_fade_exit"
             app:popEnterAnim="@anim/fragment_fade_enter"
             app:popExitAnim="@anim/fragment_close_exit" />
     </fragment>
     <fragment
-        android:id="@+id/exteriorSettingsFragment"
-        android:name="com.madness.collision.settings.ExteriorSettingsFragment">
+        android:id="@+id/utilPage"
+        android:name="com.madness.collision.util.Page" >
+        <argument
+            android:name="fragmentClass"
+            app:argType="com.madness.collision.util.TypedNavArg" />
+        <argument
+            android:name="titleId"
+            app:argType="integer"
+            android:defaultValue="0" />
         <action
-            android:id="@+id/action_exteriorSettingsFragment_to_exteriorFragment"
+            android:id="@+id/action_utilPage_to_exteriorFragment"
             app:destination="@id/exteriorFragment"
             app:enterAnim="@anim/fragment_open_enter"
             app:exitAnim="@anim/fragment_fade_exit"
