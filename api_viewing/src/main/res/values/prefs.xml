@@ -26,6 +26,7 @@
         <item>ARM</item>
         <item>x86</item>
         <item>@string/av_settings_tags_system</item>
+        <item>@string/av_ai</item>
     </string-array>
     <string-array name="prefAvTagsValues">
         <item>@string/prefAvTagsValuePackageInstallerGp</item>
@@ -36,6 +37,7 @@
         <item>@string/prefAvTagsValueNativeLibArm</item>
         <item>@string/prefAvTagsValueNativeLibX86</item>
         <item>@string/prefAvTagsValuePrivilegeSys</item>
+        <item>@string/prefAvTagsValueIconAdaptive</item>
     </string-array>
     <string name="prefAvTagsValuePackageInstallerGp" translatable="false">avTagsValPiGp</string>
     <string name="prefAvTagsValuePackageInstallerPi" translatable="false">avTagsValPiPi</string>
@@ -45,5 +47,6 @@
     <string name="prefAvTagsValueNativeLibArm" translatable="false">avTagsValNlArm</string>
     <string name="prefAvTagsValueNativeLibX86" translatable="false">avTagsValNlX86</string>
     <string name="prefAvTagsValuePrivilegeSys" translatable="false">avTagsValPriSys</string>
+    <string name="prefAvTagsValueIconAdaptive" translatable="false">avTagsValIconAda</string>
 
 </resources>
