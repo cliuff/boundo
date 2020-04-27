@@ -66,28 +66,22 @@ object MyBridge: Bridge() {
     @Suppress("unused")
     fun initTagSettings(context: Context, prefSettings: SharedPreferences) {
         val tagSettings = mutableSetOf<String>()
-        listOf(
-                R.string.prefAvTagsValuePackageInstallerGp,
-                R.string.prefAvTagsValuePackageInstallerPi,
-                R.string.prefAvTagsValueCrossPlatformFlu,
-                R.string.prefAvTagsValueCrossPlatformRn,
-                R.string.prefAvTagsValueCrossPlatformXar,
-                R.string.prefAvTagsValueNativeLibArm,
-                R.string.prefAvTagsValueNativeLibX86,
-                R.string.prefAvTagsValuePrivilegeSys,
-                R.string.prefAvTagsValueIconAdaptive
-        ).forEach {
-            tagSettings.add(context.getString(it))
+        val tagValues = context.resources.obtainTypedArray(R.array.prefAvTagsValues)
+        for (i in 0 until tagValues.length()) {
+            val value = tagValues.getString(i) ?: continue
+            tagSettings.add(value)
         }
+        tagValues.recycle()
         prefSettings.edit {
             putStringSet(PrefUtil.AV_TAGS, tagSettings)
         }
     }
 
     @Suppress("unused")
-    fun updateTagSettingsAi(context: Context, prefSettings: SharedPreferences) {
+    fun updateTagSettingsAiHs(context: Context, prefSettings: SharedPreferences) {
         val tagSettings = prefSettings.getStringSet(PrefUtil.AV_TAGS, emptySet())!!.toMutableSet()
         tagSettings.add(context.getString(R.string.prefAvTagsValueIconAdaptive))
+        tagSettings.add(context.getString(R.string.prefAvTagsValueHasSplits))
         prefSettings.edit {
             putStringSet(PrefUtil.AV_TAGS, tagSettings)
         }

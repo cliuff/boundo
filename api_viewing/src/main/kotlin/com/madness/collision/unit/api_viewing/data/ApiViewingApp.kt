@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020 Clifford Liu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.madness.collision.unit.api_viewing.data
 
 import android.content.ComponentName
@@ -63,10 +79,11 @@ internal class ApiViewingApp(
     var adaptiveIcon: Boolean = false
     var preload: Boolean = false
     var apiUnit: Int = ApiUnit.NON
-    var apkPath: String = ""
     var updateTime = 0L
     var isNativeLibrariesRetrieved = false
-    var nativeLibraries: BooleanArray = BooleanArray(7) { false }
+    var nativeLibraries: BooleanArray = BooleanArray(ApkUtil.NATIVE_LIB_SUPPORT_SIZE) { false }
+    @Ignore
+    lateinit var appPackage: AppPackage
     @Ignore
     private var type: Int = TYPE_APP
     @Ignore
@@ -100,7 +117,7 @@ internal class ApiViewingApp(
                 name = packageName
             }else {
                 apiUnit = if ((info.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM) == 0) ApiUnit.USER else ApiUnit.SYS
-                apkPath = info.applicationInfo.sourceDir
+                appPackage = AppPackage(info.applicationInfo)
                 loadName(context, info.applicationInfo)
                 //name = manager.getApplicationLabel(pi.applicationInfo).toString();
             }
@@ -115,7 +132,7 @@ internal class ApiViewingApp(
             if (X.aboveOn(Build.VERSION_CODES.N)) {
                 minAPI = info.applicationInfo.minSdkVersion
             }else {
-                val minApiText = ManifestUtil.getMinSdk(apkPath)
+                val minApiText = ManifestUtil.getMinSdk(appPackage.basePath)
                 if (minApiText.isNotEmpty()) minAPI = minApiText.toInt()
             }
             minSDK = Utils.getAndroidVersionByAPI(minAPI, false)
@@ -129,8 +146,8 @@ internal class ApiViewingApp(
         }
     }
 
-    fun initArchive(context: Context, path: String, applicationInfo: ApplicationInfo): ApiViewingApp {
-        apkPath = path
+    fun initArchive(context: Context, applicationInfo: ApplicationInfo): ApiViewingApp {
+        appPackage = AppPackage(applicationInfo)
         loadName(context, applicationInfo)
         //name = manager.getApplicationLabel(pi.applicationInfo).toString();
         return this
@@ -169,7 +186,7 @@ internal class ApiViewingApp(
     }
 
     fun getApplicationInfo(context: Context): ApplicationInfo? {
-        return if (this.isArchive()) MiscApp.getApplicationInfo(context, apkPath = apkPath)
+        return if (this.isArchive()) MiscApp.getApplicationInfo(context, apkPath = appPackage.basePath)
         else MiscApp.getApplicationInfo(context, packageName = packageName)
     }
 
@@ -191,7 +208,7 @@ internal class ApiViewingApp(
                 applicationInfo ?: return this
                 load(context, {
                     getOriginalIconDrawable(context, applicationInfo)!!.mutate()
-                }, { ManifestUtil.getRoundIcon(context, applicationInfo, apkPath) })
+                }, { ManifestUtil.getRoundIcon(context, applicationInfo, appPackage.basePath) })
             }
             TYPE_ICON -> throw IllegalArgumentException("instance of TYPE_ICON must provide icon retrievers")
             else -> this
@@ -407,8 +424,24 @@ internal class ApiViewingApp(
         return logoCircular
     }
 
+    private fun ApkUtil.getNativeLibSupport(appPackage: AppPackage): BooleanArray {
+        return if (appPackage.hasSplits) {
+            val re = BooleanArray(NATIVE_LIB_SUPPORT_SIZE) { false }
+            appPackage.apkPaths.forEach {
+                val apkRe = getNativeLibSupport(it)
+                for (i in 0 until NATIVE_LIB_SUPPORT_SIZE) {
+                    if (re[i]) continue
+                    re[i] = apkRe[i]
+                }
+            }
+            re
+        } else {
+            getNativeLibSupport(appPackage.basePath)
+        }
+    }
+
     fun retrieveNativeLibraries() {
-        ApkUtil.getNativeLibSupport(apkPath).copyInto(nativeLibraries)
+        ApkUtil.getNativeLibSupport(appPackage).copyInto(nativeLibraries)
         isNativeLibrariesRetrieved = true
     }
 
@@ -442,7 +475,7 @@ internal class ApiViewingApp(
     }
 
     fun apkPage(): Intent{
-        val file = File(apkPath)
+        val file = File(appPackage.basePath)
         val intent = Intent(Intent.ACTION_VIEW)
         intent.setDataAndType(Uri.parse(file.parent), "resource/folder")
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
@@ -472,7 +505,7 @@ internal class ApiViewingApp(
         targetSDKLetter = parIn.readInt().toChar()
         minSDKLetter = parIn.readInt().toChar()
         apiUnit = parIn.readInt()
-        apkPath = parIn.readString() ?: ""
+        appPackage = parIn.readParcelable(AppPackage::class.java.classLoader)!!
         updateTime = parIn.readLong()
         type = parIn.readInt()
         val booleanArray = BooleanArray(2)
@@ -482,7 +515,7 @@ internal class ApiViewingApp(
         isLoadingIcon = booleanArray[2]
         _iconDetails = parIn.readParcelable(IconRetrievingDetails::class.java.classLoader)
         isNativeLibrariesRetrieved = parIn.readInt() == 1
-        parIn.readBooleanArray(BooleanArray(7) { false })
+        parIn.readBooleanArray(nativeLibraries)
     }
 
     override fun writeToParcel( dest: Parcel, flags: Int) {
@@ -500,7 +533,7 @@ internal class ApiViewingApp(
         dest.writeInt(targetSDKLetter.toInt())
         dest.writeInt(minSDKLetter.toInt())
         dest.writeInt(apiUnit)
-        dest.writeString(apkPath)
+        dest.writeParcelable(appPackage, flags)
         dest.writeLong(updateTime)
         dest.writeInt(type)
         dest.writeBooleanArray(booleanArrayOf(adaptiveIcon, preload, isLoadingIcon))

@@ -17,18 +17,48 @@
 package com.madness.collision.unit.api_viewing.data
 
 import android.content.pm.ApplicationInfo
+import android.os.Parcel
+import android.os.Parcelable
 
-internal class AppPackage(applicationInfo: ApplicationInfo) {
+internal class AppPackage private constructor(val basePath: String, val splitPaths: List<String>): Parcelable {
 
-    val hasSplits: Boolean
-    val apkPaths: List<String>
-    init {
-        val splitPaths = applicationInfo.splitPublicSourceDirs ?: emptyArray()
-        hasSplits = splitPaths.isNotEmpty()
+    val hasSplits: Boolean = splitPaths.isNotEmpty()
+    val apkPaths: List<String> = makeApkPaths()
+
+    constructor(applicationInfo: ApplicationInfo): this(
+            applicationInfo.publicSourceDir ?: "",
+            applicationInfo.splitPublicSourceDirs?.toList() ?: emptyList()
+    )
+
+    private fun makeApkPaths(): List<String> {
         val paths = ArrayList<String>(splitPaths.size + 1)
-        paths.add(applicationInfo.publicSourceDir ?: "")
+        paths.add(basePath)
         paths.addAll(splitPaths)
-        apkPaths = paths
+        return paths
+    }
+
+    constructor(parcel: Parcel) : this(
+            parcel.readString() ?: "",
+            parcel.createStringArrayList() ?: emptyList()
+    )
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(basePath)
+        parcel.writeStringList(splitPaths)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<AppPackage> {
+        override fun createFromParcel(parcel: Parcel): AppPackage {
+            return AppPackage(parcel)
+        }
+
+        override fun newArray(size: Int): Array<AppPackage?> {
+            return arrayOfNulls(size)
+        }
     }
 
 }

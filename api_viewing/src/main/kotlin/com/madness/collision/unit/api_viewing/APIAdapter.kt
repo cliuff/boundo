@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020 Clifford Liu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.madness.collision.unit.api_viewing
 
 import android.animation.*
@@ -29,6 +45,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.animation.doOnEnd
 import androidx.core.content.pm.PackageInfoCompat
+import androidx.core.view.forEach
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -217,8 +234,11 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
     private val itemLength: Int = X.size(context, 70f, X.DP).roundToInt()
     private val colorSurface = if (shouldShowDesserts) ThemeUtil.getColor(context, R.attr.colorASurface) else 0
 
-    private fun inflateTag(name: String, parent: ViewGroup): AdapterAvTagBinding {
-        return AdapterAvTagBinding.inflate(inflater, parent, true).apply {
+    private fun inflateTag(name: String, parent: ViewGroup) {
+        parent.forEach {
+            if (it is TextView && it.text == name) return
+        }
+        AdapterAvTagBinding.inflate(inflater, parent, true).apply {
             avAdapterInfoTag.text = name
         }
     }
@@ -300,14 +320,15 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
         holder.name.dartFuture(appInfo.name)
         holder.logo.setTag(R.bool.tagKeyAvAdapterItemId, appInfo)
 
-        if (!appInfo.hasIcon) {
+        holder.tags.removeAllViews()
+        val shouldWaitForIcon = !appInfo.hasIcon
+        if (shouldWaitForIcon) {
             ensureItem(index)
             val logoView = holder.logo
             val checkerHandler = Handler()
             runnable {
-                val itemApp = logoView.getTag(R.bool.tagKeyAvAdapterItemId) as ApiViewingApp
                 val iconApp = logoView.getTag(R.bool.tagKeyAvAdapterItemIconId) as ApiViewingApp?
-                if (itemApp !== iconApp && itemApp.hasIcon) {
+                if (appInfo !== iconApp && appInfo.hasIcon) {
                     if (EasyAccess.shouldShowTagIconAdaptive && appInfo.adaptiveIcon) {
                         inflateTag(context.getString(MyR.string.av_ai), holder.tags)
                     }
@@ -367,7 +388,6 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
             holder.updateTime.visibility = View.GONE
         }
 
-        holder.tags.removeAllViews()
         if (EasyAccess.shouldShowTagPackageInstaller) {
             context.packageManager.getInstallerPackageName(appInfo.packageName)?.let {
                 val installerGPlay = "com.android.vending"
@@ -425,8 +445,12 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
             }
         }
 
-        if (EasyAccess.shouldShowTagIconAdaptive && appInfo.adaptiveIcon) {
+        if (!shouldWaitForIcon && EasyAccess.shouldShowTagIconAdaptive && appInfo.adaptiveIcon) {
             inflateTag(context.getString(MyR.string.av_ai), holder.tags)
+        }
+
+        if (EasyAccess.shouldShowTagHasSplits && appInfo.appPackage.hasSplits) {
+            inflateTag(context.getString(MyR.string.av_tag_has_splits), holder.tags)
         }
 
         holder.card.setOnClickListener {
@@ -716,13 +740,14 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
         }
     }
 
+    // todo split APKs
     private fun actionApk(app: ApiViewingApp){
         val path = F.createPath(F.cachePublicPath(context), "App", "APK", "${app.name} v${app.verName}.apk")
         val apk = File(path)
         if (F.prepare4(apk)) {
             GlobalScope.launch {
                 try {
-                    X.copyFileLessTwoGB(File(app.apkPath), apk)
+                    X.copyFileLessTwoGB(File(app.appPackage.basePath), apk)
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
@@ -745,7 +770,7 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
         return try {
             val flags = extraFlags
             pi = if (appInfo.isArchive()) {
-                context.packageManager.getPackageArchiveInfo(appInfo.apkPath, flags)
+                context.packageManager.getPackageArchiveInfo(appInfo.appPackage.basePath, flags)
             } else {
                 context.packageManager.getPackageInfo(appInfo.packageName, flags)
             }
