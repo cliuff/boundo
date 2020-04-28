@@ -25,7 +25,6 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.core.content.edit
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
@@ -36,7 +35,7 @@ import com.madness.collision.settings.ExteriorFragment
 import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.util.*
 
-internal class PrefExterior: PreferenceFragmentCompat() {
+internal class PrefExterior: PreferenceFragmentCompat(), NavNode {
     companion object {
         const val TAG = "PrefExterior"
         private const val TIME_SCHEDULE_START = 0
@@ -46,6 +45,7 @@ internal class PrefExterior: PreferenceFragmentCompat() {
         fun newInstance() = PrefExterior()
     }
 
+    override val nodeDestinationId: Int = R.id.utilPage
     private val mainViewModel: MainViewModel by activityViewModels()
     private lateinit var prefLightTheme: Preference
     private lateinit var prefDarkTheme: Preference
@@ -96,11 +96,11 @@ internal class PrefExterior: PreferenceFragmentCompat() {
         val context = context ?: return super.onPreferenceTreeClick(preference)
         return when(preference.key){
             getString(R.string.prefExteriorKeyBack) -> {
-                findNavController().navigate(PageDirections.actionUtilPageToExteriorFragment(ExteriorFragment.MODE_LIGHT))
+                navigate(PageDirections.actionUtilPageToExteriorFragment(ExteriorFragment.MODE_LIGHT))
                 true
             }
             getString(R.string.prefExteriorKeyBackDark) -> {
-                findNavController().navigate(PageDirections.actionUtilPageToExteriorFragment(ExteriorFragment.MODE_DARK))
+                navigate(PageDirections.actionUtilPageToExteriorFragment(ExteriorFragment.MODE_DARK))
                 true
             }
             keyLightTheme -> {

@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020 Clifford Liu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.madness.collision.main.more
 
 import android.content.Context
@@ -12,7 +28,6 @@ import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.card.MaterialCardView
 import com.madness.collision.Democratic
 import com.madness.collision.R
@@ -21,12 +36,13 @@ import com.madness.collision.main.MainViewModel
 import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.util.*
 
-class MoreFragment : Fragment(), Democratic, View.OnClickListener {
+class MoreFragment : Fragment(), Democratic, View.OnClickListener, NavNode {
     companion object {
         @JvmStatic
         fun newInstance() = MoreFragment()
     }
 
+    override val nodeDestinationId: Int = R.id.moreFragment
     private val viewModel: MainViewModel by activityViewModels()
     private val exterior = mainApplication.exterior
     private var exteriorTransparency: Int = 0xFF
@@ -102,6 +118,6 @@ class MoreFragment : Fragment(), Democratic, View.OnClickListener {
             R.id.moreUnitsManager -> MoreFragmentDirections.actionMoreFragmentToUnitsManagerFragment()
             R.id.moreSettings -> MoreFragmentDirections.actionMoreFragmentToSettingsFragment()
             else -> null
-        }?.let { findNavController().navigate(it) }
+        }?.let { navigate(it) }
     }
 }

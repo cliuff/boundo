@@ -33,7 +33,6 @@ import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
-import androidx.navigation.fragment.findNavController
 import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.databinding.FragmentSettingsBinding
@@ -44,12 +43,13 @@ import com.madness.collision.pref.PrefExterior
 import com.madness.collision.unit.Unit
 import com.madness.collision.util.*
 
-internal class SettingsFragment : Fragment(), Democratic {
+internal class SettingsFragment : Fragment(), Democratic, NavNode {
 
     companion object {
         private const val TAG = "Settings"
     }
 
+    override val nodeDestinationId: Int = R.id.settingsFragment
     private val mainViewModel: MainViewModel by activityViewModels()
     private var _viewBinding: FragmentSettingsBinding? = null
     private val viewBinding: FragmentSettingsBinding
@@ -89,11 +89,11 @@ internal class SettingsFragment : Fragment(), Democratic {
         }
 
         viewBinding.settingsItemStyle.setOnClickListener {
-            findNavController().navigate(SettingsFragmentDirections.actionSettingsFragmentToUtilPage(TypedNavArg<PrefExterior>(), R.string.settings_exterior))
+            navigate(SettingsFragmentDirections.actionSettingsFragmentToUtilPage(TypedNavArg<PrefExterior>(), R.string.settings_exterior))
         }
 
         viewBinding.settingsItemAbout.setOnClickListener {
-            findNavController().navigate(SettingsFragmentDirections.actionSettingsFragmentToAdviceFragment())
+            navigate(SettingsFragmentDirections.actionSettingsFragmentToAdviceFragment())
         }
 
         val installedUnits = Unit.getInstalledUnits(context)
