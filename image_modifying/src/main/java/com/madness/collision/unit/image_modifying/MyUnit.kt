@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020 Clifford Liu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.madness.collision.unit.image_modifying
 
 import android.Manifest
@@ -121,10 +137,8 @@ class MyUnit: Unit(){
                     val context = context ?: return
                     image ?: return
                     actionDone(context)
-                }
-                else {
-                    val context = context ?: return
-                    X.toast(context, R.string.toast_permission_storage_denied, Toast.LENGTH_SHORT)
+                } else {
+                    notifyBriefly(R.string.toast_permission_storage_denied)
                 }
             }
         }
@@ -165,10 +179,11 @@ class MyUnit: Unit(){
         if (X.belowOff(X.Q)){
             val permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
             if (PermissionUtil.check(context, permissions).isNotEmpty()) {
-                if (X.aboveOn(X.M))
+                if (X.aboveOn(X.M)) {
                     requestPermissions(permissions, permission_REQUEST_EXTERNAL_STORAGE)
-                else
-                    X.toast(context, R.string.toast_permission_storage_denied, Toast.LENGTH_SHORT)
+                } else {
+                    notifyBriefly(R.string.toast_permission_storage_denied)
+                }
                 return
             }
         }
@@ -177,8 +192,11 @@ class MyUnit: Unit(){
         popLoading.show()
         GlobalScope.launch {
             val isSuccessful = saveImage(context, processImage(context))
-            if (isSuccessful) X.toast(context, MyR.string.im_toast_finish, Toast.LENGTH_LONG)
-            else X.toast(context, R.string.text_error, Toast.LENGTH_SHORT)
+            if (isSuccessful) {
+                notify(MyR.string.im_toast_finish)
+            } else {
+                notifyBriefly(R.string.text_error)
+            }
         }.invokeOnCompletion {
             popLoading.dismiss()
         }

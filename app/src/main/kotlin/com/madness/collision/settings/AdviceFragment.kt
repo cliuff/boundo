@@ -75,13 +75,13 @@ internal class AdviceFragment : Fragment(), Democratic, View.OnClickListener, Na
                 val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                 val clipData = clipboard.primaryClip
                 if (clipData == null) {
-                    X.toast(context, R.string.text_no_content, Toast.LENGTH_SHORT)
+                    notifyBriefly(R.string.text_no_content)
                     return
                 }
                 val builder = StringBuilder()
                 for (i in 0 until clipData.itemCount) builder.append(clipData.getItemAt(i).htmlText)
                 clipboard.setPrimaryClip(ClipData.newPlainText("text", builder.toString()))
-                X.toast(context, R.string.text_done, Toast.LENGTH_SHORT)
+                notifyBriefly(R.string.text_done)
             }
             R.id.adviceLicense -> {
                 navigate(AdviceFragmentDirections.actionAdviceFragmentToOssActivity())

@@ -159,7 +159,7 @@ internal class ImmortalActivity : AppCompatActivity(), View.OnClickListener {
                 if (isExisting) it.removeDynamicShortcuts(P.SC_ID_IMMORTAL)
                 else it.addDynamicShortcuts(P.SC_ID_IMMORTAL)
             }
-            X.toast(this, R.string.text_done, Toast.LENGTH_SHORT)
+            notifyBriefly(R.string.text_done)
             true
         }
     }

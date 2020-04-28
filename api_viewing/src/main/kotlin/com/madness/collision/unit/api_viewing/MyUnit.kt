@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020 Clifford Liu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.madness.collision.unit.api_viewing
 
 import android.Manifest
@@ -703,7 +719,7 @@ class MyUnit: com.madness.collision.unit.Unit(), AdapterView.OnItemSelectedListe
                         requestPermissions(permissions, requestCode)
                     else {
                         refreshLayout.isRefreshing = false
-                        X.toast(context, R.string.toast_permission_storage_denied, Toast.LENGTH_LONG)
+                        notify(R.string.toast_permission_storage_denied)
                     }
                 }
             }
@@ -715,8 +731,7 @@ class MyUnit: com.madness.collision.unit.Unit(), AdapterView.OnItemSelectedListe
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
             refreshLayout.isRefreshing = false
-            val context = context ?: return
-            X.toast(context, R.string.toast_permission_storage_denied, Toast.LENGTH_LONG)
+            notify(R.string.toast_permission_storage_denied)
             return
         }
         if (requestCode == REQUEST_EXTERNAL_STORAGE){
@@ -839,7 +854,7 @@ class MyUnit: com.madness.collision.unit.Unit(), AdapterView.OnItemSelectedListe
                     val uri: Uri? = data?.data
                     val cd: ClipData? = data?.clipData
                     if (resultCode != AppCompatActivity.RESULT_OK || (uri == null && cd == null)) {
-                        X.toast(context, R.string.text_no_content, Toast.LENGTH_LONG)
+                        notify(R.string.text_no_content)
                         return@now
                     }
                     val pathsSize: Int = (if (uri != null) 1 else cd!!.itemCount)
@@ -856,7 +871,7 @@ class MyUnit: com.madness.collision.unit.Unit(), AdapterView.OnItemSelectedListe
             }
             REQUEST_OPEN_DIRECTORY -> {
                 if (resultCode != Activity.RESULT_OK) {
-                    X.toast(context, R.string.text_no_content, Toast.LENGTH_SHORT)
+                    notifyBriefly(R.string.text_no_content)
                     ceaseRefresh(ApiUnit.APK)
                     return
                 }
@@ -873,7 +888,7 @@ class MyUnit: com.madness.collision.unit.Unit(), AdapterView.OnItemSelectedListe
             }
             REQUEST_OPEN_VOLUME -> {
                 if (resultCode != Activity.RESULT_OK) {
-                    X.toast(context, R.string.text_no_content, Toast.LENGTH_SHORT)
+                    notifyBriefly(R.string.text_no_content)
                     ceaseRefresh(ApiUnit.VOLUME)
                     return
                 }

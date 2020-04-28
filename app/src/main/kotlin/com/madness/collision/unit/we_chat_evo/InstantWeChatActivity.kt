@@ -1,15 +1,28 @@
+/*
+ * Copyright 2020 Clifford Liu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.madness.collision.unit.we_chat_evo
 
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.widget.ProgressBar
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.madness.collision.R
-import com.madness.collision.util.SystemUtil
-import com.madness.collision.util.ThemeUtil
-import com.madness.collision.util.X
+import com.madness.collision.util.*
 
 class InstantWeChatActivity: AppCompatActivity() {
 
@@ -31,7 +44,7 @@ class InstantWeChatActivity: AppCompatActivity() {
                 if (X.belowOff(X.P)) overridePendingTransition(R.anim.res_fade_in, R.anim.res_fade_out)
                 finish()
             }catch( e: Exception){
-                X.toast(this, R.string.WeChatLauncher_Launch_Fail, Toast.LENGTH_SHORT)
+                notifyBriefly(R.string.WeChatLauncher_Launch_Fail)
             }
         }, 400)
     }

@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020 Clifford Liu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.madness.collision.unit.school_timetable
 
 import android.content.*
@@ -163,7 +179,7 @@ class MyUnit: Unit(), View.OnClickListener{
                 intent.component = ComponentName("com.google.android.calendar", "com.google.android.calendar.ICalLauncher")
             context.startActivity(intent)
         }catch ( e: ActivityNotFoundException) {
-            X.toast(context, MyR.string.ics_Toast_open_fail, Toast.LENGTH_SHORT)
+            notifyBriefly(MyR.string.ics_Toast_open_fail)
         }
     }
 
@@ -297,7 +313,7 @@ class MyUnit: Unit(), View.OnClickListener{
         val context = context ?: return
         val file = File(F.valFilePubTtPrevious(context))
         if (!file.exists()){
-            X.toast(context, MyR.string.ics_Import_Toast_Null, Toast.LENGTH_SHORT)
+            notifyBriefly(MyR.string.ics_Import_Toast_Null)
             return
         }
         val filesPath = F.valCachePubTtUndo(context)
@@ -329,8 +345,7 @@ class MyUnit: Unit(), View.OnClickListener{
     private fun undoBySegment(undoIterator: Iterator<String>, undoCacheDir: String, pop: CollisionDialog){
         if(!undoIterator.hasNext()) {
             pop.dismiss()
-            val context = context ?: return
-            X.toast(context, MyR.string.ics_Undo_Toast_Nailed, Toast.LENGTH_SHORT)
+            notifyBriefly(MyR.string.ics_Undo_Toast_Nailed)
             return
         }
         val path = F.createPath(undoCacheDir, "${Calendar.getInstance().time.time}.ics")
@@ -392,8 +407,11 @@ class MyUnit: Unit(), View.OnClickListener{
     private fun exportIndicator2Cal(){
         val context = context ?: return
         val file = File(F.valFilePubTtIndicator(context))
-        if (file.exists()) openIcsFile(context, file)
-        else X.toast(context, R.string.text_error, Toast.LENGTH_SHORT)
+        if (file.exists()) {
+            openIcsFile(context, file)
+        } else {
+            notifyBriefly(R.string.text_error)
+        }
     }
 
     @Suppress("unused")
@@ -445,7 +463,7 @@ class MyUnit: Unit(), View.OnClickListener{
                         //val url: Uri? = context.contentResolver.insert(CalendarContract.Events.CONTENT_URI, event)
                     }
                 }
-                X.toast(context, R.string.text_done, Toast.LENGTH_SHORT)
+                notifyBriefly(R.string.text_done)
             }
             layout.addView(button)
         }
