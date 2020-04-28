@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020 Clifford Liu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.madness.collision.unit
 
 import android.content.Context
@@ -14,6 +30,9 @@ import com.madness.collision.databinding.AdapterUnitsManagerBinding
 import com.madness.collision.diy.SandwichAdapter
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.util.ThemeUtil
+import java.text.Collator
+import java.util.*
+import kotlin.Comparator
 
 internal class UnitsManagerAdapter(context: Context, splitInstallManager: SplitInstallManager, private val mainViewModel: MainViewModel)
     : SandwichAdapter<UnitsManagerAdapter.UnitViewHolder>(context) {
@@ -30,9 +49,7 @@ internal class UnitsManagerAdapter(context: Context, splitInstallManager: SplitI
     private val installedUnits = Unit.getInstalledUnits(splitInstallManager)
     private val mDescriptions: List<Description>
     init {
-        val frequencies = Unit.getFrequencies(mContext)
-        mDescriptions = frequencies.toList().plus(Unit.UNITS.filter { !frequencies.containsKey(it) }.map { it to 0 })
-                .sortedByDescending { it.second }.mapNotNull { Unit.getDescription(it.first) }
+        mDescriptions = Unit.UNITS.mapNotNull { Unit.getDescription(it) }.sortedWith(Comparator { o1, o2 -> Collator.getInstance(Locale.CHINESE).compare(o1.getName(context), o2.getName(context)) })
     }
     private val colorPass: Int by lazy { ThemeUtil.getColor(context, R.attr.colorActionPass) }
 

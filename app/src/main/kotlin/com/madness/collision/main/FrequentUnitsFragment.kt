@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.madness.collision.unit
+package com.madness.collision.main
 
 import android.content.Context
 import android.os.Bundle
@@ -23,31 +23,28 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.madness.collision.databinding.FragmentUnitsBinding
-import com.madness.collision.main.MainViewModel
+import com.madness.collision.databinding.FragmentFrequentUnitsBinding
 import com.madness.collision.settings.SettingsFunc
-import com.madness.collision.util.X
-import com.madness.collision.util.availableWidth
-import kotlin.math.roundToInt
 
-internal class UnitsFragment : Fragment() {
+internal class FrequentUnitsFragment : Fragment() {
 
     companion object {
 
         @JvmStatic
-        fun newInstance() : UnitsFragment {
-            return UnitsFragment()
+        fun newInstance() : FrequentUnitsFragment {
+            return FrequentUnitsFragment()
         }
     }
 
-    private lateinit var mViews: FragmentUnitsBinding
+    private lateinit var mViews: FragmentFrequentUnitsBinding
     private lateinit var mRecyclerView: RecyclerView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val context = context
         if (context != null) SettingsFunc.updateLanguage(context)
-        mViews = FragmentUnitsBinding.inflate(inflater, container, false)
+        mViews = FragmentFrequentUnitsBinding.inflate(inflater, container, false)
         return mViews.root
     }
 
@@ -56,17 +53,10 @@ internal class UnitsFragment : Fragment() {
         val context: Context = context ?: return
         val mainViewModel: MainViewModel by activityViewModels()
 
-        mRecyclerView = mViews.unitsRecyclerView
+        mRecyclerView = mViews.frequentUnitsRecyclerView
 
-        val unitWidth = X.size(context, 400f, X.DP)
-        val spanCount = (availableWidth / unitWidth).roundToInt().run {
-            if (this < 2) 1 else this
-        }
-        val mAdapter = UnitsAdapter(context, mainViewModel)
-        mAdapter.spanCount = spanCount
-        mRecyclerView.layoutManager = mAdapter.suggestLayoutManager(context)
+        val mAdapter = FrequentUnitsAdapter(context, mainViewModel)
+        mRecyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         mRecyclerView.adapter = mAdapter
-        mRecyclerView.setHasFixedSize(true)
-        mRecyclerView.setItemViewCacheSize(mAdapter.itemCount)
     }
 }

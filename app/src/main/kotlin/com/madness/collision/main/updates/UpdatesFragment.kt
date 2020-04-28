@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020 Clifford Liu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.madness.collision.main.updates
 
 import android.content.Context
@@ -11,6 +27,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
 import com.madness.collision.Democratic
 import com.madness.collision.R
+import com.madness.collision.databinding.MainUpdatesHeaderBinding
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.UpdatesProvider
@@ -48,12 +65,17 @@ internal class UpdatesFragment : Fragment(), Democratic {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        if (fragments.isEmpty()) {
+            mainUpdatesSecUpdates.visibility = View.GONE
+        }
+        val inflater = LayoutInflater.from(context)
         for ((unitName, f) in fragments) {
-            ensureAdded(R.id.updatesContainer, f)
+            val header = MainUpdatesHeaderBinding.inflate(inflater, mainUpdatesContainer, true)
+            ensureAdded(R.id.mainUpdatesContainer, f)
             val description = Unit.getDescription(unitName) ?: continue
-            updatesPinned.setCompoundDrawablesRelativeWithIntrinsicBounds(description.getIcon(mContext), null, null, null)
-            updatesPinned.text = description.getName(mContext)
-            updatesPinnedContainer.setOnClickListener {
+            header.mainUpdatesHeader.setCompoundDrawablesRelativeWithIntrinsicBounds(description.getIcon(mContext), null, null, null)
+            header.mainUpdatesHeader.text = description.getName(mContext)
+            header.mainUpdatesHeader.setOnClickListener {
                 mainViewModel.displayUnit(unitName, shouldShowNavAfterBack = true)
             }
         }
@@ -64,10 +86,10 @@ internal class UpdatesFragment : Fragment(), Democratic {
         democratize(mainViewModel)
         val extra = X.size(mContext, 5f, X.DP).roundToInt()
         mainViewModel.contentWidthTop.observe(viewLifecycleOwner) {
-            updatesContainer.alterPadding(top = it + extra)
+            mainUpdatesContainer.alterPadding(top = it + extra)
         }
         mainViewModel.contentWidthBottom.observe(viewLifecycleOwner) {
-            updatesContainer.alterPadding(bottom = it + extra)
+            mainUpdatesContainer.alterPadding(bottom = it + extra)
         }
     }
 

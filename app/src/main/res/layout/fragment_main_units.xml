@@ -15,34 +15,32 @@
   ~ limitations under the License.
   -->
 
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:scrollbarThumbVertical="@drawable/scrollbar_vertical"
-    android:scrollbars="vertical"
-    android:layout_width="match_parent"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:id="@+id/mainUpdatesContainer"
+        android:id="@+id/mainUnitsContainer"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/mainUpdatesSecPinned"
-            android:text="@string/mainSecStarred"
+            android:id="@+id/mainUnitsSecFrequents"
+            android:text="@string/mainSecFrequents"
             style="@style/MainSectionHeader"
             android:layout_marginTop="0dp"/>
 
         <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/mainUpdatesPinned"
-            android:name="com.madness.collision.main.updates.PinnedUnitsFragment"
+            android:id="@+id/mainUnitsFrequents"
+            android:name="com.madness.collision.main.FrequentUnitsFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-        <TextView
-            android:id="@+id/mainUpdatesSecUpdates"
-            android:text="@string/main_updates"
-            style="@style/MainSectionHeader"/>
-
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/mainUnitsUnits"
+            android:name="com.madness.collision.unit.UnitsFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

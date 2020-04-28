@@ -14,59 +14,57 @@
  * limitations under the License.
  */
 
-package com.madness.collision.unit
+package com.madness.collision.main
 
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.RecyclerView
-import com.madness.collision.databinding.FragmentUnitsBinding
-import com.madness.collision.main.MainViewModel
+import androidx.lifecycle.observe
+import com.madness.collision.Democratic
+import com.madness.collision.R
+import com.madness.collision.databinding.FragmentMainUnitsBinding
 import com.madness.collision.settings.SettingsFunc
-import com.madness.collision.util.X
-import com.madness.collision.util.availableWidth
-import kotlin.math.roundToInt
+import com.madness.collision.util.alterPadding
 
-internal class UnitsFragment : Fragment() {
+internal class MainUnitsFragment : Fragment(), Democratic {
 
     companion object {
 
         @JvmStatic
-        fun newInstance() : UnitsFragment {
-            return UnitsFragment()
+        fun newInstance() : MainUnitsFragment {
+            return MainUnitsFragment()
         }
     }
 
-    private lateinit var mViews: FragmentUnitsBinding
-    private lateinit var mRecyclerView: RecyclerView
+    private lateinit var mViews: FragmentMainUnitsBinding
+
+    override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
+        toolbar.setTitle(R.string.units)
+        return true
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val context = context
         if (context != null) SettingsFunc.updateLanguage(context)
-        mViews = FragmentUnitsBinding.inflate(inflater, container, false)
+        mViews = FragmentMainUnitsBinding.inflate(inflater, container, false)
         return mViews.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val context: Context = context ?: return
         val mainViewModel: MainViewModel by activityViewModels()
+        democratize(mainViewModel)
 
-        mRecyclerView = mViews.unitsRecyclerView
-
-        val unitWidth = X.size(context, 400f, X.DP)
-        val spanCount = (availableWidth / unitWidth).roundToInt().run {
-            if (this < 2) 1 else this
+        mainViewModel.contentWidthTop.observe(viewLifecycleOwner) {
+            mViews.mainUnitsContainer.alterPadding(top = it)
         }
-        val mAdapter = UnitsAdapter(context, mainViewModel)
-        mAdapter.spanCount = spanCount
-        mRecyclerView.layoutManager = mAdapter.suggestLayoutManager(context)
-        mRecyclerView.adapter = mAdapter
-        mRecyclerView.setHasFixedSize(true)
-        mRecyclerView.setItemViewCacheSize(mAdapter.itemCount)
+        mainViewModel.contentWidthBottom.observe(viewLifecycleOwner) {
+            mViews.mainUnitsContainer.alterPadding(bottom = it)
+        }
     }
 }
