@@ -234,6 +234,10 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
     private val itemLength: Int = X.size(context, 70f, X.DP).roundToInt()
     private val colorSurface = if (shouldShowDesserts) ThemeUtil.getColor(context, R.attr.colorASurface) else 0
 
+    private fun inflateTag(nameResId: Int, parent: ViewGroup) {
+        inflateTag(context.getString(nameResId), parent)
+    }
+
     private fun inflateTag(name: String, parent: ViewGroup) {
         parent.forEach {
             if (it is TextView && it.text == name) return
@@ -315,6 +319,14 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
         }
     }
 
+    private fun Holder.inflateTag(nameResId: Int) {
+        inflateTag(nameResId, this.tags)
+    }
+
+    private fun Holder.inflateTag(name: String) {
+        inflateTag(name, this.tags)
+    }
+
     override fun onMakeBody(holder: Holder, index: Int) {
         val appInfo = apps[index]
         holder.name.dartFuture(appInfo.name)
@@ -322,15 +334,16 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
 
         holder.tags.removeAllViews()
         val shouldWaitForIcon = !appInfo.hasIcon
+        var taskIcon: Runnable? = null
         if (shouldWaitForIcon) {
             ensureItem(index)
             val logoView = holder.logo
             val checkerHandler = Handler()
-            runnable {
+            taskIcon = runnable {
                 val iconApp = logoView.getTag(R.bool.tagKeyAvAdapterItemIconId) as ApiViewingApp?
                 if (appInfo !== iconApp && appInfo.hasIcon) {
                     if (EasyAccess.shouldShowTagIconAdaptive && appInfo.adaptiveIcon) {
-                        inflateTag(context.getString(MyR.string.av_ai), holder.tags)
+                        holder.inflateTag(MyR.string.av_ai)
                     }
                     holder.logo.setTag(R.bool.tagKeyAvAdapterItemIconId, appInfo)
                     animateLogo(logoView)
@@ -338,7 +351,7 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
                 } else {
                     checkerHandler.postDelayed(this, 400)
                 }
-            }.run()
+            }
         } else {
             holder.logo.setTag(R.bool.tagKeyAvAdapterItemIconId, appInfo)
             holder.logo.setImageBitmap(appInfo.icon)
@@ -408,49 +421,52 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
                         else -> null
                     }
                 }
-                if (name != null) inflateTag(name, holder.tags)
+                if (name != null) holder.inflateTag(name)
             }
         }
         if (EasyAccess.shouldShowTagPrivilegeSystem && appInfo.apiUnit == ApiUnit.SYS) {
-            inflateTag(context.getString(MyR.string.av_adapter_tag_system), holder.tags)
+            holder.inflateTag(MyR.string.av_adapter_tag_system)
         }
+        var layoutNativeLib: (() -> Unit)? = null
         if (EasyAccess.shouldShowTagCrossPlatform || EasyAccess.shouldShowTagNativeLib) {
-            val layoutNativeLib: () -> Unit = {
+            layoutNativeLib = {
                 val nls = appInfo.nativeLibraries
                 if (EasyAccess.shouldShowTagNativeLib) {
                     if (EasyAccess.shouldShowTagNativeLibArm) {
-                        if (nls[0]) inflateTag("arm32", holder.tags)
-                        if (nls[1]) inflateTag("arm64", holder.tags)
+                        if (nls[0]) holder.inflateTag("arm32")
+                        if (nls[1]) holder.inflateTag("arm64")
                     }
                     if (EasyAccess.shouldShowTagNativeLibX86) {
-                        if (nls[2]) inflateTag("x86", holder.tags)
-                        if (nls[3]) inflateTag("x64", holder.tags)
+                        if (nls[2]) holder.inflateTag("x86")
+                        if (nls[3]) holder.inflateTag("x64")
                     }
                 }
                 if (EasyAccess.shouldShowTagCrossPlatform) {
-                    if (EasyAccess.shouldShowTagCrossPlatformFlutter && nls[4]) inflateTag("Flutter", holder.tags)
-                    if (EasyAccess.shouldShowTagCrossPlatformReactNative && nls[5]) inflateTag("React Native", holder.tags)
-                    if (EasyAccess.shouldShowTagCrossPlatformXarmarin && nls[6]) inflateTag("Xamarin", holder.tags)
-                }
-            }
-            if (appInfo.isNativeLibrariesRetrieved) {
-                layoutNativeLib.invoke()
-            } else {
-                GlobalScope.launch {
-                    appInfo.retrieveNativeLibraries()
-                    launch(Dispatchers.Main) {
-                        layoutNativeLib.invoke()
-                    }
+                    if (EasyAccess.shouldShowTagCrossPlatformFlutter && nls[4]) holder.inflateTag("Flutter")
+                    if (EasyAccess.shouldShowTagCrossPlatformReactNative && nls[5]) holder.inflateTag("React Native")
+                    if (EasyAccess.shouldShowTagCrossPlatformXarmarin && nls[6]) holder.inflateTag("Xamarin")
                 }
             }
         }
 
-        if (!shouldWaitForIcon && EasyAccess.shouldShowTagIconAdaptive && appInfo.adaptiveIcon) {
-            inflateTag(context.getString(MyR.string.av_ai), holder.tags)
+        // first inflate native lib tags then has splits tag and last ai tag
+        val shouldInflateHs = EasyAccess.shouldShowTagHasSplits && appInfo.appPackage.hasSplits
+        val shouldInflateAi = !shouldWaitForIcon && EasyAccess.shouldShowTagIconAdaptive && appInfo.adaptiveIcon
+        val taskInOrder: () -> Unit = {
+            layoutNativeLib?.invoke()
+            if (shouldInflateHs) holder.inflateTag(MyR.string.av_tag_has_splits)
+            if (shouldInflateAi) holder.inflateTag(MyR.string.av_ai)
+            taskIcon?.run()
         }
-
-        if (EasyAccess.shouldShowTagHasSplits && appInfo.appPackage.hasSplits) {
-            inflateTag(context.getString(MyR.string.av_tag_has_splits), holder.tags)
+        if (layoutNativeLib != null && !appInfo.isNativeLibrariesRetrieved) {
+            GlobalScope.launch {
+                appInfo.retrieveNativeLibraries()
+                launch(Dispatchers.Main) {
+                    taskInOrder.invoke()
+                }
+            }
+        } else {
+            taskInOrder.invoke()
         }
 
         holder.card.setOnClickListener {
