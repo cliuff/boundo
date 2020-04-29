@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020 Clifford Liu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.madness.collision.unit.themed_wallpaper
 
 import android.app.WallpaperManager
@@ -12,6 +28,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
 import com.madness.collision.R
 import com.madness.collision.settings.ExteriorFragment
@@ -53,29 +70,35 @@ class MyUnit: Unit() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val context = context ?: return
+        val mViewModel: TwViewModel by activityViewModels()
+        mViewModel.isWallpaperChanged.observe(viewLifecycleOwner) { isChanged ->
+            if (isChanged != true) return@observe
+            GlobalScope.launch {
+                val pathLight = F.valFilePubTwPortrait(context)
+                val pathDark = F.valFilePubTwPortraitDark(context)
+                val imgLight = ImageUtil.getBitmap(pathLight)
+                val imgDark = ImageUtil.getBitmap(pathDark)
+                val width: Int by lazy { X.size(context, 150f, X.DP).roundToInt() }
+                val imageDefaultLight by lazy {
+                    X.toTarget(X.drawableToBitmap(ColorDrawable(Color.WHITE)), width, width)
+                }
+                val imageDefaultDark by lazy {
+                    X.toTarget(X.drawableToBitmap(ColorDrawable(Color.BLACK)), width, width)
+                }
+                launch(Dispatchers.Main){
+                    twImgLight.setImageBitmap(imgLight ?: imageDefaultLight)
+                    twImgDark.setImageBitmap(imgDark ?: imageDefaultDark)
+                }
+            }
+        }
+
+        mViewModel.isWallpaperChanged.value = true
         twCardLight.setOnClickListener {
             ExteriorFragment.newInstance(ExteriorFragment.MODE_TW_LIGHT).let { mainViewModel.displayFragment(it) }
         }
         twCardDark.setOnClickListener {
             ExteriorFragment.newInstance(ExteriorFragment.MODE_TW_DARK).let { mainViewModel.displayFragment(it) }
-        }
-        val context = context ?: return
-        GlobalScope.launch {
-            val pathLight = F.valFilePubTwPortrait(context)
-            val pathDark = F.valFilePubTwPortraitDark(context)
-            val imgLight = ImageUtil.getBitmap(pathLight)
-            val imgDark = ImageUtil.getBitmap(pathDark)
-            val width: Int by lazy { X.size(context, 150f, X.DP).roundToInt() }
-            val imageDefaultLight by lazy {
-                X.toTarget(X.drawableToBitmap(ColorDrawable(Color.WHITE)), width, width)
-            }
-            val imageDefaultDark by lazy {
-                X.toTarget(X.drawableToBitmap(ColorDrawable(Color.BLACK)), width, width)
-            }
-            launch(Dispatchers.Main){
-                twImgLight.setImageBitmap(imgLight ?: imageDefaultLight)
-                twImgDark.setImageBitmap(imgDark ?: imageDefaultDark)
-            }
         }
     }
 

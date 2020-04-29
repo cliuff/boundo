@@ -43,6 +43,7 @@ import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.main.MainActivity
 import com.madness.collision.main.MainViewModel
+import com.madness.collision.unit.themed_wallpaper.AccessTw
 import com.madness.collision.unit.themed_wallpaper.ThemedWallpaperEasyAccess
 import com.madness.collision.util.*
 import kotlinx.android.synthetic.main.activity_exterior.*
@@ -86,10 +87,6 @@ class ExteriorFragment: Fragment(), Democratic, View.OnClickListener{
             return ExteriorFragment().apply { arguments = b }
         }
     }
-
-//    private lateinit var settingsPref: SharedPreferences
-//    private lateinit var switchStatus: Switch
-//    private lateinit var switchNavigation: Switch
 
     private var mode: Int = MODE_LIGHT
     private var isTW : Boolean = false
@@ -139,35 +136,12 @@ class ExteriorFragment: Fragment(), Democratic, View.OnClickListener{
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-//        val activity = activity ?: return
         val context = context ?: return
         democratize(mainViewModel)
         mainViewModel.contentWidthTop.observe(viewLifecycleOwner) {
             exteriorContainer.alterPadding(top = it)
         }
 
-//        settingsPref = context.getSharedPreferences(P.PREF_SETTINGS, AppCompatActivity.MODE_PRIVATE)
-        /*
-        switchStatus = exteriorSwitchStatus
-        switchNavigation = exteriorSwitchNavigation
-
-        if (!mainApplication.exterior){
-            switchStatus.isChecked = true
-            switchNavigation.isChecked = true
-        }else {
-            if (settingsPref.getBoolean(P.SETTINGS_DARK_STATUS_ICON, false))
-                switchStatus.isChecked = true
-            if (settingsPref.getBoolean(P.SETTINGS_DARK_NAV_ICON, false))
-                switchNavigation.isChecked = true
-        }
-
-        switchNavigation.setOnCheckedChangeListener { _, isChecked ->
-            X.applySystemUIChanges(activity, overrideStatus = true, overrideNavigation = true, darkStatus = switchStatus.isChecked, darkNavigation = isChecked)
-        }
-        switchStatus.setOnCheckedChangeListener { _, isChecked ->
-            X.applySystemUIChanges(activity, overrideStatus = true, overrideNavigation = true, darkStatus = isChecked, darkNavigation = switchNavigation.isChecked)
-        }
-*/
         sb = exteriorSeekBar
         rs = GaussianBlur(context)
         sb.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -332,17 +306,12 @@ class ExteriorFragment: Fragment(), Democratic, View.OnClickListener{
                         mainApplication.background = null
                         mainApplication.exterior = false
                     }
-/*
-                    settingsPref.edit().run {
-                        remove(P.SETTINGS_DARK_STATUS_ICON)
-                        remove(P.SETTINGS_DARK_NAV_ICON)
-                        apply()
-                    }*/
                 }
                 launch(Dispatchers.Main) {
                     dialog.dismiss()
                     if (isTW){
                         notifyBriefly(R.string.text_done)
+                        AccessTw.getIsWallpaperChanged(this@ExteriorFragment).value = true
                         mainViewModel.popUpBackStack()
                     } else{
 //                    findNavController().popBackStack(R.id.mainFragment, true)
@@ -389,16 +358,12 @@ class ExteriorFragment: Fragment(), Democratic, View.OnClickListener{
                     e.printStackTrace()
                 }
             }
-/*
-                settingsPref.edit().run {
-                    putBoolean(P.SETTINGS_DARK_STATUS_ICON, switchStatus.isChecked)
-                    putBoolean(P.SETTINGS_DARK_NAV_ICON, switchNavigation.isChecked)
-                    apply()
-                }*/
+
             launch(Dispatchers.Main) {
                 dialog.dismiss()
                 if (isTW){
                     notifyBriefly(R.string.text_done)
+                    AccessTw.getIsWallpaperChanged(this@ExteriorFragment).value = true
                     mainViewModel.popUpBackStack()
                 } else{
 //                    findNavController().popBackStack(R.id.mainFragment, true)

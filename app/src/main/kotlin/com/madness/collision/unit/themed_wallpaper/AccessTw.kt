@@ -16,32 +16,30 @@
 
 package com.madness.collision.unit.themed_wallpaper
 
+import android.appwidget.AppWidgetManager
+import android.content.Context
 import androidx.activity.ComponentActivity
-import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.MutableLiveData
-import com.madness.collision.unit.Bridge
 import com.madness.collision.unit.Unit
+import com.madness.collision.unit.UnitAccess
 
-object MyBridge: Bridge() {
+object AccessTw: UnitAccess(Unit.UNIT_NAME_THEMED_WALLPAPER) {
 
-    override val unitName: String = Unit.UNIT_NAME_THEMED_WALLPAPER
-
-    /**
-     * @param args empty
-     */
-    override fun getUnitInstance(vararg args: Any?): Unit {
-        return MyUnit()
+    fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
+        getMethod("updateAppWidget", Context::class, AppWidgetManager::class, Int::class)
+                .invoke(context, appWidgetManager, appWidgetId)
     }
 
+    @Suppress("UNCHECKED_CAST")
     fun getIsWallpaperChanged(activity: ComponentActivity): MutableLiveData<Boolean> {
-        val mViewModel: TwViewModel by activity.viewModels()
-        return mViewModel.isWallpaperChanged
+        return getMethod("getIsWallpaperChanged", ComponentActivity::class)
+                .invoke(activity) as MutableLiveData<Boolean>
     }
 
+    @Suppress("UNCHECKED_CAST")
     fun getIsWallpaperChanged(fragment: Fragment): MutableLiveData<Boolean> {
-        val mViewModel: TwViewModel by fragment.activityViewModels()
-        return mViewModel.isWallpaperChanged
+        return getMethod("getIsWallpaperChanged", Fragment::class)
+                .invoke(fragment) as MutableLiveData<Boolean>
     }
 }
