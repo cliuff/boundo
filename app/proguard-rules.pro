@@ -20,15 +20,23 @@
 # hide the original source file name.
 -renamesourcefileattribute SourceFile
 
--keep class androidx.navigation.fragment.NavHostFragment
+# Fragments may be refrenced in xml file
+-keep class * extends androidx.fragment.app.Fragment
+
+# Navigation
+#-keep class androidx.navigation.fragment.NavHostFragment
+# This is refrenced in nav graph file
+-keep class com.madness.collision.util.TypedNavArg
 
 # Keep dynamic feature module classes
--keep class * extends com.madness.collision.unit.Unit
+# com.madness.collision.unit.Unit extends Fragment
+#-keep class * extends com.madness.collision.unit.Unit
 -keep class * extends com.madness.collision.unit.Bridge { *; }
 
 # Kotlin reflect
-#-dontwarn kotlin.reflect.jvm.internal.**
-#-keep class kotlin.reflect.jvm.internal.** { *; }
+# T::class.createInstance() in com.madness.collision.util.Page seems to be needing this to work
+-dontwarn kotlin.reflect.jvm.internal.**
+-keep class kotlin.reflect.jvm.internal.** { *; }
 
 ##---------------Begin: proguard configuration for Gson  ----------
 # Gson uses generic type information stored in a class file when working with fields. Proguard

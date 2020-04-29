@@ -57,7 +57,7 @@ android {
         applicationId "com.madness.collision"
         minSdkVersion 22
         targetSdkVersion 29
-        versionCode 20042919
+        versionCode 20042923
         versionName '3.2'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testApplicationId "$applicationId\\.test"

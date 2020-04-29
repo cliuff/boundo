@@ -63,10 +63,12 @@ internal class UnitManager(private val context: Context, private val splitInstal
         val viewRef = WeakReference(view)
         splitInstallManager.deferredUninstall(listOf(description.unitName)).addOnSuccessListener {
             viewRef.notify(R.string.unit_manager_uninstall_success, true)
+            Unit.unpinUnit(context, description.unitName)
             updateUnitState(description)
             if (description.unitName == Unit.UNIT_NAME_COOL_APP) aftermathCoolApp(context, true)
         }.addOnFailureListener {
             viewRef.notify(R.string.text_error)
+            Unit.unpinUnit(context, description.unitName)
             updateUnitState(description)
         }
     }
