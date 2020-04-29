@@ -20,7 +20,7 @@
 # hide the original source file name.
 -renamesourcefileattribute SourceFile
 
-#-keep class androidx.navigation.fragment.NavHostFragment
+-keep class androidx.navigation.fragment.NavHostFragment
 
 # Keep dynamic feature module classes
 -keep class * extends com.madness.collision.unit.Unit
