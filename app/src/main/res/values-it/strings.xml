@@ -1,4 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2020 Clifford Liu
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <resources>
     <string name="app_name">Boundo</string>
     <string name="appDesc">Un insieme di strumenti destinati a fare alcune cose per te</string>
@@ -227,4 +243,6 @@
     <string name="unit_manager_install_success">Play Store sta elaborando l\'installazione</string>
     <string name="unit_desc_install_notice">Prova di installare</string>
     <string name="unit_desc_pin">fissare</string>
+    <string name="mainSecStarred">Ha recitato</string>
+    <string name="mainSecFrequents">Spesso usato</string>
 </resources>
