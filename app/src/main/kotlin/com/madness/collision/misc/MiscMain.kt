@@ -97,7 +97,7 @@ internal object MiscMain {
             // init tags
             AccessAV.initTagSettings(context, prefSettings)
         }
-        if (verOri in 0 until 20042713) {
+        if (verOri in 0 until 20042919) {
             // add new Adaptive Icon and Has Splits tags
             AccessAV.updateTagSettingsAiHs(context, prefSettings)
             // move pics from cache to file
