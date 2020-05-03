@@ -225,8 +225,8 @@
     <string name="unit_desc_at">• Interrompere la riproduzione dell\'audio</string>
     <string name="unit_desc_we">• Collegamento dello scanner WeChat</string>
     <string name="unit_desc_qc">• Collegamento ai contatti QQ</string>
-    <string name="unit_desc_requirement_shortcut">Android 7.1+</string>
-    <string name="unit_desc_requirement_nm">Sotto Android 10</string>
+    <string name="unit_desc_requirement_shortcut">La versione di Android è almeno 7.1</string>
+    <string name="unit_desc_requirement_nm">La versione Android è al massimo 9</string>
     <string name="unit_desc_installed">installato</string>
     <string name="unit_desc_not_installed">Non installato</string>
     <string name="unit_desc_available">A disposizione</string>

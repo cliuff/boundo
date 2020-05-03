@@ -227,8 +227,8 @@
     <string name="unit_desc_qc">•ทางลัดที่ติดต่อของ QQ</string>
     <string name="unit_desc_requirement_qc">ติดตั้ง QQ แล้ว</string>
     <string name="unit_desc_requirement_we">ติดตั้ง WeChat แล้ว</string>
-    <string name="unit_desc_requirement_shortcut">Android 7.1+</string>
-    <string name="unit_desc_requirement_nm">ต่ำกว่า Android 10</string>
+    <string name="unit_desc_requirement_shortcut">เวอร์ชัน Android อย่างน้อย 7.1</string>
+    <string name="unit_desc_requirement_nm">Android เวอร์ชันไม่เกิน 9</string>
     <string name="unit_desc_uninstall">ถอนการติดตั้ง</string>
     <string name="unit_desc_install">ติดตั้ง</string>
     <string name="unit_desc_unavailable">ไม่มี</string>

@@ -20,6 +20,7 @@ import android.app.WallpaperManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -28,15 +29,11 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
 import com.madness.collision.R
 import com.madness.collision.settings.ExteriorFragment
 import com.madness.collision.unit.Unit
-import com.madness.collision.util.F
-import com.madness.collision.util.ImageUtil
-import com.madness.collision.util.X
-import com.madness.collision.util.alterPadding
+import com.madness.collision.util.*
 import kotlinx.android.synthetic.main.unit_themed_wallpaper.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -46,9 +43,14 @@ import com.madness.collision.unit.themed_wallpaper.R as MyR
 
 class MyUnit: Unit() {
 
+    private var timestamp: Long = 0L
+
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
         toolbar.setTitle(R.string.twService)
         inflateAndTint(MyR.menu.toolbar_tw, toolbar, iconColor)
+        if (MyBridge.changeTimestamp > timestamp) {
+            loadPreview(context)
+        }
         return true
     }
 
@@ -65,40 +67,55 @@ class MyUnit: Unit() {
         return false
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        timestamp = System.currentTimeMillis()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(MyR.layout.unit_themed_wallpaper, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val context = context ?: return
-        val mViewModel: TwViewModel by activityViewModels()
-        mViewModel.isWallpaperChanged.observe(viewLifecycleOwner) { isChanged ->
-            if (isChanged != true) return@observe
-            GlobalScope.launch {
-                val pathLight = F.valFilePubTwPortrait(context)
-                val pathDark = F.valFilePubTwPortraitDark(context)
-                val imgLight = ImageUtil.getBitmap(pathLight)
-                val imgDark = ImageUtil.getBitmap(pathDark)
-                val width: Int by lazy { X.size(context, 150f, X.DP).roundToInt() }
-                val imageDefaultLight by lazy {
-                    X.toTarget(X.drawableToBitmap(ColorDrawable(Color.WHITE)), width, width)
-                }
-                val imageDefaultDark by lazy {
-                    X.toTarget(X.drawableToBitmap(ColorDrawable(Color.BLACK)), width, width)
-                }
-                launch(Dispatchers.Main){
-                    twImgLight.setImageBitmap(imgLight ?: imageDefaultLight)
-                    twImgDark.setImageBitmap(imgDark ?: imageDefaultDark)
-                }
-            }
-        }
-
-        mViewModel.isWallpaperChanged.value = true
         twCardLight.setOnClickListener {
             ExteriorFragment.newInstance(ExteriorFragment.MODE_TW_LIGHT).let { mainViewModel.displayFragment(it) }
         }
         twCardDark.setOnClickListener {
             ExteriorFragment.newInstance(ExteriorFragment.MODE_TW_DARK).let { mainViewModel.displayFragment(it) }
+        }
+        val context = context ?: return
+        loadPreview(context)
+    }
+
+    private fun loadPreview(context: Context) {
+        GlobalScope.launch {
+            val pathLight = F.valFilePubTwPortrait(context)
+            val pathDark = F.valFilePubTwPortraitDark(context)
+            val imgLight: Bitmap?
+            val imgDark: Bitmap?
+            try {
+                imgLight = ImageUtil.getBitmap(pathLight)
+                imgDark = ImageUtil.getBitmap(pathDark)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                notifyBriefly(R.string.text_error)
+                return@launch
+            } catch (e: OutOfMemoryError) {
+                e.printStackTrace()
+                notifyBriefly(R.string.text_error)
+                return@launch
+            }
+            val width: Int by lazy { X.size(context, 150f, X.DP).roundToInt() }
+            val imageDefaultLight by lazy {
+                X.toTarget(X.drawableToBitmap(ColorDrawable(Color.WHITE)), width, width)
+            }
+            val imageDefaultDark by lazy {
+                X.toTarget(X.drawableToBitmap(ColorDrawable(Color.BLACK)), width, width)
+            }
+            launch(Dispatchers.Main){
+                twImgLight.setImageBitmap(imgLight ?: imageDefaultLight)
+                twImgDark.setImageBitmap(imgDark ?: imageDefaultDark)
+            }
         }
     }
 

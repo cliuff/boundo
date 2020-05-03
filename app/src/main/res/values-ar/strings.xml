@@ -225,8 +225,8 @@
     <string name="unit_desc_at">• إيقاف الصوت من اللعب</string>
     <string name="unit_desc_we">• &#1564;WeChat اختصار الماسح الضوئي</string>
     <string name="unit_desc_qc">• اختصار اتصالات QQ</string>
-    <string name="unit_desc_requirement_shortcut">أندرويد 7.1+</string>
-    <string name="unit_desc_requirement_nm">أدناه Android 10</string>
+    <string name="unit_desc_requirement_shortcut">إصدار Android هو 7.1 على الأقل</string>
+    <string name="unit_desc_requirement_nm">إصدار Android هو 9 على الأكثر</string>
     <string name="unit_desc_installed">المثبتة</string>
     <string name="unit_desc_not_installed">غير مثبت</string>
     <string name="unit_desc_available">متاح</string>

@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020 Clifford Liu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.madness.collision.unit.no_media
 
 import android.content.Context
@@ -12,13 +28,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.madness.collision.R
 import com.madness.collision.databinding.AdapterNmBinding
 import com.madness.collision.diy.SandwichAdapter
+import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.no_media.data.BasicInfo
 import com.madness.collision.unit.no_media.data.Dir
 import com.madness.collision.util.F
@@ -28,7 +44,7 @@ import java.io.File
 
 internal class Adapter(
         context: Context,
-        private val fragmentManager: FragmentManager,
+        private val mainViewModel: MainViewModel,
         private val folders: List<Dir>,
         private val foldersMap: Map<String, List<BasicInfo>>,
         private var itemWidth: Int,
@@ -78,8 +94,9 @@ internal class Adapter(
         }
         holder.folder.setOnClickListener {
             val files = foldersMap[folder.path] ?: emptyList()
-            NmItemFragment.newInstance(folder.path, files, spanCount, itemWidth, itemHeight)
-                    .show(fragmentManager, NmItemFragment.TAG)
+            NmItemFragment.newInstance(folder.path, files, spanCount, itemWidth, itemHeight).let {
+                mainViewModel.displayFragment(it)
+            }
         }
     }
 

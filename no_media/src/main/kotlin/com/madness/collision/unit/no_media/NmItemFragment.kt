@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020 Clifford Liu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.madness.collision.unit.no_media
 
 import android.content.ContentUris
@@ -8,12 +24,13 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.fragment.app.DialogFragment
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.settings.SettingsFunc
@@ -25,9 +42,10 @@ import kotlinx.android.synthetic.main.nm_item.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.File
+import kotlin.math.roundToInt
 import com.madness.collision.unit.no_media.R as MyR
 
-internal class NmItemFragment: DialogFragment(), View.OnClickListener {
+internal class NmItemFragment: Fragment(), Democratic, View.OnClickListener {
 
     companion object{
         const val EXTRA_PATH = "path"
@@ -35,7 +53,6 @@ internal class NmItemFragment: DialogFragment(), View.OnClickListener {
         const val EXTRA_SPAN_COUNT = "spanCount"
         const val EXTRA_WIDTH = "width"
         const val EXTRA_HEIGHT = "height"
-        val TAG = NmItemFragment::class.java.simpleName
 
         @JvmStatic
         fun newInstance(
@@ -62,11 +79,6 @@ internal class NmItemFragment: DialogFragment(), View.OnClickListener {
 
     private val mainViewModel: MainViewModel by activityViewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL, R.style.AppTheme_FullScreenDialog)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val context = context ?: return null
         SettingsFunc.updateLanguage(context)
@@ -77,22 +89,11 @@ internal class NmItemFragment: DialogFragment(), View.OnClickListener {
         super.onActivityCreated(savedInstanceState)
         val context = context ?: return
 
-        dialog?.window?.let {
-            SystemUtil.applyEdge2Edge(it)
-            val darkBar = mainApplication.isPaleTheme
-            SystemUtil.applyStatusBarColor(context, it, darkBar, false)
-            SystemUtil.applyNavBarColor(context, it, darkBar, true)
-        }
-
-        nmItemPath.setTag(R.bool.nmItemPathPaddingBottom, nmItemPath.paddingBottom)
-        mainViewModel.insetBottom.observe(viewLifecycleOwner){
-            nmItemPath.alterPadding(bottom = nmItemPath.getTag(R.bool.nmItemPathPaddingBottom) as Int + it)
-        }
-        mainViewModel.insetLeft.observe(viewLifecycleOwner){
-            nmItemRoot.alterPadding(start = it)
-        }
-        mainViewModel.insetRight.observe(viewLifecycleOwner){
-            nmItemRoot.alterPadding(end = it)
+        democratize(mainViewModel)
+        mainViewModel.contentWidthBottom.observe(viewLifecycleOwner){
+            (nmItemPath.layoutParams as ConstraintLayout.LayoutParams).run {
+                this.bottomMargin = it + X.size(context, 10f, X.DP).roundToInt()
+            }
         }
 
         val bundle: Bundle? = arguments
@@ -109,27 +110,16 @@ internal class NmItemFragment: DialogFragment(), View.OnClickListener {
             nmItemRv.layoutManager = manager
             nmItemRv.adapter = ItemAdapter(context, folder.images, itemWidth, itemHeight).apply {
                 this.spanCount = spanCount
-                topCover = mainViewModel.insetTop.value ?: 0
-                nmItemPath.measure(shouldLimitHor = true)
-                bottomCover = nmItemPath.measuredHeight
+                topCover = mainViewModel.contentWidthTop.value ?: 0
+                bottomCover = mainViewModel.contentWidthBottom.value ?: 0
             }
             nmItemPath.text = folder.path
             nmItemProgressBar.visibility = View.GONE
             nm = folder.nm
-            nmItemFab.show()
             nmItemFab.setOnClickListener(this)
         } else {
             nmItemProgressBar.visibility = View.GONE
-            X.toast(context, getString(R.string.text_error), Toast.LENGTH_SHORT)
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        if (dialog == null) return
-        dialog!!.window?.run {
-            setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-            setWindowAnimations(R.style.AppTheme_PopUp)
+            notifyBriefly(R.string.text_error)
         }
     }
 
@@ -157,7 +147,7 @@ internal class NmItemFragment: DialogFragment(), View.OnClickListener {
                     }
                 })
             }else{
-                CollisionDialog.alert(context, R.string.text_error).show()
+                notifyBriefly(R.string.text_error)
             }/*
             if (folderNM && folder.nmFile.delete()) {
                 nm = false

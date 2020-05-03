@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020 Clifford Liu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.madness.collision.util
 
 import android.app.Activity
@@ -23,6 +39,8 @@ import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
+import androidx.core.util.component1
+import androidx.core.util.component2
 import androidx.palette.graphics.Palette
 import com.madness.collision.misc.MiscApp
 import com.madness.collision.unit.api_viewing.AccessAV
@@ -255,28 +273,12 @@ object X {
     }
 
     fun toMax( image: Bitmap, maximumLength: Int): Bitmap{
-        val lengthHorizontal = image.width
-        val lengthVertical = image.height
-        if (max(lengthHorizontal, lengthVertical) == maximumLength) return image
-        var targetWidth: Int = maximumLength
-        var targetHeight: Int = maximumLength
-        when {
-            lengthVertical > lengthHorizontal -> targetWidth = (lengthHorizontal * maximumLength) / lengthVertical
-            lengthVertical < lengthHorizontal -> targetHeight = (lengthVertical * maximumLength) / lengthHorizontal
-        }
+        val (targetWidth, targetHeight) = image.size.doOptimal(maximumLength)
         return Bitmap.createScaledBitmap(image, targetWidth, targetHeight, true)
     }
 
     fun toMin( image: Bitmap, minimumLength: Int): Bitmap{
-        val lengthHorizontal = image.width
-        val lengthVertical = image.height
-        if (min(lengthHorizontal, lengthVertical) == minimumLength) return image
-        var targetWidth: Int = minimumLength
-        var targetHeight: Int = minimumLength
-        when {
-            lengthVertical > lengthHorizontal -> targetHeight = (lengthVertical * minimumLength) / lengthHorizontal
-            lengthVertical < lengthHorizontal -> targetWidth = (lengthHorizontal * minimumLength) / lengthVertical
-        }
+        val (targetWidth, targetHeight) = image.size.doMinimum(minimumLength)
         return Bitmap.createScaledBitmap(image, targetWidth, targetHeight, true)
     }
 

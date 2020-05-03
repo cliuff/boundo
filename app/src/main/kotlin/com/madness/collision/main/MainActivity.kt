@@ -81,6 +81,10 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
         var mainBottomNavRef: WeakReference<View>? = null
             private set
 
+        fun syncScroll(behavior: MyHideBottomViewOnScrollBehavior<*>?) {
+            mainBottomNavRef?.get()?.let { behavior?.setupSync(it) }
+        }
+
         fun forItem(name: String, args: Bundle? = null): Bundle {
             val extras = Bundle()
             extras.putString(LAUNCH_ITEM, name)
@@ -89,6 +93,8 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
         }
     }
 
+    private var isNavUp = false
+    private var primaryStatusBarConfig: SystemBarConfig? = null
     private var primaryNavBarConfig: SystemBarConfig? = null
     private var isToolbarInflated = false
     private var colorIcon = 0
@@ -294,7 +300,21 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
 
     private fun clearDemocratic() {
         mainTB.menu.clear()
+        mainTB.visibility = View.VISIBLE
         mainTB.setOnClickListener(null)
+        window.decorView.systemUiVisibility = window.decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_LOW_PROFILE.inv()
+        primaryStatusBarConfig?.let {
+            SystemUtil.applyStatusBarConfig(mContext, mWindow, it)
+        }
+        if (isNavUp) {
+            val config = primaryNavBarConfig
+            if (config != null && !config.isTransparentBar)
+                SystemUtil.applyNavBarConfig(mContext, mWindow, SystemBarConfig(config.isDarkIcon, isTransparentBar = true))
+        } else {
+            primaryNavBarConfig?.let {
+                SystemUtil.applyNavBarConfig(mContext, mWindow, it)
+            }
+        }
     }
 
     private val FragmentTransaction.animNew: FragmentTransaction
@@ -403,11 +423,13 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
         mainBottomNavRef = WeakReference(mainBottomNav)
         navScrollBehavior?.run {
             onSlidedUpCallback = {
+                isNavUp = true
                 val config = primaryNavBarConfig
                 if (config != null && !config.isTransparentBar)
                     SystemUtil.applyNavBarConfig(mContext, mWindow, SystemBarConfig(config.isDarkIcon, isTransparentBar = true))
             }
             onSlidedDownCallback = {
+                isNavUp = false
                 primaryNavBarConfig?.let {
                     SystemUtil.applyNavBarConfig(mContext, mWindow, it)
                 }
@@ -590,7 +612,8 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
                 isDarkStatus = colorFore == Color.BLACK
                 launch(Dispatchers.Main) {
                     mWindow.let {
-                        SystemUtil.applyStatusBarColor(mContext, it, isDarkStatus, true)
+                        primaryStatusBarConfig = SystemBarConfig(isDarkStatus, isTransparentBar = true)
+                        SystemUtil.applyStatusBarConfig(mContext, it, primaryStatusBarConfig!!)
                         val isTransparentNav = mainApplication.exterior || (viewModel.insetBottom.value ?: 0) < X.size(mContext, 15f, X.DP)
                         primaryNavBarConfig = SystemBarConfig(isDarkStatus, isTransparentBar = isTransparentNav)
                         SystemUtil.applyNavBarConfig(mContext, it, primaryNavBarConfig!!)
@@ -602,7 +625,9 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
                 launch(Dispatchers.Main) {
                     setToolbarBackColor(this, colorBack)
                     mWindow.also {
-                        primaryNavBarConfig = SystemUtil.applyDefaultSystemUiVisibility(mContext, it, viewModel.insetBottom.value ?: 0).second
+                        val configs = SystemUtil.applyDefaultSystemUiVisibility(mContext, it, viewModel.insetBottom.value ?: 0)
+                        primaryStatusBarConfig = configs.first
+                        primaryNavBarConfig = configs.second
                         navScrollBehavior?.onSlidedUpCallback?.invoke()
                     }
                 }
@@ -634,8 +659,11 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
             background.background = null
             return
         }
-        if (X.aboveOn(X.N) && isInMultiWindowMode) X.setSplitBackground(mContext, background, X.getCurrentAppResolution(mContext))
-        else X.setBackground(mContext, background)
+        if (X.aboveOn(X.N) && isInMultiWindowMode) {
+            X.setSplitBackground(mContext, background, X.getCurrentAppResolution(mContext))
+        } else {
+            X.setBackground(mContext, background)
+        }
     }
 
     private fun initExterior() {

@@ -221,8 +221,8 @@
     <string name="unit_desc_unavailable">Unavailable</string>
     <string name="unit_desc_install">Install</string>
     <string name="unit_desc_uninstall">Uninstall</string>
-    <string name="unit_desc_requirement_nm">Below Android 10</string>
-    <string name="unit_desc_requirement_shortcut">Android 7.1+</string>
+    <string name="unit_desc_requirement_nm">Android version is at most 9</string>
+    <string name="unit_desc_requirement_shortcut">Android version is at least 7.1</string>
     <string name="unit_desc_requirement_we">WeChat installed</string>
     <string name="unit_desc_requirement_qc">QQ installed</string>
     <string name="unit_desc_av">• Check Android API level of all apps and apks on device\n• Check Adaptive Icon support of all apps\n• App API stats\n• APK and icon extraction\n• Package details and signature details</string>

@@ -46,9 +46,11 @@ import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.Unit
 import com.madness.collision.util.*
 import kotlinx.android.synthetic.main.unit_im.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.*
+import kotlin.math.roundToInt
 import com.madness.collision.unit.image_modifying.R as MyR
 
 class MyUnit: Unit(){
@@ -57,8 +59,9 @@ class MyUnit: Unit(){
         const val permission_REQUEST_EXTERNAL_STORAGE = 200
     }
 
-    private var image: Bitmap? = null
-    private var imageName: String = ""
+    private var sampleImage: Bitmap? = null
+    private var imageGetter: (() -> Pair<String, Bitmap>?)? = null
+    private var previewSize = 0
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
         toolbar.setTitle(R.string.developertools_cropimage)
@@ -71,7 +74,6 @@ class MyUnit: Unit(){
         when (item.itemId){
             MyR.id.imToolbarDone -> {
                 val context = context ?: return false
-                image ?: return false
                 actionDone(context)
                 return true
             }
@@ -97,12 +99,8 @@ class MyUnit: Unit(){
             getImage.type = "image/*"
             startActivityForResult(getImage, REQUEST_GET_IMAGE)
         }
-        val tg200dp = X.size(context, 200f, X.DP).toInt()
-        (imagePreview.layoutParams as FrameLayout.LayoutParams).run {
-            width = tg200dp
-            height = tg200dp
-        }
-        imagePreview.setImageDrawable(context.getDrawable(R.drawable.img_gallery))
+        previewSize = X.size(context, 200f, X.DP).roundToInt()
+        setDefaultImage(context)
         val formatItems: Array<String> = if (X.aboveOn(X.P)) {
             arrayOf("png", "jpg", "webp", "heif")
         } else {
@@ -111,7 +109,6 @@ class MyUnit: Unit(){
         toolsImageFormat.setText(formatItems[0])
         toolsImageFormat.dropDownBackground.setTint(ThemeUtil.getColor(context, R.attr.colorASurface))
         toolsImageFormat.setAdapter(ArrayAdapter(context, R.layout.pop_list_item, formatItems))
-        image = null
         val onSeek = object : SeekBar.OnSeekBarChangeListener{
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
                 val v = when(p0?.id){
@@ -128,6 +125,17 @@ class MyUnit: Unit(){
         imageCompress.setOnSeekBarChangeListener(onSeek)
     }
 
+    private fun setDefaultImage(context: Context) {
+        (imagePreview.layoutParams as FrameLayout.LayoutParams).run {
+            width = previewSize
+            height = previewSize
+        }
+        imagePreview.setImageDrawable(context.getDrawable(R.drawable.img_gallery))
+        imageCard.cardElevation = 0f
+        imageEditWidth.setText("")
+        imageEditHeight.setText("")
+    }
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
@@ -135,7 +143,6 @@ class MyUnit: Unit(){
                 if (grantResults.isEmpty()) return
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     val context = context ?: return
-                    image ?: return
                     actionDone(context)
                 } else {
                     notifyBriefly(R.string.toast_permission_storage_denied)
@@ -149,28 +156,71 @@ class MyUnit: Unit(){
         val context = context ?: return
         val activity = activity ?: return
         if (requestCode == REQUEST_GET_IMAGE && resultCode == Activity.RESULT_OK && data != null) {
-            val dataUri = data.data ?: return
-            MemoryManager.clearSpace(activity)
-            try {
-                image = ImageUtil.getBitmap(context, dataUri)
-            } catch (e: IOException) { e.printStackTrace() }
+            GlobalScope.launch {
+                val dataUri = data.data ?: return@launch
+                MemoryManager.clearSpace(activity)
+                sampleImage = null
+                launch(Dispatchers.Main) {
+                    imagePreview.setImageDrawable(null)
+                }
+                try {
+                    sampleImage = ImageUtil.getSampledBitmap(context, dataUri, previewSize, previewSize)
+                } catch (e: OutOfMemoryError) {
+                    e.printStackTrace()
+                    notifyBriefly(R.string.text_error)
+                    return@launch
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    notifyBriefly(R.string.text_error)
+                    return@launch
+                }
+                imageGetter = {
+                    val imageName: String
+                    var nameCursor: Cursor? = null
+                    if (data.data != null) {
+                        nameCursor = context.contentResolver.query(data.data!!, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null)
+                    }
+                    if (nameCursor != null) {
+                        nameCursor.moveToFirst()
+                        imageName = nameCursor.getString(0)
+                        nameCursor.close()
+                    } else {
+                        imageName = ""
+                    }
+                    try {
+                        ImageUtil.getBitmap(context, dataUri)?.run {
+                            imageName to this
+                        }
+                    } catch (e: OutOfMemoryError) {
+                        e.printStackTrace()
+                        notifyBriefly(R.string.text_error)
+                        null
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        notifyBriefly(R.string.text_error)
+                        null
+                    }
+                }
 
-            val tg200dp = X.size(context, 200f, X.DP).toInt()
-            (imagePreview.layoutParams as FrameLayout.LayoutParams).run {
-                width = ViewGroup.LayoutParams.WRAP_CONTENT
-                height = ViewGroup.LayoutParams.WRAP_CONTENT
+                showImage(context)
             }
-            imagePreview.setImageBitmap(X.toMax(image!!, tg200dp))
-            imageCard.cardElevation = X.size(context, 4f, X.DP)
-            imageEditWidth.setText(image!!.width.toString())
-            imageEditHeight.setText(image!!.height.toString())
-            var nameCursor: Cursor? = null
-            if (data.data != null)
-                nameCursor = activity.contentResolver.query(data.data!!, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null)
-            if (nameCursor != null) {
-                nameCursor.moveToFirst()
-                imageName = nameCursor.getString(0)
-                nameCursor.close()
+        }
+    }
+
+    private fun showImage(context: Context) {
+        val image = sampleImage ?: return
+        GlobalScope.launch {
+            val targetImage = X.toMax(image, previewSize)
+            val elevation = X.size(context, 4f, X.DP)
+            launch(Dispatchers.Main) {
+                (imagePreview.layoutParams as FrameLayout.LayoutParams).run {
+                    width = ViewGroup.LayoutParams.WRAP_CONTENT
+                    height = ViewGroup.LayoutParams.WRAP_CONTENT
+                }
+                imagePreview.setImageBitmap(targetImage)
+                imageCard.cardElevation = elevation
+                imageEditWidth.setText(image.width.toString())
+                imageEditHeight.setText(image.height.toString())
             }
         }
     }
@@ -191,47 +241,76 @@ class MyUnit: Unit(){
         val popLoading = CollisionDialog.loading(context, ProgressBar(context))
         popLoading.show()
         GlobalScope.launch {
-            val isSuccessful = saveImage(context, processImage(context))
+            sampleImage = null
+            launch(Dispatchers.Main) {
+                imagePreview.setImageDrawable(null)
+            }
+            val (imageName, image) = imageGetter?.invoke() ?: "" to null
+            val isSuccessful = if (image != null) {
+                try {
+                    processImage(context, image)?.run { saveImage(context, this, imageName) } ?: false
+                } catch (e: OutOfMemoryError) {
+                    e.printStackTrace()
+                    notifyBriefly(R.string.text_error)
+                    false
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    notifyBriefly(R.string.text_error)
+                    false
+                }
+            } else {
+                false
+            }
             if (isSuccessful) {
                 notify(MyR.string.im_toast_finish)
             } else {
                 notifyBriefly(R.string.text_error)
+            }
+            launch(Dispatchers.Main) {
+                setDefaultImage(context)
             }
         }.invokeOnCompletion {
             popLoading.dismiss()
         }
     }
 
-    private fun processImage(context: Context): Bitmap{
+    private fun processImage(context: Context, targetImage: Bitmap): Bitmap? {
+        var image = targetImage
         val tX: Int = if (!imageEditWidth.text.isNullOrEmpty())
             imageEditWidth.text!!.toString().toInt().let {
                 if (it < 8000) it
                 else {
                     X.toast(context, "limit width 8000", Toast.LENGTH_SHORT)
-                    image!!.width
+                    image.width
                 }
             }
-        else image!!.width
+        else {
+            image.width
+        }
         val tH: Int = if (!imageEditHeight.text.isNullOrEmpty())
             imageEditHeight.text!!.toString().toInt().let {
                 if (it < 8000) it
                 else {
                     X.toast(context, "limit height 8000", Toast.LENGTH_SHORT)
-                    image!!.height
+                    image.height
                 }
             }
-        else image!!.height
-        var image = X.toTarget(image!!, tX, tH)
+        else {
+            image.height
+        }
+        image = X.toTarget(image, tX, tH)
         val blurDegree = imageBlur.progress / 4f
-        if (blurDegree != 0f)
-            X.toMin(image.collisionBitmap, 100).let {
+        if (blurDegree != 0f) {
+            val blurred = X.toMin(image.collisionBitmap, 100).let {
                 GaussianBlur(context).blurOnce(it, blurDegree)
-            }.let { image = X.toTarget(it, image.width, image.height) }
-//                image = X.toTarget(GaussianBlur(context).blurOnce(X.toMin(image.collisionBitmap, 100), blurDegree), image.width, image.height)
+            }
+            image = X.toTarget(blurred, image.width, image.height)
+        }
+        //                image = X.toTarget(GaussianBlur(context).blurOnce(X.toMin(image.collisionBitmap, 100), blurDegree), image.width, image.height)
         return image
     }
 
-    private fun saveImage(context: Context, image: Bitmap): Boolean{
+    private fun saveImage(context: Context, image: Bitmap, imageName: String): Boolean{
         val formatExtension: String = toolsImageFormat.text.toString()
         var isHeif = false
         var name = imageName.substring(0, imageName.lastIndexOf("."))

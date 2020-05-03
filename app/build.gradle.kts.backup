@@ -46,8 +46,8 @@ android {
         applicationId = "com.madness.collision"
         minSdkVersion(22)
         targetSdkVersion(29)
-        versionCode = 20042923
-        versionName = "3.2"
+        versionCode = 20050313
+        versionName = "3.3"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testApplicationId = "${applicationId}.test"
         renderscriptSupportModeEnabled = true
@@ -215,6 +215,7 @@ object Dependencies {
 
 dependencies {
 
+    implementation 'androidx.documentfile:documentfile:1.0.1'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation("com.google.android.play:core:1.7.2")
     listOf(

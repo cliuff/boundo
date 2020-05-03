@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020 Clifford Liu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.madness.collision.unit.qq_contacts
 
 import android.annotation.TargetApi
@@ -21,10 +37,7 @@ import com.madness.collision.databinding.InstantQqItemBinding
 import com.madness.collision.instant.Instant
 import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.Unit
-import com.madness.collision.util.CollisionDialog
-import com.madness.collision.util.ThemeUtil
-import com.madness.collision.util.X
-import com.madness.collision.util.alterPadding
+import com.madness.collision.util.*
 import kotlinx.android.synthetic.main.activity_instant_qq_manager.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -57,7 +70,7 @@ class MyUnit : Unit() {
             MyR.id.instantQqManagerTbRemove -> {
                 val context = context ?: return false
                 if (instantQqList.childCount == 0){
-                    CollisionDialog.alert(context, R.string.text_no_content).show()
+                    notifyBriefly(R.string.text_no_content)
                     return true
                 }
                 if (selectionCount < 1){

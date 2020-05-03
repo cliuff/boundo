@@ -231,10 +231,10 @@
     <string name="unit_desc_unavailable">不可用</string>
     <string name="unit_desc_requirement_qc">已安装 QQ</string>
     <string name="unit_desc_requirement_we">已安装微信</string>
-    <string name="unit_desc_requirement_nm">安卓 10 以下</string>
+    <string name="unit_desc_requirement_nm">安卓版本至多 9</string>
     <string name="unit_desc_uninstall">卸载</string>
     <string name="unit_desc_install">安装</string>
-    <string name="unit_desc_requirement_shortcut">安卓 7.1 及以上</string>
+    <string name="unit_desc_requirement_shortcut">安卓版本至少 7.1</string>
     <string name="unit_manager_install_success">Play 商店处理中</string>
     <string name="unit_manager_uninstall_success">将在设备空闲时卸载</string>
     <string name="unit_manager_error_network">网络故障</string>

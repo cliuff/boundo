@@ -130,7 +130,7 @@ class MyUnit : Unit() {
                 foldersMap.clear()
                 getMedia(context, false)
                 getMedia(context, true)
-                Adapter(context, activity.supportFragmentManager, folders, foldersMap, itemWidth, itemHeight).also {
+                Adapter(context, mainViewModel, folders, foldersMap, itemWidth, itemHeight).also {
                     it.spanCount = spanCount
                     it.topCover = mainViewModel.contentWidthTop.value ?: 0
                     it.bottomCover = mainViewModel.contentWidthBottom.value ?: 0

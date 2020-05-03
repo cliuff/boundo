@@ -57,8 +57,8 @@ android {
         applicationId "com.madness.collision"
         minSdkVersion 22
         targetSdkVersion 29
-        versionCode 20042923
-        versionName '3.2'
+        versionCode 20050313
+        versionName '3.3'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testApplicationId "$applicationId\\.test"
         renderscriptSupportModeEnabled true
@@ -151,6 +151,7 @@ dependencies {
 
     implementation 'androidx.core:core:1.2.0'
     implementation 'androidx.core:core-ktx:1.2.0'
+    implementation 'androidx.documentfile:documentfile:1.0.1'
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.fragment:fragment-ktx:1.2.4'
     implementation 'androidx.drawerlayout:drawerlayout:1.1.0-beta01'

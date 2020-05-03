@@ -47,7 +47,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
-import java.io.IOException
 import java.util.*
 import kotlin.math.roundToInt
 import com.madness.collision.unit.qq_contacts.R as MyR
@@ -136,17 +135,24 @@ internal class QqFragment : Fragment(), Democratic {
         val context = context ?: return
         if (requestCode == REQUEST_LOAD_IMAGE && resultCode == AppCompatActivity.RESULT_OK && data != null){
             val selectedImage = data.data ?: return
-            MemoryManager.clearSpace(activity)
-            try {
-                avatar = ImageUtil.getBitmap(context, selectedImage)
-            } catch ( e: IOException) {
-                e.printStackTrace()
-                notify(MyR.string.launcher_qqcontacts_getavatar_toast_fail)
-                return
-            }
-            avatar = X.toSquare(avatar!!).collisionBitmap
+            GlobalScope.launch {
+                MemoryManager.clearSpace(activity)
+                avatar = null
+                try {
+                    avatar = ImageUtil.getBitmap(context, selectedImage)
+                } catch (e: OutOfMemoryError) {
+                    e.printStackTrace()
+                    notify(MyR.string.launcher_qqcontacts_getavatar_toast_fail)
+                    return@launch
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    notify(MyR.string.launcher_qqcontacts_getavatar_toast_fail)
+                    return@launch
+                }
+                avatar = X.toSquare(avatar!!).collisionBitmap
 
-            setCircularAvatar(context)
+                setCircularAvatar(context)
+            }
         }
     }
 
@@ -158,9 +164,14 @@ internal class QqFragment : Fragment(), Democratic {
     }
 
     private fun setCircularAvatar(context: Context){
-        circularAvatar = X.circularBitmap(avatar!!)
-        val tg200dp = X.size(context, 200f, X.DP).roundToInt()
-        instantQqProfile.setImageBitmap(X.toMax(circularAvatar!!, tg200dp))
+        GlobalScope.launch {
+            circularAvatar = X.circularBitmap(avatar!!)
+            val tg200dp = X.size(context, 200f, X.DP).roundToInt()
+            val target = X.toMax(circularAvatar!!, tg200dp)
+            launch(Dispatchers.Main) {
+                instantQqProfile.setImageBitmap(target)
+            }
+        }
     }
 
     private fun actionDone(context: Context){
@@ -192,7 +203,7 @@ internal class QqFragment : Fragment(), Democratic {
     private fun processContact(context: Context, newContact: QqContact){
         val shortcutManager: ShortcutManager? = context.getSystemService(ShortcutManager::class.java)
         if (shortcutManager == null){
-            CollisionDialog.alert(context, R.string.text_error).show()
+            notifyBriefly(R.string.text_error)
             return
         }
         val intent = Intent(Intent.ACTION_VIEW)

@@ -43,6 +43,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.card.MaterialCardView
 import com.madness.collision.R
+import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.api_viewing.APIAdapter.Companion.sealBack
 import com.madness.collision.unit.api_viewing.APIAdapter.Companion.seals
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
@@ -303,20 +304,23 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
                 val back = X.drawableToBitmap(mvTarget.back.drawable)
                 ApiDecentFragment.newInstance(app, ApiDecentFragment.TYPE_TARGET, back).let {
                     this.dismiss()
-                    it.show(parentFragmentManager, ApiDecentFragment.TAG)
+                    val mvm: MainViewModel by activityViewModels()
+                    mvm.displayFragment(it)
                 }
             }
             MyR.id.sdk_info_api_min -> {
                 val back = X.drawableToBitmap(mvMin.back.drawable)
                 ApiDecentFragment.newInstance(app, ApiDecentFragment.TYPE_MINIMUM, back).let {
                     this.dismiss()
-                    it.show(parentFragmentManager, ApiDecentFragment.TAG)
+                    val mvm: MainViewModel by activityViewModels()
+                    mvm.displayFragment(it)
                 }
             }
             MyR.id.sdkcheck_dialog_logo -> {
                 AppIconFragment.newInstance(app.name, app.packageName, app.appPackage.basePath, app.isArchive()).let {
                     this.dismiss()
-                    it.show(parentFragmentManager, AppIconFragment.TAG)
+                    val mvm: MainViewModel by activityViewModels()
+                    mvm.displayFragment(it)
                 }
             }
             MyR.id.api_info_back -> {

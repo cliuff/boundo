@@ -23,11 +23,13 @@ object ApkUtil {
 
     const val NATIVE_LIB_SUPPORT_SIZE = 7
 
-    fun getNativeLibSupport(path: String): BooleanArray = getNativeLibSupport(File(path))
+    fun getNativeLibSupport(path: String): BooleanArray {
+        return getNativeLibSupport(File(path))
+    }
 
     fun getNativeLibSupport(file: File): BooleanArray {
         return try {
-            JarFile(file).run {
+            JarFile(file).use { jar ->
                 val libFlutter = "libflutter.so"
                 val libReactNative = "libreactnativejni.so"
                 val libXamarin = "libxamarin-app.so"
@@ -43,7 +45,7 @@ object ApkUtil {
                 var hasFlutter = false
                 var hasReactNative = false
                 var hasXamarin = false
-                val iterator = entries().iterator()
+                val iterator = jar.entries().iterator()
                 while (iterator.hasNext()){
                     val e = iterator.next()
                     val name = e.name

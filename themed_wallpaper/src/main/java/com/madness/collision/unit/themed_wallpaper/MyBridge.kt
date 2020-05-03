@@ -16,17 +16,13 @@
 
 package com.madness.collision.unit.themed_wallpaper
 
-import androidx.activity.ComponentActivity
-import androidx.activity.viewModels
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.MutableLiveData
 import com.madness.collision.unit.Bridge
 import com.madness.collision.unit.Unit
 
 object MyBridge: Bridge() {
 
     override val unitName: String = Unit.UNIT_NAME_THEMED_WALLPAPER
+    internal var changeTimestamp: Long = 0L
 
     /**
      * @param args empty
@@ -35,13 +31,9 @@ object MyBridge: Bridge() {
         return MyUnit()
     }
 
-    fun getIsWallpaperChanged(activity: ComponentActivity): MutableLiveData<Boolean> {
-        val mViewModel: TwViewModel by activity.viewModels()
-        return mViewModel.isWallpaperChanged
+    @Suppress("unused")
+    fun updateChangeTimestamp() {
+        changeTimestamp = System.currentTimeMillis()
     }
 
-    fun getIsWallpaperChanged(fragment: Fragment): MutableLiveData<Boolean> {
-        val mViewModel: TwViewModel by fragment.activityViewModels()
-        return mViewModel.isWallpaperChanged
-    }
 }

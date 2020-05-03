@@ -56,7 +56,9 @@ internal class UpdatesFragment : Fragment(), Democratic {
             Unit.getUpdates(it)?.run { it to this }
         }
         fragments = updatesProviders.mapNotNull {
-            it.second.getFragment()?.run { it.first to this }
+            if (it.second.hasUpdates(this)) it.second.getFragment()?.run {
+                it.first to this
+            } else null
         }
     }
 
@@ -65,8 +67,15 @@ internal class UpdatesFragment : Fragment(), Democratic {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        if (fragments.isEmpty()) {
-            mainUpdatesSecUpdates.visibility = View.GONE
+        loadUpdates()
+    }
+
+    private fun loadUpdates() {
+        mainUpdatesSecUpdates.visibility = if (fragments.isEmpty()) View.GONE else View.VISIBLE
+        // clear
+        val fixedChildCount = 3
+        if (mainUpdatesContainer.childCount > fixedChildCount) {
+            mainUpdatesContainer.removeViews(fixedChildCount, mainUpdatesContainer.childCount - fixedChildCount)
         }
         val inflater = LayoutInflater.from(context)
         for ((unitName, f) in fragments) {

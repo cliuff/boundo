@@ -95,8 +95,16 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
                     val letter = index[0]
                     // may get deleted during cache clearing on app starts
                     if (map.containsKey(letter) || !file.exists()) continue@files
-                    val src = ImageUtil.getBitmap(file) ?: continue
-                    map[letter] = src
+                    try {
+                        val src = ImageUtil.getBitmap(file) ?: continue
+                        map[letter] = src
+                    } catch (e: OutOfMemoryError) {
+                        e.printStackTrace()
+                        continue@files
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        continue@files
+                    }
 //                    try {
 //                    }catch (e: FileNotFoundException){
 //                        e.printStackTrace()
@@ -133,15 +141,21 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
             return itemColorInfo(context, apiLevel, false)
         }
 
-        fun getItemColorAccent(context: Context, apiLevel: Int) = itemColorInfo(context, apiLevel, true)
+        fun getItemColorAccent(context: Context, apiLevel: Int): Int {
+            return itemColorInfo(context, apiLevel, true)
+        }
+
+        fun getItemColorForIllustration(context: Context, apiLevel: Int): Int {
+            return itemColorInfo(context, apiLevel, isAccent = true, isForIllustration = true)
+        }
 
         fun getItemColorText(apiLevel: Int) = when (apiLevel) {
             X.M -> Color.BLACK
             else -> Color.WHITE
         }
 
-        private fun itemColorInfo(context: Context, apiLevel: Int, isAccent: Boolean): Int {
-            if (mainApplication.exterior){
+        private fun itemColorInfo(context: Context, apiLevel: Int, isAccent: Boolean, isForIllustration: Boolean = false): Int {
+            if (mainApplication.exterior && !isForIllustration){
                 val attrRes = if (isAccent) android.R.attr.textColor else R.attr.colorASurface
                 return ThemeUtil.getColor(context, attrRes)
             }
@@ -158,8 +172,8 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
                 else -> if (isAccent) "c5e8b0" else X.getColorHex(context, R.color.androidRobotGreenBack)
             }.run {
                 val color = Color.parseColor("#$this")
-                if (isAccent) return color
-                return if (mainApplication.isDarkTheme) ColorUtil.darkenAs(color, 0.15f) else color
+                if (isAccent && !isForIllustration) return color
+                return if (mainApplication.isDarkTheme) ColorUtil.darkenAs(color, if (isForIllustration) 0.7f else 0.15f) else color
             }
         }
 
@@ -180,6 +194,27 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
             seals[index] = bitmap
             val path = F.createPath(F.valCachePubAvSeal(context), "seal-$index.png")
             if (F.prepare4(path)) X.savePNG(bitmap, path)
+        }
+
+        fun getSealForIllustration(context: Context, index: Char, size: Int): Bitmap? {
+            if (seals.containsKey(index)) {
+                seals[index]?.let {
+                    return X.toMax(it, size)
+                }
+            }
+            val res = getAndroidCodenameImageRes(index)
+            if (res == 0) return null
+            val drawable: Drawable
+            try {
+                drawable = context.getDrawable(res) ?: return null
+            } catch (e: Resources.NotFoundException) {
+                e.printStackTrace()
+                return null
+            }
+            val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+            drawable.setBounds(0, 0, size, size)
+            drawable.draw(Canvas(bitmap))
+            return bitmap
         }
     }
 

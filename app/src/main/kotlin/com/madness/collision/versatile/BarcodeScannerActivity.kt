@@ -91,7 +91,7 @@ internal class BarcodeScannerActivity: AppCompatActivity() {
                 try {
                     transfer(uri, file)
                 }catch (e: Exception){
-                    X.toast(this@BarcodeScannerActivity, R.string.text_app_not_installed, Toast.LENGTH_LONG)
+                    notify(R.string.text_app_not_installed)
                 }finally {
                     bitmap.recycle()
                 }

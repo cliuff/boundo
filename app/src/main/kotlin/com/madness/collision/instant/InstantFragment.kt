@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020 Clifford Liu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.madness.collision.instant
 
 import android.annotation.TargetApi
@@ -11,6 +27,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import com.madness.collision.Democratic
@@ -22,7 +39,9 @@ import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.util.CollisionDialog
 import com.madness.collision.util.X
 import com.madness.collision.util.alterPadding
+import com.madness.collision.util.availableWidth
 import kotlinx.android.synthetic.main.activity_instant_manager.*
+import kotlin.math.roundToInt
 
 @TargetApi(X.N)
 internal class InstantFragment: Fragment(), Democratic {
@@ -66,6 +85,12 @@ internal class InstantFragment: Fragment(), Democratic {
         mainViewModel.contentWidthBottom.observe(viewLifecycleOwner) {
             instantContainer.alterPadding(bottom = it)
         }
+
+        val itemWidth = X.size(context, 400f, X.DP)
+        val spanCount = (availableWidth / itemWidth).roundToInt().run {
+            if (this < 2) 1 else this
+        }
+
         val installedUnits = SplitInstallManagerFactory.create(context).installedModules
         val predicate: (InstantItem) -> Boolean = {
             (!it.hasRequiredUnit || installedUnits.contains(it.requiredUnitName)) && it.isAvailable(context)
@@ -74,7 +99,7 @@ internal class InstantFragment: Fragment(), Democratic {
         val adapterTile = InstantAdapter(context, mainViewModel, InstantAdapter.TYPE_TILE, availableTiles)
         instantRecyclerTile.setHasFixedSize(true)
         instantRecyclerTile.setItemViewCacheSize(availableTiles.size)
-        instantRecyclerTile.layoutManager = LinearLayoutManager(context)
+        instantRecyclerTile.layoutManager = if (spanCount == 1) LinearLayoutManager(context) else GridLayoutManager(context, spanCount)
         instantRecyclerTile.adapter = adapterTile
         if (X.belowOff(X.N_MR1)) {
             instantRecyclerShortcut.visibility = View.GONE
@@ -85,7 +110,7 @@ internal class InstantFragment: Fragment(), Democratic {
         val adapterShortcut = InstantAdapter(context, mainViewModel, InstantAdapter.TYPE_SHORTCUT, availableShortcuts)
         instantRecyclerShortcut.setHasFixedSize(true)
         instantRecyclerShortcut.setItemViewCacheSize(availableShortcuts.size)
-        instantRecyclerShortcut.layoutManager = LinearLayoutManager(context)
+        instantRecyclerShortcut.layoutManager = if (spanCount == 1) LinearLayoutManager(context) else GridLayoutManager(context, spanCount)
         instantRecyclerShortcut.adapter = adapterShortcut
     }
 

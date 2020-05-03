@@ -1,5 +1,22 @@
+/*
+ * Copyright 2020 Clifford Liu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.madness.collision.unit.api_viewing
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
@@ -7,11 +24,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.DialogFragment
+import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.observe
+import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
@@ -19,12 +38,11 @@ import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.util.SystemUtil
 import com.madness.collision.util.X
-import com.madness.collision.util.alterPadding
 import com.madness.collision.util.mainApplication
 import kotlinx.android.synthetic.main.api_decent_fragment.*
 import com.madness.collision.unit.api_viewing.R as MyR
 
-internal class ApiDecentFragment : DialogFragment() {
+internal class ApiDecentFragment : Fragment(), Democratic {
 
     companion object {
         const val TYPE_TARGET = 1
@@ -32,7 +50,6 @@ internal class ApiDecentFragment : DialogFragment() {
         const val ARG_APP = "app"
         const val ARG_TYPE = "type"
         const val ARG_BACK = "back"
-        const val TAG = "APIDecentFragment"
 
         @JvmStatic
         fun newInstance(app: ApiViewingApp, type: Int, back: Bitmap) = ApiDecentFragment().apply {
@@ -45,10 +62,21 @@ internal class ApiDecentFragment : DialogFragment() {
     }
 
     private val viewModel: ApiDecentViewModel by viewModels()
+    private var isDarkBar = false
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL, R.style.AppTheme_FullScreenDialog)
+    override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
+        toolbar.visibility = View.GONE
+        updateBars()
+        return true
+    }
+
+    private fun updateBars() {
+        val context = context ?: return
+        activity?.window?.let { window ->
+            window.decorView.systemUiVisibility = window.decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_LOW_PROFILE
+            SystemUtil.applyStatusBarColor(context, window, isDarkBar, isTransparentBar = true)
+            SystemUtil.applyNavBarColor(context, window, isDarkBar, isTransparentBar = true)
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -59,18 +87,8 @@ internal class ApiDecentFragment : DialogFragment() {
         super.onActivityCreated(savedInstanceState)
         val context = context ?: return
 
-        dialog?.window?.let {
-            it.decorView.systemUiVisibility = it.decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_LOW_PROFILE
-            SystemUtil.applyEdge2Edge(it)
-        }
-
         val mainViewModel: MainViewModel by activityViewModels()
-        mainViewModel.insetLeft.observe(viewLifecycleOwner){
-            apiDecentBack.alterPadding(start = it)
-        }
-        mainViewModel.insetRight.observe(viewLifecycleOwner){
-            apiDecentBack.alterPadding(end = it)
-        }
+        democratize(mainViewModel)
 
         arguments?.apply {
             viewModel.app = MutableLiveData(getParcelable(ARG_APP) ?: ApiViewingApp())
@@ -100,11 +118,8 @@ internal class ApiDecentFragment : DialogFragment() {
                         }
                         apiDecentHeart.drawable.mutate().setTint(colorText)
 
-                        val darkBar = colorText == Color.BLACK
-                        dialog?.window?.let { window ->
-                            SystemUtil.applyStatusBarColor(context, window, darkBar, isTransparentBar = true)
-                            SystemUtil.applyNavBarColor(context, window, darkBar, isTransparentBar = true)
-                        }
+                        isDarkBar = colorText == Color.BLACK
+                        updateBars()
                     } else {
                         apiDecentChipCodeName.visibility = View.GONE
                     }
@@ -122,15 +137,6 @@ internal class ApiDecentFragment : DialogFragment() {
             apiDecentShade.visibility = if (mainApplication.isDarkTheme) View.VISIBLE else View.GONE
             val reso = X.getCurrentAppResolution(context)
             apiDecentBack.background = BitmapDrawable(resources, X.toTarget(it, reso.x, reso.y))
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        if (dialog == null) return
-        dialog!!.window?.run {
-            setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-            setWindowAnimations(R.style.AppTheme_PopUp)
         }
     }
 

@@ -225,8 +225,8 @@
     <string name="unit_desc_at">• Detener la reproducción de audio</string>
     <string name="unit_desc_we">• Atajo de escáner WeChat</string>
     <string name="unit_desc_qc">• Acceso directo a contactos QQ</string>
-    <string name="unit_desc_requirement_shortcut">Android 7.1 o superior</string>
-    <string name="unit_desc_requirement_nm">Por debajo de Android 10</string>
+    <string name="unit_desc_requirement_shortcut">La versión de Android es al menos 7.1</string>
+    <string name="unit_desc_requirement_nm">La versión de Android es como máximo 9</string>
     <string name="unit_desc_installed">Instalado</string>
     <string name="unit_desc_not_installed">No instalado</string>
     <string name="unit_desc_available">Disponible</string>

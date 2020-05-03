@@ -63,7 +63,7 @@ internal class ImmortalActivity : AppCompatActivity(), View.OnClickListener {
                         FilePop.by(this, logFile!!, "text/html", R.string.immortalShareTitle).show(it, FilePop.TAG)
                     }
                 } else {
-                    CollisionDialog.alert(this, R.string.textWaitASecond).show()
+                    notify(R.string.textWaitASecond)
                 }
             }
 
@@ -84,7 +84,7 @@ internal class ImmortalActivity : AppCompatActivity(), View.OnClickListener {
                         putExtra(Intent.EXTRA_TITLE, title) // android q title
                     }.let { Intent.createChooser(it, title) }) // deprecated in android 10
                 } else {
-                    CollisionDialog.alert(this, R.string.textWaitASecond).show()
+                    notify(R.string.textWaitASecond)
                 }
             }
 

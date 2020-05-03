@@ -192,6 +192,7 @@ internal class ApiViewingViewModel(application: Application): AndroidViewModel(a
 
     fun clearCache() {
         apps4Cache.clear()
+        loadedItems.clear()
         timestampCache = System.currentTimeMillis()
         updateDeviceAppsCount()
     }
@@ -250,7 +251,7 @@ internal class ApiViewingViewModel(application: Application): AndroidViewModel(a
             val paths: MutableList<String> = ArrayList()
             X.listFiles(file, ".apk", paths)
             paths.forEach { addFile(context, it) }
-        }else{
+        } else {
             addFile(context, file.path)
         }
     }
@@ -263,7 +264,7 @@ internal class ApiViewingViewModel(application: Application): AndroidViewModel(a
         try {
             val inStream: InputStream = context.contentResolver.openInputStream(uri) ?: return null
             inStream.use { FileOutputStream(file).use { outStream -> it.copyTo(outStream) } }
-        }catch (e: Exception){
+        } catch (e: Exception){
             return null
         }
         return file

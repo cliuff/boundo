@@ -225,8 +225,8 @@
     <string name="unit_desc_at">• остановить воспроизведение звука</string>
     <string name="unit_desc_we">• WeChat Сканер ярлык</string>
     <string name="unit_desc_qc">• QQ контакты ярлык</string>
-    <string name="unit_desc_requirement_shortcut">Android 7.1+</string>
-    <string name="unit_desc_requirement_nm">Ниже Android 10</string>
+    <string name="unit_desc_requirement_shortcut">Версия Android не ниже 7.1</string>
+    <string name="unit_desc_requirement_nm">Версия Android максимум 9</string>
     <string name="unit_desc_installed">Установлены</string>
     <string name="unit_desc_not_installed">Не установлено</string>
     <string name="unit_desc_available">Доступный</string>

@@ -227,8 +227,8 @@
     <string name="unit_desc_qc">• Phím tắt liên lạc QQ</string>
     <string name="unit_desc_requirement_qc">QQ đã cài đặt</string>
     <string name="unit_desc_requirement_we">Đã cài đặt WeChat</string>
-    <string name="unit_desc_requirement_shortcut">Android 7.1 trở lên</string>
-    <string name="unit_desc_requirement_nm">Dưới Android 10</string>
+    <string name="unit_desc_requirement_shortcut">Phiên bản Android ít nhất là 7.1</string>
+    <string name="unit_desc_requirement_nm">Phiên bản Android nhiều nhất là 9</string>
     <string name="unit_desc_uninstall">Gỡ cài đặt</string>
     <string name="unit_desc_install">Tải về</string>
     <string name="unit_desc_unavailable">Không có sẵn</string>

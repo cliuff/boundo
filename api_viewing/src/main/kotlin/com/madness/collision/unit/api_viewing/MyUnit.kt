@@ -34,6 +34,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.edit
+import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -132,6 +133,12 @@ class MyUnit: com.madness.collision.unit.Unit(), AdapterView.OnItemSelectedListe
         toolbar.background.mutate().constantState?.newDrawable()?.let { tbDrawable = it }
         this.iconColor = iconColor
         this.toolbar = toolbar
+        // After image operations, cache is cleared, leaving list empty.
+        // Ensures list refreshes after user comes back.
+        if (viewModel.loadedItems.isVacant && viewModel.apps4Cache.isEmpty()) {
+            refreshLayout.isRefreshing = true
+            refreshList()
+        }
         return true
     }
 
@@ -232,7 +239,7 @@ class MyUnit: com.madness.collision.unit.Unit(), AdapterView.OnItemSelectedListe
         settingsPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
         if (!settingsPreferences.getBoolean("APIViewerInitialized", false)){
             settingsPreferences.edit { putBoolean("APIViewerInitialized", true) }
-            CollisionDialog.alert(context, R.string.api_viewer_initialize).show()
+            notify(R.string.api_viewer_initialize)
         }
 
         EasyAccess.init(context, settingsPreferences)
@@ -435,7 +442,7 @@ class MyUnit: com.madness.collision.unit.Unit(), AdapterView.OnItemSelectedListe
 
         refreshLayout.setOnRefreshListener(this::refreshList)
 
-        MainActivity.mainBottomNavRef?.get()?.let { mScrollBehavior?.setupSync(it) }
+        MainActivity.syncScroll(mScrollBehavior)
 
         if (X.aboveOn(X.N)){
             val apkDisplayDragListener = object : View.OnDragListener{
@@ -443,7 +450,9 @@ class MyUnit: com.madness.collision.unit.Unit(), AdapterView.OnItemSelectedListe
                 override fun onDrag(v: View?, event: DragEvent?): Boolean {
                     event ?: return false
                     when (event.action) {
-                        DragEvent.ACTION_DRAG_ENTERED -> X.toast(context, R.string.apiDragDropHint, Toast.LENGTH_SHORT)
+                        DragEvent.ACTION_DRAG_ENTERED -> {
+                            notifyBriefly(R.string.apiDragDropHint)
+                        }
                         DragEvent.ACTION_DROP -> {
                             permission = activity?.requestDragAndDropPermissions(event)
                             dragDropAction(context, event.clipData)
@@ -531,8 +540,8 @@ class MyUnit: com.madness.collision.unit.Unit(), AdapterView.OnItemSelectedListe
                 loadedItems.loading(item)
                 ApiTaskManager.now {
                     if (X.aboveOn(X.Q)) {
-                        accessiblePrimaryExternal(context) { uri ->
-                            getFamily(uri, DocumentsContract.getTreeDocumentId(uri))
+                        accessiblePrimaryExternal(context) {
+                            displayApkFromTreeDocumentUriQuery(context, it)
                         }
                     } else {
                         try {
@@ -564,8 +573,9 @@ class MyUnit: com.madness.collision.unit.Unit(), AdapterView.OnItemSelectedListe
                 loadedItems.loading(item)
                 startActivityForResult(
                         Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
-                            addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
+                            // make it possible to access children
                             addFlags(Intent.FLAG_GRANT_PREFIX_URI_PERMISSION)
+                            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                         },
                         REQUEST_OPEN_VOLUME
                 )
@@ -706,8 +716,11 @@ class MyUnit: com.madness.collision.unit.Unit(), AdapterView.OnItemSelectedListe
                 if (flagGranted) return false
                 startActivityForResult(
                         Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
+                            // make it possible to persist
                             addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
+                            // make it possible to access children
                             addFlags(Intent.FLAG_GRANT_PREFIX_URI_PERMISSION)
+                            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                         },
                         REQUEST_OPEN_DIRECTORY
                 )
@@ -798,7 +811,7 @@ class MyUnit: com.madness.collision.unit.Unit(), AdapterView.OnItemSelectedListe
         ApiTaskManager.now {
             val cd: ClipData? = clipData
             if (cd == null) {
-                X.toast(context, R.string.text_no_content, Toast.LENGTH_LONG)
+                notifyBriefly(R.string.text_no_content)
                 return@now
             }
             val description = cd.description
@@ -817,24 +830,11 @@ class MyUnit: com.madness.collision.unit.Unit(), AdapterView.OnItemSelectedListe
                         displaySearchFilter(item.text.toString())
                     }
                     else -> {
-                        displayFile(context, itemUri)
-//                        if (!DocumentsContract.isDocumentUri(context, itemUri)){
-//                            displayFile(context, itemUri)
-//                            continue@items
-//                        }
-//                        val contentResolver = activity?.contentResolver
-//                        val cursor = contentResolver?.query(itemUri, null, null, null, null)
-//                        val doc = DocumentFile.fromSingleUri(context, itemUri)!!
-//                        doc.listFiles()
-//                        if (doc.isFile){
-//                            if (contentResolver?.getType(itemUri) == "application/vnd.android.package-archive")
-//                                displayFile(context, itemUri)
-//                        }else{
-//                            val docId = DocumentsContract.getDocumentId(doc.uri)
-//                            DocumentsContract.buildTreeDocumentUri("${BuildConfig.APPLICATION_ID}.fileProvider", docId).also {
-//                                getFamily(it, docId)
-//                            }
-//                        }
+                        if (!DocumentsContract.isDocumentUri(context, itemUri)){
+                            displayFile(context, itemUri)
+                            continue@items
+                        }
+                        displayApkFromDocumentUri(context, itemUri)
                     }
                 }
             }
@@ -877,7 +877,7 @@ class MyUnit: com.madness.collision.unit.Unit(), AdapterView.OnItemSelectedListe
                 }
                 data?.data?.let {
                     ApiTaskManager.now {
-                        val takeFlags: Int = data.flags and (Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                        val takeFlags: Int = Intent.FLAG_GRANT_READ_URI_PERMISSION
                         context.contentResolver.takePersistableUriPermission(it, takeFlags)
                         val uriString = it.toString()
                         settingsPreferences.edit { putString(P.URI_EXTERNAL_PRIMARY, uriString) }
@@ -895,7 +895,7 @@ class MyUnit: com.madness.collision.unit.Unit(), AdapterView.OnItemSelectedListe
                 // todo
                 data?.data?.let {
                     ApiTaskManager.now {
-                        getFamily(it, DocumentsContract.getTreeDocumentId(it))
+                        displayApkFromTreeDocumentUriQuery(context, it)
                     }.invokeOnCompletion {
                         ceaseRefresh(ApiUnit.VOLUME)
                     }
@@ -904,12 +904,43 @@ class MyUnit: com.madness.collision.unit.Unit(), AdapterView.OnItemSelectedListe
         }
     }
 
+    private fun displayApkFromDocumentUri(context: Context, uri: Uri) {
+        val doc = DocumentFile.fromSingleUri(context, uri)!!
+        displayApkFromDocument(context, doc)
+    }
+
+    private fun displayApkFromDocument(context: Context, doc: DocumentFile, isTreeUriKnown: Boolean = false) {
+        if (!doc.canRead()) return
+        val docUri = doc.uri
+        if (doc.isFile) {
+            if (doc.type == "application/vnd.android.package-archive" && doc.name?.contains(APP_CACHE_PREFIX) != true) {
+                displayFile(context, docUri)
+            }
+            return
+        }
+
+        if (!isTreeUriKnown) {
+            val mTreeUri = if (X.aboveOn(X.N) && !DocumentsContract.isTreeUri(docUri)) {
+                val docId = DocumentsContract.getDocumentId(docUri)
+                DocumentsContract.buildTreeDocumentUri(docUri.authority, docId)
+            } else {
+                docUri
+            }
+            displayApkFromDocument(context, DocumentFile.fromTreeUri(context, mTreeUri)!!, true)
+            return
+        }
+        for (childDoc in doc.listFiles()) {
+            displayApkFromDocument(context, childDoc, true)
+        }
+    }
+
     /**
      * get apk from this uri
      */
-    private fun getFamily( treeUri: Uri, documentId: String) {
-        val contentResolver = activity?.contentResolver ?: return
-        val childrenUri = DocumentsContract.buildChildDocumentsUriUsingTree(treeUri, documentId)
+    private fun displayApkFromTreeDocumentUriQuery(context: Context, treeUri: Uri, docId: String = DocumentsContract.getTreeDocumentId(treeUri)) {
+//        if (!DocumentsContract.isDocumentUri(context, treeUri)) return
+        val contentResolver = context.contentResolver ?: return
+        val childrenUri = DocumentsContract.buildChildDocumentsUriUsingTree(treeUri, docId)
 
         val columns = arrayOf(
                 DocumentsContract.Document.COLUMN_MIME_TYPE,
@@ -922,17 +953,17 @@ class MyUnit: com.madness.collision.unit.Unit(), AdapterView.OnItemSelectedListe
                 val mimeType = cursor.getString(0) ?: ""
                 if (mimeType == DocumentsContract.Document.MIME_TYPE_DIR) {
                     val id = cursor.getString(1)
-                    DocumentsContract.buildDocumentUriUsingTree(treeUri, id)?.also { getFamily(it, id) }
+                    DocumentsContract.buildDocumentUriUsingTree(treeUri, id)?.also {
+                        displayApkFromTreeDocumentUriQuery(context, treeUri, id)
+                    }
                     continue
                 }
                 if (mimeType != "application/vnd.android.package-archive") continue
                 val id = cursor.getString(1)
                 val name = cursor.getString(2)
                 if (name.contains(APP_CACHE_PREFIX)) continue
-                context?.let { context ->
-                    DocumentsContract.buildDocumentUriUsingTree(treeUri, id)?.also {
-                        displayFile(context, it)
-                    }
+                DocumentsContract.buildDocumentUriUsingTree(treeUri, id)?.also {
+                    displayFile(context, it)
                 }
             }
         }

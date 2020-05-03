@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020 Clifford Liu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.madness.collision.unit.api_viewing
 
 import android.content.Context
@@ -8,11 +24,14 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.DialogFragment
+import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
+import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.misc.MiscApp
@@ -22,13 +41,12 @@ import kotlinx.android.synthetic.main.dialog_api_sub_ai.*
 import java.io.File
 import com.madness.collision.unit.api_viewing.R as MyR
 
-internal class AppIconFragment : DialogFragment() {
+internal class AppIconFragment : Fragment(), Democratic {
     companion object {
         const val ARG_APP_NAME = "Name"
         const val ARG_PACKAGE_NAME = "PackageName"
         const val ARG_APK_Path = "ApkPath"
         const val ARG_IS_ARCHIVE = "IsArchive"
-        const val TAG = "AppIconFragment"
 
         @JvmStatic
         fun newInstance(appName: String, packageName: String, path: String, isArchive: Boolean) = AppIconFragment().apply {
@@ -43,37 +61,39 @@ internal class AppIconFragment : DialogFragment() {
 
     private val mainViewModel: MainViewModel by activityViewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL, R.style.AppTheme_FullScreenDialog)
+    override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
+        toolbar.title = arguments?.getString(ARG_APP_NAME) ?: ""
+        inflateAndTint(MyR.menu.toolbar_av_icon, toolbar, iconColor)
+        return true
+    }
+
+    override fun selectOption(item: MenuItem): Boolean {
+        when (item.itemId) {
+            MyR.id.avIconToolbarManual -> {
+                val context = context ?: return false
+                CollisionDialog.alert(context, MyR.string.apiInfoAiOverallDes).show()
+                return true
+            }
+        }
+        return false
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(MyR.layout.dialog_api_sub_ai, container, true)
+        return inflater.inflate(MyR.layout.dialog_api_sub_ai, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val context = context ?: return
 
-        dialog?.window?.let {
-            SystemUtil.applyEdge2Edge(it)
-            SystemUtil.applyDefaultSystemUiVisibility(context, it, mainViewModel.insetBottom.value ?: 0)
-        }
-
-        mainViewModel.insetTop.observe(viewLifecycleOwner) {
+        democratize(mainViewModel)
+        mainViewModel.contentWidthTop.observe(viewLifecycleOwner) {
             apiInfoAiGuideTop.setGuidelineBegin(it)
         }
-        mainViewModel.insetBottom.observe(viewLifecycleOwner) {
+        mainViewModel.contentWidthBottom.observe(viewLifecycleOwner) {
             apiInfoAiGuideBottom.setGuidelineEnd(it)
 //            (apiInfoAiSpace.layoutParams as ConstraintLayout.LayoutParams).height = it
 //            apiInfoAiSpace.layoutParams = ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, it)
-        }
-        mainViewModel.insetLeft.observe(viewLifecycleOwner){
-            avInfoAiRoot.alterPadding(start = it)
-        }
-        mainViewModel.insetRight.observe(viewLifecycleOwner){
-            avInfoAiRoot.alterPadding(end = it)
         }
 
         val appName = arguments?.getString(ARG_APP_NAME) ?: ""
@@ -169,19 +189,6 @@ internal class AppIconFragment : DialogFragment() {
             }
         }else {
             X.makeGone(apiInfoAiIconRGroup, apiInfoAiIconRGroupAi)
-        }
-
-        apiInfoAiOverallDes.setOnClickListener{
-            CollisionDialog.alert(context, MyR.string.apiInfoAiOverallDes).show()
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        if (dialog == null) return
-        dialog!!.window?.run {
-            setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-            setWindowAnimations(R.style.AppTheme_PopUp)
         }
     }
 

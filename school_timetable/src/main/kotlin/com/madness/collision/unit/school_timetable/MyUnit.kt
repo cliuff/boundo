@@ -199,7 +199,7 @@ class MyUnit: Unit(), View.OnClickListener{
                 popExport.findViewById<View>(MyR.id.ttExportCal).setOnClickListener {
                     if (!isTimeInformed && dateStart == P.TT_DATE_START_DEFAULT){
                         popExport.dismiss()
-                        CollisionDialog.alert(context, MyR.string.ttTimeNotice).show()
+                        notify(MyR.string.ttTimeNotice)
                         isTimeInformed = true
                     }else{
                         popExport.dismiss()
@@ -210,7 +210,7 @@ class MyUnit: Unit(), View.OnClickListener{
                 popExport.findViewById<View>(MyR.id.ttExportFile).setOnClickListener {
                     if (!isTimeInformed && dateStart == P.TT_DATE_START_DEFAULT){
                         popExport.dismiss()
-                        CollisionDialog.alert(context, MyR.string.ttTimeNotice).show()
+                        notify(MyR.string.ttTimeNotice)
                         isTimeInformed = true
                     }else{
                         popExport.dismiss()
@@ -288,7 +288,7 @@ class MyUnit: Unit(), View.OnClickListener{
                 if (file.exists()) {
                     FilePop.by(context, file, "text/html", "").show(childFragmentManager, FilePop.TAG)
                 } else {
-                    CollisionDialog.alert(context, R.string.text_no_content).show()
+                    notify(R.string.text_no_content)
                 }
             }
         }
@@ -298,7 +298,7 @@ class MyUnit: Unit(), View.OnClickListener{
         val context = context ?: return
         val file = File(F.valFilePubTtIndicator(context))
         if (!file.exists()){
-            X.toast(context, getString(R.string.text_error), Toast.LENGTH_SHORT)
+            notifyBriefly(R.string.text_error)
             return
         }
         val filesPath = F.valCachePubTtUndo(context)
@@ -370,7 +370,7 @@ class MyUnit: Unit(), View.OnClickListener{
         if (iCalFile.exists()) {
             FilePop.by(context, iCalFile, "text/calendar", "").show(childFragmentManager, FilePop.TAG)
         } else {
-            CollisionDialog.alert(context, MyR.string.ics_Import_Toast_Null).show()
+            notify(MyR.string.ics_Import_Toast_Null)
         }
     }
 
@@ -378,14 +378,14 @@ class MyUnit: Unit(), View.OnClickListener{
         val context = context ?: return
         val ultimatePath = F.valFilePubTtIndicator(context)
         if (ultimatePath.isEmpty()) {
-            X.toast(context, getString(R.string.text_error), Toast.LENGTH_SHORT)
+            notifyBriefly(R.string.text_error)
             return
         }
         val iCalFile = File(ultimatePath)
         if (iCalFile.exists()) {
             FilePop.by(context, iCalFile, "text/calendar", "").show(childFragmentManager, FilePop.TAG)
         } else {
-            CollisionDialog.alert(context, R.string.text_no_content).show()
+            notifyBriefly(R.string.text_no_content)
         }
     }
 
@@ -400,7 +400,7 @@ class MyUnit: Unit(), View.OnClickListener{
             try { X.copyFileLessTwoGB(file, previousFile)
             } catch ( e: IOException) { e.printStackTrace() }
         } else {
-            CollisionDialog.alert(context, MyR.string.ics_Import_Toast_Null).show()
+            notify(MyR.string.ics_Import_Toast_Null)
         }
     }
 
