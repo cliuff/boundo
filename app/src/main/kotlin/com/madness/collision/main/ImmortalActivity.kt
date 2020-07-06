@@ -16,6 +16,8 @@
 
 package com.madness.collision.main
 
+import android.app.ActivityManager
+import android.app.ApplicationExitInfo
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ShortcutManager
@@ -212,6 +214,44 @@ internal class ImmortalActivity : AppCompatActivity(), View.OnClickListener {
         val writer = FileWriter(logFile)
         writer.write(wrapInHtml("Manufacture: $manufacture\nModel: $model\nProduct: $product\nDevice: $device\nAPI: $apiLevel\nApp: $verName($ver)\nLocales: $locales\n"))
 
+        if (false && X.aboveOn(X.R)) {
+            val am = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager?
+            val exitReasons = am?.getHistoricalProcessExitReasons(BuildConfig.APPLICATION_ID, 0, 0) ?: emptyList()
+            exitReasons.forEach { exitInfo ->
+                when (exitInfo.reason) {
+                    ApplicationExitInfo.REASON_ANR -> {
+                    }
+                    ApplicationExitInfo.REASON_CRASH -> {
+                    }
+                    ApplicationExitInfo.REASON_CRASH_NATIVE -> {
+                    }
+                    ApplicationExitInfo.REASON_DEPENDENCY_DIED -> {
+                    }
+                    ApplicationExitInfo.REASON_EXCESSIVE_RESOURCE_USAGE -> {
+                    }
+                    ApplicationExitInfo.REASON_EXIT_SELF -> {
+                    }
+                    ApplicationExitInfo.REASON_INITIALIZATION_FAILURE -> {
+                    }
+                    ApplicationExitInfo.REASON_LOW_MEMORY -> {
+                    }
+                    ApplicationExitInfo.REASON_OTHER -> {
+                    }
+                    ApplicationExitInfo.REASON_PERMISSION_CHANGE -> {
+                    }
+                    ApplicationExitInfo.REASON_SIGNALED -> {
+                    }
+                    ApplicationExitInfo.REASON_UNKNOWN -> {
+                    }
+                    ApplicationExitInfo.REASON_USER_REQUESTED -> {
+                    }
+                    ApplicationExitInfo.REASON_USER_STOPPED -> {
+                    }
+                    else -> {
+                    }
+                }
+            }
+        }
         // - write logcat
         val process = Runtime.getRuntime().exec("logcat -d -v time")
         val reader = InputStreamReader(process.inputStream)

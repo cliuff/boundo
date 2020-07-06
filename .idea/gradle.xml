@@ -4,8 +4,20 @@
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
+        <compositeConfiguration>
+          <compositeBuild compositeDefinitionSource="SCRIPT">
+            <builds>
+              <build path="$PROJECT_DIR$/dependencyPlugin" name="dependencyPlugin">
+                <projects>
+                  <project path="$PROJECT_DIR$/dependencyPlugin" />
+                </projects>
+              </build>
+            </builds>
+          </compositeBuild>
+        </compositeConfiguration>
         <option name="delegatedBuild" value="false" />
         <option name="testRunner" value="PLATFORM" />
+        <option name="disableWrapperSourceDistributionNotification" value="true" />
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
@@ -14,8 +26,8 @@
             <option value="$PROJECT_DIR$/api_viewing" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/audio_timer" />
-            <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/cool_app" />
+            <option value="$PROJECT_DIR$/dependencyPlugin" />
             <option value="$PROJECT_DIR$/image_modifying" />
             <option value="$PROJECT_DIR$/no_media" />
             <option value="$PROJECT_DIR$/qq_contacts" />

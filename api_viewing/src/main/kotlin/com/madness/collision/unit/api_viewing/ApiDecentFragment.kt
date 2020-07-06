@@ -25,7 +25,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
@@ -37,12 +36,16 @@ import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.util.SystemUtil
+import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.X
 import com.madness.collision.util.mainApplication
 import kotlinx.android.synthetic.main.api_decent_fragment.*
 import com.madness.collision.unit.api_viewing.R as MyR
 
-internal class ApiDecentFragment : Fragment(), Democratic {
+internal class ApiDecentFragment : TaggedFragment(), Democratic {
+
+    override val category: String = "AV"
+    override val id: String = "ApiDecent"
 
     companion object {
         const val TYPE_TARGET = 1

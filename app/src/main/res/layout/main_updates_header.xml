@@ -15,16 +15,15 @@
   ~ limitations under the License.
   -->
 
-<TextView
-xmlns:android="http://schemas.android.com/apk/res/android"
-android:id="@+id/mainUpdatesHeader"
-android:textSize="16sp"
-android:drawablePadding="20dp"
-android:layout_marginTop="12dp"
-android:paddingTop="6dp"
-android:paddingBottom="6dp"
-android:paddingStart="20dp"
-android:paddingEnd="20dp"
-android:drawableTint="?android:textColor"
-android:layout_width="wrap_content"
-android:layout_height="wrap_content"/>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mainUpdatesHeader"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="12dp"
+    android:drawablePadding="20dp"
+    android:drawableTint="?android:textColor"
+    android:paddingStart="20dp"
+    android:paddingTop="6dp"
+    android:paddingEnd="20dp"
+    android:paddingBottom="6dp"
+    android:textSize="16sp" />

@@ -80,7 +80,10 @@ class TypedNavArg() : Parcelable {
 /**
  * Wrap a fragment
  */
-class Page(fragment: Fragment? = null, private var titleId: Int = 0, private val democratic: Democratic? = null) : Fragment(), Democratic {
+class Page(fragment: Fragment? = null, private var titleId: Int = 0, private val democratic: Democratic? = null) : TaggedFragment(), Democratic {
+
+    override val category: String = "Page"
+    override val id: String = "Page"
 
     private val mainViewModel: MainViewModel by activityViewModels()
     private var mFragment: Fragment? = null

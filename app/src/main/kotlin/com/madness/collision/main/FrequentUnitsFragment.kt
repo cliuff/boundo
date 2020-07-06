@@ -21,14 +21,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.madness.collision.databinding.FragmentFrequentUnitsBinding
 import com.madness.collision.settings.SettingsFunc
+import com.madness.collision.util.TaggedFragment
 
-internal class FrequentUnitsFragment : Fragment() {
+internal class FrequentUnitsFragment : TaggedFragment() {
+
+    override val category: String = "FrequentUnits"
+    override val id: String = "FrequentUnits"
 
     companion object {
 

@@ -30,7 +30,6 @@ import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.edit
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
 import com.madness.collision.Democratic
@@ -43,7 +42,10 @@ import com.madness.collision.pref.PrefExterior
 import com.madness.collision.unit.Unit
 import com.madness.collision.util.*
 
-internal class SettingsFragment : Fragment(), Democratic, NavNode {
+internal class SettingsFragment : TaggedFragment(), Democratic, NavNode {
+
+    override val category: String = "Settings"
+    override val id: String = "Settings"
 
     companion object {
         private const val TAG = "Settings"
@@ -89,7 +91,10 @@ internal class SettingsFragment : Fragment(), Democratic, NavNode {
         }
 
         viewBinding.settingsItemStyle.setOnClickListener {
-            navigate(SettingsFragmentDirections.actionSettingsFragmentToUtilPage(TypedNavArg<PrefExterior>(), R.string.settings_exterior))
+//            navigate(SettingsFragmentDirections.actionSettingsFragmentToUtilPage(TypedNavArg<PrefExterior>(), R.string.settings_exterior))
+            navigate(SettingsFragmentDirections.actionSettingsFragmentToUtilPage(TypedNavArg<PrefExterior>()).apply {
+                titleId = R.string.settings_exterior
+            })
         }
 
         viewBinding.settingsItemAbout.setOnClickListener {

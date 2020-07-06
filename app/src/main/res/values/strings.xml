@@ -87,7 +87,7 @@
     <string name="text_new">New</string>
     <string name="language_en_us" translatable="false">English (US)</string>
     <string name="languageEnGB" translatable="false">English (UK)</string>
-    <string name="language_zh_cn" translatable="false">中文（中国）</string>
+    <string name="language_zh_cn" translatable="false">中文（中国大陆）</string>
     <string name="settings_sdk">Display round app icons</string>
     <string name="tools_nm">Private Pics Hiding</string>
     <string name="nm_adapter_img_content_1">Image folder image</string>
@@ -273,4 +273,19 @@
     <string name="unit_desc_pin">Pin</string>
     <string name="mainSecFrequents">Frequents</string>
     <string name="mainSecStarred">Starred</string>
+    <string name="lang_fr_fr" translatable="false">Français (France)</string>
+    <string name="lang_zh_hk" translatable="false">中文（香港）</string>
+    <string name="lang_zh_mo" translatable="false">中文（澳門）</string>
+    <string name="lang_zh_tw" translatable="false">中文（台灣）</string>
+    <string name="lang_zh_sg" translatable="false">中文（新加坡）</string>
+    <string name="lang_el" translatable="false">Ελληνικά</string>
+    <string name="lang_el_gr" translatable="false">Ελληνικά (Ελλάδα)</string>
+    <string name="lang_ja" translatable="false">日本語</string>
+    <string name="lang_ja_jp" translatable="false">日本語（日本）</string>
+    <string name="lang_ko" translatable="false">한국어</string>
+    <string name="lang_ko_kr" translatable="false">한국어 (한국)</string>
+    <string name="lang_tr" translatable="false">Türkçe</string>
+    <string name="lang_tr_tr" translatable="false">Türkçe (Türkiye)</string>
+    <string name="lang_de" translatable="false">Deutsches</string>
+    <string name="lang_de_de" translatable="false">Deutsches (Deutschland)</string>
 </resources>

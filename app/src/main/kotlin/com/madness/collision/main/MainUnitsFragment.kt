@@ -22,16 +22,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
 import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.databinding.FragmentMainUnitsBinding
 import com.madness.collision.settings.SettingsFunc
+import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.alterPadding
 
-internal class MainUnitsFragment : Fragment(), Democratic {
+internal class MainUnitsFragment : TaggedFragment(), Democratic {
+
+    override val category: String = "MainUnits"
+    override val id: String = "MainUnits"
 
     companion object {
 

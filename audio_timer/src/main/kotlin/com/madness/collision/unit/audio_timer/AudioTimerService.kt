@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020 Clifford Liu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.madness.collision.unit.audio_timer
 
 import android.app.PendingIntent
@@ -22,6 +38,7 @@ internal class AudioTimerService: Service() {
     companion object {
         const val ARG_DURATION = "duration"
         var isRunning = false
+        private val tickCallbacks: MutableList<Callback> = mutableListOf()
 
         fun start(context: Context) {
             val intent = Intent(context, AudioTimerService::class.java)
@@ -38,6 +55,26 @@ internal class AudioTimerService: Service() {
             intent.putExtra(ARG_DURATION, targetDuration)
             context.startService(intent)
         }
+
+        fun stop(context: Context) {
+            context.stopService(Intent(context, AudioTimerService::class.java))
+        }
+
+        fun addCallback(callback: Callback?) {
+            callback ?: return
+            tickCallbacks.add(callback)
+        }
+
+        fun removeCallback(callback: Callback?) {
+            callback ?: return
+            tickCallbacks.remove(callback)
+        }
+    }
+
+    interface Callback {
+        fun onTick(targetTime: Long, leftTime: Long)
+
+        fun onTick(displayText: String)
     }
 
     private lateinit var mNotificationManager: NotificationManagerCompat
@@ -74,7 +111,7 @@ internal class AudioTimerService: Service() {
         val cancelPendingIntent = PendingIntent.getService(context, 0, cancelIntent, 0)
         val color = X.getColor(context, if (ThemeUtil.getIsNight(context)) R.color.primaryABlack else R.color.primaryAWhite)
         notificationBuilder = NotificationsUtil.Builder(context, NotificationsUtil.CHANNEL_AUDIO_TIMER)
-                .setSmallIcon(R.drawable.ic_music_off_24)
+                .setSmallIcon(R.drawable.ic_timer_24)
                 .setColor(color)
                 .setContentTitle(localeContext.getString(R.string.unit_audio_timer))
                 .setCategory(NotificationCompat.CATEGORY_SERVICE)
@@ -118,21 +155,35 @@ internal class AudioTimerService: Service() {
             completeWork()
             false
         } else {
-            updateNotification()
+            tick()
             true
         }
     }
 
-    private fun updateNotification() {
+    private fun tick() {
         val timeLeft = targetTime - System.currentTimeMillis()
         val re = timeFormat.format(timeLeft)
         val hour = timeLeft / 3600000
-        notificationBuilder.setContentText("${if (hour == 0L) "" else "$hour:"}$re")
+        val displayText = "${if (hour == 0L) "" else "$hour:"}$re"
+        updateNotification(displayText)
+        tickCallbacks.forEach {
+            it.onTick(targetTime, timeLeft)
+            it.onTick(displayText)
+        }
+    }
+
+    private fun updateNotification(text: String) {
+        notificationBuilder.setContentText(text)
         mNotificationManager.notify(notificationId, notificationBuilder.build())
     }
 
     private fun completeWork() {
         stopAudio(this)
+        tickCallbacks.forEach {
+            it.onTick(targetTime, 0L)
+            it.onTick("")
+        }
+        tickCallbacks.clear()
         mHandler.postDelayed({ stopSelf() }, 500)
         isRunning = false
     }

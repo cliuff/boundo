@@ -55,7 +55,11 @@ import java.io.*
 import kotlin.math.min
 import kotlin.math.roundToInt
 
-class ExteriorFragment: Fragment(), Democratic, View.OnClickListener{
+class ExteriorFragment: TaggedFragment(), Democratic, View.OnClickListener{
+
+    override val category: String = "Exterior"
+    override val id: String = "Exterior"
+
     companion object {
         private const val REQUEST_GET_IMAGE = 100
         private const val PERMISSION_EXTERNAL_STORAGE = 200

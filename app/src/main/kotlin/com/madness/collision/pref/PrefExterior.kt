@@ -96,11 +96,17 @@ internal class PrefExterior: PreferenceFragmentCompat(), NavNode {
         val context = context ?: return super.onPreferenceTreeClick(preference)
         return when(preference.key){
             getString(R.string.prefExteriorKeyBack) -> {
-                navigate(PageDirections.actionUtilPageToExteriorFragment(ExteriorFragment.MODE_LIGHT))
+//                navigate(PageDirections.actionUtilPageToExteriorFragment(ExteriorFragment.MODE_LIGHT))
+                navigate(PageDirections.actionUtilPageToExteriorFragment().apply {
+                    mode = ExteriorFragment.MODE_LIGHT
+                })
                 true
             }
             getString(R.string.prefExteriorKeyBackDark) -> {
-                navigate(PageDirections.actionUtilPageToExteriorFragment(ExteriorFragment.MODE_DARK))
+//                navigate(PageDirections.actionUtilPageToExteriorFragment(ExteriorFragment.MODE_DARK))
+                navigate(PageDirections.actionUtilPageToExteriorFragment().apply {
+                    mode = ExteriorFragment.MODE_DARK
+                })
                 true
             }
             keyLightTheme -> {

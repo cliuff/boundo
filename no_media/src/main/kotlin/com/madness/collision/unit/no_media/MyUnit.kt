@@ -44,6 +44,8 @@ import com.madness.collision.unit.no_media.R as MyR
 
 class MyUnit : Unit() {
 
+    override val id: String = "NM"
+
     companion object{
         private const val REQUEST_READ_EXTERNAL = 30
     }

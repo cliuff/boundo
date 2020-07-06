@@ -471,8 +471,8 @@ object X {
         toast(context, toastId, Toast.LENGTH_LONG)
     }
 
-    const val DEV = 10000 // developer preview
-    const val R = 30
+    const val DEV = Build.VERSION_CODES.CUR_DEVELOPMENT
+    const val R = Build.VERSION_CODES.R
     const val Q = Build.VERSION_CODES.Q
     const val P = Build.VERSION_CODES.P
     const val O_MR1 = Build.VERSION_CODES.O_MR1

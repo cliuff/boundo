@@ -1,9 +1,24 @@
+/*
+ * Copyright 2020 Clifford Liu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.madness.collision.unit.audio_timer
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,9 +32,15 @@ import com.madness.collision.unit.audio_timer.databinding.UnitAudioTimerBinding
 import com.madness.collision.util.P
 import com.madness.collision.util.X
 import com.madness.collision.util.alterPadding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 class MyUnit : Unit() {
+
+    override val id: String = "AT"
 
     private var _viewBinding: UnitAudioTimerBinding? = null
     private val viewBinding: UnitAudioTimerBinding
@@ -53,7 +74,12 @@ class MyUnit : Unit() {
             // stop if running already
             if (AudioTimerService.isRunning) {
                 context.stopService(intent)
-                Handler().postDelayed(this::updateStatus, 500)
+                GlobalScope.launch {
+                    delay(100)
+                    launch(Dispatchers.Main) {
+                        updateStatus()
+                    }
+                }
                 return@setOnClickListener
             }
             val hourInput = viewBinding.atHour.text?.toString() ?: ""
@@ -64,7 +90,12 @@ class MyUnit : Unit() {
             context.stopService(intent)
             intent.putExtra(AudioTimerService.ARG_DURATION, targetDuration)
             context.startService(intent)
-            Handler().postDelayed(this::updateStatus, 500)
+            GlobalScope.launch {
+                delay(100)
+                launch(Dispatchers.Main) {
+                    updateStatus()
+                }
+            }
             val shouldUpdateHour = hourInput.isNotEmpty()
             val shouldUpdateMinute = minuteInput.isNotEmpty()
             pref.edit {

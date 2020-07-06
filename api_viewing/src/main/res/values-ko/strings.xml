@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2020 Clifford Liu
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="av_updates_recents">최근 업데이트</string>
+    <string name="sdkcheck_dialog_targetsdktext">목표</string>
+    <string name="sdkcheck_dialog_minsdktext">최저</string>
+    <string name="sdkcheck_sortspinner_sortbyname">이름으로</string>
+    <string name="sdkcheck_sortspinner_sortbyhighersdk">높은 API</string>
+    <string name="sdkcheck_sortspinner_sortbylowersdk">낮은 API</string>
+    <string name="sdkcheck_displayspinner_user">나의 앱들</string>
+    <string name="sdkcheck_displayspinner_usersystem">모든 앱</string>
+    <string name="res_api_code_names_c">컵 케이크</string>
+    <string name="res_api_code_names_d">도넛</string>
+    <string name="res_api_code_names_e">에클 레어</string>
+    <string name="res_api_code_names_f">프로 요</string>
+    <string name="res_api_code_names_g">생강 빵</string>
+    <string name="res_api_code_names_h">벌집</string>
+    <string name="res_api_code_names_i">아이스크림 샌드위치</string>
+    <string name="res_api_code_names_j">젤리 빈</string>
+    <string name="res_api_code_names_k">킷 캣</string>
+    <string name="res_api_code_names_l">사탕 과자</string>
+    <string name="res_api_code_names_m">마시멜로</string>
+    <string name="res_api_code_names_n">누가</string>
+    <string name="res_api_code_names_o">오레오</string>
+    <string name="res_api_code_names_p">파이</string>
+    <string name="apiDetails">세부</string>
+    <string name="apiDetailsVerName">"버전 이름 : "</string>
+    <string name="apiDetailsVerCode">"버전 번호 : "</string>
+    <string name="apiDetailsFirstInstall">"첫 설치 : "</string>
+    <string name="apiDetailsLastUpdate">"마지막 업데이트: "</string>
+    <string name="apiDetailsInsatllFrom">"설치자 : "</string>
+    <string name="apiDetailsInstallUnknown">알 수 없는</string>
+    <string name="apiDetailsInstallGP">구글 플레이 스토어</string>
+    <string name="apiDetailsInstallPI">응용 프로그램 설치 프로그램</string>
+    <string name="apiDetailsCert">증명서</string>
+    <string name="apiDetailsValiSince">"유효 기간 시작 시간 : "</string>
+    <string name="apiDetailsValiUntil">"유효 기간 : "</string>
+    <string name="apiDetailsIssuer">"발급자 : "</string>
+    <string name="apiDetailsSubject">"본체: "</string>
+    <string name="apiDetailsSigAlg">"서명 알고리즘 : "</string>
+    <string name="apiDetailsSigAlgOID">"서명 알고리즘 객체 식별자 : "</string>
+    <string name="apiDetailsPermissions">허가:</string>
+    <string name="apiDetailsActivities">활동:</string>
+    <string name="apiDetailsReceivers">방송 수신기 :</string>
+    <string name="apiDetailsServices">서비스:</string>
+    <string name="apiDetailsProviders">공급 업체 :</string>
+    <string name="resApiCodeNamesB">Petit Four</string>
+    <string name="resPrincipalCN">공개 이름</string>
+    <string name="resPrincipalOU">조직 단위</string>
+    <string name="resPrincipalO">조직</string>
+    <string name="resPrincipalL">시티</string>
+    <string name="resPrincipalST">주 /시</string>
+    <string name="resPrincipalC">국가</string>
+    <string name="resPrincipalEmail">이메일</string>
+    <string name="apiInfoAiIconDes">아이콘 (설치 패키지)</string>
+    <string name="apiInfoAiIconRDes">원형 아이콘 (설치 패키지)</string>
+    <string name="apiInfoAiIconDesSys">아이콘 (시스템)</string>
+    <string name="apiInfoAiOverallDes">설치 패키지는 두 개의 아이콘 세트를 선언 할 수 있습니다.\n한 세트는 일반 아이콘이고 다른 세트는 원형 아이콘입니다.\n두 아이콘 세트 모두 Android 8.0에 도입 된 적응 형 아이콘을 포함 할 수 있습니다.\n원형 아이콘은 Android 7.1에서 도입되었습니다.</string>
+    <string name="avTBViewingTarget">목표 / 최소 API보기</string>
+    <string name="avManual">프로그래밍 인터페이스 (API)는 일반적으로 다양한 구성 요소가 서로 통신 할 수 있도록 잘 정의 된 메소드 세트입니다.\n\n소프트웨어 개발 키트 (SDK)는 일반적으로 특정 개발 플랫폼에서의 응용 프로그램 개발을위한 일련의 소프트웨어 개발 도구입니다.\n\n따라서 개발 플랫폼의 SDK에는 해당 플랫폼의 해당 API가 포함됩니다.\n\nAndroid API 버전을 API 레벨이라고합니다.\n\n모든 새로운 Android 릴리스에는 API가 크게 변경되어 새로운 기능 지원, 개인 정보 액세스 제한, 보안 향상, 성능 향상 및 안전하지 않고 비효율적 인 API를 포기하게됩니다.\n\n때때로 Android 버전 업데이트에는 버그 수정 만 있고 API 변경이 없으므로 API 레벨은 동일하게 유지됩니다.\n\n대상 SDK 버전은 응용 프로그램에서 사용할 API 수준을 선언합니다.\n\n최소 SDK 버전은 응용 프로그램에 필요한 최소 API 수준을 선언합니다.\n\n새로운 버전의 Android에 대한 일부 제한 사항 및 개선 사항은 응용 프로그램의 대상 API 수준이 장치에서 Android 시스템의 API 수준에 도달 할 때만 적용됩니다.</string>
+    <string name="av_share_full">파노라마</string>
+    <string name="av_share_stroked">뇌졸중</string>
+    <string name="av_updates_view_more">더보기</string>
+    <string name="av_settings_tags">상표</string>
+    <string name="av_settings_tags_system">시스템 응용</string>
+    <string name="av_adapter_tag_system">체계</string>
+    <string name="av_ai">적응 형 아이콘</string>
+    <string name="av_tag_has_splits">Split APK</string>
+</resources>

@@ -43,14 +43,13 @@ import com.madness.collision.unit.themed_wallpaper.R as MyR
 
 class MyUnit: Unit() {
 
+    override val id: String = "TW"
+
     private var timestamp: Long = 0L
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
         toolbar.setTitle(R.string.twService)
         inflateAndTint(MyR.menu.toolbar_tw, toolbar, iconColor)
-        if (MyBridge.changeTimestamp > timestamp) {
-            loadPreview(context)
-        }
         return true
     }
 
@@ -85,6 +84,12 @@ class MyUnit: Unit() {
         }
         val context = context ?: return
         loadPreview(context)
+    }
+
+    private fun updatePreview(context: Context) {
+        if (MyBridge.changeTimestamp > timestamp) {
+            loadPreview(context)
+        }
     }
 
     private fun loadPreview(context: Context) {
@@ -124,6 +129,14 @@ class MyUnit: Unit() {
         democratize()
         mainViewModel.contentWidthTop.observe(viewLifecycleOwner){
             twRoot.alterPadding(top = it)
+        }
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (!hidden) {
+            val context = context ?: return
+            updatePreview(context)
         }
     }
 

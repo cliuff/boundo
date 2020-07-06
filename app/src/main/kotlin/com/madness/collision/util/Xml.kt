@@ -23,7 +23,7 @@ import kotlin.math.min
  * Parse the 'compressed' binary form of Android XML docs
  * such as AndroidManifest.xml in APK
  */
-internal class Xml(xml: ByteArray, private val mode: Int = MODE_MARK, attr: Array<String> = emptyArray()){
+class Xml(xml: ByteArray, private val mode: Int = MODE_MARK, attr: Array<String> = emptyArray()){
     companion object {
         /** terminates the process when desired attribute is found */
         const val MODE_FIND = 0

@@ -47,6 +47,8 @@ import com.madness.collision.unit.qq_contacts.R as MyR
 
 class MyUnit : Unit() {
 
+    override val id: String = "QC"
+
     companion object {
         private const val KEY_CONTACT = MyR.bool.instantQqItemContact
         private const val KEY_SELECTION = MyR.bool.instantQqItemIsSelected

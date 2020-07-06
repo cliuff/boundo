@@ -19,6 +19,7 @@ package com.madness.collision.unit.audio_timer
 import android.content.Context
 import com.madness.collision.unit.Bridge
 import com.madness.collision.unit.Unit
+import com.madness.collision.unit.UpdatesProvider
 
 object MyBridge: Bridge() {
 
@@ -29,6 +30,10 @@ object MyBridge: Bridge() {
      */
     override fun getUnitInstance(vararg args: Any?): Unit {
         return MyUnit()
+    }
+
+    override fun getUpdates(): UpdatesProvider? {
+        return MyUpdatesProvider()
     }
 
     @Suppress("unused")

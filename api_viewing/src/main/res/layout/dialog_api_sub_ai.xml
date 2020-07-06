@@ -65,18 +65,6 @@
             app:layout_constraintStart_toStartOf="@id/apiInfoAiGuideStart"
             app:layout_constraintEnd_toEndOf="@id/apiInfoAiGuideEnd"/>
 
-        <androidx.constraintlayout.widget.Group
-            android:id="@+id/apiInfoAiIconGroup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:constraint_referenced_ids="apiInfoAiIconShade,apiInfoAiIcon,apiInfoAiIconDes"/>
-
-        <androidx.constraintlayout.widget.Group
-            android:id="@+id/apiInfoAiIconGroupAi"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:constraint_referenced_ids="apiInfoAiIconFore,apiInfoAiIconForeDes,apiInfoAiIconBack,apiInfoAiIconBackDes,apiInfoAiIconRound,apiInfoAiIconRounded,apiInfoAiIconSquircle"/>
-
         <ImageView
             android:id="@+id/apiInfoAiIconShade"
             android:layout_width="match_parent"
@@ -195,18 +183,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-
         <androidx.constraintlayout.widget.Group
-            android:id="@+id/apiInfoAiIconRGroup"
+            android:id="@+id/apiInfoAiIconGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="apiInfoAiIconRShade,apiInfoAiIconR,apiInfoAiIconRDes"/>
+            app:constraint_referenced_ids="apiInfoAiIconShade,apiInfoAiIcon,apiInfoAiIconDes"/>
 
         <androidx.constraintlayout.widget.Group
-            android:id="@+id/apiInfoAiIconRGroupAi"
+            android:id="@+id/apiInfoAiIconGroupAi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="apiInfoAiIconRFore,apiInfoAiIconRForeDes,apiInfoAiIconRBack,apiInfoAiIconRBackDes,apiInfoAiIconRRound,apiInfoAiIconRRounded,apiInfoAiIconRSquircle"/>
+            app:constraint_referenced_ids="apiInfoAiIconFore,apiInfoAiIconForeDes,apiInfoAiIconBack,apiInfoAiIconBackDes,apiInfoAiIconRound,apiInfoAiIconRounded,apiInfoAiIconSquircle"/>
+
+
 
         <ImageView
             android:id="@+id/apiInfoAiIconRShade"
@@ -325,6 +314,19 @@
             tools:ignore="SmallSp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/apiInfoAiIconRGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="apiInfoAiIconRShade,apiInfoAiIconR,apiInfoAiIconRDes"/>
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/apiInfoAiIconRGroupAi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="apiInfoAiIconRFore,apiInfoAiIconRForeDes,apiInfoAiIconRBack,apiInfoAiIconRBackDes,apiInfoAiIconRRound,apiInfoAiIconRRounded,apiInfoAiIconRSquircle"/>
+
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/apiInfoAiBarrierR"

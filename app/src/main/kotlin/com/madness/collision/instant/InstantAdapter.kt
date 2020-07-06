@@ -1,8 +1,25 @@
+/*
+ * Copyright 2020 Clifford Liu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.madness.collision.instant
 
 import android.annotation.TargetApi
 import android.content.ComponentName
 import android.content.Context
+import android.content.pm.ComponentInfo
 import android.content.pm.PackageManager
 import android.content.pm.ShortcutManager
 import android.view.LayoutInflater
@@ -15,9 +32,12 @@ import com.madness.collision.R
 import com.madness.collision.databinding.InstantItemComplexBinding
 import com.madness.collision.databinding.InstantItemSimpleBinding
 import com.madness.collision.instant.shortcut.InstantShortcut
-import com.madness.collision.instant.tile.InstantTile
 import com.madness.collision.main.MainViewModel
+import com.madness.collision.misc.MiscApplication
 import com.madness.collision.util.X
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 @TargetApi(X.N_MR1)
 internal class InstantAdapter<T: InstantItem>(
@@ -30,6 +50,7 @@ internal class InstantAdapter<T: InstantItem>(
         private const val TYPE_COMPLEX = R.layout.instant_item_complex
         const val TYPE_SHORTCUT = 0
         const val TYPE_TILE = 1
+        const val TYPE_OTHER = 2
     }
 
     class InstantSimpleHolder(binding: InstantItemSimpleBinding): RecyclerView.ViewHolder(binding.root) {
@@ -56,12 +77,18 @@ internal class InstantAdapter<T: InstantItem>(
             null
         }
     }
+    private var mComponents: List<ComponentInfo>? = null
+    private var isLoadingComponents: Boolean = false
+    private val onLoadedCallbacks: MutableList<() -> Unit> = mutableListOf()
 
     private val isShortcut: Boolean
         get() = dataType == TYPE_SHORTCUT
 
     private val isTile: Boolean
         get() = dataType == TYPE_TILE
+
+    private val isOther: Boolean
+        get() = dataType == TYPE_OTHER
 
     override fun getItemViewType(position: Int): Int {
         return if (mData[position].hasDescription) TYPE_COMPLEX else TYPE_SIMPLE
@@ -109,10 +136,32 @@ internal class InstantAdapter<T: InstantItem>(
                 if (isChecked) instant.addDynamicShortcuts(shortcutItem.id)
                 else instant.removeDynamicShortcuts(shortcutItem.id)
             }
-        } else if (isTile) {
-            val tileItem = item as InstantTile<*>
-            val comp = ComponentName(mContext.packageName, tileItem.tileClass.qualifiedName ?: "")
-            switch.isChecked = mContext.packageManager.getComponentEnabledSetting(comp) == PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+        } else if (isTile || isOther) {
+            val tileItem = item as InstantComponent<*>
+            val claName = tileItem.klass.qualifiedName ?: ""
+            val checker = {
+                if (claName.isNotEmpty()) GlobalScope.launch {
+                    val components = mComponents ?: emptyList()
+                    val isEnabled = MiscApplication.isComponentEnabled(mContext, claName, components)
+                    launch(Dispatchers.Main) {
+                        switch.isChecked = isEnabled
+                    }
+                }
+            }
+            if (isLoadingComponents) {
+                onLoadedCallbacks.add { checker.invoke() }
+            } else if (mComponents == null) {
+                isLoadingComponents = true
+                GlobalScope.launch {
+                    mComponents = MiscApplication.getComponents(mContext)
+                    isLoadingComponents = false
+                    checker.invoke()
+                    onLoadedCallbacks.forEach { it.invoke() }
+                }
+            } else {
+                checker.invoke()
+            }
+            val comp = ComponentName(mContext.packageName, claName)
             switch.setOnCheckedChangeListener { _, isChecked ->
                 val state = if (isChecked)
                     PackageManager.COMPONENT_ENABLED_STATE_ENABLED

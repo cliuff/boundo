@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2020 Clifford Liu
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="av_updates_recents">Letzte</string>
+    <string name="sdkcheck_dialog_targetsdktext">Ziel</string>
+    <string name="sdkcheck_dialog_minsdktext">Mindest.</string>
+    <string name="sdkcheck_sortspinner_sortbyname">Namentlich</string>
+    <string name="sdkcheck_sortspinner_sortbyhighersdk">Höchste API</string>
+    <string name="sdkcheck_sortspinner_sortbylowersdk">Niedrigste API</string>
+    <string name="sdkcheck_displayspinner_user">Meine Applikationen</string>
+    <string name="sdkcheck_displayspinner_usersystem">Alle Apps</string>
+    <string name="apiDetails">Einzelheiten</string>
+    <string name="apiDetailsInstallUnknown">Unbekannt</string>
+    <string name="apiDetailsInstallGP">Google Play Store</string>
+    <string name="apiDetailsInstallPI">Paket-Installationsprogramm</string>
+    <string name="apiDetailsCert">Zertifikat</string>
+    <string name="res_api_code_names_c">Cupcake</string>
+    <string name="res_api_code_names_d">Krapfen</string>
+    <string name="res_api_code_names_e">Eclair</string>
+    <string name="res_api_code_names_f">Froyo</string>
+    <string name="res_api_code_names_g">Lebkuchen</string>
+    <string name="res_api_code_names_h">Bienenwabe</string>
+    <string name="res_api_code_names_i">Eiscreme-Sandwich</string>
+    <string name="res_api_code_names_j">Geleebohne</string>
+    <string name="res_api_code_names_k">KitKat</string>
+    <string name="res_api_code_names_l">Lutscher</string>
+    <string name="res_api_code_names_m">Mäusespeck</string>
+    <string name="res_api_code_names_n">Nougat</string>
+    <string name="res_api_code_names_o">Oreo</string>
+    <string name="res_api_code_names_p">Kuchen</string>
+    <string name="resApiCodeNamesB">Petit Four</string>
+    <string name="resPrincipalCN">Gemeinsamen Namen</string>
+    <string name="resPrincipalOU">Organisationseinheit</string>
+    <string name="resPrincipalO">Organisation</string>
+    <string name="resPrincipalL">Stadt oder Ort</string>
+    <string name="resPrincipalST">Staat oder Provinz</string>
+    <string name="resPrincipalC">Land</string>
+    <string name="resPrincipalEmail">Email</string>
+    <string name="apiInfoAiIconDes">Symbol (APK)</string>
+    <string name="apiInfoAiIconRDes">Rundes Symbol (APK)</string>
+    <string name="apiInfoAiIconDesSys">Symbol (System)</string>
+    <string name="apiInfoAiOverallDes">Es gibt zwei Sätze von Launcher-Symbolen, die sich in einer apk manifestieren können, wobei das eine das normale App-Symbol und das andere das runde App-Symbol ist.\nBeide Sets können Adaptive Icon enthalten, das mit Android 8.0 eingeführt wurde. Das runde App-Symbol wurde mit Android 7.1 eingeführt.</string>
+    <string name="avTBViewingTarget">Ziel anzeigen / min. API</string>
+    <string name="av_share_full">Voll</string>
+    <string name="av_share_stroked">Streichelte</string>
+    <string name="av_updates_view_more">Mehr sehen</string>
+    <string name="av_settings_tags">Stichworte</string>
+    <string name="av_settings_tags_system">System App</string>
+    <string name="av_adapter_tag_system">System</string>
+    <string name="av_ai">Adaptives Symbol</string>
+    <string name="av_tag_has_splits">Split APK</string>
+    <string name="avManual">Eine Anwendungsprogrammierschnittstelle (API) besteht im Allgemeinen aus einer Reihe klar definierter Kommunikationsmethoden zwischen verschiedenen Komponenten.\n\nEin Software Development Kit (SDK) besteht normalerweise aus einer Reihe von Softwareentwicklungstools, mit denen Anwendungen für eine bestimmte Entwicklungsplattform erstellt werden können.\n\nFolglich enthält das SDK einer Plattform die entsprechende API dieser Plattform.\n\nDie Version der API einer Android-Version wird als API-Ebene bezeichnet.\n\nMit jeder neuen Android-Version werden zahlreiche API-Änderungen vorgenommen, die den Zugriff auf neue Funktionen, Einschränkungen beim Zugriff auf den Datenschutz, Sicherheitsverbesserungen und Leistungsverbesserungen mit sich bringen und gleichzeitig unsichere und ineffiziente APIs ablehnen.\n\nManchmal enthält eine Android-Version nur Fehlerkorrekturen usw., aber keine API-Änderungen, sodass die API-Ebene gleich bleibt.\n\nDie Ziel-SDK-Version definiert die Ziel-API-Ebene, für die eine App entwickelt wurde.\n\nDie minimale SDK-Version definiert die minimale API-Ebene, die eine App benötigt.\n\nEinige Einschränkungen und Verbesserungen neuer Android-Versionen gelten nur für Apps, wenn ihre Ziel-API-Ebene mit der des Android-Systems des Geräts übereinstimmt oder diese übertrifft.</string>
+    <string name="apiDetailsPermissions">Berechtigungen:</string>
+    <string name="apiDetailsActivities">Aktivitäten:</string>
+    <string name="apiDetailsReceivers">Rundfunkempfänger:</string>
+    <string name="apiDetailsServices">Dienstleistungen:</string>
+    <string name="apiDetailsProviders">Anbieter:</string>
+    <string name="apiDetailsValiSince">"Gültigkeit seit: "</string>
+    <string name="apiDetailsValiUntil">"Gültigkeit bis: "</string>
+    <string name="apiDetailsIssuer">"Aussteller: "</string>
+    <string name="apiDetailsSubject">"Gegenstand: "</string>
+    <string name="apiDetailsSigAlg">"Signaturalgorithmus: "</string>
+    <string name="apiDetailsSigAlgOID">"Signaturalgorithmus OID: "</string>
+    <string name="apiDetailsVerName">"Versionsname: "</string>
+    <string name="apiDetailsVerCode">"Versionscode: "</string>
+    <string name="apiDetailsFirstInstall">"Erste Installation: "</string>
+    <string name="apiDetailsLastUpdate">"Letztes Update: "</string>
+    <string name="apiDetailsInsatllFrom">"Installateur: "</string>
+</resources>

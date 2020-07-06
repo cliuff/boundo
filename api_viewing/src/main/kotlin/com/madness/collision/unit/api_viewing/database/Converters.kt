@@ -17,7 +17,7 @@
 package com.madness.collision.unit.api_viewing.database
 
 import androidx.room.TypeConverter
-import com.madness.collision.util.ApkUtil
+import com.madness.collision.unit.api_viewing.util.ApkUtil
 import com.madness.collision.util.jsonSimpleTo
 import com.madness.collision.util.simpleToJson
 

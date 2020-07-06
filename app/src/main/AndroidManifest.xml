@@ -1,4 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2020 Clifford Liu
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.madness.collision">
@@ -17,6 +33,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+<!--    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>-->
 
     <application
         android:name=".main.MainApplication"
@@ -33,6 +50,7 @@
         <!-- Activities -->
         <activity
             android:name=".main.MainActivity"
+            android:enabled="true"
             android:label="@string/app_name"
             android:launchMode="singleInstance">
             <intent-filter>
@@ -44,6 +62,7 @@
         </activity>
         <activity
             android:name=".versatile.ApkSharing"
+            android:enabled="true"
             android:excludeFromRecents="true"
             android:icon="@mipmap/ic_apk_sharing"
             android:label="@string/activityApkSharing">
@@ -57,6 +76,7 @@
         </activity>
         <activity
             android:name=".versatile.TextProcessingActivity"
+            android:enabled="true"
             android:excludeFromRecents="true"
             android:label="@string/activityTextProcessingApp">
             <intent-filter>
@@ -69,6 +89,7 @@
         </activity>
         <activity
             android:name=".versatile.ApiViewingSearchActivity"
+            android:enabled="true"
             android:excludeFromRecents="true"
             android:label="@string/activity_av_search">
             <intent-filter>
@@ -82,10 +103,13 @@
 
         <activity
             android:name=".unit.themed_wallpaper.ConfigActivity"
+            android:enabled="true"
             android:excludeFromRecents="true"
             android:exported="true" />
 
-        <activity android:name=".main.ImmortalActivity">
+        <activity
+            android:name=".main.ImmortalActivity"
+            android:enabled="true">
             <intent-filter>
                 <action android:name="${applicationId}.IMMORTALITY" />
 
@@ -104,10 +128,12 @@
         -->
         <activity
             android:name=".versatile.BarcodeScannerActivity"
+            android:enabled="true"
             android:excludeFromRecents="true"
             android:theme="@style/AppTheme.Transparent"/>
         <activity
             android:name=".qs.PrefActivity"
+            android:enabled="true"
             android:excludeFromRecents="true">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />
@@ -134,6 +160,7 @@
         </activity> <!-- Tile Services -->
         <provider
             android:name="androidx.core.content.FileProvider"
+            android:enabled="true"
             android:authorities="${applicationId}.fileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
@@ -143,6 +170,7 @@
         </provider>
         <receiver
             android:name=".versatile.AppInfoWidget"
+            android:enabled="true"
             android:label="@string/developertools_appinfowidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -155,6 +183,7 @@
         </receiver>
         <service
             android:name=".unit.themed_wallpaper.ThemedWallpaperService"
+            android:enabled="true"
             android:label="@string/twService"
             android:permission="android.permission.BIND_WALLPAPER">
             <intent-filter>
@@ -178,7 +207,7 @@
         <service
             android:name=".qs.TileServiceAudioTimer"
             android:enabled="false"
-            android:icon="@drawable/ic_music_off_24"
+            android:icon="@drawable/ic_timer_24"
             android:label="@string/unit_audio_timer"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
@@ -215,9 +244,12 @@
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
-        <service android:name=".util.NotificationActions" />
+        <service
+            android:name=".util.NotificationActions"
+            android:enabled="true" />
         <service
             android:name=".versatile.ScreenCapturingService"
+            android:enabled="true"
             android:foregroundServiceType="mediaProjection"
             tools:ignore="UnusedAttribute" />
     </application>

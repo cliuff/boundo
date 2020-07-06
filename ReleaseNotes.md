@@ -1,3 +1,88 @@
+
+- **3.5** 20070612
+<en-US>
+• Added support for Traditional Chinese, German, Greek, Japanese, Korean and Turkish with the help of Google Translate
+• Made some improvements
+</en-US>
+<ar>
+• تمت إضافة دعم للصينية التقليدية والألمانية واليونانية واليابانية والكورية والتركية بمساعدة ترجمة Google
+• إجراء بعض التحسينات
+</ar>
+<de-DE>
+• Unterstützung für traditionelles Chinesisch, Deutsch, Griechisch, Japanisch, Koreanisch und Türkisch mithilfe von Google Translate hinzugefügt
+• Einige Verbesserungen vorgenommen
+</de-DE>
+<el-GR>
+• Προστέθηκε υποστήριξη για παραδοσιακά κινέζικα, γερμανικά, ελληνικά, ιαπωνικά, κορεατικά και τουρκικά με τη βοήθεια της Μετάφρασης Google
+• Έκανε κάποιες βελτιώσεις
+</el-GR>
+<en-GB>
+• Added support for Traditional Chinese, German, Greek, Japanese, Korean and Turkish with the help of Google Translate
+• Made some improvements
+</en-GB>
+<es-419>
+• Se agregó soporte para chino tradicional, alemán, griego, japonés, coreano y turco con la ayuda de Google Translate
+• Hice algunas mejoras
+</es-419>
+<es-ES>
+• Se agregó soporte para chino tradicional, alemán, griego, japonés, coreano y turco con la ayuda de Google Translate
+• Hice algunas mejoras
+</es-ES>
+<es-US>
+• Se agregó soporte para chino tradicional, alemán, griego, japonés, coreano y turco con la ayuda de Google Translate
+• Hice algunas mejoras
+</es-US>
+<fr-FR>
+• Ajout de la prise en charge du chinois traditionnel, allemand, grec, japonais, coréen et turc avec l'aide de Google Translate
+• Apporté quelques améliorations
+</fr-FR>
+<it-IT>
+• Aggiunto supporto per cinese tradizionale, tedesco, greco, giapponese, coreano e turco con l'aiuto di Google Translate
+• Ha apportato alcuni miglioramenti
+</it-IT>
+<ja-JP>
+• Google翻訳を使用して、繁体字中国語、ドイツ語、ギリシャ語、日本語、韓国語、トルコ語のサポートを追加しました
+• いくつかの改善を行いました
+</ja-JP>
+<ko-KR>
+• Google Translate의 도움으로 중국어 번체, 독일어, 그리스어, 일본어, 한국어 및 터키어에 대한 지원 추가
+• 일부 개선
+</ko-KR>
+<pt-PT>
+• Adicionado suporte para chinês tradicional, alemão, grego, japonês, coreano e turco com a ajuda do Google Translate
+• fez algumas melhorias
+</pt-PT>
+<ru-RU>
+• Добавлена поддержка традиционного китайского, немецкого, греческого, японского, корейского и турецкого языков с помощью Google Translate.
+• Сделаны некоторые улучшения
+</ru-RU>
+<th>
+• เพิ่มการรองรับภาษาจีนดั้งเดิมเยอรมันกรีกญี่ปุ่นเกาหลีและตุรกีด้วยความช่วยเหลือของ Google Translate
+• ทำการปรับปรุงบางอย่าง
+</th>
+<tr-TR>
+• Google Translate yardımıyla Geleneksel Çince, Almanca, Yunanca, Japonca, Korece ve Türkçe desteği eklendi
+• Bazı iyileştirmeler yapıldı
+</tr-TR>
+<vi>
+• Đã thêm hỗ trợ cho tiếng Trung Quốc truyền thống, tiếng Đức, tiếng Hy Lạp, tiếng Nhật, tiếng Hàn và tiếng Thổ Nhĩ Kỳ với sự trợ giúp của Google Dịch
+• Thực hiện một số cải tiến
+</vi>
+<zh-CN>
+• 在谷歌翻译的帮助下增加了对繁体中文、德语、希腊语、日语、韩语和土耳其语的支持
+• 做了些许改进
+</zh-CN>
+<zh-HK>
+• 在谷歌翻譯的幫助下增加了對繁體中文、德語、希臘語、日語、韓語和土耳其語的支持
+• 做了些許改進
+</zh-HK>
+<zh-TW>
+• 在谷歌翻譯的幫助下增加了對繁體中文、德語、希臘語、日語、韓語和土耳其語的支持
+• 做了些許改進
+</zh-TW>
+
+
+
 - **3.3** 20050313
 <en-US>
 App API

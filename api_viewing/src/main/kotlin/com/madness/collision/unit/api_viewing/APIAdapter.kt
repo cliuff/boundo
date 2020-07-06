@@ -116,6 +116,7 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
         fun getAndroidCodenameImageRes(letter: Char): Int {
             if (!EasyAccess.isSweet) return 0
             return when (letter) {
+                'r' -> MyR.drawable.seal_r_vector
                 'q' -> MyR.drawable.seal_q_vector
                 'p' -> MyR.drawable.seal_p_vector  // Pie
                 'o' -> MyR.drawable.sdk_seal_o  // Oreo
@@ -160,9 +161,11 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
                 return ThemeUtil.getColor(context, attrRes)
             }
             when (apiLevel) {
+                X.R -> if (isAccent) "acd5c1" else "defbf0"
+                X.Q -> if (isAccent) "c5e8b0" else "f7ffe9"
                 X.P -> if (isAccent) "e0c8b0" else "fff6d5"
                 X.O, X.O_MR1 -> if (isAccent) "b0b0b0" else "eeeeee"
-                X.N, X.N_MR1 -> if (isAccent) "ffb2a8" else "ffeeee"
+                X.N, X.N_MR1 -> if (isAccent) "ffb2a8" else "ffecf6"
                 X.M -> if (isAccent) "b0c9c5" else "e0f3f0"
                 X.L, X.L_MR1 -> if (isAccent) "ffb0b0" else "ffeeee"
                 X.K, X.K_WATCH -> if (isAccent) "d0c7ba" else "fff3e0"
@@ -437,27 +440,7 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
         }
 
         if (EasyAccess.shouldShowTagPackageInstaller) {
-            context.packageManager.getInstallerPackageName(appInfo.packageName)?.let {
-                val installerGPlay = "com.android.vending"
-                val isGp = it == installerGPlay
-                val showGp = EasyAccess.shouldShowTagPackageInstallerGooglePlay && isGp
-                val showPi = EasyAccess.shouldShowTagPackageInstallerPackageInstaller && !isGp
-                if (!showGp && !showPi) return@let
-                val installerName = MiscApp.getApplicationInfo(context, packageName = it)
-                        ?.loadLabel(context.packageManager)?.toString() ?: ""
-                val name = if (installerName.isNotEmpty()) {
-                    installerName
-                } else {
-                    val installerAndroid = "com.google.android.packageinstaller"
-                    when (it) {
-                        installerGPlay -> context.getString(MyR.string.apiDetailsInstallGP)
-                        installerAndroid -> context.getString(MyR.string.apiDetailsInstallPI)
-                        "null" -> null
-                        else -> null
-                    }
-                }
-                if (name != null) holder.inflateTag(name)
-            }
+            tagPackageInstaller(appInfo, holder)
         }
         if (EasyAccess.shouldShowTagPrivilegeSystem && appInfo.apiUnit == ApiUnit.SYS) {
             holder.inflateTag(MyR.string.av_adapter_tag_system)
@@ -465,22 +448,7 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
         var layoutNativeLib: (() -> Unit)? = null
         if (EasyAccess.shouldShowTagCrossPlatform || EasyAccess.shouldShowTagNativeLib) {
             layoutNativeLib = {
-                val nls = appInfo.nativeLibraries
-                if (EasyAccess.shouldShowTagNativeLib) {
-                    if (EasyAccess.shouldShowTagNativeLibArm) {
-                        if (nls[0]) holder.inflateTag("arm32")
-                        if (nls[1]) holder.inflateTag("arm64")
-                    }
-                    if (EasyAccess.shouldShowTagNativeLibX86) {
-                        if (nls[2]) holder.inflateTag("x86")
-                        if (nls[3]) holder.inflateTag("x64")
-                    }
-                }
-                if (EasyAccess.shouldShowTagCrossPlatform) {
-                    if (EasyAccess.shouldShowTagCrossPlatformFlutter && nls[4]) holder.inflateTag("Flutter")
-                    if (EasyAccess.shouldShowTagCrossPlatformReactNative && nls[5]) holder.inflateTag("React Native")
-                    if (EasyAccess.shouldShowTagCrossPlatformXarmarin && nls[6]) holder.inflateTag("Xamarin")
-                }
+                tagNativeLibs(appInfo, holder)
             }
         }
 
@@ -536,6 +504,57 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
         }
     }
 
+    private fun tagHidden(appInfo: ApiViewingApp, holder: Holder) {
+        // todo app that does not show in launcher
+    }
+
+    private fun tagNativeLibs(appInfo: ApiViewingApp, holder: Holder) {
+        val nls = appInfo.nativeLibraries
+        if (EasyAccess.shouldShowTagNativeLib) {
+            if (EasyAccess.shouldShowTagNativeLibArm) {
+                if (nls[0]) holder.inflateTag("arm32")
+                if (nls[1]) holder.inflateTag("arm64")
+            }
+            if (EasyAccess.shouldShowTagNativeLibX86) {
+                if (nls[2]) holder.inflateTag("x86")
+                if (nls[3]) holder.inflateTag("x64")
+            }
+        }
+        if (EasyAccess.shouldShowTagCrossPlatform) {
+            if (EasyAccess.shouldShowTagCrossPlatformFlutter && nls[4]) holder.inflateTag("Flutter")
+            if (EasyAccess.shouldShowTagCrossPlatformReactNative && nls[5]) holder.inflateTag("React Native")
+            if (EasyAccess.shouldShowTagCrossPlatformXarmarin && nls[6]) holder.inflateTag("Xamarin")
+        }
+    }
+
+    private fun tagPackageInstaller(appInfo: ApiViewingApp, holder: Holder) {
+        val installer = try {
+            context.packageManager.getInstallerPackageName(appInfo.packageName) ?: return
+        } catch (e: IllegalArgumentException) {
+            e.printStackTrace()
+            return
+        }
+        val installerGPlay = ApiViewingApp.packagePlayStore
+        val isGp = installer == installerGPlay
+        val showGp = EasyAccess.shouldShowTagPackageInstallerGooglePlay && isGp
+        val showPi = EasyAccess.shouldShowTagPackageInstallerPackageInstaller && !isGp
+        if (!showGp && !showPi) return
+        val installerName = MiscApp.getApplicationInfo(context, packageName = installer)
+                ?.loadLabel(context.packageManager)?.toString() ?: ""
+        val name = if (installerName.isNotEmpty()) {
+            installerName
+        } else {
+            val installerAndroid = ApiViewingApp.packagePackageInstaller
+            when (installer) {
+                installerGPlay -> context.getString(MyR.string.apiDetailsInstallGP)
+                installerAndroid -> context.getString(MyR.string.apiDetailsInstallPI)
+                "null" -> null
+                else -> null
+            }
+        }
+        if (name != null) holder.inflateTag(name)
+    }
+
     private fun actionDetails(appInfo: ApiViewingApp) {
         val pop = CollisionDialog(context, R.string.text_alright)
         pop.setContent(0)
@@ -578,15 +597,20 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
                         .append(format.format(cal.time))
                         .append('\n')
                 builder.append(context.getString(MyR.string.apiDetailsInsatllFrom), StyleSpan(Typeface.BOLD), spanFlags)
-                val installer = context.packageManager.getInstallerPackageName(appInfo.packageName)
+                val installer: String? = try {
+                    context.packageManager.getInstallerPackageName(appInfo.packageName)
+                } catch (e: IllegalArgumentException) {
+                    e.printStackTrace()
+                    null
+                }
                 if (installer != null) {
                     val installerName = MiscApp.getApplicationInfo(context, packageName = installer)
                             ?.loadLabel(context.packageManager)?.toString() ?: ""
                     if (installerName.isNotEmpty()) {
                         builder.append(installerName)
                     } else {
-                        val installerAndroid = "com.google.android.packageinstaller"
-                        val installerGPlay = "com.android.vending"
+                        val installerAndroid = ApiViewingApp.packagePackageInstaller
+                        val installerGPlay = ApiViewingApp.packagePlayStore
                         when (installer) {
                             installerGPlay ->
                                 builder.append(context.getString(MyR.string.apiDetailsInstallGP))

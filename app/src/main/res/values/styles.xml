@@ -490,4 +490,8 @@
         <item name="android:drawablePadding">20dp</item>
     </style>
 
+    <style name="AvTagText" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textSize">10sp</item>
+    </style>
+
 </resources>

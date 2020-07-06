@@ -180,7 +180,7 @@
     <string name="instantTileMDUManual">点击磁贴以刷新数据。添加该磁贴时会提示授予使用统计权限。</string>
     <string name="instantTileScannerAlipayManual">点击磁贴以截屏并调用支付宝扫一扫扫描屏幕截图。</string>
     <string name="instantTileScannerMmManual">点击磁贴以截屏并打开微信扫一扫手动选取屏幕截图扫描。</string>
-    <string name="instantManual">在桌面上长按应用图标以调出“应用 Shortcuts”。\n下拉通知栏，通知区域上面的那些设置开关便是”快捷设置磁贴“。</string>
+    <string name="instantManual">在桌面上长按应用图标以调出“应用 Shortcuts”。\n下拉通知栏，通知区域上面的那些设置开关便是“快捷设置磁贴”。</string>
     <string name="textDuplicate">复制</string>
     <string name="avAdapterActionsApk">分享安装包</string>
     <string name="avAdapterActionsDetails">详情</string>

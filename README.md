@@ -1,16 +1,16 @@
 # Boundo
 
 **Requirement**
-- Android Studio 3.6
-- Gradle 6.3
+- Android Studio 4.0
+- Gradle 6.5.1
 
 **After check-out**
-- Add a file named **custom.properties** in project root directory, within add the following lines:
-> packageName=com.madness.collision  
-> signingKeyStorePath=**KeyStorePath**  
-> signingKeyStorePassword=**KeyStorePassword**  
-> signingKeyAlias=**KeyAlias**  
-> signingKeyPassword=**KeyPassword**  
+- Add a file named `custom.properties` in project root directory, within add the following lines:
+> packageName=com.madness.collision
+> signingKeyStorePath=**KeyStorePath**
+> signingKeyStorePassword=**KeyStorePassword**
+> signingKeyAlias=**KeyAlias**
+> signingKeyPassword=**KeyPassword**
 
 **After sync**
 - **Edit Configurations**: configuration **app**, change **deploy** to **APK from app bundle**

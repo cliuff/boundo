@@ -21,15 +21,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.X
 import com.madness.collision.util.availableWidth
 import kotlinx.android.synthetic.main.av_list.*
 import kotlin.math.roundToInt
 
-internal class AppListFragment : Fragment() {
+internal class AppListFragment : TaggedFragment() {
+
+    override val category: String = "AV"
+    override val id: String = "AppList"
 
     companion object {
         private const val ARG_IS_SCROLLBAR_ENABLED = "isScrollbarEnabled"

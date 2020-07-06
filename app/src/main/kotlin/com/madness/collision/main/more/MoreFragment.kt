@@ -25,7 +25,6 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
 import com.google.android.material.card.MaterialCardView
@@ -36,7 +35,11 @@ import com.madness.collision.main.MainViewModel
 import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.util.*
 
-class MoreFragment : Fragment(), Democratic, View.OnClickListener, NavNode {
+class MoreFragment : TaggedFragment(), Democratic, View.OnClickListener, NavNode {
+
+    override val category: String = "More"
+    override val id: String = "More"
+    
     companion object {
         @JvmStatic
         fun newInstance() = MoreFragment()

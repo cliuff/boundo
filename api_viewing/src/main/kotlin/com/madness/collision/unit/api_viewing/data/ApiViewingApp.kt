@@ -35,6 +35,8 @@ import com.madness.collision.R
 import com.madness.collision.misc.MiscApp
 import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.api_viewing.Utils
+import com.madness.collision.unit.api_viewing.util.ApkUtil
+import com.madness.collision.unit.api_viewing.util.ManifestUtil
 import com.madness.collision.util.*
 import java.io.File
 import kotlin.math.max
@@ -50,6 +52,8 @@ internal class ApiViewingApp(
         const val packagePlayStore = "com.android.vending"
         const val pageSettings = "settings"
         const val pageApk = "apk"
+
+        const val packagePackageInstaller = "com.google.android.packageinstaller"
 
         private const val TYPE_ICON = 2
         private const val TYPE_APP = 1

@@ -1,4 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2020 Clifford Liu
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <resources>
     <string name="timetable_load_remove">移除当前课表</string>
     <string name="timetable_load_new">从剪贴板加载新课表</string>
@@ -6,7 +22,6 @@
     <string name="timetable_manual_browsers">Chrome浏览器、Microsoft Edge、三星浏览器、Via浏览器、X浏览器、神奇浏览器、VC浏览器、旗鱼浏览器、Lim浏览器、H5浏览器、欧朋浏览器、百度浏览器、360浏览器、搜狗浏览器、羽·浏览器、遨游云浏览器 等等\n\n不支持的浏览器(国内应用市场及Play市场版本）：\nUC浏览器、火狐浏览器、QQ浏览器、夸克浏览器 等</string>
     <string name="ttExport">导出课表</string>
     <string name="ttTimeNotice">请为课表设置时间和日期</string>
-    <string name="ics_TextView_instruction">功能详情：\n1. 解析教务系统课表，只支持部分正方教务系统\n2. 基于课表生成日历文件 (iCalendar, .ics)，可导入至谷歌日历等\n3. 当周指示，在每周周一创建全天事件，指示当周是第几周\n\n注意事项：\n1. 在导入日历前请设置好时间和日期\n2. 若教务系统课表发生变动，请按原步骤重新导入或者直接在本App内修改\n3. 无论如何，在将新课表导出至日历前必须撤销上一次导入日历的课表\n \n 解析教务系统课表：\n1. 用支持的浏览器打开学校正方教务系统页面并找到你想要导入的课表\n2. 在课表任意课程上长按以进入文本选择模式，接着按全选然后按复制，此时课表内容已经复制至剪贴板\n3. 回到本App点击 从剪贴板加载课表</string>
     <string name="ics_Toast_open_fail">打开失败，请下载相关软件！</string>
     <string name="ics_Toast_generating_success">完成！</string>
     <string name="ics_Toast_classtime_generating_fail">生成上课时间失败！</string>
@@ -62,4 +77,7 @@
     <string name="ttValidateName">请验证好课程名</string>
     <string name="Advice_TextView_IssueReport_Text">课表代码文件</string>
     <string name="advice_textview_issue_details">从剪贴板里的课表内容生成的HTML文件</string>
+    <string name="st_manual_features">功能详情：\n1. 解析教务系统课表，只支持部分正方教务系统\n2. 基于课表生成日历文件 (iCalendar, .ics)，可导入至谷歌日历等\n3. 当周指示，在每周周一创建全天事件，指示当周是第几周</string>
+    <string name="st_manual_notes">注意事项：\n1. 在导入日历前请设置好时间和日期\n2. 若教务系统课表发生变动，请按原步骤重新导入或者直接在本App内修改\n3. 无论如何，在将新课表导出至日历前必须撤销上一次导入日历的课表</string>
+    <string name="st_manual_instructions">解析教务系统课表：\n1. 用支持的浏览器打开学校正方教务系统页面并找到你想要导入的课表\n2. 在课表任意课程上长按以进入文本选择模式，接着按全选然后按复制，此时课表内容已经复制至剪贴板\n3. 回到本App点击 从剪贴板加载课表</string>
 </resources>

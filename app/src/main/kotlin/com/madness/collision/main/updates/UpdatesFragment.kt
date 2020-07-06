@@ -31,18 +31,29 @@ import com.madness.collision.databinding.MainUpdatesHeaderBinding
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.UpdatesProvider
+import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.X
 import com.madness.collision.util.alterPadding
 import com.madness.collision.util.ensureAdded
 import kotlinx.android.synthetic.main.fragment_updates.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
-internal class UpdatesFragment : Fragment(), Democratic {
+internal class UpdatesFragment : TaggedFragment(), Democratic {
+
+    override val category: String = "MainUpdates"
+    override val id: String = "Updates"
 
     private lateinit var mContext: Context
     private val mainViewModel: MainViewModel by activityViewModels()
-    private lateinit var updatesProviders: List<Pair<String, UpdatesProvider>>
-    private lateinit var fragments: List<Pair<String, Fragment>>
+    private var updatesProviders: MutableList<Pair<String, UpdatesProvider>> = mutableListOf()
+    private var fragments: MutableList<Pair<String, Fragment>> = mutableListOf()
+    private var _fixedChildCount: Int = 0
+    private val fixedChildCount: Int
+    get() = _fixedChildCount
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
         toolbar.setTitle(R.string.main_updates)
@@ -52,14 +63,6 @@ internal class UpdatesFragment : Fragment(), Democratic {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mContext = context ?: return
-        updatesProviders = Unit.getPinnedUnits(mContext).mapNotNull {
-            Unit.getUpdates(it)?.run { it to this }
-        }
-        fragments = updatesProviders.mapNotNull {
-            if (it.second.hasUpdates(this)) it.second.getFragment()?.run {
-                it.first to this
-            } else null
-        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -67,27 +70,8 @@ internal class UpdatesFragment : Fragment(), Democratic {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        loadUpdates()
-    }
-
-    private fun loadUpdates() {
-        mainUpdatesSecUpdates.visibility = if (fragments.isEmpty()) View.GONE else View.VISIBLE
-        // clear
-        val fixedChildCount = 3
-        if (mainUpdatesContainer.childCount > fixedChildCount) {
-            mainUpdatesContainer.removeViews(fixedChildCount, mainUpdatesContainer.childCount - fixedChildCount)
-        }
-        val inflater = LayoutInflater.from(context)
-        for ((unitName, f) in fragments) {
-            val header = MainUpdatesHeaderBinding.inflate(inflater, mainUpdatesContainer, true)
-            ensureAdded(R.id.mainUpdatesContainer, f)
-            val description = Unit.getDescription(unitName) ?: continue
-            header.mainUpdatesHeader.setCompoundDrawablesRelativeWithIntrinsicBounds(description.getIcon(mContext), null, null, null)
-            header.mainUpdatesHeader.text = description.getName(mContext)
-            header.mainUpdatesHeader.setOnClickListener {
-                mainViewModel.displayUnit(unitName, shouldShowNavAfterBack = true)
-            }
-        }
+        super.onViewCreated(view, savedInstanceState)
+        _fixedChildCount = mainUpdatesContainer.childCount
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -99,6 +83,73 @@ internal class UpdatesFragment : Fragment(), Democratic {
         }
         mainViewModel.contentWidthBottom.observe(viewLifecycleOwner) {
             mainUpdatesContainer.alterPadding(bottom = it + extra)
+        }
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        loadUpdates()
+    }
+
+    /**
+     * Remove all the updates, especially the fragments from fragment manager
+     */
+    private fun clearUpdates() {
+        if (fragments.isEmpty()) return
+        val transaction = childFragmentManager.beginTransaction()
+        fragments.forEach {
+            transaction.remove(it.second)
+        }
+        transaction.commitNowAllowingStateLoss()
+        // clear headers
+        if (mainUpdatesContainer.childCount > fixedChildCount) {
+            mainUpdatesContainer.removeViews(fixedChildCount, mainUpdatesContainer.childCount - fixedChildCount)
+        }
+    }
+
+    private fun loadUpdates() {
+        // clear old updates
+        clearUpdates()
+        // load latest updates
+        updatesProviders = Unit.getPinnedUnits(mContext).mapNotNull {
+            Unit.getUpdates(it)?.run { it to this }
+        }.toMutableList()
+        fragments = updatesProviders.mapNotNull {
+            if (it.second.hasUpdates(this)) it.second.getFragment()?.run {
+                it.first to this
+            } else null
+        }.toMutableList()
+        mainUpdatesSecUpdates.visibility = if (fragments.isEmpty()) View.GONE else View.VISIBLE
+        val inflater = LayoutInflater.from(context)
+        for ((_, f) in fragments) {
+            ensureAdded(R.id.mainUpdatesContainer, f, true)
+        }
+        GlobalScope.launch {
+            delay(100)
+            launch(Dispatchers.Main) {
+                for (i in fragments.indices) {
+                    val (unitName, _) = fragments[i]
+                    val header = MainUpdatesHeaderBinding.inflate(inflater, mainUpdatesContainer, false)
+                    val description = Unit.getDescription(unitName) ?: continue
+                    mainUpdatesContainer.addView(header.root, fixedChildCount + i * 2)
+                    header.mainUpdatesHeader.setCompoundDrawablesRelativeWithIntrinsicBounds(description.getIcon(mContext), null, null, null)
+                    header.mainUpdatesHeader.text = description.getName(mContext)
+                    header.mainUpdatesHeader.setOnClickListener {
+                        mainViewModel.displayUnit(unitName, shouldShowNavAfterBack = true)
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (!hidden) {
+            loadUpdates()
+        } else {
+            fragments.forEach { (_, f) ->
+                f.onHiddenChanged(hidden)
+            }
         }
     }
 

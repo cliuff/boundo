@@ -51,7 +51,11 @@ import java.util.*
 import kotlin.math.roundToInt
 import com.madness.collision.unit.qq_contacts.R as MyR
 
-internal class QqFragment : Fragment(), Democratic {
+internal class QqFragment : TaggedFragment(), Democratic {
+
+    override val category: String = "QC"
+    override val id: String = "QQ"
+
     companion object{
         private const val REQUEST_LOAD_IMAGE = 10
         private const val ARG_CONTACT = "argContact"

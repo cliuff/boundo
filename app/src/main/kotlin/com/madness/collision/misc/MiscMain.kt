@@ -120,6 +120,10 @@ internal object MiscMain {
                 }
             }
         }
+        if ((verOri in 0 until 20070119) && X.aboveOn(X.N_MR1)) {
+            val sm = context.getSystemService(ShortcutManager::class.java)
+            if (sm != null) Instant(context, sm).refreshDynamicShortcuts(P.SC_ID_AUDIO_TIMER)
+        }
     }
 
     private fun initPinnedUnits(pref: SharedPreferences) {

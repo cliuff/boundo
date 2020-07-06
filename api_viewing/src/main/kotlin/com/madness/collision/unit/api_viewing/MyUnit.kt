@@ -51,22 +51,28 @@ import com.madness.collision.unit.api_viewing.util.PrefUtil
 import com.madness.collision.util.*
 import kotlinx.android.synthetic.main.fragment_api.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.io.File
 import com.madness.collision.unit.api_viewing.R as MyR
 
-class MyUnit: com.madness.collision.unit.Unit(), AdapterView.OnItemSelectedListener, MenuItem.OnMenuItemClickListener{
+class MyUnit: com.madness.collision.unit.Unit() {
+
+    override val id: String = "AV"
+
     companion object {
 //        const val ARG_INTENT = "intent"
         const val EXTRA_DATA_STREAM = AccessAV.EXTRA_DATA_STREAM
 
         const val HANDLE_DISPLAY_APK = AccessAV.HANDLE_DISPLAY_APK
 
-        private const val DISPLAY_APPS_USER: Int = 0
-        private const val DISPLAY_APPS_SYSTEM: Int = 1
-        private const val DISPLAY_APPS_ALL: Int = 2
-        private const val DISPLAY_APPS_APK: Int = 3
-        private const val DISPLAY_APPS_SELECT: Int = 4
-        private const val DISPLAY_APPS_VOLUME: Int = 5
+        const val DISPLAY_APPS_USER: Int = 0
+        const val DISPLAY_APPS_SYSTEM: Int = 1
+        const val DISPLAY_APPS_ALL: Int = 2
+        const val DISPLAY_APPS_APK: Int = 3
+        const val DISPLAY_APPS_SELECT: Int = 4
+        const val DISPLAY_APPS_VOLUME: Int = 5
 
 //        private val TAG = ApiFragment::class.java.simpleName
         private const val REQUEST_OPEN_DIRECTORY = 2
@@ -95,7 +101,7 @@ class MyUnit: com.madness.collision.unit.Unit(), AdapterView.OnItemSelectedListe
     // data
     private var extras: Bundle? = null
     private var mode = 0
-    private var sortItem: Int = SORT_POSITION_API_LOW
+    private var sortItem: Int = SORT_POSITION_API_TIME
     private var displayItem: Int = DISPLAY_APPS_USER
     private val loadedItems: ApiUnit
         get() = viewModel.loadedItems
@@ -109,10 +115,11 @@ class MyUnit: com.madness.collision.unit.Unit(), AdapterView.OnItemSelectedListe
     private lateinit var rDisplay: RunnableDisplay
 
     // views
-    private lateinit var spDisplayMethod: Spinner
     lateinit var refreshLayout: SwipeRefreshLayout
     private lateinit var adapter: APIAdapter
+    // set as null when hidden, so as to fix anchor problem
     private var popSort: PopupMenu? = null
+    private var popSrc: PopupMenu? = null
 
     // context related
     private lateinit var pm: PackageManager
@@ -182,7 +189,6 @@ class MyUnit: com.madness.collision.unit.Unit(), AdapterView.OnItemSelectedListe
                         }
                         refreshLayout.isRefreshing = true
                         if (sAft.isEmpty()) {
-                            //service.submit{ refreshHandler.obtainMessage(HANDLE_REFRESH_LIST).sendToTarget() }
                             context?.let { context -> ApiTaskManager.now { handleRefreshList(context) } }
                         }else {
                             val isAddition = sAft.startsWith(sOri)
@@ -200,7 +206,9 @@ class MyUnit: com.madness.collision.unit.Unit(), AdapterView.OnItemSelectedListe
                     popSort = PopupMenu(context, activity.findViewById(MyR.id.apiTBSort))
                     popSort!!.run {
                         menuInflater.inflate(MyR.menu.api_sort, menu)
-                        setOnMenuItemClickListener(this@MyUnit::onMenuItemClick)
+                        setOnMenuItemClickListener {
+                            clickSortItem(it)
+                        }
                         menu.getItem(sortItem).isChecked = true
                     }
                 }
@@ -237,14 +245,21 @@ class MyUnit: com.madness.collision.unit.Unit(), AdapterView.OnItemSelectedListe
         if (tbDrawable == null) tbDrawable = ColorDrawable(colorTb)
 
         settingsPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
-        if (!settingsPreferences.getBoolean("APIViewerInitialized", false)){
-            settingsPreferences.edit { putBoolean("APIViewerInitialized", true) }
+        if (!settingsPreferences.getBoolean(PrefUtil.AV_INIT_NOTIFY, PrefUtil.AV_INIT_NOTIFY_DEFAULT)){
+            settingsPreferences.edit { putBoolean(PrefUtil.AV_INIT_NOTIFY, true) }
             notify(R.string.api_viewer_initialize)
         }
 
         EasyAccess.init(context, settingsPreferences)
 
         listFragment = AppListFragment.newInstance()
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        if (hidden) {
+            popSort = null
+        }
+        super.onHiddenChanged(hidden)
     }
 
     override fun onStop() {
@@ -326,19 +341,18 @@ class MyUnit: com.madness.collision.unit.Unit(), AdapterView.OnItemSelectedListe
      * from text processing activity, app list is empty
      */
     private fun displaySearch(context: Context, text: String){
-        if (text.isNotEmpty()) {
-            val installedApps: List<PackageInfo> = pm.getInstalledPackages(0)
-            val apps = mutableListOf<ApiViewingApp>()
-            for (appInfo in installedApps) {
-                val label = appInfo.applicationInfo.loadLabel(pm)
-                if (label.contains(text, true)) {
-                    apps.add(ApiViewingApp(context, appInfo, preloadProcess = true, archive = false))
-                }
+        if (text.isEmpty()) return
+        val installedApps: List<PackageInfo> = pm.getInstalledPackages(0)
+        val apps = mutableListOf<ApiViewingApp>()
+        for (appInfo in installedApps) {
+            val label = appInfo.applicationInfo.loadLabel(pm)
+            if (label.contains(text, true)) {
+                apps.add(ApiViewingApp(context, appInfo, preloadProcess = true, archive = false))
             }
-            viewModel.addApps(apps)
-            viewModel.sortApps(sortItem)
-            handleRefreshList(context)
         }
+        viewModel.addApps(apps)
+        viewModel.sortApps(sortItem)
+        handleRefreshList(context)
     }
 
     /**
@@ -373,7 +387,7 @@ class MyUnit: com.madness.collision.unit.Unit(), AdapterView.OnItemSelectedListe
             }
         }
 
-        sortItem = settingsPreferences.getInt("SDKCheckSortSpinnerSelection", 0)
+        sortItem = settingsPreferences.getInt(PrefUtil.AV_SORT_ITEM, PrefUtil.AV_SORT_ITEM_DEFAULT)
         rSort = RunnableSort(sortItem)
         adapter.setSortMethod(sortItem)
 
@@ -390,27 +404,6 @@ class MyUnit: com.madness.collision.unit.Unit(), AdapterView.OnItemSelectedListe
             ApiTaskManager.now {
                 loadSortedList(ApiUnit.NON, sortEfficiently = true, fg = true)
             }
-        }
-
-        if (mode != LAUNCH_MODE_SEARCH && mode != LAUNCH_MODE_LINK){
-            spDisplayMethod = apiSpinnerDisplay
-            val displayMethod = arrayOf(
-                    getString(MyR.string.sdkcheck_displayspinner_user),
-                    getString(R.string.apiDisplaySys),
-                    getString(MyR.string.sdkcheck_displayspinner_usersystem),
-                    getString(R.string.apiDisplayAPK),
-                    getString(R.string.apiDisplayFile),
-                    getString(R.string.apiDisplayVolume)
-            )
-            spDisplayMethod.adapter = ArrayAdapter(context, R.layout.pop_list_item, displayMethod)
-            spDisplayMethod.onItemSelectedListener = this
-            displayItem = settingsPreferences.getInt("SDKCheckDisplaySpinnerSelection", 0)
-            rDisplay = RunnableDisplay(displayItem)
-            spDisplayMethod.setSelection(displayItem)
-            // if modify spinner's background directly, the arrow icon will disappear
-//            apiSpinnerDisplayBack.background = tbDrawable
-            X.curvedCard(apiSpinnerDisplayBack)
-            X.curvedCard(apiStatsBack)
         }
 
         democratize()
@@ -444,6 +437,22 @@ class MyUnit: com.madness.collision.unit.Unit(), AdapterView.OnItemSelectedListe
 
         MainActivity.syncScroll(mScrollBehavior)
 
+        if (mode != LAUNCH_MODE_SEARCH && mode != LAUNCH_MODE_LINK){
+            displayItem = settingsPreferences.getInt(PrefUtil.AV_LIST_SRC_ITEM, PrefUtil.AV_LIST_SRC_ITEM_DEFAULT)
+            popSrc = PopupMenu(context, avListSrc).apply {
+                menuInflater.inflate(MyR.menu.av_list_src, menu)
+                setOnMenuItemClickListener {
+                    clickListSrcItem(it)
+                }
+            }
+            avListSrc.setOnClickListener {
+                popSrc?.show()
+            }
+            rDisplay = RunnableDisplay(displayItem)
+            X.curvedCard(apiSpinnerDisplayBack)
+            X.curvedCard(apiStatsBack)
+        }
+
         if (X.aboveOn(X.N)){
             val apkDisplayDragListener = object : View.OnDragListener{
                 var permission: DragAndDropPermissions? = null
@@ -464,6 +473,103 @@ class MyUnit: com.madness.collision.unit.Unit(), AdapterView.OnItemSelectedListe
             }
             apiContainer.setOnDragListener(apkDisplayDragListener)
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (mode != LAUNCH_MODE_SEARCH && mode != LAUNCH_MODE_LINK) {
+            // fix refreshing animation not shown
+            GlobalScope.launch {
+                delay(1)
+                launch(Dispatchers.Main) {
+                    selectListSrcItem(displayItem)
+                }
+            }
+        }
+        if (mode == LAUNCH_MODE_SEARCH && extras != null) {
+            GlobalScope.launch {
+                delay(1)
+                launch(Dispatchers.Main) {
+                    refreshLayout.isRefreshing = true
+                }
+            }
+        }
+    }
+
+    private fun clickSortItem(item: MenuItem): Boolean  {
+        refreshLayout.isRefreshing = true
+        when (item.itemId){
+            MyR.id.menuApiSortAPIL ->
+                sortItem = SORT_POSITION_API_LOW
+            MyR.id.menuApiSortAPIH ->
+                sortItem = SORT_POSITION_API_HIGH
+            MyR.id.menuApiSortAPIName ->
+                sortItem = SORT_POSITION_API_NAME
+            MyR.id.menuApiSortAPITime ->
+                sortItem = SORT_POSITION_API_TIME
+        }
+        item.isChecked = true
+        rSort.position = sortItem
+        ApiTaskManager.join(task = rSort)
+        return true
+    }
+
+    /**
+     * Select an item
+     * Update menu item selection and invoke the corresponding callback
+     */
+    private fun selectListSrcItem(item: Int) {
+        popSrc?.menu?.getItem(item)?.let {
+            clickListSrcItem(it)
+        }
+    }
+
+    private fun clickListSrcItem(item: MenuItem): Boolean {
+        refreshLayout.isRefreshing = true
+        avListSrc.text = item.title
+        item.isChecked = true
+        var isStatsAvailable = false
+        when (item.itemId){
+            MyR.id.avListSrcUsr -> {
+                displayItem = DISPLAY_APPS_USER
+                isStatsAvailable = true
+                ApiUnit.USER
+            }
+            MyR.id.avListSrcSys -> {
+                displayItem = DISPLAY_APPS_SYSTEM
+                isStatsAvailable = true
+                ApiUnit.SYS
+            }
+            MyR.id.avListSrcAll -> {
+                displayItem = DISPLAY_APPS_ALL
+                isStatsAvailable = true
+                ApiUnit.ALL_APPS
+            }
+            MyR.id.avListSrcDeviceApk -> {
+                displayItem = DISPLAY_APPS_APK
+                ApiUnit.APK
+            }
+            MyR.id.avListSrcCustom -> {
+                displayItem = DISPLAY_APPS_SELECT
+                if (loadItem == ApiUnit.DISPLAY) ApiUnit.DISPLAY
+                else ApiUnit.SELECTED
+            }
+            MyR.id.avListSrcVolume -> {
+                displayItem = DISPLAY_APPS_VOLUME
+                ApiUnit.VOLUME
+            }
+            else -> null
+        }?.let { loadItem = it }
+        if (needPermission(REQUEST_EXTERNAL_STORAGE)) return true
+        rDisplay.position = displayItem
+        ApiTaskManager.join(task = rDisplay)
+        ApiTaskManager.now(Dispatchers.Main){
+            val listener = if (isStatsAvailable) View.OnClickListener {
+                mainViewModel.displayFragment(StatisticsFragment.newInstance(loadItem))
+            } else null
+            apiStats.setOnClickListener(listener)
+        }
+        return true
     }
 
     override fun onLowMemory() {
@@ -493,9 +599,14 @@ class MyUnit: com.madness.collision.unit.Unit(), AdapterView.OnItemSelectedListe
      */
     private fun loadSortedList(item: Int , sortEfficiently: Boolean , fg: Boolean ) {
         val context = context ?: return
+
         if (mode == LAUNCH_MODE_SEARCH && extras != null) {
+            // load as ApiUnit.ALL_APPS, because loadedItems is used to avoid repeated loading
+            if (!loadedItems.shouldLoad(ApiUnit.ALL_APPS)) return
+            loadedItems.loading(ApiUnit.ALL_APPS)
             val text = extras!!.getString(Intent.EXTRA_TEXT) ?: ""
             displaySearch(context, text)
+            loadedItems.finish(ApiUnit.ALL_APPS)
             return
         }
 
@@ -664,49 +775,6 @@ class MyUnit: com.madness.collision.unit.Unit(), AdapterView.OnItemSelectedListe
         }
     }
 
-    override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long )  {
-        if (parent == spDisplayMethod){
-            refreshLayout.isRefreshing = true
-            displayItem = position
-            var isStatsAvailable = false
-            when (position){
-                DISPLAY_APPS_USER -> {
-                    isStatsAvailable = true
-                    ApiUnit.USER
-                }
-                DISPLAY_APPS_SYSTEM -> {
-                    isStatsAvailable = true
-                    ApiUnit.SYS
-                }
-                DISPLAY_APPS_ALL -> {
-                    isStatsAvailable = true
-                    ApiUnit.ALL_APPS
-                }
-                DISPLAY_APPS_APK -> ApiUnit.APK
-                DISPLAY_APPS_SELECT -> {
-                    if (loadItem == ApiUnit.DISPLAY) ApiUnit.DISPLAY
-                    else ApiUnit.SELECTED
-                }
-                DISPLAY_APPS_VOLUME -> ApiUnit.VOLUME
-                else -> null
-            }?.let { loadItem = it }
-            if (needPermission(REQUEST_EXTERNAL_STORAGE)) return
-            rDisplay.position = position
-            //service.submit(rDisplay)
-            ApiTaskManager.join(task = rDisplay)
-            ApiTaskManager.now(Dispatchers.Main){
-                val listener = if (isStatsAvailable) View.OnClickListener {
-                    mainViewModel.displayFragment(StatisticsFragment.newInstance(loadItem))
-                } else null
-                apiStats.setOnClickListener(listener)
-            }
-        }
-    }
-
-    override fun onNothingSelected(parent: AdapterView<*>)  {
-
-    }
-
     private fun needPermission(requestCode: Int ): Boolean {
         val context = context ?: return false
         return if (displayItem == DISPLAY_APPS_APK){
@@ -749,35 +817,10 @@ class MyUnit: com.madness.collision.unit.Unit(), AdapterView.OnItemSelectedListe
         }
         if (requestCode == REQUEST_EXTERNAL_STORAGE){
             rDisplay.position = displayItem
-            //service.submit(rDisplay)
             ApiTaskManager.join(task = rDisplay)
         }else if (requestCode == REQUEST_EXTERNAL_STORAGE_RE){
             refreshList()
         }
-    }
-/*
-    override fun onDestroy()  {
-        super.onDestroy()
-        service.shutdownNow()
-    }*/
-
-    override fun onMenuItemClick(item: MenuItem): Boolean  {
-        refreshLayout.isRefreshing = true
-        when (item.itemId){
-            MyR.id.menuApiSortAPIL ->
-                sortItem = SORT_POSITION_API_LOW
-            MyR.id.menuApiSortAPIH ->
-                sortItem = SORT_POSITION_API_HIGH
-            MyR.id.menuApiSortAPIName ->
-                sortItem = SORT_POSITION_API_NAME
-            MyR.id.menuApiSortAPITime ->
-                sortItem = SORT_POSITION_API_TIME
-        }
-        item.isChecked = true
-        rSort.position = sortItem
-        //service.submit(rSort)
-        ApiTaskManager.join(task = rSort)
-        return true
     }
 
     private interface RunnableAPI{
@@ -787,7 +830,7 @@ class MyUnit: com.madness.collision.unit.Unit(), AdapterView.OnItemSelectedListe
     private inner class RunnableSort(override var position: Int) : Runnable, RunnableAPI {
         override fun run()  {
             adapter.setSortMethod(position)
-            settingsPreferences.edit { putInt("SDKCheckSortSpinnerSelection", position) }
+            settingsPreferences.edit { putInt(PrefUtil.AV_SORT_ITEM, position) }
             viewModel.sortApps(sortItem)
             context?.let { handleRefreshList(it) }
         }
@@ -795,8 +838,9 @@ class MyUnit: com.madness.collision.unit.Unit(), AdapterView.OnItemSelectedListe
 
     private inner class RunnableDisplay(override var position: Int) : Runnable, RunnableAPI {
         override fun run()  {
-            if (position != DISPLAY_APPS_SELECT && position != DISPLAY_APPS_VOLUME)
-                settingsPreferences.edit { putInt("SDKCheckDisplaySpinnerSelection", position) }
+            if (position != DISPLAY_APPS_SELECT && position != DISPLAY_APPS_VOLUME) {
+                settingsPreferences.edit { putInt(PrefUtil.AV_LIST_SRC_ITEM, position) }
+            }
             loadSortedList(loadItem, sortEfficiently = true, fg = true)
             viewModel.sortApps(sortItem)
             context?.let { handleRefreshList(it) }
@@ -818,7 +862,7 @@ class MyUnit: com.madness.collision.unit.Unit(), AdapterView.OnItemSelectedListe
             if (!description.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
                 loadItem = ApiUnit.DISPLAY
                 ApiTaskManager.now(Dispatchers.Main) {
-                    spDisplayMethod.setSelection(DISPLAY_APPS_SELECT)
+                    selectListSrcItem(DISPLAY_APPS_SELECT)
                 }
             }
             val mimeType = description.getMimeType(0)

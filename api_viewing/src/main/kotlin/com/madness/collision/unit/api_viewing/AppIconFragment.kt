@@ -28,7 +28,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
 import com.madness.collision.Democratic
@@ -36,12 +35,17 @@ import com.madness.collision.R
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.misc.MiscApp
 import com.madness.collision.unit.api_viewing.data.AppIcon
+import com.madness.collision.unit.api_viewing.util.ManifestUtil
 import com.madness.collision.util.*
 import kotlinx.android.synthetic.main.dialog_api_sub_ai.*
 import java.io.File
 import com.madness.collision.unit.api_viewing.R as MyR
 
-internal class AppIconFragment : Fragment(), Democratic {
+internal class AppIconFragment : TaggedFragment(), Democratic {
+
+    override val category: String = "AV"
+    override val id: String = "AppIcon"
+
     companion object {
         const val ARG_APP_NAME = "Name"
         const val ARG_PACKAGE_NAME = "PackageName"

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2020 Clifford Liu
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="Main_WeChatLauncher_Toast_State_ShiftEnabled">Jetzt aktiviert, benötigt der Launcher einige Sekunden, um implementiert zu werden</string>
+    <string name="Main_WeChatLauncher_Toast_State_ShiftDisabled">Jetzt deaktiviert, benötigt Launcher einige Sekunden, um implementiert zu werden</string>
+    <string name="we_note">Probieren Sie diese Funktion nicht aus, wenn Sie einen App-Launcher ohne App-Schublade verwenden (die meisten chinesischen Telefone)\n\nWenn Sie versehentlich feststellen, dass das Startsymbol von Boundo fehlt, deinstallieren Sie zuerst die App und installieren Sie sie erneut\n\nWenn Sie dieses Gerät aktivieren, beachten Sie bitte, dass das Boundo WeChat-Symbol (wenn es an den Desktop gesendet wird) nach dem Neustart des Geräts in das Boundo-Symbol geändert wird und das WeChat-Verknüpfungssymbol (wenn es auf dem Desktop angeheftet ist) fehlt</string>
+</resources>

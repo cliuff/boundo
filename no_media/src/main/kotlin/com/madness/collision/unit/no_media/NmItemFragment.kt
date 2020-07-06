@@ -25,7 +25,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
@@ -45,7 +44,10 @@ import java.io.File
 import kotlin.math.roundToInt
 import com.madness.collision.unit.no_media.R as MyR
 
-internal class NmItemFragment: Fragment(), Democratic, View.OnClickListener {
+internal class NmItemFragment: TaggedFragment(), Democratic, View.OnClickListener {
+
+    override val category: String = "NM"
+    override val id: String = "NmItem"
 
     companion object{
         const val EXTRA_PATH = "path"

@@ -40,7 +40,10 @@ import com.madness.collision.util.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-internal class UnitDescFragment : Fragment(), Democratic {
+internal class UnitDescFragment : TaggedFragment(), Democratic {
+
+    override val category: String = "UnitDesc"
+    override val id: String = "UnitDesc"
 
     companion object {
 

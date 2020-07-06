@@ -21,17 +21,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.madness.collision.databinding.FragmentUnitsBinding
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.settings.SettingsFunc
+import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.X
 import com.madness.collision.util.availableWidth
 import kotlin.math.roundToInt
 
-internal class UnitsFragment : Fragment() {
+internal class UnitsFragment : TaggedFragment() {
+
+    override val category: String = "Units"
+    override val id: String = "Units"
 
     companion object {
 

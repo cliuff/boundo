@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2020 Clifford Liu
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="timetable_load_remove">현재 수업 제거</string>
+    <string name="timetable_load_new">클립 보드에서 새로운 수업 일정을로드</string>
+    <string name="timetable_manual_browsers">Chrome 브라우저, Microsoft Edge, Samsung 브라우저, Via Via 브라우저, X 브라우저, Magic Browser, VC Browser, Sailfish Browser, Lim Browser, H5 Browser, Opera Browser, Baidu Browser, 360 Browser 브라우저, Sogou 브라우저, Yu · browser, Aoyou 클라우드 브라우저 등\n\n지원되지 않는 브라우저 (중국어 응용 프로그램 시장 및 Play 마켓 버전) :\nUC 브라우저, Firefox 브라우저, QQ 브라우저, 쿼크 브라우저 등</string>
+    <string name="timetable_manual_browser_support">브라우저 지원</string>
+    <string name="ttExport">수업 일정 내보내기</string>
+    <string name="ttTimeNotice">시간표의 시간과 날짜를 설정하십시오</string>
+    <string name="ics_Toast_open_fail">열지 못했습니다. 관련 소프트웨어를 다운로드하십시오!</string>
+    <string name="ics_Toast_generating_success">수행하다!</string>
+    <string name="ics_Toast_classtime_generating_fail">수업 시간을 생성하지 못했습니다!</string>
+    <string name="ics_Button_set_date">첫째 주 월요일</string>
+    <string name="ics_Button_set_time_morning">오전 수업 시간</string>
+    <string name="ics_Button_date_picker">시간과 날짜</string>
+    <string name="ics_Button_picker_finish">수행하다</string>
+    <string name="ics_Button_set_time_afternoon">오후 수업 시간</string>
+    <string name="ics_Button_set_time_evening">저녁 수업 시간</string>
+    <string name="ics_EditText_Time">%1$d 분</string>
+    <string name="ics_TextView_set_ClassTime_text">수업 시간-분</string>
+    <string name="ics_Undo_AlertDialog_Message">그래서 계속</string>
+    <string name="ics_Undo_AlertDialog_Button">계속하다</string>
+    <string name="ics_Undo_Toast_Nailed">수행하다</string>
+    <string name="Settings_Switch_icsDefault_Text">시간표를 Google 캘린더로 내보내기</string>
+    <string name="ics_Import_Toast_Null">수업 일정이 없습니다</string>
+    <string name="ics_Function_AlertDialog_Instruction">시작 및 종료 주 정보를 찾을 수 없습니다\n시작 및 종료 주를 수동으로 입력하십시오.</string>
+    <string name="ics_Function_AlertDialog_EditText_StartingWeekHint">시작 주</string>
+    <string name="ics_Function_AlertDialog_EditText_EndingWeekHint">종료 주</string>
+    <string name="ics_Function_AlertDialog_Title">빠진 정보</string>
+    <string name="ics_TextView_MorningBreakTimeInstruction_Text">아침 휴식</string>
+    <string name="ics_TextView_AfternoonBreakTimeInstruction_Text">오후 휴식</string>
+    <string name="ics_TextView_EveningBreakTimeInstruction_Text">야간 휴식 시간</string>
+    <string name="ics_TextView_InferiorBreakTime">작게 - 분</string>
+    <string name="ics_TextView_SuperiorBreakTime">크게 - 분</string>
+    <string name="ics_TextView_ChooseBreakTime">위의 모든 기간의 기본 기간을 설정하면 아래에 설정된 기간이 해당 기간에 해당하는 기본 기간보다 우선합니다.</string>
+    <string name="ics_Part1_Button_OK_Text">확인하다</string>
+    <string name="ics_Function_Toast_NOHtml_Text">지원되는 브라우저를 사용하여 다시 시도하십시오</string>
+    <string name="ics_toast_errortobedelt">분석 할 오류</string>
+    <string name="ics_alter_cname">코스 명</string>
+    <string name="ics_alter_cteacher">선생님</string>
+    <string name="ics_alter_croom">위치</string>
+    <string name="ics_alter_clperiod">지속</string>
+    <string name="ics_alter_clphase">시각</string>
+    <string name="ics_alter_periodswitch">격주</string>
+    <string name="ics_alter_classlasting_1">작은 교훈</string>
+    <string name="ics_alter_classlasting_2">두 개의 작은 수업</string>
+    <string name="ics_alter_classlasting_3">세 가지 작은 수업</string>
+    <string name="ics_alter_classtime_am1">아침의 1/4</string>
+    <string name="ics_alter_classtime_am2">오전 2 분기</string>
+    <string name="ics_alter_classtime_pm1">첫 오후</string>
+    <string name="ics_alter_classtime_pm2">오후 2 분기</string>
+    <string name="ics_alter_classtime_pm3">오후 3 분기</string>
+    <string name="ics_alter_classtime_eve2">저녁 2 분기</string>
+    <string name="ics_Button_add">코스 추가</string>
+    <string name="ics_switch_app">앱 모드 (시간대 정보 없음)</string>
+    <string name="ics_alter_classtime_eve1">저녁의 1/4</string>
+    <string name="ics_tv_break_duration">휴식 시간</string>
+    <string name="ics_alter_classtime_am3">오전 3 분기</string>
+    <string name="ics_alter_classtime_eve3">3 분기</string>
+    <string name="ics_instruction_help">수업 일정을로드하지 못했습니다</string>
+    <string name="ics_manual_help_solution">일정 기능이 더 이상 유지되지 않습니다. 다른 응용 프로그램을 사용하십시오</string>
+    <string name="ttValidateName">코스 이름을 확인하십시오</string>
+    <string name="Advice_TextView_IssueReport_Text">수업 일정 코드 파일</string>
+    <string name="advice_textview_issue_details">클립 보드의 커리큘럼 내용에서 생성 된 HTML 파일</string>
+    <string name="st_manual_features">기능 세부 사항 :\n1. 교육 행정 시스템의 시간표를 분석하고, 정사각형 교육 행정 시스템의 일부만 지원\n2. Google 캘린더 등으로 가져올 수있는 시간표를 기반으로 캘린더 파일 (iCalendar, .ics)을 생성합니다.\n3. 주간 지침, 매주 월요일에 종일 일정을 만들어 현재 주가 어느 주인지 나타냅니다.</string>
+    <string name="st_manual_notes">지침:\n1. 달력을 가져 오기 전에 시간과 날짜를 설정하십시오\n2. 교육 관리 시스템의 시간표가 변경되면 원래 단계에 따라 다시 가져 오거나이 응용 프로그램에서 직접 수정하십시오\n3. 새 일정을 일정으로 내보내기 전에 마지막으로 가져온 일정을 취소해야합니다.</string>
+    <string name="st_manual_instructions">교육 행정 시스템의 시간표를 분석하십시오.\n1. 지원되는 브라우저를 사용하여 학교 광장 교육 시스템 페이지를 열고 가져올 시간표를 찾으십시오.\n2. 커리큘럼의 코스를 길게 누르면 텍스트 선택 모드로 들어간 다음 모두를 선택한 다음 복사 한 다음 커리큘럼의 내용이 클립 보드에 복사됩니다.\n3.이 앱으로 돌아가 클립 보드에서 시간표를로드하려면 클릭하십시오.</string>
+</resources>

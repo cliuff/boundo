@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2020 Clifford Liu
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="av_updates_recents">最近更新</string>
+    <string name="sdkcheck_dialog_targetsdktext">目標</string>
+    <string name="sdkcheck_dialog_minsdktext">最低</string>
+    <string name="sdkcheck_sortspinner_sortbyname">按名稱</string>
+    <string name="sdkcheck_sortspinner_sortbyhighersdk">高API</string>
+    <string name="sdkcheck_sortspinner_sortbylowersdk">低 API</string>
+    <string name="sdkcheck_displayspinner_user">我的應用</string>
+    <string name="sdkcheck_displayspinner_usersystem">所有應用</string>
+    <string name="res_api_code_names_c">紙杯蛋糕</string>
+    <string name="res_api_code_names_d">甜甜圈</string>
+    <string name="res_api_code_names_e">閃電泡芙</string>
+    <string name="res_api_code_names_f">優格冰淇淋</string>
+    <string name="res_api_code_names_g">薑餅</string>
+    <string name="res_api_code_names_h">蜂巢</string>
+    <string name="res_api_code_names_i">冰淇淋三明治</string>
+    <string name="res_api_code_names_j">果凍豆</string>
+    <string name="res_api_code_names_k">奇巧巧克力</string>
+    <string name="res_api_code_names_l">棒棒糖</string>
+    <string name="res_api_code_names_m">棉花糖</string>
+    <string name="res_api_code_names_n">牛軋糖</string>
+    <string name="res_api_code_names_o">奧利奧</string>
+    <string name="res_api_code_names_p">派</string>
+    <string name="apiDetails">詳情</string>
+    <string name="apiDetailsVerName">版本名：</string>
+    <string name="apiDetailsVerCode">版本號：</string>
+    <string name="apiDetailsFirstInstall">首次安裝：</string>
+    <string name="apiDetailsLastUpdate">上次更新：</string>
+    <string name="apiDetailsInsatllFrom">安裝程序：</string>
+    <string name="apiDetailsInstallUnknown">未知</string>
+    <string name="apiDetailsInstallGP">谷歌 Play 商店</string>
+    <string name="apiDetailsInstallPI">應用安裝程序</string>
+    <string name="apiDetailsCert">證書</string>
+    <string name="apiDetailsValiSince">有效期起始時間：</string>
+    <string name="apiDetailsValiUntil">有效期終止時間：</string>
+    <string name="apiDetailsIssuer">頒發者：</string>
+    <string name="apiDetailsSubject">主體：</string>
+    <string name="apiDetailsSigAlg">簽名算法：</string>
+    <string name="apiDetailsSigAlgOID">簽名算法對象標識符：</string>
+    <string name="apiDetailsPermissions">權限：</string>
+    <string name="apiDetailsActivities">活動：</string>
+    <string name="apiDetailsReceivers">廣播接收器：</string>
+    <string name="apiDetailsServices">服務：</string>
+    <string name="apiDetailsProviders">供應器：</string>
+    <string name="resApiCodeNamesB">Petit Four</string>
+    <string name="resPrincipalCN">公開名稱</string>
+    <string name="resPrincipalOU">組織單位</string>
+    <string name="resPrincipalO">組織/機構</string>
+    <string name="resPrincipalL">城市</string>
+    <string name="resPrincipalST">省市/州</string>
+    <string name="resPrincipalC">國家</string>
+    <string name="resPrincipalEmail">電子郵件</string>
+    <string name="apiInfoAiIconDes">圖標（安裝包）</string>
+    <string name="apiInfoAiIconRDes">圓圖標（安裝包）</string>
+    <string name="apiInfoAiIconDesSys">圖標（系統）</string>
+    <string name="apiInfoAiOverallDes">安裝包可以聲明兩套圖標。\n一套是一般圖標，一套是圓圖標。\n兩套圖標都可包含安卓8.0引入的自適應圖標。\n圓圖標是在安卓7.1時引入的。</string>
+    <string name="avTBViewingTarget">查看目標/最低 API</string>
+    <string name="avManual">程序編程接口 (API)，籠統地來說是一個明確定義好的用於各種元件相互通信的方法集。\n\n軟件開發工具包 (SDK) 一般是一個用於特定開發平台應用開發的軟件開發工具集。\n\n因此，一個開發平台的SDK包含了該平台相應的API。\n\n安卓API的版本被稱作API級別。\n\n每個安卓新版本的發布都會有巨大的API變更，帶來新功能支持、隱私獲取限制、安全性提升、性能增強，並棄用不安全和低效率的API。\n\n有時安卓版本更新只有錯誤修復等而沒有任何API變更所以API級別保持不變。\n\n目標SDK版本聲明一個應用程序所計劃使用的API級別。\n\n最低SDK版本聲明一個應用程序所要求的最低API級別。\n\n安卓新版本的某些限制和增強只有當應用程序的目標API級別達到設備上安卓系統的API級別時才生效。</string>
+    <string name="av_share_full">全景</string>
+    <string name="av_share_stroked">描邊</string>
+    <string name="av_updates_view_more">查看更多</string>
+    <string name="av_settings_tags">標籤</string>
+    <string name="av_settings_tags_system">系統應用</string>
+    <string name="av_adapter_tag_system">系統</string>
+    <string name="av_ai">自適應圖標</string>
+    <string name="av_tag_has_splits">Split APK</string>
+</resources>

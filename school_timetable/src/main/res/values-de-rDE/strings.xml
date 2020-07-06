@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2020 Clifford Liu
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="timetable_load_remove">Entfernen Sie die aktuelle</string>
+    <string name="timetable_load_new">Aus der Zwischenablage analysieren</string>
+    <string name="timetable_manual_browser_support">Browser-Unterstützung</string>
+    <string name="ttExport">Zeitplan exportieren</string>
+    <string name="ttTimeNotice">Bitte stellen Sie Datum und Uhrzeit für Ihren Zeitplan ein</string>
+    <string name="ics_Toast_open_fail">Scheitern Sie, laden Sie verwandte Software herunter!</string>
+    <string name="ics_Toast_generating_success">Erfolg!</string>
+    <string name="ics_Toast_classtime_generating_fail">Fehler beim Parsen der Zeit</string>
+    <string name="ics_Button_set_date">Montag der ersten Schulwoche</string>
+    <string name="ics_Button_set_time_morning">Startzeit des Morgenunterrichts</string>
+    <string name="ics_Button_picker_finish">Fertig</string>
+    <string name="ics_Button_set_time_afternoon">Startzeit des Nachmittagsunterrichts</string>
+    <string name="ics_Button_set_time_evening">Startzeit des Abendunterrichts</string>
+    <string name="ics_TextView_set_ClassTime_text">Kurze Unterrichtsdauer in Minuten</string>
+    <string name="ics_Undo_AlertDialog_Message">Bitte fahren Sie so fort</string>
+    <string name="ics_Undo_AlertDialog_Button">Fortsetzen</string>
+    <string name="ics_Undo_Toast_Nailed">Arbeit abgeschlossen</string>
+    <string name="Settings_Switch_icsDefault_Text">Der Stundenplan wird in Google Kalender exportiert</string>
+    <string name="ics_Import_Toast_Null">Derzeit keine Informationen zum Stundenplan</string>
+    <string name="ics_Function_AlertDialog_EditText_StartingWeekHint">Woche beginnen</string>
+    <string name="ics_Function_AlertDialog_EditText_EndingWeekHint">Ende der Woche</string>
+    <string name="ics_Function_AlertDialog_Title">Gebrochene Informationen</string>
+    <string name="ics_TextView_MorningBreakTimeInstruction_Text">Dauer der Morgenpause</string>
+    <string name="ics_TextView_AfternoonBreakTimeInstruction_Text">Dauer der Nachmittagspause</string>
+    <string name="ics_TextView_EveningBreakTimeInstruction_Text">Dauer der Abendpause</string>
+    <string name="ics_TextView_InferiorBreakTime">Kurz in Minuten</string>
+    <string name="ics_TextView_SuperiorBreakTime">Lange in Minuten</string>
+    <string name="ics_Part1_Button_OK_Text">OK</string>
+    <string name="ics_Function_Toast_NOHtml_Text">Wechseln Sie zu unterstützten Browsern und versuchen Sie es erneut</string>
+    <string name="ics_toast_errortobedelt">Zu analysierender Fehler</string>
+    <string name="ics_alter_cname">Kursname</string>
+    <string name="ics_alter_cteacher">Lehrer</string>
+    <string name="ics_alter_croom">Ort</string>
+    <string name="ics_alter_clperiod">Dauer</string>
+    <string name="ics_alter_clphase">Zeit</string>
+    <string name="ics_alter_periodswitch">14-tägig</string>
+    <string name="ics_alter_classlasting_1">1 kleine Klasse</string>
+    <string name="ics_alter_classlasting_2">2 kleine Klassen</string>
+    <string name="ics_alter_classlasting_3">3 kleine Klassen</string>
+    <string name="ics_alter_classtime_am1">1. Periode Morgen</string>
+    <string name="ics_alter_classtime_am2">2. Periode Morgen</string>
+    <string name="ics_alter_classtime_pm1">1. Periode Nachmittag</string>
+    <string name="ics_alter_classtime_pm2">2. Nachmittag</string>
+    <string name="ics_alter_classtime_pm3">3. Nachmittag</string>
+    <string name="ics_alter_classtime_eve2">2. Abend</string>
+    <string name="ics_Button_add">Neuer Kurs</string>
+    <string name="ics_switch_app">App-Modus (keine Zeitzoneninformationen angeben)</string>
+    <string name="ics_alter_classtime_eve1">1. Abend</string>
+    <string name="ics_tv_break_duration">Pausenzeit</string>
+    <string name="ics_alter_classtime_am3">3. Periode Morgen</string>
+    <string name="ics_alter_classtime_eve3">3. Abend</string>
+    <string name="ics_instruction_help">Der Zeitplan für die Analyse schlägt fehl</string>
+    <string name="ics_manual_help_solution">Da diese Funktion nicht mehr beibehalten wird, empfehlen wir Ihnen, nach anderen Alternativen zu suchen</string>
+    <string name="ttValidateName">Bitte bestätigen Sie den Kursnamen</string>
+    <string name="Advice_TextView_IssueReport_Text">Code-Datei für den Stundenplan</string>
+    <string name="advice_textview_issue_details">Die HTML-Datei, die aus dem ursprünglichen Stundenplan der Schule in der Zwischenablage generiert wurde</string>
+    <string name="timetable_manual_browsers">Google Chrome, Microsoft Edge, Samsung Internetbrowser, Via Browser, XBrowser, Magic Browser, VC Browser, Salfish Browser (von Ruanmei.com), Lim Browser, H5 Browser, Opera Browser, DU Browser, 360 Browser, Sogou Browser, YuBrowser, Maxthon Browser usw.\n\nNicht unterstützt (sowohl chinesische App-Märkte als auch Play Store-Editionen):\nUC-Browser, Firefox-Browser, QQ-Browser, Quark-Browser usw.</string>
+    <string name="ics_Button_date_picker">Terminzeit</string>
+    <string name="ics_EditText_Time">%1$d min</string>
+    <string name="ics_Function_AlertDialog_Instruction">Weitere Informationen werden benötigt\nBitte geben Sie unten die Startwoche und die Endwoche ein:</string>
+    <string name="ics_TextView_ChooseBreakTime">Stellen Sie im obigen Abschnitt die Standardunterbrechungsdauer in allen Phasen bis zu einem Tag ein, während jede der folgenden Einstellungen die Standardeinstellung der entsprechenden Phase überschreibt.</string>
+    <string name="st_manual_features">Eigenschaften:\n1. Analysieren Sie den Stundenplan auf der Website des Schulbildungssystems. Nur ein Teil des ZFSoft-Bildungssystems wird unterstützt\n2. Generieren Sie eine iCalendar-Datei (.ics) aus dem Stundenplan, die in Google Kalender usw. importiert werden kann\n3. Wochenindikator, um am Montag ganztägige Ereignisse zu erstellen, die angeben, um welche Woche es sich handelt</string>
+    <string name="st_manual_notes">Hinweis:\n1. Stellen Sie sicher, dass Sie Datum und Uhrzeit einstellen, bevor Sie den Zeitplan in den Kalender exportieren\n2. Wiederholen Sie den Vorgang, wenn Ihr Stundenplan auf der Website des Schulbildungssystems aktualisiert wird. Alternativ kann das Update durch manuelle Änderungen in der App angewendet werden\n3. Sie müssen den vorherigen Kalenderimport rückgängig machen, bevor Sie den aktualisierten exportieren</string>
+    <string name="st_manual_instructions">So analysieren Sie den Stundenplan:\n1. Finden Sie Ihren Stundenplan auf der offiziellen Website des ZFSoft-Bildungssystems der Schule über einen unterstützten Browser\n2.Drücken Sie lange auf ein Element in Ihrem Stundenplan, um in den Textauswahlmodus zu wechseln. Drücken Sie dann \"Alle auswählen\" und dann \"Kopieren\". Der Inhalt wird nun in die Zwischenablage kopiert\n3.Kommen Sie zurück und klicken Sie auf \"Aus Zwischenablage analysieren\".</string>
+</resources>

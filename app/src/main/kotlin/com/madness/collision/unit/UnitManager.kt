@@ -26,11 +26,19 @@ import com.google.android.play.core.splitinstall.SplitInstallManager
 import com.google.android.play.core.splitinstall.SplitInstallRequest
 import com.google.android.play.core.splitinstall.model.SplitInstallErrorCode
 import com.madness.collision.R
+import com.madness.collision.qs.TileServiceApiViewer
+import com.madness.collision.qs.TileServiceAudioTimer
+import com.madness.collision.unit.themed_wallpaper.ThemedWallpaperService
+import com.madness.collision.unit.we_chat_evo.InstantWeChatActivity
 import com.madness.collision.util.X
 import com.madness.collision.util.notify
 import com.madness.collision.util.notifyBriefly
+import com.madness.collision.versatile.ApiViewingSearchActivity
+import com.madness.collision.versatile.ApkSharing
 import com.madness.collision.versatile.AppInfoWidget
+import com.madness.collision.versatile.TextProcessingActivity
 import java.lang.ref.WeakReference
+import kotlin.reflect.KClass
 
 internal class UnitManager(private val context: Context, private val splitInstallManager: SplitInstallManager) {
 
@@ -45,7 +53,7 @@ internal class UnitManager(private val context: Context, private val splitInstal
         splitInstallManager.startInstall(request).addOnSuccessListener {
             viewRef.notify(R.string.unit_manager_install_success, true)
             updateUnitState(description)
-            if (description.unitName == Unit.UNIT_NAME_COOL_APP) aftermathCoolApp(context, false)
+            doAftermath(context, description, false)
         }.addOnFailureListener { exception ->
             val e = if (exception is SplitInstallException) exception else null
             val errorMessage = when(e?.errorCode) {
@@ -65,12 +73,23 @@ internal class UnitManager(private val context: Context, private val splitInstal
             viewRef.notify(R.string.unit_manager_uninstall_success, true)
             Unit.unpinUnit(context, description.unitName)
             updateUnitState(description)
-            if (description.unitName == Unit.UNIT_NAME_COOL_APP) aftermathCoolApp(context, true)
+            doAftermath(context, description, true)
         }.addOnFailureListener {
             viewRef.notify(R.string.text_error)
             Unit.unpinUnit(context, description.unitName)
             updateUnitState(description)
         }
+    }
+
+    private fun doAftermath(context: Context, description: Description, isUninstall: Boolean) {
+        when (description.unitName) {
+            Unit.UNIT_NAME_API_VIEWING -> this::aftermathApiViewing
+            Unit.UNIT_NAME_AUDIO_TIMER -> this::aftermathAudioTimer
+            Unit.UNIT_NAME_COOL_APP -> this::aftermathCoolApp
+            Unit.UNIT_NAME_THEMED_WALLPAPER -> this::aftermathThemedWallpaper
+            Unit.UNIT_NAME_WE_CHAT_EVO -> this::aftermathWeChatEvo
+            else -> return
+        }.invoke(context, isUninstall)
     }
 
     private fun WeakReference<View?>.notify(textResId: Int, shouldLastLong: Boolean = false) {
@@ -82,13 +101,63 @@ internal class UnitManager(private val context: Context, private val splitInstal
         }
     }
 
-    private fun aftermathCoolApp(context: Context, isUninstall: Boolean) {
-        val state = if (isUninstall)
-            PackageManager.COMPONENT_ENABLED_STATE_DISABLED
-        else
+    private fun Boolean.stateEnabled(): Int {
+        return if (this)
             PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-        val componentName = ComponentName(context.packageName, AppInfoWidget::class.qualifiedName ?: "")
-        context.packageManager.setComponentEnabledSetting(componentName, state, PackageManager.DONT_KILL_APP)
+        else
+            PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+    }
+
+    private fun Boolean.stateDisabled(): Int {
+        return (!this).stateEnabled()
+    }
+
+    private fun KClass<*>.toComponentName(context: Context): ComponentName {
+        return ComponentName(context.packageName, qualifiedName ?: "")
+    }
+
+    private inline fun <reified T> componentName(context: Context): ComponentName {
+        return T::class.toComponentName(context)
+    }
+
+    private fun aftermathCoolApp(context: Context, isUninstall: Boolean) {
+        context.packageManager.setComponentEnabledSetting(
+                componentName<AppInfoWidget>(context),
+                isUninstall.stateDisabled(),
+                PackageManager.DONT_KILL_APP
+        )
+    }
+
+    private fun aftermathApiViewing(context: Context, isUninstall: Boolean) {
+        val state = isUninstall.stateDisabled()
+        val pm = context.packageManager
+        listOf(ApkSharing::class, TextProcessingActivity::class, ApiViewingSearchActivity::class, TileServiceApiViewer::class).forEach {
+            pm.setComponentEnabledSetting(it.toComponentName(context), state, PackageManager.DONT_KILL_APP)
+        }
+    }
+
+    private fun aftermathThemedWallpaper(context: Context, isUninstall: Boolean) {
+        context.packageManager.setComponentEnabledSetting(
+                componentName<ThemedWallpaperService>(context),
+                isUninstall.stateDisabled(),
+                PackageManager.DONT_KILL_APP
+        )
+    }
+
+    private fun aftermathAudioTimer(context: Context, isUninstall: Boolean) {
+        context.packageManager.setComponentEnabledSetting(
+                componentName<TileServiceAudioTimer>(context),
+                isUninstall.stateDisabled(),
+                PackageManager.DONT_KILL_APP
+        )
+    }
+
+    private fun aftermathWeChatEvo(context: Context, isUninstall: Boolean) {
+        context.packageManager.setComponentEnabledSetting(
+                componentName<InstantWeChatActivity>(context),
+                isUninstall.stateDisabled(),
+                PackageManager.DONT_KILL_APP
+        )
     }
 
 }

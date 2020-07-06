@@ -56,6 +56,9 @@ import kotlin.collections.ArrayList
 import com.madness.collision.unit.school_timetable.R as MyR
 
 class MyUnit: Unit(), View.OnClickListener{
+
+    override val id: String = "ST"
+
     companion object {
 
         var ref: WeakReference<MyUnit>? = null

@@ -28,14 +28,17 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.edit
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.util.*
 
-internal class AdviceFragment : Fragment(), Democratic, View.OnClickListener, NavNode {
+internal class AdviceFragment : TaggedFragment(), Democratic, View.OnClickListener, NavNode {
+
+    override val category: String = "Advice"
+    override val id: String = "Advice"
+    
     private lateinit var background: View
     private var count4DebugMode = 0
     private val mainViewModel: MainViewModel by activityViewModels()

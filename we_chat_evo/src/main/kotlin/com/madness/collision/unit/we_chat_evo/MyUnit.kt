@@ -31,11 +31,12 @@ import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.Unit
 import com.madness.collision.util.alterPadding
 import com.madness.collision.util.notify
-import com.madness.collision.util.setMarginText
 import kotlinx.android.synthetic.main.unit_we_chat_evo.*
 import com.madness.collision.unit.we_chat_evo.R as MyR
 
 class MyUnit : Unit(), CompoundButton.OnCheckedChangeListener {
+
+    override val id: String = "WE"
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
         toolbar.setTitle(R.string.unit_we_chat_evo)
@@ -49,7 +50,7 @@ class MyUnit : Unit(), CompoundButton.OnCheckedChangeListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val context = context ?: return
-        weNote.setMarginText(context, MyR.string.we_note)
+        weNote.setText(MyR.string.we_note)
         weSwitch.isChecked = componentEnabled<InstantWeChatActivity>(context)
         weSwitch.setOnCheckedChangeListener(this)
     }

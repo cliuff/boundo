@@ -30,6 +30,7 @@ import com.madness.collision.misc.MiscApp
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.util.P
+import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.X
 import com.madness.collision.util.ensureAdded
 import kotlinx.coroutines.Dispatchers
@@ -38,7 +39,10 @@ import kotlinx.coroutines.launch
 import kotlin.math.min
 import kotlin.math.roundToInt
 
-internal class MyUpdatesFragment : Fragment() {
+internal class MyUpdatesFragment : TaggedFragment() {
+
+    override val category: String = "AV"
+    override val id: String = "MyUpdates"
 
     companion object {
         var appTimestamp: Long = 0L

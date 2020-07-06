@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020 Clifford Liu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.madness.collision.unit.api_viewing
 
 import android.content.Context
@@ -44,8 +60,8 @@ internal object Utils {
             X.R -> "11"
             Q -> "10"
             P -> "9"  // 9 Pie
-            O_MR1 -> if (exact) "8.1.0" else "8"  // 8.1.0 Oreo
-            O -> if (exact) "8.0.0" else "8"  // 8.0.0 Oreo
+            O_MR1 -> if (exact) "8.1" else "8"  // 8.1.0 Oreo
+            O -> if (exact) "8.0" else "8"  // 8.0.0 Oreo
             N_MR1-> if (exact) "7.1" else "7"  // 7.1 Nougat
             N -> if (exact) "7.0" else "7"  // 7.0 Nougat
             M -> if (exact) "6.0" else "6"  // 6.0 Marshmallow
@@ -87,8 +103,8 @@ internal object Utils {
         if (fullName) context ?: return " "
         return when (apiLevel) {
             X.DEV -> if (fullName) "DEV" else " "
-            X.R -> if (fullName) "R" else "r"
-            Q -> if (fullName) "Q" else "q"
+            X.R -> if (fullName) "11" else "r"
+            Q -> if (fullName) "10" else "q"
             P -> if (fullName) context!!.getString(R.string.res_api_code_names_p) else "p"  // Pie
             O, O_MR1 -> if (fullName) context!!.getString(R.string.res_api_code_names_o) else "o"  // Oreo
             N, N_MR1 -> if (fullName) context!!.getString(R.string.res_api_code_names_n) else "n"  // Nougat

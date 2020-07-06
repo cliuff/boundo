@@ -1,4 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2020 Clifford Liu
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <resources>
     <string name="ics_alter_clperiod">Duración</string>
     <string name="Advice_TextView_IssueReport_Text">Archivo de código de horario escolar</string>
@@ -12,7 +28,7 @@
     <string name="ics_Button_set_time_morning">Hora de inicio de clases matutinas</string>
     <string name="ics_Function_AlertDialog_EditText_EndingWeekHint">Fin de semana</string>
     <string name="ics_Function_AlertDialog_EditText_StartingWeekHint">Semana de inicio</string>
-    <string name="ics_EditText_Time">%1$dmin</string>
+    <string name="ics_EditText_Time">%1$d min</string>
     <string name="ics_Function_AlertDialog_Title">Información rota</string>
     <string name="ics_Function_Toast_NOHtml_Text">Cambie a navegadores compatibles e intente nuevamente</string>
     <string name="ics_Import_Toast_Null">No hay información del horario escolar por el momento</string>
@@ -61,5 +77,7 @@
     <string name="ics_Button_date_picker">Fecha y hora</string>
     <string name="ics_Function_AlertDialog_Instruction">Se necesita más información.\nIngrese la semana de inicio y fin de semana a continuación:</string>
     <string name="timetable_manual_browsers">Google Chrome, Microsoft Edge, Samsung Internet Browser, Via Browser, XBrowser, Magic Browser, VC Browser, Salfish Browser (por Ruanmei.com), Lim Browser, H5 Browser, Opera Browser, DU Browser, 360 Browser, Sogou Browser, YuBrowser, Maxthon Browser, etc.\n\nNo compatible (tanto los mercados de aplicaciones chinos como las ediciones de Play Store):\nUC Browser, Firefox Browser, QQ Browser, Quark Browser, etc.</string>
-    <string name="ics_TextView_instruction">caracteristicas:\n1. Analice el horario escolar del sitio web del sistema educativo de la escuela, solo se admite parte del sistema educativo ZFSoft\n2. Genere un archivo iCalendar (.ics) a partir del horario escolar, que puede importarse a Google Calendar, etc.\n3. Indicador de semana, para crear eventos de todo el día el lunes que indique qué semana es\n\nNota:\n1. Asegúrese de establecer su fecha y hora antes de exportar el calendario al calendario\n2. Repita el proceso si su horario escolar en el sitio web del sistema educativo de la escuela se actualiza, alternativamente, la actualización se puede aplicar mediante modificaciones manuales dentro de la aplicación\n3. Debe deshacer la importación del calendario anterior antes de exportar el actualizado\n\nPara analizar el horario escolar:\n1.Busque el horario de su escuela en el sitio web oficial del sistema educativo ZFSoft de la escuela a través del navegador compatible\n2.Mantenga presionado cualquier elemento en el horario de su escuela para ingresar al modo de selección de texto, luego presione \"seleccionar todo\" y luego \"copiar\", el contenido ahora se copia al portapapeles\n3.Vuelve y presiona el botón \"analizar desde el portapapeles\"</string>
+    <string name="st_manual_features">caracteristicas:\n1. Analice el horario escolar del sitio web del sistema educativo de la escuela, solo se admite parte del sistema educativo ZFSoft\n2. Genere un archivo iCalendar (.ics) a partir del horario escolar, que puede importarse a Google Calendar, etc.\n3. Indicador de semana, para crear eventos de todo el día el lunes que indique qué semana es</string>
+    <string name="st_manual_notes">Nota:\n1. Asegúrese de establecer su fecha y hora antes de exportar el calendario al calendario\n2. Repita el proceso si su horario escolar en el sitio web del sistema educativo de la escuela se actualiza, alternativamente, la actualización se puede aplicar mediante modificaciones manuales dentro de la aplicación\n3. Debe deshacer la importación del calendario anterior antes de exportar el actualizado</string>
+    <string name="st_manual_instructions">Para analizar el horario escolar:\n1.Busque el horario de su escuela en el sitio web oficial del sistema educativo ZFSoft de la escuela a través del navegador compatible\n2.Mantenga presionado cualquier elemento en el horario de su escuela para ingresar al modo de selección de texto, luego presione \"seleccionar todo\" y luego \"copiar\", el contenido ahora se copia al portapapeles\n3.Vuelve y presiona el botón \"analizar desde el portapapeles\"</string>
 </resources>

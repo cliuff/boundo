@@ -1,9 +1,24 @@
+/*
+ * Copyright 2020 Clifford Liu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.madness.collision.unit
 
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.play.core.splitinstall.SplitInstallManager
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
@@ -18,7 +33,10 @@ import com.madness.collision.util.*
 /**
  * Dynamic feature
  */
-abstract class Unit: Fragment(), Democratic {
+abstract class Unit: TaggedFragment(), Democratic {
+
+    override val category: String
+        get() = "Unit"
 
     companion object {
         const val UNIT_NAME_API_VIEWING = "api_viewing"
@@ -40,7 +58,7 @@ abstract class Unit: Fragment(), Democratic {
                 Description(UNIT_NAME_NO_MEDIA, R.string.tools_nm, R.drawable.ic_flip_24).setDescResId(R.string.unit_desc_nm)
                         .setRequirement(Description.Checker(R.string.unit_desc_requirement_nm) { X.belowOff(X.Q) }),
                 Description(UNIT_NAME_THEMED_WALLPAPER, R.string.twService, R.drawable.ic_image_24).setDescResId(R.string.unit_desc_tw),
-                Description(UNIT_NAME_AUDIO_TIMER, R.string.unit_audio_timer, R.drawable.ic_music_off_24).setDescResId(R.string.unit_desc_at),
+                Description(UNIT_NAME_AUDIO_TIMER, R.string.unit_audio_timer, R.drawable.ic_timer_24).setDescResId(R.string.unit_desc_at),
                 Description(UNIT_NAME_WE_CHAT_EVO, R.string.unit_we_chat_evo, R.drawable.ic_we_chat_24).setDescResId(R.string.unit_desc_we)
                         .setRequirement(
                                 Description.Checker(R.string.unit_desc_requirement_shortcut) { X.aboveOn(X.N_MR1) },

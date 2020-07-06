@@ -24,7 +24,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
@@ -32,19 +31,21 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import com.madness.collision.Democratic
 import com.madness.collision.R
+import com.madness.collision.instant.other.InstantOthers
 import com.madness.collision.instant.shortcut.InstantShortcuts
 import com.madness.collision.instant.tile.InstantTiles
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.settings.SettingsFunc
-import com.madness.collision.util.CollisionDialog
-import com.madness.collision.util.X
-import com.madness.collision.util.alterPadding
-import com.madness.collision.util.availableWidth
+import com.madness.collision.util.*
 import kotlinx.android.synthetic.main.activity_instant_manager.*
 import kotlin.math.roundToInt
 
 @TargetApi(X.N)
-internal class InstantFragment: Fragment(), Democratic {
+internal class InstantFragment: TaggedFragment(), Democratic {
+
+    override val category: String = "Instant"
+    override val id: String = "Instant"
+    
     companion object {
         @JvmStatic
         fun newInstance() = InstantFragment()
@@ -95,12 +96,16 @@ internal class InstantFragment: Fragment(), Democratic {
         val predicate: (InstantItem) -> Boolean = {
             (!it.hasRequiredUnit || installedUnits.contains(it.requiredUnitName)) && it.isAvailable(context)
         }
+        // qs tiles
         val availableTiles = InstantTiles.TILES.filter(predicate)
         val adapterTile = InstantAdapter(context, mainViewModel, InstantAdapter.TYPE_TILE, availableTiles)
-        instantRecyclerTile.setHasFixedSize(true)
-        instantRecyclerTile.setItemViewCacheSize(availableTiles.size)
-        instantRecyclerTile.layoutManager = if (spanCount == 1) LinearLayoutManager(context) else GridLayoutManager(context, spanCount)
-        instantRecyclerTile.adapter = adapterTile
+        instantRecyclerTile.run {
+            setHasFixedSize(true)
+            setItemViewCacheSize(availableTiles.size)
+            layoutManager = if (spanCount == 1) LinearLayoutManager(context) else GridLayoutManager(context, spanCount)
+            adapter = adapterTile
+        }
+        // shortcuts
         if (X.belowOff(X.N_MR1)) {
             instantRecyclerShortcut.visibility = View.GONE
             instantIntroShortcut.visibility = View.GONE
@@ -108,10 +113,21 @@ internal class InstantFragment: Fragment(), Democratic {
         }
         val availableShortcuts = InstantShortcuts.SHORTCUTS.filter(predicate)
         val adapterShortcut = InstantAdapter(context, mainViewModel, InstantAdapter.TYPE_SHORTCUT, availableShortcuts)
-        instantRecyclerShortcut.setHasFixedSize(true)
-        instantRecyclerShortcut.setItemViewCacheSize(availableShortcuts.size)
-        instantRecyclerShortcut.layoutManager = if (spanCount == 1) LinearLayoutManager(context) else GridLayoutManager(context, spanCount)
-        instantRecyclerShortcut.adapter = adapterShortcut
+        instantRecyclerShortcut.run {
+            setHasFixedSize(true)
+            setItemViewCacheSize(availableShortcuts.size)
+            layoutManager = if (spanCount == 1) LinearLayoutManager(context) else GridLayoutManager(context, spanCount)
+            adapter = adapterShortcut
+        }
+        // other
+        val availableOther = InstantOthers.OTHERS.filter(predicate)
+        val adapterOther = InstantAdapter(context, mainViewModel, InstantAdapter.TYPE_OTHER, availableOther)
+        instantRecyclerOther.run {
+            setHasFixedSize(true)
+            setItemViewCacheSize(availableOther.size)
+            layoutManager = if (spanCount == 1) LinearLayoutManager(context) else GridLayoutManager(context, spanCount)
+            adapter = adapterOther
+        }
     }
 
 }

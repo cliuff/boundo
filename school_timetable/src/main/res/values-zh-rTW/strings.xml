@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2020 Clifford Liu
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="timetable_load_remove">移除當前課表</string>
+    <string name="timetable_load_new">從剪貼板加載新課表</string>
+    <string name="timetable_manual_browsers">Chrome瀏覽器、Microsoft Edge、三星瀏覽器、Via瀏覽器、X瀏覽器、神奇瀏覽器、VC瀏覽器、旗魚瀏覽器、Lim瀏覽器、H5瀏覽器、歐朋瀏覽器、百度瀏覽器、360瀏覽器、搜狗瀏覽器、羽·瀏覽器、遨遊雲瀏覽器等等\n\n不支持的瀏覽器(中國應用市場及Play市場版本）：\nUC瀏覽器、火狐瀏覽器、QQ瀏覽器、夸克瀏覽器 等</string>
+    <string name="timetable_manual_browser_support">瀏覽器支持</string>
+    <string name="ttExport">導出課表</string>
+    <string name="ttTimeNotice">請為課表設置時間和日期</string>
+    <string name="ics_Toast_open_fail">打開失敗，請下載相關軟件！</string>
+    <string name="ics_Toast_generating_success">完成！</string>
+    <string name="ics_Toast_classtime_generating_fail">生成上課時間失敗！</string>
+    <string name="ics_Button_set_date">第一周週一</string>
+    <string name="ics_Button_set_time_morning">早晨上課時間</string>
+    <string name="ics_Button_date_picker">時間與日期</string>
+    <string name="ics_Button_picker_finish">完成</string>
+    <string name="ics_Button_set_time_afternoon">下午上課時間</string>
+    <string name="ics_Button_set_time_evening">晚上上課時間</string>
+    <string name="ics_EditText_Time">%1$d分鐘</string>
+    <string name="ics_TextView_set_ClassTime_text">小課時長 - 分鐘</string>
+    <string name="ics_Undo_AlertDialog_Message">如此以繼續</string>
+    <string name="ics_Undo_AlertDialog_Button">繼續</string>
+    <string name="ics_Undo_Toast_Nailed">完成</string>
+    <string name="Settings_Switch_icsDefault_Text">課表導出至谷歌日曆</string>
+    <string name="ics_Import_Toast_Null">無課表</string>
+    <string name="ics_Function_AlertDialog_Instruction">找不到它們的起止周信息\n請手動輸入起止週：</string>
+    <string name="ics_Function_AlertDialog_EditText_StartingWeekHint">起始週</string>
+    <string name="ics_Function_AlertDialog_EditText_EndingWeekHint">終止週</string>
+    <string name="ics_Function_AlertDialog_Title">信息缺失</string>
+    <string name="ics_TextView_MorningBreakTimeInstruction_Text">上午課間休息時長</string>
+    <string name="ics_TextView_AfternoonBreakTimeInstruction_Text">下午課間休息時長</string>
+    <string name="ics_TextView_EveningBreakTimeInstruction_Text">夜間課間休息時長</string>
+    <string name="ics_TextView_InferiorBreakTime">小 - 分鐘</string>
+    <string name="ics_TextView_SuperiorBreakTime">大 - 分鐘</string>
+    <string name="ics_TextView_ChooseBreakTime">在上方設置所有時間段課間的默認時長，在下方設置的時長將會覆蓋該時間段所對應的默認時長</string>
+    <string name="ics_Part1_Button_OK_Text">確認</string>
+    <string name="ics_Function_Toast_NOHtml_Text">請使用支持的瀏覽器再試一次</string>
+    <string name="ics_toast_errortobedelt">待分析的錯誤</string>
+    <string name="ics_alter_cname">課程名</string>
+    <string name="ics_alter_cteacher">教師</string>
+    <string name="ics_alter_croom">地點</string>
+    <string name="ics_alter_clperiod">時長</string>
+    <string name="ics_alter_clphase">時間</string>
+    <string name="ics_alter_periodswitch">隔週</string>
+    <string name="ics_alter_classlasting_1">一節小課</string>
+    <string name="ics_alter_classlasting_2">二節小課</string>
+    <string name="ics_alter_classlasting_3">三節小課</string>
+    <string name="ics_alter_classtime_am1">上午第一節</string>
+    <string name="ics_alter_classtime_am2">上午第二節</string>
+    <string name="ics_alter_classtime_pm1">下午第一節</string>
+    <string name="ics_alter_classtime_pm2">下午第二節</string>
+    <string name="ics_alter_classtime_pm3">下午第三節</string>
+    <string name="ics_alter_classtime_eve2">晚上第二節</string>
+    <string name="ics_Button_add">添加課程</string>
+    <string name="ics_switch_app">App 模式（不包含時區信息）</string>
+    <string name="ics_alter_classtime_eve1">晚上第一節</string>
+    <string name="ics_tv_break_duration">課間休息時長</string>
+    <string name="ics_alter_classtime_am3">上午第三節</string>
+    <string name="ics_alter_classtime_eve3">晚上第三節</string>
+    <string name="ics_instruction_help">課表加載失敗</string>
+    <string name="ics_manual_help_solution">課表功能已不再進行維護，請使用其它應用</string>
+    <string name="ttValidateName">請驗證好課程名</string>
+    <string name="Advice_TextView_IssueReport_Text">課表代碼文件</string>
+    <string name="advice_textview_issue_details">從剪貼板裡的課表內容生成的HTML文件</string>
+    <string name="st_manual_features">功能詳情：\n1. 解析教務系統課表，只支持部分正方教務系統\n2. 基於課表生成日曆文件 (iCalendar, .ics)，可導入至谷歌日曆等\n3. 當週指示，在每週週一創建全天事件，指示當周是第幾週</string>
+    <string name="st_manual_notes">注意事項：\n1. 在導入日曆前請設置好時間和日期\n2. 若教務系統課表發生變動，請按原步驟重新導入或者直接在本App內修改\n3. 無論如何，在將新課表導出至日曆前必須撤銷上一次導入日曆的課表</string>
+    <string name="st_manual_instructions">解析教務系統課表：\n1. 用支持的瀏覽器打開學校正方教務系統頁面並找到你想要導入的課表\n2. 在課表任意課程上長按以進入文本選擇模式，接著按全選然後按複製，此時課表內容已經復制至剪貼板\n3. 回到本App點擊 從剪貼板加載課表</string>
+</resources>

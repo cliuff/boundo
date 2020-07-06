@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2020 Clifford Liu
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="av_updates_recents">Son İşlemler</string>
+    <string name="sdkcheck_dialog_targetsdktext">Hedef</string>
+    <string name="sdkcheck_dialog_minsdktext">Min.</string>
+    <string name="sdkcheck_sortspinner_sortbyname">İsimle</string>
+    <string name="sdkcheck_sortspinner_sortbyhighersdk">En Yüksek API</string>
+    <string name="sdkcheck_sortspinner_sortbylowersdk">En Düşük API</string>
+    <string name="sdkcheck_displayspinner_user">Benim uygulamalarım</string>
+    <string name="sdkcheck_displayspinner_usersystem">Tüm uygulamalar</string>
+    <string name="res_api_code_names_c">Cupcake</string>
+    <string name="res_api_code_names_d">Tatlı çörek</string>
+    <string name="res_api_code_names_e">ekler</string>
+    <string name="res_api_code_names_f">Froyo</string>
+    <string name="res_api_code_names_g">zencefilli çörek</string>
+    <string name="res_api_code_names_h">Bal peteği</string>
+    <string name="res_api_code_names_i">Dondurmalı Sandviç</string>
+    <string name="res_api_code_names_j">Jöle fasulye şekerleme</string>
+    <string name="res_api_code_names_k">Kit Kat</string>
+    <string name="res_api_code_names_l">Lolipop</string>
+    <string name="res_api_code_names_m">Hatmi</string>
+    <string name="res_api_code_names_n">koz helvası</string>
+    <string name="res_api_code_names_o">Oreo</string>
+    <string name="res_api_code_names_p">Turta</string>
+    <string name="apiDetails">ayrıntılar</string>
+    <string name="apiDetailsVerName">"Sürüm adı: "</string>
+    <string name="apiDetailsVerCode">"Sürüm kodu: "</string>
+    <string name="apiDetailsFirstInstall">"İlk kurulum: "</string>
+    <string name="apiDetailsLastUpdate">"Son Güncelleme: "</string>
+    <string name="apiDetailsInsatllFrom">"Yükleyici: "</string>
+    <string name="apiDetailsInstallUnknown">Bilinmeyen</string>
+    <string name="apiDetailsInstallGP">Google Oyun mağazası</string>
+    <string name="apiDetailsInstallPI">Paket yükleyici</string>
+    <string name="apiDetailsCert">sertifika</string>
+    <string name="apiDetailsValiSince">"Geçerlilik tarihi: "</string>
+    <string name="apiDetailsValiUntil">"Geçerlilik süresi: "</string>
+    <string name="apiDetailsIssuer">"Veren: "</string>
+    <string name="apiDetailsSubject">"Konu: "</string>
+    <string name="apiDetailsSigAlg">"İmza algoritması: "</string>
+    <string name="apiDetailsSigAlgOID">"İmza algoritması OID: "</string>
+    <string name="apiDetailsPermissions">İzinler:</string>
+    <string name="apiDetailsActivities">Etkinlikler:</string>
+    <string name="apiDetailsReceivers">Yayın Alıcıları:</string>
+    <string name="apiDetailsServices">Hizmetler:</string>
+    <string name="apiDetailsProviders">Sağlayıcıları:</string>
+    <string name="resApiCodeNamesB">Petit Four</string>
+    <string name="resPrincipalCN">Yaygın isim</string>
+    <string name="resPrincipalOU">Organizasyon Birimi</string>
+    <string name="resPrincipalO">organizasyon</string>
+    <string name="resPrincipalL">Şehir veya Bölge</string>
+    <string name="resPrincipalST">Eyalet veya İl</string>
+    <string name="resPrincipalC">ülke</string>
+    <string name="resPrincipalEmail">E-posta</string>
+    <string name="apiInfoAiIconDes">Simge (APK)</string>
+    <string name="apiInfoAiIconRDes">Yuvarlak Simge (APK)</string>
+    <string name="apiInfoAiIconDesSys">Simge (sistem)</string>
+    <string name="apiInfoAiOverallDes">Birinin normal uygulama simgesi diğerinin yuvarlak uygulama simgesi olduğu bir apk\'de tezahür edebilen iki başlatıcı ikonu seti vardır.\nHer iki set de Android 8.0 ile tanıtılan Adaptive Icon içerebilir. Yuvarlak uygulama simgesi Android 7.1 ile tanıtıldı.</string>
+    <string name="avTBViewingTarget">Hedefi / dak. Görüntüle API</string>
+    <string name="avManual">Bir uygulama programlama arayüzü (API), genel anlamda, çeşitli bileşenler arasında açıkça tanımlanmış bir iletişim yöntemleri kümesidir.\n\nBir yazılım geliştirme kiti (SDK), genellikle belirli bir geliştirme platformu için uygulama oluşturulmasına izin veren bir yazılım geliştirme araçları setidir.\n\nSonuç olarak, bir platformun SDK\'sı o platformun ilgili API\'sını içerir.\n\nAndroid sürümünün API sürümüne API Düzeyi denir.\n\nHer yeni Android sürümünde, güvenli olmayan ve verimsiz API\'ları kullanımdan kaldırırken yeni özelliklere erişim, gizlilik erişim kısıtlamaları, güvenlik geliştirmeleri ve performans iyileştirmeleri getiren çok sayıda API değişikliği geliyor.\n\nBazen bir Android sürümü yalnızca hata düzeltmeleri içerir ve böylece API değişiklikleri olmaz, bu nedenle API Düzeyi aynı kalır.\n\nHedef SDK Sürümü, bir uygulamanın kullanmak için tasarlandığı hedef API Düzeyini tanımlar.\n\nMinimum SDK Sürümü, bir uygulamanın gerektirdiği minimum API Düzeyi\'ni tanımlar.\n\nYeni Android sürümlerinin bazı kısıtlamaları ve geliştirmeleri, yalnızca hedef API Düzeyi cihazın Android sistemindekilerle eşleştiğinde veya onu aştığında uygulamalar için geçerli olacaktır.</string>
+    <string name="av_share_full">Tam</string>
+    <string name="av_share_stroked">okşadı</string>
+    <string name="av_updates_view_more">Daha fazla göster</string>
+    <string name="av_settings_tags">Etiketler</string>
+    <string name="av_settings_tags_system">Sistem uygulaması</string>
+    <string name="av_adapter_tag_system">sistem</string>
+    <string name="av_ai">Uyarlanabilir simge</string>
+    <string name="av_tag_has_splits">Split APK</string>
+</resources>

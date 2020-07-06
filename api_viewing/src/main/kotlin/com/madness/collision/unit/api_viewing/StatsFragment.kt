@@ -20,16 +20,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.EasyAccess
+import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.X
 import kotlinx.android.synthetic.main.fragment_stats.*
 import kotlin.math.roundToInt
 import com.madness.collision.unit.api_viewing.R as MyR
 
-internal class StatsFragment: Fragment(){
+internal class StatsFragment: TaggedFragment(){
+
+    override val category: String = "AV"
+    override val id: String = "Stats"
 
     companion object {
         const val ARG_TYPE = "type"

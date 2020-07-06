@@ -1,4 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2020 Clifford Liu
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <resources>
     <string name="ics_alter_clperiod">Длительность</string>
     <string name="ics_alter_clphase">Время</string>
@@ -29,7 +45,7 @@
     <string name="ics_alter_cteacher">учитель</string>
     <string name="ics_alter_croom">Место расположения</string>
     <string name="ics_alter_cname">Название курса</string>
-    <string name="ics_EditText_Time">%1$dmin</string>
+    <string name="ics_EditText_Time">%1$d min</string>
     <string name="ics_Function_Toast_NOHtml_Text">Переключитесь на поддерживаемые браузеры и попробуйте снова</string>
     <string name="ics_Import_Toast_Null">Нет информации о расписании школ</string>
     <string name="ics_Part1_Button_OK_Text">Ok</string>
@@ -61,5 +77,7 @@
     <string name="ics_Button_date_picker">Дата и время</string>
     <string name="ics_Function_AlertDialog_Instruction">Требуется больше информации\nПожалуйста, введите начало и конец недели ниже:</string>
     <string name="timetable_manual_browsers">Гугл Хром, Microsoft Edge, Интернет-браузер Samsung, Via Browser, XBrowser, Magic Browser, VC Browser, Salfish Browser (by Ruanmei.com), Lim Browser, H5 Browser, Opera Browser, DU Browser, 360 Browser, Sogou Browser, YuBrowser, Maxthon Browser etc.\n\nНе поддерживается (И китайские рынки приложений и издания Play Store):\nUC Browser, Firefox Browser, QQ Browser, Quark Browser и т.п.</string>
-    <string name="ics_TextView_instruction">Функции:\n1. Разбор школьного расписания с сайта школьной системы образования, поддерживаются только некоторые из образовательной системы ZFSoft\n2. Создайте файл iCalendar (.ics) из школьного расписания, который можно импортировать в Календарь Google и т. Д.\n3. Индикатор недели, чтобы создать события на весь день в понедельник, которые сообщают, какая это неделя\n\nЗамечания:\n1. Обязательно установите дату и время перед экспортом расписания в календарь\n2. Повторите процесс, если ваше школьное расписание на веб-сайте школьной системы образования будет обновлено, или же обновление может быть применено путем ручных изменений в приложении.\n3. Вы должны отменить предыдущий импорт календаря перед экспортом обновленного\n\nДля разбора школьного расписания:\n1.Найдите свое школьное расписание на официальном сайте образовательной системы ZFSoft через поддерживаемый браузер.\n2.Нажмите и удерживайте любой элемент в школьном расписании, чтобы перейти в режим выделения текста, затем нажмите «выбрать все» и затем «скопировать», теперь содержимое копируется в буфер обмена.\n3.Вернись и нажми на кнопку с надписью \"разбор из буфера обмена\"</string>
+    <string name="st_manual_features">Функции:\n1. Разбор школьного расписания с сайта школьной системы образования, поддерживаются только некоторые из образовательной системы ZFSoft\n2. Создайте файл iCalendar (.ics) из школьного расписания, который можно импортировать в Календарь Google и т. Д.\n3. Индикатор недели, чтобы создать события на весь день в понедельник, которые сообщают, какая это неделя</string>
+    <string name="st_manual_notes">Замечания:\n1. Обязательно установите дату и время перед экспортом расписания в календарь\n2. Повторите процесс, если ваше школьное расписание на веб-сайте школьной системы образования будет обновлено, или же обновление может быть применено путем ручных изменений в приложении.\n3. Вы должны отменить предыдущий импорт календаря перед экспортом обновленного</string>
+    <string name="st_manual_instructions">Для разбора школьного расписания:\n1.Найдите свое школьное расписание на официальном сайте образовательной системы ZFSoft через поддерживаемый браузер.\n2.Нажмите и удерживайте любой элемент в школьном расписании, чтобы перейти в режим выделения текста, затем нажмите «выбрать все» и затем «скопировать», теперь содержимое копируется в буфер обмена.\n3.Вернись и нажми на кнопку с надписью \"разбор из буфера обмена\"</string>
 </resources>

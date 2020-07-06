@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2020 Clifford Liu
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="av_updates_recents">Πρόσφατα</string>
+    <string name="sdkcheck_dialog_targetsdktext">Στόχος</string>
+    <string name="sdkcheck_dialog_minsdktext">Ελάχ.</string>
+    <string name="sdkcheck_sortspinner_sortbyname">Από όνομα</string>
+    <string name="sdkcheck_sortspinner_sortbyhighersdk">Υψηλότερο API</string>
+    <string name="sdkcheck_sortspinner_sortbylowersdk">Χαμηλότερο API</string>
+    <string name="sdkcheck_displayspinner_user">Οι εφαρμογές μου</string>
+    <string name="sdkcheck_displayspinner_usersystem">Όλες οι εφαρμογές</string>
+    <string name="res_api_code_names_c">Κεκάκι</string>
+    <string name="res_api_code_names_d">Ντόνατ</string>
+    <string name="res_api_code_names_e">Eclair</string>
+    <string name="res_api_code_names_f">Φρόιο</string>
+    <string name="res_api_code_names_g">Μελόπιτα</string>
+    <string name="res_api_code_names_h">Κηρήθρα</string>
+    <string name="res_api_code_names_i">Παγωτο ΣΑΝΤΟΥΪΤΣ</string>
+    <string name="res_api_code_names_j">Jelly Bean</string>
+    <string name="res_api_code_names_k">Kit Kat</string>
+    <string name="res_api_code_names_l">Γλειφιτζούρι</string>
+    <string name="res_api_code_names_m">Marshmallow</string>
+    <string name="res_api_code_names_n">Μαντολάτο</string>
+    <string name="res_api_code_names_o">Ωρεο</string>
+    <string name="res_api_code_names_p">Πίτα</string>
+    <string name="apiDetails">Λεπτομέριες</string>
+    <string name="apiDetailsVerName">"Όνομα έκδοσης: "</string>
+    <string name="apiDetailsVerCode">"Κωδικός έκδοσης: "</string>
+    <string name="apiDetailsFirstInstall">"Πρώτη εγκατάσταση: "</string>
+    <string name="apiDetailsLastUpdate">"Τελευταία ενημέρωση: "</string>
+    <string name="apiDetailsInsatllFrom">"Πρόγραμμα εγκατάστασης: "</string>
+    <string name="apiDetailsInstallUnknown">Αγνωστος</string>
+    <string name="apiDetailsInstallGP">Google Play Store</string>
+    <string name="apiDetailsInstallPI">Πρόγραμμα εγκατάστασης πακέτων</string>
+    <string name="apiDetailsCert">Πιστοποιητικό</string>
+    <string name="apiDetailsValiSince">"Ισχύς από: "</string>
+    <string name="apiDetailsValiUntil">"Ισχύει έως: "</string>
+    <string name="apiDetailsIssuer">"Εκδότης: "</string>
+    <string name="apiDetailsSubject">"Θέμα: "</string>
+    <string name="apiDetailsSigAlg">"Αλγόριθμος υπογραφής: "</string>
+    <string name="apiDetailsSigAlgOID">"OID αλγόριθμος υπογραφής: "</string>
+    <string name="apiDetailsPermissions">Άδειες:</string>
+    <string name="apiDetailsActivities">Δραστηριότητες:</string>
+    <string name="apiDetailsReceivers">Δέκτες μετάδοσης:</string>
+    <string name="apiDetailsServices">Υπηρεσίες:</string>
+    <string name="apiDetailsProviders">Πάροχοι:</string>
+    <string name="resApiCodeNamesB">Μικρά ζυμαροζαχαρωτά</string>
+    <string name="resPrincipalCN">Συνηθισμένο όνομα</string>
+    <string name="resPrincipalOU">Οργανωτική μονάδα</string>
+    <string name="resPrincipalO">Οργάνωση</string>
+    <string name="resPrincipalL">Πόλη ή τοποθεσία</string>
+    <string name="resPrincipalST">Κράτος ή επαρχία</string>
+    <string name="resPrincipalC">Χώρα</string>
+    <string name="resPrincipalEmail">ΗΛΕΚΤΡΟΝΙΚΗ ΔΙΕΥΘΥΝΣΗ</string>
+    <string name="apiInfoAiIconDes">Εικονίδιο (APK)</string>
+    <string name="apiInfoAiIconRDes">Στρογγυλό εικονίδιο (APK)</string>
+    <string name="apiInfoAiIconDesSys">Εικονίδιο (σύστημα)</string>
+    <string name="apiInfoAiOverallDes">Υπάρχουν δύο σύνολα εικονιδίων εκκίνησης που μπορούν να εκδηλωθούν σε ένα apk, στο οποίο το ένα είναι κανονικό εικονίδιο εφαρμογής και το άλλο είναι στρογγυλό εικονίδιο εφαρμογής.\nΚαι τα δύο σύνολα μπορούν να περιέχουν Adaptive Icon, το οποίο παρουσιάστηκε με το Android 8.0. Το εικονίδιο στρογγυλής εφαρμογής παρουσιάστηκε με το Android 7.1.</string>
+    <string name="avTBViewingTarget">Προβολή στόχου / λεπτό API</string>
+    <string name="avManual">Μια διεπαφή προγραμματισμού εφαρμογών (API), σε γενικές γραμμές, είναι ένα σύνολο σαφώς καθορισμένων μεθόδων επικοινωνίας μεταξύ διαφόρων συνιστωσών.\n\nΈνα κιτ ανάπτυξης λογισμικού (SDK) είναι συνήθως ένα σύνολο εργαλείων ανάπτυξης λογισμικού που επιτρέπει τη δημιουργία εφαρμογών για μια συγκεκριμένη πλατφόρμα ανάπτυξης.\n\nΚατά συνέπεια, το SDK μιας πλατφόρμας περιέχει το αντίστοιχο API αυτής της πλατφόρμας.\n\nΗ έκδοση του API μιας έκδοσης Android αναφέρεται ως επίπεδο API.\n\nΜε κάθε νέα έκδοση Android έρχονται πολλές αλλαγές στο API, προσφέροντας πρόσβαση σε νέες δυνατότητες, περιορισμούς πρόσβασης στο απόρρητο, βελτιώσεις ασφάλειας και βελτιώσεις απόδοσης, ενώ καταργούν τα ανασφαλή και αναποτελεσματικά API.\n\nΜερικές φορές μια έκδοση Android περιέχει μόνο διορθώσεις σφαλμάτων και ούτω καθεξής, αλλά κανένα API δεν αλλάζει, επομένως το επίπεδο API παραμένει το ίδιο.\n\nΗ έκδοση SDK προορισμού καθορίζει το επίπεδο API στόχου που έχει σχεδιαστεί για χρήση από μια εφαρμογή.\n\nΗ ελάχιστη έκδοση SDK καθορίζει το ελάχιστο επίπεδο API που απαιτείται από μια εφαρμογή.\n\nΟρισμένοι περιορισμοί και βελτιώσεις των νέων εκδόσεων Android θα ισχύουν για εφαρμογές μόνο όταν το επίπεδο API στόχου τους ταιριάζει ή υπερβαίνει εκείνο του συστήματος Android της συσκευής.</string>
+    <string name="av_share_full">Γεμάτος</string>
+    <string name="av_share_stroked">Χαϊδεύτηκε</string>
+    <string name="av_updates_view_more">Δείτε περισσότερα</string>
+    <string name="av_settings_tags">Ετικέτες</string>
+    <string name="av_settings_tags_system">Εφαρμογή συστήματος</string>
+    <string name="av_adapter_tag_system">Σύστημα</string>
+    <string name="av_ai">Προσαρμοστικό εικονίδιο</string>
+    <string name="av_tag_has_splits">Split APK</string>
+</resources>

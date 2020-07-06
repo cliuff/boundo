@@ -22,7 +22,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.util.forEach
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
@@ -33,13 +32,17 @@ import com.madness.collision.R
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
+import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.ThemeUtil
 import com.madness.collision.util.X
 import kotlinx.android.synthetic.main.fragment_chart.*
 import kotlin.math.roundToInt
 import com.madness.collision.unit.api_viewing.R as MyR
 
-internal class ChartFragment: Fragment(){
+internal class ChartFragment: TaggedFragment(){
+
+    override val category: String = "AV"
+    override val id: String = "Chart"
 
     companion object {
         const val ARG_TYPE = "type"

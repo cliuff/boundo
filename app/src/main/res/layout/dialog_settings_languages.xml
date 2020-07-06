@@ -1,4 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2020 Clifford Liu
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/Settings_LanguagePicker_RadioGroup"
     android:animateLayoutChanges="true"
@@ -36,6 +52,26 @@
         android:id="@+id/language_zh_cn"
         android:text="@string/language_zh_cn"
         android:tag="zh_CN"
+        style="@style/LanguageItem"/>
+    <RadioButton
+        android:id="@+id/languageZhHK"
+        android:text="@string/lang_zh_hk"
+        android:tag="zh_HK"
+        style="@style/LanguageItem"/>
+    <RadioButton
+        android:id="@+id/languageZhMO"
+        android:text="@string/lang_zh_mo"
+        android:tag="zh_MO"
+        style="@style/LanguageItem"/>
+    <RadioButton
+        android:id="@+id/languageZhTW"
+        android:text="@string/lang_zh_tw"
+        android:tag="zh_TW"
+        style="@style/LanguageItem"/>
+    <RadioButton
+        android:id="@+id/languageZhSG"
+        android:text="@string/lang_zh_sg"
+        android:tag="zh_SG"
         style="@style/LanguageItem"/>
     <RadioButton
         android:id="@+id/languageRu"
@@ -111,6 +147,66 @@
         android:id="@+id/languageFr"
         android:text="@string/lang_fr"
         android:tag="fr"
+        style="@style/LanguageItem"/>
+    <RadioButton
+        android:id="@+id/languageFrFR"
+        android:text="@string/lang_fr_fr"
+        android:tag="fr_FR"
+        style="@style/LanguageItem"/>
+
+    <RadioButton
+        android:id="@+id/languageEl"
+        android:text="@string/lang_el"
+        android:tag="el"
+        style="@style/LanguageItem"/>
+    <RadioButton
+        android:id="@+id/languageElGR"
+        android:text="@string/lang_el_gr"
+        android:tag="el_GR"
+        style="@style/LanguageItem"/>
+
+    <RadioButton
+        android:id="@+id/languageJa"
+        android:text="@string/lang_ja"
+        android:tag="ja"
+        style="@style/LanguageItem"/>
+    <RadioButton
+        android:id="@+id/languageJaJP"
+        android:text="@string/lang_ja_jp"
+        android:tag="ja_JP"
+        style="@style/LanguageItem"/>
+
+    <RadioButton
+        android:id="@+id/languageKo"
+        android:text="@string/lang_ko"
+        android:tag="ko"
+        style="@style/LanguageItem"/>
+    <RadioButton
+        android:id="@+id/languageKoKR"
+        android:text="@string/lang_ko_kr"
+        android:tag="ko_KR"
+        style="@style/LanguageItem"/>
+
+    <RadioButton
+        android:id="@+id/languageTr"
+        android:text="@string/lang_tr"
+        android:tag="tr"
+        style="@style/LanguageItem"/>
+    <RadioButton
+        android:id="@+id/languageTrTR"
+        android:text="@string/lang_tr_tr"
+        android:tag="tr_TR"
+        style="@style/LanguageItem"/>
+
+    <RadioButton
+        android:id="@+id/languageDe"
+        android:text="@string/lang_de"
+        android:tag="de"
+        style="@style/LanguageItem"/>
+    <RadioButton
+        android:id="@+id/languageDeDE"
+        android:text="@string/lang_de_de"
+        android:tag="de_DE"
         style="@style/LanguageItem"/>
 
 </RadioGroup>

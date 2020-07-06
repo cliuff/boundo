@@ -22,7 +22,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
 import com.madness.collision.R as MainR
@@ -31,11 +30,16 @@ import com.madness.collision.main.MainViewModel
 import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.EasyAccess
+import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.alterPadding
 import com.madness.collision.util.ensureAdded
 import kotlinx.android.synthetic.main.fragment_statistics.*
 
-internal class StatisticsFragment: Fragment(), Democratic {
+internal class StatisticsFragment: TaggedFragment(), Democratic {
+
+    override val category: String = "AV"
+    override val id: String = "Statistics"
+
     companion object {
         const val ARG_TYPE = "type"
         @JvmStatic
@@ -59,7 +63,7 @@ internal class StatisticsFragment: Fragment(), Democratic {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val unit: Int = arguments?.getInt(ARG_TYPE) ?: ApiUnit.ALL_APPS
-        val isHor = view.findViewById<View>(R.id.avStatisticsContainerPieChart) != null
+        val isHor = view.findViewById<View>(R.id.avStatisticsContainer) == null
         ensureAdded(if (isHor) R.id.avStatisticsContainerPieChart else R.id.avStatisticsContainer, ChartFragment.newInstance(unit))
         ensureAdded(if (isHor) R.id.avStatisticsContainerList else R.id.avStatisticsContainer, StatsFragment.newInstance(unit))
     }
@@ -69,11 +73,12 @@ internal class StatisticsFragment: Fragment(), Democratic {
         activity?.run {
             val mainViewModel: MainViewModel by activityViewModels()
             democratize(mainViewModel)
+            val container = avStatisticsContainer ?: avStatisticsRoot
             mainViewModel.contentWidthTop.observe(viewLifecycleOwner) {
-                avStatisticsContainer.alterPadding(top = it)
+                container.alterPadding(top = it)
             }
             mainViewModel.contentWidthBottom.observe(viewLifecycleOwner) {
-                avStatisticsContainer.alterPadding(bottom = it)
+                container.alterPadding(bottom = it)
             }
         }
     }

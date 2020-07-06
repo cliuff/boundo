@@ -54,6 +54,9 @@ import kotlin.math.roundToInt
 import com.madness.collision.unit.image_modifying.R as MyR
 
 class MyUnit: Unit(){
+
+    override val id: String = "IM"
+
     companion object {
         const val REQUEST_GET_IMAGE = 100
         const val permission_REQUEST_EXTERNAL_STORAGE = 200
