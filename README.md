@@ -6,11 +6,11 @@
 
 **After check-out**
 - Add a file named `custom.properties` in project root directory, within add the following lines:
-> packageName=com.madness.collision
-> signingKeyStorePath=**KeyStorePath**
-> signingKeyStorePassword=**KeyStorePassword**
-> signingKeyAlias=**KeyAlias**
-> signingKeyPassword=**KeyPassword**
+> packageName=com.madness.collision  
+> signingKeyStorePath=**KeyStorePath**  
+> signingKeyStorePassword=**KeyStorePassword**  
+> signingKeyAlias=**KeyAlias**  
+> signingKeyPassword=**KeyPassword**  
 
 **After sync**
 - **Edit Configurations**: configuration **app**, change **deploy** to **APK from app bundle**
