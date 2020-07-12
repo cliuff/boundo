@@ -169,7 +169,6 @@
     <string name="ttWeekIndicatorUndo">Google 캘린더 가져 오기 실행 취소</string>
     <string name="textQuality">품질</string>
     <string name="tileDataUsageAccess">사용 데이터에 액세스하도록 허용</string>
-    <string name="textSelectPrimaryExternal">장치의 기본 저장소의 루트 디렉토리를 선택하십시오</string>
     <string name="apiDisplayVolume">폴더를 선택하십시오</string>
     <string name="activityApkSharing">API보기</string>
     <string name="sharingNonApkLink">비 설치 패키지 다운로드 링크</string>

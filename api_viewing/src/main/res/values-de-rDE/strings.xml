@@ -81,4 +81,5 @@
     <string name="apiDetailsFirstInstall">"Erste Installation: "</string>
     <string name="apiDetailsLastUpdate">"Letztes Update: "</string>
     <string name="apiDetailsInsatllFrom">"Installateur: "</string>
+    <string name="av_apks_select_folder">Wählen Sie einen Ordner zum Scannen aus</string>
 </resources>

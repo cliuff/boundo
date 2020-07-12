@@ -81,4 +81,5 @@
     <string name="av_adapter_tag_system">System</string>
     <string name="av_ai">Adaptive icon</string>
     <string name="av_tag_has_splits">Has splits</string>
+    <string name="av_apks_select_folder">Select a folder to scan</string>
 </resources>

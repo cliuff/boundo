@@ -90,7 +90,7 @@ class MoreFragment : TaggedFragment(), Democratic, View.OnClickListener, NavNode
             mViews.findViewById<LinearLayout>(R.id.moreContainer)?.alterPadding(bottom = it)
         }
         val cardInstant = mViews.findViewById<MaterialCardView>(R.id.moreInstant)
-        val isInstantUnavailable = X.belowOff(X.N)
+        val isInstantUnavailable = X.belowOff(X.M)
         if (isInstantUnavailable) cardInstant.visibility = View.GONE
         val cardSettings = mViews.findViewById<MaterialCardView>(R.id.moreSettings)
         val cardUnitManager = mViews.findViewById<MaterialCardView>(R.id.moreUnitsManager)

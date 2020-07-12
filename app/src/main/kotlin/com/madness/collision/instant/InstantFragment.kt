@@ -16,7 +16,6 @@
 
 package com.madness.collision.instant
 
-import android.annotation.TargetApi
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -40,7 +39,6 @@ import com.madness.collision.util.*
 import kotlinx.android.synthetic.main.activity_instant_manager.*
 import kotlin.math.roundToInt
 
-@TargetApi(X.N)
 internal class InstantFragment: TaggedFragment(), Democratic {
 
     override val category: String = "Instant"
@@ -97,36 +95,46 @@ internal class InstantFragment: TaggedFragment(), Democratic {
             (!it.hasRequiredUnit || installedUnits.contains(it.requiredUnitName)) && it.isAvailable(context)
         }
         // qs tiles
-        val availableTiles = InstantTiles.TILES.filter(predicate)
-        val adapterTile = InstantAdapter(context, mainViewModel, InstantAdapter.TYPE_TILE, availableTiles)
-        instantRecyclerTile.run {
-            setHasFixedSize(true)
-            setItemViewCacheSize(availableTiles.size)
-            layoutManager = if (spanCount == 1) LinearLayoutManager(context) else GridLayoutManager(context, spanCount)
-            adapter = adapterTile
+        val availableTiles by lazy { InstantTiles.TILES.filter(predicate) }
+        if (X.aboveOn(X.N) && availableTiles.isNotEmpty()) {
+            val adapterTile = InstantAdapter(context, mainViewModel, InstantAdapter.TYPE_TILE, availableTiles)
+            instantRecyclerTile.run {
+                setHasFixedSize(true)
+                setItemViewCacheSize(availableTiles.size)
+                layoutManager = if (spanCount == 1) LinearLayoutManager(context) else GridLayoutManager(context, spanCount)
+                adapter = adapterTile
+            }
+        } else {
+            instantRecyclerTile.visibility = View.GONE
+            instantIntroTile.visibility = View.GONE
         }
         // shortcuts
-        if (X.belowOff(X.N_MR1)) {
+        val availableShortcuts by lazy { InstantShortcuts.SHORTCUTS.filter(predicate) }
+        if (X.aboveOn(X.N_MR1) && availableShortcuts.isNotEmpty()) {
+            val adapterShortcut = InstantAdapter(context, mainViewModel, InstantAdapter.TYPE_SHORTCUT, availableShortcuts)
+            instantRecyclerShortcut.run {
+                setHasFixedSize(true)
+                setItemViewCacheSize(availableShortcuts.size)
+                layoutManager = if (spanCount == 1) LinearLayoutManager(context) else GridLayoutManager(context, spanCount)
+                adapter = adapterShortcut
+            }
+        } else {
             instantRecyclerShortcut.visibility = View.GONE
             instantIntroShortcut.visibility = View.GONE
-            return
-        }
-        val availableShortcuts = InstantShortcuts.SHORTCUTS.filter(predicate)
-        val adapterShortcut = InstantAdapter(context, mainViewModel, InstantAdapter.TYPE_SHORTCUT, availableShortcuts)
-        instantRecyclerShortcut.run {
-            setHasFixedSize(true)
-            setItemViewCacheSize(availableShortcuts.size)
-            layoutManager = if (spanCount == 1) LinearLayoutManager(context) else GridLayoutManager(context, spanCount)
-            adapter = adapterShortcut
         }
         // other
         val availableOther = InstantOthers.OTHERS.filter(predicate)
-        val adapterOther = InstantAdapter(context, mainViewModel, InstantAdapter.TYPE_OTHER, availableOther)
-        instantRecyclerOther.run {
-            setHasFixedSize(true)
-            setItemViewCacheSize(availableOther.size)
-            layoutManager = if (spanCount == 1) LinearLayoutManager(context) else GridLayoutManager(context, spanCount)
-            adapter = adapterOther
+        if (availableOther.isNotEmpty()) {
+            val adapterOther = InstantAdapter(context, mainViewModel, InstantAdapter.TYPE_OTHER, availableOther)
+            instantRecyclerOther.run {
+                setHasFixedSize(true)
+                setItemViewCacheSize(availableOther.size)
+                layoutManager = if (spanCount == 1) LinearLayoutManager(context) else GridLayoutManager(context, spanCount)
+                adapter = adapterOther
+            }
+        } else {
+            instantRecyclerOther.visibility = View.GONE
+            instantIntroOther.visibility = View.GONE
         }
     }
 

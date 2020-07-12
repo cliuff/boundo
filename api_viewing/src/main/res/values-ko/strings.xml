@@ -81,4 +81,5 @@
     <string name="av_adapter_tag_system">체계</string>
     <string name="av_ai">적응 형 아이콘</string>
     <string name="av_tag_has_splits">Split APK</string>
+    <string name="av_apks_select_folder">스캔 할 폴더를 선택하십시오</string>
 </resources>

@@ -301,16 +301,16 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
         val app = viewModel.app.value!!
         when(v.id){
             MyR.id.sdk_info_api_target -> {
-                val back = X.drawableToBitmap(mvTarget.back.drawable)
-                ApiDecentFragment.newInstance(app, ApiDecentFragment.TYPE_TARGET, back).let {
+                val verLetter = Utils.getAndroidLetterByAPI(app.targetAPI)
+                ApiDecentFragment.newInstance(app, ApiDecentFragment.TYPE_TARGET, verLetter, itemLength).let {
                     this.dismiss()
                     val mvm: MainViewModel by activityViewModels()
                     mvm.displayFragment(it)
                 }
             }
             MyR.id.sdk_info_api_min -> {
-                val back = X.drawableToBitmap(mvMin.back.drawable)
-                ApiDecentFragment.newInstance(app, ApiDecentFragment.TYPE_MINIMUM, back).let {
+                val verLetter = Utils.getAndroidLetterByAPI(app.minAPI)
+                ApiDecentFragment.newInstance(app, ApiDecentFragment.TYPE_MINIMUM, verLetter, itemLength).let {
                     this.dismiss()
                     val mvm: MainViewModel by activityViewModels()
                     mvm.displayFragment(it)

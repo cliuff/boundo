@@ -81,4 +81,5 @@
     <string name="av_adapter_tag_system">Sistema</string>
     <string name="av_ai">Icona adattiva</string>
     <string name="av_tag_has_splits">Split APK</string>
+    <string name="av_apks_select_folder">Seleziona una cartella da scansionare</string>
 </resources>

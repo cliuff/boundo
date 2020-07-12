@@ -146,7 +146,6 @@
     <string name="textQuality">品质</string>
     <string name="tileDataUsageAccess">允许我们对使用情况数据进行访问</string>
     <string name="tileData">本月已用流量统计</string>
-    <string name="textSelectPrimaryExternal">请选取设备主存储根目录</string>
     <string name="apiDisplayVolume">选取文件夹</string>
     <string name="activityApkSharing">查看 API</string>
     <string name="sharingNonApkLink">非安装包下载链接</string>

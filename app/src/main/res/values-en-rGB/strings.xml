@@ -145,7 +145,6 @@
     <string name="textQuality">Quality</string>
     <string name="tileDataUsageAccess">Allow us to access usage</string>
     <string name="tileData">Month data usage</string>
-    <string name="textSelectPrimaryExternal">Please select the root of device\'s primary storage</string>
     <string name="apiDisplayVolume">Select file folder</string>
     <string name="activityApkSharing">Check API</string>
     <string name="sharingNonApkLink">Not apk download link</string>

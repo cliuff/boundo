@@ -81,7 +81,7 @@ internal class SettingsFragment : TaggedFragment(), Democratic, NavNode {
             viewBinding.settingsUnits.findViewById<ViewStub>(R.id.settingsItemLanguagesStub)?.inflate()
             viewBinding.settingsUnits.findViewById<View>(R.id.settingsItemLanguagesContainer)?.run {
                 findViewById<TextView>(R.id.settingsUnitItem)?.run {
-                    setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_language_24_special, 0, 0, 0)
+                    setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_language_24, 0, 0, 0)
                     setText(R.string.Settings_Button_SwitchLanguage)
                 }
                 setOnClickListener {

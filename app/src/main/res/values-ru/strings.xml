@@ -178,7 +178,6 @@
     <string name="textRound">Круглый</string>
     <string name="textRounded">Прямоугольник с закругленными углами</string>
     <string name="textSelectFromGallery">Выберите изображение из галереи вручную</string>
-    <string name="textSelectPrimaryExternal">Пожалуйста, выберите корень основного хранилища устройства</string>
     <string name="textShareApk">Поделитесь APK этого приложения с другими</string>
     <string name="textShareImage">Поделиться логотипом этого приложения с другими</string>
     <string name="textSquircle">Squircle</string>

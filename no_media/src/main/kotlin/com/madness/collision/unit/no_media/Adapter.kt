@@ -19,6 +19,7 @@ package com.madness.collision.unit.no_media
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Typeface
+import android.os.Environment
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -37,7 +38,6 @@ import com.madness.collision.diy.SandwichAdapter
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.no_media.data.BasicInfo
 import com.madness.collision.unit.no_media.data.Dir
-import com.madness.collision.util.F
 import com.madness.collision.util.ThemeUtil
 import com.madness.collision.util.dartFuture
 import java.io.File
@@ -73,7 +73,10 @@ internal class Adapter(
 
         val folder = folders[index]
         val dirLimit = 50
-        val dir = folder.getCleanPath(F.externalRoot()).run {
+//        the root of the primary shared storage
+//        used below Android 10
+        val externalRoot = Environment.getExternalStorageDirectory()?.path ?: ""
+        val dir = folder.getCleanPath(externalRoot).run {
             if (this.length > dirLimit) "..." + this.substring(this.length - dirLimit, this.length)
             else this
         }

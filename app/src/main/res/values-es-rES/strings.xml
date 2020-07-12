@@ -154,7 +154,6 @@
     <string name="textRound">Redondo</string>
     <string name="textRounded">Rectángulo redondeado</string>
     <string name="textSelectFromGallery">Seleccionar imagen de la galería manualmente</string>
-    <string name="textSelectPrimaryExternal">Seleccione la raíz del almacenamiento primario del dispositivo.</string>
     <string name="textShareApk">Comparta el APK de esta aplicación con otros</string>
     <string name="textShareImage">Comparta el logo de esta aplicación con otros</string>
     <string name="textSquircle">Ardilla</string>

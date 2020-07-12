@@ -230,17 +230,6 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
         val api: AppCompatTextView = itemView.findViewById(MyR.id.avAdapterInfoAPI) as AppCompatTextView
         val seal: ImageView = itemView.findViewById(MyR.id.avAdapterSeal)
         val card: MaterialCardView = itemView.findViewById(MyR.id.avAdapterCard)
-
-        constructor(itemView: View, sweetMargin: Int, colorSurface: Int): this(itemView) {
-            card.setCardBackgroundColor(colorSurface)
-//            mViews.avAdapterCard.cardElevation = sweetElevation
-//            mViews.avAdapterCard.stateListAnimator = AnimatorInflater.loadStateListAnimator(context, R.animator.res_lift_card_on_touch)
-            (card.layoutParams as RecyclerView.LayoutParams).run {
-                topMargin = sweetMargin
-                bottomMargin = sweetMargin
-            }
-        }
-
     }
 
     var apps: List<ApiViewingApp> = emptyList()
@@ -261,16 +250,26 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
     private val inflater = LayoutInflater.from(context)
     private var sortMethod: Int = MyUnit.SORT_POSITION_API_LOW
     private var regexFields: MutableMap<String, String> = HashMap()
-    private val isExterior = mainApplication.exterior
-//    private val exteriorTransparency: Int = if (exterior) X.getColor(context, R.color.exteriorTransparencyColor) else Color.WHITE
-    private val isSweet = EasyAccess.isSweet
-    private val shouldShowDesserts = !isExterior && isSweet && (mainApplication.isPaleTheme || mainApplication.isDarkTheme)
-//    private val sweetElevation = if (shouldShowDesserts) X.size(context, 1f, X.DP) else 0f
-    private val sweetMargin = if (shouldShowDesserts) X.size(context, 5f, X.DP).roundToInt() else 0
+    private val isExterior: Boolean
+        get() = mainApplication.exterior
+    private val isSweet: Boolean
+        get() = EasyAccess.isSweet
+    private val shouldShowDesserts: Boolean
+        get() = !isExterior && isSweet && (mainApplication.isPaleTheme || mainApplication.isDarkTheme)
+    private val sweetMargin by lazy { X.size(context, 5f, X.DP).roundToInt() }
+    private val plainMargin by lazy { X.size(context, 2f, X.DP).roundToInt() }
+    private val margin: Int
+        get() = if (shouldShowDesserts) sweetMargin else plainMargin
     private val shouldShowTime : Boolean
         get() = sortMethod == MyUnit.SORT_POSITION_API_TIME
     private val itemLength: Int = X.size(context, 70f, X.DP).roundToInt()
-    private val colorSurface = if (shouldShowDesserts) ThemeUtil.getColor(context, R.attr.colorASurface) else 0
+    private val _colorSurface by lazy { ThemeUtil.getColor(context, R.attr.colorASurface) }
+    private val colorSurface: Int
+        get() = if (shouldShowDesserts) _colorSurface else 0
+    private val colorBackground by lazy { ThemeUtil.getColor(context, R.attr.colorABackground) }
+    private val colorItem by lazy { ThemeUtil.getColor(context, R.attr.colorAItem) }
+    private val tagColor: Int
+        get() = if (shouldShowDesserts) colorBackground else colorItem
 
     private fun inflateTag(nameResId: Int, parent: ViewGroup) {
         inflateTag(context.getString(nameResId), parent)
@@ -282,6 +281,7 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
         }
         AdapterAvTagBinding.inflate(inflater, parent, true).apply {
             avAdapterInfoTag.text = name
+            avAdapterInfoTag.background.setTint(tagColor)
         }
     }
 
@@ -298,7 +298,7 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
 
     override fun onCreateBodyItemViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val itemView = inflater.inflate(MyR.layout.adapter_av, parent, false)
-        return if (shouldShowDesserts) Holder(itemView, sweetMargin, colorSurface) else Holder(itemView)
+        return Holder(itemView)
     }
 
     fun ensureItem(index: Int, refreshLayout: SwipeRefreshLayout? = null) {
@@ -366,6 +366,14 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
     }
 
     override fun onMakeBody(holder: Holder, index: Int) {
+        // set surface color before setting the background color to avoid seen-through shadow of cards
+//        if (shouldShowDesserts && !holder.card.cardBackgroundColor.isOpaque) {
+//            holder.card.setCardBackgroundColor(colorSurface)
+//        }
+        (holder.card.layoutParams as RecyclerView.LayoutParams).run {
+            topMargin = margin
+            bottomMargin = margin
+        }
         val appInfo = apps[index]
         holder.name.dartFuture(appInfo.name)
         holder.logo.setTag(R.bool.tagKeyAvAdapterItemId, appInfo)
@@ -419,7 +427,7 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
         holder.api.dartFuture(verInfo.displaySdk)
 
         populate4Seal(context, verInfo.letter, itemLength)
-        if (shouldShowDesserts){
+        if (shouldShowDesserts) {
             holder.api.setTextColor(getItemColorAccent(context, verInfo.api))
             val seal: Bitmap? = seals[verInfo.letter]
             if (seal == null) {
@@ -430,6 +438,10 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
             }
             val itemBack = getItemColorBack(context, verInfo.api)
             holder.card.setCardBackgroundColor(itemBack)
+        } else {
+            holder.api.setTextColor(holder.name.textColors)
+            holder.seal.visibility = View.GONE
+            holder.card.setCardBackgroundColor(colorSurface)
         }
 
         if (shouldShowTime && appInfo.isNotArchive()) {

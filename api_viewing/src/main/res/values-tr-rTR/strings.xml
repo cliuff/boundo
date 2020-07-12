@@ -81,4 +81,5 @@
     <string name="av_adapter_tag_system">sistem</string>
     <string name="av_ai">Uyarlanabilir simge</string>
     <string name="av_tag_has_splits">Split APK</string>
+    <string name="av_apks_select_folder">Taranacak klasörü seçin</string>
 </resources>

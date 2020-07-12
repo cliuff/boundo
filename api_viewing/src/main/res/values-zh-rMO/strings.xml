@@ -81,4 +81,5 @@
     <string name="av_adapter_tag_system">系統</string>
     <string name="av_ai">自適應圖標</string>
     <string name="av_tag_has_splits">Split APK</string>
+    <string name="av_apks_select_folder">選擇要掃描的文件夾</string>
 </resources>

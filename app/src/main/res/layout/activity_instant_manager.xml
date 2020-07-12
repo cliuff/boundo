@@ -35,8 +35,11 @@
             android:layout_height="wrap_content"
             android:text="@string/instantTileIntro"
             android:textSize="18sp"
-            android:padding="20dp"
-            android:layout_marginTop="5dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:layout_marginTop="10dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"/>
 
@@ -45,6 +48,7 @@
             android:divider="@null"
             android:scrollbars="none"
             android:nestedScrollingEnabled="false"
+            android:layout_marginBottom="30dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -54,8 +58,11 @@
             android:layout_height="wrap_content"
             android:text="@string/instant_manager_intro"
             android:textSize="18sp"
-            android:padding="20dp"
-            android:layout_marginTop="35dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:layout_marginTop="10dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"/>
 
@@ -64,6 +71,7 @@
             android:divider="@null"
             android:scrollbars="none"
             android:nestedScrollingEnabled="false"
+            android:layout_marginBottom="30dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -73,8 +81,11 @@
             android:layout_height="wrap_content"
             android:text="@string/main_more"
             android:textSize="18sp"
-            android:padding="20dp"
-            android:layout_marginTop="35dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:layout_marginTop="10dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"/>
 

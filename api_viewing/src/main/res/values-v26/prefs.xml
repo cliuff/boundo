@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Copyright 2020 Clifford Liu
   ~
@@ -14,20 +15,7 @@
   ~ limitations under the License.
   -->
 
-<manifest xmlns:dist="http://schemas.android.com/apk/distribution"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.madness.collision.unit.api_viewing">
-
-    <dist:module
-        dist:instant="false"
-        dist:title="@string/title_api_viewing">
-        <dist:delivery>
-            <dist:install-time />
-        </dist:delivery>
-        <dist:fusing dist:include="true" />
-    </dist:module>
-
-    <!-- query apps on Android 11 -->
-    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
-</manifest>
-
+<resources>
+    <!-- render round icon by default on Android O -->
+    <bool name="API_CIRCULAR_ICON_DEFAULT">true</bool>
+</resources>

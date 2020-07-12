@@ -162,7 +162,6 @@
     <string name="textQuality">Chất lượng</string>
     <string name="tileDataUsageAccess">Cho phép chúng tôi truy cập sử dụng</string>
     <string name="tileData">Sử dụng dữ liệu tháng</string>
-    <string name="textSelectPrimaryExternal">Vui lòng chọn thư mục gốc của bộ lưu trữ chính của thiết bị</string>
     <string name="apiDisplayVolume">Chọn thư mục tập tin</string>
     <string name="activityApkSharing">Kiểm tra API</string>
     <string name="sharingNonApkLink">Không tải apk liên kết</string>

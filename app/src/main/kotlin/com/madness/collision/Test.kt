@@ -19,6 +19,9 @@ package com.madness.collision
 import android.app.usage.UsageStats
 import android.app.usage.UsageStatsManager
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
 import android.graphics.BitmapRegionDecoder
 import android.graphics.Rect
 import com.madness.collision.util.X
@@ -39,6 +42,13 @@ object Test {
         val mySortedMap: SortedMap<Long, UsageStats> = TreeMap()
         stats.forEach { mySortedMap[it.lastTimeUsed] = it }
         return mySortedMap[mySortedMap.lastKey()]?.packageName ?: ""
+    }
+
+    fun getLauncherActivities(context: Context): List<ResolveInfo> {
+        val pm: PackageManager = context.packageManager
+        val mainIntent = Intent(Intent.ACTION_MAIN, null)
+        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER)
+        return pm.queryIntentActivities(mainIntent, 0).sortedWith(ResolveInfo.DisplayNameComparator(pm))
     }
 
     fun processLargeImage(stream: InputStream) {

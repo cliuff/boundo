@@ -69,7 +69,7 @@ class BackwardOperation(val operationFlags: BooleanArray): Parcelable {
 
         override fun writeToParcel(parcel: Parcel, flags: Int) {
             parcel.writeString(uid)
-            parcel.writeString(clazz::qualifiedName.name)
+            parcel.writeString(clazz.qualifiedName)
             parcel.writeBundle(args)
         }
 

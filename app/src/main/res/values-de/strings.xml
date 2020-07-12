@@ -141,7 +141,6 @@
     <string name="textQuality">Qualität</string>
     <string name="tileDataUsageAccess">Erlauben Sie uns, auf die Nutzung zuzugreifen</string>
     <string name="tileData">Monatliche Datennutzung</string>
-    <string name="textSelectPrimaryExternal">Bitte wählen Sie das Stammverzeichnis des Primärspeichers des Geräts aus</string>
     <string name="apiDisplayVolume">Dateiordner auswählen</string>
     <string name="activityApkSharing">Überprüfen Sie die API</string>
     <string name="sharingNonApkLink">Nicht apk Download-Link</string>

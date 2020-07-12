@@ -142,7 +142,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
         this.toolbar = toolbar
         // After image operations, cache is cleared, leaving list empty.
         // Ensures list refreshes after user comes back.
-        if (viewModel.loadedItems.isVacant && viewModel.apps4Cache.isEmpty()) {
+        if (loadedItems.isVacant && viewModel.apps4Cache.isEmpty()) {
             refreshLayout.isRefreshing = true
             refreshList()
         }
@@ -222,7 +222,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
             }
             MyR.id.apiTBManual -> {
                 val context = context ?: return false
-                CollisionDialog.alert(context, MyR.string.avManual.leadingMargin(context)).show()
+                CollisionDialog.alert(context, MyR.string.avManual).show()
                 return true
             }
             MyR.id.apiTBViewingTarget -> {
@@ -245,6 +245,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
         if (tbDrawable == null) tbDrawable = ColorDrawable(colorTb)
 
         settingsPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
+        // notify on Android O
         if (!settingsPreferences.getBoolean(PrefUtil.AV_INIT_NOTIFY, PrefUtil.AV_INIT_NOTIFY_DEFAULT)){
             settingsPreferences.edit { putBoolean(PrefUtil.AV_INIT_NOTIFY, true) }
             notify(R.string.api_viewer_initialize)
@@ -258,6 +259,18 @@ class MyUnit: com.madness.collision.unit.Unit() {
     override fun onHiddenChanged(hidden: Boolean) {
         if (hidden) {
             popSort = null
+        } else {
+            // check settings
+            GlobalScope.launch {
+                val context = context ?: return@launch
+                val isChanged = EasyAccess.load(context, settingsPreferences, false)
+                if (isChanged) {
+                    delay(1)
+                    launch(Dispatchers.Main) {
+                        adapter.notifyDataSetChanged()
+                    }
+                }
+            }
         }
         super.onHiddenChanged(hidden)
     }
@@ -386,6 +399,8 @@ class MyUnit: com.madness.collision.unit.Unit() {
                 loadAppIcons()
             }
         }
+        // todo use RecyclerView 1.2 to restore scroll position
+        // myAdapter.setStateRestorationStrategy(StateRestorationStrategy.WHEN_NOT_EMPTY);
 
         sortItem = settingsPreferences.getInt(PrefUtil.AV_SORT_ITEM, PrefUtil.AV_SORT_ITEM_DEFAULT)
         rSort = RunnableSort(sortItem)
@@ -477,6 +492,8 @@ class MyUnit: com.madness.collision.unit.Unit() {
 
     override fun onStart() {
         super.onStart()
+        // attention: these statements will be invoked after screen off and on,
+        // where data is loaded already
         if (mode != LAUNCH_MODE_SEARCH && mode != LAUNCH_MODE_LINK) {
             // fix refreshing animation not shown
             GlobalScope.launch {
@@ -487,10 +504,14 @@ class MyUnit: com.madness.collision.unit.Unit() {
             }
         }
         if (mode == LAUNCH_MODE_SEARCH && extras != null) {
-            GlobalScope.launch {
-                delay(1)
-                launch(Dispatchers.Main) {
-                    refreshLayout.isRefreshing = true
+            // fix refreshing animation not shown
+            // invoke only the first time
+            if (loadedItems.isBusy && viewModel.apps4Cache.isEmpty()) {
+                GlobalScope.launch {
+                    delay(1)
+                    launch(Dispatchers.Main) {
+                        refreshLayout.isRefreshing = true
+                    }
                 }
             }
         }
@@ -520,6 +541,8 @@ class MyUnit: com.madness.collision.unit.Unit() {
      */
     private fun selectListSrcItem(item: Int) {
         popSrc?.menu?.getItem(item)?.let {
+            // avoid duplicate refresh
+            if (it.isChecked) return
             clickListSrcItem(it)
         }
     }
@@ -601,7 +624,8 @@ class MyUnit: com.madness.collision.unit.Unit() {
         val context = context ?: return
 
         if (mode == LAUNCH_MODE_SEARCH && extras != null) {
-            // load as ApiUnit.ALL_APPS, because loadedItems is used to avoid repeated loading
+            // load as ApiUnit.ALL_APPS,
+            // because loadedItems is used to check loading and avoid repeated loading
             if (!loadedItems.shouldLoad(ApiUnit.ALL_APPS)) return
             loadedItems.loading(ApiUnit.ALL_APPS)
             val text = extras!!.getString(Intent.EXTRA_TEXT) ?: ""
@@ -611,7 +635,10 @@ class MyUnit: com.madness.collision.unit.Unit() {
         }
 
         if (mode == LAUNCH_MODE_LINK && extras != null) {
-            onActivityResult(INTENT_GET_FILE, AppCompatActivity.RESULT_OK, Intent().apply { data = this@MyUnit.extras!!.getParcelable(EXTRA_DATA_STREAM) })
+            val reIntent = Intent().apply {
+                data = this@MyUnit.extras!!.getParcelable(EXTRA_DATA_STREAM)
+            }
+            onActivityResult(INTENT_GET_FILE, AppCompatActivity.RESULT_OK, reIntent)
             return
         }
 
@@ -666,7 +693,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
                                     }
                                 }
                             }, external)
-                        }catch (e: Exception){ e.printStackTrace() }
+                        } catch (e: Exception){ e.printStackTrace() }
                     }
                 }.invokeOnCompletion {
                     ceaseRefresh(ApiUnit.APK)
@@ -713,7 +740,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
     }
 
     private fun accessiblePrimaryExternal(context: Context, task: ((uri: Uri) -> Unit)?): Boolean{
-        val uriExternalPrimary = settingsPreferences.getString(P.URI_EXTERNAL_PRIMARY, "") ?: ""
+        val uriExternalPrimary = settingsPreferences.getString(P.URI_SCANNING_FOLDER, "") ?: ""
         for (uriPermission in context.contentResolver.persistedUriPermissions) {
             val uriString = uriPermission.uri.toString()
             if (uriString != uriExternalPrimary) continue
@@ -792,8 +819,8 @@ class MyUnit: com.madness.collision.unit.Unit() {
                         },
                         REQUEST_OPEN_DIRECTORY
                 )
-                X.toast(context, R.string.textSelectPrimaryExternal, Toast.LENGTH_LONG)
-            } else{
+                X.toast(context, MyR.string.av_apks_select_folder, Toast.LENGTH_LONG)
+            } else {
                 val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
                 if (PermissionUtil.check(context, permissions).isNotEmpty()) {
                     if (X.aboveOn(X.M))
@@ -924,7 +951,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
                         val takeFlags: Int = Intent.FLAG_GRANT_READ_URI_PERMISSION
                         context.contentResolver.takePersistableUriPermission(it, takeFlags)
                         val uriString = it.toString()
-                        settingsPreferences.edit { putString(P.URI_EXTERNAL_PRIMARY, uriString) }
+                        settingsPreferences.edit { putString(P.URI_SCANNING_FOLDER, uriString) }
                         rDisplay.position = displayItem
                         ApiTaskManager.join(task = rDisplay)
                     }

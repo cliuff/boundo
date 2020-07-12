@@ -34,7 +34,7 @@ object Versions {
     const val androidxFragment = "1.2.5"
     const val androidxDrawerLayout = "1.1.0"
     const val androidxSwipeRefreshLayout = "1.1.0"
-    const val androidxConstraintLayout = "2.0.0-beta7"
+    const val androidxConstraintLayout = "2.0.0-beta8"
     const val androidxPalette = "1.0.0"
     const val androidxCardView = "1.0.0"
     const val androidxRecyclerView = "1.1.0"

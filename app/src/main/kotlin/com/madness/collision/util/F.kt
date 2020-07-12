@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020 Clifford Liu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.madness.collision.util
 
 import android.content.Context
@@ -36,10 +52,8 @@ object F {
     fun valFilePubTwPortraitDark(context: Context) = createPath(valFilePubExterior(context), "twBackDark.webp")
 
     /**
-     * the root of the primary shared storage
+     * used below Android 10
      */
-    fun externalRoot() = Environment.getExternalStorageDirectory()?.path ?: ""
-
     fun externalRoot(sub: String) = Environment.getExternalStoragePublicDirectory(sub)?.path ?: ""
 
     fun cachePrivateFile(context: Context) = context.cacheDir
@@ -77,4 +91,13 @@ object F {
     fun createPath(path: String, vararg names: String) = StringBuilder(path).apply { names.forEach { append(File.separator).append(it) } }.toString()
 
     fun createFile(path: String, vararg names: String) = File(createPath(path, *names))
+
+    // Checks if a volume containing external storage is available for read and write.
+    val isExternalWritable: Boolean
+        get() = Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED
+
+    // Checks if a volume containing external storage is available to at least read.
+    val isExternalReadable: Boolean
+        get() = Environment.getExternalStorageState() in
+                setOf(Environment.MEDIA_MOUNTED, Environment.MEDIA_MOUNTED_READ_ONLY)
 }

@@ -23,16 +23,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.madness.collision.main.MainViewModel
-import com.madness.collision.misc.MiscApp
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
-import com.madness.collision.util.P
-import com.madness.collision.util.TaggedFragment
-import com.madness.collision.util.X
-import com.madness.collision.util.ensureAdded
+import com.madness.collision.util.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -51,14 +48,18 @@ internal class MyUpdatesFragment : TaggedFragment() {
 
         fun checkUpdate(hostFragment: Fragment): Boolean {
             val context = hostFragment.context ?: return false
+            if (hostFragment.activity == null || hostFragment.isDetached || !hostFragment.isAdded) return false
             val mainViewModel: MainViewModel by hostFragment.activityViewModels()
             val prefSettings = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
-            val lastTimestamp = prefSettings.getLong(P.PACKAGE_CHANGED_TIMESTAMP, System.currentTimeMillis())
+            // display recent updates in last week if no history (by default)
+            val lastTimestamp = prefSettings.getLong(P.PACKAGE_CHANGED_TIMESTAMP, System.currentTimeMillis() - 604800000)
             val shouldUpdate = (sessionTimestamp == 0L || sessionTimestamp != mainViewModel.timestamp) && lastTimestamp < mainViewModel.timestamp
             changedPackages = if (shouldUpdate) {
-                MiscApp.getChangedPackages(context)
+                Utils.getChangedPackages(context, lastTimestamp).also {
+                    prefSettings.edit { putLong(P.PACKAGE_CHANGED_TIMESTAMP, System.currentTimeMillis()) }
+                }
             } else {
-                MiscApp.getChangedPackages(context, appTimestamp)
+                Utils.getChangedPackages(context, appTimestamp)
             }
             if (shouldUpdate) {
                 appTimestamp = lastTimestamp
@@ -98,14 +99,25 @@ internal class MyUpdatesFragment : TaggedFragment() {
             if (changedPackages == null) {
                 checkUpdate(this@MyUpdatesFragment)
             }
-            val mChangedPackages = changedPackages!!
-            mList = if (mChangedPackages.isEmpty()) mList else mChangedPackages.subList(0, min(mChangedPackages.size, 10)) .mapIndexed { index, p ->
-                ApiViewingApp(mContext, p, preloadProcess = true, archive = false).setOnLoadedListener {
-                    launch(Dispatchers.Main) {
-                        mAdapter.notifyListItemChanged(index)
-                    }
-                }.load(mContext)
-            }.let { ApiViewingViewModel.sortList(it, MyUnit.SORT_POSITION_API_TIME) }
+            val mChangedPackages = changedPackages ?: emptyList()
+            val spanCount = if (activity == null || isDetached || !isAdded) {
+                1
+            } else {
+                val unitWidth = X.size(mContext, 450f, X.DP)
+                (availableWidth / unitWidth).roundToInt().run {
+                    if (this < 2) 1 else this
+                }
+            }
+            val listLimitSize = min(mChangedPackages.size, 10 * spanCount)
+            mList = if (mChangedPackages.isEmpty()) mList else {
+                mChangedPackages.subList(0, listLimitSize).mapIndexed { index, p ->
+                    ApiViewingApp(mContext, p, preloadProcess = true, archive = false).setOnLoadedListener {
+                        launch(Dispatchers.Main) {
+                            mAdapter.notifyListItemChanged(index)
+                        }
+                    }.load(mContext)
+                }.let { ApiViewingViewModel.sortList(it, MyUnit.SORT_POSITION_API_TIME) }
+            }
             changedPackages = null
 
             launch(Dispatchers.Main) {

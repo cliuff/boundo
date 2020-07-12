@@ -169,7 +169,6 @@
     <string name="ttWeekIndicatorUndo">Googleカレンダーのインポートを元に戻す</string>
     <string name="textQuality">品質</string>
     <string name="tileDataUsageAccess">使用状況データへのアクセスを許可する</string>
-    <string name="textSelectPrimaryExternal">デバイスの主ストレージのルートディレクトリを選択してください</string>
     <string name="apiDisplayVolume">フォルダを選択</string>
     <string name="activityApkSharing">APIを表示</string>
     <string name="sharingNonApkLink">非インストールパッケージのダウンロードリンク</string>

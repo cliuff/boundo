@@ -35,6 +35,15 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 <!--    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>-->
 
+    <queries>
+        <!-- check if QQ is installed -->
+        <package android:name="com.tencent.mobileqq" />
+        <!-- check if WeChat is installed -->
+        <package android:name="com.tencent.mm" />
+        <!-- check if Alipay is installed -->
+        <package android:name="com.eg.android.AlipayGphone" />
+    </queries>
+
     <application
         android:name=".main.MainApplication"
         android:allowBackup="true"

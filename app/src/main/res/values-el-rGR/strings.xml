@@ -171,7 +171,6 @@
     <string name="ttWeekIndicatorUndo">Αναίρεση εισαγωγών στο Ημερολόγιο Google</string>
     <string name="textQuality">Ποιότητα</string>
     <string name="tileDataUsageAccess">Επιτρέψτε μας να αποκτήσουμε πρόσβαση στη χρήση</string>
-    <string name="textSelectPrimaryExternal">Επιλέξτε τη ρίζα του κύριου χώρου αποθήκευσης της συσκευής</string>
     <string name="apiDisplayVolume">Επιλέξτε φάκελο αρχείου</string>
     <string name="activityApkSharing">Ελέγξτε το API</string>
     <string name="sharingNonApkLink">Όχι σύνδεσμος λήψης apk</string>

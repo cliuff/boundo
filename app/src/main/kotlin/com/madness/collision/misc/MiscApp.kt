@@ -1,14 +1,25 @@
+/*
+ * Copyright 2020 Clifford Liu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.madness.collision.misc
 
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
-import android.os.Build
-import android.provider.Settings
-import androidx.annotation.RequiresApi
-import androidx.core.content.edit
-import com.madness.collision.util.P
 
 object MiscApp {
     fun getPackageInfo(context: Context, packageName: String = "", apkPath: String = ""): PackageInfo?{
@@ -48,43 +59,6 @@ object MiscApp {
                 e.printStackTrace()
                 null
             }
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun getChangedPackageNames(context: Context): List<String>{
-        val prefSettings = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
-        val bootCount = Settings.Global.getInt(context.contentResolver, Settings.Global.BOOT_COUNT, 0)
-        val sequenceNum = if (bootCount == prefSettings.getInt(P.PACKAGE_CHANGED_BOOT_COUNT, 0))
-            prefSettings.getInt(P.PACKAGE_CHANGED_SEQUENCE_NO, 0)
-        else 0
-        val changedPackages = context.packageManager.getChangedPackages(sequenceNum)
-        prefSettings.edit {
-            putInt(P.PACKAGE_CHANGED_BOOT_COUNT, bootCount)
-            putInt(P.PACKAGE_CHANGED_SEQUENCE_NO, changedPackages?.sequenceNumber ?: sequenceNum)
-        }
-        return changedPackages?.packageNames ?: emptyList()
-    }
-
-    fun getChangedPackages(context: Context, timestamp: Long = 0): List<PackageInfo> {
-//        return if (X.aboveOn(X.O)) {
-//            getChangedPackageNames(context).mapNotNull { getPackageInfo(context, it) }
-//        } else {
-//        }
-        val shouldOverride = timestamp != 0L
-        val prefSettings = if (shouldOverride) null else context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
-        val finalTimestamp = if (shouldOverride) timestamp
-        else prefSettings!!.getLong(P.PACKAGE_CHANGED_TIMESTAMP, System.currentTimeMillis())
-        val re = context.packageManager.getInstalledPackages(0).filter {
-            it.lastUpdateTime >= finalTimestamp
-        }
-        if (!shouldOverride) prefSettings!!.edit { putLong(P.PACKAGE_CHANGED_TIMESTAMP, System.currentTimeMillis()) }
-        return re
-    }
-
-    fun getNewPackages(changedPackages: List<PackageInfo>): List<PackageInfo> {
-        return changedPackages.filter {
-            it.lastUpdateTime == it.firstInstallTime
         }
     }
 }

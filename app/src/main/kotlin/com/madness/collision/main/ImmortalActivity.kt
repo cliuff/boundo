@@ -53,6 +53,14 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 internal class ImmortalActivity : AppCompatActivity(), View.OnClickListener {
+
+    companion object {
+        private val COLOR_RED = Color.parseColor("#FFF03030")
+        private val COLOR_ORANGE = Color.parseColor("#FFF0A070")
+        private val COLOR_GREEN = Color.parseColor("#FF10A070")
+        private val COLOR_BLUE = Color.parseColor("#FF1070A0")
+    }
+
     private var logFile: File? = null
 
     override fun onClick(v: View?) {
@@ -72,31 +80,41 @@ internal class ImmortalActivity : AppCompatActivity(), View.OnClickListener {
             R.id.immortalBagSend -> {
                 if (logFile != null){
                     val title = getString(R.string.immortalSendTitle)
-                    startActivity(Intent().apply {
-                        action = Intent.ACTION_SENDTO
+                    val locales = getLocaleTags()
+                    val body = "\n\nApp: ${BuildConfig.VERSION_NAME}(${BuildConfig.VERSION_CODE})\nLocales: $locales\n\n"
+                    val intent = Intent().apply {
+                        // ACTION_SENDTO (for no attachment) or
+                        // ACTION_SEND (for one attachment) or
+                        // ACTION_SEND_MULTIPLE (for multiple attachments)
+                        action = Intent.ACTION_SEND
                         flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION
-                        data = Uri.parse("mailto:" + P.CONTACT_EMAIL)
-//                        putExtra(Intent.EXTRA_EMAIL, arrayOf(P.CONTACT_EMAIL))
-                        putExtra(Intent.EXTRA_STREAM, Uri.fromFile(logFile))
+                        putExtra(Intent.EXTRA_EMAIL, arrayOf(P.CONTACT_EMAIL))
+                        putExtra(Intent.EXTRA_STREAM, logFile!!.getProviderUri(this@ImmortalActivity))
                         putExtra(Intent.EXTRA_SUBJECT, getString(R.string.immortalEmailSubject))
-//                        type = "text/plain"
-                        val locales = getLocaleTags()
-                        val body = "\n\nApp: ${BuildConfig.VERSION_NAME}(${BuildConfig.VERSION_CODE})\nLocales: $locales\n\n"
+                        type = "message/rfc822"
                         putExtra(Intent.EXTRA_TEXT, body)
-                        putExtra(Intent.EXTRA_TITLE, title) // android q title
-                    }.let { Intent.createChooser(it, title) }) // deprecated in android 10
+                        // android 10 title
+                        putExtra(Intent.EXTRA_TITLE, title)
+                    }
+                    try {
+                        startActivity(intent)
+                        X.toast(this, R.string.textEmail, Toast.LENGTH_LONG)
+                    } catch (e: Exception) {
+                        notify(R.string.text_app_not_installed)
+                    }
                 } else {
                     notify(R.string.textWaitASecond)
                 }
             }
 
             R.id.immortalContactEmail -> {
+                val intent = Intent().apply {
+                    action = Intent.ACTION_SENDTO
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    data = Uri.parse("mailto:" + P.CONTACT_EMAIL)
+                }
                 try {
-                    startActivity(Intent().apply {
-                        action = Intent.ACTION_SENDTO
-                        flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                        data = Uri.parse("mailto:" + P.CONTACT_EMAIL)
-                    })
+                    startActivity(intent)
                 } catch (e: Exception) {
                     CollisionDialog.infoCopyable(this, P.CONTACT_EMAIL).show()
                 }
@@ -123,7 +141,7 @@ internal class ImmortalActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.i("Immortal", "onCreate()")
+        Log.i("Immortal", "immortal onCreate")
         // true: from settings, false: from crash
         val isMortal = intent.getStringExtra(P.IMMORTAL_EXTRA_LAUNCH_MODE) == P.IMMORTAL_EXTRA_LAUNCH_MODE_MORTAL
         ThemeUtil.updateTheme(this, getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE))
@@ -143,7 +161,7 @@ internal class ImmortalActivity : AppCompatActivity(), View.OnClickListener {
                 launch(Dispatchers.Main) {
                     if (isMortal) immortalMessage.setText(R.string.immortalMessageMortal)
                 }
-            }catch (e: Exception){
+            } catch (e: Exception){
                 e.printStackTrace()
                 launch(Dispatchers.Main) {
                     immortalMessage.setText(R.string.text_error)
@@ -210,7 +228,9 @@ internal class ImmortalActivity : AppCompatActivity(), View.OnClickListener {
         // - clear extra log files
         logFile.parentFile?.deleteRecursively()
 
-        if (!F.prepare4(logFile)) return File("")
+        if (!F.prepare4(logFile)) {
+            throw Exception("Error occurred while preparing file")
+        }
         val writer = FileWriter(logFile)
         writer.write(wrapInHtml("Manufacture: $manufacture\nModel: $model\nProduct: $product\nDevice: $device\nAPI: $apiLevel\nApp: $verName($ver)\nLocales: $locales\n"))
 
@@ -260,20 +280,25 @@ internal class ImmortalActivity : AppCompatActivity(), View.OnClickListener {
 
         writer.close()
 
-        Log.i("Immortal", "Log: ${logFile.path}")
+        Log.i("Immortal", "immortal log: ${logFile.path}")
 
         return logFile
     }
 
     private fun wrapInHtml(line: String): String{
         val re = SpannableStringBuilder(line)
-        when{
-            re.matches("[\\d- :.]*E/.*".toRegex()) -> re.highlightAll(Color.RED)
-            re.matches("[\\d- :.]*W/.*".toRegex()) -> re.highlightAll(Color.MAGENTA)
+        when {
+            re.matches("[\\d- :.]*E/.*".toRegex()) -> re.highlightAll(COLOR_RED)
+            re.matches("[\\d- :.]*W/.*".toRegex()) -> re.highlightAll(COLOR_ORANGE)
+            re.matches(".*beginning of crash.*".toRegex()) -> re.highlightAll(COLOR_GREEN)
+            re.matches(".*System\\.exit called.*".toRegex()) -> re.highlightAll(COLOR_GREEN)
+            re.matches(".*VM exiting.*".toRegex()) -> re.highlightAll(COLOR_GREEN)
+            re.matches(".*immortal onCreate.*".toRegex()) -> re.highlightAll(COLOR_GREEN)
+            re.matches(".*immortal log.*".toRegex()) -> re.highlightAll(COLOR_GREEN)
         }
-        if (re.matches("[\\d- :.]*./dness.collisio.*".toRegex())) re.highlight("dness.collisio", Color.BLUE)
-        if (BuildConfig.DEBUG && re.matches("[\\d- :.]*./ollision.morta.*".toRegex())) re.highlight("ollision.morta", Color.BLUE)
-        re.highlight(BuildConfig.BUILD_PACKAGE, Color.BLUE)
+        if (re.matches("[\\d- :.]*./dness.collisio.*".toRegex())) re.highlight("dness.collisio", COLOR_BLUE)
+        if (BuildConfig.DEBUG && re.matches("[\\d- :.]*./ollision.morta.*".toRegex())) re.highlight("ollision.morta", COLOR_BLUE)
+        re.highlight(BuildConfig.BUILD_PACKAGE, COLOR_BLUE)
         re.appendln()
         return HtmlCompat.toHtml(SpannedString(re), HtmlCompat.TO_HTML_PARAGRAPH_LINES_INDIVIDUAL)
     }

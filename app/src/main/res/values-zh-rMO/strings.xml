@@ -172,7 +172,6 @@
     <string name="ttWeekIndicatorUndo">撤銷谷歌日曆的導入</string>
     <string name="textQuality">品質</string>
     <string name="tileDataUsageAccess">允許我們對使用情況數據進行訪問</string>
-    <string name="textSelectPrimaryExternal">請選取設備主存儲根目錄</string>
     <string name="apiDisplayVolume">選取文件夾</string>
     <string name="activityApkSharing">查看 API</string>
     <string name="sharingNonApkLink">非安裝包下載鏈接</string>

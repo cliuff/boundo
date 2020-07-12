@@ -19,12 +19,14 @@ package com.madness.collision.instant.other
 import com.madness.collision.R
 import com.madness.collision.instant.instantComponent
 import com.madness.collision.unit.Unit
+import com.madness.collision.util.X
 import com.madness.collision.versatile.TextProcessingActivity
 
 internal object InstantOthers {
 
     val OTHERS = listOf(
             instantComponent<TextProcessingActivity>(R.string.activityTextProcessingApp, Unit.UNIT_NAME_API_VIEWING)
+                    .setRequirement { X.aboveOn(X.M) }
     )
 
 }

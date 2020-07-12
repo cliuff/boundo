@@ -162,7 +162,6 @@
     <string name="textQuality">Qualità</string>
     <string name="tileDataUsageAccess">Consentici di accedere all\'uso</string>
     <string name="tileData">Utilizzo dei dati del mese</string>
-    <string name="textSelectPrimaryExternal">Seleziona la radice della memoria principale del dispositivo</string>
     <string name="apiDisplayVolume">Seleziona la cartella dei file</string>
     <string name="activityApkSharing">Controlla API</string>
     <string name="sharingNonApkLink">Link per il download non apk</string>

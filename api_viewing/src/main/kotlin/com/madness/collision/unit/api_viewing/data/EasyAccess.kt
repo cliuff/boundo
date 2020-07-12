@@ -53,23 +53,85 @@ internal object EasyAccess {
     var shouldShowTagHasSplits = false
 
     fun init(context: Context, prefSettings: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)) {
-        isViewingTarget = prefSettings.getBoolean(PrefUtil.AV_VIEWING_TARGET, PrefUtil.AV_VIEWING_TARGET_DEFAULT)
-        shouldRoundIcon = prefSettings.getBoolean(PrefUtil.API_CIRCULAR_ICON, PrefUtil.API_CIRCULAR_ICON_DEFAULT)
-        shouldManifestedRound = prefSettings.getBoolean(PrefUtil.API_PACKAGE_ROUND_ICON, PrefUtil.API_PACKAGE_ROUND_ICON_DEFAULT)
-        shouldClip2Round = prefSettings.getBoolean(PrefUtil.AV_CLIP_ROUND, PrefUtil.AV_CLIP_ROUND_DEFAULT)
-        isSweet = prefSettings.getBoolean(PrefUtil.AV_SWEET, PrefUtil.AV_SWEET_DEFAULT)
-        shouldIncludeDisabled = prefSettings.getBoolean(PrefUtil.AV_INCLUDE_DISABLED, PrefUtil.AV_INCLUDE_DISABLED_DEFAULT)
+        load(context, prefSettings, false)
+    }
+
+    fun isChanged(context: Context, prefSettings: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)): Boolean {
+        return load(context, prefSettings, true)
+    }
+
+    /**
+     * @param isLazy whether to fast detect change. True to detect change, false to enforce complete loading.
+     * @return whether there is change
+     */
+    fun load(context: Context, prefSettings: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE), isLazy: Boolean): Boolean {
+        var isChanged = false
+        isViewingTarget = prefSettings.getBoolean(PrefUtil.AV_VIEWING_TARGET, PrefUtil.AV_VIEWING_TARGET_DEFAULT).also {
+            isChanged = isChanged || it != isViewingTarget
+            if (isLazy && isChanged) return true
+        }
+        shouldRoundIcon = prefSettings.getBoolean(PrefUtil.API_CIRCULAR_ICON, PrefUtil.API_CIRCULAR_ICON_DEFAULT).also {
+            isChanged = isChanged || it != shouldRoundIcon
+            if (isLazy && isChanged) return true
+        }
+        shouldManifestedRound = prefSettings.getBoolean(PrefUtil.API_PACKAGE_ROUND_ICON, PrefUtil.API_PACKAGE_ROUND_ICON_DEFAULT).also {
+            isChanged = isChanged || it != shouldManifestedRound
+            if (isLazy && isChanged) return true
+        }
+        shouldClip2Round = prefSettings.getBoolean(PrefUtil.AV_CLIP_ROUND, PrefUtil.AV_CLIP_ROUND_DEFAULT).also {
+            isChanged = isChanged || it != shouldClip2Round
+            if (isLazy && isChanged) return true
+        }
+        isSweet = prefSettings.getBoolean(PrefUtil.AV_SWEET, PrefUtil.AV_SWEET_DEFAULT).also {
+            isChanged = isChanged || it != isSweet
+            if (isLazy && isChanged) return true
+        }
+        shouldIncludeDisabled = prefSettings.getBoolean(PrefUtil.AV_INCLUDE_DISABLED, PrefUtil.AV_INCLUDE_DISABLED_DEFAULT).also {
+            isChanged = isChanged || it != shouldIncludeDisabled
+            if (isLazy && isChanged) return true
+        }
 
         val tagSettings = prefSettings.getStringSet(PrefUtil.AV_TAGS, HashSet())!!
-        shouldShowTagPackageInstallerGooglePlay = tagSettings.contains(context.getString(R.string.prefAvTagsValuePackageInstallerGp))
-        shouldShowTagPackageInstallerPackageInstaller = tagSettings.contains(context.getString(R.string.prefAvTagsValuePackageInstallerPi))
-        shouldShowTagCrossPlatformFlutter = tagSettings.contains(context.getString(R.string.prefAvTagsValueCrossPlatformFlu))
-        shouldShowTagCrossPlatformReactNative = tagSettings.contains(context.getString(R.string.prefAvTagsValueCrossPlatformRn))
-        shouldShowTagCrossPlatformXarmarin = tagSettings.contains(context.getString(R.string.prefAvTagsValueCrossPlatformXar))
-        shouldShowTagNativeLibArm = tagSettings.contains(context.getString(R.string.prefAvTagsValueNativeLibArm))
-        shouldShowTagNativeLibX86 = tagSettings.contains(context.getString(R.string.prefAvTagsValueNativeLibX86))
-        shouldShowTagPrivilegeSystem = tagSettings.contains(context.getString(R.string.prefAvTagsValuePrivilegeSys))
-        shouldShowTagIconAdaptive = tagSettings.contains(context.getString(R.string.prefAvTagsValueIconAdaptive))
-        shouldShowTagHasSplits = tagSettings.contains(context.getString(R.string.prefAvTagsValueHasSplits))
+        shouldShowTagPackageInstallerGooglePlay = tagSettings.contains(context.getString(R.string.prefAvTagsValuePackageInstallerGp)).also {
+            isChanged = isChanged || it != shouldShowTagPackageInstallerGooglePlay
+            if (isLazy && isChanged) return true
+        }
+        shouldShowTagPackageInstallerPackageInstaller = tagSettings.contains(context.getString(R.string.prefAvTagsValuePackageInstallerPi)).also {
+            isChanged = isChanged || it != shouldShowTagPackageInstallerPackageInstaller
+            if (isLazy && isChanged) return true
+        }
+        shouldShowTagCrossPlatformFlutter = tagSettings.contains(context.getString(R.string.prefAvTagsValueCrossPlatformFlu)).also {
+            isChanged = isChanged || it != shouldShowTagCrossPlatformFlutter
+            if (isLazy && isChanged) return true
+        }
+        shouldShowTagCrossPlatformReactNative = tagSettings.contains(context.getString(R.string.prefAvTagsValueCrossPlatformRn)).also {
+            isChanged = isChanged || it != shouldShowTagCrossPlatformReactNative
+            if (isLazy && isChanged) return true
+        }
+        shouldShowTagCrossPlatformXarmarin = tagSettings.contains(context.getString(R.string.prefAvTagsValueCrossPlatformXar)).also {
+            isChanged = isChanged || it != shouldShowTagCrossPlatformXarmarin
+            if (isLazy && isChanged) return true
+        }
+        shouldShowTagNativeLibArm = tagSettings.contains(context.getString(R.string.prefAvTagsValueNativeLibArm)).also {
+            isChanged = isChanged || it != shouldShowTagNativeLibArm
+            if (isLazy && isChanged) return true
+        }
+        shouldShowTagNativeLibX86 = tagSettings.contains(context.getString(R.string.prefAvTagsValueNativeLibX86)).also {
+            isChanged = isChanged || it != shouldShowTagNativeLibX86
+            if (isLazy && isChanged) return true
+        }
+        shouldShowTagPrivilegeSystem = tagSettings.contains(context.getString(R.string.prefAvTagsValuePrivilegeSys)).also {
+            isChanged = isChanged || it != shouldShowTagPrivilegeSystem
+            if (isLazy && isChanged) return true
+        }
+        shouldShowTagIconAdaptive = tagSettings.contains(context.getString(R.string.prefAvTagsValueIconAdaptive)).also {
+            isChanged = isChanged || it != shouldShowTagIconAdaptive
+            if (isLazy && isChanged) return true
+        }
+        shouldShowTagHasSplits = tagSettings.contains(context.getString(R.string.prefAvTagsValueHasSplits)).also {
+            isChanged = isChanged || it != shouldShowTagHasSplits
+            if (isLazy && isChanged) return true
+        }
+        return isChanged
     }
 }

@@ -17,7 +17,6 @@
 package com.madness.collision.unit.api_viewing
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
@@ -52,14 +51,16 @@ internal class ApiDecentFragment : TaggedFragment(), Democratic {
         const val TYPE_MINIMUM = 2
         const val ARG_APP = "app"
         const val ARG_TYPE = "type"
-        const val ARG_BACK = "back"
+        const val ARG_VER_LETTER = "verLetter"
+        const val ARG_ITEM_LENGTH = "itemLength"
 
         @JvmStatic
-        fun newInstance(app: ApiViewingApp, type: Int, back: Bitmap) = ApiDecentFragment().apply {
+        fun newInstance(app: ApiViewingApp, type: Int, verLetter: Char, itemLength: Int) = ApiDecentFragment().apply {
             arguments = Bundle().apply {
                 putParcelable(ARG_APP, app)
                 putInt(ARG_TYPE, type)
-                putParcelable(ARG_BACK, back)
+                putChar(ARG_VER_LETTER, verLetter)
+                putInt(ARG_ITEM_LENGTH, itemLength)
             }
         }
     }
@@ -96,7 +97,9 @@ internal class ApiDecentFragment : TaggedFragment(), Democratic {
         arguments?.apply {
             viewModel.app = MutableLiveData(getParcelable(ARG_APP) ?: ApiViewingApp())
             viewModel.type = MutableLiveData(getInt(ARG_TYPE))
-            viewModel.back = MutableLiveData(getParcelable(ARG_BACK)!!)
+            val verLetter = getChar(ARG_VER_LETTER)
+            val itemLength = getInt(ARG_ITEM_LENGTH)
+            viewModel.back = MutableLiveData(ApiInfoPop.disposeSealBack(context, verLetter, itemLength))
         }
         viewModel.app.observe(viewLifecycleOwner) {
             it?.run {

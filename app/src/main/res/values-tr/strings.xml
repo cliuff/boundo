@@ -171,7 +171,6 @@
     <string name="ttWeekIndicatorUndo">Google Takvim\'deki içe aktarma işlemlerini geri alma</string>
     <string name="textQuality">Kalite</string>
     <string name="tileDataUsageAccess">Kullanıma erişmemize izin ver</string>
-    <string name="textSelectPrimaryExternal">Lütfen cihazın birincil deposunun kökünü seçin</string>
     <string name="apiDisplayVolume">Dosya klasörünü seçin</string>
     <string name="activityApkSharing">API\'yı kontrol et</string>
     <string name="sharingNonApkLink">Apk indir link</string>

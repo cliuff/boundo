@@ -267,7 +267,7 @@ internal class ApiViewingApp(
     }
 
     private fun retrieveAppIcon(context: Context, isDefined: Boolean, iconDrawable: Drawable): Bitmap? {
-        var logoDrawable= iconDrawable
+        var logoDrawable = iconDrawable
         if (isDefined) {
             if (iconDetails.isDefault) {
                 logoDrawable = context.getDrawable(R.drawable.res_android_robot_head) ?: return null
@@ -275,7 +275,7 @@ internal class ApiViewingApp(
         } else {
             iconDetails.width = logoDrawable.intrinsicWidth
             iconDetails.height = logoDrawable.intrinsicHeight
-            if (iconDetails.width <= 0 || iconDetails.height <= 0){
+            if (iconDetails.width <= 0 || iconDetails.height <= 0) {
                 iconDetails.isDefault = true
                 logoDrawable = context.getDrawable(R.drawable.res_android_robot_head) ?: return null
                 iconDetails.width = logoDrawable.intrinsicWidth
@@ -292,6 +292,7 @@ internal class ApiViewingApp(
             }
         }
 
+        if (iconDetails.width <= 0 || iconDetails.height <= 0) return null
         var logo = Bitmap.createBitmap(iconDetails.width, iconDetails.height, Bitmap.Config.ARGB_8888)
         logoDrawable.setBounds(0, 0, iconDetails.width, iconDetails.height)
         logoDrawable.draw(Canvas(logo))

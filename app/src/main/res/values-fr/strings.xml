@@ -146,7 +146,6 @@
     <string name="textQuality">Qualité</string>
     <string name="tileDataUsageAccess">Permettez-nous d\'accéder au données d\'utilisation</string>
     <string name="tileData">Utilisation mensuelle des données</string>
-    <string name="textSelectPrimaryExternal">Veuillez sélectionner la racine du stockage principal de l\'appareil</string>
     <string name="apiDisplayVolume">Sélectionner un dossier de fichier</string>
     <string name="activityApkSharing">Vérifier l\'API</string>
     <string name="sharingNonApkLink">Pas de lien de téléchargement poir l\'apk</string>

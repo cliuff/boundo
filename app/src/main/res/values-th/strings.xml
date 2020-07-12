@@ -162,7 +162,6 @@
     <string name="textQuality">คุณภาพ</string>
     <string name="tileDataUsageAccess">อนุญาตให้เราเข้าถึงการใช้งาน</string>
     <string name="tileData">การใช้ข้อมูลเดือน</string>
-    <string name="textSelectPrimaryExternal">โปรดเลือกรูทของที่เก็บข้อมูลหลักของอุปกรณ์</string>
     <string name="apiDisplayVolume">เลือกโฟลเดอร์ไฟล์</string>
     <string name="activityApkSharing">ตรวจสอบ API</string>
     <string name="sharingNonApkLink">ไม่ใช่ลิงก์ดาวน์โหลด apk</string>

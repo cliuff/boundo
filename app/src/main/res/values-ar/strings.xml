@@ -162,7 +162,6 @@
     <string name="textQuality">جودة</string>
     <string name="tileDataUsageAccess">اسمح لنا بالوصول إلى الاستخدام</string>
     <string name="tileData">شهر استخدام البيانات</string>
-    <string name="textSelectPrimaryExternal">يرجى تحديد جذر التخزين الأساسي للجهاز</string>
     <string name="apiDisplayVolume">حدد مجلد الملف</string>
     <string name="activityApkSharing">تحقق API</string>
     <string name="sharingNonApkLink">ليس apk تحميل الرابط</string>

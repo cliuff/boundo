@@ -1,4 +1,66 @@
 
+- **3.5.2** 20071212
+<en-US>
+Bug fixes and improvements
+</en-US>
+<ar>
+الاصلاحات والتحسينات
+</ar>
+<de-DE>
+Fehlerbehebungen und Verbesserungen
+</de-DE>
+<el-GR>
+Διορθώσεις σφαλμάτων και βελτιώσεις
+</el-GR>
+<en-GB>
+Bug fixes and improvements
+</en-GB>
+<es-419>
+Corrección de errores y mejoras.
+</es-419>
+<es-ES>
+Corrección de errores y mejoras.
+</es-ES>
+<es-US>
+Corrección de errores y mejoras.
+</es-US>
+<fr-FR>
+Corrections de bugs et améliorations
+</fr-FR>
+<it-IT>
+Correzioni di bug e miglioramenti
+</it-IT>
+<ja-JP>
+バグ修正と改善
+</ja-JP>
+<ko-KR>
+버그 수정 및 개선
+</ko-KR>
+<pt-PT>
+Correções de bugs e melhorias
+</pt-PT>
+<ru-RU>
+Исправления ошибок и улучшения
+</ru-RU>
+<th>
+แก้ไขข้อผิดพลาดและการปรับปรุง
+</th>
+<tr-TR>
+Hata düzeltmeleri ve iyileştirmeler
+</tr-TR>
+<vi>
+Sửa lỗi và cải tiến
+</vi>
+<zh-CN>
+错误修复和改进
+</zh-CN>
+<zh-HK>
+錯誤修復和改進
+</zh-HK>
+<zh-TW>
+錯誤修復和改進
+</zh-TW>
+
 - **3.5** 20070612
 <en-US>
 • Added support for Traditional Chinese, German, Greek, Japanese, Korean and Turkish with the help of Google Translate

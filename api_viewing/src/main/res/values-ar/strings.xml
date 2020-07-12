@@ -81,4 +81,5 @@
     <string name="av_adapter_tag_system">النظام</string>
     <string name="av_ai">أيقونة التكيف</string>
     <string name="av_tag_has_splits">&#1564;Split APK</string>
+    <string name="av_apks_select_folder">حدد مجلدًا للمسح الضوئي</string>
 </resources>
