@@ -17,15 +17,29 @@
 package com.madness.collision.unit
 
 import androidx.fragment.app.Fragment
+import java.lang.ref.WeakReference
 
-abstract class UpdatesProvider {
+abstract class UpdatesProvider: Updatable {
 
-    open fun hasUpdates(hostFragment: Fragment): Boolean {
-        return false
-    }
+    protected var fragmentRef: WeakReference<Fragment>? = null
+    protected val mFragment: Fragment?
+        get() = fragmentRef?.get()
+    protected val updatable: Updatable?
+        get() {
+            val f = mFragment ?: return null
+            return if (f is Updatable) f else null
+        }
 
     open fun getFragment(): Fragment? {
         return null
+    }
+
+    override fun hasUpdates(hostFragment: Fragment): Boolean {
+        return updatable?.hasUpdates(hostFragment) ?: false
+    }
+
+    override fun updateState() {
+        updatable?.updateState()
     }
 
 }

@@ -17,6 +17,7 @@
 package com.madness.collision.util
 
 import android.content.res.TypedArray
+import androidx.core.content.res.use
 import com.madness.collision.BuildConfig
 import java.util.*
 
@@ -70,7 +71,8 @@ object P {
     get() {
         val cal = Calendar.getInstance()
         val year = cal.get(Calendar.YEAR)
-        return if ((cal.get(Calendar.MONTH) + 1) in 1 until 7) "${year}0101" // after the end of the former half semester(December) and before the start of summer holiday (July)
+        // after the end of the former half semester(December) and before the start of summer holiday (July)
+        return if ((cal.get(Calendar.MONTH) + 1) in 1 until 7) "${year}0101"
         else "${year}0901"
     }
     const val TT_TIME_MORNING = "morningTime"
@@ -106,27 +108,35 @@ object P {
 
     const val SETTINGS_THEME_NONE = -1
 
-    fun getPrefIndexedEntry(value: String, entries: TypedArray, values: TypedArray): IndexedValue<String>{
+    /**
+     * Get the corresponding entry and index of the given [value]
+     * Note: [entries] and [values] will be recycled
+     */
+    fun getPrefIndexedEntry(value: String, entries: TypedArray, values: TypedArray): IndexedValue<String> {
         var re = IndexedValue(0, "")
-        for (i in 0 until values.length()){
-            if (values.getString(i) != value) continue
-            re = IndexedValue(i, entries.getString(i) ?: "")
-            break
+        values.use {
+            for (i in 0 until it.length()){
+                if (it.getString(i) != value) continue
+                re = IndexedValue(i, entries.use { e -> e.getString(i) ?: "" })
+                break
+            }
         }
-        entries.recycle()
-        values.recycle()
         return re
     }
 
-    fun getPrefIndex(value: String, entries: TypedArray, values: TypedArray): Int{
+    /**
+     * Get the corresponding index of the given [value]
+     * Note: [values] will be recycled
+     */
+    fun getPrefIndex(value: String, values: TypedArray): Int {
         var re = 0
-        for (i in 0 until values.length()){
-            if (values.getString(i) != value) continue
-            re = i
-            break
+        values.use {
+            for (i in 0 until it.length()){
+                if (it.getString(i) != value) continue
+                re = i
+                break
+            }
         }
-        entries.recycle()
-        values.recycle()
         return re
     }
 }

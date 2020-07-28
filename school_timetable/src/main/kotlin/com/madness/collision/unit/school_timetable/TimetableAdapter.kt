@@ -108,7 +108,6 @@ internal class TimetableAdapter(private var context: Context , var timetable: Ti
                 context.getString(MyR.string.ics_alter_classtime_eve3)
         )
         spPhase.adapter = ArrayAdapter(context, R.layout.pop_list_item, clPhases)
-        spPhase.setPopupBackgroundResource(R.drawable.res_dialog_md2)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TableViewHolder {

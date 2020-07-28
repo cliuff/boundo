@@ -20,10 +20,10 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginTop="12dp"
-    android:drawablePadding="20dp"
+    android:drawablePadding="12dp"
     android:drawableTint="?android:textColor"
     android:paddingStart="20dp"
-    android:paddingTop="6dp"
     android:paddingEnd="20dp"
-    android:paddingBottom="6dp"
-    android:textSize="16sp" />
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    android:textSize="15sp" />

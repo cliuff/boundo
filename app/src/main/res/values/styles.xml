@@ -25,7 +25,9 @@
         <item name="toolbarStyle">@style/AppTheme.Toolbar</item>
 <!--        <item name="android:datePickerDialogTheme">@style/AppTheme.DatePickerDialog</item>-->
 <!--        <item name="android:timePickerDialogTheme">@style/AppTheme.TimePickerDialog</item>-->
-        <item name="android:popupMenuStyle">@style/AppTheme.OverflowMenu</item>
+        <item name="android:popupMenuStyle">@style/AppTheme.PopupMenu</item>
+        <item name="popupMenuStyle">@style/AppTheme.PopupMenu</item>
+        <item name="android:contextPopupMenuStyle" tools:targetApi="n">@style/AppTheme.ContextMenu</item>
         <item name="android:dropDownSpinnerStyle">@style/AppTheme.Spinner</item>
         <item name="android:actionOverflowButtonStyle">@style/AppTheme.OverflowButton</item>
         <item name="actionOverflowMenuStyle">@style/AppTheme.OverflowMenu</item>
@@ -207,13 +209,6 @@
         <item name="colorScrollbar">@color/scrollbarABlackGray</item>
     </style>
 
-    <!--
-    <style name="AppTheme.PopupMenu" parent="Widget.AppCompat.Light.PopupMenu">
-        <item name="android:background">@drawable/res_dialog_md2</item>
-        <item name="android:colorBackground">@android:color/transparent</item>
-    </style>
--->
-
     <style name="AppTheme.AlertDialog" parent="Theme.MaterialComponents.Light.Dialog.Alert">
         <item name="colorAccent">?colorAPrimary</item>
         <item name="colorPrimary">?colorAPrimary</item>
@@ -224,6 +219,8 @@
         <item name="android:colorForeground">?colorText</item>
         <item name="android:windowBackground">?colorASurface</item>
         <item name="android:colorBackground">?colorASurface</item>
+        <item name="android:textColorAlertDialogListItem">?colorTextSub</item>
+        <item name="textColorAlertDialogListItem">?colorTextSub</item>
     </style>
 
     <style name="AppTheme.Dialog" parent="Theme.MaterialComponents.Light.Dialog">
@@ -236,18 +233,30 @@
         <item name="android:colorForeground">?colorText</item>
         <item name="android:windowBackground">?colorASurface</item>
         <item name="android:colorBackground">?colorASurface</item>
+        <item name="android:textColorAlertDialogListItem">?colorTextSub</item>
+        <item name="textColorAlertDialogListItem">?colorTextSub</item>
     </style>
 
     <style name="AppTheme.Spinner" parent="Widget.AppCompat.Spinner.DropDown">
-        <item name="android:popupBackground">@drawable/res_dialog_md2</item>
+        <item name="android:popupBackground">@drawable/popup_menu_back</item>
+<!--        <item name="android:dropDownSelector">?attr/listChoiceBackgroundIndicator</item>-->
+    </style>
+
+    <style name="AppTheme.PopupMenu" parent="Widget.MaterialComponents.PopupMenu">
+        <item name="android:popupBackground">@drawable/popup_menu_back</item>
+        <item name="android:dropDownVerticalOffset">2dp</item>
+    </style>
+
+    <style name="AppTheme.ContextMenu" parent="Widget.MaterialComponents.PopupMenu.ContextMenu">
+        <item name="android:popupBackground">@drawable/popup_menu_back</item>
+    </style>
+
+    <style name="AppTheme.OverflowMenu" parent="Widget.MaterialComponents.PopupMenu.Overflow">
+        <item name="android:popupBackground">@drawable/popup_menu_back</item>
     </style>
 
     <style name="AppTheme.OverflowButton" parent="Widget.AppCompat.Light.ActionButton.Overflow">
         <item name="android:tint">?colorIcon</item>
-    </style>
-
-    <style name="AppTheme.OverflowMenu" parent="Widget.AppCompat.Light.PopupMenu.Overflow">
-        <item name="android:popupBackground">@drawable/res_dialog_md2</item>
     </style>
 
     <style name="LanguageItem">
@@ -314,7 +323,15 @@
     </style>
 
     <style name="AppTheme.DatePickerDialog" parent="Theme.MaterialComponents.Light.Dialog">
-        <item name="colorPrimary">?colorAccentBack</item>
+        <item name="colorAccent">?colorAPrimary</item>
+        <item name="colorPrimary">?colorAPrimary</item>
+        <item name="colorPrimaryDark">?colorAPrimary</item>
+        <item name="android:textColor">?colorText</item>
+        <item name="android:textColorPrimary">?colorText</item>
+        <item name="android:textColorSecondary">?colorTextSub</item>
+        <item name="android:colorForeground">?colorText</item>
+        <item name="android:windowBackground">?colorASurface</item>
+        <item name="android:colorBackground">?colorASurface</item>
         <item name="android:backgroundTint">?colorASurface</item>
         <!--        <item name="android:background">?colorABackground</item>-->
         <item name="android:datePickerStyle">@style/AppTheme.TimePicker</item>
@@ -326,16 +343,45 @@
 
     <style name="AppTheme.TimePickerDialog" parent="Theme.MaterialComponents.Light.Dialog">
         <item name="colorAccent">?colorAPrimary</item>
+        <item name="colorPrimary">?colorAPrimary</item>
+        <item name="colorPrimaryDark">?colorAPrimary</item>
+        <item name="android:textColor">?colorText</item>
+        <item name="android:textColorPrimary">?colorText</item>
+        <item name="android:textColorSecondary">?colorTextSub</item>
+        <item name="android:colorForeground">?colorText</item>
+        <item name="android:windowBackground">?colorASurface</item>
+        <item name="android:colorBackground">?colorASurface</item>
+<!--        <item name="colorControlActivated">?colorAccent</item>-->
         <item name="android:backgroundTint">?colorASurface</item>
         <item name="android:timePickerStyle">@style/AppTheme.TimePicker</item>
+<!--        <item name="buttonBarButtonStyle">@style/AppTheme.ButtonBarButtonStyle</item>-->
     </style>
 
-    <style name="AppTheme.TimePicker" parent="android:Widget.Material.Light.TimePicker">
+    <style name="AppTheme.ButtonBarButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog.Flush">
+        <item name="colorAccent">?colorAPrimary</item>
+        <item name="colorPrimary">?colorAPrimary</item>
+        <item name="colorPrimaryDark">?colorAPrimary</item>
+        <item name="android:textColor">?colorAPrimary</item>
+        <item name="android:textColorPrimary">?colorAPrimary</item>
+    </style>
+
+    <style name="AppTheme.TimePicker" parent="@android:style/Widget.Material.Light.TimePicker">
+        <item name="colorAccent">?colorAPrimary</item>
+        <item name="colorPrimary">?colorAPrimary</item>
+        <item name="colorPrimaryDark">?colorAPrimary</item>
+        <item name="android:textColor">?colorText</item>
+        <item name="android:textColorPrimary">?colorText</item>
+        <item name="android:textColorSecondary">?colorTextSub</item>
+        <item name="android:colorForeground">?colorText</item>
+        <item name="android:windowBackground">?colorASurface</item>
+        <item name="android:colorBackground">?colorASurface</item>
         <item name="android:headerTimeTextAppearance">@style/TextAppearance.TimePickerDialogStyle.TimeLabel</item>
-        <item name="android:headerBackground">?colorASurface</item>
-        <item name="android:numbersTextColor">?colorAOnItem</item>
-        <item name="android:numbersInnerTextColor" tools:targetApi="m">?colorTextSub</item>
-        <item name="android:numbersSelectorColor">?colorAPrimary</item>
+<!--        <item name="android:headerBackground">?colorAccentBack</item>-->
+        <!-- change hour text color, the color stays(prevents the selected one from changing to another color) -->
+<!--        <item name="android:numbersTextColor">?colorText</item>-->
+        <!-- change minute text color, the color stays(prevents the selected one from changing to another color) -->
+<!--        <item name="android:numbersInnerTextColor" tools:targetApi="m">?colorTextSub</item>-->
+        <item name="android:numbersSelectorColor">?colorAccent</item>
         <item name="android:numbersBackgroundColor">?colorAItem</item>
         <item name="android:amPmTextColor">?colorTextSub</item>
     </style>
@@ -390,7 +436,7 @@
         <item name="android:background">?colorStroke</item>
     </style>
 
-    <style name="InstantSwitchAlone" parent="Widget.AppCompat.CompoundButton.Switch">
+    <style name="InstantSwitchAlone" parent="Widget.MaterialComponents.CompoundButton.Switch">
         <item name="android:paddingStart">15dp</item>
         <item name="android:paddingEnd">30dp</item>
         <item name="android:layout_width">wrap_content</item>
@@ -418,7 +464,7 @@
         <item name="android:layout_weight">1</item>
     </style>
 
-    <style name="MainText" parent="Widget.AppCompat.TextView">
+    <style name="MainText" parent="Widget.MaterialComponents.TextView">
         <item name="android:paddingTop">25dp</item>
         <item name="android:paddingBottom">25dp</item>
         <item name="android:paddingStart">30dp</item>
@@ -467,7 +513,7 @@
         <item name="android:gravity">center_horizontal</item>
     </style>
 
-    <style name="TTRadio" parent="Widget.AppCompat.CompoundButton.RadioButton">
+    <style name="TTRadio" parent="Widget.MaterialComponents.CompoundButton.RadioButton">
         <item name="android:button">@android:color/transparent</item>
         <item name="android:background">@drawable/res_radio_week</item>
         <item name="android:textColor">@color/tt_radio_text_states</item>
@@ -476,7 +522,7 @@
         <item name="android:gravity">center</item>
     </style>
 
-    <style name="MainSectionHeader" parent="Widget.AppCompat.TextView">
+    <style name="MainSectionHeader" parent="Widget.MaterialComponents.TextView">
         <item name="android:paddingTop">8dp</item>
         <item name="android:paddingBottom">8dp</item>
         <item name="android:paddingStart">20dp</item>

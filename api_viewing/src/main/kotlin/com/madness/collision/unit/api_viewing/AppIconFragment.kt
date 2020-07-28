@@ -131,30 +131,30 @@ internal class AppIconFragment : TaggedFragment(), Democratic {
             if (icon.isAdaptive && X.aboveOn(X.O)) {
                 val logoDrawable = icon.drawable as AdaptiveIconDrawable
                 apiInfoAiIcon.setImageBitmap(icon.bitmap)
-                apiInfoAiIcon.setOnClickListener { actionIcon(context, icon.bitmap, "$appName-Full") }
+                apiInfoAiIcon.setOnLongClickListener { actionIcon(context, icon.bitmap, "$appName-Full"); true }
                 apiInfoAiIconFore.setImageDrawable(logoDrawable.foreground)
-                apiInfoAiIconFore.setOnClickListener { actionIcon(context, logoDrawable.foreground, "$appName-Fore") }
+                apiInfoAiIconFore.setOnLongClickListener { actionIcon(context, logoDrawable.foreground, "$appName-Fore"); true }
                 apiInfoAiIconBack.setImageDrawable(logoDrawable.background)
-                apiInfoAiIconBack.setOnClickListener { actionIcon(context, logoDrawable.background, "$appName-Back") }
+                apiInfoAiIconBack.setOnLongClickListener { actionIcon(context, logoDrawable.background, "$appName-Back"); true }
 
                 val dp80 = X.size(context, 72f, X.DP).toInt()
                 val drawableRound = BitmapDrawable(context.resources, icon.round)
                 drawableRound.setBounds(0, 0, dp80, dp80)
                 apiInfoAiIconRound.setCompoundDrawablesRelative(null, drawableRound, null, null)
-                apiInfoAiIconRound.setOnClickListener { actionIcon(context, icon.round, "$appName-Round") }
+                apiInfoAiIconRound.setOnLongClickListener { actionIcon(context, icon.round, "$appName-Round"); true }
 
                 val drawableRounded = BitmapDrawable(context.resources, icon.rounded)
                 drawableRounded.setBounds(0, 0, dp80, dp80)
                 apiInfoAiIconRounded.setCompoundDrawablesRelative(null, drawableRounded, null, null)
-                apiInfoAiIconRounded.setOnClickListener { actionIcon(context, icon.rounded, "$appName-Rounded") }
+                apiInfoAiIconRounded.setOnLongClickListener { actionIcon(context, icon.rounded, "$appName-Rounded"); true }
 
                 val drawableSquircle = BitmapDrawable(context.resources, icon.squircle)
                 drawableSquircle.setBounds(0, 0, dp80, dp80)
                 apiInfoAiIconSquircle.setCompoundDrawablesRelative(null, drawableSquircle, null, null)
-                apiInfoAiIconSquircle.setOnClickListener { actionIcon(context, icon.squircle, "$appName-Squircle") }
+                apiInfoAiIconSquircle.setOnLongClickListener { actionIcon(context, icon.squircle, "$appName-Squircle"); true }
             } else {
                 apiInfoAiIcon.setImageBitmap(icon.bitmap)
-                apiInfoAiIcon.setOnClickListener { actionIcon(context, icon.bitmap, "$appName-Full") }
+                apiInfoAiIcon.setOnLongClickListener { actionIcon(context, icon.bitmap, "$appName-Full"); true }
                 X.makeGone(apiInfoAiIconGroupAi)
             }
         }else{
@@ -165,30 +165,30 @@ internal class AppIconFragment : TaggedFragment(), Democratic {
             if (icon.isAdaptive && X.aboveOn(X.O)) {
                 val logoDrawable = icon.drawable as AdaptiveIconDrawable
                 apiInfoAiIconR.setImageBitmap(icon.bitmap)
-                apiInfoAiIconR.setOnClickListener { actionIcon(context, icon.bitmap, "$appName-R-Full") }
+                apiInfoAiIconR.setOnLongClickListener { actionIcon(context, icon.bitmap, "$appName-R-Full"); true }
                 apiInfoAiIconRFore.setImageDrawable(logoDrawable.foreground)
-                apiInfoAiIconRFore.setOnClickListener { actionIcon(context, logoDrawable.foreground, "$appName-R-Fore") }
+                apiInfoAiIconRFore.setOnLongClickListener { actionIcon(context, logoDrawable.foreground, "$appName-R-Fore"); true }
                 apiInfoAiIconRBack.setImageDrawable(logoDrawable.background)
-                apiInfoAiIconRBack.setOnClickListener { actionIcon(context, logoDrawable.background, "$appName-R-Back") }
+                apiInfoAiIconRBack.setOnLongClickListener { actionIcon(context, logoDrawable.background, "$appName-R-Back"); true }
 
                 val dp80 = X.size(context, 72f, X.DP).toInt()
                 val drawableRound = BitmapDrawable(context.resources, icon.round)
                 drawableRound.setBounds(0, 0, dp80, dp80)
                 apiInfoAiIconRRound.setCompoundDrawablesRelative(null, drawableRound, null, null)
-                apiInfoAiIconRRound.setOnClickListener { actionIcon(context, icon.round, "$appName-R-Round") }
+                apiInfoAiIconRRound.setOnLongClickListener { actionIcon(context, icon.round, "$appName-R-Round"); true }
 
                 val drawableRounded = BitmapDrawable(context.resources, icon.rounded)
                 drawableRounded.setBounds(0, 0, dp80, dp80)
                 apiInfoAiIconRRounded.setCompoundDrawablesRelative(null, drawableRounded, null, null)
-                apiInfoAiIconRRounded.setOnClickListener { actionIcon(context, icon.rounded, "$appName-R-Rounded") }
+                apiInfoAiIconRRounded.setOnLongClickListener { actionIcon(context, icon.rounded, "$appName-R-Rounded"); true }
 
                 val drawableSquircle = BitmapDrawable(context.resources, icon.squircle)
                 drawableSquircle.setBounds(0, 0, dp80, dp80)
                 apiInfoAiIconRSquircle.setCompoundDrawablesRelative(null, drawableSquircle, null, null)
-                apiInfoAiIconRSquircle.setOnClickListener { actionIcon(context, icon.squircle, "$appName-R-Squircle") }
+                apiInfoAiIconRSquircle.setOnLongClickListener { actionIcon(context, icon.squircle, "$appName-R-Squircle"); true }
             } else {
                 apiInfoAiIconR.setImageBitmap(icon.bitmap)
-                apiInfoAiIconR.setOnClickListener { actionIcon(context, icon.bitmap, "$appName-R-Full") }
+                apiInfoAiIconR.setOnLongClickListener { actionIcon(context, icon.bitmap, "$appName-R-Full"); true }
                 X.makeGone(apiInfoAiIconRGroupAi)
             }
         }else {

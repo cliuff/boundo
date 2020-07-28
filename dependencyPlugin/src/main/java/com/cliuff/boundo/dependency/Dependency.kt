@@ -50,7 +50,7 @@ object Versions {
     const val androidxWear = "1.0.0"
 
     const val googleTruth = "1.0"
-    const val googleMaterialTheme = "1.1.0"
+    const val googleMaterialTheme = "1.2.0-rc01"
     const val googlePlayServicesOSSLicenses = "17.0.0"
     const val googlePlayServicesBasement = "17.2.1"
     const val googleGson = "2.8.6"
@@ -63,6 +63,7 @@ object Versions {
     const val kotlin = "1.3.72"
     const val kotlinCoroutines = "1.3.0"
     const val mpChart = "v3.1.0"
+    const val openCsv = "5.2"
 }
 
 class Dependencies : Plugin<Project> {
@@ -129,6 +130,7 @@ class Dependencies : Plugin<Project> {
         const val junitJupiter = "org.junit.jupiter:junit-jupiter-api:${Versions.junitJupiter}"
         const val kotlinCoroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.kotlinCoroutines}"
         const val mpChart = "com.github.PhilJay:MPAndroidChart:${Versions.mpChart}"
+        const val openCsv = "com.opencsv:opencsv:${Versions.openCsv}"
 
         // wear
         const val androidxPercentLayout = "androidx.percentlayout:percentlayout:${Versions.androidxPercentLayout}"

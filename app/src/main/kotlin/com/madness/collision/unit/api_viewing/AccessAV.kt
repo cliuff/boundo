@@ -46,8 +46,4 @@ object AccessAV: UnitAccess(Unit.UNIT_NAME_API_VIEWING) {
         getMethod("initTagSettings", Context::class, SharedPreferences::class).invoke(context, prefSettings)
     }
 
-    fun updateTagSettingsAiHs(context: Context, prefSettings: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)) {
-        getMethod("updateTagSettingsAiHs", Context::class, SharedPreferences::class).invoke(context, prefSettings)
-    }
-
 }

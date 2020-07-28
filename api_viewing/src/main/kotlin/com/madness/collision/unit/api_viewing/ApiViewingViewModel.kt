@@ -317,6 +317,21 @@ internal class ApiViewingViewModel(application: Application): AndroidViewModel(a
         updateApps4Cache(sortList(apps4Cache, sortItem), false)
     }
 
+    fun findApps(searchSize: Int, predicate: (app: ApiViewingApp) -> Boolean): MutableList<ApiViewingApp> {
+        return if (X.aboveOn(X.N)) {
+            apps4Cache.parallelStream().filter(predicate).collect(Collectors.toList())
+        } else {
+            val list = ArrayList<ApiViewingApp>(searchSize)
+            for (listApp in apps4Cache) {
+                if (predicate.invoke(listApp)) {
+                    list.add(listApp)
+                }
+                if (list.size == searchSize) break
+            }
+            list
+        }
+    }
+
     companion object {
 
         private fun compareName(o1: ApiViewingApp, o2: ApiViewingApp): Int {

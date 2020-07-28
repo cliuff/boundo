@@ -1,35 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2020 Clifford Liu
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <androidx.preference.PreferenceCategory
+        android:summary="@string/av_pref_loading_summary"
+        android:title="@string/av_pref_loading">
 
         <androidx.preference.SwitchPreference
             android:defaultValue="@bool/avIncludeDisabledDefault"
             android:key="@string/avIncludeDisabled"
-            android:title="@string/prefSettingsAvIncludeDisabled"/>
-        <androidx.preference.SwitchPreference
-            android:defaultValue="@bool/avSweetDefault"
-            android:key="@string/avSweet"
-            android:title="@string/prefSettingsSweet"/>
+            android:title="@string/prefSettingsAvIncludeDisabled" />
+
         <androidx.preference.SwitchPreference
             android:defaultValue="@bool/API_CIRCULAR_ICON_DEFAULT"
             android:key="@string/API_CIRCULAR_ICON"
-            android:title="@string/settings_sdk"/>
-        <androidx.preference.SwitchPreference
-            android:defaultValue="@bool/API_APK_PRELOAD_DEFAULT"
-            android:key="@string/API_APK_PRELOAD"
-            android:title="@string/settingsApiApkPreload"/>
+            android:title="@string/settings_sdk" />
+
         <androidx.preference.SwitchPreference
             android:defaultValue="@bool/API_PACKAGE_ROUND_ICON_DEFAULT"
             android:key="@string/API_PACKAGE_ROUND_ICON"
-            android:title="@string/settingsApiRetrieveRoundIcon"/>
+            android:title="@string/settingsApiRetrieveRoundIcon" />
+
         <androidx.preference.SwitchPreference
             android:defaultValue="@bool/avClipRoundDefault"
             android:key="@string/avClipRound"
-            android:title="@string/prefSettingsTrim2Round"/>
+            android:title="@string/prefSettingsTrim2Round" />
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory
+        android:summary="@string/av_pref_displaying_summary"
+        android:title="@string/av_pref_displaying">
+
+        <androidx.preference.SwitchPreference
+            android:defaultValue="@bool/avSweetDefault"
+            android:key="@string/avSweet"
+            android:title="@string/prefSettingsSweet" />
 
         <androidx.preference.MultiSelectListPreference
             android:entries="@array/prefAvTagsEntries"
             android:entryValues="@array/prefAvTagsValues"
             android:key="@string/avTags"
-            android:title="@string/av_settings_tags"/>
+            android:title="@string/av_settings_tags" />
+    </androidx.preference.PreferenceCategory>
 
+    <androidx.preference.PreferenceCategory
+        android:title="@string/main_more">
+
+        <androidx.preference.SwitchPreference
+            android:defaultValue="@bool/API_APK_PRELOAD_DEFAULT"
+            android:key="@string/API_APK_PRELOAD"
+            android:title="@string/settingsApiApkPreload" />
+    </androidx.preference.PreferenceCategory>
 </androidx.preference.PreferenceScreen>

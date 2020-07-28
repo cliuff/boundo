@@ -20,6 +20,7 @@ import android.app.usage.UsageStats
 import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.LauncherApps
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.graphics.BitmapRegionDecoder
@@ -46,6 +47,7 @@ object Test {
 
     fun getLauncherActivities(context: Context): List<ResolveInfo> {
         val pm: PackageManager = context.packageManager
+//        LauncherApps() // look into this class
         val mainIntent = Intent(Intent.ACTION_MAIN, null)
         mainIntent.addCategory(Intent.CATEGORY_LAUNCHER)
         return pm.queryIntentActivities(mainIntent, 0).sortedWith(ResolveInfo.DisplayNameComparator(pm))

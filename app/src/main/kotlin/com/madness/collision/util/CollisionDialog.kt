@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020 Clifford Liu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.madness.collision.util
 
 import android.app.Dialog
@@ -141,8 +157,8 @@ class CollisionDialog private constructor(private val mContext: Context, private
 
     override fun show() {
         if (type == TYPE_POP_UP) {
-            decentHeight()
             decentButtons()
+            decentHeight()
         }
         super.show()
     }
@@ -169,13 +185,14 @@ class CollisionDialog private constructor(private val mContext: Context, private
         parent.measure(shouldLimitHor = true)
         container.measure(shouldLimitHor = true)
         val totalContentHeight = parent.measuredHeight
-        val extraHeight = totalContentHeight - container.measuredHeight
+        val containerContentHeight = container.measuredHeight
+        val extraHeight = totalContentHeight - containerContentHeight
         val insetsHeight = mainApplication.insetTop + mainApplication.insetBottom
         val containableHeight = X.getCurrentAppResolution(mContext).y - insetsHeight
         val blankMargin = X.size(mContext, 70f, X.DP).roundToInt()
         val shouldResize = containableHeight - totalContentHeight < blankMargin
         val remainHeight = containableHeight - extraHeight - blankMargin
-        if (remainHeight <= 0){
+        if (remainHeight <= 0) {
             clearCustomContent()
             noButtons()
             buttonIndifferent.visibility = View.VISIBLE
@@ -186,10 +203,10 @@ class CollisionDialog private constructor(private val mContext: Context, private
             setContent(R.string.text_error)
             return
         }
-        val reHeight = if (shouldResize) remainHeight else ViewGroup.LayoutParams.WRAP_CONTENT
-        (scrollView.layoutParams as LinearLayout.LayoutParams).run {
-            width = container.measuredWidth
-            height = reHeight
+        val scParams = scrollView.layoutParams as LinearLayout.LayoutParams
+        scParams.width = max(container.measuredWidth, parent.measuredWidth)
+        if (shouldResize) {
+            scParams.height = remainHeight
         }
     }
 

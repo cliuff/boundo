@@ -29,19 +29,28 @@ import kotlin.reflect.full.createInstance
 
 class BackwardOperation(val operationFlags: BooleanArray): Parcelable {
 
-    class Page(private val uid: String, private val clazz: KClass<*>): Parcelable {
+    class Page(private val uid: String, private val clazz: KClass<*>?): Parcelable {
         private var args: Bundle? = null
         private var ref: WeakReference<TaggedFragment?> = WeakReference(null)
 
         val hasRef: Boolean
             get() = ref.get() != null
-        val fragment: TaggedFragment
+        val fragment: TaggedFragment?
             get() = ref.get() ?: newFragment
         val refFragment: TaggedFragment?
             get() = ref.get()
-        val newFragment: TaggedFragment
-            get() = (clazz.createInstance() as TaggedFragment).apply {
-                arguments = args
+        val newFragment: TaggedFragment?
+            get() {
+                clazz ?: return null
+                val f = try {
+                    clazz.createInstance()
+                } catch (e: Throwable) {
+                    e.printStackTrace()
+                    return null
+                }
+                return (f as TaggedFragment).apply {
+                    arguments = args
+                }
             }
 
         constructor(fragment: TaggedFragment): this(fragment.uid, fragment::class) {
@@ -63,13 +72,19 @@ class BackwardOperation(val operationFlags: BooleanArray): Parcelable {
             return this
         }
 
-        constructor(parcel: Parcel) : this(parcel.readString() ?: "", Class.forName(parcel.readString() ?: "").kotlin) {
+        constructor(parcel: Parcel) : this(parcel.readString() ?: "",
+                try {
+                    Class.forName(parcel.readString() ?: "").kotlin
+                } catch (e: ClassNotFoundException) {
+                    e.printStackTrace()
+                    null
+                }) {
             args = parcel.readBundle(javaClass.classLoader)
         }
 
         override fun writeToParcel(parcel: Parcel, flags: Int) {
             parcel.writeString(uid)
-            parcel.writeString(clazz.qualifiedName)
+            parcel.writeString(clazz?.qualifiedName ?: "")
             parcel.writeBundle(args)
         }
 

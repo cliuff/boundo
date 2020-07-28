@@ -82,4 +82,11 @@
     <string name="av_ai">アダプティブアイコン</string>
     <string name="av_tag_has_splits">Split APK</string>
     <string name="av_apks_select_folder">スキャンするフォルダを選択</string>
+    <string name="av_pref_loading">リストの読み込み</string>
+    <string name="av_pref_displaying">リスト表示</string>
+    <string name="av_adapter_tag_hidden">隠す</string>
+    <string name="av_settings_tag_hidden">ランチャーにアイコンを表示しない</string>
+    <string name="av_pref_loading_summary">変更をトリガーする手動更新</string>
+    <string name="av_pref_displaying_summary">変更を自動的にトリガーする</string>
+    <string name="av_main_filter_tip">ラベルを長押ししてみてください</string>
 </resources>

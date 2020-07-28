@@ -25,11 +25,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewStub
 import android.widget.ProgressBar
-import android.widget.RadioButton
-import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.edit
+import androidx.core.content.res.use
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
 import com.madness.collision.Democratic
@@ -121,28 +120,18 @@ internal class SettingsFragment : TaggedFragment(), Democratic, NavNode {
     }
 
     private fun showLanguages(context: Context) {
-        val dialogLanguage = CollisionDialog(context, R.string.Settings_Language_Button_Cancel)
-        dialogLanguage.setCustomContent(R.layout.dialog_settings_languages)
-        dialogLanguage.setTitleCollision(R.string.Settings_Language_Dialog_Title, 0, 0)
-        dialogLanguage.setContent(0)
-        dialogLanguage.setListener{ dialogLanguage.dismiss() }
-        dialogLanguage.show()
+        val langEntries = context.resources.obtainTypedArray(R.array.prefSettingsLangEntries)
+        val langValues = context.resources.obtainTypedArray(R.array.prefSettingsLangValues)
         val lang = SettingsFunc.getLanguage(context)
-        val radioGroup: RadioGroup = dialogLanguage.findViewById(R.id.Settings_LanguagePicker_RadioGroup)
         Log.i(TAG, "Currently set: $lang")
-        for (i in 0 until radioGroup.childCount){
-            val radioBtn = radioGroup.getChildAt(i)
-            if (radioBtn.tag.toString() == lang) {
-                radioGroup.check(radioBtn.id)
-                break
-            }
-        }
-        val onCheckedChangeListener = RadioGroup.OnCheckedChangeListener{ group, checkedId ->
-            dialogLanguage.dismiss()
-            val radioButton: RadioButton = group.findViewById (checkedId)
-            val newLang = radioButton.tag.toString()
+        val langIndex = P.getPrefIndex(lang, langValues)
+        PopupUtil.selectSingle(context, R.string.Settings_Language_Dialog_Title, langEntries, langIndex) {
+            pop, _, index ->
+            pop.dismiss()
+            val values = context.resources.obtainTypedArray(R.array.prefSettingsLangValues)
+            val newLang = values.use { it.getString(index) } ?: SettingsFunc.AUTO
             val systemAppLang = SystemUtil.getLocaleApp().toString()
-            Log.i(TAG, "System app lang: $systemAppLang, New lang: $newLang")
+            Log.i(TAG, "New lang: $newLang, system app lang: $systemAppLang")
             val oldLocaleString = SystemUtil.getLocaleUsr(context).toString()
             SettingsFunc.settingsPreferencesLanguage(context, newLang)
             val newLocaleString = SystemUtil.getLocaleUsr(context).toString()
@@ -153,8 +142,7 @@ internal class SettingsFragment : TaggedFragment(), Democratic, NavNode {
                 }
                 mainViewModel.action.value = MainActivity.ACTION_RECREATE to null
             }
-        }
-        radioGroup.setOnCheckedChangeListener(onCheckedChangeListener)
+        }.show()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

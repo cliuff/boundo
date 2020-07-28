@@ -21,6 +21,7 @@ import android.app.Activity
 import android.content.*
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.graphics.Paint
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -29,16 +30,21 @@ import android.provider.DocumentsContract
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.edit
+import androidx.core.content.res.use
+import androidx.core.view.forEach
+import androidx.core.view.get
 import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.android.material.checkbox.MaterialCheckBox
 import com.madness.collision.R
 import com.madness.collision.main.MainActivity
 import com.madness.collision.main.MyHideBottomViewOnScrollBehavior
@@ -48,13 +54,12 @@ import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.util.PrefUtil
+import com.madness.collision.unit.api_viewing.util.SheetUtil
 import com.madness.collision.util.*
 import kotlinx.android.synthetic.main.fragment_api.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.io.File
+import java.lang.Runnable
 import com.madness.collision.unit.api_viewing.R as MyR
 
 class MyUnit: com.madness.collision.unit.Unit() {
@@ -117,15 +122,19 @@ class MyUnit: com.madness.collision.unit.Unit() {
     // views
     lateinit var refreshLayout: SwipeRefreshLayout
     private lateinit var adapter: APIAdapter
-    // set as null when hidden, so as to fix anchor problem
+    // set as null when hidden, so as to fix anchor problem with toolbar
     private var popSort: PopupMenu? = null
     private var popSrc: PopupMenu? = null
+//    private var popFilterTag: PopupWindow? = null
+    private val antiSelectedIndexes = mutableSetOf<Int>()
 
     // context related
     private lateinit var pm: PackageManager
     private lateinit var settingsPreferences: SharedPreferences
     private lateinit var toolbar: Toolbar
     private lateinit var listFragment: AppListFragment
+
+    private var searchBackPressedCallback: OnBackPressedCallback? = null
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
         val textRes = if (EasyAccess.isViewingTarget) MyR.string.sdkcheck_dialog_targetsdktext else MyR.string.sdkcheck_dialog_minsdktext
@@ -198,14 +207,17 @@ class MyUnit: com.madness.collision.unit.Unit() {
                         return true
                     }
                 })
+                ensureSearchActionCollapse(item)
                 return true
             }
             MyR.id.apiTBSort -> {
                 val activity = activity ?: return false
                 if (popSort == null) {
-                    popSort = PopupMenu(context, activity.findViewById(MyR.id.apiTBSort))
-                    popSort!!.run {
-                        menuInflater.inflate(MyR.menu.api_sort, menu)
+                    popSort = PopupMenu(context, activity.findViewById(MyR.id.apiTBSort)).apply {
+                        if (X.aboveOn(X.Q)) {
+                            setForceShowIcon(true)
+                        }
+                        inflate(MyR.menu.api_sort)
                         setOnMenuItemClickListener {
                             clickSortItem(it)
                         }
@@ -234,8 +246,64 @@ class MyUnit: com.madness.collision.unit.Unit() {
                 adapter.notifyDataSetChanged()
                 return true
             }
+            MyR.id.avMainTbShare -> {
+                val context = context ?: return false
+                exportList(context)
+                return true
+            }
         }
         return false
+    }
+
+    private fun exportList(context: Context) {
+        GlobalScope.launch {
+            val path = F.createPath(F.cachePublicPath(context), "Temp", "AV", "AppList.csv")
+            val file = File(path)
+            if (!F.prepare4(file)) return@launch
+            SheetUtil.csvWriterAll(getList(context), file)
+            launch(Dispatchers.Main) {
+                FilePop.by(context, file, "text/csv", R.string.fileActionsShare)
+                        .show(childFragmentManager, FilePop.TAG)
+            }
+        }
+    }
+
+    private fun getList(context: Context): List<Array<String>> {
+//        val list = adapter.apps
+//        val re = ArrayList<Array<String>>(list.size + 1)
+//        re.add(arrayOf(context.getString(R.string.apiDetailsPackageName)))
+//        list.forEach {
+//            re.add(arrayOf(it.name))
+//        }
+//        return re
+        return adapter.apps.map {
+            arrayOf(it.name)
+        }
+    }
+
+    private fun ensureSearchActionCollapse(menuItem: MenuItem) {
+        val activity = activity ?: return
+        // action view is not expanded for the time being, make it in a listener
+        menuItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+            override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+                item ?: return true
+                searchBackPressedCallback?.remove()
+                searchBackPressedCallback = object : OnBackPressedCallback(true) {
+                    override fun handleOnBackPressed() {
+                        if (item.isActionViewExpanded) {
+                            item.collapseActionView()
+                        }
+                    }
+                }.also { activity.onBackPressedDispatcher.addCallback(it) }
+                return true
+            }
+            override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+                item ?: return true
+                searchBackPressedCallback?.remove()
+                searchBackPressedCallback = null
+                return true
+            }
+        })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -259,6 +327,9 @@ class MyUnit: com.madness.collision.unit.Unit() {
     override fun onHiddenChanged(hidden: Boolean) {
         if (hidden) {
             popSort = null
+            // remove this callback otherwise app cannot go back
+            searchBackPressedCallback?.remove()
+            searchBackPressedCallback = null
         } else {
             // check settings
             GlobalScope.launch {
@@ -267,6 +338,8 @@ class MyUnit: com.madness.collision.unit.Unit() {
                 if (isChanged) {
                     delay(1)
                     launch(Dispatchers.Main) {
+                        avMainFilterText.text = null
+                        avMainFilterText.visibility = View.GONE
                         adapter.notifyDataSetChanged()
                     }
                 }
@@ -276,6 +349,8 @@ class MyUnit: com.madness.collision.unit.Unit() {
     }
 
     override fun onStop() {
+        searchBackPressedCallback?.remove()
+        searchBackPressedCallback = null
         ApiTaskManager.cancelAll()
         super.onStop()
     }
@@ -454,8 +529,11 @@ class MyUnit: com.madness.collision.unit.Unit() {
 
         if (mode != LAUNCH_MODE_SEARCH && mode != LAUNCH_MODE_LINK){
             displayItem = settingsPreferences.getInt(PrefUtil.AV_LIST_SRC_ITEM, PrefUtil.AV_LIST_SRC_ITEM_DEFAULT)
-            popSrc = PopupMenu(context, avListSrc).apply {
-                menuInflater.inflate(MyR.menu.av_list_src, menu)
+            popSrc = PopupMenu(context, apiSpinnerDisplayBack).apply {
+                if (X.aboveOn(X.Q)) {
+                    setForceShowIcon(true)
+                }
+                inflate(MyR.menu.av_list_src)
                 setOnMenuItemClickListener {
                     clickListSrcItem(it)
                 }
@@ -464,8 +542,42 @@ class MyUnit: com.madness.collision.unit.Unit() {
                 popSrc?.show()
             }
             rDisplay = RunnableDisplay(displayItem)
-            X.curvedCard(apiSpinnerDisplayBack)
+            val filterTags = context.resources.obtainTypedArray(MyR.array.prefAvTagsEntries)
+            val popTags = PopupUtil.selectMulti(context, MyR.string.av_main_filter_tip, filterTags, emptySet()) {
+                pop, container, indexes ->
+                pop.dismiss()
+                closeFilterTagMenu(container, indexes)
+            }
+            val container: ViewGroup = popTags.findViewById(R.id.popupSelectMultiContainer)
+            val longClickListener = View.OnLongClickListener {
+                val checkedIndex = it.tag as Int
+                if (it is CompoundButton) {
+                    it.isChecked = true
+                    if (checkedIndex in antiSelectedIndexes) {
+                        it.paintFlags = it.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                        antiSelectedIndexes.remove(checkedIndex)
+                    } else {
+                        it.paintFlags = it.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                        antiSelectedIndexes.add(checkedIndex)
+                    }
+                }
+                true
+            }
+            container.forEach {
+                it.setOnLongClickListener(longClickListener)
+            }
+//            val width = ViewGroup.LayoutParams.WRAP_CONTENT
+//            popFilterTag = PopupWindow(filterTagDelegate, width, width).apply {
+//                setOnDismissListener {
+//                }
+//            }
+            avMainFilterContainer.setOnClickListener {
+//                popTags?.showAsDropDown(avMainFilterCard)
+                popTags.show()
+            }
             X.curvedCard(apiStatsBack)
+            X.curvedCard(avMainFilterCard)
+            X.curvedCard(apiSpinnerDisplayBack)
         }
 
         if (X.aboveOn(X.N)){
@@ -530,6 +642,11 @@ class MyUnit: com.madness.collision.unit.Unit() {
                 sortItem = SORT_POSITION_API_TIME
         }
         item.isChecked = true
+        // clear tag filter
+        val context = context
+        if (context != null) {
+            clearTagFilter(context)
+        }
         rSort.position = sortItem
         ApiTaskManager.join(task = rSort)
         return true
@@ -584,15 +701,89 @@ class MyUnit: com.madness.collision.unit.Unit() {
             else -> null
         }?.let { loadItem = it }
         if (needPermission(REQUEST_EXTERNAL_STORAGE)) return true
+        // clear tag filter
+        val context = context
+        if (context != null) {
+            clearTagFilter(context)
+        }
         rDisplay.position = displayItem
         ApiTaskManager.join(task = rDisplay)
         ApiTaskManager.now(Dispatchers.Main){
             val listener = if (isStatsAvailable) View.OnClickListener {
                 mainViewModel.displayFragment(StatisticsFragment.newInstance(loadItem))
             } else null
-            apiStats.setOnClickListener(listener)
+            avMainStatsContainer.setOnClickListener(listener)
         }
         return true
+    }
+
+    private fun closeFilterTagMenu(container: ViewGroup, checkedIndexes: Set<Int>) {
+        val context = context ?: return
+        refreshLayout.isRefreshing = true
+        GlobalScope.launch {
+            var singleTitle: CharSequence? = null
+            val value = context.resources.obtainTypedArray(MyR.array.prefAvTagsValues).use {
+                values ->
+                checkedIndexes.associate {
+                    val name = values.getString(it) ?: ""
+                    val isAntied = it in antiSelectedIndexes
+                    name to TriStateSelectable(name, !isAntied)
+                }
+            }
+            if (checkedIndexes.size == 1) {
+                val checkedItem = container[checkedIndexes.first()] as MaterialCheckBox
+                singleTitle = checkedItem.text
+            }
+            launch(Dispatchers.Main) {
+                if (value.isEmpty()) {
+                    avMainFilterText.text = null
+                    avMainFilterText.visibility = View.GONE
+                    avMainFilterContainer.setOnLongClickListener(null)
+                } else {
+                    if (value.size == 1) {
+                        avMainFilterText.text = singleTitle?.toString()
+                        avMainFilterText.visibility = View.VISIBLE
+                        if (checkedIndexes.first() in antiSelectedIndexes) {
+                            avMainFilterText.paintFlags = avMainFilterText.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                        } else {
+                            avMainFilterText.paintFlags = avMainFilterText.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                        }
+                    } else {
+                        avMainFilterText.text = null
+                        avMainFilterText.visibility = View.GONE
+                    }
+                    avMainFilterContainer.setOnLongClickListener {
+                        clearTagFilter(context)
+                        refreshAdapterList(viewModel.screen4Display(loadItem))
+                        true
+                    }
+                }
+            }
+            // cannot detect whether changed, previous state cannot be determined
+            // because filter state share data with normal state
+            AppTag.loadTagSettings(context, value, false)
+            val completeList = viewModel.screen4Display(loadItem)
+            val displayList = if (value.isEmpty()) completeList
+            else filterByTag(context, this, completeList)
+            launch(Dispatchers.Main) {
+                refreshAdapterList(displayList)
+                refreshLayout.isRefreshing = false
+            }
+        }
+    }
+
+    private suspend fun filterByTag(context: Context, scope: CoroutineScope, appList: List<ApiViewingApp>): List<ApiViewingApp> {
+        return withContext(scope.coroutineContext) {
+            appList.filter {
+                AppTag.filterTags(context, it)
+            }
+        }
+    }
+
+    private fun clearTagFilter(context: Context) {
+        avMainFilterText.text = null
+        avMainFilterText.visibility = View.GONE
+        AppTag.loadTagSettings(context, settingsPreferences, false)
     }
 
     override fun onLowMemory() {
@@ -603,6 +794,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
 
     private fun refreshList() {
         ApiTaskManager.now {
+            ApiInfoPop.clearStores()
             viewModel.screenOut(loadItem)
 //            viewModel.updateApps4Display()
             loadedItems.unLoad(loadItem)
@@ -613,7 +805,11 @@ class MyUnit: com.madness.collision.unit.Unit() {
 
     private fun refreshAdapterList(list: List<ApiViewingApp> = viewModel.apps4Cache) {
         viewModel.updateApps4Display(list)
-        ApiTaskManager.now(Dispatchers.Main) { scrollToTop() }
+        ApiTaskManager.now(Dispatchers.Main) {
+            apiStats?.text = adapter.listCount.toString()
+            apiStats?.visibility = View.VISIBLE
+            scrollToTop()
+        }
     }
 
     /**
@@ -751,9 +947,9 @@ class MyUnit: com.madness.collision.unit.Unit() {
         return false
     }
 
-    private fun getFilter(isAddition: Boolean , displayList: List<ApiViewingApp> ): Filter {
+    private fun getFilter(isAddition: Boolean, displayList: List<ApiViewingApp>): Filter {
         return object : Filter() {
-            override fun performFiltering(charSequence: CharSequence ): FilterResults {
+            override fun performFiltering(charSequence: CharSequence): FilterResults {
                 val appList = if (isAddition) adapter.apps else displayList
                 val filterResults = FilterResults()
                 if (appList.isEmpty()) {
@@ -761,21 +957,23 @@ class MyUnit: com.madness.collision.unit.Unit() {
                     return filterResults
                 }
                 val filtered: MutableList<ApiViewingApp> = mutableListOf()
-                var appName: String
                 val locale = SystemUtil.getLocaleApp()
                 val filterText = charSequence.toString()
                 val input4Comparision: String = filterText.toLowerCase(locale)
                 val iterator: Iterator<ApiViewingApp> = appList.iterator()
                 while (iterator.hasNext()){
                     val info = iterator.next()
-                    appName = info.name.replace(" ", "").toLowerCase(locale)
-                    if (appName.contains(input4Comparision) || info.packageName.toLowerCase(locale).contains(input4Comparision)) {
+                    val appName = info.name.replace(" ", "").toLowerCase(locale)
+                    if (appName.contains(input4Comparision)
+                            || info.packageName.toLowerCase(locale).contains(input4Comparision)) {
                         filtered.add(info)
                         continue
                     }
                     val ver = if (EasyAccess.isViewingTarget) VerInfo(info.targetAPI, info.targetSDK, info.targetSDKLetter)
                     else VerInfo(info.minAPI, info.minSDK, info.minSDKLetter)
-                    if (filterText == ver.api.toString() || ver.sdk.startsWith(filterText)) filtered.add(info)
+                    if (filterText == ver.api.toString() || ver.sdk.startsWith(filterText)) {
+                        filtered.add(info)
+                    }
                 }
                 filterResults.values = filtered
                 filterResults.count = filtered.size
@@ -783,21 +981,14 @@ class MyUnit: com.madness.collision.unit.Unit() {
             }
 
             override fun publishResults(charSequence: CharSequence, filterResults: FilterResults) {
-                if (filterResults.count == 0) {
-                    refreshAdapterList(emptyList())
-                    refreshLayout.isRefreshing = false
-                    return
+                val reValues = filterResults.values
+                val re = if (filterResults.count != 0 && reValues is MutableList<*>) {
+                    reValues.filterIsInstance<ApiViewingApp>()
+                } else {
+                    emptyList()
                 }
-                val infos: MutableList<ApiViewingApp>
-                if (filterResults.values is MutableList<*>) {
-                    infos = mutableListOf()
-                    for (ob in filterResults.values as MutableList<*>){
-                        if (ob is ApiViewingApp)
-                            infos.add(ob)
-                    }
-                    refreshAdapterList(infos)
-                    refreshLayout.isRefreshing = false
-                }
+                refreshAdapterList(re)
+                refreshLayout.isRefreshing = false
             }
         }
     }
@@ -845,7 +1036,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
         if (requestCode == REQUEST_EXTERNAL_STORAGE){
             rDisplay.position = displayItem
             ApiTaskManager.join(task = rDisplay)
-        }else if (requestCode == REQUEST_EXTERNAL_STORAGE_RE){
+        } else if (requestCode == REQUEST_EXTERNAL_STORAGE_RE){
             refreshList()
         }
     }
@@ -871,10 +1062,6 @@ class MyUnit: com.madness.collision.unit.Unit() {
             loadSortedList(loadItem, sortEfficiently = true, fg = true)
             viewModel.sortApps(sortItem)
             context?.let { handleRefreshList(it) }
-            // set stats
-            ApiTaskManager.now(Dispatchers.Main) {
-                apiStats?.text = adapter.listCount.toString()
-            }
         }
     }
 

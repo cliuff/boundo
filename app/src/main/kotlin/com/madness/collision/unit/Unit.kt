@@ -111,7 +111,11 @@ abstract class Unit: TaggedFragment(), Democratic {
 
         fun getFrequencies(context: Context,
                            pref: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
-        ) = PrefsUtil.getCompoundItem<String, String>(pref, P.UNIT_FREQUENCIES).mapValues { it.value.toInt() }
+        ): Map<String, Int> {
+            return PrefsUtil.getCompoundItem<String, String>(pref, P.UNIT_FREQUENCIES).mapValues {
+                it.value.toInt()
+            }
+        }
 
         fun increaseFrequency(context: Context, unitName: String,
                               pref: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)

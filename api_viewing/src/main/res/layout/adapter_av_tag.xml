@@ -15,20 +15,42 @@
   ~ limitations under the License.
   -->
 
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/avAdapterInfoTag"
-    android:textColor="?colorAOnBackground"
-    tools:text="System"
-    android:clickable="false"
-    android:paddingTop="2dp"
-    android:paddingBottom="2dp"
-    android:paddingStart="5dp"
-    android:paddingEnd="5dp"
-    android:backgroundTint="?colorABackground"
     android:background="@drawable/av_item_tag_back"
-    android:textAppearance="@style/AvTagText"
+    android:backgroundTint="?colorABackground"
     android:alpha="@fraction/surfaceAlpha"
+    android:paddingStart="3dp"
+    android:paddingEnd="3dp"
+    android:clickable="false"
+    android:gravity="center"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    tools:ignore="SmallSp" />
+    tools:ignore="UseCompoundDrawables">
+
+    <ImageView
+        android:id="@+id/avAdapterInfoTagIcon"
+        tools:src="@mipmap/ic_launcher"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:paddingStart="2dp"
+        android:paddingEnd="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="16dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@null" />
+
+    <TextView
+        android:id="@+id/avAdapterInfoTagName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="2dp"
+        android:paddingEnd="2dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:textAppearance="@style/AvTagText"
+        android:textColor="?colorAOnBackground"
+        tools:ignore="SmallSp"
+        tools:text="System" />
+</LinearLayout>

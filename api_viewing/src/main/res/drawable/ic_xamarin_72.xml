@@ -1,0 +1,25 @@
+<!--
+  ~ Copyright 2020 Clifford Liu
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="72dp"
+    android:height="72dp"
+    android:viewportWidth="7.3728"
+    android:viewportHeight="7.3713517">
+  <path
+      android:pathData="m2.54051,1.27518c-0.14636,0.00032 -0.28962,0.0834 -0.36329,0.21014l-1.14592,1.99057c-0.07254,0.12708 -0.07254,0.29318 0,0.42026l1.14592,1.99059c0.07367,0.12674 0.21693,0.20984 0.36329,0.21014L4.83236,6.09688c0.14636,-0.00032 0.28962,-0.0834 0.36329,-0.21014l1.14592,-1.99059c0.07254,-0.12708 0.07252,-0.29318 0,-0.42026l-1.14592,-1.99057c-0.07367,-0.12676 -0.21693,-0.20984 -0.36329,-0.21014zM2.56132,2.43971c0.00315,-0.00032 0.00646,-0.00032 0.00961,0h0.3953a0.05212,0.05212 0,0 1,0.04323 0.0257l0.67059,1.19499c0.00339,0.006 0.00555,0.0125 0.00635,0.0193 0.00085,-0.007 0.00301,-0.0133 0.00639,-0.0193l0.66898,-1.19504a0.05229,0.05229 0,0 1,0.04481 -0.0257h0.39532c0.03499,0.00029 0.06122,0.0444 0.04481,0.0754l-0.65459,1.17094 0.65459,1.16933c0.01795,0.0312 -0.00889,0.0773 -0.04481,0.077L4.40658,4.93233a0.05229,0.05229 0,0 1,-0.04481 -0.02724l-0.66898,-1.19501c-0.00339,-0.006 -0.00555,-0.0125 -0.00637,-0.0192a0.05144,0.05144 0,0 1,-0.00637 0.0193l-0.67061,1.19499a0.05224,0.05224 0,0 1,-0.04318 0.0273h-0.39534c-0.03592,0.00032 -0.06276,-0.0458 -0.04481,-0.077l0.65459,-1.16933 -0.65459,-1.17094c-0.01569,-0.0283 0.00345,-0.0693 0.0352,-0.0754z"
+      android:fillColor="#3498db"/>
+</vector>

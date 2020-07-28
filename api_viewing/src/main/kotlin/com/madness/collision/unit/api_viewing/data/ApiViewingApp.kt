@@ -26,7 +26,6 @@ import android.graphics.*
 import android.graphics.drawable.AdaptiveIconDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
-import android.os.Build
 import android.os.Parcel
 import android.os.Parcelable
 import android.provider.Settings
@@ -44,8 +43,8 @@ import kotlin.math.roundToInt
 
 @Entity(tableName = "apps")
 internal class ApiViewingApp(
-        @PrimaryKey @ColumnInfo(name = "package") val packageName: String
-) : Parcelable {
+        @PrimaryKey @ColumnInfo(name = "package") var packageName: String
+) : Parcelable, Cloneable {
 
     companion object {
         const val packageCoolApk = "com.coolapk.market"
@@ -86,12 +85,19 @@ internal class ApiViewingApp(
     var updateTime = 0L
     var isNativeLibrariesRetrieved = false
     var nativeLibraries: BooleanArray = BooleanArray(ApkUtil.NATIVE_LIB_SUPPORT_SIZE) { false }
+    var isLaunchable = false
     @Ignore
     lateinit var appPackage: AppPackage
     @Ignore
     private var type: Int = TYPE_APP
     @Ignore
     private var mOnLoadedListener: (() -> Unit)? = null
+
+    val isArchive: Boolean
+        get() = apiUnit == ApiUnit.APK
+
+    val isNotArchive: Boolean
+        get() = !isArchive
 
     @Ignore
     private var _iconDetails: IconRetrievingDetails? = null
@@ -106,46 +112,59 @@ internal class ApiViewingApp(
     val hasIcon: Boolean
         get() = icon != null
 
-    constructor(): this(""){
+    constructor(): this("") {
         type = TYPE_ICON
     }
 
-    constructor(context: Context,  info: PackageInfo, preloadProcess: Boolean, archive: Boolean): this(info.packageName ?: ""){
+    constructor(context: Context,  info: PackageInfo, preloadProcess: Boolean, archive: Boolean)
+            : this(info.packageName ?: "") {
+        init(context, info, preloadProcess, archive)
+    }
+
+    public override fun clone(): Any {
+        return super.clone()
+    }
+
+    fun init(context: Context,  info: PackageInfo, preloadProcess: Boolean, archive: Boolean) {
         if (preloadProcess) {
             type = TYPE_APP
             verName = info.versionName ?: ""
             updateTime = info.lastUpdateTime
             preload = true
-            if (archive){
+            if (archive) {
                 apiUnit = ApiUnit.APK
                 name = packageName
-            }else {
-                apiUnit = if ((info.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM) == 0) ApiUnit.USER else ApiUnit.SYS
+            } else {
+                val isNotSysApp = (info.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM) == 0
+                apiUnit = if (isNotSysApp) ApiUnit.USER else ApiUnit.SYS
                 appPackage = AppPackage(info.applicationInfo)
                 loadName(context, info.applicationInfo)
                 //name = manager.getApplicationLabel(pi.applicationInfo).toString();
             }
             this.targetAPI = info.applicationInfo.targetSdkVersion
             targetSDK = Utils.getAndroidVersionByAPI(targetAPI, false)
-            if (targetSDK.isNotEmpty()){
+            if (targetSDK.isNotEmpty()) {
                 targetSDKDouble = targetSDK.toDouble()
                 targetSDKDisplay = targetSDK
             }
             targetSDKLetter = Utils.getAndroidLetterByAPI(targetAPI)
 
-            if (X.aboveOn(Build.VERSION_CODES.N)) {
+            if (X.aboveOn(X.N)) {
                 minAPI = info.applicationInfo.minSdkVersion
-            }else {
+            } else {
                 val minApiText = ManifestUtil.getMinSdk(appPackage.basePath)
                 if (minApiText.isNotEmpty()) minAPI = minApiText.toInt()
             }
             minSDK = Utils.getAndroidVersionByAPI(minAPI, false)
-            if (minSDK.isNotEmpty()){
+            if (minSDK.isNotEmpty()) {
                 minSDKDouble = minSDK.toDouble()
                 minSDKDisplay = minSDK
             }
             minSDKLetter = Utils.getAndroidLetterByAPI(minAPI)
-        }else {
+
+            val pm = context.packageManager
+            isLaunchable = pm.getLaunchIntentForPackage(packageName) != null
+        } else {
             load(context, info.applicationInfo)
         }
     }
@@ -190,7 +209,7 @@ internal class ApiViewingApp(
     }
 
     fun getApplicationInfo(context: Context): ApplicationInfo? {
-        return if (this.isArchive()) MiscApp.getApplicationInfo(context, apkPath = appPackage.basePath)
+        return if (this.isArchive) MiscApp.getApplicationInfo(context, apkPath = appPackage.basePath)
         else MiscApp.getApplicationInfo(context, packageName = packageName)
     }
 
@@ -262,7 +281,7 @@ internal class ApiViewingApp(
     val isIconOriginal: Boolean
         get() = !EasyAccess.shouldRoundIcon
 
-    private fun retrieveAppIconInfo(iconDrawable: Drawable) {
+    fun retrieveAppIconInfo(iconDrawable: Drawable) {
         adaptiveIcon = X.aboveOn(X.O) && iconDrawable is AdaptiveIconDrawable
     }
 
@@ -492,12 +511,9 @@ internal class ApiViewingApp(
         icon = null
     }
 
-    fun isArchive() = apiUnit == ApiUnit.APK
-    
-    fun isNotArchive() = !isArchive()
-
     private constructor(parIn: Parcel): this(parIn.readString() ?: "") {
-        icon = parIn.readParcelable(Bitmap::class.java.classLoader)!!
+        val cl = javaClass.classLoader
+        icon = parIn.readParcelable(cl)!!
         name = parIn.readString() ?: ""
         targetAPI = parIn.readInt()
         minAPI = parIn.readInt()
@@ -510,7 +526,7 @@ internal class ApiViewingApp(
         targetSDKLetter = parIn.readInt().toChar()
         minSDKLetter = parIn.readInt().toChar()
         apiUnit = parIn.readInt()
-        appPackage = parIn.readParcelable(AppPackage::class.java.classLoader)!!
+        appPackage = parIn.readParcelable(cl)!!
         updateTime = parIn.readLong()
         type = parIn.readInt()
         val booleanArray = BooleanArray(2)
@@ -518,8 +534,9 @@ internal class ApiViewingApp(
         adaptiveIcon = booleanArray[0]
         preload = booleanArray[1]
         isLoadingIcon = booleanArray[2]
-        _iconDetails = parIn.readParcelable(IconRetrievingDetails::class.java.classLoader)
-        isNativeLibrariesRetrieved = parIn.readInt() == 1
+        isNativeLibrariesRetrieved = booleanArray[3]
+        isLaunchable = booleanArray[4]
+        _iconDetails = parIn.readParcelable(cl)
         parIn.readBooleanArray(nativeLibraries)
     }
 
@@ -541,9 +558,11 @@ internal class ApiViewingApp(
         dest.writeParcelable(appPackage, flags)
         dest.writeLong(updateTime)
         dest.writeInt(type)
-        dest.writeBooleanArray(booleanArrayOf(adaptiveIcon, preload, isLoadingIcon))
+        dest.writeBooleanArray(booleanArrayOf(
+                adaptiveIcon, preload, isLoadingIcon,
+                isNativeLibrariesRetrieved, isLaunchable
+        ))
         dest.writeParcelable(_iconDetails, flags)
-        dest.writeInt(if (isNativeLibrariesRetrieved) 1 else 0)
         dest.writeBooleanArray(nativeLibraries)
     }
 

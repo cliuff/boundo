@@ -82,4 +82,11 @@
     <string name="av_ai">Προσαρμοστικό εικονίδιο</string>
     <string name="av_tag_has_splits">Split APK</string>
     <string name="av_apks_select_folder">Επιλέξτε ένα φάκελο για σάρωση</string>
+    <string name="av_pref_loading">Φόρτωση λίστας</string>
+    <string name="av_pref_displaying">Εμφάνιση λίστας</string>
+    <string name="av_adapter_tag_hidden">Κρυμμένος</string>
+    <string name="av_settings_tag_hidden">Το εικονίδιο της εφαρμογής δεν εμφανίζεται στο πρόγραμμα εκκίνησης</string>
+    <string name="av_pref_loading_summary">Μη αυτόματη ανανέωση για ενεργοποίηση αλλαγών</string>
+    <string name="av_pref_displaying_summary">Οι αλλαγές ενεργοποιούνται αυτόματα</string>
+    <string name="av_main_filter_tip">Δοκιμάστε να πατήσετε παρατεταμένα μια ετικέτα</string>
 </resources>

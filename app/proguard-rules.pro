@@ -20,7 +20,7 @@
 # hide the original source file name.
 -renamesourcefileattribute SourceFile
 
-# Fragments may be refrenced in xml file
+# Fragments may be refrenced in xml file or used for page restoration
 -keep class * extends androidx.fragment.app.Fragment
 
 # Navigation

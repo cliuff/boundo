@@ -82,4 +82,11 @@
     <string name="av_ai">적응 형 아이콘</string>
     <string name="av_tag_has_splits">Split APK</string>
     <string name="av_apks_select_folder">스캔 할 폴더를 선택하십시오</string>
+    <string name="av_pref_loading">리스트 로딩</string>
+    <string name="av_pref_displaying">리스트 표시</string>
+    <string name="av_adapter_tag_hidden">숨는 장소</string>
+    <string name="av_settings_tag_hidden">실행기에 아이콘을 표시하지 않음</string>
+    <string name="av_pref_loading_summary">변경 사항을 트리거하기위한 수동 새로 고침</string>
+    <string name="av_pref_displaying_summary">자동 변경 사항 트리거</string>
+    <string name="av_main_filter_tip">라벨을 길게 누르십시오</string>
 </resources>

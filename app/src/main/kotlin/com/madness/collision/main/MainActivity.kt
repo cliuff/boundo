@@ -226,10 +226,12 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
                     if (forwardFragment != null) {
                         remove(forwardFragment)
                     }
-                    if (backwardFragment.isAdded) {
-                        show(backwardFragment)
-                    } else {
-                        add(navHostFragment.view?.id ?: 0, backwardFragment, backwardFragment.uid)
+                    if (backwardFragment != null) {
+                        if (backwardFragment.isAdded) {
+                            show(backwardFragment)
+                        } else {
+                            add(navHostFragment.view?.id ?: 0, backwardFragment, backwardFragment.uid)
+                        }
                     }
                     commitNow()
                 }
@@ -239,7 +241,9 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
                 if (shouldShowNavAfterBack) showNav()
                 // make unit value matches reality
                 val isMoreUnit = !mBackStack.isEmpty()
-                viewModel.unit.value = if (isMoreUnit) backwardFragment to booleanArrayOf(false, false, true) else null
+                if (backwardFragment != null) {
+                    viewModel.unit.value = if (isMoreUnit) backwardFragment to booleanArrayOf(false, false, true) else null
+                }
             }
         }
         return cachedCallback!!
@@ -264,7 +268,14 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
             applyUpdates(context)
 
             val activityName = intent.getStringExtra(LAUNCH_ACTIVITY) ?: ""
-            val target = if (activityName.isNotEmpty()) Class.forName(activityName) else null
+            val target = if (activityName.isNotEmpty()) {
+                try {
+                    Class.forName(activityName)
+                } catch (e: ClassNotFoundException) {
+                    e.printStackTrace()
+                    null
+                }
+            } else null
             target?.let {
                 val startIntent = Intent(this@MainActivity, it)
                 startIntent.putExtras(intent)

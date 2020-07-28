@@ -27,6 +27,7 @@ import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.madness.collision.main.MainViewModel
+import com.madness.collision.unit.Updatable
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.util.*
@@ -36,14 +37,14 @@ import kotlinx.coroutines.launch
 import kotlin.math.min
 import kotlin.math.roundToInt
 
-internal class MyUpdatesFragment : TaggedFragment() {
+internal class MyUpdatesFragment : TaggedFragment(), Updatable {
 
     override val category: String = "AV"
     override val id: String = "MyUpdates"
 
     companion object {
-        var appTimestamp: Long = 0L
-        var sessionTimestamp: Long = 0L
+        private var appTimestamp: Long = 0L
+        private var sessionTimestamp: Long = 0L
         var changedPackages: List<PackageInfo>? = null
 
         fun checkUpdate(hostFragment: Fragment): Boolean {
@@ -89,13 +90,16 @@ internal class MyUpdatesFragment : TaggedFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         ensureAdded(R.id.avUpdatesRecentsListContainer, mListFragment, true)
-        GlobalScope.launch {
-            mAdapter = mListFragment.getAdapter()
-            mAdapter.setSortMethod(MyUnit.SORT_POSITION_API_TIME)
-            val space = X.size(mContext, 5f, X.DP).roundToInt()
-            mAdapter.topCover = space
-            mAdapter.bottomCover = space
+        mAdapter = mListFragment.getAdapter()
+        mAdapter.setSortMethod(MyUnit.SORT_POSITION_API_TIME)
+        val space = X.size(mContext, 5f, X.DP).roundToInt()
+        mAdapter.topCover = space
+        mAdapter.bottomCover = space
+        updateState()
+    }
 
+    override fun updateState() {
+        GlobalScope.launch {
             if (changedPackages == null) {
                 checkUpdate(this@MyUpdatesFragment)
             }
@@ -120,16 +124,18 @@ internal class MyUpdatesFragment : TaggedFragment() {
             }
             changedPackages = null
 
-            launch(Dispatchers.Main) {
+            launch(Dispatchers.Main) updateUI@ {
                 mAdapter.apps = mList
                 val recycler = mListFragment.getRecyclerView()
                 recycler.setHasFixedSize(true)
                 recycler.setItemViewCacheSize(mAdapter.itemCount)
                 val visibility = if (mList.isEmpty()) View.GONE else View.VISIBLE
+                val view = view ?: return@updateUI
                 view.findViewById<TextView>(R.id.avUpdatesRecentsTitle)?.visibility = visibility
                 view.findViewById<TextView>(R.id.avUpdatesRecentsMore)?.run {
                     this.visibility = visibility
                     setOnClickListener {
+                        if (activity == null || isDetached || !isAdded) return@setOnClickListener
                         val mainViewModel: MainViewModel by activityViewModels()
                         mainViewModel.displayUnit(MyBridge.unitName, shouldShowNavAfterBack = true)
                     }

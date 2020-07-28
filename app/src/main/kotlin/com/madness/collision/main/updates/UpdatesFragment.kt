@@ -63,6 +63,9 @@ internal class UpdatesFragment : TaggedFragment(), Democratic {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mContext = context ?: return
+        updatesProviders = Unit.getPinnedUnits(mContext).mapNotNull {
+            Unit.getUpdates(it)?.run { it to this }
+        }.toMutableList()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -111,9 +114,6 @@ internal class UpdatesFragment : TaggedFragment(), Democratic {
         // clear old updates
         clearUpdates()
         // load latest updates
-        updatesProviders = Unit.getPinnedUnits(mContext).mapNotNull {
-            Unit.getUpdates(it)?.run { it to this }
-        }.toMutableList()
         fragments = updatesProviders.mapNotNull {
             if (it.second.hasUpdates(this)) it.second.getFragment()?.run {
                 it.first to this

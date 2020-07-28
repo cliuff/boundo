@@ -23,7 +23,6 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -55,7 +54,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.File
-import java.util.stream.Collectors
 import kotlin.math.max
 import kotlin.math.roundToInt
 import com.madness.collision.unit.api_viewing.R as MyR
@@ -70,6 +68,14 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
         const val TAG = "APIInfoPop"
         const val ARG_APP = "app"
 
+        private var initializedStoreLink = false
+        private val storeMap = mutableMapOf<String, Bitmap>()
+
+        fun clearStores() {
+            initializedStoreLink = false
+            storeMap.clear()
+        }
+
         fun newInstance(app: ApiViewingApp) = ApiInfoPop().apply {
             arguments = Bundle().apply {
                 putParcelable(ARG_APP, app)
@@ -80,7 +86,7 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
             if (sealBack.containsKey(letter)) return sealBack[letter]!!
             //final int INITIAL_colorPlain = -1;//color #00000000 has the value of 0
             val colorPlain: Int
-            val dp60: Int
+            val blurWidth: Int
             var bitmap: Bitmap
             val resImageID = APIAdapter.getAndroidCodenameImageRes(letter)
             // draw color
@@ -89,14 +95,13 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
                 if (letter == 'k' && EasyAccess.isSweet){
                     index4SealBack = letter
                     colorPlain = Color.parseColor("#753500")
-                }else{
+                } else {
                     index4SealBack = '?'
                     if (sealBack.containsKey(index4SealBack)) return sealBack[index4SealBack]!!
                     colorPlain = X.getColor(context, R.color.androidRobotGreen)
                 }
-                dp60 = X.size(context, 60f, X.DP).toInt()
-                //bitmap = Bitmap.createBitmap((if (X.belowOff(X.N)) X.size(context, 260f, X.DP).toInt() else dp60 * 2), dp60 * 2, Bitmap.Config.ARGB_8888)
-                bitmap = Bitmap.createBitmap(dp60 * 2, dp60 * 2, Bitmap.Config.ARGB_8888)
+                blurWidth = X.size(context, 60f, X.DP).toInt() * 2
+                bitmap = Bitmap.createBitmap(blurWidth, blurWidth, Bitmap.Config.ARGB_8888)
                 Canvas(bitmap).drawColor(colorPlain)
                 sealBack[index4SealBack] = bitmap
                 val path = F.createPath(F.valCachePubAvSeal(context), "back-$index4SealBack.png")
@@ -106,32 +111,16 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
             // draw image res
             APIAdapter.populate4Seal(context, letter, itemLength)
             var seal: Bitmap = seals[letter]!!.collisionBitmap
-            //boolean minNada = Build.VERSION.SDK_INT < Build.VERSION_CODES.N;
-            val minNada = false
-            var dp260 = 0
-            if (minNada) dp260 = X.size(context, 260f, X.DP).toInt()
-            val targetLength = seal.width / (if (minNada) 52 else 18)
-            bitmap = Bitmap.createBitmap(
-                    targetLength * (if (minNada) 13 else 4),
-                    targetLength * (if (minNada) 9 else 4),
-                    Bitmap.Config.ARGB_8888
-            )
-            seal = Bitmap.createBitmap(
-                    seal,
-                    targetLength * (if (minNada) 20 else 7),
-                    targetLength * (if (minNada) 30 else 7),
-                    bitmap.width,
-                    bitmap.height
-            )
+            val targetLength = seal.width / 18
+            val bitmapWidth = targetLength * 4
+            val sealWidth = targetLength * 7
+            bitmap = Bitmap.createBitmap(bitmapWidth, bitmapWidth, Bitmap.Config.ARGB_8888)
+            seal = Bitmap.createBitmap(seal, sealWidth, sealWidth, bitmap.width, bitmap.height)
             val canvas2Draw = Canvas(bitmap)
             canvas2Draw.drawColor(Color.parseColor("#fff5f5f5"))
             canvas2Draw.drawBitmap(seal, 0f, 0f, Paint(Paint.ANTI_ALIAS_FLAG))
-            dp60 = X.size(context, 60f, X.DP).toInt()
-            bitmap = X.blurBitmap(
-                    context, bitmap,
-                    (if (minNada) dp260 else dp60 * 2),
-                    dp60 * 2
-            )
+            blurWidth = X.size(context, 60f, X.DP).toInt() * 2
+            bitmap = X.blurBitmap(context, bitmap, blurWidth, blurWidth)
             sealBack[letter] = bitmap
             val path = F.createPath(F.valCachePubAvSeal(context), "back-$letter.png")
             if (F.prepare4(path)) X.savePNG(bitmap, path)
@@ -190,10 +179,6 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
     private var popStore: CollisionDialog? = null
 
     private val aiAvailable = X.supportAdaptiveIconAvailable()
-    private var initializedStoreLink = false
-    private val storeMap = HashMap<String, ApiViewingApp>().toMutableMap()
-
-//    private lateinit var applicationInfo: ApplicationInfo
 
     private var itemLength = 0
 
@@ -317,135 +302,143 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
                 }
             }
             MyR.id.sdkcheck_dialog_logo -> {
-                AppIconFragment.newInstance(app.name, app.packageName, app.appPackage.basePath, app.isArchive()).let {
+                AppIconFragment.newInstance(app.name, app.packageName, app.appPackage.basePath, app.isArchive).let {
                     this.dismiss()
                     val mvm: MainViewModel by activityViewModels()
                     mvm.displayFragment(it)
                 }
             }
-            MyR.id.api_info_back -> {
-                GlobalScope.launch {
-                    if (!initializedStoreLink) {
-                        // by activityViewModels() may produce IllegalArgumentException due to getActivity null value
-                        // by activityViewModels() may produce IllegalStateException[java.lang.IllegalStateException: Can't access ViewModels from detached fragment]
-                        // due to fragment being detached?
-                        if (activity == null || isDetached || !isAdded) {
-                            X.toast(context, R.string.text_error, Toast.LENGTH_SHORT)
-                            return@launch
-                        }
-                        initializedStoreLink = true
-                        val searchSize = 3
-                        var filtered: MutableList<ApiViewingApp> = mutableListOf()
-                        val avViewModel: ApiViewingViewModel by activityViewModels()
-                        avViewModel.apps4Cache.let {
-                            if (X.aboveOn(Build.VERSION_CODES.N)) {
-                                filtered = it.parallelStream().filter { apiApp ->
-                                    apiApp.packageName == packageCoolApk ||
-                                            apiApp.packageName == packagePlayStore ||
-                                            apiApp.packageName == packageSettings
-                                }.collect(Collectors.toList())
-                            } else {
-                                for (listApp in it) {
-                                    if (listApp.packageName == packageCoolApk ||
-                                            listApp.packageName == packagePlayStore
-                                            || listApp.packageName == packageSettings)
-                                        filtered.add(listApp)
-                                    if (filtered.size == searchSize) break
-                                }
-                            }
-                        }
-                        launch(Dispatchers.Main) {
-                            // dismiss after viewModel access
-                            dismiss()
-                        }
-                        for (listApp in filtered) {
-                            if (listApp.preload) listApp.load(context)
-                            storeMap[listApp.packageName] = listApp
-                        }
-                        for (name in arrayOf(packageCoolApk, packagePlayStore, packageSettings)){
-                            if (storeMap[name] != null) continue
-                            try {
-                                val pi = context.packageManager.getPackageInfo(name, 0)
-                                storeMap[name] = ApiViewingApp(context, pi, preloadProcess = true, archive = false)
-                                        .load(context, pi.applicationInfo)
-                            } catch (e: PackageManager.NameNotFoundException) {
-                                e.printStackTrace()
-                                if (name == packageSettings){
-                                    storeMap[name] = ApiViewingApp()
-                                            .load(context, { context.getDrawable(R.mipmap.logo_settings)!! }, { null })
-                                }
-                            }
-                        }
-                    }
+            MyR.id.api_info_back -> actionStores(context, app)
+            MyR.id.apiCapture -> actionShare(context)
+        }
+    }
 
-                    launch(Dispatchers.Main) {
-                        val vCoolApk : ImageView
-                        val vPlayStore : ImageView
-                        val vSettings: ImageView
-                        popStore = CollisionDialog(context, R.string.text_forgetit).apply {
-                            setListener { dismiss() }
-                            setTitleCollision(R.string.avStoreLink, 0, 0)
-                            setContent(0)
-                            setCustomContent(MyR.layout.pop_av_store_link)
-                            vCoolApk = findViewById(MyR.id.vCoolApk)
-                            vPlayStore = findViewById(MyR.id.vPlayStore)
-                            vSettings = findViewById(MyR.id.vSettings)
-                        }
-                        val iconWidth = X.size(context, 60f, X.DP).roundToInt()
-                        for ((name, storeApp) in arrayOf(packageCoolApk to storeMap[packageCoolApk], packagePlayStore to storeMap[packagePlayStore])){
-                            var icon: Bitmap? = null
-                            var listener: View.OnClickListener? = null
-                            storeApp?.let { store ->
-                                icon = store.icon
-                                listener = View.OnClickListener {
-                                    try {
-                                        context.startActivity(app.storePage(name, true))
-                                    } catch (e: Exception) {
-                                        context.startActivity(app.storePage(name, false))
-                                    }
-                                    popStore?.dismiss()
-                                }
-                            }
-                            when(name){
-                                packageCoolApk -> vCoolApk
-                                packagePlayStore -> vPlayStore
-                                else -> null
-                            }?.run {
-                                if (storeApp == null) {
-                                    setPadding(0, 0, 0, 0)
-                                }else{
-                                    icon?.let { setImageBitmap(X.toTarget(it, iconWidth, iconWidth)) }
-                                    setOnClickListener(listener)
-                                }
-                            }
-                        }
+    private fun actionStores(context: Context, app: ApiViewingApp) {
+        if (!initializedStoreLink) {
+            GlobalScope.launch {
+                if (!initStores(context)) return@launch
+                launch(Dispatchers.Main) {
+                    // dismiss after viewModel access in initStores
+                    dismiss()
+                    showStores(context, app)
+                }
+            }
+        } else {
+            dismiss()
+            showStores(context, app)
+        }
+    }
 
-                        val finalSettings = storeMap[packageSettings]
-                        if (finalSettings != null && (app.isNotArchive() || X.belowOff(X.Q))) {
-                            run {
-                                finalSettings.icon
-                            }?.let { vSettings.setImageBitmap(X.toTarget(it, iconWidth, iconWidth)) }
-                            vSettings.setOnClickListener {
-                                if (app.isNotArchive()) {
-                                    context.startActivity(app.settingsPage())
-                                } else {
-                                    try {
-                                        context.startActivity(app.apkPage())
-                                    } catch (e: Exception) {
-                                        CollisionDialog.infoCopyable(context, app.appPackage.basePath).show()
-                                    }
-                                }
-                                popStore?.dismiss()
-                            }
-                        } else {
-                            vSettings.setPadding(0, 0, 0, 0)
+    private fun initStores(context: Context): Boolean {
+        // by activityViewModels() may produce IllegalArgumentException due to getActivity null value
+        // by activityViewModels() may produce IllegalStateException[java.lang.IllegalStateException: Can't access ViewModels from detached fragment]
+        // due to fragment being detached?
+        if (activity == null || isDetached || !isAdded) {
+            X.toast(context, R.string.text_error, Toast.LENGTH_SHORT)
+            return false
+        }
+        initializedStoreLink = true
+        val searchSize = 3
+        val avViewModel: ApiViewingViewModel by activityViewModels()
+        // find from loaded apps
+        val filtered = avViewModel.findApps(searchSize) {
+            val pn = it.packageName
+            pn == packageCoolApk || pn == packagePlayStore || pn == packageSettings
+        }
+        // load them if not loaded
+        for (listApp in filtered) {
+            if (listApp.preload) {
+                listApp.load(context)
+            }
+            listApp.icon?.let {
+                storeMap[listApp.packageName] = it
+            }
+        }
+        // manually initialize those not found in loaded apps
+        for (name in arrayOf(packageCoolApk, packagePlayStore, packageSettings)) {
+            if (storeMap[name] != null) continue
+            try {
+                val pi = context.packageManager.getPackageInfo(name, 0)
+                ApiViewingApp(context, pi, preloadProcess = true, archive = false)
+                        .load(context, pi.applicationInfo).icon?.let {
+                            storeMap[name] = it
                         }
-                        popStore?.show()
+            } catch (e: PackageManager.NameNotFoundException) {
+                e.printStackTrace()
+                // initialize settings app as predefined
+                if (name == packageSettings){
+                    ApiViewingApp().load(context, {
+                        context.getDrawable(R.mipmap.logo_settings)!!
+                    }, { null }).icon?.let {
+                        storeMap[name] = it
                     }
                 }
             }
-            MyR.id.apiCapture -> actionShare(context)
         }
+        return true
+    }
+
+    private fun showStores(context: Context, app: ApiViewingApp) {
+        val vCoolApk : ImageView
+        val vPlayStore : ImageView
+        val vSettings: ImageView
+        popStore = CollisionDialog(context, R.string.text_forgetit).apply {
+            setListener { dismiss() }
+            setTitleCollision(R.string.avStoreLink, 0, 0)
+            setContent(0)
+            setCustomContent(MyR.layout.pop_av_store_link)
+            vCoolApk = findViewById(MyR.id.vCoolApk)
+            vPlayStore = findViewById(MyR.id.vPlayStore)
+            vSettings = findViewById(MyR.id.vSettings)
+        }
+        val iconWidth = X.size(context, 60f, X.DP).roundToInt()
+        val storePackages = arrayOf(packageCoolApk to storeMap[packageCoolApk],
+                packagePlayStore to storeMap[packagePlayStore])
+        for ((name, storeIcon) in storePackages) {
+            var listener: View.OnClickListener? = null
+            if (storeIcon != null) {
+                listener = View.OnClickListener {
+                    try {
+                        context.startActivity(app.storePage(name, true))
+                    } catch (e: Exception) {
+                        context.startActivity(app.storePage(name, false))
+                    }
+                    popStore?.dismiss()
+                }
+            }
+            when(name) {
+                packageCoolApk -> vCoolApk
+                packagePlayStore -> vPlayStore
+                else -> null
+            }?.run {
+                if (storeIcon == null) {
+                    setPadding(0, 0, 0, 0)
+                } else {
+                    setImageBitmap(X.toTarget(storeIcon, iconWidth, iconWidth))
+                    setOnClickListener(listener)
+                }
+            }
+        }
+
+        val settingsIcon = storeMap[packageSettings]
+        if (settingsIcon != null && (app.isNotArchive || X.belowOff(X.Q))) {
+            vSettings.setImageBitmap(X.toTarget(settingsIcon, iconWidth, iconWidth))
+            vSettings.setOnClickListener {
+                if (app.isNotArchive) {
+                    context.startActivity(app.settingsPage())
+                } else {
+                    try {
+                        context.startActivity(app.apkPage())
+                    } catch (e: Exception) {
+                        CollisionDialog.infoCopyable(context, app.appPackage.basePath).show()
+                    }
+                }
+                popStore?.dismiss()
+            }
+        } else {
+            vSettings.setPadding(0, 0, 0, 0)
+        }
+        popStore?.show()
     }
 
     private fun actionShare(context: Context) {

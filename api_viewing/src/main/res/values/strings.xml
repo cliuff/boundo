@@ -82,4 +82,16 @@
     <string name="av_ai">Adaptive icon</string>
     <string name="av_tag_has_splits">Has splits</string>
     <string name="av_apks_select_folder">Select a folder to scan</string>
+    <string name="av_pref_loading">List loading</string>
+    <string name="av_pref_loading_summary">Manually refresh to trigger changes</string>
+    <string name="av_pref_displaying_summary">Changes are triggered automatically</string>
+    <string name="av_pref_displaying">List displaying</string>
+    <string name="av_adapter_tag_hidden">Hidden</string>
+    <string name="av_settings_tag_hidden">App icon not shown in launcher</string>
+    <string name="av_settings_tag_flu" translatable="false">Flutter</string>
+    <string name="av_settings_tag_rn" translatable="false">React Native</string>
+    <string name="av_settings_tag_xam" translatable="false">Xamarin</string>
+    <string name="av_settings_tag_arm" translatable="false">ARM</string>
+    <string name="av_settings_tag_x86" translatable="false">x86</string>
+    <string name="av_main_filter_tip">Try long-pressing a tag</string>
 </resources>

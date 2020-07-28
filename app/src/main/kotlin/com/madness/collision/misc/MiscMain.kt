@@ -98,8 +98,6 @@ internal object MiscMain {
             AccessAV.initTagSettings(context, prefSettings)
         }
         if (verOri in 0 until 20042923) {
-            // add new Adaptive Icon and Has Splits tags
-            AccessAV.updateTagSettingsAiHs(context, prefSettings)
             // move pics from cache to file
             val valCachePubExterior = F.createPath(F.cachePublicPath(context), Environment.DIRECTORY_PICTURES, "Exterior")
             listOf(

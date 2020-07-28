@@ -82,4 +82,11 @@
     <string name="av_ai">Адаптивный значок</string>
     <string name="av_tag_has_splits">Split APK</string>
     <string name="av_apks_select_folder">Выберите папку для сканирования</string>
+    <string name="av_pref_loading">Загрузка списка</string>
+    <string name="av_pref_displaying">Отображение списка</string>
+    <string name="av_adapter_tag_hidden">скрытый</string>
+    <string name="av_settings_tag_hidden">Значок приложения не отображается в панели запуска</string>
+    <string name="av_pref_loading_summary">Обновление вручную, чтобы вызвать изменения</string>
+    <string name="av_pref_displaying_summary">Изменения запускаются автоматически</string>
+    <string name="av_main_filter_tip">Попробуйте долго нажимать на тег</string>
 </resources>

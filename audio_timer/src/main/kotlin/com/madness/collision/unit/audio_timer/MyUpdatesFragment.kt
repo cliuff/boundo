@@ -20,13 +20,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.madness.collision.unit.Updatable
 import com.madness.collision.util.TaggedFragment
 import kotlinx.android.synthetic.main.at_updates.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-internal class MyUpdatesFragment : TaggedFragment() {
+internal class MyUpdatesFragment : TaggedFragment(), Updatable {
 
     override val category: String = "AT"
     override val id: String = "MyUpdates"
@@ -71,4 +72,5 @@ internal class MyUpdatesFragment : TaggedFragment() {
         }
         super.onHiddenChanged(hidden)
     }
+
 }

@@ -18,14 +18,18 @@ package com.madness.collision.unit.api_viewing
 
 import androidx.fragment.app.Fragment
 import com.madness.collision.unit.UpdatesProvider
+import java.lang.ref.WeakReference
 
 internal class MyUpdatesProvider : UpdatesProvider() {
 
-    override fun hasUpdates(hostFragment: Fragment): Boolean {
-        return MyUpdatesFragment.checkUpdate(hostFragment)
+    override fun getFragment(): Fragment? {
+        if (mFragment == null) {
+            fragmentRef = WeakReference(MyUpdatesFragment())
+        }
+        return mFragment
     }
 
-    override fun getFragment(): Fragment? {
-        return MyUpdatesFragment()
+    override fun hasUpdates(hostFragment: Fragment): Boolean {
+        return MyUpdatesFragment.checkUpdate(hostFragment)
     }
 }

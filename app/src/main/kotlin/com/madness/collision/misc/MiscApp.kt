@@ -45,13 +45,13 @@ object MiscApp {
     fun getApplicationInfo(context: Context, packageName: String = "", apkPath: String = ""): ApplicationInfo?{
         val isArchive = packageName.isEmpty()
         val pm: PackageManager = context.packageManager
-        return if (isArchive){
+        return if (isArchive) {
             if (apkPath.isEmpty()) return null
             pm.getPackageArchiveInfo(apkPath, 0)?.applicationInfo?.apply {
                 sourceDir = apkPath
                 publicSourceDir = apkPath
             }
-        }else{
+        } else {
             if (packageName.isEmpty()) return null
             try {
                 pm.getApplicationInfo(packageName, 0)

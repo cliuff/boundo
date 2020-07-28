@@ -63,25 +63,20 @@ object MyBridge: Bridge() {
         viewModel.clearCache()
     }
 
+    /**
+     * Add only the selected ones
+     * Adding all the tags will harm performance
+     * Users will have a glimpse of available features in Filter by Tag
+     * This feature alone does not serve that purpose any more
+     */
     @Suppress("unused")
     fun initTagSettings(context: Context, prefSettings: SharedPreferences) {
         val tagSettings = mutableSetOf<String>()
-        val tagValues = context.resources.obtainTypedArray(R.array.prefAvTagsValues)
-        for (i in 0 until tagValues.length()) {
-            val value = tagValues.getString(i) ?: continue
-            tagSettings.add(value)
-        }
-        tagValues.recycle()
-        prefSettings.edit {
-            putStringSet(PrefUtil.AV_TAGS, tagSettings)
-        }
-    }
-
-    @Suppress("unused")
-    fun updateTagSettingsAiHs(context: Context, prefSettings: SharedPreferences) {
-        val tagSettings = prefSettings.getStringSet(PrefUtil.AV_TAGS, emptySet())!!.toMutableSet()
-        tagSettings.add(context.getString(R.string.prefAvTagsValueIconAdaptive))
-        tagSettings.add(context.getString(R.string.prefAvTagsValueHasSplits))
+        tagSettings.add(context.getString(R.string.prefAvTagsValuePackageInstallerGp))
+        tagSettings.add(context.getString(R.string.prefAvTagsValuePackageInstallerPi))
+        tagSettings.add(context.getString(R.string.prefAvTagsValueCrossPlatformFlu))
+        tagSettings.add(context.getString(R.string.prefAvTagsValueCrossPlatformRn))
+        tagSettings.add(context.getString(R.string.prefAvTagsValueCrossPlatformXam))
         prefSettings.edit {
             putStringSet(PrefUtil.AV_TAGS, tagSettings)
         }

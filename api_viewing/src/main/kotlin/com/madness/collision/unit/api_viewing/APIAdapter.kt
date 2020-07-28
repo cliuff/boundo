@@ -19,7 +19,6 @@ package com.madness.collision.unit.api_viewing
 import android.animation.*
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.content.pm.*
 import android.content.res.Resources
 import android.graphics.Bitmap
@@ -45,7 +44,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.animation.doOnEnd
 import androidx.core.content.pm.PackageInfoCompat
-import androidx.core.view.forEach
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -54,11 +52,9 @@ import com.google.android.material.chip.ChipGroup
 import com.madness.collision.R
 import com.madness.collision.diy.SandwichAdapter
 import com.madness.collision.misc.MiscApp
-import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
-import com.madness.collision.unit.api_viewing.databinding.AdapterAvTagBinding
 import com.madness.collision.util.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -76,8 +72,16 @@ import com.madness.collision.unit.api_viewing.R as MyR
 internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>(context) {
 
     companion object {
+        private val isExterior: Boolean
+            get() = mainApplication.exterior
+        private val isSweet: Boolean
+            get() = EasyAccess.isSweet
+        val shouldShowDesserts: Boolean
+            get() = !isExterior && isSweet && (mainApplication.isPaleTheme || mainApplication.isDarkTheme)
+
         var seals = HashMap<Char, Bitmap>().toMutableMap()
         var sealBack = HashMap<Char, Bitmap>().toMutableMap()
+
         init {
             GlobalScope.launch {
                 val seal = File(F.valCachePubAvSeal(mainApplication))
@@ -162,7 +166,7 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
             }
             when (apiLevel) {
                 X.R -> if (isAccent) "acd5c1" else "defbf0"
-                X.Q -> if (isAccent) "c5e8b0" else "f7ffe9"
+                X.Q -> if (isAccent) "c1d5ac" else "f0fbde"
                 X.P -> if (isAccent) "e0c8b0" else "fff6d5"
                 X.O, X.O_MR1 -> if (isAccent) "b0b0b0" else "eeeeee"
                 X.N, X.N_MR1 -> if (isAccent) "ffb2a8" else "ffecf6"
@@ -248,14 +252,11 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mLayoutManager: LinearLayoutManager
     private val inflater = LayoutInflater.from(context)
+    init {
+        AppTag.inflater = inflater
+    }
     private var sortMethod: Int = MyUnit.SORT_POSITION_API_LOW
     private var regexFields: MutableMap<String, String> = HashMap()
-    private val isExterior: Boolean
-        get() = mainApplication.exterior
-    private val isSweet: Boolean
-        get() = EasyAccess.isSweet
-    private val shouldShowDesserts: Boolean
-        get() = !isExterior && isSweet && (mainApplication.isPaleTheme || mainApplication.isDarkTheme)
     private val sweetMargin by lazy { X.size(context, 5f, X.DP).roundToInt() }
     private val plainMargin by lazy { X.size(context, 2f, X.DP).roundToInt() }
     private val margin: Int
@@ -266,24 +267,6 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
     private val _colorSurface by lazy { ThemeUtil.getColor(context, R.attr.colorASurface) }
     private val colorSurface: Int
         get() = if (shouldShowDesserts) _colorSurface else 0
-    private val colorBackground by lazy { ThemeUtil.getColor(context, R.attr.colorABackground) }
-    private val colorItem by lazy { ThemeUtil.getColor(context, R.attr.colorAItem) }
-    private val tagColor: Int
-        get() = if (shouldShowDesserts) colorBackground else colorItem
-
-    private fun inflateTag(nameResId: Int, parent: ViewGroup) {
-        inflateTag(context.getString(nameResId), parent)
-    }
-
-    private fun inflateTag(name: String, parent: ViewGroup) {
-        parent.forEach {
-            if (it is TextView && it.text == name) return
-        }
-        AdapterAvTagBinding.inflate(inflater, parent, true).apply {
-            avAdapterInfoTag.text = name
-            avAdapterInfoTag.background.setTint(tagColor)
-        }
-    }
 
     fun setSortMethod(sortMethod: Int): APIAdapter {
         this.sortMethod = sortMethod
@@ -357,14 +340,6 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
         }
     }
 
-    private fun Holder.inflateTag(nameResId: Int) {
-        inflateTag(nameResId, this.tags)
-    }
-
-    private fun Holder.inflateTag(name: String) {
-        inflateTag(name, this.tags)
-    }
-
     override fun onMakeBody(holder: Holder, index: Int) {
         // set surface color before setting the background color to avoid seen-through shadow of cards
 //        if (shouldShowDesserts && !holder.card.cardBackgroundColor.isOpaque) {
@@ -388,9 +363,7 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
             taskIcon = runnable {
                 val iconApp = logoView.getTag(R.bool.tagKeyAvAdapterItemIconId) as ApiViewingApp?
                 if (appInfo !== iconApp && appInfo.hasIcon) {
-                    if (EasyAccess.shouldShowTagIconAdaptive && appInfo.adaptiveIcon) {
-                        holder.inflateTag(MyR.string.av_ai)
-                    }
+                    AppTag.tagAdaptiveIcon(context, appInfo, holder)
                     holder.logo.setTag(R.bool.tagKeyAvAdapterItemIconId, appInfo)
                     animateLogo(logoView)
                     checkerHandler.removeCallbacks(this)
@@ -444,44 +417,19 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
             holder.card.setCardBackgroundColor(colorSurface)
         }
 
-        if (shouldShowTime && appInfo.isNotArchive()) {
+        if (shouldShowTime && appInfo.isNotArchive) {
             holder.updateTime.dartFuture(DateUtils.getRelativeTimeSpanString(appInfo.updateTime, System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS))
             holder.updateTime.visibility = View.VISIBLE
         } else {
             holder.updateTime.visibility = View.GONE
         }
 
-        if (EasyAccess.shouldShowTagPackageInstaller) {
-            tagPackageInstaller(appInfo, holder)
-        }
-        if (EasyAccess.shouldShowTagPrivilegeSystem && appInfo.apiUnit == ApiUnit.SYS) {
-            holder.inflateTag(MyR.string.av_adapter_tag_system)
-        }
-        var layoutNativeLib: (() -> Unit)? = null
-        if (EasyAccess.shouldShowTagCrossPlatform || EasyAccess.shouldShowTagNativeLib) {
-            layoutNativeLib = {
-                tagNativeLibs(appInfo, holder)
+        GlobalScope.launch {
+            val installer = AppTag.ensureResources(context, appInfo)
+            launch(Dispatchers.Main) {
+                AppTag.inflateTags(context, appInfo, holder, installer, !shouldWaitForIcon)
+                taskIcon?.run()
             }
-        }
-
-        // first inflate native lib tags then has splits tag and last ai tag
-        val shouldInflateHs = EasyAccess.shouldShowTagHasSplits && appInfo.appPackage.hasSplits
-        val shouldInflateAi = !shouldWaitForIcon && EasyAccess.shouldShowTagIconAdaptive && appInfo.adaptiveIcon
-        val taskInOrder: () -> Unit = {
-            layoutNativeLib?.invoke()
-            if (shouldInflateHs) holder.inflateTag(MyR.string.av_tag_has_splits)
-            if (shouldInflateAi) holder.inflateTag(MyR.string.av_ai)
-            taskIcon?.run()
-        }
-        if (layoutNativeLib != null && !appInfo.isNativeLibrariesRetrieved) {
-            GlobalScope.launch {
-                appInfo.retrieveNativeLibraries()
-                launch(Dispatchers.Main) {
-                    taskInOrder.invoke()
-                }
-            }
-        } else {
-            taskInOrder.invoke()
         }
 
         holder.card.setOnClickListener {
@@ -516,57 +464,6 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
         }
     }
 
-    private fun tagHidden(appInfo: ApiViewingApp, holder: Holder) {
-        // todo app that does not show in launcher
-    }
-
-    private fun tagNativeLibs(appInfo: ApiViewingApp, holder: Holder) {
-        val nls = appInfo.nativeLibraries
-        if (EasyAccess.shouldShowTagNativeLib) {
-            if (EasyAccess.shouldShowTagNativeLibArm) {
-                if (nls[0]) holder.inflateTag("arm32")
-                if (nls[1]) holder.inflateTag("arm64")
-            }
-            if (EasyAccess.shouldShowTagNativeLibX86) {
-                if (nls[2]) holder.inflateTag("x86")
-                if (nls[3]) holder.inflateTag("x64")
-            }
-        }
-        if (EasyAccess.shouldShowTagCrossPlatform) {
-            if (EasyAccess.shouldShowTagCrossPlatformFlutter && nls[4]) holder.inflateTag("Flutter")
-            if (EasyAccess.shouldShowTagCrossPlatformReactNative && nls[5]) holder.inflateTag("React Native")
-            if (EasyAccess.shouldShowTagCrossPlatformXarmarin && nls[6]) holder.inflateTag("Xamarin")
-        }
-    }
-
-    private fun tagPackageInstaller(appInfo: ApiViewingApp, holder: Holder) {
-        val installer = try {
-            context.packageManager.getInstallerPackageName(appInfo.packageName) ?: return
-        } catch (e: IllegalArgumentException) {
-            e.printStackTrace()
-            return
-        }
-        val installerGPlay = ApiViewingApp.packagePlayStore
-        val isGp = installer == installerGPlay
-        val showGp = EasyAccess.shouldShowTagPackageInstallerGooglePlay && isGp
-        val showPi = EasyAccess.shouldShowTagPackageInstallerPackageInstaller && !isGp
-        if (!showGp && !showPi) return
-        val installerName = MiscApp.getApplicationInfo(context, packageName = installer)
-                ?.loadLabel(context.packageManager)?.toString() ?: ""
-        val name = if (installerName.isNotEmpty()) {
-            installerName
-        } else {
-            val installerAndroid = ApiViewingApp.packagePackageInstaller
-            when (installer) {
-                installerGPlay -> context.getString(MyR.string.apiDetailsInstallGP)
-                installerAndroid -> context.getString(MyR.string.apiDetailsInstallPI)
-                "null" -> null
-                else -> null
-            }
-        }
-        if (name != null) holder.inflateTag(name)
-    }
-
     private fun actionDetails(appInfo: ApiViewingApp) {
         val pop = CollisionDialog(context, R.string.text_alright)
         pop.setContent(0)
@@ -598,7 +495,7 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
                     .append(appInfo.minAPI.toString())
                     .append(context.getString(R.string.textParentheses, "${Utils.getAndroidVersionByAPI(appInfo.minAPI, true)}, ${Utils.getAndroidCodenameByAPI(context, appInfo.minAPI)}"))
                     .append('\n')
-            if (appInfo.isNotArchive()) {
+            if (appInfo.isNotArchive) {
                 val cal = Calendar.getInstance()
                 cal.timeInMillis = pi.firstInstallTime
                 builder.append(context.getString(MyR.string.apiDetailsFirstInstall), StyleSpan(Typeface.BOLD), spanFlags)
@@ -658,7 +555,8 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
             var services: Array<ServiceInfo> = emptyArray()
             var providers: Array<ProviderInfo> = emptyArray()
 
-            val flagSignature = if (X.aboveOn(28)) PackageManager.GET_SIGNING_CERTIFICATES else PackageManager.GET_SIGNATURES
+            val flagSignature = if (X.aboveOn(X.P)) PackageManager.GET_SIGNING_CERTIFICATES
+            else PackageManager.GET_SIGNATURES
             val flags = PackageManager.GET_PERMISSIONS or PackageManager.GET_ACTIVITIES or
                     PackageManager.GET_RECEIVERS or PackageManager.GET_SERVICES or
                     PackageManager.GET_PROVIDERS or flagSignature
@@ -689,7 +587,7 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
             }
 
             var signatures: Array<Signature> = emptyArray()
-            if (X.aboveOn(28)) {
+            if (X.aboveOn(X.P)) {
                 if (pi.signingInfo != null) {
                     signatures = if (pi.signingInfo.hasMultipleSigners()) {
                         pi.signingInfo.apkContentsSigners
@@ -698,7 +596,8 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
                     }
                 }
             } else {
-                if (pi.signatures != null) signatures = pi.signatures
+                val piSignature = pi.signatures
+                if (piSignature != null) signatures = piSignature
             }
             if (regexFields.isEmpty()) {
                 Utils.principalFields(context, regexFields)
@@ -821,7 +720,7 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
         val image = File(path)
         app.getOriginalIcon(context)?.let { if (F.prepare4(image)) X.savePNG(it, path) }
         val uri: Uri = image.getProviderUri(context)
-        val previewTitle = app.name // todo set preview title
+//        val previewTitle = app.name // todo set preview title
         activity.supportFragmentManager.let {
             FilePop.by(context, uri, "image/*", R.string.textShareImage, uri, app.name).show(it, FilePop.TAG)
         }
@@ -841,8 +740,8 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
             }
         }
         val uri: Uri = apk.getProviderUri(context)
-        val previewTitle = "${app.name} v${app.verName}"
-        val flag = Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+//        val previewTitle = "${app.name} v${app.verName}"
+//        val flag = Intent.FLAG_GRANT_WRITE_URI_PERMISSION
         activity.supportFragmentManager.let {
             FilePop.by(context, uri, "application/vnd.android.package-archive", R.string.textShareApk).show(it, FilePop.TAG)
         }
@@ -855,11 +754,10 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
     private fun retrieveOn(appInfo: ApiViewingApp, extraFlags: Int, subject: String): Pair<Boolean, PackageInfo?> {
         var pi: PackageInfo? = null
         return try {
-            val flags = extraFlags
-            pi = if (appInfo.isArchive()) {
-                context.packageManager.getPackageArchiveInfo(appInfo.appPackage.basePath, flags)
+            pi = if (appInfo.isArchive) {
+                context.packageManager.getPackageArchiveInfo(appInfo.appPackage.basePath, extraFlags)
             } else {
-                context.packageManager.getPackageInfo(appInfo.packageName, flags)
+                context.packageManager.getPackageInfo(appInfo.packageName, extraFlags)
             }
             true to pi
         } catch (e: Exception) {

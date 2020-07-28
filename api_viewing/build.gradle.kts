@@ -30,7 +30,7 @@ android {
     sourceSets {
         getByName("main").java.srcDir("src/main/kotlin")
     }
-    compileSdkVersion(29)
+    compileSdkVersion(30)
 
     flavorDimensions("arch")
     productFlavors {
@@ -53,7 +53,7 @@ android {
 
     defaultConfig {
         minSdkVersion(22)
-        targetSdkVersion(29)
+        targetSdkVersion(30)
     }
 
     compileOptions {
@@ -78,7 +78,8 @@ dependencies {
             Dependencies.androidxPreference,
             Dependencies.androidxRoom,
             Dependencies.androidxRoomRuntime,
-            Dependencies.mpChart
+            Dependencies.mpChart,
+            Dependencies.openCsv
     ).forEach { implementation(it) }
     Dependencies.dynamicFeatureBasics.forEach { implementation(it) }
 

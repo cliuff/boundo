@@ -82,4 +82,11 @@
     <string name="av_ai">Icono adaptativo</string>
     <string name="av_tag_has_splits">Split APK</string>
     <string name="av_apks_select_folder">Seleccione una carpeta para escanear</string>
+    <string name="av_pref_loading">Carga de la lista</string>
+    <string name="av_pref_displaying">Lista de visualización</string>
+    <string name="av_adapter_tag_hidden">Oculto</string>
+    <string name="av_settings_tag_hidden">El ícono de la aplicación no se muestra en el iniciador</string>
+    <string name="av_pref_loading_summary">Actualizar manualmente para activar cambios</string>
+    <string name="av_pref_displaying_summary">Los cambios se activan automáticamente</string>
+    <string name="av_main_filter_tip">Intenta mantener presionada una etiqueta</string>
 </resources>

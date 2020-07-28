@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020 Clifford Liu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.madness.collision.util
 
 import android.content.Context
@@ -8,6 +24,7 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.PowerManager
 import android.util.TypedValue
+import androidx.core.content.res.use
 import com.madness.collision.R
 import com.madness.collision.misc.MiscMain
 import com.madness.collision.unit.themed_wallpaper.ThemedWallpaperEasyAccess
@@ -109,13 +126,12 @@ object ThemeUtil {
 
         val keyDarkTheme = resources.getString(R.string.prefExteriorKeyDarkTheme)
         val darkValue = prefSettings.getString(keyDarkTheme, resources.getString(R.string.prefExteriorDefaultDarkTheme)) ?: ""
-        val entriesDarkTheme = resources.obtainTypedArray(R.array.prefExteriorDarkThemeEntries)
         val valuesDarkTheme = resources.obtainTypedArray(R.array.prefExteriorDarkThemeValues)
         // entriesDarkTheme and valuesDarkTheme are recycled during the call
-        val darkIndex = P.getPrefIndex(darkValue, entriesDarkTheme, valuesDarkTheme)
-        val darkThemes = resources.obtainTypedArray(R.array.prefExteriorDarkThemeRes)
-        val darkThemeId = darkThemes.getResourceId(darkIndex, -1)
-        darkThemes.recycle()
+        val darkIndex = P.getPrefIndex(darkValue, valuesDarkTheme)
+        val darkThemeId = resources.obtainTypedArray(R.array.prefExteriorDarkThemeRes).use {
+            it.getResourceId(darkIndex, -1)
+        }
 
         val isAlways = planValue == resources.getString(R.string.prefExteriorDarkPlanValueAlways)
         if (isAlways){
@@ -130,12 +146,11 @@ object ThemeUtil {
         val keyLightTheme = resources.getString(R.string.prefExteriorKeyLightTheme)
         val lightValue = prefSettings.getString(keyLightTheme, resources.getString(R.string.prefExteriorDefaultLightTheme)) ?: ""
 
-        val entriesLightTheme = resources.obtainTypedArray(R.array.prefExteriorLightThemeEntries)
         val valuesLightTheme = resources.obtainTypedArray(R.array.prefExteriorLightThemeValues)
-        val lightIndex = P.getPrefIndex(lightValue, entriesLightTheme, valuesLightTheme)
-        val lightThemes = resources.obtainTypedArray(R.array.prefExteriorLightThemeRes)
-        val lightThemeId = lightThemes.getResourceId(lightIndex, -1)
-        lightThemes.recycle()
+        val lightIndex = P.getPrefIndex(lightValue, valuesLightTheme)
+        val lightThemeId = resources.obtainTypedArray(R.array.prefExteriorLightThemeRes).use {
+            it.getResourceId(lightIndex, -1)
+        }
 
         val keyBS = resources.getString(R.string.prefExteriorKeyDarkByBatterySaver)
         val valBSDefault = resources.getBoolean(R.bool.prefExteriorDefaultDarkByBatterySaver)

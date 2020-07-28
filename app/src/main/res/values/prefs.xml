@@ -1,4 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2020 Clifford Liu
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- preference keys -->
@@ -63,5 +79,117 @@
     <string name="prefExteriorDarkPlanValueAlways" translatable="false">darkPlanValueAlways</string>
     <string name="prefExteriorDarkPlanValueNever" translatable="false">darkPlanValueNever</string>
     <string name="prefExteriorDarkPlanValueSchedule" translatable="false">darkPlanValueSchedule</string>
+
+    <string-array name="prefSettingsLangEntries">
+        <item>@string/Settings_LanguagePicker_Auto</item>
+        <item>@string/Settings_LanguagePicker_English</item>
+        <item>@string/languageEnGB</item>
+        <item>@string/language_en_us</item>
+        <item>@string/Settings_LanguagePicker_SimplifiedChinese</item>
+        <item>@string/language_zh_cn</item>
+        <item>@string/lang_zh_hk</item>
+        <item>@string/lang_zh_mo</item>
+        <item>@string/lang_zh_tw</item>
+        <item>@string/lang_zh_sg</item>
+        <item>@string/languageRu</item>
+        <item>@string/languageRuRU</item>
+        <item>@string/lang_es</item>
+        <item>@string/lang_es_es</item>
+        <item>@string/lang_es_us</item>
+        <item>@string/lang_ar</item>
+        <item>@string/lang_it</item>
+        <item>@string/lang_it_it</item>
+        <item>@string/lang_pt</item>
+        <item>@string/lang_pt_pt</item>
+        <item>@string/lang_th</item>
+        <item>@string/lang_th_th</item>
+        <item>@string/lang_vi</item>
+        <item>@string/lang_vi_vn</item>
+        <item>@string/lang_fr</item>
+        <item>@string/lang_fr_fr</item>
+        <item>@string/lang_el</item>
+        <item>@string/lang_el_gr</item>
+        <item>@string/lang_ja</item>
+        <item>@string/lang_ja_jp</item>
+        <item>@string/lang_ko</item>
+        <item>@string/lang_ko_kr</item>
+        <item>@string/lang_tr</item>
+        <item>@string/lang_tr_tr</item>
+        <item>@string/lang_de</item>
+        <item>@string/lang_de_de</item>
+    </string-array>
+    <string-array name="prefSettingsLangValues">
+        <item>auto</item>
+        <item>en</item>
+        <item>en_GB</item>
+        <item>en_US</item>
+        <item>zh</item>
+        <item>zh_CN</item>
+        <item>zh_HK</item>
+        <item>zh_MO</item>
+        <item>zh_TW</item>
+        <item>zh_SG</item>
+        <item>ru</item>
+        <item>ru_RU</item>
+        <item>es</item>
+        <item>es_ES</item>
+        <item>es_US</item>
+        <item>ar</item>
+        <item>it</item>
+        <item>it_IT</item>
+        <item>pt</item>
+        <item>pt_PT</item>
+        <item>th</item>
+        <item>th_TH</item>
+        <item>vi</item>
+        <item>vi_VN</item>
+        <item>fr</item>
+        <item>fr_FR</item>
+        <item>el</item>
+        <item>el_GR</item>
+        <item>ja</item>
+        <item>ja_JP</item>
+        <item>ko</item>
+        <item>ko_KR</item>
+        <item>tr</item>
+        <item>tr_TR</item>
+        <item>de</item>
+        <item>de_DE</item>
+    </string-array>
+    <string name="Settings_LanguagePicker_English" translatable="false">English</string>
+    <string name="language_en_us" translatable="false">English (US)</string>
+    <string name="languageEnGB" translatable="false">English (UK)</string>
+    <string name="Settings_LanguagePicker_SimplifiedChinese" translatable="false">中文</string>
+    <string name="language_zh_cn" translatable="false">中文（中国大陆）</string>
+    <string name="lang_zh_hk" translatable="false">中文（香港）</string>
+    <string name="lang_zh_mo" translatable="false">中文（澳門）</string>
+    <string name="lang_zh_tw" translatable="false">中文（台灣）</string>
+    <string name="lang_zh_sg" translatable="false">中文（新加坡）</string>
+    <string name="lang_fr" translatable="false">Français</string>
+    <string name="lang_fr_fr" translatable="false">Français (France)</string>
+    <string name="lang_el" translatable="false">Ελληνικά</string>
+    <string name="lang_el_gr" translatable="false">Ελληνικά (Ελλάδα)</string>
+    <string name="lang_ja" translatable="false">日本語</string>
+    <string name="lang_ja_jp" translatable="false">日本語（日本）</string>
+    <string name="lang_ko" translatable="false">한국어</string>
+    <string name="lang_ko_kr" translatable="false">한국어 (대한민국)</string>
+    <string name="lang_tr" translatable="false">Türkçe</string>
+    <string name="lang_tr_tr" translatable="false">Türkçe (Türkiye)</string>
+    <string name="lang_de" translatable="false">Deutsch</string>
+    <string name="lang_de_de" translatable="false">Deutsch (Deutschland)</string>
+    <string name="lang_es" translatable="false">Español</string>
+    <string name="lang_es_es" translatable="false">Español (España)</string>
+    <string name="lang_es_us" translatable="false">Español (EE.UU.)</string>
+    <string name="lang_ar" translatable="false">العربية</string>
+    <string name="lang_it" translatable="false">Italiano</string>
+    <string name="lang_it_it" translatable="false">Italiano (Italia)</string>
+    <string name="lang_pt" translatable="false">Português</string>
+    <string name="lang_pt_pt" translatable="false">Português (Portugal)</string>
+    <string name="lang_th" translatable="false">ไทย</string>
+    <string name="lang_th_th" translatable="false">ไทย (ไทย)</string>
+    <string name="lang_vi" translatable="false">Tiếng Việt</string>
+    <string name="lang_vi_vn" translatable="false">Tiếng Việt (Việt Nam)</string>
+    <string name="languageRu" translatable="false">Русский</string>
+    <string name="languageRuRU" translatable="false">Русский (Россия)</string>
 
 </resources>

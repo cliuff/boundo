@@ -37,36 +37,39 @@
     <string-array name="prefAvTagsEntries">
         <item>@string/apiDetailsInstallGP</item>
         <item>@string/apiDetailsInstallPI</item>
-        <item>Flutter</item>
-        <item>React Native</item>
-        <item>Xarmarin</item>
-        <item>ARM</item>
-        <item>x86</item>
+        <item>@string/av_settings_tag_flu</item>
+        <item>@string/av_settings_tag_rn</item>
+        <item>@string/av_settings_tag_xam</item>
+        <item>@string/av_settings_tag_arm</item>
+        <item>@string/av_settings_tag_x86</item>
+        <item>@string/av_settings_tag_hidden</item>
         <item>@string/av_settings_tags_system</item>
-        <item>@string/av_ai</item>
         <item>@string/av_tag_has_splits</item>
+        <item>@string/av_ai</item>
     </string-array>
     <string-array name="prefAvTagsValues">
         <item>@string/prefAvTagsValuePackageInstallerGp</item>
         <item>@string/prefAvTagsValuePackageInstallerPi</item>
         <item>@string/prefAvTagsValueCrossPlatformFlu</item>
         <item>@string/prefAvTagsValueCrossPlatformRn</item>
-        <item>@string/prefAvTagsValueCrossPlatformXar</item>
+        <item>@string/prefAvTagsValueCrossPlatformXam</item>
         <item>@string/prefAvTagsValueNativeLibArm</item>
         <item>@string/prefAvTagsValueNativeLibX86</item>
+        <item>@string/prefAvTagsValueHidden</item>
         <item>@string/prefAvTagsValuePrivilegeSys</item>
-        <item>@string/prefAvTagsValueIconAdaptive</item>
         <item>@string/prefAvTagsValueHasSplits</item>
+        <item>@string/prefAvTagsValueIconAdaptive</item>
     </string-array>
     <string name="prefAvTagsValuePackageInstallerGp" translatable="false">avTagsValPiGp</string>
     <string name="prefAvTagsValuePackageInstallerPi" translatable="false">avTagsValPiPi</string>
     <string name="prefAvTagsValueCrossPlatformFlu" translatable="false">avTagsValCpFlu</string>
     <string name="prefAvTagsValueCrossPlatformRn" translatable="false">avTagsValCpRn</string>
-    <string name="prefAvTagsValueCrossPlatformXar" translatable="false">avTagsValCpXar</string>
+    <string name="prefAvTagsValueCrossPlatformXam" translatable="false">avTagsValCpXar</string>
     <string name="prefAvTagsValueNativeLibArm" translatable="false">avTagsValNlArm</string>
     <string name="prefAvTagsValueNativeLibX86" translatable="false">avTagsValNlX86</string>
+    <string name="prefAvTagsValueHidden" translatable="false">avTagsValueHidden</string>
     <string name="prefAvTagsValuePrivilegeSys" translatable="false">avTagsValPriSys</string>
-    <string name="prefAvTagsValueIconAdaptive" translatable="false">avTagsValIconAda</string>
     <string name="prefAvTagsValueHasSplits" translatable="false">avTagsValHasSplits</string>
+    <string name="prefAvTagsValueIconAdaptive" translatable="false">avTagsValIconAda</string>
 
 </resources>

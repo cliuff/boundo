@@ -82,4 +82,11 @@
     <string name="apiDetailsLastUpdate">"Letztes Update: "</string>
     <string name="apiDetailsInsatllFrom">"Installateur: "</string>
     <string name="av_apks_select_folder">Wählen Sie einen Ordner zum Scannen aus</string>
+    <string name="av_pref_loading">Listenladen</string>
+    <string name="av_pref_displaying">Listenanzeige</string>
+    <string name="av_adapter_tag_hidden">Versteckt</string>
+    <string name="av_settings_tag_hidden">Das App-Symbol wird im Launcher nicht angezeigt</string>
+    <string name="av_pref_loading_summary">Manuell aktualisieren, um Änderungen auszulösen</string>
+    <string name="av_pref_displaying_summary">Änderungen werden automatisch ausgelöst</string>
+    <string name="av_main_filter_tip">Versuchen Sie, ein Tag lange zu drücken</string>
 </resources>

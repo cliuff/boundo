@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020 Clifford Liu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.madness.collision.unit.api_viewing
 
 import android.content.Context
@@ -7,6 +23,8 @@ import androidx.annotation.WorkerThread
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.database.AppDao
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.withContext
 
 internal class AppRepository(private val dao: AppDao){
     @WorkerThread
@@ -27,6 +45,27 @@ internal class AppRepository(private val dao: AppDao){
     fun getAllApps(context: Context): List<ApiViewingApp>{
         return getAppsAll(context)
 //        return dao.getAllApps().value ?: emptyList()
+    }
+
+    /**
+     * multi-coroutine
+     */
+    private suspend fun getAppsE(context: Context, scope: CoroutineScope, predicate: ((PackageInfo) -> Boolean)? = null): List<ApiViewingApp> {
+        val anApp = ApiViewingApp("")
+        val packages = context.packageManager.getInstalledPackages(0).let {
+            if (predicate == null) it else it.filter(predicate)
+        }
+        val apps = packages.map {
+            anApp.clone() as ApiViewingApp
+        }
+        apps.forEachIndexed { index, app ->
+            withContext(scope.coroutineContext) {
+                val pack = packages[index]
+                app.packageName = pack.packageName
+                app.init(context, pack, preloadProcess = true, archive = false)
+            }
+        }
+        return apps
     }
 
     private fun getApps(context: Context, predicate: ((PackageInfo) -> Boolean)? = null): List<ApiViewingApp>{

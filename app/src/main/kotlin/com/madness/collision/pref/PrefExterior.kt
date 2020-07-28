@@ -17,13 +17,11 @@
 package com.madness.collision.pref
 
 import android.app.TimePickerDialog
-import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.TypedArray
 import android.os.Bundle
-import android.widget.RadioButton
-import android.widget.RadioGroup
 import androidx.core.content.edit
+import androidx.core.content.res.use
 import androidx.fragment.app.activityViewModels
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -110,71 +108,41 @@ internal class PrefExterior: PreferenceFragmentCompat(), NavNode {
                 true
             }
             keyLightTheme -> {
-                val popLight = popList(context, R.string.prefExteriorLightTheme)
-                val radioGroup: RadioGroup = popLight.findViewById(R.id.prefListGroup)
-                for (i in 0 until entriesLightTheme.length()){
-                    layoutInflater.inflate(R.layout.pref_list_item, radioGroup)
-                    val item = radioGroup.getChildAt(i) as RadioButton
-                    if(i == 0) (item.layoutParams as RadioGroup.LayoutParams).topMargin = 0
-                    item.id = R.id.prefListGroup + i + 1
-                    item.text = entriesLightTheme.getString(i)
-                }
-                radioGroup.check(radioGroup.getChildAt(indexLightTheme).id)
-                popLight.show()
-                val onCheckedChangeListener = RadioGroup.OnCheckedChangeListener{ _, checkedId ->
-                    val index = radioGroup.indexOfChild(radioGroup.findViewById(checkedId))
-                    popLight.dismiss()
-                    preferenceManager.sharedPreferences.edit { putString(keyLightTheme, valuesLightTheme.getString(index)) }
+                PopupUtil.selectSingle(context, R.string.prefExteriorLightTheme, entriesLightTheme, indexLightTheme) {
+                    pop, _, index ->
+                    pop.dismiss()
+                    preferenceManager.sharedPreferences.edit {
+                        putString(keyLightTheme, valuesLightTheme.use { it.getString(index) })
+                    }
                     prefLightTheme.summaryProvider = summaryProvider
                     updateTheme()
-                }
-                radioGroup.setOnCheckedChangeListener(onCheckedChangeListener)
+                }.show()
                 true
             }
             keyDarkTheme -> {
-                val popDark = popList(context, R.string.prefExteriorDarkTheme)
-                val radioGroup: RadioGroup = popDark.findViewById(R.id.prefListGroup)
-                for (i in 0 until entriesDarkTheme.length()){
-                    layoutInflater.inflate(R.layout.pref_list_item, radioGroup)
-                    val item = radioGroup.getChildAt(i) as RadioButton
-                    if(i == 0) (item.layoutParams as RadioGroup.LayoutParams).topMargin = 0
-                    item.id = R.id.prefListGroup + i + 1
-                    item.text = entriesDarkTheme.getString(i)
-                }
-                radioGroup.check(radioGroup.getChildAt(indexDarkTheme).id)
-                popDark.show()
-                val onCheckedChangeListener = RadioGroup.OnCheckedChangeListener{ _, checkedId ->
-                    val index = radioGroup.indexOfChild(radioGroup.findViewById(checkedId))
-                    popDark.dismiss()
-                    preferenceManager.sharedPreferences.edit { putString(keyDarkTheme, valuesDarkTheme.getString(index)) }
+                PopupUtil.selectSingle(context, R.string.prefExteriorDarkTheme, entriesDarkTheme, indexDarkTheme) {
+                    pop, _, index ->
+                    pop.dismiss()
+                    preferenceManager.sharedPreferences.edit {
+                        putString(keyDarkTheme, valuesDarkTheme.use { it.getString(index) })
+                    }
                     prefDarkTheme.summaryProvider = summaryProvider
                     updateTheme()
-                }
-                radioGroup.setOnCheckedChangeListener(onCheckedChangeListener)
+                }.show()
                 true
             }
             keyApplyDarkPlan -> {
-                val popPlan = popList(context, R.string.prefExteriorDarkPlan)
-                val radioGroup: RadioGroup = popPlan.findViewById(R.id.prefListGroup)
-                for (i in 0 until entriesApplyDark.length()){
-                    layoutInflater.inflate(R.layout.pref_list_item, radioGroup)
-                    val item = radioGroup.getChildAt(i) as RadioButton
-                    if(i == 0) (item.layoutParams as RadioGroup.LayoutParams).topMargin = 0
-                    item.id = R.id.prefListGroup + i + 1
-                    item.text = entriesApplyDark.getString(i)
-                }
-                radioGroup.check(radioGroup.getChildAt(indexApplyDark).id)
-                popPlan.show()
-                val onCheckedChangeListener = RadioGroup.OnCheckedChangeListener{ _, checkedId ->
-                    val index = radioGroup.indexOfChild(radioGroup.findViewById(checkedId))
-                    popPlan.dismiss()
-                    val value = valuesApplyDark.getString(index)
-                    preferenceManager.sharedPreferences.edit { putString(keyApplyDarkPlan, value) }
+                PopupUtil.selectSingle(context, R.string.prefExteriorDarkPlan, entriesApplyDark, indexApplyDark) {
+                    pop, _, index ->
+                    pop.dismiss()
+                    val value = valuesApplyDark.use { it.getString(index) }
+                    preferenceManager.sharedPreferences.edit {
+                        putString(keyApplyDarkPlan, value)
+                    }
                     prefApplyDark.summaryProvider = summaryProvider
                     updateScheduleEnabling(value ?: "")
                     updateTheme()
-                }
-                radioGroup.setOnCheckedChangeListener(onCheckedChangeListener)
+                }.show()
                 true
             }
             keyScheduleStart -> {
@@ -191,13 +159,6 @@ internal class PrefExterior: PreferenceFragmentCompat(), NavNode {
             }
             else -> super.onPreferenceTreeClick(preference)
         }
-    }
-
-    private fun popList(context: Context, titleId: Int) = CollisionDialog(context, R.string.Settings_Language_Button_Cancel).apply {
-        setCustomContent(R.layout.pref_list)
-        setTitleCollision(titleId, 0, 0)
-        setContent(0)
-        setListener{ dismiss() }
     }
 
     private fun pickTime(timePhase: Int){

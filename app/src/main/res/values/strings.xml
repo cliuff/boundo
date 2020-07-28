@@ -21,8 +21,6 @@
     <string name="Main_ToolBar_title_Settings">Settings</string>
     <string name="Settings_Button_SwitchLanguage">Languages</string>
     <string name="Settings_Button_CheckUpdate">App update</string>
-    <string name="Settings_LanguagePicker_English" translatable="false">English</string>
-    <string name="Settings_LanguagePicker_SimplifiedChinese" translatable="false">中文</string>
     <string name="Settings_LanguagePicker_Auto">Follow system</string>
     <string name="Settings_Language_Button_Cancel">Cancel</string>
     <string name="Settings_Language_Dialog_Title">Languages</string>
@@ -85,9 +83,6 @@
     <string name="sdk_search_hint"><font size="12">name, package, API level, Android version</font></string>
     <string name="instant_manager_intro">App Shortcuts</string>
     <string name="text_new">New</string>
-    <string name="language_en_us" translatable="false">English (US)</string>
-    <string name="languageEnGB" translatable="false">English (UK)</string>
-    <string name="language_zh_cn" translatable="false">中文（中国大陆）</string>
     <string name="settings_sdk">Display round app icons</string>
     <string name="tools_nm">Private Pics Hiding</string>
     <string name="nm_adapter_img_content_1">Image folder image</string>
@@ -222,26 +217,12 @@
     <string name="title_api_viewing" translatable="false">App API</string>
     <string name="main_updates">Updates</string>
     <string name="main_more">More</string>
-    <string name="languageRu" translatable="false">Русский</string>
-    <string name="languageRuRU" translatable="false">Русский (Россия)</string>
     <string name="title_audio_timer" translatable="false">Audio Timer</string>
     <string name="unit_audio_timer">Audio Timer</string>
     <string name="title_we_chat_evo" translatable="false">WeChat Evo</string>
     <string name="title_qq_contacts" translatable="false">QQ Contacts</string>
     <string name="unit_we_chat_evo">WeChat Shortcut</string>
     <string name="unit_qq_contacts">QQ Contact Shortcut</string>
-    <string name="lang_es" translatable="false">Español</string>
-    <string name="lang_es_es" translatable="false">Español (España)</string>
-    <string name="lang_es_us" translatable="false">Español (EE.UU.)</string>
-    <string name="lang_ar" translatable="false">العربية</string>
-    <string name="lang_it" translatable="false">Italiano</string>
-    <string name="lang_it_it" translatable="false">Italiano (Italia)</string>
-    <string name="lang_pt" translatable="false">Português</string>
-    <string name="lang_pt_pt" translatable="false">Português (Portugal)</string>
-    <string name="lang_th" translatable="false">ไทย</string>
-    <string name="lang_th_th" translatable="false">ไทย (ไทย)</string>
-    <string name="lang_vi" translatable="false">Tiếng Việt</string>
-    <string name="lang_vi_vn" translatable="false">Tiếng Việt (Việt Nam)</string>
     <string name="unit_desc_installed">Installed</string>
     <string name="unit_desc_not_installed">Not installed</string>
     <string name="unit_desc_available">Available</string>
@@ -268,23 +249,7 @@
     <string name="unit_manager_error_api_unavailable">API unavailable</string>
     <string name="unit_desc_uninstall_notice">Deferring uninstall</string>
     <string name="unit_desc_install_notice">Trying to install</string>
-    <string name="lang_fr" translatable="false">Français</string>
     <string name="unit_desc_pin">Pin</string>
     <string name="mainSecFrequents">Frequents</string>
     <string name="mainSecStarred">Starred</string>
-    <string name="lang_fr_fr" translatable="false">Français (France)</string>
-    <string name="lang_zh_hk" translatable="false">中文（香港）</string>
-    <string name="lang_zh_mo" translatable="false">中文（澳門）</string>
-    <string name="lang_zh_tw" translatable="false">中文（台灣）</string>
-    <string name="lang_zh_sg" translatable="false">中文（新加坡）</string>
-    <string name="lang_el" translatable="false">Ελληνικά</string>
-    <string name="lang_el_gr" translatable="false">Ελληνικά (Ελλάδα)</string>
-    <string name="lang_ja" translatable="false">日本語</string>
-    <string name="lang_ja_jp" translatable="false">日本語（日本）</string>
-    <string name="lang_ko" translatable="false">한국어</string>
-    <string name="lang_ko_kr" translatable="false">한국어 (한국)</string>
-    <string name="lang_tr" translatable="false">Türkçe</string>
-    <string name="lang_tr_tr" translatable="false">Türkçe (Türkiye)</string>
-    <string name="lang_de" translatable="false">Deutsches</string>
-    <string name="lang_de_de" translatable="false">Deutsches (Deutschland)</string>
 </resources>

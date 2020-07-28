@@ -82,4 +82,11 @@
     <string name="av_ai">أيقونة التكيف</string>
     <string name="av_tag_has_splits">&#1564;Split APK</string>
     <string name="av_apks_select_folder">حدد مجلدًا للمسح الضوئي</string>
+    <string name="av_pref_loading">تحميل القائمة</string>
+    <string name="av_pref_displaying">عرض القائمة</string>
+    <string name="av_adapter_tag_hidden">مخفي</string>
+    <string name="av_settings_tag_hidden">لا يظهر رمز التطبيق في المشغل</string>
+    <string name="av_pref_loading_summary">قم بالتحديث يدويًا لتشغيل التغييرات</string>
+    <string name="av_pref_displaying_summary">يتم تشغيل التغييرات تلقائيًا</string>
+    <string name="av_main_filter_tip">حاول الضغط مع الاستمرار على علامة</string>
 </resources>

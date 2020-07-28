@@ -37,7 +37,13 @@ import kotlin.reflect.full.createInstance
 
 @Suppress("FunctionName")
 inline fun <reified T: Fragment> Page(titleId: Int = 0, democratic: Democratic? = null): Page {
-    return Page(T::class.createInstance(), titleId, democratic)
+    val f = try {
+        T::class.createInstance()
+    } catch (e: Throwable) {
+        e.printStackTrace()
+        null
+    }
+    return Page(f, titleId, democratic)
 }
 
 @Suppress("FunctionName")
