@@ -1,4 +1,72 @@
 
+- **3.6** 20072706
+<en-US>
+• Now it is possible to filter app list by tag
+• Now you can export app list as CSV sheets
+• New tag: Hidden, find out who hides in the dark
+• Now display colorful icon for package installers and cross-platform frameworks
+</en-US>
+<ar>
+Enter or paste your release notes for ar here
+</ar>
+<de-DE>
+Enter or paste your release notes for de-DE here
+</de-DE>
+<el-GR>
+Enter or paste your release notes for el-GR here
+</el-GR>
+<en-GB>
+• Now it is possible to filter app list by tag
+• Now you can export app list as CSV sheets
+• New tag: Hidden, find out who hides in the dark
+• Now display colorful icon for package installers and cross-platform frameworks
+</en-GB>
+<es-419>
+Enter or paste your release notes for es-419 here
+</es-419>
+<es-ES>
+Enter or paste your release notes for es-ES here
+</es-ES>
+<es-US>
+Enter or paste your release notes for es-US here
+</es-US>
+<fr-FR>
+Enter or paste your release notes for fr-FR here
+</fr-FR>
+<it-IT>
+Enter or paste your release notes for it-IT here
+</it-IT>
+<ja-JP>
+Enter or paste your release notes for ja-JP here
+</ja-JP>
+<ko-KR>
+Enter or paste your release notes for ko-KR here
+</ko-KR>
+<pt-PT>
+Enter or paste your release notes for pt-PT here
+</pt-PT>
+<ru-RU>
+Enter or paste your release notes for ru-RU here
+</ru-RU>
+<th>
+Enter or paste your release notes for th here
+</th>
+<tr-TR>
+Enter or paste your release notes for tr-TR here
+</tr-TR>
+<vi>
+Enter or paste your release notes for vi here
+</vi>
+<zh-CN>
+Enter or paste your release notes for zh-CN here
+</zh-CN>
+<zh-HK>
+Enter or paste your release notes for zh-HK here
+</zh-HK>
+<zh-TW>
+Enter or paste your release notes for zh-TW here
+</zh-TW>
+
 - **3.5.2** 20071212
 <en-US>
 Bug fixes and improvements
