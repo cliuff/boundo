@@ -252,9 +252,6 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mLayoutManager: LinearLayoutManager
     private val inflater = LayoutInflater.from(context)
-    init {
-        AppTag.inflater = inflater
-    }
     private var sortMethod: Int = MyUnit.SORT_POSITION_API_LOW
     private var regexFields: MutableMap<String, String> = HashMap()
     private val sweetMargin by lazy { X.size(context, 5f, X.DP).roundToInt() }
@@ -505,13 +502,33 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
                 builder.append(context.getString(MyR.string.apiDetailsLastUpdate), StyleSpan(Typeface.BOLD), spanFlags)
                         .append(format.format(cal.time))
                         .append('\n')
-                builder.append(context.getString(MyR.string.apiDetailsInsatllFrom), StyleSpan(Typeface.BOLD), spanFlags)
-                val installer: String? = try {
+                val installer: String? = if (X.aboveOn(X.R)) {
+                    val si = try {
+                        context.packageManager.getInstallSourceInfo(appInfo.packageName)
+                    } catch (e: PackageManager.NameNotFoundException) {
+                        e.printStackTrace()
+                        null
+                    }
+                    if (si != null) {
+                        // todo initiatingPackageName
+//                        builder.append("InitiatingPackageName: ", StyleSpan(Typeface.BOLD), spanFlags)
+                        // If the package that requested the install has been uninstalled,
+                        // only this app's own install information can be retrieved
+//                        builder.append(si.initiatingPackageName ?: "Unknown").append('\n')
+//                        builder.append("OriginatingPackageName: ", StyleSpan(Typeface.BOLD), spanFlags)
+                        // If not holding the INSTALL_PACKAGES permission then the result will always return null
+//                        builder.append(si.originatingPackageName ?: "Unknown").append('\n')
+                        si.installingPackageName
+                    } else {
+                        null
+                    }
+                } else try {
                     context.packageManager.getInstallerPackageName(appInfo.packageName)
                 } catch (e: IllegalArgumentException) {
                     e.printStackTrace()
                     null
                 }
+                builder.append(context.getString(MyR.string.apiDetailsInsatllFrom), StyleSpan(Typeface.BOLD), spanFlags)
                 if (installer != null) {
                     val installerName = MiscApp.getApplicationInfo(context, packageName = installer)
                             ?.loadLabel(context.packageManager)?.toString() ?: ""

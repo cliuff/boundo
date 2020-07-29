@@ -63,6 +63,16 @@ object MyBridge: Bridge() {
         viewModel.clearCache()
     }
 
+    @Suppress("unused")
+    fun clearTags() {
+        AppTag.clearCache()
+    }
+
+    @Suppress("unused")
+    fun clearContext() {
+        AppTag.clearContext()
+    }
+
     /**
      * Add only the selected ones
      * Adding all the tags will harm performance

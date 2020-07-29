@@ -1,5 +1,5 @@
 
-- **3.6** 20072706
+- **3.6.1** 20072913
 <en-US>
 • Now it is possible to filter app list by tag
 • Now you can export app list as CSV sheets

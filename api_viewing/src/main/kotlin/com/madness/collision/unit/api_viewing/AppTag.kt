@@ -93,7 +93,14 @@ internal object AppTag {
     private var shouldShowTagHasSplits = false
     private var shouldShowTagIconAdaptive = false
 
-    lateinit var inflater: LayoutInflater
+    fun clearCache() {
+        tagIcons.clear()
+    }
+
+    fun clearContext() {
+        colorBackground = null
+        colorItem = null
+    }
 
     private fun <V> Map<String, V>.get(context: Context, id: Int) = this[tagId(context, id)]
 
@@ -177,11 +184,20 @@ internal object AppTag {
     private fun ensureInstaller(context: Context, appInfo: ApiViewingApp): String? {
         if (!shouldShowTagPackageInstaller && !isAntied(context, TAG_ID_GP) && !isAntied(context, TAG_ID_PI)) return null
         // must enable package installer to know unknown installer, which in turn invalidate package installer
-        val installer = try {
-            context.packageManager.getInstallerPackageName(appInfo.packageName)
-        } catch (e: IllegalArgumentException) {
-            e.printStackTrace()
-            null
+        val installer = if (X.aboveOn(X.R)) {
+            try {
+                context.packageManager.getInstallSourceInfo(appInfo.packageName)
+            } catch (e: PackageManager.NameNotFoundException) {
+                e.printStackTrace()
+                null
+            }?.installingPackageName
+        } else {
+            try {
+                context.packageManager.getInstallerPackageName(appInfo.packageName)
+            } catch (e: IllegalArgumentException) {
+                e.printStackTrace()
+                null
+            }
         } ?: return null
         // real name should be used when showing tag name
         // use package name when showing tag icon only
@@ -239,6 +255,7 @@ internal object AppTag {
         parent.forEach {
             if (it is LinearLayout && (it.tag as String) == name) return
         }
+        val inflater = LayoutInflater.from(context)
         AdapterAvTagBinding.inflate(inflater, parent, true).apply {
             avAdapterInfoTag.tag = name
             avAdapterInfoTag.background.setTint(getTagColor(context))

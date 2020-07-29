@@ -42,6 +42,14 @@ object AccessAV: UnitAccess(Unit.UNIT_NAME_API_VIEWING) {
         getMethod("clearApps", ComponentActivity::class).invoke(activity)
     }
 
+    fun clearTags() {
+        invokeWithoutArg("clearTags")
+    }
+
+    fun clearContext() {
+        invokeWithoutArg("clearContext")
+    }
+
     fun initTagSettings(context: Context, prefSettings: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)) {
         getMethod("initTagSettings", Context::class, SharedPreferences::class).invoke(context, prefSettings)
     }

@@ -45,6 +45,7 @@ import com.madness.collision.diy.WindowInsets
 import com.madness.collision.misc.MiscMain
 import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.Unit
+import com.madness.collision.unit.api_viewing.AccessAV
 import com.madness.collision.util.*
 import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.coroutines.*
@@ -153,6 +154,7 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
         GlobalScope.launch {
             MiscMain.clearCache(this@MainActivity)
         }
+        AccessAV.clearContext()
         super.onDestroy()
     }
 
