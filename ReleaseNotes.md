@@ -1,4 +1,7 @@
 
+Tag content regex: \n((((?!(<.*>)).)*)\n)*((?!(<.*>)).)+
+
+
 - **3.6.1** 20072913
 <en-US>
 • Now it is possible to filter app list by tag
@@ -7,13 +10,22 @@
 • Now display colorful icon for package installers and cross-platform frameworks
 </en-US>
 <ar>
-Enter or paste your release notes for ar here
+• الآن يمكن تصفية قائمة التطبيقات حسب العلامة
+• يمكنك الآن تصدير قائمة التطبيقات كأوراق CSV
+• علامة جديدة: مخفية ، اكتشف من يختبئ في الظلام
+• الآن عرض أيقونة ملونة لتركيب الحزم وأطر العمل عبر الأنظمة الأساسية
 </ar>
 <de-DE>
-Enter or paste your release notes for de-DE here
+• Jetzt ist es möglich, die App-Liste nach Tags zu filtern
+• Jetzt können Sie die App-Liste als CSV-Blätter exportieren
+• Neues Tag: Versteckt, finde heraus, wer sich im Dunkeln versteckt
+• Zeigen Sie jetzt ein farbenfrohes Symbol für Paketinstallationsprogramme und plattformübergreifende Frameworks an
 </de-DE>
 <el-GR>
-Enter or paste your release notes for el-GR here
+• Τώρα είναι δυνατό να φιλτράρετε τη λίστα εφαρμογών με ετικέτα
+• Τώρα μπορείτε να εξαγάγετε τη λίστα εφαρμογών ως φύλλα CSV
+• Νέα ετικέτα: Κρυφό, μάθετε ποιος κρύβεται στο σκοτάδι
+• Τώρα εμφανίστε πολύχρωμο εικονίδιο για προγράμματα εγκατάστασης πακέτων και πλατφόρμες πολλαπλών πλατφορμών
 </el-GR>
 <en-GB>
 • Now it is possible to filter app list by tag
@@ -22,49 +34,94 @@ Enter or paste your release notes for el-GR here
 • Now display colorful icon for package installers and cross-platform frameworks
 </en-GB>
 <es-419>
-Enter or paste your release notes for es-419 here
+• Ahora es posible filtrar la lista de aplicaciones por etiqueta
+• Ahora puede exportar la lista de aplicaciones como hojas CSV
+• Nueva etiqueta: Oculta, descubre quién se esconde en la oscuridad.
+• Ahora muestre íconos coloridos para instaladores de paquetes y marcos multiplataforma
 </es-419>
 <es-ES>
-Enter or paste your release notes for es-ES here
+• Ahora es posible filtrar la lista de aplicaciones por etiqueta
+• Ahora puede exportar la lista de aplicaciones como hojas CSV
+• Nueva etiqueta: Oculta, descubre quién se esconde en la oscuridad.
+• Ahora muestre íconos coloridos para instaladores de paquetes y marcos multiplataforma
 </es-ES>
 <es-US>
-Enter or paste your release notes for es-US here
+• Ahora es posible filtrar la lista de aplicaciones por etiqueta
+• Ahora puede exportar la lista de aplicaciones como hojas CSV
+• Nueva etiqueta: Oculta, descubre quién se esconde en la oscuridad.
+• Ahora muestre íconos coloridos para instaladores de paquetes y marcos multiplataforma
 </es-US>
 <fr-FR>
-Enter or paste your release notes for fr-FR here
+• Il est désormais possible de filtrer la liste des applications par tag
+• Vous pouvez désormais exporter la liste des applications sous forme de feuilles CSV
+• Nouveau tag: caché, découvrez qui se cache dans le noir
+• Affiche maintenant une icône colorée pour les installateurs de packages et les frameworks multiplateformes
 </fr-FR>
 <it-IT>
-Enter or paste your release notes for it-IT here
+• Ora è possibile filtrare l'elenco delle app per tag
+• Ora è possibile esportare l'elenco delle app come fogli CSV
+• Nuovo tag: nascosto, scopri chi si nasconde nel buio
+• Ora visualizza un'icona colorata per i programmi di installazione dei pacchetti e i framework multipiattaforma
 </it-IT>
 <ja-JP>
-Enter or paste your release notes for ja-JP here
+•アプリケーションリストをラベルでフィルタリング
+•アプリケーションリストをCSVテーブルとしてエクスポートする
+•新しいタブ：デスクトップアイコンを表示しないアプリケーションを非表示、検索
+•パッケージインストーラーとクロスプラットフォームフレームワークのラベルにアイコンが表示されるようになりました
 </ja-JP>
 <ko-KR>
-Enter or paste your release notes for ko-KR here
+• 라벨별로 애플리케이션 목록 필터링
+• 응용 프로그램 목록을 CSV 테이블로 내보내기
+• 새 탭 : 바탕 화면 아이콘을 표시하지 않는 응용 프로그램 찾기, 숨기기
+• 패키지 설치 프로그램 및 크로스 플랫폼 프레임 워크의 레이블에 아이콘이 표시됩니다.
 </ko-KR>
 <pt-PT>
-Enter or paste your release notes for pt-PT here
+• Agora é possível filtrar a lista de aplicativos por tag
+• Agora você pode exportar a lista de aplicativos como folhas CSV
+• Nova etiqueta: Oculta, descubra quem se esconde no escuro
+• Agora, exiba o ícone colorido para instaladores de pacotes e estruturas de plataforma cruzada
 </pt-PT>
 <ru-RU>
-Enter or paste your release notes for ru-RU here
+• Теперь можно фильтровать список приложений по тегам.
+• Теперь вы можете экспортировать список приложений в виде листов CSV
+• Новый тег: скрытый, узнайте, кто прячется в темноте
+• Теперь отображаем цветной значок для установщиков пакетов и кроссплатформенных фреймворков.
 </ru-RU>
 <th>
-Enter or paste your release notes for th here
+•ตอนนี้มันเป็นไปได้ในการกรองรายการแอพตามแท็ก
+•ตอนนี้คุณสามารถส่งออกรายการแอปเป็นแผ่นงาน CSV
+•แท็กใหม่: ซ่อนค้นหาว่าใครซ่อนอยู่ในที่มืด
+•ตอนนี้แสดงไอคอนที่มีสีสันสำหรับตัวติดตั้งแพ็คเกจและเฟรมเวิร์กข้ามแพลตฟอร์ม
 </th>
 <tr-TR>
-Enter or paste your release notes for tr-TR here
+• Artık uygulama listesini etikete göre filtrelemek mümkün
+• Artık uygulama listesini CSV sayfaları olarak dışa aktarabilirsiniz
+• Yeni etiket: Gizli, karanlıkta kimin gizlendiğini öğren
+• Artık paket kurucular ve platformlar arası çerçeveler için renkli simge göster
 </tr-TR>
 <vi>
-Enter or paste your release notes for vi here
+• Bây giờ có thể lọc danh sách ứng dụng theo thẻ
+• Bây giờ bạn có thể xuất danh sách ứng dụng dưới dạng trang CSV
+• Thẻ mới: Ẩn, tìm ra ai trốn trong bóng tối
+• Bây giờ hiển thị biểu tượng đầy màu sắc cho trình cài đặt gói và khung đa nền tảng
 </vi>
 <zh-CN>
-Enter or paste your release notes for zh-CN here
+• 按标签过滤应用列表
+• 将应用列表导出为CSV表格
+• 新标签：隐藏，找出不显示桌面图标的应用
+• 软件包安装程序和跨平台框架的标签现在显示图标
 </zh-CN>
 <zh-HK>
-Enter or paste your release notes for zh-HK here
+• 按標籤過濾應用列表
+• 將應用列表導出為CSV表格
+• 新標籤：隱藏，找出不顯示桌面圖標的應用
+• 軟件包安裝程序和跨平台框​​架的標籤現在顯示圖標
 </zh-HK>
 <zh-TW>
-Enter or paste your release notes for zh-TW here
+• 按標籤過濾應用列表
+• 將應用列表導出為CSV表格
+• 新標籤：隱藏，找出不顯示桌面圖標的應用
+• 軟件包安裝程序和跨平台框​​架的標籤現在顯示圖標
 </zh-TW>
 
 - **3.5.2** 20071212
