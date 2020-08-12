@@ -90,9 +90,10 @@ internal class BarcodeScannerActivity: AppCompatActivity() {
                 bitmap.compress(Bitmap.CompressFormat.WEBP, P.WEBP_COMPRESS_SPACE_FIRST, fos)
                 try {
                     transfer(uri, file)
-                }catch (e: Exception){
+                } catch (e: Exception){
+                    e.printStackTrace()
                     notify(R.string.text_app_not_installed)
-                }finally {
+                } finally {
                     bitmap.recycle()
                 }
             }

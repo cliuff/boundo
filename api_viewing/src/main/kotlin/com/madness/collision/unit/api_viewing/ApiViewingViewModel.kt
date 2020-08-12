@@ -264,7 +264,8 @@ internal class ApiViewingViewModel(application: Application): AndroidViewModel(a
         try {
             val inStream: InputStream = context.contentResolver.openInputStream(uri) ?: return null
             inStream.use { FileOutputStream(file).use { outStream -> it.copyTo(outStream) } }
-        } catch (e: Exception){
+        } catch (e: Exception) {
+            e.printStackTrace()
             return null
         }
         return file

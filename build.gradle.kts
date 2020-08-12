@@ -25,12 +25,16 @@ buildscript {
     repositories {
         google()
         jcenter()
+        maven {
+            url = uri("https://plugins.gradle.org/m2/")
+        }
     }
     val versions = object {
         val kotlin = "1.3.72"
-        val dokka = "0.9.18"
+//        val dokka = "0.10.1" // dokka and dokka gradle plugin
+//        val dokkaAndroidGradlePlugin = "0.9.18" // dokka android gradle plugin
         val androidxNavigation = "2.3.0"
-        val googlePlayServicesOSSLicensesPlugin = "0.10.0"
+        val googlePlayServicesOSSLicensesPlugin = "0.10.2"
         val androidGradlePlugin = "4.0.1"
     }
     dependencies {
@@ -38,7 +42,8 @@ buildscript {
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:${versions.androidxNavigation}")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}")
         classpath("org.jetbrains.kotlin:kotlin-android-extensions:${versions.kotlin}")
-        classpath("org.jetbrains.dokka:dokka-android-gradle-plugin:${versions.dokka}")
+//        classpath("org.jetbrains.dokka:dokka-gradle-plugin:${versions.dokka}")
+//        classpath("org.jetbrains.dokka:dokka-android-gradle-plugin:${versions.dokkaAndroidGradlePlugin}")
         classpath("com.google.android.gms:oss-licenses-plugin:${versions.googlePlayServicesOSSLicensesPlugin}")
     }
 }
@@ -55,4 +60,3 @@ tasks{
         delete(rootProject.buildDir)
     }
 }
-

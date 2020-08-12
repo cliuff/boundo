@@ -178,10 +178,12 @@ class MyUnit: Unit(), View.OnClickListener{
             val flags: Int = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION
             intent.flags = flags
             intent.setDataAndType(file.getProviderUri(context), type)
-            if (settingsPreferences.getBoolean(P.TT_CAL_DEFAULT_GOOGLE, true))
+            if (settingsPreferences.getBoolean(P.TT_CAL_DEFAULT_GOOGLE, true)) {
                 intent.component = ComponentName("com.google.android.calendar", "com.google.android.calendar.ICalLauncher")
+            }
             context.startActivity(intent)
-        }catch ( e: ActivityNotFoundException) {
+        } catch ( e: ActivityNotFoundException) {
+            e.printStackTrace()
             notifyBriefly(MyR.string.ics_Toast_open_fail)
         }
     }
@@ -356,9 +358,9 @@ class MyUnit: Unit(), View.OnClickListener{
         try {
             newOutPutFile = Formatter(path)
         } catch (e: FileNotFoundException) {
+            e.printStackTrace()
             val context = context ?: return
             X.toast(context, "file $path got lost", Toast.LENGTH_LONG)
-            e.printStackTrace()
             return
         }
         newOutPutFile.format(undoIterator.next())

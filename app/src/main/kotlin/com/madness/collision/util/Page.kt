@@ -110,10 +110,7 @@ class Page(fragment: Fragment? = null, private var titleId: Int = 0, private val
     }
 
     override fun selectOption(item: MenuItem): Boolean {
-        if (democratic != null) {
-            return democratic.selectOption(item)
-        }
-        return false
+        return democratic?.selectOption(item) ?: false
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -122,7 +119,12 @@ class Page(fragment: Fragment? = null, private var titleId: Int = 0, private val
         val args = arguments ?: return
         val fragmentClass = args.getParcelable<TypedNavArg>("fragmentClass")
         if (fragmentClass != null) {
-            mFragment = fragmentClass.clazz?.createInstance()
+            mFragment = try {
+                fragmentClass.clazz?.createInstance()
+            } catch (e: Throwable) {
+                e.printStackTrace()
+                null
+            }
         }
         titleId = args.getInt("titleId")
     }

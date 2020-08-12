@@ -211,9 +211,11 @@ class MyUnit: com.madness.collision.unit.Unit() {
                 return true
             }
             MyR.id.apiTBSort -> {
-                val activity = activity ?: return false
                 if (popSort == null) {
-                    popSort = PopupMenu(context, activity.findViewById(MyR.id.apiTBSort)).apply {
+                    // when in overflow menu, menu item has no icon button
+                    // thus anchor would be null
+                    val anchor = toolbar.findViewById<View>(MyR.id.apiTBSort) ?: return false
+                    popSort = PopupMenu(context, anchor).apply {
                         if (X.aboveOn(X.Q)) {
                             setForceShowIcon(true)
                         }

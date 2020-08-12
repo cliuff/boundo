@@ -430,6 +430,7 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
         return try {
             viewModel.democratic.value?.selectOption(item) ?: false
         } catch (e: Exception) {
+            e.printStackTrace()
             notifyBriefly(R.string.text_error)
             false
         }

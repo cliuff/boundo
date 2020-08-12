@@ -26,7 +26,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
@@ -40,7 +39,7 @@ import com.madness.collision.util.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-internal class UnitDescFragment : TaggedFragment(), Democratic {
+internal class UnitDescFragment() : TaggedFragment(), Democratic {
 
     override val category: String = "UnitDesc"
     override val id: String = "UnitDesc"
@@ -49,9 +48,7 @@ internal class UnitDescFragment : TaggedFragment(), Democratic {
 
         @JvmStatic
         fun newInstance(description: Description): UnitDescFragment {
-            return UnitDescFragment().apply {
-                this.description = description
-            }
+            return UnitDescFragment(description)
         }
     }
 
@@ -63,14 +60,14 @@ internal class UnitDescFragment : TaggedFragment(), Democratic {
     private var icStarred: Drawable? = null
     private var toolbar: Toolbar? = null
 
-    private lateinit var description: Description
-//        set(value) {
-//            field = value
-//            if (isAdded) mViewModel.description.value = value
-//        }
+    private var description: Description? = null
+
+    constructor(description: Description) : this() {
+        this.description = description
+    }
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
-        toolbar.title = description.getName(context)
+        toolbar.title = description?.getName(context)
         inflateAndTint(R.menu.toolbar_unit_desc, toolbar, iconColor)
         this.toolbar = toolbar
         return true
@@ -117,8 +114,8 @@ internal class UnitDescFragment : TaggedFragment(), Democratic {
         super.onDestroyView()
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         mViewModel.description.value = description
     }
 
@@ -129,6 +126,7 @@ internal class UnitDescFragment : TaggedFragment(), Democratic {
         val colorAlert: Int by lazy { ThemeUtil.getColor(context, R.attr.colorActionAlert) }
         val colorAlertBack: Int by lazy { ThemeUtil.getColor(context, R.attr.colorActionAlertBack) }
         mViewModel.description.observe(viewLifecycleOwner) {
+            val description = it ?: return@observe
             val splitInstallManager = SplitInstallManagerFactory.create(context)
             val installedUnits = Unit.getInstalledUnits(splitInstallManager)
             val isInstalled = installedUnits.contains(it.unitName)

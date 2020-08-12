@@ -103,12 +103,16 @@ object X {
 
     fun listFiles4API( handler: Handler,  folder: File){
         if (!folder.exists() || !folder.canRead() || !folder.isDirectory) return
-        for (newFile in folder.listFiles() ?: emptyArray()){
+        for (newFile in folder.listFiles() ?: emptyArray()) {
             try {
                 if (newFile.isFile && newFile.name.endsWith(".apk")) {
                     handler.obtainMessage(AccessAV.HANDLE_DISPLAY_APK, newFile.path).sendToTarget()
-                }else if (newFile.isDirectory) listFiles4API(handler, newFile)
-            }catch (e: Exception){ e.printStackTrace() }
+                } else if (newFile.isDirectory) {
+                    listFiles4API(handler, newFile)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
         /*
         if (aboveOn(O)){

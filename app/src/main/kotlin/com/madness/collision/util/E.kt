@@ -20,6 +20,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Point
 import android.net.Uri
+import android.os.Build
 import android.text.PrecomputedText
 import android.text.Spannable
 import android.text.SpannableString
@@ -88,12 +89,21 @@ infix fun TextView.dartHold(text: CharSequence) {
     this dart text
 }
 
+/**
+ * IllegalArgumentException: Given text can not be applied to TextView
+ * Meizu 15 Plus, API 24
+ * [TextViewCompat.setPrecomputedText]
+ */
 infix fun AppCompatTextView.dartFuture(text: CharSequence) {
+    if (Build.MANUFACTURER == "Meizu" && X.belowOff(X.O)) {
+        setText(text)
+        return
+    }
     val textFuture = try {
         PrecomputedTextCompat.getTextFuture(text, textMetricsParamsCompat, null)
     } catch (e: IllegalArgumentException) {
         e.printStackTrace()
-        setText(null)
+        setText(text)
         return
     }
     setTextFuture(textFuture)

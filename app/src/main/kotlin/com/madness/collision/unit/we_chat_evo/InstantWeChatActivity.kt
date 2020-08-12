@@ -43,7 +43,8 @@ class InstantWeChatActivity: AppCompatActivity() {
                 startActivity(packageManager.getLaunchIntentForPackage("com.tencent.mm"))
                 if (X.belowOff(X.P)) overridePendingTransition(R.anim.res_fade_in, R.anim.res_fade_out)
                 finish()
-            }catch( e: Exception){
+            } catch (e: Exception) {
+                e.printStackTrace()
                 notifyBriefly(R.string.WeChatLauncher_Launch_Fail)
             }
         }, 400)

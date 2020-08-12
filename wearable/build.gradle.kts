@@ -36,13 +36,17 @@ val signingKeyStorePassword: String = properties.getProperty("signingKeyStorePas
 val signingKeyAlias: String = properties.getProperty("signingKeyAlias", "")
 val signingKeyPassword: String = properties.getProperty("signingKeyPassword", "")
 
-//dokka-android {
-//    outputFormat = "html"
-//    outputDirectory = "./kdoc"
+//dokkaHtml {
+//    outputDirectory = "$buildDir/dokka"
+//    dokkaSourceSets {
+//        create("main") {
+//            noAndroidSdkLink = true
+//        }
+//    }
 //}
 
 android {
-    buildToolsVersion = "29.0.3"
+    buildToolsVersion = "30.0.0"
     sourceSets {
         getByName("main").java.srcDir("src/main/kotlin")
     }
@@ -154,7 +158,7 @@ dependencies {
             Dependencies.androidxLifecycleViewModel,
             Dependencies.androidxLifecycleLiveData,
             Dependencies.androidxPreference,
-            Dependencies.googleMaterialTheme,
+            Dependencies.googleMaterialComponents,
             Dependencies.kotlinStdlib,
             Dependencies.androidxPercentLayout,
             Dependencies.androidxLegacyV4,

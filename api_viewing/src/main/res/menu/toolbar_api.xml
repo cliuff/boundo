@@ -22,12 +22,13 @@
         android:title="@android:string/search_go"
         android:icon="@drawable/ic_search_24"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
-        app:showAsAction="always|collapseActionView"/>
+        app:showAsAction="ifRoom|collapseActionView"/>
+    <!-- always show as action to have anchor view for popup menu -->
     <item
         android:id="@+id/apiTBSort"
         android:title="@string/text_sort"
         android:icon="@drawable/ic_sort_24"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
     <item
         android:id="@+id/apiTBRefresh"
         android:title="@string/text_refresh"

@@ -22,6 +22,21 @@
 
 # Fragments may be refrenced in xml file or used for page restoration
 -keep class * extends androidx.fragment.app.Fragment
+-keepclassmembers class * extends androidx.fragment.app.Fragment {
+ public <init>();
+}
+
+-keep class * extends com.madness.collision.util.TaggedFragment
+-keepclassmembers class * extends com.madness.collision.util.TaggedFragment {
+ public <init>();
+}
+
+# Page class uses Reflection to create fragment instance
+# used with preference fragments, which extends PreferenceFragmentCompat
+-keep class * extends androidx.preference.PreferenceFragmentCompat
+-keepclassmembers class * extends androidx.preference.PreferenceFragmentCompat {
+ public <init>();
+}
 
 # Navigation
 #-keep class androidx.navigation.fragment.NavHostFragment

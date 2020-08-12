@@ -24,7 +24,8 @@ plugins {
     kotlin("android.extensions")
     id("androidx.navigation.safeargs")
     id("kotlin-kapt")
-    id("org.jetbrains.dokka-android")
+//    id("org.jetbrains.dokka")
+//    id("org.jetbrains.dokka-android")
     id("com.google.android.gms.oss-licenses-plugin")
     id("com.cliuff.boundo.dependencies")
 }
@@ -39,9 +40,13 @@ val signingKeyStorePassword: String = properties.getProperty("signingKeyStorePas
 val signingKeyAlias: String = properties.getProperty("signingKeyAlias", "")
 val signingKeyPassword: String = properties.getProperty("signingKeyPassword", "")
 
-//dokka-android {
-//    outputFormat = "html"
-//    outputDirectory = "./kdoc"
+//dokkaHtml {
+//    outputDirectory = "$buildDir/dokka"
+//    dokkaSourceSets {
+//        create("main") {
+//            noAndroidSdkLink = true
+//        }
+//    }
 //}
 
 android {
@@ -64,8 +69,8 @@ android {
         applicationId = "com.madness.collision"
         minSdkVersion(22)
         targetSdkVersion(30)
-        versionCode = 20072913
-        versionName = "3.6.1"
+        versionCode = 20080801
+        versionName = "3.6.2"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testApplicationId = "${applicationId}.test"
         renderscriptSupportModeEnabled = true
@@ -176,7 +181,7 @@ dependencies {
             Dependencies.androidxNavigationFragment,
             Dependencies.androidxNavigationUI,
             Dependencies.androidxDocumentFile,
-            Dependencies.googleMaterialTheme,
+            Dependencies.googleMaterialComponents,
             Dependencies.googlePlayServicesOSSLicenses,
             Dependencies.googleGson,
             Dependencies.googlePlayCore,

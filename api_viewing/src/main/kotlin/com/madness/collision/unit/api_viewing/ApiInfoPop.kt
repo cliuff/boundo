@@ -401,6 +401,7 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
                     try {
                         context.startActivity(app.storePage(name, true))
                     } catch (e: Exception) {
+                        e.printStackTrace()
                         context.startActivity(app.storePage(name, false))
                     }
                     popStore?.dismiss()
@@ -430,6 +431,7 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
                     try {
                         context.startActivity(app.apkPage())
                     } catch (e: Exception) {
+                        e.printStackTrace()
                         CollisionDialog.infoCopyable(context, app.appPackage.basePath).show()
                     }
                 }

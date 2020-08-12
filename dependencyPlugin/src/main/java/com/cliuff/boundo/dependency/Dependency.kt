@@ -47,21 +47,26 @@ object Versions {
     const val androidxDocumentFile = "1.0.1"
     const val androidxPercentLayout = "1.0.0"
     const val androidxLegacyV4 = "1.0.0"
+    // This dependency is for the Wear UI Library,
+    // which has classes that exemplify best practices
     const val androidxWear = "1.0.0"
 
-    const val googleTruth = "1.0"
-    const val googleMaterialTheme = "1.2.0-rc01"
+    const val googleTruth = "1.0.1"
+    const val googleMaterialComponents = "1.2.0"
     const val googlePlayServicesOSSLicenses = "17.0.0"
-    const val googlePlayServicesBasement = "17.2.1"
+    const val googlePlayServicesBasement = "17.3.0"
     const val googleGson = "2.8.6"
-    const val googlePlayCore = "1.7.3"
+    const val googlePlayCore = "1.8.0"
+    // This dependency is for the Wearable Support Library,
+    // which has additional classes (including for watch faces)
     const val googleSupportWearable = "2.7.0"
+    // This dependency is set to compile only
     const val googleWearable = "2.7.0"
-    const val glide = "4.9.0"
-    const val jsoup = "1.12.1"
-    const val junitJupiter = "5.5.2"
+    const val glide = "4.11.0"
+    const val jsoup = "1.13.1"
+    const val junitJupiter = "5.6.2"
     const val kotlin = "1.3.72"
-    const val kotlinCoroutines = "1.3.0"
+    const val kotlinCoroutines = "1.3.8"
     const val mpChart = "v3.1.0"
     const val openCsv = "5.2"
 }
@@ -115,7 +120,7 @@ class Dependencies : Plugin<Project> {
         // optional - Firebase JobDispatcher support
         const val androidxWorkFirebase = "androidx.work:work-firebase:${Versions.androidxWork}"
 
-        const val googleMaterialTheme = "com.google.android.material:material:${Versions.googleMaterialTheme}"
+        const val googleMaterialComponents = "com.google.android.material:material:${Versions.googleMaterialComponents}"
         const val googlePlayServicesOSSLicenses = "com.google.android.gms:play-services-oss-licenses:${Versions.googlePlayServicesOSSLicenses}"
         const val googlePlayServicesBasement = "com.google.android.gms:play-services-basement:${Versions.googlePlayServicesBasement}"
         const val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
@@ -150,7 +155,7 @@ class Dependencies : Plugin<Project> {
                 androidxLifecycleCommon,
                 androidxLifecycleViewModel,
                 androidxLifecycleLiveData,
-                googleMaterialTheme,
+                googleMaterialComponents,
                 googlePlayCore
         )
     }

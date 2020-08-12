@@ -100,6 +100,7 @@ internal class ImmortalActivity : AppCompatActivity(), View.OnClickListener {
                         startActivity(intent)
                         X.toast(this, R.string.textEmail, Toast.LENGTH_LONG)
                     } catch (e: Exception) {
+                        e.printStackTrace()
                         notify(R.string.text_app_not_installed)
                     }
                 } else {
@@ -116,6 +117,7 @@ internal class ImmortalActivity : AppCompatActivity(), View.OnClickListener {
                 try {
                     startActivity(intent)
                 } catch (e: Exception) {
+                    e.printStackTrace()
                     CollisionDialog.infoCopyable(this, P.CONTACT_EMAIL).show()
                 }
             }
@@ -129,6 +131,7 @@ internal class ImmortalActivity : AppCompatActivity(), View.OnClickListener {
                     })
                     X.toast(this, R.string.Advice_QQ_Toast_Text, Toast.LENGTH_LONG)
                 } catch (e: Exception) {
+                    e.printStackTrace()
                     CollisionDialog.infoCopyable(this, P.CONTACT_QQ).show()
                 }
             }

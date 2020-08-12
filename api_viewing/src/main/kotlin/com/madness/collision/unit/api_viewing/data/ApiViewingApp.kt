@@ -199,7 +199,16 @@ internal class ApiViewingApp(
                 val nContext = context.createPackageContext(packageName, Context.CONTEXT_RESTRICTED)
                 val localeContext = SystemUtil.getLocaleContext(nContext, SettingsFunc.getLocale(la))
                 val labelRes = localeContext.applicationInfo.labelRes
-                name = if (labelRes == 0) "" else { try { localeContext.getString(labelRes) } catch (e: Exception) { "" } }
+                name = if (labelRes == 0) {
+                    ""
+                } else {
+                    try {
+                        localeContext.getString(labelRes)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        ""
+                    }
+                }
             }
         } catch ( e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
