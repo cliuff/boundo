@@ -22,15 +22,18 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ShortcutManager
 import android.graphics.Color
+import android.graphics.Typeface
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.LocaleList
 import android.text.Spannable
+import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.SpannedString
 import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -123,12 +126,13 @@ internal class ImmortalActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             R.id.immortalContactQQ -> {
+                val intent = Intent().apply {
+                    action = Intent.ACTION_VIEW
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    data = Uri.parse("mqqwpa://im/chat?chat_type=wpa&uin=${P.CONTACT_QQ}&version=1")
+                }
                 try {
-                    startActivity(Intent().apply {
-                        action = Intent.ACTION_VIEW
-                        flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                        data = Uri.parse("mqqwpa://im/chat?chat_type=wpa&uin=${P.CONTACT_QQ}&version=1")
-                    })
+                    startActivity(intent)
                     X.toast(this, R.string.Advice_QQ_Toast_Text, Toast.LENGTH_LONG)
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -237,41 +241,38 @@ internal class ImmortalActivity : AppCompatActivity(), View.OnClickListener {
         val writer = FileWriter(logFile)
         writer.write(wrapInHtml("Manufacture: $manufacture\nModel: $model\nProduct: $product\nDevice: $device\nAPI: $apiLevel\nApp: $verName($ver)\nLocales: $locales\n"))
 
-        if (false && X.aboveOn(X.R)) {
+        if (X.aboveOn(X.R)) {
             val am = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager?
             val exitReasons = am?.getHistoricalProcessExitReasons(BuildConfig.APPLICATION_ID, 0, 0) ?: emptyList()
+            if (exitReasons.isNotEmpty()) {
+                val reasonsTitle = SpannableString("Historical process exit reasons")
+                reasonsTitle.setSpan(StyleSpan(Typeface.BOLD), 0, reasonsTitle.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                writer.write(reasonsTitle.toString().wrappedInHtml)
+            }
             exitReasons.forEach { exitInfo ->
-                when (exitInfo.reason) {
-                    ApplicationExitInfo.REASON_ANR -> {
-                    }
-                    ApplicationExitInfo.REASON_CRASH -> {
-                    }
-                    ApplicationExitInfo.REASON_CRASH_NATIVE -> {
-                    }
-                    ApplicationExitInfo.REASON_DEPENDENCY_DIED -> {
-                    }
-                    ApplicationExitInfo.REASON_EXCESSIVE_RESOURCE_USAGE -> {
-                    }
-                    ApplicationExitInfo.REASON_EXIT_SELF -> {
-                    }
-                    ApplicationExitInfo.REASON_INITIALIZATION_FAILURE -> {
-                    }
-                    ApplicationExitInfo.REASON_LOW_MEMORY -> {
-                    }
-                    ApplicationExitInfo.REASON_OTHER -> {
-                    }
-                    ApplicationExitInfo.REASON_PERMISSION_CHANGE -> {
-                    }
-                    ApplicationExitInfo.REASON_SIGNALED -> {
-                    }
-                    ApplicationExitInfo.REASON_UNKNOWN -> {
-                    }
-                    ApplicationExitInfo.REASON_USER_REQUESTED -> {
-                    }
-                    ApplicationExitInfo.REASON_USER_STOPPED -> {
-                    }
-                    else -> {
-                    }
+                val reason = when (exitInfo.reason) {
+                    ApplicationExitInfo.REASON_ANR -> "ANR"
+                    ApplicationExitInfo.REASON_CRASH -> "crash"
+                    ApplicationExitInfo.REASON_CRASH_NATIVE -> "crash_native"
+                    ApplicationExitInfo.REASON_DEPENDENCY_DIED -> "dependency_died"
+                    ApplicationExitInfo.REASON_EXCESSIVE_RESOURCE_USAGE -> "excessive_resource_usage"
+                    ApplicationExitInfo.REASON_EXIT_SELF -> "exit_self"
+                    ApplicationExitInfo.REASON_INITIALIZATION_FAILURE -> "initialization_failure"
+                    ApplicationExitInfo.REASON_LOW_MEMORY -> "low_memory"
+                    ApplicationExitInfo.REASON_OTHER -> "other"
+                    ApplicationExitInfo.REASON_PERMISSION_CHANGE -> "permission_change"
+                    ApplicationExitInfo.REASON_SIGNALED -> "signaled"
+                    ApplicationExitInfo.REASON_UNKNOWN -> "unknown"
+                    ApplicationExitInfo.REASON_USER_REQUESTED -> "user_requested"
+                    ApplicationExitInfo.REASON_USER_STOPPED -> "user_stopped"
+                    else -> "unspecified"
+                }
+                val info = "Process name: ${exitInfo.processName}(pid ${exitInfo.pid})\nReason: $reason\nDesc: ${exitInfo.description ?: "Unspecified"}\n"
+                writer.write(info.wrappedInHtml)
+                exitInfo.traceInputStream?.let { traceStream ->
+                    val reader = InputStreamReader(traceStream)
+                    reader.useLines { it.forEach {  line -> writer.write(wrapInHtml(line)) } }
+                    writer.write("\n")
                 }
             }
         }
@@ -288,7 +289,10 @@ internal class ImmortalActivity : AppCompatActivity(), View.OnClickListener {
         return logFile
     }
 
-    private fun wrapInHtml(line: String): String{
+    private val String.wrappedInHtml: String
+        get() = wrapInHtml(this)
+
+    private fun wrapInHtml(line: String): String {
         val re = SpannableStringBuilder(line)
         when {
             re.matches("[\\d- :.]*E/.*".toRegex()) -> re.highlightAll(COLOR_RED)
@@ -302,15 +306,15 @@ internal class ImmortalActivity : AppCompatActivity(), View.OnClickListener {
         if (re.matches("[\\d- :.]*./dness.collisio.*".toRegex())) re.highlight("dness.collisio", COLOR_BLUE)
         if (BuildConfig.DEBUG && re.matches("[\\d- :.]*./ollision.morta.*".toRegex())) re.highlight("ollision.morta", COLOR_BLUE)
         re.highlight(BuildConfig.BUILD_PACKAGE, COLOR_BLUE)
-        re.appendln()
+        re.appendLine()
         return HtmlCompat.toHtml(SpannedString(re), HtmlCompat.TO_HTML_PARAGRAPH_LINES_INDIVIDUAL)
     }
 
-    private fun SpannableStringBuilder.highlightAll(color: Int){
+    private fun SpannableStringBuilder.highlightAll(color: Int) {
         setSpan(ForegroundColorSpan(color), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
     }
 
-    private fun SpannableStringBuilder.highlight(content: String, color: Int){
+    private fun SpannableStringBuilder.highlight(content: String, color: Int) {
         var indexEnd = 0
         while (true) {
             val indexStart = indexOf(content, indexEnd)
