@@ -32,9 +32,9 @@ object Versions {
     const val androidxNavigation = "2.3.0"
     const val androidxCoreTesing = "2.1.0"
     const val androidxFragment = "1.2.5"
-    const val androidxDrawerLayout = "1.1.0"
+    const val androidxDrawerLayout = "1.1.1"
     const val androidxSwipeRefreshLayout = "1.1.0"
-    const val androidxConstraintLayout = "2.0.0-beta8"
+    const val androidxConstraintLayout = "2.0.1"
     const val androidxPalette = "1.0.0"
     const val androidxCardView = "1.0.0"
     const val androidxRecyclerView = "1.1.0"
@@ -52,7 +52,7 @@ object Versions {
     const val androidxWear = "1.0.0"
 
     const val googleTruth = "1.0.1"
-    const val googleMaterialComponents = "1.2.0"
+    const val googleMaterialComponents = "1.2.1"
     const val googlePlayServicesOSSLicenses = "17.0.0"
     const val googlePlayServicesBasement = "17.3.0"
     const val googleGson = "2.8.6"
@@ -65,10 +65,11 @@ object Versions {
     const val glide = "4.11.0"
     const val jsoup = "1.13.1"
     const val junitJupiter = "5.6.2"
-    const val kotlin = "1.3.72"
+    const val kotlin = "1.4.0"
     const val kotlinCoroutines = "1.3.8"
     const val mpChart = "v3.1.0"
     const val openCsv = "5.2"
+    const val rxJava = "3.0.5"
 }
 
 class Dependencies : Plugin<Project> {
@@ -136,6 +137,7 @@ class Dependencies : Plugin<Project> {
         const val kotlinCoroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.kotlinCoroutines}"
         const val mpChart = "com.github.PhilJay:MPAndroidChart:${Versions.mpChart}"
         const val openCsv = "com.opencsv:opencsv:${Versions.openCsv}"
+        const val rxJava = "io.reactivex.rxjava3:rxjava:${Versions.rxJava}"
 
         // wear
         const val androidxPercentLayout = "androidx.percentlayout:percentlayout:${Versions.androidxPercentLayout}"

@@ -243,4 +243,5 @@
     <string name="unit_desc_pin">Pin</string>
     <string name="mainSecFrequents">Frequents</string>
     <string name="mainSecStarred">Starred</string>
+    <string name="app_device_controls">Boundo Controls</string>
 </resources>

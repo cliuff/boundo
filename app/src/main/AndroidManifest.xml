@@ -34,6 +34,8 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 <!--    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>-->
+    <!-- Legacy shortcut -->
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
 
     <queries>
         <!-- check if QQ is installed -->
@@ -246,7 +248,7 @@
         <service
             android:name=".qs.TileServiceMonthData"
             android:enabled="false"
-            android:icon="@drawable/ic_logo_fore_vector"
+            android:icon="@drawable/ic_data_usage_24"
             android:label="@string/tileData"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
@@ -261,6 +263,15 @@
             android:enabled="true"
             android:foregroundServiceType="mediaProjection"
             tools:ignore="UnusedAttribute" />
+        <!-- Device controls -->
+        <service
+            android:name=".versatile.MyControlService"
+            android:label="@string/app_device_controls"
+            android:permission="android.permission.BIND_CONTROLS">
+            <intent-filter>
+                <action android:name="android.service.controls.ControlsProviderService" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

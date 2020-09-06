@@ -110,7 +110,7 @@ internal class InstantFragment: TaggedFragment(), Democratic {
         }
         // shortcuts
         val availableShortcuts by lazy { InstantShortcuts.SHORTCUTS.filter(predicate) }
-        if (X.aboveOn(X.N_MR1) && availableShortcuts.isNotEmpty()) {
+        if (availableShortcuts.isNotEmpty()) {
             val adapterShortcut = InstantAdapter(context, mainViewModel, InstantAdapter.TYPE_SHORTCUT, availableShortcuts)
             instantRecyclerShortcut.run {
                 setHasFixedSize(true)

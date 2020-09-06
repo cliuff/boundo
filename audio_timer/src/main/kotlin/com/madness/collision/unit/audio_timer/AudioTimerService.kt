@@ -32,6 +32,9 @@ import androidx.core.app.NotificationManagerCompat
 import com.madness.collision.R
 import com.madness.collision.main.MainActivity
 import com.madness.collision.util.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 
 internal class AudioTimerService: Service() {
@@ -40,20 +43,29 @@ internal class AudioTimerService: Service() {
         var isRunning = false
         private val tickCallbacks: MutableList<Callback> = mutableListOf()
 
-        fun start(context: Context) {
+        fun start(context: Context, duration: Long? = null) {
             val intent = Intent(context, AudioTimerService::class.java)
             // stop if running already
             if (isRunning) {
                 context.stopService(intent)
                 return
             }
-            val pref = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
-            val timeHour = pref.getInt(P.AT_TIME_HOUR, 0)
-            val timeMinute = pref.getInt(P.AT_TIME_MINUTE, 0)
-            val targetDuration = (timeHour * 60 + timeMinute) * 60000L
+            val targetDuration = if (duration == null) {
+                val pref = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
+                val timeHour = pref.getInt(P.AT_TIME_HOUR, 0)
+                val timeMinute = pref.getInt(P.AT_TIME_MINUTE, 0)
+                (timeHour * 60 + timeMinute) * 60000L
+            } else {
+                duration
+            }
             context.stopService(intent)
             intent.putExtra(ARG_DURATION, targetDuration)
-            context.startService(intent)
+            try {
+                context.startService(intent)
+            } catch (e: IllegalStateException) {
+                e.printStackTrace()
+                X.toast(context, R.string.text_error, Toast.LENGTH_SHORT)
+            }
         }
 
         fun stop(context: Context) {
@@ -72,7 +84,7 @@ internal class AudioTimerService: Service() {
     }
 
     interface Callback {
-        fun onTick(targetTime: Long, leftTime: Long)
+        fun onTick(targetTime: Long, duration: Long, leftTime: Long)
 
         fun onTick(displayText: String)
     }
@@ -82,6 +94,7 @@ internal class AudioTimerService: Service() {
     private lateinit var mHandler:Handler
     private lateinit var mRunnable: Runnable
     private var targetTime: Long = 0
+    private var duration: Long = 0
     private val timeFormat = SimpleDateFormat("mm:ss", SystemUtil.getLocaleSys())
     private val notificationId = NotificationsUtil.ID_AUDIO_TIMER
     private lateinit var notificationBuilder: NotificationCompat.Builder
@@ -96,7 +109,7 @@ internal class AudioTimerService: Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         isRunning = true
-        val duration = intent?.getLongExtra(ARG_DURATION, 0) ?: 0
+        duration = intent?.getLongExtra(ARG_DURATION, 0) ?: 0
         targetTime = System.currentTimeMillis() + duration
         val context = this
         val clickIntent = Intent(context, MainActivity::class.java).apply {
@@ -136,7 +149,7 @@ internal class AudioTimerService: Service() {
     private fun start() {
         Thread {
             Looper.prepare()
-            mHandler = Handler()
+            mHandler = Handler(Looper.myLooper()!!)
             mRunnable = runnable {
                 val shouldContinue = updateStatus()
                 if (shouldContinue) mHandler.postDelayed(this, 1000)
@@ -167,7 +180,7 @@ internal class AudioTimerService: Service() {
         val displayText = "${if (hour == 0L) "" else "$hour:"}$re"
         updateNotification(displayText)
         tickCallbacks.forEach {
-            it.onTick(targetTime, timeLeft)
+            it.onTick(targetTime, duration, timeLeft)
             it.onTick(displayText)
         }
     }
@@ -180,11 +193,14 @@ internal class AudioTimerService: Service() {
     private fun completeWork() {
         stopAudio(this)
         tickCallbacks.forEach {
-            it.onTick(targetTime, 0L)
+            it.onTick(targetTime, duration, 0L)
             it.onTick("")
         }
         tickCallbacks.clear()
-        mHandler.postDelayed({ stopSelf() }, 500)
+        GlobalScope.launch {
+            delay(500)
+            stopSelf()
+        }
         isRunning = false
     }
 

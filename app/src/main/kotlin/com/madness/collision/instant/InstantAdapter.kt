@@ -16,7 +16,6 @@
 
 package com.madness.collision.instant
 
-import android.annotation.TargetApi
 import android.content.ComponentName
 import android.content.Context
 import android.content.pm.ComponentInfo
@@ -25,11 +24,13 @@ import android.content.pm.ShortcutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.madness.collision.R
 import com.madness.collision.databinding.InstantItemComplexBinding
+import com.madness.collision.databinding.InstantItemShortcutBinding
 import com.madness.collision.databinding.InstantItemSimpleBinding
 import com.madness.collision.instant.shortcut.InstantShortcut
 import com.madness.collision.main.MainViewModel
@@ -39,15 +40,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-@TargetApi(X.N_MR1)
 internal class InstantAdapter<T: InstantItem>(
         context: Context, private val mainViewModel: MainViewModel,
         private val dataType: Int, data: List<T> = emptyList()
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
-        private const val TYPE_SIMPLE = R.layout.instant_item_simple
-        private const val TYPE_COMPLEX = R.layout.instant_item_complex
+        private const val ITEM_TYPE_SIMPLE = R.layout.instant_item_simple
+        private const val ITEM_TYPE_COMPLEX = R.layout.instant_item_complex
+        private const val ITEM_TYPE_SHORTCUT = R.layout.instant_item_shortcut
         const val TYPE_SHORTCUT = 0
         const val TYPE_TILE = 1
         const val TYPE_OTHER = 2
@@ -60,9 +61,17 @@ internal class InstantAdapter<T: InstantItem>(
     }
 
     class InstantComplexHolder(binding: InstantItemComplexBinding): RecyclerView.ViewHolder(binding.root) {
-        val switch: SwitchMaterial = binding.instantItemComplexTitleSwitch
+        val switch: SwitchMaterial = binding.instantItemComplexSwitch
         val title: TextView = binding.instantItemComplexTitle
         val titleLayout: View = binding.instantItemComplexTitleLayout
+    }
+
+    class InstantShortcutHolder(binding: InstantItemShortcutBinding): RecyclerView.ViewHolder(binding.root) {
+        val switch: SwitchMaterial = binding.instantItemShortcutSwitch
+        val title: TextView = binding.instantItemShortcutTitle
+        val titleLayout: View = binding.instantItemShortcutTitleLayout
+        val pin: ImageView = binding.instantItemShortcutPin
+        val divider: View = binding.instantItemShortcutDivider
     }
 
     private val mContext: Context = context
@@ -71,7 +80,9 @@ internal class InstantAdapter<T: InstantItem>(
     private val instant: Instant?
     init {
         instant = if (isShortcut) {
-            val manager = context.getSystemService(ShortcutManager::class.java)
+            val manager = if (X.aboveOn(X.N_MR1))
+                context.getSystemService(ShortcutManager::class.java)
+            else null
             if (manager != null) Instant(context, manager) else null
         } else {
             null
@@ -91,13 +102,18 @@ internal class InstantAdapter<T: InstantItem>(
         get() = dataType == TYPE_OTHER
 
     override fun getItemViewType(position: Int): Int {
-        return if (mData[position].hasDescription) TYPE_COMPLEX else TYPE_SIMPLE
+        return when {
+            isShortcut -> ITEM_TYPE_SHORTCUT
+            mData[position].hasDescription -> ITEM_TYPE_COMPLEX
+            else -> ITEM_TYPE_SIMPLE
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when(viewType) {
-            TYPE_SIMPLE -> InstantSimpleHolder(InstantItemSimpleBinding.inflate(mInflater, parent, false))
-            else -> InstantComplexHolder(InstantItemComplexBinding.inflate(mInflater, parent, false))
+            ITEM_TYPE_SHORTCUT -> InstantShortcutHolder(InstantItemShortcutBinding.inflate(mInflater, parent, false))
+            ITEM_TYPE_COMPLEX -> InstantComplexHolder(InstantItemComplexBinding.inflate(mInflater, parent, false))
+            else -> InstantSimpleHolder(InstantItemSimpleBinding.inflate(mInflater, parent, false))
         }
     }
 
@@ -124,9 +140,25 @@ internal class InstantAdapter<T: InstantItem>(
                 }
                 switch = holder.switch
             }
+            is InstantShortcutHolder -> {
+                holder.title.text = name
+                holder.titleLayout.setOnClickListener {
+                    val shortcutItem = item as InstantShortcut
+                    instant?.pinShortcut(shortcutItem.id)
+                }
+                holder.pin.setOnClickListener {
+                    val shortcutItem = item as InstantShortcut
+                    instant?.pinShortcut(shortcutItem.id)
+                }
+                if (X.belowOff(X.N_MR1)) {
+                    holder.switch.visibility = View.GONE
+                    holder.divider.visibility = View.GONE
+                }
+                switch = holder.switch
+            }
             else -> return
         }
-        if (isShortcut) {
+        if (isShortcut && X.aboveOn(X.N_MR1)) {
             val shortcutItem = item as InstantShortcut
             instant?.dynamicShortcuts?.find { it.id == shortcutItem.id }?.let {
                 switch.isChecked = true
@@ -148,18 +180,22 @@ internal class InstantAdapter<T: InstantItem>(
                     }
                 }
             }
-            if (isLoadingComponents) {
-                onLoadedCallbacks.add { checker.invoke() }
-            } else if (mComponents == null) {
-                isLoadingComponents = true
-                GlobalScope.launch {
-                    mComponents = MiscApplication.getComponents(mContext)
-                    isLoadingComponents = false
-                    checker.invoke()
-                    onLoadedCallbacks.forEach { it.invoke() }
+            when {
+                isLoadingComponents -> {
+                    onLoadedCallbacks.add { checker.invoke() }
                 }
-            } else {
-                checker.invoke()
+                mComponents == null -> {
+                    isLoadingComponents = true
+                    GlobalScope.launch {
+                        mComponents = MiscApplication.getComponents(mContext)
+                        isLoadingComponents = false
+                        checker.invoke()
+                        onLoadedCallbacks.forEach { it.invoke() }
+                    }
+                }
+                else -> {
+                    checker.invoke()
+                }
             }
             val comp = ComponentName(mContext.packageName, claName)
             switch.setOnCheckedChangeListener { _, isChecked ->

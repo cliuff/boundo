@@ -24,6 +24,7 @@ import com.madness.collision.unit.UpdatesProvider
 object MyBridge: Bridge() {
 
     override val unitName: String = Unit.UNIT_NAME_AUDIO_TIMER
+    private val tickCallbacks: MutableMap<AtCallback, AudioTimerService.Callback> = mutableMapOf()
 
     /**
      * @param args empty
@@ -39,5 +40,40 @@ object MyBridge: Bridge() {
     @Suppress("unused")
     fun start(context: Context) {
         AudioTimerService.start(context)
+    }
+
+    @Suppress("unused")
+    fun start(context: Context, duration: Long) {
+        AudioTimerService.start(context, duration)
+    }
+
+    @Suppress("unused")
+    fun stop(context: Context) {
+        AudioTimerService.stop(context)
+    }
+
+    @Suppress("unused")
+    fun isRunning(): Boolean {
+        return AudioTimerService.isRunning
+    }
+
+    @Suppress("unused")
+    fun addCallback(callback: AtCallback) {
+        val mCallback = object : AudioTimerService.Callback {
+            override fun onTick(targetTime: Long, duration: Long, leftTime: Long) {
+                callback.onTick(targetTime, duration, leftTime)
+            }
+            override fun onTick(displayText: String) {
+                callback.onTick(displayText)
+            }
+        }
+        tickCallbacks[callback] = mCallback
+        AudioTimerService.addCallback(mCallback)
+    }
+
+    @Suppress("unused")
+    fun removeCallback(callback: AtCallback) {
+        AudioTimerService.removeCallback(tickCallbacks[callback])
+        tickCallbacks.remove(callback)
     }
 }

@@ -50,7 +50,7 @@ val signingKeyPassword: String = properties.getProperty("signingKeyPassword", ""
 //}
 
 android {
-    buildToolsVersion = "30.0.0"
+    buildToolsVersion = "30.0.2"
     sourceSets {
         getByName("main").java.srcDir("src/main/kotlin")
     }
@@ -69,8 +69,8 @@ android {
         applicationId = "com.madness.collision"
         minSdkVersion(22)
         targetSdkVersion(30)
-        versionCode = 20080801
-        versionName = "3.6.2"
+        versionCode = 20090512
+        versionName = "3.6.3"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testApplicationId = "${applicationId}.test"
         renderscriptSupportModeEnabled = true
@@ -98,16 +98,16 @@ android {
     flavorDimensions("arch")
     productFlavors {
         create("full") {
-            setDimension("arch")
+            dimension = "arch"
         }
         create("arm") {
-            setDimension("arch")
+            dimension = "arch"
             ndk{
                 abiFilters("armeabi-v7a", "arm64-v8a")
             }
         }
         create("x86") {
-            setDimension("arch")
+            dimension = "arch"
             ndk{
                 abiFilters("x86", "x86_64")
             }
@@ -187,7 +187,8 @@ dependencies {
             Dependencies.googlePlayCore,
             Dependencies.jsoup,
             Dependencies.kotlinStdlib,
-            Dependencies.kotlinReflect
+            Dependencies.kotlinReflect,
+            Dependencies.rxJava
     ).forEach { implementation(it) }
 
     listOf(

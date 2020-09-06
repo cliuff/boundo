@@ -41,7 +41,7 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         mCallback = object : AudioTimerService.Callback {
-            override fun onTick(targetTime: Long, leftTime: Long) {
+            override fun onTick(targetTime: Long, duration: Long, leftTime: Long) {
             }
 
             override fun onTick(displayText: String) {
