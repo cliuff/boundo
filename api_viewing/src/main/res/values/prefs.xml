@@ -40,6 +40,7 @@
         <item>@string/av_settings_tag_flu</item>
         <item>@string/av_settings_tag_rn</item>
         <item>@string/av_settings_tag_xam</item>
+        <item>@string/av_settings_tag_kot</item>
         <item>@string/av_settings_tag_arm</item>
         <item>@string/av_settings_tag_x86</item>
         <item>@string/av_settings_tag_hidden</item>
@@ -53,6 +54,7 @@
         <item>@string/prefAvTagsValueCrossPlatformFlu</item>
         <item>@string/prefAvTagsValueCrossPlatformRn</item>
         <item>@string/prefAvTagsValueCrossPlatformXam</item>
+        <item>@string/prefAvTagsValueKotlin</item>
         <item>@string/prefAvTagsValueNativeLibArm</item>
         <item>@string/prefAvTagsValueNativeLibX86</item>
         <item>@string/prefAvTagsValueHidden</item>
@@ -65,6 +67,7 @@
     <string name="prefAvTagsValueCrossPlatformFlu" translatable="false">avTagsValCpFlu</string>
     <string name="prefAvTagsValueCrossPlatformRn" translatable="false">avTagsValCpRn</string>
     <string name="prefAvTagsValueCrossPlatformXam" translatable="false">avTagsValCpXar</string>
+    <string name="prefAvTagsValueKotlin" translatable="false">avTagsValKot</string>
     <string name="prefAvTagsValueNativeLibArm" translatable="false">avTagsValNlArm</string>
     <string name="prefAvTagsValueNativeLibX86" translatable="false">avTagsValNlX86</string>
     <string name="prefAvTagsValueHidden" translatable="false">avTagsValueHidden</string>

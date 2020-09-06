@@ -27,6 +27,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
 import androidx.core.view.forEach
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
@@ -42,12 +43,14 @@ internal object AppTag {
     private const val TAG_KEY_FLUTTER = "flu"
     private const val TAG_KEY_REACT_NATIVE = "rn"
     private const val TAG_KEY_Xamarin = "xam"
+    private const val TAG_KEY_Kotlin = "kot"
 
     private const val TAG_ID_GP = R.string.prefAvTagsValuePackageInstallerGp
     private const val TAG_ID_PI = R.string.prefAvTagsValuePackageInstallerPi
     private const val TAG_ID_FLU = R.string.prefAvTagsValueCrossPlatformFlu
     private const val TAG_ID_RN = R.string.prefAvTagsValueCrossPlatformRn
     private const val TAG_ID_XAM = R.string.prefAvTagsValueCrossPlatformXam
+    private const val TAG_ID_KOT = R.string.prefAvTagsValueKotlin
     private const val TAG_ID_ARM = R.string.prefAvTagsValueNativeLibArm
     private const val TAG_ID_X86 = R.string.prefAvTagsValueNativeLibX86
     private const val TAG_ID_HID = R.string.prefAvTagsValueHidden
@@ -68,6 +71,7 @@ internal object AppTag {
             TAG_ID_FLU,
             TAG_ID_RN,
             TAG_ID_XAM,
+            TAG_ID_KOT,
             TAG_ID_ARM,
             TAG_ID_X86,
             TAG_ID_HID,
@@ -82,6 +86,7 @@ internal object AppTag {
     private var shouldShowTagCrossPlatformFlutter = false
     private var shouldShowTagCrossPlatformReactNative = false
     private var shouldShowTagCrossPlatformXamarin = false
+    private var shouldShowTagKotlin = false
     private val shouldShowTagCrossPlatform: Boolean
         get() = shouldShowTagCrossPlatformFlutter || shouldShowTagCrossPlatformReactNative || shouldShowTagCrossPlatformXamarin
     private var shouldShowTagNativeLibArm = false
@@ -130,7 +135,7 @@ internal object AppTag {
 
     private fun makeTagIcon(context: Context, resId: Int): Bitmap? {
         val drawable = try {
-            context.getDrawable(resId)
+            ContextCompat.getDrawable(context, resId)
         } catch (e: Resources.NotFoundException) {
             e.printStackTrace()
             null
@@ -192,12 +197,7 @@ internal object AppTag {
                 null
             }?.installingPackageName
         } else {
-            try {
-                context.packageManager.getInstallerPackageName(appInfo.packageName)
-            } catch (e: IllegalArgumentException) {
-                e.printStackTrace()
-                null
-            }
+            getInstallerLegacy(context, appInfo)
         } ?: return null
         // real name should be used when showing tag name
         // use package name when showing tag icon only
@@ -221,6 +221,16 @@ internal object AppTag {
         return installer
     }
 
+    @Suppress("deprecation")
+    private fun getInstallerLegacy(context: Context, app: ApiViewingApp): String? {
+        return try {
+            context.packageManager.getInstallerPackageName(app.packageName)
+        } catch (e: IllegalArgumentException) {
+            e.printStackTrace()
+            null
+        }
+    }
+
     /**
      * prepare res for native lib tags
      */
@@ -228,6 +238,7 @@ internal object AppTag {
         val isAntiedFlu = isAntied(context, TAG_ID_FLU)
         val isAntiedRn = isAntied(context, TAG_ID_RN)
         val isAntiedXam = isAntied(context, TAG_ID_XAM)
+        val isAntiedKot = isAntied(context, TAG_ID_KOT)
         if (shouldShowTagCrossPlatformFlutter || (!isAntiedFlu && (isAntiedRn || isAntiedXam))) {
             ensureTagIcon(context, TAG_KEY_FLUTTER, R.drawable.ic_flutter_72)
         }
@@ -237,9 +248,12 @@ internal object AppTag {
         if (shouldShowTagCrossPlatformXamarin || (!isAntiedXam && (isAntiedRn || isAntiedFlu))) {
             ensureTagIcon(context, TAG_KEY_Xamarin, R.drawable.ic_xamarin_72)
         }
+        if (shouldShowTagKotlin || !isAntiedKot) {
+            ensureTagIcon(context, TAG_KEY_Kotlin, R.drawable.ic_kotlin_72)
+        }
         // anti any one requires further look-up to confirm
-        val isAnyAntied = isAntiedFlu || isAntiedRn || isAntiedXam || isAntied(context, TAG_ID_ARM) || isAntied(context, TAG_ID_X86)
-        if (shouldShowTagCrossPlatform || shouldShowTagNativeLib || isAnyAntied) {
+        val isAnyAntied = isAntiedFlu || isAntiedRn || isAntiedXam || isAntiedKot || isAntied(context, TAG_ID_ARM) || isAntied(context, TAG_ID_X86)
+        if (shouldShowTagCrossPlatform || shouldShowTagKotlin || shouldShowTagNativeLib || isAnyAntied) {
             if (!appInfo.isNativeLibrariesRetrieved) {
                 appInfo.retrieveNativeLibraries()
             }
@@ -304,9 +318,12 @@ internal object AppTag {
         if ((shouldShowTagCrossPlatformXamarin || (!isAntiedXam && (isAntiedRn || isAntiedFlu))) && nls[6]) {
             holder.inflateTag(context, "Xamarin", tagIcons[TAG_KEY_Xamarin])
         }
+        if (shouldShowTagKotlin && !isAntied(context, TAG_ID_KOT) && nls[7]) {
+            holder.inflateTag(context, "Kotlin", tagIcons[TAG_KEY_Kotlin])
+        }
         if (shouldShowTagNativeLibArm && !isAntied(context, TAG_ID_ARM)) {
-            if (nls[0]) holder.inflateTag(context, "arm32")
-            if (nls[1]) holder.inflateTag(context, "arm64")
+            if (nls[0]) holder.inflateTag(context, "ARM")
+            if (nls[1]) holder.inflateTag(context, "ARM 64")
         }
         if (shouldShowTagNativeLibX86 && !isAntied(context, TAG_ID_X86)) {
             if (nls[2]) holder.inflateTag(context, "x86")
@@ -375,6 +392,8 @@ internal object AppTag {
         else if (isAntied(context, TAG_ID_RN) && !nls[5]) return true
         if (shouldShowTagCrossPlatformXamarin && nls[6]) return true
         else if (isAntied(context, TAG_ID_XAM) && !nls[6]) return true
+        if (shouldShowTagKotlin && nls[7]) return true
+        else if (isAntied(context, TAG_ID_KOT) && !nls[7]) return true
 
         // an item can be both arm and x86, this is different from package installer tag relationship
         // actually this is the universal relationship between every tag
@@ -435,6 +454,7 @@ internal object AppTag {
         shouldShowTagCrossPlatformFlutter = isSelected(context, TAG_ID_FLU)
         shouldShowTagCrossPlatformReactNative = isSelected(context, TAG_ID_RN)
         shouldShowTagCrossPlatformXamarin = isSelected(context, TAG_ID_XAM)
+        shouldShowTagKotlin = isSelected(context, TAG_ID_KOT)
         shouldShowTagNativeLibArm = isSelected(context, TAG_ID_ARM)
         shouldShowTagNativeLibX86 = isSelected(context, TAG_ID_X86)
         shouldShowTagHidden = isSelected(context, TAG_ID_HID)

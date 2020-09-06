@@ -91,6 +91,7 @@
     <string name="av_settings_tag_flu" translatable="false">Flutter</string>
     <string name="av_settings_tag_rn" translatable="false">React Native</string>
     <string name="av_settings_tag_xam" translatable="false">Xamarin</string>
+    <string name="av_settings_tag_kot" translatable="false">Kotlin</string>
     <string name="av_settings_tag_arm" translatable="false">ARM</string>
     <string name="av_settings_tag_x86" translatable="false">x86</string>
     <string name="av_main_filter_tip">Try long-pressing a tag</string>
