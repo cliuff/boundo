@@ -16,10 +16,19 @@
 
 package com.madness.collision.util.task
 
-interface Result {
+class TaskResult<D, R>(override val isSuccess: Boolean, data: D? = null,
+                       reason: R? = null): Resultful<D, R> {
+    private val mData = data
+    private val mReason = reason
+
+    override val data: D?
+        get() = mData
+    override val failingReason: R?
+        get() = mReason
 
     companion object {
-        const val SUCCESSFUL = "Result.SUCCESSFUL"
-        const val FAILED = "Result.FAILED"
+        fun <D> success(data: D? = null) = TaskResult<D, Any>(true, data = data)
+
+        fun <R> failure(reason: R? = null) = TaskResult<Any, R>(false, reason = reason)
     }
 }
