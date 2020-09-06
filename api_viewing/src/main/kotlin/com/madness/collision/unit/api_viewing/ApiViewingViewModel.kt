@@ -30,6 +30,7 @@ import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.database.AppRoom
 import com.madness.collision.util.F
+import com.madness.collision.util.StringUtils
 import com.madness.collision.util.X
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -38,8 +39,6 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
-import java.text.Collator
-import java.util.*
 import java.util.stream.Collectors
 import kotlin.Comparator
 import kotlin.collections.ArrayList
@@ -336,21 +335,7 @@ internal class ApiViewingViewModel(application: Application): AndroidViewModel(a
     companion object {
 
         private fun compareName(o1: ApiViewingApp, o2: ApiViewingApp): Int {
-            return Collator.getInstance(Locale.CHINESE).compare(o1.name, o2.name)
-//            val compareIn = { locale: Locale ->
-//                Collator.getInstance(locale).compare(o1.name, o2.name)
-//            }
-//            if (X.aboveOn(X.N)) {
-//                val locales = LocaleList.getAdjustedDefault()
-//                var re = 0
-//                for (i in 0 until locales.size()) {
-//                    re = compareIn(locales[i])
-//                    if (re != 0) return re
-//                }
-//                return re
-//            } else {
-//                return compareIn(Locale.getDefault())
-//            }
+            return StringUtils.compareName(o1.name, o2.name)
         }
 
         fun sortList(list: List<ApiViewingApp>, sortItem: Int): List<ApiViewingApp> {

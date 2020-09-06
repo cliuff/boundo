@@ -25,11 +25,9 @@ import com.google.android.material.card.MaterialCardView
 import com.madness.collision.databinding.AdapterUnitsBinding
 import com.madness.collision.diy.SandwichAdapter
 import com.madness.collision.main.MainViewModel
+import com.madness.collision.util.StringUtils
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.text.Collator
-import java.util.*
-import kotlin.Comparator
 
 internal class UnitsAdapter(context: Context, private val mainViewModel: MainViewModel)
     : SandwichAdapter<UnitsAdapter.UnitsHolder>(context) {
@@ -43,7 +41,9 @@ internal class UnitsAdapter(context: Context, private val mainViewModel: MainVie
     private val mInflater: LayoutInflater = LayoutInflater.from(mContext)
     private val mAvailableDescriptions = Unit.getInstalledUnits(mContext).mapNotNull {
         Unit.getDescription(it)
-    }.filter { it.isAvailable(mContext) }.sortedWith(Comparator { o1, o2 -> Collator.getInstance(Locale.CHINESE).compare(o1.getName(context), o2.getName(context)) })
+    }.filter { it.isAvailable(mContext) }.sortedWith { o1, o2 ->
+        StringUtils.compareName(o1.getName(context), o2.getName(context))
+    }
 
     override var spanCount: Int = 1
     override val listCount: Int = mAvailableDescriptions.size

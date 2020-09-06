@@ -29,10 +29,8 @@ import com.madness.collision.R
 import com.madness.collision.databinding.AdapterUnitsManagerBinding
 import com.madness.collision.diy.SandwichAdapter
 import com.madness.collision.main.MainViewModel
+import com.madness.collision.util.StringUtils
 import com.madness.collision.util.ThemeUtil
-import java.text.Collator
-import java.util.*
-import kotlin.Comparator
 
 internal class UnitsManagerAdapter(context: Context, splitInstallManager: SplitInstallManager, private val mainViewModel: MainViewModel)
     : SandwichAdapter<UnitsManagerAdapter.UnitViewHolder>(context) {
@@ -49,7 +47,9 @@ internal class UnitsManagerAdapter(context: Context, splitInstallManager: SplitI
     private val installedUnits = Unit.getInstalledUnits(splitInstallManager)
     private val mDescriptions: List<Description>
     init {
-        mDescriptions = Unit.UNITS.mapNotNull { Unit.getDescription(it) }.sortedWith(Comparator { o1, o2 -> Collator.getInstance(Locale.CHINESE).compare(o1.getName(context), o2.getName(context)) })
+        mDescriptions = Unit.UNITS.mapNotNull { Unit.getDescription(it) }.sortedWith { o1, o2 ->
+            StringUtils.compareName(o1.getName(context), o2.getName(context))
+        }
     }
     private val colorPass: Int by lazy { ThemeUtil.getColor(context, R.attr.colorActionPass) }
 

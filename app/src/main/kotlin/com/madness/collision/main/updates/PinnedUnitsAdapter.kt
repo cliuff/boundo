@@ -27,11 +27,9 @@ import com.madness.collision.databinding.AdapterFrequentUnitsBinding
 import com.madness.collision.diy.SandwichAdapter
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.Unit
+import com.madness.collision.util.StringUtils
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.text.Collator
-import java.util.*
-import kotlin.Comparator
 
 internal class PinnedUnitsAdapter(context: Context, private val mainViewModel: MainViewModel)
     : SandwichAdapter<PinnedUnitsAdapter.UnitsHolder>(context) {
@@ -46,7 +44,9 @@ internal class PinnedUnitsAdapter(context: Context, private val mainViewModel: M
     private val mInflater: LayoutInflater = LayoutInflater.from(mContext)
     private val pinnedUnitsDescriptions = Unit.getPinnedUnits(mContext).mapNotNull {
         Unit.getDescription(it)
-    }.filter { it.isAvailable(mContext) }.sortedWith(Comparator { o1, o2 -> Collator.getInstance(Locale.CHINESE).compare(o1.getName(context), o2.getName(context)) })
+    }.filter { it.isAvailable(mContext) }.sortedWith { o1, o2 ->
+        StringUtils.compareName(o1.getName(context), o2.getName(context))
+    }
 
     override var spanCount: Int = 1
     override val listCount: Int = pinnedUnitsDescriptions.size
