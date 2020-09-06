@@ -28,7 +28,6 @@ import android.net.Uri
 import android.os.*
 import android.provider.DocumentsContract
 import android.view.*
-import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
@@ -186,7 +185,8 @@ class MyUnit: com.madness.collision.unit.Unit() {
                 searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
                     override fun onQueryTextSubmit(query: String?): Boolean {
                         val context = context ?: return true
-                        (context.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager?)?.hideSoftInputFromWindow(searchView.windowToken, 0)
+                        val window = activity?.window ?: return true
+                        SystemUtil.hideImeCompat(context, searchView, window)
                         searchView.clearFocus()
                         return true
                     }

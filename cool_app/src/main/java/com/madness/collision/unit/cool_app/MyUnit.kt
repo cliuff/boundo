@@ -26,7 +26,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -36,6 +35,7 @@ import androidx.core.content.edit
 import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.Unit
 import com.madness.collision.util.P
+import com.madness.collision.util.SystemUtil
 import com.madness.collision.versatile.AppInfoWidget
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -66,37 +66,37 @@ class MyUnit: Unit() {
                 P.APP_INFO_PACKAGE_DEFAULT)
                 ?: P.APP_INFO_PACKAGE_DEFAULT
         sync(packageName)
-        view?.run {
-            val focus: View = findViewById(R.id.app_info_focus)
-            focus.requestFocus()
-            val etName: EditText = findViewById(R.id.app_info_name)
-            etName.setText(packageName)
-            etName.setSelectAllOnFocus(true)
-            etName.setOnEditorActionListener{ v, actionId, event ->
-                if ((event != null && event.keyCode == KeyEvent.KEYCODE_ENTER) ||
-                        actionId == EditorInfo.IME_ACTION_DONE) {
-                    if (v.text == null || v.text.toString().isEmpty()) {
-                        return@setOnEditorActionListener false
-                    }
-                    focus.requestFocus()
-                    val inputMethodManager = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    inputMethodManager.hideSoftInputFromWindow(v.windowToken, 0)
-                    val tvRating: TextView = findViewById(R.id.caRating)
-                    val tvDownloads: TextView = findViewById(R.id.app_info_downloads)
-                    val tvFlowers: TextView = findViewById(R.id.app_info_flowers)
-                    val tvComments: TextView = findViewById(R.id.app_info_comments)
-                    val progressBar: ProgressBar = findViewById(R.id.app_info_progress)
-                    tvComments.visibility = View.GONE
-                    tvFlowers.visibility = View.GONE
-                    tvDownloads.visibility = View.GONE
-                    tvRating.visibility = View.GONE
-                    progressBar.visibility = View.VISIBLE
-                    sync(v.text.toString())
-                    prefSettings?.edit { putString(P.APP_INFO_PACKAGE, v.text.toString()) }
-                    return@setOnEditorActionListener true
+        val view = view ?: return
+        val focus: View = view.findViewById(R.id.app_info_focus)
+        focus.requestFocus()
+        val etName: EditText = view.findViewById(R.id.app_info_name)
+        etName.setText(packageName)
+        etName.setSelectAllOnFocus(true)
+        etName.setOnEditorActionListener{ v, actionId, event ->
+            if ((event != null && event.keyCode == KeyEvent.KEYCODE_ENTER) ||
+                    actionId == EditorInfo.IME_ACTION_DONE) {
+                if (v.text == null || v.text.toString().isEmpty()) {
+                    return@setOnEditorActionListener false
                 }
-                false
+                focus.requestFocus()
+                val context = context ?: return@setOnEditorActionListener true
+                val window = activity?.window ?: return@setOnEditorActionListener true
+                SystemUtil.hideImeCompat(context, v, window)
+                val tvRating: TextView = view.findViewById(R.id.caRating)
+                val tvDownloads: TextView = view.findViewById(R.id.app_info_downloads)
+                val tvFlowers: TextView = view.findViewById(R.id.app_info_flowers)
+                val tvComments: TextView = view.findViewById(R.id.app_info_comments)
+                val progressBar: ProgressBar = view.findViewById(R.id.app_info_progress)
+                tvComments.visibility = View.GONE
+                tvFlowers.visibility = View.GONE
+                tvDownloads.visibility = View.GONE
+                tvRating.visibility = View.GONE
+                progressBar.visibility = View.VISIBLE
+                sync(v.text.toString())
+                prefSettings?.edit { putString(P.APP_INFO_PACKAGE, v.text.toString()) }
+                return@setOnEditorActionListener true
             }
+            false
         }
     }
 
@@ -106,44 +106,45 @@ class MyUnit: Unit() {
             app = CoolApp(packageName)
             app.retrieve()
         }.invokeOnCompletion {
-            view?.run {
-                val tvRating: TextView = findViewById(R.id.caRating)
-                val tvDownloads: TextView = findViewById(R.id.app_info_downloads)
-                val tvFlowers: TextView = findViewById(R.id.app_info_flowers)
-                val tvComments: TextView = findViewById(R.id.app_info_comments)
-                val progressBar: ProgressBar = findViewById(R.id.app_info_progress)
-                val vLogo: ImageView = findViewById(R.id.appInfoLogo)
-                if (app.isNotHealthy()){
-                    GlobalScope.launch(Dispatchers.Main) {
-                        tvDownloads.setText(MainR.string.text_parse_fails)
-                        tvDownloads.visibility = View.VISIBLE
-                        progressBar.visibility = View.GONE
-                    }
-                    return@invokeOnCompletion
-                }
-                val infoRating = String.format("%.1f", app.rating)
-                val infoDownloads = String.format("%.0f", app.countDownloads)
-                val infoFlowers = String.format("%.0f", app.countFlowers)
-                val infoComments = String.format("%.0f", app.countComments)
+            val view = view ?: return@invokeOnCompletion
+            val tvRating: TextView = view.findViewById(R.id.caRating)
+            val tvDownloads: TextView = view.findViewById(R.id.app_info_downloads)
+            val tvFlowers: TextView = view.findViewById(R.id.app_info_flowers)
+            val tvComments: TextView = view.findViewById(R.id.app_info_comments)
+            val progressBar: ProgressBar = view.findViewById(R.id.app_info_progress)
+            val vLogo: ImageView = view.findViewById(R.id.appInfoLogo)
+            if (app.isNotHealthy()){
                 GlobalScope.launch(Dispatchers.Main) {
-                    tvRating.text = infoRating
-                    tvDownloads.text = infoDownloads
-                    tvFlowers.text = infoFlowers
-                    tvComments.text = infoComments
-                    vLogo.setImageBitmap(app.logo)
-                    progressBar.visibility = View.GONE
-                    tvRating.visibility = View.VISIBLE
+                    tvDownloads.setText(MainR.string.text_parse_fails)
                     tvDownloads.visibility = View.VISIBLE
-                    tvFlowers.visibility = View.VISIBLE
-                    tvComments.visibility = View.VISIBLE
+                    progressBar.visibility = View.GONE
                 }
-                // update widgets
-                val intent = Intent(activity, AppInfoWidget::class.java)
-                intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
-                val ids = AppWidgetManager.getInstance(activity).getAppWidgetIds(ComponentName(activity!!, AppInfoWidget::class.java))
-                intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
-                activity!!.sendBroadcast(intent)
+                return@invokeOnCompletion
             }
+            val infoRating = String.format("%.1f", app.rating)
+            val infoDownloads = String.format("%.0f", app.countDownloads)
+            val infoFlowers = String.format("%.0f", app.countFlowers)
+            val infoComments = String.format("%.0f", app.countComments)
+            GlobalScope.launch(Dispatchers.Main) {
+                tvRating.text = infoRating
+                tvDownloads.text = infoDownloads
+                tvFlowers.text = infoFlowers
+                tvComments.text = infoComments
+                vLogo.setImageBitmap(app.logo)
+                progressBar.visibility = View.GONE
+                tvRating.visibility = View.VISIBLE
+                tvDownloads.visibility = View.VISIBLE
+                tvFlowers.visibility = View.VISIBLE
+                tvComments.visibility = View.VISIBLE
+            }
+            // update widgets
+            val intent = Intent(activity, AppInfoWidget::class.java)
+            intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+            val context = context ?: return@invokeOnCompletion
+            val comp = ComponentName(context, AppInfoWidget::class.java)
+            val ids = AppWidgetManager.getInstance(activity).getAppWidgetIds(comp)
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
+            context.sendBroadcast(intent)
         }
     }
 }

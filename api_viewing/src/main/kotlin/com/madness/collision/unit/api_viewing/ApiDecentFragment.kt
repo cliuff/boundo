@@ -23,7 +23,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
@@ -77,10 +79,17 @@ internal class ApiDecentFragment : TaggedFragment(), Democratic {
     private fun updateBars() {
         val context = context ?: return
         activity?.window?.let { window ->
-            window.decorView.systemUiVisibility = window.decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_LOW_PROFILE
+            // Low profile mode is deprecated since Android 11.
+            if (X.belowOff(X.R)) applyLowProfileModeLegacy(window)
             SystemUtil.applyStatusBarColor(context, window, isDarkBar, isTransparentBar = true)
             SystemUtil.applyNavBarColor(context, window, isDarkBar, isTransparentBar = true)
         }
+    }
+
+    @Suppress("deprecation")
+    private fun applyLowProfileModeLegacy(window: Window) {
+        val decorView = window.decorView
+        decorView.systemUiVisibility = decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_LOW_PROFILE
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -117,7 +126,7 @@ internal class ApiDecentFragment : TaggedFragment(), Democratic {
                         apiDecentChipCodeName.text = Utils.getAndroidCodenameByAPI(context, api)
                         if (apiDecentChipCodeName.text.isBlank()) apiDecentChipCodeName.visibility = View.GONE
                         val resId = APIAdapter.getAndroidCodenameImageRes(letter)
-                        apiDecentChipCodeName.chipIcon = if (resId == 0) null else context.getDrawable(resId)
+                        apiDecentChipCodeName.chipIcon = if (resId == 0) null else ContextCompat.getDrawable(context, resId)
                         val colorText = APIAdapter.getItemColorText(api)
                         arrayOf(apiDecentLabel, apiDecentChipAPI, apiDecentChipVer, apiDecentChipCodeName, apiDecentAPILabel, apiDecentVer).forEach { view ->
                             view.setTextColor(colorText)

@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020 Clifford Liu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.madness.collision.versatile
 
 import android.app.Service
@@ -24,6 +40,10 @@ import com.madness.collision.util.NotificationsUtil
 import com.madness.collision.util.SystemUtil
 import com.madness.collision.util.ThemeUtil
 import com.madness.collision.util.X
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.lang.ref.WeakReference
 
 internal class ScreenCapturingService: Service() {
     companion object {
@@ -31,23 +51,27 @@ internal class ScreenCapturingService: Service() {
         const val ARG_DATA = "data"
 
         private const val CAPTURE_NAME = "BoundoCapture"
-        private const val VIRTUAL_DISPLAY_FLAGS = DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY or DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC
+        private const val VIRTUAL_DISPLAY_FLAGS = DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY or
+                DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC
         private lateinit var sMediaProjection: MediaProjection
 
         var capture: Bitmap? = null
+        // Service cannot obtain display by its context
+        var uiContext: WeakReference<Context>? = null
     }
 
     private lateinit var mProjectionManager: MediaProjectionManager
-    private lateinit var  mImageReader:ImageReader
-    private lateinit var  mHandler:Handler
-    private lateinit var  mDisplay:Display
-    private lateinit var  mVirtualDisplay:VirtualDisplay
+    private lateinit var mImageReader: ImageReader
+    private lateinit var mHandler: Handler
+    private var mDisplay: Display? = null
+    private lateinit var mVirtualDisplay: VirtualDisplay
     private var mWidth = 0
     private var mHeight = 0
     private var mRotation = 0
     private lateinit var  mOrientationChangeCallback: OrientationChangeCallback
     private lateinit var windowManager: WindowManager
     private var localeContext: Context? = null
+    private var context: Context = this
 
     inner class ImageAvailableListener : ImageReader.OnImageAvailableListener {
         override fun onImageAvailable(reader: ImageReader) {
@@ -60,9 +84,13 @@ internal class ScreenCapturingService: Service() {
             val pixelStride = planes[0].pixelStride
             val rowStride = planes[0].rowStride
             val rowPadding = rowStride - pixelStride * mWidth
+            val width = mWidth + rowPadding / pixelStride
 
-            capture = Bitmap.createBitmap(mWidth + rowPadding / pixelStride, mHeight, Bitmap.Config.ARGB_8888)
-            capture!!.copyPixelsFromBuffer(buffer)
+            // todo width is bigger than actual width but is the only right one for this bitmap,
+            // using mWidth instead will not produce desired image
+            val bitmap = Bitmap.createBitmap(width, mHeight, Bitmap.Config.ARGB_8888)
+            bitmap.copyPixelsFromBuffer(buffer)
+            capture = bitmap
 
             if (X.aboveOn(X.P)) reader.discardFreeBuffers()
             reader.close()
@@ -71,18 +99,18 @@ internal class ScreenCapturingService: Service() {
 
     inner class OrientationChangeCallback(context: Context) : OrientationEventListener(context) {
         override fun onOrientationChanged(orientation: Int) {
-            val rotation = mDisplay.rotation
-            if (rotation != mRotation) {
-                mRotation = rotation
-                try {
-                    // clean up
-                    mVirtualDisplay.release()
-                    mImageReader.setOnImageAvailableListener(null, null)
-                    // re-create virtual display depending on device width / height
-                    createVirtualDisplay()
-                } catch ( e: Exception) {
-                    e.printStackTrace()
-                }
+            val display = mDisplay ?: return
+            val rotation = display.rotation
+            if (rotation == mRotation) return
+            mRotation = rotation
+            try {
+                // clean up
+                mVirtualDisplay.release()
+                mImageReader.setOnImageAvailableListener(null, null)
+                // re-create virtual display depending on device width / height
+                createVirtualDisplay()
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }
@@ -98,10 +126,10 @@ internal class ScreenCapturingService: Service() {
 
     override fun onCreate() {
         super.onCreate()
+        context = uiContext?.get() ?: this
         windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
         mProjectionManager = getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
         if (X.aboveOn(X.Q)){
-            val context = this
             localeContext = SystemUtil.getLocaleContextSys(context)
         }
     }
@@ -110,7 +138,6 @@ internal class ScreenCapturingService: Service() {
         val resultCode = intent?.getIntExtra(ARG_RESULT_CODE, 0) ?: 0
         val data: Intent = intent?.getParcelableExtra(ARG_DATA) ?: return super.onStartCommand(intent, flags, startId)
         if (X.aboveOn(X.Q)){
-            val context = this
             val color = X.getColor(context, if (ThemeUtil.getIsNight(context)) R.color.primaryABlack else R.color.primaryAWhite)
             val builder = NotificationsUtil.Builder(context, NotificationsUtil.CHANNEL_SERVICE)
                     .setSmallIcon(R.drawable.ic_notify_logo)
@@ -132,32 +159,36 @@ internal class ScreenCapturingService: Service() {
         // start capture handling thread
         Thread {
             Looper.prepare()
-            mHandler = Handler()
-            mHandler.postDelayed({
+            mHandler = Handler(Looper.myLooper()!!)
+            GlobalScope.launch {
+                delay(200)
                 startProjection(resultCode, data)
-            }, 200)
+            }
             Looper.loop()
         }.start()
     }
 
     private fun startProjection(resultCode: Int, data: Intent) {
         sMediaProjection = mProjectionManager.getMediaProjection(resultCode, data)
-        mDisplay = windowManager.defaultDisplay
-        mOrientationChangeCallback = OrientationChangeCallback(this)
+        mDisplay = SystemUtil.getDisplay(context)
+        mOrientationChangeCallback = OrientationChangeCallback(context)
         if (mOrientationChangeCallback.canDetectOrientation()) mOrientationChangeCallback.enable()
         sMediaProjection.registerCallback(MediaProjectionStopCallback(), mHandler)
-        Handler().postDelayed({ createVirtualDisplay() }, 100)
+        GlobalScope.launch {
+            delay(100)
+            createVirtualDisplay()
+        }
     }
 
     private fun createVirtualDisplay() {
         val size = Point()
-        windowManager.defaultDisplay.getRealSize(size)
+        mDisplay?.getRealSize(size)
         mWidth = size.x
         mHeight = size.y
         mImageReader = ImageReader.newInstance(mWidth, mHeight, PixelFormat.RGBA_8888, 1)
+        val dpi = context.resources.displayMetrics.densityDpi
         mVirtualDisplay = sMediaProjection.createVirtualDisplay(
-                CAPTURE_NAME, mWidth, mHeight,
-                resources.displayMetrics.densityDpi,
+                CAPTURE_NAME, mWidth, mHeight, dpi,
                 VIRTUAL_DISPLAY_FLAGS, mImageReader.surface,
                 null, mHandler
         )
@@ -165,7 +196,11 @@ internal class ScreenCapturingService: Service() {
     }
 
     private fun stopProjection() {
+        uiContext = null
         mHandler.post{ sMediaProjection.stop() }
-        mHandler.postDelayed({ stopSelf() }, 500)
+        GlobalScope.launch {
+            delay(500)
+            stopSelf()
+        }
     }
 }

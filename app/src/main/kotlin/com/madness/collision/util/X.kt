@@ -31,6 +31,7 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Handler
 import android.util.TypedValue
+import android.view.Display
 import android.view.Surface
 import android.view.View
 import android.view.WindowManager
@@ -313,20 +314,32 @@ object X {
         return Integer.toHexString(getColor(context, colorRes) and 0x00ffffff)
     }
 
-    fun  getPortraitRealResolution(context: Context): Point{
-        val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager? ?: return Point()
+    fun getPortraitRealResolution(context: Context): Point {
+        val display = SystemUtil.getDisplay(context) ?: return Point()
         val size = Point()
-        //subject to device rotation regardless of ORIENTATION value
-        windowManager.defaultDisplay.getRealSize(size)
-        val rotation = windowManager.defaultDisplay.rotation
+        // subject to device rotation regardless of ORIENTATION value
+        display.getRealSize(size)
+        val rotation = display.rotation
         return if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) Point(size.y, size.x) else size
     }
 
-    fun  getCurrentAppResolution(context: Context): Point{
-        val size = Point()
-        val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager? ?: return Point()
-        windowManager.defaultDisplay.getSize(size)
-        return size
+    fun getCurrentAppResolution(context: Context): Point {
+        return if (aboveOn(R)) {
+            val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager? ?: return Point()
+            val metrics = windowManager.currentWindowMetrics
+            val bounds = metrics.bounds
+            Point(bounds.width(), bounds.height())
+        } else {
+            val display = SystemUtil.getDisplay(context) ?: return Point()
+            val size = Point()
+            display.getSizeLegacy(size)
+            size
+        }
+    }
+
+    @Suppress("deprecation")
+    private fun Display.getSizeLegacy(size: Point) {
+        getSize(size)
     }
 
     /**

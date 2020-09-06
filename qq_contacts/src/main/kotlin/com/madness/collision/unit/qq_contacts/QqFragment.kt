@@ -34,7 +34,7 @@ import android.widget.ProgressBar
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.Fragment
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import com.madness.collision.Democratic
 import com.madness.collision.R
@@ -160,8 +160,8 @@ internal class QqFragment : TaggedFragment(), Democratic {
         }
     }
 
-    private fun setAvatarDefault(context: Context){
-        val imgGallery = context.getDrawable(R.drawable.img_gallery) ?: return
+    private fun setAvatarDefault(context: Context) {
+        val imgGallery = ContextCompat.getDrawable(context, R.drawable.img_gallery) ?: return
         avatar = X.drawableToBitmap(imgGallery)
         circularAvatar = avatar
         instantQqProfile.setImageBitmap(avatar)
@@ -232,14 +232,18 @@ internal class QqFragment : TaggedFragment(), Democratic {
         avatar?.let {
             val path = newContact.getProfilePhotoPath(context)
             if (F.prepare4(path)){
+                val format = if (X.aboveOn(X.R)) Bitmap.CompressFormat.WEBP_LOSSY else webpLegacy
                 try {
-                    it.compress(Bitmap.CompressFormat.WEBP, P.WEBP_COMPRESS_SPACE_FIRST, FileOutputStream(path))
+                    it.compress(format, P.WEBP_COMPRESS_SPACE_FIRST, FileOutputStream(path))
                 } catch ( e: FileNotFoundException) {
                     e.printStackTrace()
                 }
             }
         }
     }
+
+    @Suppress("deprecation")
+    private val webpLegacy = Bitmap.CompressFormat.WEBP
 
     private fun actionGetImage(){
         val getImage = Intent(Intent.ACTION_GET_CONTENT)

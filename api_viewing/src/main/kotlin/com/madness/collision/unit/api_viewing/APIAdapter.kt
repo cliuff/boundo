@@ -43,6 +43,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.animation.doOnEnd
+import androidx.core.content.ContextCompat
 import androidx.core.content.pm.PackageInfoCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -190,7 +191,7 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
             if (res == 0) return
             val drawable: Drawable
             try {
-                drawable = context.getDrawable(res) ?: return
+                drawable = ContextCompat.getDrawable(context, res) ?: return
             } catch (e: Resources.NotFoundException) {
                 e.printStackTrace()
                 return
@@ -213,7 +214,7 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
             if (res == 0) return null
             val drawable: Drawable
             try {
-                drawable = context.getDrawable(res) ?: return null
+                drawable = ContextCompat.getDrawable(context, res) ?: return null
             } catch (e: Resources.NotFoundException) {
                 e.printStackTrace()
                 return null
@@ -522,11 +523,8 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
                     } else {
                         null
                     }
-                } else try {
-                    context.packageManager.getInstallerPackageName(appInfo.packageName)
-                } catch (e: IllegalArgumentException) {
-                    e.printStackTrace()
-                    null
+                } else {
+                    getInstallerLegacy(context, appInfo)
                 }
                 builder.append(context.getString(MyR.string.apiDetailsInsatllFrom), StyleSpan(Typeface.BOLD), spanFlags)
                 if (installer != null) {
@@ -563,7 +561,8 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
                     .append("x86_64 ").append(if (nls[3]) '✓' else '✗').append("  ")
                     .append("Flutter ").append(if (nls[4]) '✓' else '✗').append("  ")
                     .append("React Native ").append(if (nls[5]) '✓' else '✗').append("  ")
-                    .append("Xamarin ").append(if (nls[6]) '✓' else '✗')
+                    .append("Xamarin ").append(if (nls[6]) '✓' else '✗').append("  ")
+                    .append("Kotlin ").append(if (nls[7]) '✓' else '✗')
                     .append('\n')
 
             var permissions: Array<String> = emptyArray()
@@ -573,7 +572,7 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
             var providers: Array<ProviderInfo> = emptyArray()
 
             val flagSignature = if (X.aboveOn(X.P)) PackageManager.GET_SIGNING_CERTIFICATES
-            else PackageManager.GET_SIGNATURES
+            else getSigFlagLegacy
             val flags = PackageManager.GET_PERMISSIONS or PackageManager.GET_ACTIVITIES or
                     PackageManager.GET_RECEIVERS or PackageManager.GET_SERVICES or
                     PackageManager.GET_PROVIDERS or flagSignature
@@ -613,7 +612,7 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
                     }
                 }
             } else {
-                val piSignature = pi.signatures
+                val piSignature = pi.sigLegacy
                 if (piSignature != null) signatures = piSignature
             }
             if (regexFields.isEmpty()) {
@@ -731,6 +730,23 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
             }
         }
     }
+
+    @Suppress("deprecation")
+    private fun getInstallerLegacy(context: Context, app: ApiViewingApp): String? {
+        return try {
+            context.packageManager.getInstallerPackageName(app.packageName)
+        } catch (e: IllegalArgumentException) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    @Suppress("deprecation")
+    private val getSigFlagLegacy = PackageManager.GET_SIGNATURES
+
+    @Suppress("deprecation")
+    private val PackageInfo.sigLegacy: Array<Signature>?
+        get() = signatures
 
     private fun actionIcon(app: ApiViewingApp){
         val path = F.createPath(F.cachePublicPath(context), "App", "Logo", "${app.name}.png")

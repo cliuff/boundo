@@ -1,9 +1,26 @@
+/*
+ * Copyright 2020 Clifford Liu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.madness.collision.unit.themed_wallpaper
 
 import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.drawable.Drawable
 import android.os.Handler
+import android.os.Looper
 import android.service.wallpaper.WallpaperService
 import android.view.SurfaceHolder
 import com.madness.collision.R
@@ -16,10 +33,11 @@ class ThemedWallpaperService : WallpaperService(){
         get() = ThemedWallpaperEasyAccess.background!!
     private var frameRate: Float = 0.1f
         set(value) {
-            frameGap = (1000f / value).toLong()
+            frameGap = (1_000f / value).toLong()
             field = value
         }
-    private var frameGap: Long = 10000L
+    private var frameGap: Long = 10_000L
+    private var wallpaperFrameRate: Float = 0.1f
     private lateinit var prefSettings: SharedPreferences
 
     override fun onCreate() {
@@ -27,7 +45,8 @@ class ThemedWallpaperService : WallpaperService(){
         prefSettings = getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
         val keyApplyDarkPlan = resources.getString(R.string.prefExteriorKeyDarkPlan)
         val planValue = prefSettings.getString(keyApplyDarkPlan, resources.getString(R.string.prefExteriorDefaultDarkPlan)) ?: ""
-        frameRate = if(planValue == resources.getString(R.string.prefExteriorDarkPlanValueSchedule)) 0.05f else 1f
+        wallpaperFrameRate = if(planValue == resources.getString(R.string.prefExteriorDarkPlanValueSchedule)) 0.05f else 1f
+        frameRate = wallpaperFrameRate
         if (ThemedWallpaperEasyAccess.isDead) {
             ThemedWallpaperEasyAccess.wallpaperTimestamp = System.currentTimeMillis()
             ThemedWallpaperEasyAccess.isDead = false
@@ -44,9 +63,9 @@ class ThemedWallpaperService : WallpaperService(){
         return ThemedEngine()
     }
 
-    inner class ThemedEngine: Engine(){
+    inner class ThemedEngine: Engine() {
         private var wallpaperTimestamp = 0L
-        private val handler = Handler()
+        private val handler = Handler(Looper.myLooper()!!)
         private val drawThread = Thread{
             val changed = wallpaperTimestamp != ThemedWallpaperEasyAccess.wallpaperTimestamp || updateWallpaperRes()
             wallpaperTimestamp = ThemedWallpaperEasyAccess.wallpaperTimestamp
@@ -54,9 +73,8 @@ class ThemedWallpaperService : WallpaperService(){
                 themedWallpaper.updateWallpaper(wallpaperDrawable)
                 themedWallpaper.completeTranslate()
             }
-            updateFrame(themedWallpaper.isTranslating || changed, true)
-            // todo sleep?
-//            try { Thread.sleep(frameGap) }catch (e: Exception){}
+            val doTranslate = frameRate == wallpaperFrameRate
+            updateFrame(themedWallpaper.isTranslating || changed, doTranslate)
         }
         private var offsetRatio: Float = 0f
         private var offsetStepRatio: Float = 1f
@@ -71,8 +89,9 @@ class ThemedWallpaperService : WallpaperService(){
 
         override fun onVisibilityChanged(visible: Boolean) {
             super.onVisibilityChanged(visible)
-            if (visible) updateFrame(false)
-            else cease()
+            // Continue detecting dark mode to avoid obtrusive wallpaper change when screen unlocked
+            frameRate = if (visible) wallpaperFrameRate else (wallpaperFrameRate / 120)
+            updateFrame(false)
         }
 
         override fun onOffsetsChanged(xOffset: Float, yOffset: Float, xOffsetStep: Float, yOffsetStep: Float, xPixelOffset: Int, yPixelOffset: Int) {
@@ -80,6 +99,10 @@ class ThemedWallpaperService : WallpaperService(){
             offsetRatio = xOffset
             offsetStepRatio = xOffsetStep
             updateFrame(true)
+        }
+
+        override fun onZoomChanged(zoom: Float) {
+            super.onZoomChanged(zoom)
         }
 
         override fun onSurfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {
@@ -94,16 +117,19 @@ class ThemedWallpaperService : WallpaperService(){
                 drawFrame()
             }
             cease()
-            if (isVisible) handler.postDelayed(drawThread, if (themedWallpaper.isTranslating) ThemedWallpaper.FRAME_GAP else frameGap)
+            val fg = if (themedWallpaper.isTranslating) ThemedWallpaper.FRAME_GAP else frameGap
+            if (isVisible) handler.postDelayed(drawThread, fg)
         }
 
-        private fun drawFrame(){
+        private fun drawFrame() {
             val holder: SurfaceHolder = surfaceHolder
             val canvas = holder.lockCanvas()
             if (themedWallpaper.isTranslating) {
                 themedWallpaper.updateTranslateProgress()
                 if (!themedWallpaper.isTranslateCompleted) themedWallpaper.makeMotion(this@ThemedWallpaperService)
                 else themedWallpaper.destroyMotion()
+            } else {
+                themedWallpaper.destroyMotion()
             }
             themedWallpaper.translate(canvas, offsetRatio, offsetStepRatio)
             holder.unlockCanvasAndPost(canvas)

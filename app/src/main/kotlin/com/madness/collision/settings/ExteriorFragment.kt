@@ -36,7 +36,7 @@ import android.widget.ProgressBar
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.Fragment
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
@@ -106,8 +106,8 @@ class ExteriorFragment: TaggedFragment(), Democratic, View.OnClickListener{
     private lateinit var backPath: String
     private var mImgGallery: Drawable? = null
 
-    private fun getImgGallery(context: Context): Drawable?{
-        if (mImgGallery == null) mImgGallery = context.getDrawable(R.drawable.img_gallery)
+    private fun getImgGallery(context: Context): Drawable? {
+        if (mImgGallery == null) mImgGallery = ContextCompat.getDrawable(context, R.drawable.img_gallery)
         return mImgGallery
     }
 
@@ -413,15 +413,19 @@ class ExteriorFragment: TaggedFragment(), Democratic, View.OnClickListener{
         }
 
         if (F.prepareDir(exteriorPath)) {
+            val format = if (X.aboveOn(X.R)) Bitmap.CompressFormat.WEBP_LOSSY else webpLegacy
             try {
                 val stream = FileOutputStream(File(backPath))
-                blurred.compress(Bitmap.CompressFormat.WEBP, P.WEBP_COMPRESS_SPACE_FIRST, stream)
+                blurred.compress(format, P.WEBP_COMPRESS_SPACE_FIRST, stream)
             } catch ( e: FileNotFoundException) {
                 e.printStackTrace()
             }
         }
 
     }
+
+    @Suppress("deprecation")
+    private val webpLegacy = Bitmap.CompressFormat.WEBP
 
     override fun onClick(v: View?) {
         v ?: return

@@ -21,7 +21,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
-import android.os.Handler
 import android.view.MenuItem
 import android.view.View
 import android.view.Window
@@ -32,8 +31,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.Observer
 import androidx.lifecycle.observe
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
@@ -53,7 +54,6 @@ import java.lang.ref.WeakReference
 import kotlin.collections.ArrayDeque
 import kotlin.random.Random
 
-@OptIn(ExperimentalStdlibApi::class)
 class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
     companion object {
         /**
@@ -318,7 +318,8 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
         mainTB.menu.clear()
         mainTB.visibility = View.VISIBLE
         mainTB.setOnClickListener(null)
-        window.decorView.systemUiVisibility = window.decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_LOW_PROFILE.inv()
+        // Low profile mode is used in ApiDecentFragment. Deprecated since Android 11.
+        if (X.belowOff(X.R)) disableLowProfileModeLegacy(window)
         primaryStatusBarConfig?.let {
             SystemUtil.applyStatusBarConfig(mContext, mWindow, it)
         }
@@ -331,6 +332,12 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
                 SystemUtil.applyNavBarConfig(mContext, mWindow, it)
             }
         }
+    }
+
+    @Suppress("deprecation")
+    private fun disableLowProfileModeLegacy(window: Window) {
+        val decorView = window.decorView
+        decorView.systemUiVisibility = decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_LOW_PROFILE.inv()
     }
 
     private val FragmentTransaction.animNew: FragmentTransaction
@@ -346,10 +353,12 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
         )
 
     private fun setupViewModel() {
-        viewModel.democratic.observe(this) {
+        // todo SAM interface construction, check lifecycle support or convert my own code
+        // this one is converted, others are not
+        viewModel.democratic.observe(this, Observer {
             clearDemocratic()
             it.createOptions(mContext, mainTB, colorIcon)
-        }
+        })
         viewModel.unit.observe(this) {
             it ?: return@observe
             val (unitFragment, flags) = it
@@ -507,22 +516,18 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
 
         applyInsets()
 
-        val viewHandler = Handler()
-        runnable {
-            isToolbarInflated = mainTB.width > 0 && mainTB.height > 0
-            if (isToolbarInflated) {
-                if (!mainApplication.dead) initExterior()
-                viewHandler.removeCallbacks(this)
-            } else {
-                viewHandler.postDelayed(this, 150)
+        GlobalScope.launch {
+            while (true) {
+                isToolbarInflated = mainTB.width > 0 && mainTB.height > 0
+                if (isToolbarInflated) {
+                    if (!mainApplication.dead) launch(Dispatchers.Main) {
+                        initExterior()
+                    }
+                    break
+                }
+                delay(150)
             }
-            // todo sleep?
-//        try {
-//            Thread.sleep(150)
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//        }
-        }.run()
+        }
     }
 
     private val navScrollBehavior: MyHideBottomViewOnScrollBehavior<View>?
@@ -653,7 +658,7 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
     private fun setToolbarBackColor(scope: CoroutineScope, color: Int) {
         scope.launch {
             if (isLand) {
-                val drawable = mContext.getDrawable(R.drawable.exterior_toolbar_back)
+                val drawable = ContextCompat.getDrawable(mContext, R.drawable.exterior_toolbar_back)
                 drawable?.setTint(color)
                 launch(Dispatchers.Main) {
                     mainTB.background = drawable

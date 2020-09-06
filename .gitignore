@@ -85,6 +85,9 @@ lint/outputs/
 lint/tmp/
 # lint/reports/
 
+# Android Profiling
+*.hprof
+
 #old rules
 .DS_Store
 

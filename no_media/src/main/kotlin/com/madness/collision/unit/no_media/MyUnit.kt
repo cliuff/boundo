@@ -119,10 +119,12 @@ class MyUnit : Unit() {
             recyclerView.adapter = withContext(Dispatchers.Default) {
                 //todo calculate span count
                 spanCount = if (X.aboveOn(X.N) && activity.isInMultiWindowMode) 2 else {
-                    val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-                    val rotation = windowManager.defaultDisplay.rotation
-                    val isLand = rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270
-                    if (isLand) 4 else 2
+                    val display = SystemUtil.getDisplay(activity)
+                    if (display == null) 2 else {
+                        val rotation = display.rotation
+                        val isLand = rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270
+                        if (isLand) 4 else 2
+                    }
                 }
                 manager = GridLayoutManager(context, spanCount)
                 itemWidth = availableWidth / spanCount

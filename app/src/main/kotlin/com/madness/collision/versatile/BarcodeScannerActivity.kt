@@ -29,7 +29,6 @@ import android.media.projection.MediaProjectionManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
-import android.os.Looper
 import android.provider.MediaStore
 import android.service.quicksettings.Tile
 import android.view.View
@@ -43,9 +42,13 @@ import com.madness.collision.qs.TileServiceBarcodeScanner
 import com.madness.collision.qs.TileServiceBarcodeScannerMm
 import com.madness.collision.util.*
 import kotlinx.android.synthetic.main.activity_scanner.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
+import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -69,25 +72,28 @@ internal class BarcodeScannerActivity: AppCompatActivity() {
         val fileName = "capture$captureAffix.webp"
         val file : File?
         val uri: Uri?
-        val isViaMediaStore = mode == MODE_WECHAT && X.aboveOn(X.Q)
-        if (isViaMediaStore){
+        val isViaMediaStore = (mode == MODE_WECHAT) && X.aboveOn(X.Q)
+        uri = if (isViaMediaStore) {
             file = null
             val values = ContentValues().apply {
                 put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
                 put(MediaStore.Images.Media.MIME_TYPE, "image/webp")
             }
-            val collection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
-            uri = contentResolver.insert(collection, values)
-        }else{
+            if (X.aboveOn(X.Q)) {
+                val collection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+                contentResolver.insert(collection, values)
+            } else null
+        } else {
             file = File(F.createPath(dirCapture, fileName))
-            uri = file.getProviderUri(this@BarcodeScannerActivity)
+            file.getProviderUri(this@BarcodeScannerActivity)
         }
-        if (uri == null) return
+        uri ?: return
 
         val stream: OutputStream? = if (isViaMediaStore) contentResolver.openOutputStream(uri) else FileOutputStream(file!!)
         stream?.run {
             use { fos ->
-                bitmap.compress(Bitmap.CompressFormat.WEBP, P.WEBP_COMPRESS_SPACE_FIRST, fos)
+                val format = if (X.aboveOn(X.R)) Bitmap.CompressFormat.WEBP_LOSSY else webpLegacy
+                bitmap.compress(format, P.WEBP_COMPRESS_SPACE_FIRST, fos)
                 try {
                     transfer(uri, file)
                 } catch (e: Exception){
@@ -99,6 +105,9 @@ internal class BarcodeScannerActivity: AppCompatActivity() {
             }
         }
     }
+
+    @Suppress("deprecation")
+    private val webpLegacy = Bitmap.CompressFormat.WEBP
 
     @SuppressLint("WrongConstant")
     private fun getTransferIntent(uri: Uri? = null): Intent{
@@ -131,11 +140,13 @@ internal class BarcodeScannerActivity: AppCompatActivity() {
 
     override fun onCreate( savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val themeId = ThemeUtil.updateTheme(this, getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE), false)
+        val pref = getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
+        val themeId = ThemeUtil.updateTheme(this, pref, false)
         val themedContext = ContextThemeWrapper(this, themeId)
         val contentView = View.inflate(themedContext, R.layout.activity_scanner, null)
         setContentView(contentView)
-        scannerContent.background.setTint(ThemeUtil.getColor(themedContext, R.attr.colorASurface) and 0xf0ffffff.toInt())
+        val colorSurface = ThemeUtil.getColor(themedContext, R.attr.colorASurface)
+        scannerContent.background.setTint(colorSurface and 0xf0ffffff.toInt())
         val intent = intent
         if (intent == null){
             finish()
@@ -143,7 +154,7 @@ internal class BarcodeScannerActivity: AppCompatActivity() {
         }
         mode = intent.getIntExtra(EXTRA_MODE, MODE_ALIPAY)
         dirCapture = when(mode){
-            MODE_WECHAT -> if (X.aboveOn(X.Q)) "" else Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)?.path ?: ""
+            MODE_WECHAT -> if (X.aboveOn(X.Q)) "" else picDirLegacy()
             else -> F.createPath(F.cachePublicPath(this), Environment.DIRECTORY_PICTURES, "Captures")
         }
         val isViaMediaStore = mode == MODE_WECHAT && X.aboveOn(X.Q)
@@ -162,6 +173,11 @@ internal class BarcodeScannerActivity: AppCompatActivity() {
                 }
             } else startProjection()
         } else startProjection()
+    }
+
+    @Suppress("deprecation")
+    private fun picDirLegacy(): String {
+        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)?.path ?: ""
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -187,26 +203,21 @@ internal class BarcodeScannerActivity: AppCompatActivity() {
             putExtra(ScreenCapturingService.ARG_RESULT_CODE, resultCode)
             putExtra(ScreenCapturingService.ARG_DATA, data)
         }
+        ScreenCapturingService.uiContext = WeakReference(this)
         startService(intent)
-        Thread {
+        GlobalScope.launch {
             val time = System.currentTimeMillis()
             var bmp: Bitmap? = null
             while (bmp == null) {
-                try {
-                    Thread.sleep(200)
-                } catch (e: InterruptedException) {
-                    e.printStackTrace()
-                }
-                if (System.currentTimeMillis() - time > 10000)
-                    return@Thread
+                if (System.currentTimeMillis() - time > 10000) break
                 bmp = ScreenCapturingService.capture
+                delay(200)
             }
-            Looper.prepare()
-            processCapture(bmp)
+            val capture = bmp ?: return@launch
+            processCapture(capture)
             ScreenCapturingService.capture = null
             finish()
-            Looper.loop()
-        }.start()
+        }
     }
 
     private fun startProjection() {
