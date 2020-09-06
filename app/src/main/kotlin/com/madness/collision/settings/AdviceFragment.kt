@@ -19,7 +19,9 @@ package com.madness.collision.settings
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import android.graphics.drawable.AnimatedVectorDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -67,6 +69,8 @@ internal class AdviceFragment : TaggedFragment(), Democratic, View.OnClickListen
         arrayOf(
                 view.findViewById(R.id.adviceDerive),
                 view.findViewById(R.id.adviceLicense),
+                view.findViewById(R.id.adviceSourceCode),
+                view.findViewById(R.id.adviceTranslation),
                 vLogo as View
         ).forEach { it.listenedTimelyBy(this) }
     }
@@ -88,6 +92,22 @@ internal class AdviceFragment : TaggedFragment(), Democratic, View.OnClickListen
             }
             R.id.adviceLicense -> {
                 navigate(AdviceFragmentDirections.actionAdviceFragmentToOssActivity())
+            }
+            R.id.adviceSourceCode -> {
+                val intent = Intent().apply {
+                    action = Intent.ACTION_VIEW
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    data = Uri.parse(P.LINK_SOURCE_CODE)
+                }
+                startActivity(intent)
+            }
+            R.id.adviceTranslation -> {
+                val intent = Intent().apply {
+                    action = Intent.ACTION_VIEW
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    data = Uri.parse(P.LINK_TRANSLATION_PROGRAM)
+                }
+                startActivity(intent)
             }
             R.id.adviceLogo -> {
                 count4DebugMode++

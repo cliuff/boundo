@@ -103,6 +103,9 @@ object P {
     const val CONTACT_EMAIL = "ballupon@gmail.com"
     const val CONTACT_QQ = "909713819"
 
+    const val LINK_SOURCE_CODE = "https://github.com/cliuff/boundo"
+    const val LINK_TRANSLATION_PROGRAM = "https://docs.google.com/document/d/1Sc_jWvIbbdF6QVO-ALeZi8pBs6EvYjAHn6RYvUhDzQg/edit?usp=sharing"
+
     const val IMMORTAL_EXTRA_LAUNCH_MODE = "immortalLaunchMode"
     const val IMMORTAL_EXTRA_LAUNCH_MODE_MORTAL = "mortal"
 
