@@ -166,8 +166,7 @@ internal class TimetableAdapter(private var context: Context , var timetable: Ti
         }.let { holder.card.setCardBackgroundColor(it) }
     }
 
-    private fun addRepetitionLayout(repetition: Repetition){
-
+    private fun addRepetitionLayout(repetition: Repetition) {
         inflater.inflate(MyR.layout.tt_adapter_periods, coursePeriodLL, false).apply {
             findViewById<AppCompatEditText>(MyR.id.ttAdapterPeriodsStart).setText(repetition.fromWeek.toString())
             findViewById<AppCompatEditText>(MyR.id.ttAdapterPeriodsEnd).setText(repetition.toWeek.toString())
@@ -294,8 +293,8 @@ internal class TimetableAdapter(private var context: Context , var timetable: Ti
         etName.setTextColor(color)
         etTeacher.setTextColor(color)
         etRoom.setTextColor(color)
-        if(course.name == context.getString(MyR.string.ics_alter_cname) || course.legacyDuplicate){
-            alter.setListener(View.OnClickListener { alter.dismiss(); actionRemove(course) }, listenerOk)
+        if(course.name == context.getString(MyR.string.ics_alter_cname) || course.legacyDuplicate) {
+            alter.setListener({ alter.dismiss(); actionRemove(course) }, listenerOk)
             btnAltered.set(true)
             // below: notify the user to change the course name when adding new course
             if (!course.legacyDuplicate) {

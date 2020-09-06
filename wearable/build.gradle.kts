@@ -46,7 +46,7 @@ val signingKeyPassword: String = properties.getProperty("signingKeyPassword", ""
 //}
 
 android {
-    buildToolsVersion = "30.0.0"
+    buildToolsVersion = "30.0.2"
     sourceSets {
         getByName("main").java.srcDir("src/main/kotlin")
     }
@@ -88,16 +88,16 @@ android {
     flavorDimensions("arch")
     productFlavors {
         create("full") {
-            setDimension("arch")
+            dimension = "arch"
         }
         create("arm") {
-            setDimension("arch")
+            dimension = "arch"
             ndk{
                 abiFilters("armeabi-v7a", "arm64-v8a")
             }
         }
         create("x86") {
-            setDimension("arch")
+            dimension = "arch"
             ndk{
                 abiFilters("x86", "x86_64")
             }
