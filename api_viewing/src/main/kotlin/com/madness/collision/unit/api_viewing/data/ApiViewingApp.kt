@@ -29,6 +29,7 @@ import android.net.Uri
 import android.os.Parcel
 import android.os.Parcelable
 import android.provider.Settings
+import androidx.core.content.ContextCompat
 import androidx.room.*
 import com.madness.collision.R
 import com.madness.collision.misc.MiscApp
@@ -298,14 +299,14 @@ internal class ApiViewingApp(
         var logoDrawable = iconDrawable
         if (isDefined) {
             if (iconDetails.isDefault) {
-                logoDrawable = context.getDrawable(R.drawable.res_android_robot_head) ?: return null
+                logoDrawable = ContextCompat.getDrawable(context, R.drawable.res_android_robot_head) ?: return null
             }
         } else {
             iconDetails.width = logoDrawable.intrinsicWidth
             iconDetails.height = logoDrawable.intrinsicHeight
             if (iconDetails.width <= 0 || iconDetails.height <= 0) {
                 iconDetails.isDefault = true
-                logoDrawable = context.getDrawable(R.drawable.res_android_robot_head) ?: return null
+                logoDrawable = ContextCompat.getDrawable(context, R.drawable.res_android_robot_head) ?: return null
                 iconDetails.width = logoDrawable.intrinsicWidth
                 iconDetails.height = logoDrawable.intrinsicHeight
             }

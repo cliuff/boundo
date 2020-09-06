@@ -21,6 +21,7 @@ import android.os.Bundle
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import com.madness.collision.R
 import com.madness.collision.util.*
 
@@ -36,7 +37,7 @@ class InstantWeChatActivity: AppCompatActivity() {
         setContentView(R.layout.activity_instant_wechat)
         val root: ConstraintLayout = findViewById(R.id.instantWeChatRoot)
         root.background = if (ThemeUtil.getIsNight(this)) ColorDrawable(ThemeUtil.getColor(this, R.attr.colorABackground))
-        else getDrawable(R.drawable.ic_tencent_mm_back_a)
+        else ContextCompat.getDrawable(this, R.drawable.ic_tencent_mm_back_a)
         val bar: ProgressBar = findViewById(R.id.instant_wechat_bar)
         bar.postDelayed({
             try {

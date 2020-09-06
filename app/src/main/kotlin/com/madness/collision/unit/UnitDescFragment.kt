@@ -26,6 +26,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
@@ -92,13 +93,13 @@ internal class UnitDescFragment() : TaggedFragment(), Democratic {
     private fun getStarIcon(context: Context, isStarred: Boolean): Drawable? {
         if (isStarred) {
             if (icStarred == null) {
-                icStarred = context.getDrawable(R.drawable.ic_star_24)
+                icStarred = ContextCompat.getDrawable(context, R.drawable.ic_star_24)
                 if (icStarred == null) return null
                 icStarred!!.setTint(Color.parseColor("#A0FFC030"))
             }
             return icStarred
         } else {
-            if (icStar == null) icStar = context.getDrawable(R.drawable.ic_star_border_24)
+            if (icStar == null) icStar = ContextCompat.getDrawable(context, R.drawable.ic_star_border_24)
             icStar!!.setTint(ThemeUtil.getColor(context, R.attr.colorIcon))
             return icStar
         }

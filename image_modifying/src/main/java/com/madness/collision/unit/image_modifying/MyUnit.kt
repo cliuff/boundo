@@ -39,6 +39,7 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.heifwriter.HeifWriter
 import androidx.lifecycle.observe
 import com.madness.collision.R
@@ -133,7 +134,7 @@ class MyUnit: Unit(){
             width = previewSize
             height = previewSize
         }
-        imagePreview.setImageDrawable(context.getDrawable(R.drawable.img_gallery))
+        imagePreview.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.img_gallery))
         imageCard.cardElevation = 0f
         imageEditWidth.setText("")
         imageEditHeight.setText("")

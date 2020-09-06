@@ -34,6 +34,7 @@ import android.widget.Toast
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.Guideline
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
@@ -368,7 +369,7 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
                 // initialize settings app as predefined
                 if (name == packageSettings){
                     ApiViewingApp().load(context, {
-                        context.getDrawable(R.mipmap.logo_settings)!!
+                        ContextCompat.getDrawable(context, R.mipmap.logo_settings)!!
                     }, { null }).icon?.let {
                         storeMap[name] = it
                     }

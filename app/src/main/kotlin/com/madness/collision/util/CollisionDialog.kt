@@ -28,6 +28,7 @@ import android.view.Window
 import android.widget.*
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.content.ContextCompat
 import com.google.android.material.button.MaterialButton
 import com.madness.collision.R
 import kotlin.math.max
@@ -413,7 +414,7 @@ class CollisionDialog private constructor(private val mContext: Context, private
     }
 
     fun setBackgroundTint(color: Int) {
-        var drawable: Drawable = mContext.getDrawable(R.drawable.res_dialog_md2) ?: return
+        var drawable: Drawable = ContextCompat.getDrawable(mContext, R.drawable.res_dialog_md2) ?: return
         drawable = drawable.mutate()
         drawable.setTint(color)
         window?.setBackgroundDrawable(drawable)
