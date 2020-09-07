@@ -69,13 +69,24 @@ object SystemUtil {
         }
     }
 
+    private val Window.insetsCtrl: WindowInsetsController?
+        get() {
+            if (X.belowOff(X.R)) return null
+            return try {
+                insetsController
+            } catch (e: NullPointerException) {
+                e.printStackTrace()
+                null
+            }
+        }
+
     fun applyStatusBarConfig(context: Context, window: Window, config: SystemBarConfig){
         if (X.aboveOn(X.M)) {
             // todo use substitute in androidx
             if (X.aboveOn(X.R)) {
                 val mask = WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
                 val appearance = if (config.isDarkIcon) mask else 0
-                window.insetsController?.setSystemBarsAppearance(appearance, mask)
+                window.insetsCtrl?.setSystemBarsAppearance(appearance, mask)
             } else {
                 applyStatusBarConfigLegacy(window, config)
             }
@@ -130,7 +141,7 @@ object SystemUtil {
             if (X.aboveOn(X.R)) {
                 val mask = WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS
                 val appearance = if (config.isDarkIcon) mask else 0
-                window.insetsController?.setSystemBarsAppearance(appearance, mask)
+                window.insetsCtrl?.setSystemBarsAppearance(appearance, mask)
             } else {
                 applyNavBarConfigLegacy(window, config)
             }
@@ -233,13 +244,13 @@ object SystemUtil {
 
     @RequiresApi(X.R)
     fun hideIme(window: Window) {
-        val controller = window.insetsController ?: return
+        val controller = window.insetsCtrl ?: return
         controller.hide(WindowInsets.Type.ime())
     }
 
     @RequiresApi(X.R)
     fun showIme(window: Window) {
-        val controller = window.insetsController ?: return
+        val controller = window.insetsCtrl ?: return
         controller.show(WindowInsets.Type.ime())
     }
 
@@ -265,13 +276,13 @@ object SystemUtil {
 
     @RequiresApi(X.R)
     fun hideStatusBars(window: Window) {
-        val controller = window.insetsController ?: return
+        val controller = window.insetsCtrl ?: return
         controller.hide(WindowInsets.Type.statusBars())
     }
 
     @RequiresApi(X.R)
     fun showStatusBars(window: Window) {
-        val controller = window.insetsController ?: return
+        val controller = window.insetsCtrl ?: return
         controller.show(WindowInsets.Type.statusBars())
     }
 
@@ -296,25 +307,25 @@ object SystemUtil {
 
     @RequiresApi(X.R)
     fun hideNavigationBars(window: Window) {
-        val controller = window.insetsController ?: return
+        val controller = window.insetsCtrl ?: return
         controller.hide(WindowInsets.Type.navigationBars())
     }
 
     @RequiresApi(X.R)
     fun showNavigationBars(window: Window) {
-        val controller = window.insetsController ?: return
+        val controller = window.insetsCtrl ?: return
         controller.show(WindowInsets.Type.navigationBars())
     }
 
     @RequiresApi(X.R)
     fun hideSystemBars(window: Window) {
-        val controller = window.insetsController ?: return
+        val controller = window.insetsCtrl ?: return
         controller.hide(WindowInsets.Type.systemBars())
     }
 
     @RequiresApi(X.R)
     fun showSystemBars(window: Window) {
-        val controller = window.insetsController ?: return
+        val controller = window.insetsCtrl ?: return
         controller.show(WindowInsets.Type.systemBars())
     }
 

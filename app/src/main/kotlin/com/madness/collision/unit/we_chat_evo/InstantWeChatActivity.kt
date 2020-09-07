@@ -31,10 +31,12 @@ class InstantWeChatActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         window?.let {
             SystemUtil.applyEdge2Edge(it)
+        }
+        setContentView(R.layout.activity_instant_wechat)
+        window?.let {
             SystemUtil.applyStatusBarColor(this, it, false, isTransparentBar = true)
             SystemUtil.applyNavBarColor(this, it, false, isTransparentBar = true)
         }
-        setContentView(R.layout.activity_instant_wechat)
         val root: ConstraintLayout = findViewById(R.id.instantWeChatRoot)
         root.background = if (ThemeUtil.getIsNight(this)) ColorDrawable(ThemeUtil.getColor(this, R.attr.colorABackground))
         else ContextCompat.getDrawable(this, R.drawable.ic_tencent_mm_back_a)
