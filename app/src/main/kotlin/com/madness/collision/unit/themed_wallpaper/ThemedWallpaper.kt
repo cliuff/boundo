@@ -195,12 +195,17 @@ internal class ThemedWallpaper(private var wallpaper: Drawable) {
                 val motionHeight = new.height
                 motionBitmap = Bitmap.createBitmap(motionWidth, motionHeight, Bitmap.Config.ARGB_8888)
                 val ratio = (translateProgress - 0.333f) * 3
-                for (i in 0 until motionHeight)
-                    for (j in 0 until motionWidth) {
-                        val cPre = pre[j, i].let { it or (((it ushr 24 and 0xFF) * (1 - ratio)).roundToInt() shl 24) }
-                        val cNew = new[j, i].let { it or (((it ushr 24 and 0xFF) * ratio).roundToInt() shl 24) }
-                        motionBitmap[j, i] = ColorUtils.blendARGB(cPre, cNew, ratio)
-                    }
+                // getPixel: IllegalArgumentException: x must be < bitmap.width()
+                try {
+                    for (i in 0 until motionHeight)
+                        for (j in 0 until motionWidth) {
+                            val cPre = pre[j, i].let { it or (((it ushr 24 and 0xFF) * (1 - ratio)).roundToInt() shl 24) }
+                            val cNew = new[j, i].let { it or (((it ushr 24 and 0xFF) * ratio).roundToInt() shl 24) }
+                            motionBitmap[j, i] = ColorUtils.blendARGB(cPre, cNew, ratio)
+                        }
+                } catch (e: IllegalArgumentException) {
+                    e.printStackTrace()
+                }
                 radius = 20f
             }
             in 0.666f..1f -> {
