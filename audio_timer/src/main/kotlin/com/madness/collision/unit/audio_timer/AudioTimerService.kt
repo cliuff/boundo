@@ -179,9 +179,14 @@ internal class AudioTimerService: Service() {
         val hour = timeLeft / 3600000
         val displayText = "${if (hour == 0L) "" else "$hour:"}$re"
         updateNotification(displayText)
-        tickCallbacks.forEach {
-            it.onTick(targetTime, duration, timeLeft)
-            it.onTick(displayText)
+        // modification in other places during iterating causes exception
+        try {
+            tickCallbacks.forEach {
+                it.onTick(targetTime, duration, timeLeft)
+                it.onTick(displayText)
+            }
+        } catch (e: ConcurrentModificationException) {
+            e.printStackTrace()
         }
     }
 
@@ -192,11 +197,18 @@ internal class AudioTimerService: Service() {
 
     private fun completeWork() {
         stopAudio(this)
-        tickCallbacks.forEach {
-            it.onTick(targetTime, duration, 0L)
-            it.onTick("")
+        val iterator = tickCallbacks.iterator()
+        // modification in other places during iterating causes exception
+        try {
+            while (iterator.hasNext()) {
+                val callback = iterator.next()
+                iterator.remove()
+                callback.onTick(targetTime, duration, 0L)
+                callback.onTick("")
+            }
+        } catch (e: ConcurrentModificationException) {
+            e.printStackTrace()
         }
-        tickCallbacks.clear()
         GlobalScope.launch {
             delay(500)
             stopSelf()
