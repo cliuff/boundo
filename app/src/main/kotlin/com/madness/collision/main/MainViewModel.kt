@@ -18,7 +18,6 @@ package com.madness.collision.main
 
 import android.graphics.drawable.Drawable
 import android.view.View
-import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -27,7 +26,6 @@ import com.madness.collision.unit.Unit
 import com.madness.collision.util.mainApplication
 import com.madness.collision.util.measure
 import java.lang.ref.WeakReference
-import java.util.*
 
 class MainViewModel: ViewModel(){
     val democratic: MutableLiveData<Democratic> = MutableLiveData()

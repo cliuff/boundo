@@ -51,10 +51,11 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
             val context = hostFragment.context ?: return false
             if (hostFragment.activity == null || hostFragment.isDetached || !hostFragment.isAdded) return false
             val mainViewModel: MainViewModel by hostFragment.activityViewModels()
+            val mainTimestamp = mainViewModel.timestamp
             val prefSettings = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
             // display recent updates in last week if no history (by default)
             val lastTimestamp = prefSettings.getLong(P.PACKAGE_CHANGED_TIMESTAMP, System.currentTimeMillis() - 604800000)
-            val shouldUpdate = (sessionTimestamp == 0L || sessionTimestamp != mainViewModel.timestamp) && lastTimestamp < mainViewModel.timestamp
+            val shouldUpdate = (sessionTimestamp == 0L || sessionTimestamp != mainTimestamp) && lastTimestamp < mainTimestamp
             changedPackages = if (shouldUpdate) {
                 Utils.getChangedPackages(context, lastTimestamp).also {
                     prefSettings.edit { putLong(P.PACKAGE_CHANGED_TIMESTAMP, System.currentTimeMillis()) }
@@ -64,7 +65,7 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
             }
             if (shouldUpdate) {
                 appTimestamp = lastTimestamp
-                sessionTimestamp = mainViewModel.timestamp
+                sessionTimestamp = mainTimestamp
             }
             return !changedPackages.isNullOrEmpty()
         }
