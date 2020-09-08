@@ -20,11 +20,10 @@ import android.content.Context
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
-import android.os.Build
 import androidx.annotation.RequiresApi
 import com.madness.collision.util.X
 
-@RequiresApi(Build.VERSION_CODES.N_MR1)
+@RequiresApi(X.N_MR1)
 class Instant(private val context: Context, private val manager: ShortcutManager? = null) {
 
     val dynamicShortcuts: List<ShortcutInfo>

@@ -70,14 +70,12 @@ object SystemUtil {
     }
 
     private val Window.insetsCtrl: WindowInsetsController?
-        get() {
-            if (X.belowOff(X.R)) return null
-            return try {
-                insetsController
-            } catch (e: NullPointerException) {
-                e.printStackTrace()
-                null
-            }
+        @RequiresApi(X.R)
+        get() = try {
+            insetsController
+        } catch (e: NullPointerException) {
+            e.printStackTrace()
+            null
         }
 
     fun applyStatusBarConfig(context: Context, window: Window, config: SystemBarConfig){
