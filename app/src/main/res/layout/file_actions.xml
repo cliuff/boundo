@@ -1,65 +1,149 @@
 <?xml version="1.0" encoding="utf-8"?>
-<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:overScrollMode="never"
-    android:scrollbars="none"
+<!--
+  ~ Copyright 2020 Clifford Liu
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:paddingTop="16dp"
+    android:paddingBottom="12dp"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:paddingStart="30dp"
-        android:paddingTop="16dp"
-        android:paddingEnd="30dp"
-        android:paddingBottom="12dp"
-        android:layout_gravity="center"
-        android:orientation="horizontal"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/fileActionsInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/fileActionsInfoImage"
+            tools:src="@mipmap/ic_launcher"
+            android:adjustViewBounds="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingStart="35dp"
+            android:paddingEnd="0dp"
+            android:maxWidth="95dp"
+            android:maxHeight="80dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/fileActionsInfoTitle"
+            tools:text="Boundo.apk"
+            android:textStyle="bold"
+            android:textColor="?colorText"
+            android:textSize="22sp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            app:layout_constraintStart_toEndOf="@id/fileActionsInfoImage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/fileActionsInfoSubtitle"
+            app:layout_constraintVertical_chainStyle="packed"
+            android:paddingStart="22dp"
+            android:paddingEnd="25dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/fileActionsInfoSubtitle"
+            tools:text="APK"
+            android:textColor="?colorTextSub"
+            android:textSize="14sp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintStart_toEndOf="@id/fileActionsInfoImage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintTop_toBottomOf="@id/fileActionsInfoTitle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:paddingStart="22dp"
+            android:paddingEnd="25dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <HorizontalScrollView
+        android:overScrollMode="never"
+        android:scrollbars="none"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <LinearLayout
-            style="@style/IconActionContainer">
-            <com.google.android.material.card.MaterialCardView
-                style="@style/IconActionCard">
-                <ImageView
-                    android:id="@+id/fileActionsOpen"
-                    style="@style/IconActionIcon"
-                    android:src="@drawable/ic_open_in_new_24" />
-            </com.google.android.material.card.MaterialCardView>
-            <TextView
-                style="@style/IconActionText"
-                android:textColor="?colorAOnSurface"
-                android:text="@string/fileActionsOpen" />
+            android:paddingStart="30dp"
+            android:paddingEnd="30dp"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                style="@style/IconActionContainer">
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/IconActionCard">
+                    <ImageView
+                        android:id="@+id/fileActionsOpen"
+                        style="@style/IconActionIcon"
+                        android:src="@drawable/ic_open_in_new_24" />
+                </com.google.android.material.card.MaterialCardView>
+                <TextView
+                    style="@style/IconActionText"
+                    android:textColor="?colorAOnSurface"
+                    android:text="@string/fileActionsOpen" />
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/IconActionContainer">
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/IconActionCard">
+                    <ImageView
+                        android:id="@+id/fileActionsShare"
+                        style="@style/IconActionIcon"
+                        android:src="@drawable/ic_share_24" />
+                </com.google.android.material.card.MaterialCardView>
+                <TextView
+                    style="@style/IconActionText"
+                    android:textColor="?colorAOnSurface"
+                    android:text="@string/fileActionsShare" />
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/IconActionContainer">
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/IconActionCard">
+                    <ImageView
+                        android:id="@+id/fileActionsSave"
+                        style="@style/IconActionIcon"
+                        android:src="@drawable/ic_save_alt_24" />
+                </com.google.android.material.card.MaterialCardView>
+                <TextView
+                    style="@style/IconActionText"
+                    android:textColor="?colorAOnSurface"
+                    android:text="@string/fileActionsSave" />
+            </LinearLayout>
+
         </LinearLayout>
 
-        <LinearLayout
-            style="@style/IconActionContainer">
-            <com.google.android.material.card.MaterialCardView
-                style="@style/IconActionCard">
-                <ImageView
-                    android:id="@+id/fileActionsShare"
-                    style="@style/IconActionIcon"
-                    android:src="@drawable/ic_share_24" />
-            </com.google.android.material.card.MaterialCardView>
-            <TextView
-                style="@style/IconActionText"
-                android:textColor="?colorAOnSurface"
-                android:text="@string/fileActionsShare" />
-        </LinearLayout>
+    </HorizontalScrollView>
 
-        <LinearLayout
-            style="@style/IconActionContainer">
-            <com.google.android.material.card.MaterialCardView
-                style="@style/IconActionCard">
-                <ImageView
-                    android:id="@+id/fileActionsSave"
-                    style="@style/IconActionIcon"
-                    android:src="@drawable/ic_save_alt_24" />
-            </com.google.android.material.card.MaterialCardView>
-            <TextView
-                style="@style/IconActionText"
-                android:textColor="?colorAOnSurface"
-                android:text="@string/fileActionsSave" />
-        </LinearLayout>
-
-    </LinearLayout>
-
-</HorizontalScrollView>
+</LinearLayout>

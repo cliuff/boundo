@@ -130,11 +130,77 @@ class FilePop: BottomSheetDialogFragment(){
         intent.clipData?.run {
             val clipItem = getItemAt(0)
             imageUri = clipItem.uri
-            imageLabel = ""
+            imageLabel = description.label.toString()
         }
+        loadData()
         mViews.fileActionsOpen.setOnClickListener { open() }
         mViews.fileActionsShare.setOnClickListener { share() }
         mViews.fileActionsSave.setOnClickListener { save() }
+    }
+
+    private fun loadData() {
+        val matchRe = "(.+)/(.+)".toRegex().find(fileType)
+        val displayFileType = if (matchRe != null) {
+            val (cat, type) = matchRe.destructured
+            when (cat) {
+                "image" -> when (type) {
+                    "png" -> "PNG"
+                    "jpeg" -> "JPEG"
+                    "webp" -> "WEBP"
+                    "heif" -> "HEIF"
+                    "*" -> "IMG"
+                    else -> fileType
+                }
+                "text" -> when (type) {
+                    "csv" -> "CSV"
+                    "html" -> "HTML"
+                    "calendar" -> "ICS"
+                    "plain" -> "TXT"
+                    else -> "TXT"
+                }
+                "application" -> when (type) {
+                    "vnd.android.package-archive" -> "APK"
+                    else -> fileType
+                }
+                "resource" -> when (type) {
+                    "folder" -> ""
+                    else -> fileType
+                }
+                "*" -> when (type) {
+                    "*" -> ""
+                    else -> fileType
+                }
+                else -> fileType
+            }
+        } else fileType
+        var hasNoTitle = false
+        if (imageUri != null) {
+            mViews.fileActionsInfoImage.setImageURI(imageUri)
+        } else {
+            mViews.fileActionsInfoImage.visibility = View.GONE
+        }
+        if (imageLabel.isNotEmpty()) {
+            mViews.fileActionsInfoTitle.text = imageLabel
+        } else {
+            val fileName = fileUri.lastPathSegment ?: fileUri.path
+            if (fileName != null) {
+                mViews.fileActionsInfoTitle.text = fileName
+            } else {
+                mViews.fileActionsInfoTitle.text = displayFileType
+                hasNoTitle = true
+            }
+        }
+        if (displayFileType.isNotEmpty()) {
+            // Normal title case, set file type
+            if (!hasNoTitle) mViews.fileActionsInfoSubtitle.text = displayFileType
+            // Title set as file type, hide subtitle
+            else mViews.fileActionsInfoSubtitle.visibility = View.GONE
+        } else {
+            // Normal title case, hide subtitle
+            if (!hasNoTitle) mViews.fileActionsInfoSubtitle.visibility = View.GONE
+            // Title set as file type, hide file info
+            else mViews.fileActionsInfo.visibility = View.GONE
+        }
     }
 
     private fun open(){
@@ -166,11 +232,11 @@ class FilePop: BottomSheetDialogFragment(){
         dismiss()
     }
 
-    private fun save(){
+    private fun save() {
         val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
             type = fileType
-            // todo file name
-            putExtra(Intent.EXTRA_TITLE, "file")
+            val fileName = fileUri.lastPathSegment ?: "file"
+            putExtra(Intent.EXTRA_TITLE, fileName)
         }
         startActivityForResult(intent, REQUEST_SAVE_FILE)
     }

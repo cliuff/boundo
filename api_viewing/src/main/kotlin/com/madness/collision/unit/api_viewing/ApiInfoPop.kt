@@ -462,13 +462,14 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
         views.avShareStrokedImage.setImageBitmap(images[1])
         val share: (isFull: Boolean) -> Unit = { isFull ->
             val re = images[if (isFull) 0 else 1]
-            val fileName = "${name}_share_${if (isFull) "full" else "stroked"}.png"
+            val fileTitle = "${name}_share_${if (isFull) "full" else "stroked"}"
+            val fileName = "$fileTitle.png"
             val path = F.createPath(F.cachePublicPath(context), "App", "Logo", fileName)
             if (F.prepare4(path)) {
                 X.savePNG(re, path)
                 val uri = File(path).getProviderUri(context)
                 val titleRes = if (isFull) MyR.string.av_share_full else MyR.string.av_share_stroked
-                FilePop.by(context, uri, "image/png", titleRes, uri).show(fm, FilePop.TAG)
+                FilePop.by(context, uri, "image/png", titleRes, uri, fileTitle).show(fm, FilePop.TAG)
             }
         }
         views.avShareFullImage.setOnClickListener {

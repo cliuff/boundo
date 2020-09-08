@@ -755,13 +755,13 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
         val uri: Uri = image.getProviderUri(context)
 //        val previewTitle = app.name // todo set preview title
         activity.supportFragmentManager.let {
-            FilePop.by(context, uri, "image/*", R.string.textShareImage, uri, app.name).show(it, FilePop.TAG)
+            FilePop.by(context, uri, "image/png", R.string.textShareImage, uri, app.name).show(it, FilePop.TAG)
         }
     }
 
     // todo split APKs
     private fun actionApk(app: ApiViewingApp){
-        val path = F.createPath(F.cachePublicPath(context), "App", "APK", "${app.name} v${app.verName}.apk")
+        val path = F.createPath(F.cachePublicPath(context), "App", "APK", "${app.name}-${app.verName}.apk")
         val apk = File(path)
         if (F.prepare4(apk)) {
             GlobalScope.launch {
@@ -773,15 +773,17 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
             }
         }
         val uri: Uri = apk.getProviderUri(context)
-//        val previewTitle = "${app.name} v${app.verName}"
+        val previewTitle = "${app.name} ${app.verName}"
 //        val flag = Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+        val previewPath = F.createPath(F.cachePublicPath(context), "App", "Logo", "${app.name}.png")
+        val image = File(previewPath)
+        val appIcon = app.icon
+        if (appIcon != null && F.prepare4(image)) X.savePNG(appIcon, previewPath)
+        val imageUri = image.getProviderUri(context)
         activity.supportFragmentManager.let {
-            FilePop.by(context, uri, "application/vnd.android.package-archive", R.string.textShareApk).show(it, FilePop.TAG)
+            val fileType = "application/vnd.android.package-archive"
+            FilePop.by(context, uri, fileType, R.string.textShareApk, imageUri, previewTitle).show(it, FilePop.TAG)
         }
-//            val previewPath = F.createPath(F.cachePublicPath(context), "App", "Logo", "${app.name}.png")
-//            val image = File(previewPath)
-//            app.logo?.let { if (F.prepare4(image)) X.savePNG(it, previewPath) }
-//            clipData = ClipData.newUri(context.contentResolver, app.name, image.getProviderUri(context)) // android q image preview
     }
 
     private fun retrieveOn(appInfo: ApiViewingApp, extraFlags: Int, subject: String): Pair<Boolean, PackageInfo?> {

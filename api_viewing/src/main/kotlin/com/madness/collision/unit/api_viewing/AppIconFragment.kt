@@ -206,7 +206,7 @@ internal class AppIconFragment : TaggedFragment(), Democratic {
         imgIcon.let { if (F.prepare4(image)) X.savePNG(it, path) }
         val uri: Uri = image.getProviderUri(context)
         childFragmentManager.let {
-            FilePop.by(context, uri, "image/*", R.string.textShareImage, uri, exportName).show(it, FilePop.TAG)
+            FilePop.by(context, uri, "image/png", R.string.textShareImage, uri, exportName).show(it, FilePop.TAG)
         }
     }
 
