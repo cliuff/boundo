@@ -32,6 +32,23 @@ import androidx.core.view.forEach
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.databinding.AdapterAvTagBinding
+import com.madness.collision.unit.api_viewing.tag.ExpressibleTag
+import com.madness.collision.unit.api_viewing.tag.PackageTag
+import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_GP
+import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_PI
+import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_FLU
+import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_RN
+import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_XAM
+import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_KOT
+import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_64B
+import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_ARM
+import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_X86
+import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_HID
+import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_SYS
+import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_SPL
+import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_AI
+import com.madness.collision.unit.api_viewing.tag.TagRelation
+import com.madness.collision.unit.api_viewing.tag.toExpressible
 import com.madness.collision.unit.api_viewing.util.PrefUtil
 import com.madness.collision.util.ThemeUtil
 import com.madness.collision.util.X
@@ -45,19 +62,6 @@ internal object AppTag {
     private const val TAG_KEY_Xamarin = "xam"
     private const val TAG_KEY_Kotlin = "kot"
 
-    private const val TAG_ID_GP = R.string.prefAvTagsValuePackageInstallerGp
-    private const val TAG_ID_PI = R.string.prefAvTagsValuePackageInstallerPi
-    private const val TAG_ID_FLU = R.string.prefAvTagsValueCrossPlatformFlu
-    private const val TAG_ID_RN = R.string.prefAvTagsValueCrossPlatformRn
-    private const val TAG_ID_XAM = R.string.prefAvTagsValueCrossPlatformXam
-    private const val TAG_ID_KOT = R.string.prefAvTagsValueKotlin
-    private const val TAG_ID_ARM = R.string.prefAvTagsValueNativeLibArm
-    private const val TAG_ID_X86 = R.string.prefAvTagsValueNativeLibX86
-    private const val TAG_ID_HID = R.string.prefAvTagsValueHidden
-    private const val TAG_ID_SYS = R.string.prefAvTagsValuePrivilegeSys
-    private const val TAG_ID_SPL = R.string.prefAvTagsValueHasSplits
-    private const val TAG_ID_AI = R.string.prefAvTagsValueIconAdaptive
-
     private val tagIcons = mutableMapOf<String, Bitmap>()
     private var colorBackground: Int? = null
     private var colorItem: Int? = null
@@ -65,24 +69,6 @@ internal object AppTag {
     private val displayingTagsPrivate = mutableMapOf<String, TriStateSelectable>()
     private val displayingTags: Map<String, TriStateSelectable>
         get() = displayingTagsPrivate
-    private val tagResIds = arrayOf(
-            TAG_ID_GP,
-            TAG_ID_PI,
-            TAG_ID_FLU,
-            TAG_ID_RN,
-            TAG_ID_XAM,
-            TAG_ID_KOT,
-            TAG_ID_ARM,
-            TAG_ID_X86,
-            TAG_ID_HID,
-            TAG_ID_SYS,
-            TAG_ID_SPL,
-            TAG_ID_AI
-    )
-    private var shouldShowTagPackageInstallerGooglePlay = false
-    private var shouldShowTagPackageInstallerPackageInstaller = false
-    private val shouldShowTagPackageInstaller: Boolean
-        get() = shouldShowTagPackageInstallerGooglePlay || shouldShowTagPackageInstallerPackageInstaller
     private var shouldShowTagCrossPlatformFlutter = false
     private var shouldShowTagCrossPlatformReactNative = false
     private var shouldShowTagCrossPlatformXamarin = false
@@ -109,11 +95,26 @@ internal object AppTag {
 
     private fun <V> Map<String, V>.get(context: Context, id: Int) = this[tagId(context, id)]
 
+    private fun Map<String, TriStateSelectable>.getNonNull(context: Context, id: Int): TriStateSelectable {
+        val name = tagId(context, id)
+        return this[name] ?: TriStateSelectable(name, TriStateSelectable.STATE_DESELECTED)
+    }
+
     private fun <V> MutableMap<String, V>.put(context: Context, id: Int, value: V) {
         this[tagId(context, id)] = value
     }
 
-    private fun isSelected(context: Context, id: Int) = displayingTags.get(context, id)?.isSelected == true
+    private fun isSelected(context: Context, id: Int): Boolean {
+        return displayingTags.get(context, id)?.isSelected == true
+    }
+
+    private fun isAntied(context: Context, resId: Int): Boolean {
+        return displayingTags.get(context, resId)?.isAntiSelected == true
+    }
+
+    private fun isChecking(context: Context, resId: Int): Boolean {
+        return isSelected(context, resId) || isAntied(context, resId)
+    }
 
     private fun getTagColor(context: Context): Int {
         return if (APIAdapter.shouldShowDesserts) {
@@ -186,8 +187,8 @@ internal object AppTag {
     /**
      * prepare res for native lib tags
      */
-    private fun ensureInstaller(context: Context, appInfo: ApiViewingApp): String? {
-        if (!shouldShowTagPackageInstaller && !isAntied(context, TAG_ID_GP) && !isAntied(context, TAG_ID_PI)) return null
+    fun ensureInstaller(context: Context, appInfo: ApiViewingApp): String? {
+        if (!isChecking(context, TAG_ID_GP) && !isChecking(context, TAG_ID_PI)) return null
         // must enable package installer to know unknown installer, which in turn invalidate package installer
         val installer = if (X.aboveOn(X.R)) {
             try {
@@ -251,9 +252,11 @@ internal object AppTag {
         if (shouldShowTagKotlin || !isAntiedKot) {
             ensureTagIcon(context, TAG_KEY_Kotlin, R.drawable.ic_kotlin_72)
         }
+        val state64B = displayingTags.getNonNull(context, TAG_ID_64B)
         // anti any one requires further look-up to confirm
-        val isAnyAntied = isAntiedFlu || isAntiedRn || isAntiedXam || isAntiedKot || isAntied(context, TAG_ID_ARM) || isAntied(context, TAG_ID_X86)
-        if (shouldShowTagCrossPlatform || shouldShowTagKotlin || shouldShowTagNativeLib || isAnyAntied) {
+        val isAnyAntied = isAntiedFlu || isAntiedRn || isAntiedXam || isAntiedKot ||
+                state64B.isAntiSelected || isAntied(context, TAG_ID_ARM) || isAntied(context, TAG_ID_X86)
+        if (shouldShowTagCrossPlatform || shouldShowTagKotlin || state64B.isSelected || shouldShowTagNativeLib || isAnyAntied) {
             if (!appInfo.isNativeLibrariesRetrieved) {
                 appInfo.retrieveNativeLibraries()
             }
@@ -292,10 +295,13 @@ internal object AppTag {
     }
 
     private fun tagPackageInstaller(context: Context, installer: String?, holder: APIAdapter.Holder) {
-        if ((!shouldShowTagPackageInstaller && !isAntied(context, TAG_ID_GP) && !isAntied(context, TAG_ID_PI)) || installer == null) return
+        installer ?: return
+        val stateGp = displayingTags.getNonNull(context, TAG_ID_GP)
+        val statePi = displayingTags.getNonNull(context, TAG_ID_PI)
+        if (stateGp.isDeselected && statePi.isDeselected) return
         val isGp = installer == ApiViewingApp.packagePlayStore
-        val showGp = (shouldShowTagPackageInstallerGooglePlay || isAntied(context, TAG_ID_PI)) && isGp
-        val showPi = (shouldShowTagPackageInstallerPackageInstaller || isAntied(context, TAG_ID_GP)) && !isGp
+        val showGp = isGp && (stateGp.isSelected || (!stateGp.isAntiSelected && statePi.isAntiSelected))
+        val showPi = !isGp && (statePi.isSelected || (!statePi.isAntiSelected && stateGp.isAntiSelected))
         if (!showGp && !showPi) return
         val installerIcon = tagIcons[installer]
 //        if (name != null) holder.inflateTag(name, installerIcon)
@@ -320,6 +326,12 @@ internal object AppTag {
         }
         if (shouldShowTagKotlin && !isAntied(context, TAG_ID_KOT) && nls[7]) {
             holder.inflateTag(context, "Kotlin", tagIcons[TAG_KEY_Kotlin])
+        }
+        val state64B = displayingTags.getNonNull(context, TAG_ID_64B)
+        // todo remove anti check
+        if (state64B.isSelected && !state64B.isAntiSelected) {
+            val doInf = TagRelation.TAGS[TAG_ID_64B]?.toExpressible()?.setRes(context, appInfo)?.express()
+            if (doInf == true) holder.inflateTag(context, R.string.av_settings_tag_64b)
         }
         if (shouldShowTagNativeLibArm && !isAntied(context, TAG_ID_ARM)) {
             if (nls[0]) holder.inflateTag(context, "ARM")
@@ -364,7 +376,7 @@ internal object AppTag {
         tagDirect(context, appInfo, holder, includeTagAi)
     }
 
-    fun filterTags(context: Context, appInfo: ApiViewingApp): Boolean {
+    fun filterTags(context: Context, app: ApiViewingApp): Boolean {
         // filtering, resource loading and tag inflating are different cases
         // filtering: whether to be included in list. tag relationship should be considered.
         //     e.g. google play and package manager, cross-platform frameworks
@@ -372,55 +384,41 @@ internal object AppTag {
         //     e.g. anti any tag requires resource loading to confirm it
         // tag inflating: whether to inflate tag.
         //     any item can be included in list but without any tag inflated
-        val installer = ensureResources(context, appInfo)
-        if (shouldShowTagPackageInstaller || isAntied(context, TAG_ID_GP) || isAntied(context, TAG_ID_PI)) {
-            if (installer != null) {
-                val isGp = installer == ApiViewingApp.packagePlayStore
-                val showGp = (shouldShowTagPackageInstallerGooglePlay || (isAntied(context, TAG_ID_PI) && !isAntied(context, TAG_ID_GP))) && isGp
-                val showPi = (shouldShowTagPackageInstallerPackageInstaller || (isAntied(context, TAG_ID_GP) && !isAntied(context, TAG_ID_PI))) && !isGp
-                if (showGp || showPi) return true
-            } else if (isAntied(context, TAG_ID_GP) || isAntied(context, TAG_ID_PI)) {
-                // unknown pi case
-                return true
+        ensureNativeLibs(context, app)
+        var re = false
+        for (t in TagRelation.TAGS.values) {
+            val exTag = loadExpressibleTag(t, context, app) ?: continue
+            var exTagOther: ExpressibleTag? = null
+            if (t.relatives.size == 1) {
+                val (tag2Id, relation) = t.relatives[0]
+                // Check relative if it is complimentary and checking, no matter anti or not
+                if (relation.isComplimentary) {
+                    val tag2 = TagRelation.TAGS[tag2Id]
+                    if (tag2 != null) exTagOther = loadExpressibleTag(tag2, context, app)
+                }
             }
+            re = exTag.express()
+            if (exTagOther != null) re = when {
+                // Satisfy both when both are anti
+                exTag.isAnti && exTagOther.isAnti -> re && exTagOther.express()
+                // Satisfy non-anti if either is anti
+                exTag.isAnti || exTagOther.isAnti -> if (exTag.isAnti) exTagOther.express() else re
+                // Satisfy either when both are non-anti
+                !exTag.isAnti && !exTagOther.isAnti -> re || exTagOther.express()
+                else -> re
+            }
+            if (re) break
         }
-        val nls = appInfo.nativeLibraries
-
-        if (shouldShowTagCrossPlatformFlutter && nls[4]) return true
-        else if (isAntied(context, TAG_ID_FLU) && !nls[4]) return true
-        if (shouldShowTagCrossPlatformReactNative && nls[5]) return true
-        else if (isAntied(context, TAG_ID_RN) && !nls[5]) return true
-        if (shouldShowTagCrossPlatformXamarin && nls[6]) return true
-        else if (isAntied(context, TAG_ID_XAM) && !nls[6]) return true
-        if (shouldShowTagKotlin && nls[7]) return true
-        else if (isAntied(context, TAG_ID_KOT) && !nls[7]) return true
-
-        // an item can be both arm and x86, this is different from package installer tag relationship
-        // actually this is the universal relationship between every tag
-        if (shouldShowTagNativeLibArm && (nls[0] || nls[1])) return true
-        else if (isAntied(context, TAG_ID_ARM) && !(nls[0] || nls[1])) return true
-        if (shouldShowTagNativeLibX86 && (nls[2] || nls[3])) return true
-        else if (isAntied(context, TAG_ID_X86) && !(nls[2] || nls[3])) return true
-
-        if (shouldShowTagHidden && !appInfo.isLaunchable) return true
-        else if (isAntied(context, TAG_ID_HID) && appInfo.isLaunchable) return true
-        if (shouldShowTagPrivilegeSystem && appInfo.apiUnit == ApiUnit.SYS) return true
-        else if (isAntied(context, TAG_ID_SYS) && appInfo.apiUnit != ApiUnit.SYS) return true
-        if (shouldShowTagHasSplits && appInfo.appPackage.hasSplits) return true
-        else if (isAntied(context, TAG_ID_SPL) && !appInfo.appPackage.hasSplits) return true
-
-        val isAntiedAi = isAntied(context, TAG_ID_AI)
-        if ((shouldShowTagIconAdaptive || isAntiedAi) && !appInfo.hasIcon) {
-            val d = appInfo.getOriginalIconDrawable(context)!!.mutate()
-            appInfo.retrieveAppIconInfo(d)
-        }
-        if (shouldShowTagIconAdaptive && appInfo.adaptiveIcon) return true
-        else if (isAntied(context, TAG_ID_AI) && !appInfo.adaptiveIcon) return true
-        return false
+        return re
     }
 
-    private fun isAntied(context: Context, resId: Int): Boolean {
-        return displayingTags.get(context, resId)?.isAntiSelected ?: false
+    private fun loadExpressibleTag(tag: PackageTag, context: Context,
+                                   app: ApiViewingApp): ExpressibleTag? {
+        var expressibleTag: ExpressibleTag? = null
+        val state = displayingTags.getNonNull(context, tag.id)
+        if (!state.isDeselected) expressibleTag = tag.toExpressible().setRes(context, app)
+        if (state.isAntiSelected) expressibleTag?.anti()
+        return expressibleTag
     }
 
     /**
@@ -441,7 +439,7 @@ internal object AppTag {
 
     private fun loadTriStateTagSettings(context: Context, tagSettings: Map<String, TriStateSelectable>, isLazy: Boolean): Boolean {
         var isChanged = false
-        tagResIds.forEach {
+        PackageTag.TAG_IDS.forEach {
             isChanged = (tagSettings.changed(context, it, isLazy) ?: return true) || isChanged
         }
         return isChanged
@@ -449,8 +447,6 @@ internal object AppTag {
 
     fun loadTagSettings(context: Context, tagSettings: Map<String, TriStateSelectable>, isLazy: Boolean): Boolean {
         val isChanged = loadTriStateTagSettings(context, tagSettings, isLazy)
-        shouldShowTagPackageInstallerGooglePlay = isSelected(context, TAG_ID_GP)
-        shouldShowTagPackageInstallerPackageInstaller = isSelected(context, TAG_ID_PI)
         shouldShowTagCrossPlatformFlutter = isSelected(context, TAG_ID_FLU)
         shouldShowTagCrossPlatformReactNative = isSelected(context, TAG_ID_RN)
         shouldShowTagCrossPlatformXamarin = isSelected(context, TAG_ID_XAM)
