@@ -253,4 +253,14 @@
     <string name="mainSecFrequents">Frequents</string>
     <string name="mainSecStarred">Starred</string>
     <string name="app_device_controls">Boundo Controls</string>
+    <string name="access_sys_usage">Allow Boundo to access usage data</string>
+    <string name="text_access_denied">Access denied</string>
+    <string name="versatile_device_controls_at_hint_on">Swipe to adjust</string>
+    <string name="versatile_device_controls_at_hint_off">Tap to start</string>
+    <string name="versatile_device_controls_at_status_off">Stopped</string>
+    <string name="versatile_device_controls_at_ctrl_desc_on">Stop timer</string>
+    <string name="versatile_device_controls_at_ctrl_desc_off">Start timer</string>
+    <string name="versatile_device_controls_at_status_on">%.0f min</string>
+    <string name="versatile_device_controls_mdu_ctrl_desc">Refresh data</string>
+    <string name="versatile_device_controls_mdu_hint">Tap to refresh</string>
 </resources>

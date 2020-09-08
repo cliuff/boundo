@@ -22,6 +22,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.drawable.Icon
+import android.provider.Settings
 import android.service.controls.Control
 import android.service.controls.ControlsProviderService
 import android.service.controls.DeviceTypes
@@ -32,11 +33,13 @@ import android.service.controls.templates.*
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.widget.Toast
 import com.madness.collision.R
 import com.madness.collision.main.MainActivity
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.audio_timer.AccessAT
 import com.madness.collision.unit.audio_timer.AtCallback
+import com.madness.collision.util.SysServiceUtils
 import com.madness.collision.util.SystemUtil
 import com.madness.collision.util.X
 import io.reactivex.rxjava3.core.Flowable
@@ -82,7 +85,8 @@ class MyControlService : ControlsProviderService() {
                     val intent = Intent(context, MainActivity::class.java)
                     val pi = PendingIntent.getActivity(context, 0, intent,
                             PendingIntent.FLAG_UPDATE_CURRENT)
-                    val controlButton = ControlButton(false, "Refresh data")
+                    val actionDesc = localeContext.getString(R.string.versatile_device_controls_mdu_ctrl_desc)
+                    val controlButton = ControlButton(false, actionDesc)
                     val color = context.getColor(R.color.primaryABlack)
                     val colorBack = ColorStateList.valueOf(context.getColor(R.color.primaryVBackABlack))
                     val title = SpannableString(localeContext.getString(R.string.tileData))
@@ -90,7 +94,7 @@ class MyControlService : ControlsProviderService() {
                     val template = ToggleTemplate(DEV_ID_MDU, controlButton)
                     Control.StatefulBuilder(DEV_ID_MDU, pi)
                             .setTitle(title)
-                            .setSubtitle("Tap to refresh")
+                            .setSubtitle(context.getString(R.string.versatile_device_controls_mdu_hint))
                             .setDeviceType(DeviceTypes.TYPE_GENERIC_VIEWSTREAM)
                             .setStatus(Control.STATUS_OK)
                             .setCustomIcon(Icon.createWithResource(context, R.drawable.ic_data_usage_24).setTint(color))
@@ -219,12 +223,17 @@ class MyControlService : ControlsProviderService() {
 //                        }
                     }
                 }
-                val sub = if (isRunning) "Swipe to adjust" else "Tap to start"
-                val status = if (isRunning) "" else "Stopped"
+                val subRes = if (isRunning) R.string.versatile_device_controls_at_hint_on
+                else R.string.versatile_device_controls_at_hint_off
+                val sub = localeContext.getString(subRes)
+                val status = if (isRunning) ""
+                else localeContext.getString(R.string.versatile_device_controls_at_status_off)
                 val currentValDisplay = if (atCurrentValue < atStepValue) atStepValue else atCurrentValue
-                val rangeTemplate = RangeTemplate(DEV_ID_AT, atStepValue, atMaxValue,
-                        currentValDisplay, atStepValue, "%.0f min")
-                val actionDesc = if (isRunning) "Stop timer" else "Start timer"
+                val rangeTemplate = RangeTemplate(DEV_ID_AT, atStepValue, atMaxValue, currentValDisplay, atStepValue,
+                        localeContext.getString(R.string.versatile_device_controls_at_status_on))
+                val actionDescRes = if (isRunning) R.string.versatile_device_controls_at_ctrl_desc_on
+                else R.string.versatile_device_controls_at_ctrl_desc_off
+                val actionDesc = localeContext.getString(actionDescRes)
                 val controlButton = ControlButton(isRunning, actionDesc)
                 val toggleRangeTemplate = ToggleRangeTemplate(DEV_ID_AT, controlButton, rangeTemplate)
 //                val modeFlags = TemperatureControlTemplate.FLAG_MODE_COOL or
@@ -237,15 +246,44 @@ class MyControlService : ControlsProviderService() {
                         ?.setControlTemplate(toggleRangeTemplate)
             }
             DEV_ID_MDU -> {
-                if (action != null && action is BooleanAction) {
-                    // refresh data
+                val hasAccess = ensurePermission(context)
+                val doUpdate = action != null && action is BooleanAction
+                if (doUpdate && hasAccess) GlobalScope.launch {
+                    delay(800)
+                    getControl(context, controlId)?.let { control ->
+                        updatePublisher.onNext(control)
+                    }
                 }
-                val isRunning = AccessAT.isRunning()
-                val status = if (isRunning) "???" else ""
+                val status = if (!hasAccess) {
+                    localeContext.getString(R.string.text_access_denied)
+                } else if (doUpdate) {
+                    "..."
+                } else {
+                    val (totalGbDay, totalGbMonth) = SysServiceUtils.getDataUsage(context)
+                    String.format("%.2f • %.2f GB", totalGbDay, totalGbMonth)
+                }
                 getStatefulBuilder(context, controlId)?.setStatusText(status)
             }
             else -> null
         }?.build()
+    }
+
+    private fun ensurePermission(context: Context): Boolean {
+        val re = X.canAccessUsageStats(context)
+        if (!re) getPermission()
+        return re
+    }
+
+    private fun getPermission() {
+        val intent = Intent().apply {
+            action = Settings.ACTION_USAGE_ACCESS_SETTINGS
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        }
+        startActivity(intent)
+        GlobalScope.launch {
+            delay(1000)
+            X.toast(applicationContext, R.string.access_sys_usage, Toast.LENGTH_LONG)
+        }
     }
 
 }
