@@ -97,7 +97,8 @@ internal class InstantFragment: TaggedFragment(), Democratic {
         // qs tiles
         val availableTiles by lazy { InstantTiles.TILES.filter(predicate) }
         if (X.aboveOn(X.N) && availableTiles.isNotEmpty()) {
-            val adapterTile = InstantAdapter(context, mainViewModel, InstantAdapter.TYPE_TILE, availableTiles)
+            val adapterTile = InstantAdapter(context,
+                    mainViewModel, InstantAdapter.TYPE_TILE, availableTiles)
             instantRecyclerTile.run {
                 setHasFixedSize(true)
                 setItemViewCacheSize(availableTiles.size)
@@ -109,13 +110,15 @@ internal class InstantFragment: TaggedFragment(), Democratic {
             instantIntroTile.visibility = View.GONE
         }
         // shortcuts
-        val availableShortcuts by lazy { InstantShortcuts.SHORTCUTS.filter(predicate) }
+        val availableShortcuts = InstantShortcuts.SHORTCUTS.filter(predicate)
         if (availableShortcuts.isNotEmpty()) {
-            val adapterShortcut = InstantAdapter(context, mainViewModel, InstantAdapter.TYPE_SHORTCUT, availableShortcuts)
+            val adapterShortcut = InstantAdapter(context, mainViewModel,
+                    InstantAdapter.TYPE_SHORTCUT, availableShortcuts)
             instantRecyclerShortcut.run {
                 setHasFixedSize(true)
                 setItemViewCacheSize(availableShortcuts.size)
-                layoutManager = if (spanCount == 1) LinearLayoutManager(context) else GridLayoutManager(context, spanCount)
+                layoutManager = if (spanCount == 1) LinearLayoutManager(context)
+                else GridLayoutManager(context, spanCount)
                 adapter = adapterShortcut
             }
         } else {
@@ -123,9 +126,12 @@ internal class InstantFragment: TaggedFragment(), Democratic {
             instantIntroShortcut.visibility = View.GONE
         }
         // other
-        val availableOther = InstantOthers.OTHERS.filter(predicate)
+        val availableOther = InstantOthers.OTHERS.filter {
+            X.aboveOn(it.first)
+        }.map { it.second.invoke() }.filter(predicate)
         if (availableOther.isNotEmpty()) {
-            val adapterOther = InstantAdapter(context, mainViewModel, InstantAdapter.TYPE_OTHER, availableOther)
+            val adapterOther = InstantAdapter(context,
+                    mainViewModel, InstantAdapter.TYPE_OTHER, availableOther)
             instantRecyclerOther.run {
                 setHasFixedSize(true)
                 setItemViewCacheSize(availableOther.size)

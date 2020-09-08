@@ -26,10 +26,9 @@ import com.madness.collision.versatile.TextProcessingActivity
 internal object InstantOthers {
 
     val OTHERS = listOf(
-            instantComponent<TextProcessingActivity>(R.string.activityTextProcessingApp, Unit.UNIT_NAME_API_VIEWING)
-                    .setRequirement { X.aboveOn(X.M) },
-            instantComponent<MyControlService>(R.string.app_device_controls)
-                    .setRequirement { X.aboveOn(X.R) }
+            // Classes of higher API level cannot be loaded on lower API level
+            X.M to { instantComponent<TextProcessingActivity>(R.string.activityTextProcessingApp, Unit.UNIT_NAME_API_VIEWING) },
+            X.R to { instantComponent<MyControlService>(R.string.app_device_controls) }
     )
 
 }

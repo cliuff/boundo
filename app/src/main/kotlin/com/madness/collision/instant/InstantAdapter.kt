@@ -80,10 +80,10 @@ internal class InstantAdapter<T: InstantItem>(
     private val instant: Instant?
     init {
         instant = if (isShortcut) {
-            val manager = if (X.aboveOn(X.N_MR1))
-                context.getSystemService(ShortcutManager::class.java)
-            else null
-            if (manager != null) Instant(context, manager) else null
+            if (X.aboveOn(X.N_MR1)) {
+                val manager = context.getSystemService(ShortcutManager::class.java)
+                if (manager != null) Instant(context, manager) else null
+            } else null
         } else {
             null
         }
@@ -144,11 +144,13 @@ internal class InstantAdapter<T: InstantItem>(
                 holder.title.text = name
                 holder.titleLayout.setOnClickListener {
                     val shortcutItem = item as InstantShortcut
-                    instant?.pinShortcut(shortcutItem.id)
+                    if (X.aboveOn(X.N_MR1)) instant?.pinShortcut(shortcutItem.id)
+                    else InstantCompat.pinShortcutLegacy(mContext, shortcutItem.id)
                 }
                 holder.pin.setOnClickListener {
                     val shortcutItem = item as InstantShortcut
-                    instant?.pinShortcut(shortcutItem.id)
+                    if (X.aboveOn(X.N_MR1)) instant?.pinShortcut(shortcutItem.id)
+                    else InstantCompat.pinShortcutLegacy(mContext, shortcutItem.id)
                 }
                 if (X.belowOff(X.N_MR1)) {
                     holder.switch.visibility = View.GONE

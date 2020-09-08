@@ -41,6 +41,9 @@ object SysServiceUtils {
         val time = System.currentTimeMillis()
         try {
             // current day traffic mobile data usage
+            // querySummaryForDevice:
+            // java.lang.SecurityException: Network stats history of uid -1 is forbidden for caller 10195
+            // on a Huawei device
             val usageDay = manager.querySummaryForDevice(
                     ConnectivityManager.TYPE_MOBILE, null, timeDay, time)
             val receivedDay = usageDay.rxBytes
