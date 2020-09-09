@@ -20,8 +20,6 @@ import android.annotation.TargetApi
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.content.res.ColorStateList
-import android.graphics.drawable.Icon
 import android.provider.Settings
 import android.service.controls.Control
 import android.service.controls.ControlsProviderService
@@ -30,10 +28,10 @@ import android.service.controls.actions.BooleanAction
 import android.service.controls.actions.ControlAction
 import android.service.controls.actions.FloatAction
 import android.service.controls.templates.*
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.ForegroundColorSpan
 import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
+import androidx.core.graphics.drawable.toIcon
 import com.madness.collision.R
 import com.madness.collision.main.MainActivity
 import com.madness.collision.unit.Unit
@@ -70,16 +68,16 @@ class MyControlService : ControlsProviderService() {
                     )
                     val pi = PendingIntent.getActivity(context, 0, intent,
                             PendingIntent.FLAG_UPDATE_CURRENT)
-                    val color = context.getColor(R.color.primaryABlack)
-                    val colorBack = ColorStateList.valueOf(context.getColor(R.color.primaryVBackABlack))
-                    val title = SpannableString(localeContext.getString(R.string.unit_audio_timer))
-                    title.setSpan(ForegroundColorSpan(color), 0, title.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    val color = context.getColor(R.color.primaryAWhite)
+                    val title = localeContext.getString(R.string.unit_audio_timer)
+                    val iconDrawable = ContextCompat.getDrawable(context, R.drawable.ic_timer_24)
+                    iconDrawable?.setTint(color)
+                    val icon = iconDrawable?.toBitmap()?.toIcon()
                     Control.StatefulBuilder(DEV_ID_AT, pi)
                             .setTitle(title)
                             .setDeviceType(DeviceTypes.TYPE_GENERIC_START_STOP)
                             .setStatus(Control.STATUS_OK)
-                            .setCustomIcon(Icon.createWithResource(context, R.drawable.ic_timer_24).setTint(color))
-                            .setCustomColor(colorBack)
+                            .setCustomIcon(icon)
                 }
                 DEV_ID_MDU -> {
                     val intent = Intent(context, MainActivity::class.java)
@@ -87,18 +85,18 @@ class MyControlService : ControlsProviderService() {
                             PendingIntent.FLAG_UPDATE_CURRENT)
                     val actionDesc = localeContext.getString(R.string.versatile_device_controls_mdu_ctrl_desc)
                     val controlButton = ControlButton(false, actionDesc)
-                    val color = context.getColor(R.color.primaryABlack)
-                    val colorBack = ColorStateList.valueOf(context.getColor(R.color.primaryVBackABlack))
-                    val title = SpannableString(localeContext.getString(R.string.tileData))
-                    title.setSpan(ForegroundColorSpan(color), 0, title.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    val color = context.getColor(R.color.primaryAWhite)
+                    val title = localeContext.getString(R.string.tileData)
                     val template = ToggleTemplate(DEV_ID_MDU, controlButton)
+                    val iconDrawable = ContextCompat.getDrawable(context, R.drawable.ic_data_usage_24)
+                    iconDrawable?.setTint(color)
+                    val icon = iconDrawable?.toBitmap()?.toIcon()
                     Control.StatefulBuilder(DEV_ID_MDU, pi)
                             .setTitle(title)
                             .setSubtitle(context.getString(R.string.versatile_device_controls_mdu_hint))
                             .setDeviceType(DeviceTypes.TYPE_GENERIC_VIEWSTREAM)
                             .setStatus(Control.STATUS_OK)
-                            .setCustomIcon(Icon.createWithResource(context, R.drawable.ic_data_usage_24).setTint(color))
-                            .setCustomColor(colorBack)
+                            .setCustomIcon(icon)
                             .setControlTemplate(template)
                 }
                 else -> null
@@ -223,14 +221,16 @@ class MyControlService : ControlsProviderService() {
 //                        }
                     }
                 }
+                val currentValDisplay = if (atCurrentValue < atStepValue) atStepValue else atCurrentValue
+                val formatRes = R.string.versatile_device_controls_at_status_on
+                val formatString = localeContext.getString(formatRes)
                 val subRes = if (isRunning) R.string.versatile_device_controls_at_hint_on
                 else R.string.versatile_device_controls_at_hint_off
                 val sub = localeContext.getString(subRes)
                 val status = if (isRunning) ""
                 else localeContext.getString(R.string.versatile_device_controls_at_status_off)
-                val currentValDisplay = if (atCurrentValue < atStepValue) atStepValue else atCurrentValue
-                val rangeTemplate = RangeTemplate(DEV_ID_AT, atStepValue, atMaxValue, currentValDisplay, atStepValue,
-                        localeContext.getString(R.string.versatile_device_controls_at_status_on))
+                val rangeTemplate = RangeTemplate(DEV_ID_AT, atStepValue, atMaxValue,
+                        currentValDisplay, atStepValue, formatString)
                 val actionDescRes = if (isRunning) R.string.versatile_device_controls_at_ctrl_desc_on
                 else R.string.versatile_device_controls_at_ctrl_desc_off
                 val actionDesc = localeContext.getString(actionDescRes)
