@@ -65,7 +65,7 @@ object Versions {
     const val glide = "4.11.0"
     const val jsoup = "1.13.1"
     const val junitJupiter = "5.6.2"
-    const val kotlin = "1.4.0"
+    const val kotlin = "1.4.10"
     const val kotlinCoroutines = "1.3.8"
     const val mpChart = "v3.1.0"
     const val openCsv = "5.2"
