@@ -63,13 +63,13 @@ abstract class Unit: TaggedFragment(), Democratic {
                         .setRequirement(
                                 Description.Checker(R.string.unit_desc_requirement_shortcut) { X.aboveOn(X.N_MR1) },
                                 Description.Checker(R.string.unit_desc_requirement_we) {
-                                    MiscApp.getPackageInfo(it, packageName = "com.tencent.mm") != null
+                                    MiscApp.isAppAvailable(it, "com.tencent.mm")
                                 }),
                 Description(UNIT_NAME_QQ_CONTACTS, R.string.unit_qq_contacts, R.drawable.ic_qq_24).setDescResId(R.string.unit_desc_qc)
                         .setRequirement(
                                 Description.Checker(R.string.unit_desc_requirement_shortcut) { X.aboveOn(X.N_MR1) },
                                 Description.Checker(R.string.unit_desc_requirement_qc) {
-                                    MiscApp.getPackageInfo(it, packageName = "com.tencent.mobileqq") != null
+                                    MiscApp.isAppAvailable(it, "com.tencent.mobileqq")
                                 })
         )
         private val UNIT_DESCRIPTIONS: Map<String, Description> = mUnitDescriptions.associateBy { it.unitName }

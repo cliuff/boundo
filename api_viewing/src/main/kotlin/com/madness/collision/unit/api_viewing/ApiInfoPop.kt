@@ -18,7 +18,6 @@ package com.madness.collision.unit.api_viewing
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -44,6 +43,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.card.MaterialCardView
 import com.madness.collision.R
 import com.madness.collision.main.MainViewModel
+import com.madness.collision.misc.MiscApp
 import com.madness.collision.unit.api_viewing.APIAdapter.Companion.sealBack
 import com.madness.collision.unit.api_viewing.APIAdapter.Companion.seals
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
@@ -358,23 +358,17 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
         // manually initialize those not found in loaded apps
         for (name in arrayOf(packageCoolApk, packagePlayStore, packageSettings)) {
             if (storeMap[name] != null) continue
-            try {
-                val pi = context.packageManager.getPackageInfo(name, 0)
-                ApiViewingApp(context, pi, preloadProcess = true, archive = false)
-                        .load(context, pi.applicationInfo).icon?.let {
-                            storeMap[name] = it
-                        }
-            } catch (e: PackageManager.NameNotFoundException) {
-                e.printStackTrace()
-                // initialize settings app as predefined
-                if (name == packageSettings){
-                    ApiViewingApp().load(context, {
-                        ContextCompat.getDrawable(context, R.mipmap.logo_settings)!!
-                    }, { null }).icon?.let {
-                        storeMap[name] = it
-                    }
-                }
+            val pi = MiscApp.getPackageInfo(context, packageName = name)
+            var app: ApiViewingApp? = null
+            if (pi != null) {
+                app = ApiViewingApp(context, pi, preloadProcess = true, archive = false)
+                app.load(context, pi.applicationInfo)
+            } else if (name == packageSettings) {
+                app = ApiViewingApp()
+                app.load(context, { ContextCompat.getDrawable(context, R.mipmap.logo_settings)!! }, { null })
             }
+            val icon = app?.icon
+            if (icon != null) storeMap[name] = icon
         }
         return true
     }

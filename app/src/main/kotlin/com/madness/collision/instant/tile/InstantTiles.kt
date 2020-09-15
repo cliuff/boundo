@@ -28,9 +28,9 @@ internal object InstantTiles {
             instantComponent<TileServiceApiViewer>(R.string.apiViewer, Unit.UNIT_NAME_API_VIEWING),
             instantComponent<TileServiceAudioTimer>(R.string.unit_audio_timer, Unit.UNIT_NAME_AUDIO_TIMER),
             instantComponent<TileServiceBarcodeScannerMm>(R.string.instantTileScannerWechat) { WeChatScannerDesc() }
-                    .setRequirement { MiscApp.getPackageInfo(it, packageName = "com.tencent.mm") != null },
+                    .setRequirement { MiscApp.isAppAvailable(it, "com.tencent.mm") },
             instantComponent<TileServiceBarcodeScanner>(R.string.instantTileScannerAlipay) { AlipayScannerDesc() }
-                    .setRequirement { MiscApp.getPackageInfo(it, packageName = "com.eg.android.AlipayGphone") != null },
+                    .setRequirement { MiscApp.isAppAvailable(it, "com.eg.android.AlipayGphone") },
             instantComponent<TileServiceMonthData>(R.string.tileData) { MonthDataUsageDesc() }
     )
 

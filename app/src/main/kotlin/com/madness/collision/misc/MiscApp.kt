@@ -25,17 +25,14 @@ object MiscApp {
     fun getPackageInfo(context: Context, packageName: String = "", apkPath: String = ""): PackageInfo?{
         val isArchive = packageName.isEmpty()
         val pm: PackageManager = context.packageManager
-        return if (isArchive){
+        return if (isArchive) {
             if (apkPath.isEmpty()) return null
-            pm.getPackageArchiveInfo(apkPath, 0)?.apply {
-                applicationInfo.sourceDir = apkPath
-                applicationInfo.publicSourceDir = apkPath
-            }
-        }else{
+            getPackageArchiveInfo(context, apkPath)
+        } else {
             if (packageName.isEmpty()) return null
             try {
                 pm.getPackageInfo(packageName, 0)
-            }catch (e: PackageManager.NameNotFoundException){
+            } catch (e: PackageManager.NameNotFoundException){
                 e.printStackTrace()
                 null
             }
@@ -47,10 +44,7 @@ object MiscApp {
         val pm: PackageManager = context.packageManager
         return if (isArchive) {
             if (apkPath.isEmpty()) return null
-            pm.getPackageArchiveInfo(apkPath, 0)?.applicationInfo?.apply {
-                sourceDir = apkPath
-                publicSourceDir = apkPath
-            }
+            getPackageArchiveInfo(context, apkPath)?.applicationInfo
         } else {
             if (packageName.isEmpty()) return null
             try {
@@ -60,5 +54,21 @@ object MiscApp {
                 null
             }
         }
+    }
+
+    fun getPackageArchiveInfo(context: Context, path: String): PackageInfo? {
+        val pm: PackageManager = context.packageManager
+        val pi = pm.getPackageArchiveInfo(path, 0) ?: return null
+        pi.applicationInfo.sourceDir = path
+        pi.applicationInfo.publicSourceDir = path
+        return pi
+    }
+
+    /**
+     * Check if an app is installed and enabled
+     */
+    fun isAppAvailable(context: Context, packageName: String): Boolean {
+        val pi = getPackageInfo(context, packageName = packageName) ?: return false
+        return pi.applicationInfo.enabled
     }
 }
