@@ -450,6 +450,14 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
                 popActions.dismiss()
                 actionDetails(appInfo)
             }
+            if (appInfo.isLaunchable) {
+                popActions.findViewById<View>(MyR.id.avAdapterActionsOpen).setOnClickListener {
+                    popActions.dismiss()
+                    actionOpen(context, appInfo)
+                }
+            } else {
+                popActions.findViewById<View>(MyR.id.avAdapterActionsOpenContainer).visibility = View.GONE
+            }
             popActions.findViewById<View>(MyR.id.avAdapterActionsIcon).setOnClickListener {
                 popActions.dismiss()
                 actionIcon(appInfo)
@@ -459,6 +467,16 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
                 actionApk(appInfo)
             }
             return@setOnLongClickListener true
+        }
+    }
+
+    private fun actionOpen(context: Context, app: ApiViewingApp) {
+        if (!app.isLaunchable) return
+        val intent = context.packageManager.getLaunchIntentForPackage(app.packageName)
+        if (intent == null) {
+            activity.notifyBriefly(R.string.text_error)
+        } else {
+            context.startActivity(intent)
         }
     }
 
