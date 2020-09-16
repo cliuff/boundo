@@ -291,7 +291,8 @@ class MyUnit: Unit(), View.OnClickListener{
             MyR.id.ttCodeHtml -> {
                 val file = File(F.valFilePubTtCode(context))
                 if (file.exists()) {
-                    FilePop.by(context, file, "text/html", "").show(childFragmentManager, FilePop.TAG)
+                    FilePop.by(context, file, "text/html", "", imageLabel = "School Timetable Web")
+                            .show(childFragmentManager, FilePop.TAG)
                 } else {
                     notify(R.string.text_no_content)
                 }
@@ -373,7 +374,8 @@ class MyUnit: Unit(), View.OnClickListener{
         val context = context ?: return
         val iCalFile = File(F.valFilePubTtCurrent(context))
         if (iCalFile.exists()) {
-            FilePop.by(context, iCalFile, "text/calendar", "").show(childFragmentManager, FilePop.TAG)
+            FilePop.by(context, iCalFile, "text/calendar", "", imageLabel = "School Timetable")
+                    .show(childFragmentManager, FilePop.TAG)
         } else {
             notify(MyR.string.ics_Import_Toast_Null)
         }
@@ -388,7 +390,8 @@ class MyUnit: Unit(), View.OnClickListener{
         }
         val iCalFile = File(ultimatePath)
         if (iCalFile.exists()) {
-            FilePop.by(context, iCalFile, "text/calendar", "").show(childFragmentManager, FilePop.TAG)
+            FilePop.by(context, iCalFile, "text/calendar", "", imageLabel = "School Week Indicator")
+                    .show(childFragmentManager, FilePop.TAG)
         } else {
             notifyBriefly(R.string.text_no_content)
         }

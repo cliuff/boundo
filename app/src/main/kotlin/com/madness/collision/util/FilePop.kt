@@ -18,17 +18,23 @@ package com.madness.collision.util
 
 import android.app.Activity
 import android.content.ClipData
+import android.content.ClipDescription
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Icon
 import android.net.Uri
 import android.os.Bundle
+import android.text.format.Formatter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.madness.collision.R
 import com.madness.collision.databinding.FileActionsBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.File
 
 class FilePop: BottomSheetDialogFragment(){
@@ -51,6 +57,7 @@ class FilePop: BottomSheetDialogFragment(){
                 setDataAndType(fileUri, fileType)
                 putExtra(Intent.EXTRA_TITLE, title)
                 if (imageUri != null) clipData = ClipData.newUri(context.contentResolver, imageLabel, imageUri)
+                else if (imageLabel.isNotEmpty()) clipData = ClipData.newPlainText("File title", imageLabel)
             }
             return newInstance(intent)
         }
@@ -125,12 +132,26 @@ class FilePop: BottomSheetDialogFragment(){
             }
             else -> fileUri = intent.data!!
         }
-        intent.type?.let { fileType = it }
-        intent.getStringExtra(Intent.EXTRA_TITLE)?.let { title = it }
-        intent.clipData?.run {
-            val clipItem = getItemAt(0)
-            imageUri = clipItem.uri
-            imageLabel = description.label.toString()
+        // Determine mime type
+        val type = FileUtils.getType(mContext, fileUri)
+        if (type.isNotEmpty()) {
+            fileType = type
+        } else {
+            val intentType = intent.type
+            if (intentType != null) fileType = intentType
+        }
+        val intentTitle = intent.getStringExtra(Intent.EXTRA_TITLE)
+        if (intentTitle != null) title = intentTitle
+        val intentClipData = intent.clipData
+        if (intentClipData != null) {
+            val clipItem = intentClipData.getItemAt(0)
+            val clipDesc = intentClipData.description
+            if (clipDesc.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
+                imageLabel = clipItem.text.toString()
+            } else {
+                imageUri = clipItem.uri
+                imageLabel = intentClipData.description.label.toString()
+            }
         }
         loadData()
         mViews.fileActionsOpen.setOnClickListener { open() }
@@ -138,9 +159,9 @@ class FilePop: BottomSheetDialogFragment(){
         mViews.fileActionsSave.setOnClickListener { save() }
     }
 
-    private fun loadData() {
+    private fun getTypeLabel(fileType: String): String {
         val matchRe = "(.+)/(.+)".toRegex().find(fileType)
-        val displayFileType = if (matchRe != null) {
+        return if (matchRe != null) {
             val (cat, type) = matchRe.destructured
             when (cat) {
                 "image" -> when (type) {
@@ -173,6 +194,15 @@ class FilePop: BottomSheetDialogFragment(){
                 else -> fileType
             }
         } else fileType
+    }
+
+    private fun loadData() {
+        var typeIcon: Icon? = null
+        val displayFileType = if (X.aboveOn(X.Q)) {
+            val info = FileUtils.getTypeInfo(mContext, fileUri)
+            typeIcon = info.icon
+            info.label
+        } else getTypeLabel(fileType)
         var hasNoTitle = false
         if (imageUri != null) {
             mViews.fileActionsInfoImage.setImageURI(imageUri)
@@ -182,7 +212,9 @@ class FilePop: BottomSheetDialogFragment(){
         if (imageLabel.isNotEmpty()) {
             mViews.fileActionsInfoTitle.text = imageLabel
         } else {
-            val fileName = fileUri.lastPathSegment ?: fileUri.path
+            val uriName = FileUtils.getName(mContext, fileUri)
+            val fileName = if (uriName.isNotEmpty()) uriName
+            else fileUri.lastPathSegment ?: fileUri.path
             if (fileName != null) {
                 mViews.fileActionsInfoTitle.text = fileName
             } else {
@@ -190,16 +222,24 @@ class FilePop: BottomSheetDialogFragment(){
                 hasNoTitle = true
             }
         }
-        if (displayFileType.isNotEmpty()) {
-            // Normal title case, set file type
-            if (!hasNoTitle) mViews.fileActionsInfoSubtitle.text = displayFileType
-            // Title set as file type, hide subtitle
-            else mViews.fileActionsInfoSubtitle.visibility = View.GONE
+        val fileSize = FileUtils.getSize(mContext, fileUri)
+        val displayFileSize = Formatter.formatFileSize(mContext, fileSize)
+        if (!hasNoTitle) {
+            val subtitle = if (displayFileType.isEmpty()) displayFileSize
+            else "$displayFileType • $displayFileSize"
+            // Normal title case, set file type and size
+            mViews.fileActionsInfoSubtitle.text = subtitle
         } else {
-            // Normal title case, hide subtitle
-            if (!hasNoTitle) mViews.fileActionsInfoSubtitle.visibility = View.GONE
-            // Title set as file type, hide file info
-            else mViews.fileActionsInfo.visibility = View.GONE
+            // Title set as file type, show size only
+            mViews.fileActionsInfoSubtitle.text = displayFileSize
+        }
+        if (typeIcon != null && X.aboveOn(X.M)) lifecycleScope.launch {
+            val d = typeIcon.loadDrawable(mContext)
+            launch(Dispatchers.Main) {
+                mViews.fileActionsInfoSubtitle.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                        d, null, null, null
+                )
+            }
         }
     }
 

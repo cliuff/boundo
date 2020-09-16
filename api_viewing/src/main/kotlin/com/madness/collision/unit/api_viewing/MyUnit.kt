@@ -259,12 +259,14 @@ class MyUnit: com.madness.collision.unit.Unit() {
 
     private fun exportList(context: Context) {
         GlobalScope.launch {
-            val path = F.createPath(F.cachePublicPath(context), "Temp", "AV", "AppList.csv")
+            val name = "AppList"
+            val label = "App List"
+            val path = F.createPath(F.cachePublicPath(context), "Temp", "AV", "$name.csv")
             val file = File(path)
             if (!F.prepare4(file)) return@launch
             SheetUtil.csvWriterAll(getList(context), file)
             launch(Dispatchers.Main) {
-                FilePop.by(context, file, "text/csv", R.string.fileActionsShare)
+                FilePop.by(context, file, "text/csv", R.string.fileActionsShare, imageLabel = label)
                         .show(childFragmentManager, FilePop.TAG)
             }
         }

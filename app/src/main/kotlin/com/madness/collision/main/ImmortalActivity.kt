@@ -73,7 +73,7 @@ internal class ImmortalActivity : AppCompatActivity(), View.OnClickListener {
             R.id.immortalBagShare -> {
                 if (logFile != null){
                     supportFragmentManager.let {
-                        FilePop.by(this, logFile!!, "text/html", R.string.immortalShareTitle).show(it, FilePop.TAG)
+                        FilePop.by(this, logFile!!, "text/html", R.string.immortalShareTitle, imageLabel = "Boundo Log").show(it, FilePop.TAG)
                     }
                 } else {
                     notify(R.string.textWaitASecond)

@@ -47,7 +47,7 @@
 
         <TextView
             android:id="@+id/fileActionsInfoTitle"
-            tools:text="Boundo.apk"
+            tools:text="Boundo"
             android:textStyle="bold"
             android:textColor="?colorText"
             android:textSize="22sp"
@@ -61,16 +61,21 @@
             app:layout_constraintVertical_chainStyle="packed"
             android:paddingStart="22dp"
             android:paddingEnd="25dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <TextView
             android:id="@+id/fileActionsInfoSubtitle"
-            tools:text="APK"
+            tools:text="APK • 6.7 MB"
             android:textColor="?colorTextSub"
             android:textSize="14sp"
             android:maxLines="1"
             android:ellipsize="end"
+            android:drawablePadding="6dp"
+            android:drawableTint="?colorTextSub"
+            android:gravity="center_vertical"
             app:layout_constraintStart_toEndOf="@id/fileActionsInfoImage"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0"
@@ -78,6 +83,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:paddingStart="22dp"
             android:paddingEnd="25dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 

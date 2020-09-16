@@ -35,7 +35,6 @@ import android.view.Display
 import android.view.Surface
 import android.view.View
 import android.view.WindowManager
-import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
@@ -49,8 +48,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.*
-import java.net.MalformedURLException
-import java.net.URI
 import java.nio.charset.StandardCharsets
 import java.util.concurrent.atomic.AtomicInteger
 import javax.security.cert.CertificateException
@@ -131,25 +128,6 @@ object X {
             }
         }else {
         }*/
-    }
-
-    fun  getMimeType( file: File): String{
-        return getMimeType(file.toURI())
-    }
-
-    fun  getMimeType( uri: URI): String{
-        return try {
-            getMimeType(uri.toURL().toString())
-        } catch ( e: MalformedURLException) {
-            e.printStackTrace()
-            ""
-        }
-    }
-
-    fun  getMimeType( url: String): String{
-        val extension = MimeTypeMap.getFileExtensionFromUrl(url)
-        extension ?: return ""
-        return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension) ?: ""
     }
 
     fun copyFileLessTwoGB( src: File,  dst: File) {
