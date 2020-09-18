@@ -35,7 +35,7 @@
 
     <ScrollView
         android:id="@+id/collision_dialog_scroll"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:requiresFadingEdge="vertical"
         android:scrollbarThumbVertical="@drawable/scrollbar_vertical">
@@ -43,7 +43,8 @@
         <LinearLayout
             android:id="@+id/collision_dialog_container"
             android:orientation="vertical"
-            android:layout_width="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView

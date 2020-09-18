@@ -179,6 +179,10 @@ internal class UnitDescFragment() : TaggedFragment(), Democratic {
                 }
             }
 
+            if (!ApiUtils.isGglPlayAvailable(context)) {
+                viewBinding.unitDescAction.isEnabled = false
+            }
+
             if (it.hasChecker) {
                 val inflater = LayoutInflater.from(context)
                 val parent = viewBinding.unitDescCheckers

@@ -57,6 +57,8 @@ object Versions {
     const val googlePlayServicesBasement = "17.3.0"
     const val googleGson = "2.8.6"
     const val googlePlayCore = "1.8.0"
+    const val googlePlayCoreKtx = "1.8.1"
+    const val gglGuava = "29.0-android"
     // This dependency is for the Wearable Support Library,
     // which has additional classes (including for watch faces)
     const val googleSupportWearable = "2.7.0"
@@ -133,6 +135,8 @@ class Dependencies : Plugin<Project> {
         const val googleTruthExtensions = "com.google.truth.extensions:truth-java8-extension:${Versions.googleTruth}"
         const val googleGson = "com.google.code.gson:gson:${Versions.googleGson}"
         const val googlePlayCore = "com.google.android.play:core:${Versions.googlePlayCore}"
+        const val googlePlayCoreKtx = "com.google.android.play:core-ktx:${Versions.googlePlayCoreKtx}"
+        const val gglGuava = "com.google.guava:guava:${Versions.gglGuava}"
         const val junitJupiter = "org.junit.jupiter:junit-jupiter-api:${Versions.junitJupiter}"
         const val kotlinCoroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.kotlinCoroutines}"
         const val mpChart = "com.github.PhilJay:MPAndroidChart:${Versions.mpChart}"
@@ -158,7 +162,9 @@ class Dependencies : Plugin<Project> {
                 androidxLifecycleViewModel,
                 androidxLifecycleLiveData,
                 googleMaterialComponents,
-                googlePlayCore
+                googlePlayCore,
+                googlePlayCoreKtx,
+                gglGuava,
         )
     }
 }
