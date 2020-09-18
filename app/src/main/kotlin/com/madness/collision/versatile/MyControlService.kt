@@ -28,6 +28,7 @@ import android.service.controls.actions.BooleanAction
 import android.service.controls.actions.ControlAction
 import android.service.controls.actions.FloatAction
 import android.service.controls.templates.*
+import android.text.format.Formatter
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
@@ -259,8 +260,10 @@ class MyControlService : ControlsProviderService() {
                 } else if (doUpdate) {
                     "..."
                 } else {
-                    val (totalGbDay, totalGbMonth) = SysServiceUtils.getDataUsage(context)
-                    String.format("%.2f • %.2f GB", totalGbDay, totalGbMonth)
+                    val (totalDay, totalMonth) = SysServiceUtils.getDataUsage(context)
+                    val usageDay = Formatter.formatFileSize(context, totalDay)
+                    val usageMonth = Formatter.formatFileSize(context, totalMonth)
+                    "$usageDay • $usageMonth"
                 }
                 getStatefulBuilder(context, controlId)?.setStatusText(status)
             }

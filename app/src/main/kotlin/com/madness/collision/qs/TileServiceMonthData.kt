@@ -21,6 +21,7 @@ import android.content.Intent
 import android.os.Build
 import android.provider.Settings
 import android.service.quicksettings.TileService
+import android.text.format.Formatter
 import android.widget.Toast
 import com.madness.collision.BuildConfig
 import com.madness.collision.R
@@ -83,9 +84,13 @@ internal class TileServiceMonthData : TileService() {
         val previous = if (X.aboveOn(X.Q)) qsTile.subtitle else qsTile.label
         GlobalScope.launch {
             delay(800)
-            val (totalGbDay, totalGbMonth) = SysServiceUtils.getDataUsage(context)
-            val newVal = if (totalGbDay == 0E0 || totalGbMonth == 0E0) previous
-            else String.format("%.2f • %.2f GB", totalGbDay, totalGbMonth)
+            val (totalDay, totalMonth) = SysServiceUtils.getDataUsage(context)
+            val newVal = if (totalDay == 0L || totalMonth == 0L) previous
+            else {
+                val usageDay = Formatter.formatFileSize(context, totalDay)
+                val usageMonth = Formatter.formatFileSize(context, totalMonth)
+                "$usageDay • $usageMonth"
+            }
             if (X.aboveOn(X.Q)) {
                 qsTile.subtitle = newVal
             } else {
