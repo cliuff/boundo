@@ -88,7 +88,6 @@
     <string name="settings_fun_update_via_browser">Download via browser\n(touch &#38; hold to copy the link)</string>
     <string name="text_copy_link">Link copied</string>
     <string name="text_feature_feathering">Feature feathering, time devoting</string>
-    <string name="api_viewer_initialize">Displaying round app icons. You can change it in settings.</string>
     <string name="advice_license">Open source licenses</string>
     <string name="advice_license_details">License details for open software that helps Boundo come to shape</string>
     <string name="text_copy">Copy</string>

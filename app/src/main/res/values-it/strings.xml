@@ -110,7 +110,6 @@
     <string name="notifyChannelGroupAppDesc">Notifiche relative all\'app</string>
     <string name="notifyChannelGroupApp">App</string>
     <string name="text_feature_feathering">Caratteristica sfumatura, tempo dedicato</string>
-    <string name="api_viewer_initialize">Visualizzazione delle icone delle app rotonde. Puoi cambiarlo nelle impostazioni.</string>
     <string name="advice_license">Licenze open source</string>
     <string name="advice_license_details">Dettagli della licenza per software aperto che aiuta Boundo a prendere forma</string>
     <string name="text_copy">copia</string>

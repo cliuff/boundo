@@ -89,7 +89,6 @@
     <string name="settings_fun_update_via_browser">调用浏览器下载（长按复制链接）</string>
     <string name="text_copy_link">链接已复制</string>
     <string name="text_feature_feathering">壮志犹存，羽翼将满</string>
-    <string name="api_viewer_initialize">已自动显示圆形图标，可前往设置页面进行更改。</string>
     <string name="advice_license">开源许可</string>
     <string name="advice_license_details">斑朵的诞生全靠开源软件的支持</string>
     <string name="text_copy">复制</string>

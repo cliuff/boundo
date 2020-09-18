@@ -62,7 +62,6 @@
     <string name="apiTextSharingSelectApk">Seleccione el apk descargado</string>
     <string name="apiViewer">API de aplicación</string>
     <string name="apiViewerShort">API de aplicación</string>
-    <string name="api_viewer_initialize">Mostrar iconos redondos de aplicaciones. Puede cambiarlo en la configuración.</string>
     <string name="appDesc">Un conjunto de herramientas destinadas a hacer algunas cosas por ti</string>
     <string name="app_info_name">Nombre del paquete de la aplicación</string>
     <string name="avAdapterActionsApk">Compartir apk</string>

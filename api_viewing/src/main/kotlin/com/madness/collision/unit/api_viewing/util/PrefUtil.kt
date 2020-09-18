@@ -17,16 +17,14 @@
 package com.madness.collision.unit.api_viewing.util
 
 import com.madness.collision.unit.api_viewing.MyUnit
-import com.madness.collision.util.X
 
 internal object PrefUtil {
     const val AV_TAGS = "AvTags"
     const val API_APK_PRELOAD = "apiAPKPreload"
     const val API_APK_PRELOAD_DEFAULT = false
     const val API_CIRCULAR_ICON = "SDKCircularIcon"
-    // render round icon by default on Android O
-    val API_CIRCULAR_ICON_DEFAULT: Boolean
-        get() = X.aboveOn(X.O)
+    // render round icon only when user specified
+    const val API_CIRCULAR_ICON_DEFAULT = false
     const val API_PACKAGE_ROUND_ICON = "APIPackageRoundIcon"
     const val API_PACKAGE_ROUND_ICON_DEFAULT = false
     const val AV_CLIP_ROUND = "AVClip2Round"
@@ -37,10 +35,6 @@ internal object PrefUtil {
     const val AV_VIEWING_TARGET_DEFAULT = true
     const val AV_INCLUDE_DISABLED = "AVIncludeDisabled"
     const val AV_INCLUDE_DISABLED_DEFAULT = false
-    const val AV_INIT_NOTIFY = "APIViewerInitialized"
-    // notify on Android O
-    val AV_INIT_NOTIFY_DEFAULT: Boolean
-        get() = X.belowOff(X.O)
     const val AV_SORT_ITEM = "SDKCheckSortSpinnerSelection"
     const val AV_SORT_ITEM_DEFAULT = MyUnit.SORT_POSITION_API_TIME
     const val AV_LIST_SRC_ITEM = "SDKCheckDisplaySpinnerSelection"

@@ -142,7 +142,6 @@
     <string name="nm_adapter_img_content_1">Resim klasörü resmi</string>
     <string name="text_copy_link">Bağlantı kopyalandı</string>
     <string name="text_feature_feathering">Özellik geçişi, zaman ayırma</string>
-    <string name="api_viewer_initialize">Yuvarlak uygulama simgeleri görüntüleniyor. Ayarlardan değiştirebilirsiniz.</string>
     <string name="advice_license_details">Boundo\'nun şekillenmesine yardımcı olan açık yazılımlar için lisans ayrıntıları</string>
     <string name="text_copy_content">İçerik kopyalandı</string>
     <string name="text_apply_background">Arka plan olarak uygula</string>

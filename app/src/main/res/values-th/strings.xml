@@ -110,7 +110,6 @@
     <string name="notifyChannelGroupAppDesc">แอปที่เกี่ยวข้องกับการแจ้งเตือน</string>
     <string name="notifyChannelGroupApp">App</string>
     <string name="text_feature_feathering">ขนนกคุณสมบัติอุทิศเวลา</string>
-    <string name="api_viewer_initialize">การแสดงไอคอนรอบแอพ คุณสามารถเปลี่ยนได้ในการตั้งค่า</string>
     <string name="advice_license">ใบอนุญาตโอเพนซอร์ส</string>
     <string name="advice_license_details">รายละเอียดใบอนุญาตสำหรับซอฟต์แวร์แบบเปิดที่ช่วยให้ Boundo มีรูปทรง</string>
     <string name="text_copy">สำเนา</string>

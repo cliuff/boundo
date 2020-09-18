@@ -143,7 +143,6 @@
     <string name="settings_fun_update_via_browser">調用瀏覽器下載（長按複製鏈接）</string>
     <string name="text_copy_link">鏈接已復制</string>
     <string name="text_feature_feathering">壯志猶存，羽翼將滿</string>
-    <string name="api_viewer_initialize">已自動顯示圓形圖標，可前往設置頁面進行更改。</string>
     <string name="advice_license_details">斑朵的誕生全靠開源軟件的支持</string>
     <string name="text_copy_content">內容已復制</string>
     <string name="text_apply_background">設置為背景</string>

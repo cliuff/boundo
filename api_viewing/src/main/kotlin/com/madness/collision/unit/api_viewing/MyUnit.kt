@@ -317,12 +317,6 @@ class MyUnit: com.madness.collision.unit.Unit() {
         if (tbDrawable == null) tbDrawable = ColorDrawable(colorTb)
 
         settingsPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
-        // notify on Android O
-        if (!settingsPreferences.getBoolean(PrefUtil.AV_INIT_NOTIFY, PrefUtil.AV_INIT_NOTIFY_DEFAULT)){
-            settingsPreferences.edit { putBoolean(PrefUtil.AV_INIT_NOTIFY, true) }
-            notify(R.string.api_viewer_initialize)
-        }
-
         EasyAccess.init(context, settingsPreferences)
 
         listFragment = AppListFragment.newInstance()

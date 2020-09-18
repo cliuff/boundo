@@ -89,7 +89,6 @@
     <string name="settings_fun_update_via_browser">Télécharger via le navigateur\n(touche &#38; maintenir pour copier le lien)</string>
     <string name="text_copy_link">Le lien est copié</string>
     <string name="text_feature_feathering">Feature feathering, time devoting</string>
-    <string name="api_viewer_initialize">Affichage des icônes ronde pour les applications. Vous pouvez modifier ceci dans les paramètres.</string>
     <string name="advice_license">Licences de logiciels libres</string>
     <string name="advice_license_details">Détails des licences des différents logiciels libre qui aident Boundo à prendre forme</string>
     <string name="text_copy">Copie</string>

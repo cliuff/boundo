@@ -90,7 +90,6 @@
     <string name="apiSdkTarget">Целевой SDK</string>
     <string name="apiTextSharingSelectApk">Выберите загруженный APK</string>
     <string name="apiViewerShort">API приложения</string>
-    <string name="api_viewer_initialize">Отображение круглых значков приложений. Вы можете изменить это в настройках.</string>
     <string name="appDesc">Набор инструментов, которые обязательно сделают что-то для вас</string>
     <string name="app_info_name">Название пакета приложения</string>
     <string name="avAdapterActionsApk">Поделиться apk</string>
