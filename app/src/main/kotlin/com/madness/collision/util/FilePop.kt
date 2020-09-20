@@ -197,7 +197,8 @@ class FilePop: BottomSheetDialogFragment(){
     }
 
     private fun loadData() {
-        var typeIcon: Icon? = null
+        // Icon is available on M+
+        var typeIcon: Any? = null
         val displayFileType = if (X.aboveOn(X.Q)) {
             val info = FileUtils.getTypeInfo(mContext, fileUri)
             typeIcon = info.icon
@@ -233,7 +234,7 @@ class FilePop: BottomSheetDialogFragment(){
             // Title set as file type, show size only
             mViews.fileActionsInfoSubtitle.text = displayFileSize
         }
-        if (typeIcon != null && X.aboveOn(X.M)) lifecycleScope.launch {
+        if (typeIcon != null && X.aboveOn(X.M) && typeIcon is Icon) lifecycleScope.launch {
             val d = typeIcon.loadDrawable(mContext)
             launch(Dispatchers.Main) {
                 mViews.fileActionsInfoSubtitle.setCompoundDrawablesRelativeWithIntrinsicBounds(
