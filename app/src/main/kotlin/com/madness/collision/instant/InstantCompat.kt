@@ -28,6 +28,7 @@ import com.madness.collision.util.P
 import com.madness.collision.util.SystemUtil
 import com.madness.collision.util.X
 
+
 object InstantCompat {
     fun getShortcutBuildRes(context: Context, id: String): ShortcutBuildRes? {
         val localeContext = SystemUtil.getLocaleContextSys(context)
@@ -35,7 +36,9 @@ object InstantCompat {
             P.SC_ID_API_VIEWER -> ShortcutBuildRes(
                     Intent(Intent.ACTION_VIEW, Uri.EMPTY, context, MainActivity::class.java).putExtras(
                             MainActivity.forItem(Unit.UNIT_NAME_API_VIEWING)
-                    ),
+                    ).apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    },
                     localeContext.getString(R.string.apiViewerShort),
                     localeContext.getString(R.string.apiViewer),
                     if (X.aboveOn(X.O)) R.mipmap.shortcut_api else R.drawable.shortcut_api_vector
@@ -43,13 +46,17 @@ object InstantCompat {
             P.SC_ID_AUDIO_TIMER -> ShortcutBuildRes(
                     Intent(Intent.ACTION_VIEW, Uri.EMPTY, context, MainActivity::class.java).putExtras(
                             MainActivity.forItem(Unit.UNIT_NAME_AUDIO_TIMER)
-                    ),
+                    ).apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    },
                     localeContext.getString(R.string.unit_audio_timer),
                     localeContext.getString(R.string.unit_audio_timer),
                     if (X.aboveOn(X.O)) R.mipmap.ic_shortcut_audio_timer else R.drawable.ic_shortcut_audio_timer_legacy
             )
             P.SC_ID_IMMORTAL -> ShortcutBuildRes(
-                    Intent(Intent.ACTION_VIEW, Uri.EMPTY, context, ImmortalActivity::class.java),
+                    Intent(Intent.ACTION_VIEW, Uri.EMPTY, context, ImmortalActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    },
                     "Immortal", "Immortal", null
             )
             else -> null

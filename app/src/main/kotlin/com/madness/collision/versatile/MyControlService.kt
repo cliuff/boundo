@@ -64,9 +64,10 @@ class MyControlService : ControlsProviderService() {
             val localeContext = SystemUtil.getLocaleContextSys(context)
             return when(controlId) {
                 DEV_ID_AT -> {
-                    val intent = Intent(context, MainActivity::class.java).putExtras(
-                            MainActivity.forItem(Unit.UNIT_NAME_AUDIO_TIMER)
-                    )
+                    val intent = Intent(context, MainActivity::class.java).apply {
+                        putExtras(MainActivity.forItem(Unit.UNIT_NAME_AUDIO_TIMER))
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    }
                     val pi = PendingIntent.getActivity(context, 0, intent,
                             PendingIntent.FLAG_UPDATE_CURRENT)
                     val color = context.getColor(R.color.primaryAWhite)

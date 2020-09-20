@@ -73,10 +73,6 @@ internal object MiscMain {
         }
         // below: app in update process to the newest
         // below: apply actions
-        if ((verOri in 0 until 20021716) && X.aboveOn(X.N_MR1)) {
-            val sm = context.getSystemService(ShortcutManager::class.java)
-            if (sm != null) Instant(context, sm).refreshDynamicShortcuts(P.SC_ID_API_VIEWER)
-        }
         if (verOri in 0 until 20032901) {
             // covert to json
             val pref: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
@@ -118,7 +114,7 @@ internal object MiscMain {
                 }
             }
         }
-        if ((verOri in 0 until 20070119) && X.aboveOn(X.N_MR1)) {
+        if ((verOri in 0 until 20092011) && X.aboveOn(X.N_MR1)) {
             val sm = context.getSystemService(ShortcutManager::class.java)
             if (sm != null) Instant(context, sm).refreshDynamicShortcuts(P.SC_ID_AUDIO_TIMER)
         }
