@@ -72,6 +72,8 @@ object Versions {
     const val mpChart = "v3.1.0"
     const val openCsv = "5.2"
     const val rxJava = "3.0.5"
+    // Jetbrains annotations
+    const val jbAnnotations = "20.1.0"
 }
 
 class Dependencies : Plugin<Project> {
@@ -142,6 +144,7 @@ class Dependencies : Plugin<Project> {
         const val mpChart = "com.github.PhilJay:MPAndroidChart:${Versions.mpChart}"
         const val openCsv = "com.opencsv:opencsv:${Versions.openCsv}"
         const val rxJava = "io.reactivex.rxjava3:rxjava:${Versions.rxJava}"
+        const val jbAnnotations = "org.jetbrains:annotations:${Versions.jbAnnotations}"
 
         // wear
         const val androidxPercentLayout = "androidx.percentlayout:percentlayout:${Versions.androidxPercentLayout}"
@@ -165,6 +168,7 @@ class Dependencies : Plugin<Project> {
                 googlePlayCore,
                 googlePlayCoreKtx,
                 gglGuava,
+                jbAnnotations,
         )
     }
 }

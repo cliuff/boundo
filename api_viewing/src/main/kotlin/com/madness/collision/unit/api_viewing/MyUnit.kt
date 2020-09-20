@@ -47,6 +47,7 @@ import com.google.android.material.checkbox.MaterialCheckBox
 import com.madness.collision.R
 import com.madness.collision.main.MainActivity
 import com.madness.collision.main.MyHideBottomViewOnScrollBehavior
+import com.madness.collision.misc.MiscApp
 import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
@@ -428,15 +429,26 @@ class MyUnit: com.madness.collision.unit.Unit() {
      */
     private fun displaySearch(context: Context, text: String){
         if (text.isEmpty()) return
-        val installedApps: List<PackageInfo> = pm.getInstalledPackages(0)
-        val apps = mutableListOf<ApiViewingApp>()
-        for (appInfo in installedApps) {
-            val label = appInfo.applicationInfo.loadLabel(pm)
-            if (label.contains(text, true)) {
-                apps.add(ApiViewingApp(context, appInfo, preloadProcess = true, archive = false))
+        // Check store links
+        val appFromStore = Utils.checkStoreLink(text)
+        if (appFromStore != null) {
+            val pi = MiscApp.getPackageInfo(context, packageName = appFromStore)
+            if (pi != null) {
+                val app = ApiViewingApp(context, pi, preloadProcess = true, archive = false)
+                app.load(context, pi.applicationInfo)
+                viewModel.addApps(app)
             }
+        } else {
+            val installedApps: List<PackageInfo> = pm.getInstalledPackages(0)
+            val apps = mutableListOf<ApiViewingApp>()
+            for (appInfo in installedApps) {
+                val label = appInfo.applicationInfo.loadLabel(pm)
+                if (label.contains(text, true)) {
+                    apps.add(ApiViewingApp(context, appInfo, preloadProcess = true, archive = false))
+                }
+            }
+            viewModel.addApps(apps)
         }
-        viewModel.addApps(apps)
         viewModel.sortApps(sortItem)
         handleRefreshList(context)
     }
@@ -955,11 +967,25 @@ class MyUnit: com.madness.collision.unit.Unit() {
                     return filterResults
                 }
                 val filtered: MutableList<ApiViewingApp> = mutableListOf()
-                val locale = SystemUtil.getLocaleApp()
                 val filterText = charSequence.toString()
-                val input4Comparision: String = filterText.toLowerCase(locale)
                 val iterator: Iterator<ApiViewingApp> = appList.iterator()
-                while (iterator.hasNext()){
+                // Check store links
+                val appFromStore = Utils.checkStoreLink(filterText)
+                if (appFromStore != null) {
+                    while (iterator.hasNext()) {
+                        val info = iterator.next()
+                        if (info.packageName == appFromStore) {
+                            filtered.add(info)
+                            break
+                        }
+                    }
+                    filterResults.values = filtered
+                    filterResults.count = filtered.size
+                    return filterResults
+                }
+                val locale = SystemUtil.getLocaleApp()
+                val input4Comparision: String = filterText.toLowerCase(locale)
+                while (iterator.hasNext()) {
                     val info = iterator.next()
                     val appName = info.name.replace(" ", "").toLowerCase(locale)
                     if (appName.contains(input4Comparision)

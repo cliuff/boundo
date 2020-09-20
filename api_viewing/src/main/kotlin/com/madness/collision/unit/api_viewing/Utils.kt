@@ -52,6 +52,7 @@ import com.madness.collision.util.X.O
 import com.madness.collision.util.X.O_MR1
 import com.madness.collision.util.X.P
 import com.madness.collision.util.X.Q
+import com.madness.collision.util.regexOf
 import java.security.Principal
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -202,5 +203,27 @@ internal object Utils {
         return changedPackages.filter {
             it.lastUpdateTime == it.firstInstallTime
         }
+    }
+
+    /**
+     * Check if the [text] contains any known store link
+     */
+    fun checkStoreLink(text: String): String? {
+        // this regex cannot match Android OS whose package is android
+        val packageRegex = regexOf("([A-Za-z][A-Za-z\\d_]*\\.)+[A-Za-z][A-Za-z\\d_]*")
+        val prefix = regexOf(".*(?:https?://)?(?:www\\.)?")
+        val links = listOf(
+                regexOf("play\\.google\\.com/store/apps/details\\?id="), // Google Play store
+                regexOf("coolapk\\.com/apk/"), // Coolapk
+                regexOf("appgallery\\.cloud\\.huawei\\.com/.*shareTo="), // Huawei
+                regexOf("apps\\.galaxyappstore\\.com/detail/"), // Samsung
+        )
+        for (link in links) {
+            val realLink = "$prefix$link($packageRegex).*"
+            val re = realLink.toRegex().find(text) ?: continue
+            val (targetPackage) = re.destructured
+            return targetPackage
+        }
+        return null
     }
 }

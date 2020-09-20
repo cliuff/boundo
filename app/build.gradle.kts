@@ -69,7 +69,7 @@ android {
         applicationId = "com.madness.collision"
         minSdkVersion(22)
         targetSdkVersion(30)
-        versionCode = 20090512
+        versionCode = 20090920
         versionName = "3.6.3"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testApplicationId = "${applicationId}.test"
@@ -185,10 +185,13 @@ dependencies {
             Dependencies.googlePlayServicesOSSLicenses,
             Dependencies.googleGson,
             Dependencies.googlePlayCore,
+            Dependencies.googlePlayCoreKtx,
+            Dependencies.gglGuava,
             Dependencies.jsoup,
             Dependencies.kotlinStdlib,
             Dependencies.kotlinReflect,
-            Dependencies.rxJava
+            Dependencies.rxJava,
+            Dependencies.jbAnnotations
     ).forEach { implementation(it) }
 
     listOf(
