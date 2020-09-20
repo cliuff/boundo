@@ -24,6 +24,7 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import com.madness.collision.Democratic
 import com.madness.collision.R
@@ -37,12 +38,25 @@ import com.madness.collision.util.alterPadding
 import com.madness.collision.util.ensureAdded
 import kotlinx.android.synthetic.main.fragment_updates.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 internal class UpdatesFragment : TaggedFragment(), Democratic {
+
+    companion object {
+        const val ARG_MODE = "mode"
+        const val MODE_NORMAL = 0
+        const val MODE_NO_UPDATES = 1
+
+        @JvmStatic
+        fun newInstance(mode: Int) : UpdatesFragment {
+            val b = Bundle().apply {
+                putInt(ARG_MODE, mode)
+            }
+            return UpdatesFragment().apply { arguments = b }
+        }
+    }
 
     override val category: String = "MainUpdates"
     override val id: String = "Updates"
@@ -54,6 +68,9 @@ internal class UpdatesFragment : TaggedFragment(), Democratic {
     private var _fixedChildCount: Int = 0
     private val fixedChildCount: Int
     get() = _fixedChildCount
+    private var mode = MODE_NORMAL
+    private val isNoUpdatesMode: Boolean
+        get() = mode == MODE_NO_UPDATES
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
         toolbar.setTitle(R.string.main_updates)
@@ -63,6 +80,8 @@ internal class UpdatesFragment : TaggedFragment(), Democratic {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mContext = context ?: return
+        mode = arguments?.getInt(ARG_MODE) ?: MODE_NORMAL
+        if (isNoUpdatesMode) return
         updatesProviders = Unit.getPinnedUnits(mContext).mapNotNull {
             Unit.getUpdates(it)?.run { it to this }
         }.toMutableList()
@@ -120,12 +139,13 @@ internal class UpdatesFragment : TaggedFragment(), Democratic {
             } else null
         }.toMutableList()
         mainUpdatesSecUpdates.visibility = if (fragments.isEmpty()) View.GONE else View.VISIBLE
-        val inflater = LayoutInflater.from(context)
+        if (fragments.isEmpty()) return
         for ((_, f) in fragments) {
             ensureAdded(R.id.mainUpdatesContainer, f, true)
         }
-        GlobalScope.launch {
+        lifecycleScope.launch {
             delay(100)
+            val inflater = LayoutInflater.from(context)
             launch(Dispatchers.Main) {
                 for (i in fragments.indices) {
                     val (unitName, _) = fragments[i]

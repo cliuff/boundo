@@ -15,10 +15,10 @@
   ~ limitations under the License.
   -->
 
+<!-- omitted app:startDestination="@id/updatesFragment" to set it manually -->
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nav_main"
-    app:startDestination="@id/updatesFragment">
+    android:id="@+id/nav_main" >
 
     <fragment
         android:id="@+id/instantFragment"

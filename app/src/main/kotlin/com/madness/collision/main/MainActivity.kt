@@ -43,6 +43,7 @@ import com.google.android.material.radiobutton.MaterialRadioButton
 import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.diy.WindowInsets
+import com.madness.collision.main.updates.UpdatesFragment
 import com.madness.collision.misc.MiscMain
 import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.Unit
@@ -51,7 +52,6 @@ import com.madness.collision.util.*
 import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.coroutines.*
 import java.lang.ref.WeakReference
-import kotlin.collections.ArrayDeque
 import kotlin.random.Random
 
 class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
@@ -104,6 +104,7 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
     private lateinit var mContext: Context
     private lateinit var prefSettings: SharedPreferences
     private lateinit var mWindow: Window
+    private var launchItem: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,6 +116,7 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
         mWindow = window
         viewModel.updateTimestamp()
         applyEssentials(mContext)
+        launchItem = intent?.getStringExtra(LAUNCH_ITEM)
         applyUI()
         applyMisc(mContext)
     }
@@ -187,6 +189,14 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
         navHostFragment = supportFragmentManager.findFragmentById(R.id.mainNavHost) as NavHostFragment
         navController = navHostFragment.navController
 
+        val navInflater = navController.navInflater
+        val graph = navInflater.inflate(R.navigation.nav_main)
+        graph.startDestination = R.id.updatesFragment
+        val startArgs = if (launchItem != null) Bundle().apply {
+            putInt(UpdatesFragment.ARG_MODE, UpdatesFragment.MODE_NO_UPDATES)
+        } else null
+        navController.setGraph(graph, startArgs)
+
         setupViewModel()
 
         // invoke will clear stack
@@ -232,7 +242,8 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
                         if (backwardFragment.isAdded) {
                             show(backwardFragment)
                         } else {
-                            add(navHostFragment.view?.id ?: 0, backwardFragment, backwardFragment.uid)
+                            add(navHostFragment.view?.id
+                                    ?: 0, backwardFragment, backwardFragment.uid)
                         }
                     }
                     commitNow()
@@ -494,8 +505,8 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
 
         mainTB.setOnMenuItemClickListener(this)
 
-        val launchItemName = intent?.getStringExtra(LAUNCH_ITEM) ?: ""
-        if (launchItemName.isNotEmpty()) {
+        val launchItemName = launchItem
+        if (!launchItemName.isNullOrEmpty()) {
             val itemArgs = intent?.getBundleExtra(LAUNCH_ITEM_ARGS)
             val hasArgs = itemArgs != null
             GlobalScope.launch {
@@ -511,6 +522,7 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
                         }
                     }
                 }
+                launchItem = null
             }
         }
 
@@ -645,7 +657,8 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
                 launch(Dispatchers.Main) {
                     setToolbarBackColor(this, colorBack)
                     mWindow.also {
-                        val configs = SystemUtil.applyDefaultSystemUiVisibility(mContext, it, viewModel.insetBottom.value ?: 0)
+                        val configs = SystemUtil.applyDefaultSystemUiVisibility(mContext, it, viewModel.insetBottom.value
+                                ?: 0)
                         primaryStatusBarConfig = configs.first
                         primaryNavBarConfig = configs.second
                         navScrollBehavior?.onSlidedUpCallback?.invoke()
