@@ -243,4 +243,17 @@
     <string name="unit_desc_av">•デバイス上のすべてのアプリケーションとインストールパッケージのターゲットSDKバージョンと最小SDKバージョンの表示\n•アプリケーションがアダプティブアイコンをサポートしているかどうかの確認\n•アプリケーションAPI統計\n•インストールパッケージの抽出、アイコンの抽出\n•パッケージの詳細情報の表示、署名情報の表示</string>
     <string name="unit_desc_st">！ 中国のユーザーが使用\n•コースを手動で入力\n•教育管理システムのカリキュラムを自動的に解析（一部の正方形の教育管理システムのみをサポート）\n•iCalendarファイル（.ics）の生成\n•Googleカレンダーへのインポートなど</string>
     <string name="prefExteriorForceDarkDescDetail">Force Darkは、開発者がダークモードをすばやく実装できるように開発者向けに設計された機能です。 アプリケーションのforceDarkAllowed値をtrueに設定すると、アプリケーションは自動的にダークモードを実装できます。 開発者はさらに、ダークモードを改善するためにいくつかのインターフェイスをさらに調整し、このインターフェイスのforceDarkAllowed値をfalseに設定する必要があります。 Override force-darkをオンにすると、システムはforceDarkAllowed値を無視し、それ以外の場合は完全なダークモードが機能しなくなります。</string>
+    <string name="versatile_device_controls_at_hint_on">スライドして調整</string>
+    <string name="text_access_denied">アクセスが拒否されました</string>
+    <string name="versatile_device_controls_at_hint_off">クリックして開始</string>
+    <string name="versatile_device_controls_at_status_off">停止</string>
+    <string name="versatile_device_controls_at_ctrl_desc_on">カウントダウンを停止</string>
+    <string name="versatile_device_controls_at_ctrl_desc_off">カウントダウンを開始</string>
+    <string name="versatile_device_controls_at_status_on">%.0f 分</string>
+    <string name="versatile_device_controls_mdu_ctrl_desc">データを更新する</string>
+    <string name="versatile_device_controls_mdu_hint">更新をクリックします</string>
+    <string name="advice_source_code">ソースコード</string>
+    <string name="advice_translation_program">翻訳プラン</string>
+    <string name="app_device_controls">Boundoコントロールセンター</string>
+    <string name="access_sys_usage">Boundoに使用状況データの読み取りを許可する</string>
 </resources>

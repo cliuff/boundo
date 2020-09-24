@@ -243,4 +243,17 @@
     <string name="unit_desc_av">• Ελέγξτε το επίπεδο API Android όλων των εφαρμογών και των εφαρμογών στη συσκευή\n• Ελέγξτε την υποστήριξη προσαρμοστικών εικονιδίων όλων των εφαρμογών\n• Στατιστικά API εφαρμογών\n• Εξαγωγή APK και εικονιδίων\n• Λεπτομέρειες πακέτου και λεπτομέρειες υπογραφής</string>
     <string name="unit_desc_st">! Για Κινέζους χρήστες\n• Μη αυτόματη προσθήκη μαθημάτων\n• Ανάλυση χρονοδιαγράμματος σχολείου από τον ιστότοπο του σχολικού εκπαιδευτικού συστήματος (μόνο από το εκπαιδευτικό σύστημα ZFSoft)\n• Δημιουργία αρχείου iCalendar (.ics)\n• Εξαγωγή στο Ημερολόγιο Google κ.λπ.</string>
     <string name="prefExteriorForceDarkDescDetail">Το Force Dark είναι μια δυνατότητα για προγραμματιστές να εφαρμόζουν γρήγορα ένα σκοτεινό θέμα Με τη ρύθμιση forceDarkAllowed σε αληθινή, μια εφαρμογή λαμβάνει αυτόματα ένα σκοτεινό θέμα. Και ο προγραμματιστής θα τροποποιήσει περαιτέρω ορισμένα τμήματα της διεπαφής που δεν είναι ιδανικά και θα ορίσει forceDarkAllowed σε false σε αυτά τα τμήματα. Η ενεργοποίηση της παράκαμψης Force-dark θα κάνει το σύστημα να αγνοήσει την τιμή forceDarkAllowed, προκαλώντας μια καλή εφαρμογή σκοτεινού θέματος σε δυσλειτουργία.</string>
+    <string name="text_access_denied">Δεν επιτρέπεται η πρόσβαση</string>
+    <string name="versatile_device_controls_at_hint_on">Σύρετε για προσαρμογή</string>
+    <string name="versatile_device_controls_at_hint_off">Πατήστε για να ξεκινήσετε</string>
+    <string name="versatile_device_controls_at_status_off">Διακόπηκε</string>
+    <string name="versatile_device_controls_at_ctrl_desc_on">Διακοπή χρονομέτρου</string>
+    <string name="versatile_device_controls_at_ctrl_desc_off">Ξεκινήστε το χρονόμετρο</string>
+    <string name="versatile_device_controls_mdu_ctrl_desc">Ανανέωση δεδομένων</string>
+    <string name="versatile_device_controls_mdu_hint">Πατήστε για ανανέωση</string>
+    <string name="advice_source_code">Πηγαίος κώδικας</string>
+    <string name="advice_translation_program">Πρόγραμμα μετάφρασης</string>
+    <string name="app_device_controls">Έλεγχοι Boundo</string>
+    <string name="access_sys_usage">Επιτρέψτε στο Boundo να έχει πρόσβαση στα δεδομένα χρήσης</string>
+    <string name="versatile_device_controls_at_status_on">%.0f min</string>
 </resources>

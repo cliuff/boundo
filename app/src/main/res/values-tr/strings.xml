@@ -243,4 +243,17 @@
     <string name="unit_desc_av">• Cihazdaki tüm uygulamaların ve uygulamaların Android API seviyesini kontrol edin\n• Tüm uygulamaların Uyarlanabilir Simge desteğini kontrol edin\n• Uygulama API\'sı istatistikleri\n• APK ve simge çıkarma\n• Paket ayrıntıları ve imza ayrıntıları</string>
     <string name="unit_desc_st">! Çinli kullanıcılar için\n• Kursu manuel olarak ekleyin\n• Okul zaman çizelgesini okulun eğitim sistemi web sitesinden ayrıştırın (yalnızca bazı ZFSoft eğitim sistemlerinden bazıları)\n• iCalendar dosyası (.ics) oluşturun\n• Google Takvim\'e aktarın vb.</string>
     <string name="prefExteriorForceDarkDescDetail">Force Dark, geliştiricilerin karanlık bir temayı hızla uygulamalarını sağlayan bir özelliktir. ForceDarkAllowed değerini true olarak ayarlayarak bir uygulama otomatik olarak karanlık bir tema alır. Ve geliştirici ayrıca arabirimin ideal olmayan bazı bölümlerini değiştirecek ve forceDarkAllowed\'i bu bölümlerde false olarak ayarlayacaktır. Geçersiz Kılmayı Zorla seçeneğinin etkinleştirilmesi, sistemin forceDarkAllowed değerini yoksaymasına neden olarak iyi uygulanmış bir karanlık temanın arızalanmasına neden olur.</string>
+    <string name="text_access_denied">Erişim reddedildi</string>
+    <string name="versatile_device_controls_at_hint_on">Ayarlamak için kaydırın</string>
+    <string name="versatile_device_controls_at_hint_off">Başlamak için dokun</string>
+    <string name="versatile_device_controls_at_status_off">Durduruldu</string>
+    <string name="versatile_device_controls_at_ctrl_desc_on">Zamanlayıcıyı durdur</string>
+    <string name="versatile_device_controls_at_ctrl_desc_off">Zamanlayıcıyı başlat</string>
+    <string name="versatile_device_controls_mdu_ctrl_desc">Bilgiyi Yenile</string>
+    <string name="versatile_device_controls_mdu_hint">Yenilemek için dokunun</string>
+    <string name="advice_source_code">Kaynak kodu</string>
+    <string name="advice_translation_program">Çeviri programı</string>
+    <string name="app_device_controls">Boundo Kontrolleri</string>
+    <string name="access_sys_usage">Boundo\'nun kullanım verilerine erişmesine izin verin</string>
+    <string name="versatile_device_controls_at_status_on">%.0f min</string>
 </resources>

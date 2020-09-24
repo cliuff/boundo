@@ -154,7 +154,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Source code"
+                            android:text="@string/advice_source_code"
                             android:textColor="?android:textColor"
                             android:textSize="18sp" />
                     </LinearLayout>
@@ -180,7 +180,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Translation program"
+                            android:text="@string/advice_translation_program"
                             android:textColor="?android:textColor"
                             android:textSize="18sp" />
                     </LinearLayout>

@@ -243,4 +243,17 @@
     <string name="unit_desc_pin">fissare</string>
     <string name="mainSecStarred">Ha recitato</string>
     <string name="mainSecFrequents">Spesso usato</string>
+    <string name="text_access_denied">Accesso negato</string>
+    <string name="versatile_device_controls_at_hint_on">Scorri per regolare</string>
+    <string name="versatile_device_controls_at_hint_off">Tocca per iniziare</string>
+    <string name="versatile_device_controls_at_status_off">Fermato</string>
+    <string name="versatile_device_controls_at_ctrl_desc_on">Ferma il timer</string>
+    <string name="versatile_device_controls_at_ctrl_desc_off">Avvia il timer</string>
+    <string name="versatile_device_controls_mdu_ctrl_desc">Aggiorna i dati</string>
+    <string name="versatile_device_controls_mdu_hint">Tocca per aggiornare</string>
+    <string name="advice_source_code">Codice sorgente</string>
+    <string name="advice_translation_program">Programma di traduzione</string>
+    <string name="app_device_controls">Boundo Controls</string>
+    <string name="access_sys_usage">Consenti a Boundo di accedere ai dati di utilizzo</string>
+    <string name="versatile_device_controls_at_status_on">%.0f min</string>
 </resources>

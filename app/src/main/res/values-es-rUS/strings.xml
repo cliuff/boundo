@@ -243,4 +243,17 @@
     <string name="unit_desc_pin">prender con alfileres</string>
     <string name="mainSecStarred">Sembrado de estrellas</string>
     <string name="mainSecFrequents">Utilizado a menudo</string>
+    <string name="text_access_denied">Acceso denegado</string>
+    <string name="versatile_device_controls_at_hint_on">Desliza para ajustar</string>
+    <string name="versatile_device_controls_at_hint_off">Toca para empezar</string>
+    <string name="versatile_device_controls_at_status_off">Detenido</string>
+    <string name="versatile_device_controls_at_ctrl_desc_on">Detener temporizador</string>
+    <string name="versatile_device_controls_at_ctrl_desc_off">Iniciar temporizador</string>
+    <string name="versatile_device_controls_mdu_ctrl_desc">Actualizar datos</string>
+    <string name="versatile_device_controls_mdu_hint">Toca para actualizar</string>
+    <string name="advice_source_code">Código fuente</string>
+    <string name="advice_translation_program">Programa de traducción</string>
+    <string name="app_device_controls">Controles Boundo</string>
+    <string name="access_sys_usage">Permitir que Boundo acceda a los datos de uso</string>
+    <string name="versatile_device_controls_at_status_on">%.0f min</string>
 </resources>

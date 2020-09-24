@@ -243,4 +243,17 @@
     <string name="unit_desc_av">• 장치에서 모든 응용 프로그램 및 설치 패키지의 대상 SDK 버전 및 최소 SDK 버전을 봅니다.\n• 응용 프로그램이 적응 형 아이콘을 지원하는지 확인합니다.\n• 응용 프로그램 API 통계\n• 설치 패키지 추출, 아이콘 추출\n• 패키지 세부 정보보기, 서명 정보보기</string>
     <string name="unit_desc_st">! 중국 사용자가 사용\n• 수동으로 과정 입력\n• 교육 관리 시스템의 커리큘럼을 자동으로 구문 분석 (일부 사각형 교육 관리 시스템 만 지원)\n• iCalendar 파일 (.ics) 생성\n• Google 캘린더로 가져 오기 등</string>
     <string name="prefExteriorForceDarkDescDetail">Force Dark는 개발자가 개발자가 어두운 모드를 빠르게 구현할 수 있도록 설계된 기능입니다. 응용 프로그램의 forceDarkAllowed 값을 true로 설정하면 응용 프로그램이 자동으로 다크 모드를 구현할 수 있습니다. 개발자는 여전히 어두운 모드를 개선하기 위해 일부 인터페이스를 추가로 조정하고이 인터페이스의 forceDarkAllowed 값을 false로 설정해야합니다. 강제 어둡게 무시를 설정하면 시스템이 forceDarkAllowed 값을 무시하여 완벽한 어두운 모드가 중단됩니다.</string>
+    <string name="versatile_device_controls_at_hint_on">조정하려면 슬라이드하세요.</string>
+    <string name="text_access_denied">접근 불가</string>
+    <string name="versatile_device_controls_at_hint_off">시작하려면 클릭하세요</string>
+    <string name="versatile_device_controls_at_status_off">중지</string>
+    <string name="versatile_device_controls_at_ctrl_desc_on">카운트 다운 중지</string>
+    <string name="versatile_device_controls_at_ctrl_desc_off">카운트 다운 시작</string>
+    <string name="versatile_device_controls_at_status_on">%.0f 분</string>
+    <string name="versatile_device_controls_mdu_ctrl_desc">데이터 새로 고침</string>
+    <string name="versatile_device_controls_mdu_hint">새로 고침을 클릭하십시오.</string>
+    <string name="advice_source_code">소스 코드</string>
+    <string name="advice_translation_program">번역 계획</string>
+    <string name="app_device_controls">Boundo 제어 센터</string>
+    <string name="access_sys_usage">Boundo가 사용 데이터를 읽도록 허용</string>
 </resources>

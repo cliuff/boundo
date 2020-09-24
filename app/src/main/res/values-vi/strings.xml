@@ -243,4 +243,17 @@
     <string name="unit_desc_pin">xỏ chốt</string>
     <string name="mainSecStarred">Đã gắn dấu sao</string>
     <string name="mainSecFrequents">Thường được sử dụng</string>
+    <string name="text_access_denied">Quyền truy cập bị từ chối</string>
+    <string name="versatile_device_controls_at_hint_on">Vuốt để điều chỉnh</string>
+    <string name="versatile_device_controls_at_hint_off">Nhấn để bắt đầu</string>
+    <string name="versatile_device_controls_at_status_off">Đã dừng</string>
+    <string name="versatile_device_controls_at_ctrl_desc_on">Dừng hẹn giờ</string>
+    <string name="versatile_device_controls_at_ctrl_desc_off">Bắt đầu hẹn giờ</string>
+    <string name="versatile_device_controls_mdu_ctrl_desc">Làm mới dữ liệu</string>
+    <string name="versatile_device_controls_mdu_hint">Nhấn để làm mới</string>
+    <string name="advice_source_code">Mã nguồn</string>
+    <string name="advice_translation_program">Chương trình dịch thuật</string>
+    <string name="app_device_controls">Điều khiển Boundo</string>
+    <string name="access_sys_usage">Cho phép Boundo truy cập dữ liệu sử dụng</string>
+    <string name="versatile_device_controls_at_status_on">%.0f phút</string>
 </resources>

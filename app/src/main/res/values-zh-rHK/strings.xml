@@ -243,4 +243,17 @@
     <string name="unit_desc_av">• 查看設備上所有應用及安裝包的目標 SDK 版本和最低 SDK 版本\n• 查看應用是否支持自適應圖標\n• 應用 API 統計\n• 安裝包提取、圖標提取\n• 包詳細信息查看、簽名信息查看</string>
     <string name="unit_desc_st">！中國用戶使用\n• 手動輸入課程\n• 自動解析教務系統課表（只支持部分正方教務系統）\n• 生成 iCalendar 文件 (.ics)\n• 導入至谷歌日曆等</string>
     <string name="prefExteriorForceDarkDescDetail">Force Dark 是專為開發者設計的功能，能夠使開發者快速地實現黑暗模式。將應用的 forceDarkAllowed 值設為 true，應用便能自動實現黑暗模式。開發者仍需進一步調整部分界面以完善黑暗模式，並將這部分界面的 forceDarkAllowed 值設為 false。開啟 Override force-dark 會使系統忽視 forceDarkAllowed 值，致使本來完善的黑暗模式變得破爛。</string>
+    <string name="versatile_device_controls_at_hint_on">滑動調整</string>
+    <string name="text_access_denied">訪問被拒</string>
+    <string name="versatile_device_controls_at_hint_off">點擊開始</string>
+    <string name="versatile_device_controls_at_status_off">已停止</string>
+    <string name="versatile_device_controls_at_ctrl_desc_on">停止倒計時</string>
+    <string name="versatile_device_controls_at_ctrl_desc_off">開始倒計時</string>
+    <string name="versatile_device_controls_at_status_on">%.0f 分</string>
+    <string name="versatile_device_controls_mdu_ctrl_desc">刷新數據</string>
+    <string name="versatile_device_controls_mdu_hint">點擊刷新</string>
+    <string name="advice_source_code">源代碼</string>
+    <string name="advice_translation_program">翻譯計劃</string>
+    <string name="app_device_controls">斑朵控制中心</string>
+    <string name="access_sys_usage">允許斑朵讀取使用情況數據</string>
 </resources>

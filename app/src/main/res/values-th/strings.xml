@@ -243,4 +243,17 @@
     <string name="unit_desc_pin">ปัก</string>
     <string name="mainSecStarred">ติดดาว</string>
     <string name="mainSecFrequents">มักใช้</string>
+    <string name="text_access_denied">ปฏิเสธการเข้าใช้</string>
+    <string name="versatile_device_controls_at_hint_on">ปัดเพื่อปรับ</string>
+    <string name="versatile_device_controls_at_hint_off">แตะเพื่อเริ่ม</string>
+    <string name="versatile_device_controls_at_status_off">หยุดแล้ว</string>
+    <string name="versatile_device_controls_at_ctrl_desc_on">หยุดตัวจับเวลา</string>
+    <string name="versatile_device_controls_at_ctrl_desc_off">เริ่มจับเวลา</string>
+    <string name="versatile_device_controls_mdu_ctrl_desc">รีเฟรชข้อมูล</string>
+    <string name="versatile_device_controls_mdu_hint">แตะเพื่อรีเฟรช</string>
+    <string name="advice_source_code">รหัสแหล่งที่มา</string>
+    <string name="advice_translation_program">โปรแกรมแปล</string>
+    <string name="app_device_controls">การควบคุม Boundo</string>
+    <string name="access_sys_usage">อนุญาตให้ Boundo เข้าถึงข้อมูลการใช้งาน</string>
+    <string name="versatile_device_controls_at_status_on">%.0f นาที</string>
 </resources>

@@ -243,4 +243,17 @@
     <string name="unit_desc_pin">ثابت</string>
     <string name="mainSecStarred">مميزة بنجمة</string>
     <string name="mainSecFrequents">كثيرا ما تستخدم</string>
+    <string name="text_access_denied">تم الرفض</string>
+    <string name="versatile_device_controls_at_hint_on">انتقد لضبط</string>
+    <string name="versatile_device_controls_at_hint_off">انقر للبدء</string>
+    <string name="versatile_device_controls_at_status_off">توقفت</string>
+    <string name="versatile_device_controls_at_ctrl_desc_on">توقف الموقت</string>
+    <string name="versatile_device_controls_at_ctrl_desc_off">بدء الموقت</string>
+    <string name="versatile_device_controls_mdu_ctrl_desc">تحديث البيانات</string>
+    <string name="versatile_device_controls_mdu_hint">انقر للتحديث</string>
+    <string name="advice_source_code">مصدر الرمز</string>
+    <string name="advice_translation_program">برنامج الترجمة</string>
+    <string name="app_device_controls">ضوابط Boundo</string>
+    <string name="access_sys_usage">السماح لـ Boundo بالوصول إلى بيانات الاستخدام</string>
+    <string name="versatile_device_controls_at_status_on">%.0f min</string>
 </resources>

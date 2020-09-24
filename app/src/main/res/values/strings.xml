@@ -262,4 +262,6 @@
     <string name="versatile_device_controls_at_status_on">%.0f min</string>
     <string name="versatile_device_controls_mdu_ctrl_desc">Refresh data</string>
     <string name="versatile_device_controls_mdu_hint">Tap to refresh</string>
+    <string name="advice_source_code">Source code</string>
+    <string name="advice_translation_program">Translation program</string>
 </resources>

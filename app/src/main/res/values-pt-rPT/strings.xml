@@ -243,4 +243,17 @@
     <string name="unit_desc_pin">fixar</string>
     <string name="mainSecStarred">Estrelou</string>
     <string name="mainSecFrequents">Usado frequentemente</string>
+    <string name="text_access_denied">Acesso negado</string>
+    <string name="versatile_device_controls_at_hint_on">Deslize para ajustar</string>
+    <string name="versatile_device_controls_at_hint_off">Clique para começar</string>
+    <string name="versatile_device_controls_at_status_off">Parado</string>
+    <string name="versatile_device_controls_at_ctrl_desc_on">Parar cronômetro</string>
+    <string name="versatile_device_controls_at_ctrl_desc_off">Iniciar cronômetro</string>
+    <string name="versatile_device_controls_mdu_ctrl_desc">Atualizar dados</string>
+    <string name="versatile_device_controls_mdu_hint">Toque para atualizar</string>
+    <string name="advice_source_code">Código fonte</string>
+    <string name="advice_translation_program">Programa de tradução</string>
+    <string name="app_device_controls">Boundo Controls</string>
+    <string name="access_sys_usage">Permitir que Boundo acesse os dados de uso</string>
+    <string name="versatile_device_controls_at_status_on">%.0f min</string>
 </resources>

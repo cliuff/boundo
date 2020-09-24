@@ -242,4 +242,17 @@
     <string name="unit_desc_pin">Épingle</string>
     <string name="mainSecStarred">Favoris</string>
     <string name="mainSecFrequents">Souvent utilisé</string>
+    <string name="text_access_denied">Accès refusé</string>
+    <string name="versatile_device_controls_at_hint_on">Balayez pour ajuster</string>
+    <string name="versatile_device_controls_at_hint_off">Appuyez pour commencer</string>
+    <string name="versatile_device_controls_at_status_off">Arrêté</string>
+    <string name="versatile_device_controls_at_ctrl_desc_on">Arrêter la minuterie</string>
+    <string name="versatile_device_controls_at_ctrl_desc_off">Démarrer la minuterie</string>
+    <string name="versatile_device_controls_mdu_ctrl_desc">Actualiser les données</string>
+    <string name="versatile_device_controls_mdu_hint">Appuyez pour actualiser</string>
+    <string name="advice_source_code">Code source</string>
+    <string name="advice_translation_program">Programme de traduction</string>
+    <string name="app_device_controls">Commandes Boundo</string>
+    <string name="access_sys_usage">Autoriser Boundo à accéder aux données d\'utilisation</string>
+    <string name="versatile_device_controls_at_status_on">%.0f min</string>
 </resources>

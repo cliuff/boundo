@@ -243,4 +243,17 @@
     <string name="unit_desc_pin">固定</string>
     <string name="mainSecStarred">收藏</string>
     <string name="mainSecFrequents">常用</string>
+    <string name="text_access_denied">访问被拒</string>
+    <string name="versatile_device_controls_at_hint_on">滑动调整</string>
+    <string name="versatile_device_controls_at_hint_off">点击开始</string>
+    <string name="versatile_device_controls_at_status_off">已停止</string>
+    <string name="versatile_device_controls_at_ctrl_desc_on">停止倒计时</string>
+    <string name="versatile_device_controls_at_ctrl_desc_off">开始倒计时</string>
+    <string name="versatile_device_controls_at_status_on">%.0f 分</string>
+    <string name="versatile_device_controls_mdu_ctrl_desc">刷新数据</string>
+    <string name="versatile_device_controls_mdu_hint">点击刷新</string>
+    <string name="advice_source_code">源代码</string>
+    <string name="advice_translation_program">翻译计划</string>
+    <string name="app_device_controls">斑朵控制中心</string>
+    <string name="access_sys_usage">允许斑朵读取使用情况数据</string>
 </resources>
