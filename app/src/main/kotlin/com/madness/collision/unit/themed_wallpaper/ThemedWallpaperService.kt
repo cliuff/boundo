@@ -33,11 +33,10 @@ class ThemedWallpaperService : WallpaperService(){
         get() = ThemedWallpaperEasyAccess.background!!
     private var frameRate: Float = 0.1f
         set(value) {
-            frameGap = (1_000f / value).toLong()
+            frameGap = (1000f / value).toLong()
             field = value
         }
     private var frameGap: Long = 10_000L
-    private var wallpaperFrameRate: Float = 0.1f
     private lateinit var prefSettings: SharedPreferences
 
     override fun onCreate() {
@@ -45,8 +44,7 @@ class ThemedWallpaperService : WallpaperService(){
         prefSettings = getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
         val keyApplyDarkPlan = resources.getString(R.string.prefExteriorKeyDarkPlan)
         val planValue = prefSettings.getString(keyApplyDarkPlan, resources.getString(R.string.prefExteriorDefaultDarkPlan)) ?: ""
-        wallpaperFrameRate = if(planValue == resources.getString(R.string.prefExteriorDarkPlanValueSchedule)) 0.05f else 1f
-        frameRate = wallpaperFrameRate
+        frameRate = if(planValue == resources.getString(R.string.prefExteriorDarkPlanValueSchedule)) 0.05f else 1f
         if (ThemedWallpaperEasyAccess.isDead) {
             ThemedWallpaperEasyAccess.wallpaperTimestamp = System.currentTimeMillis()
             ThemedWallpaperEasyAccess.isDead = false
@@ -65,6 +63,10 @@ class ThemedWallpaperService : WallpaperService(){
 
     inner class ThemedEngine: Engine() {
         private var wallpaperTimestamp = 0L
+        // Device unlocked, exit an app and get back to home screen, etc.
+        private var visibleTimestamp = 0L
+        private val doSkipMotion: Boolean
+            get() = System.currentTimeMillis() - visibleTimestamp < 2000
         private val handler = Handler(Looper.myLooper()!!)
         private val drawThread = Thread{
             val changed = wallpaperTimestamp != ThemedWallpaperEasyAccess.wallpaperTimestamp || updateWallpaperRes()
@@ -73,7 +75,7 @@ class ThemedWallpaperService : WallpaperService(){
                 themedWallpaper.updateWallpaper(wallpaperDrawable)
                 themedWallpaper.completeTranslate()
             }
-            val doTranslate = frameRate == wallpaperFrameRate
+            val doTranslate = !doSkipMotion
             updateFrame(themedWallpaper.isTranslating || changed, doTranslate)
         }
         private var offsetRatio: Float = 0f
@@ -89,9 +91,12 @@ class ThemedWallpaperService : WallpaperService(){
 
         override fun onVisibilityChanged(visible: Boolean) {
             super.onVisibilityChanged(visible)
-            // Continue detecting dark mode to avoid obtrusive wallpaper change when screen unlocked
-            frameRate = if (visible) wallpaperFrameRate else (wallpaperFrameRate / 120)
-            updateFrame(false)
+            if (visible) {
+                visibleTimestamp = System.currentTimeMillis()
+                updateFrame(false, doCheckNow = true)
+            } else {
+                cease()
+            }
         }
 
         override fun onOffsetsChanged(xOffset: Float, yOffset: Float, xOffsetStep: Float, yOffsetStep: Float, xPixelOffset: Int, yPixelOffset: Int) {
@@ -111,14 +116,18 @@ class ThemedWallpaperService : WallpaperService(){
             updateFrame(true)
         }
 
-        private fun updateFrame(change: Boolean, shouldTranslate: Boolean = false){
+        private fun updateFrame(change: Boolean, shouldTranslate: Boolean = false, doCheckNow: Boolean = false) {
             if (change) {
                 if (shouldTranslate && themedWallpaper.isTranslateCompleted) themedWallpaper.startTranslate()
                 drawFrame()
             }
             cease()
-            val fg = if (themedWallpaper.isTranslating) ThemedWallpaper.FRAME_GAP else frameGap
-            if (isVisible) handler.postDelayed(drawThread, fg)
+            if (doCheckNow) {
+                handler.post(drawThread)
+            } else {
+                val fg = if (themedWallpaper.isTranslating) ThemedWallpaper.FRAME_GAP else frameGap
+                if (isVisible) handler.postDelayed(drawThread, fg)
+            }
         }
 
         private fun drawFrame() {
