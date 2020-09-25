@@ -63,10 +63,6 @@ class ThemedWallpaperService : WallpaperService(){
 
     inner class ThemedEngine: Engine() {
         private var wallpaperTimestamp = 0L
-        // Device unlocked, exit an app and get back to home screen, etc.
-        private var visibleTimestamp = 0L
-        private val doSkipMotion: Boolean
-            get() = System.currentTimeMillis() - visibleTimestamp < 2000
         private val handler = Handler(Looper.myLooper()!!)
         private val drawThread = Thread{
             val changed = wallpaperTimestamp != ThemedWallpaperEasyAccess.wallpaperTimestamp || updateWallpaperRes()
@@ -75,8 +71,7 @@ class ThemedWallpaperService : WallpaperService(){
                 themedWallpaper.updateWallpaper(wallpaperDrawable)
                 themedWallpaper.completeTranslate()
             }
-            val doTranslate = !doSkipMotion
-            updateFrame(themedWallpaper.isTranslating || changed, doTranslate)
+            updateFrame(themedWallpaper.isTranslating || changed, shouldTranslate = false)
         }
         private var offsetRatio: Float = 0f
         private var offsetStepRatio: Float = 1f
@@ -91,12 +86,8 @@ class ThemedWallpaperService : WallpaperService(){
 
         override fun onVisibilityChanged(visible: Boolean) {
             super.onVisibilityChanged(visible)
-            if (visible) {
-                visibleTimestamp = System.currentTimeMillis()
-                updateFrame(false, doCheckNow = true)
-            } else {
-                cease()
-            }
+            if (visible) updateFrame(false, doCheckNow = true)
+            else cease()
         }
 
         override fun onOffsetsChanged(xOffset: Float, yOffset: Float, xOffsetStep: Float, yOffsetStep: Float, xPixelOffset: Int, yPixelOffset: Int) {
