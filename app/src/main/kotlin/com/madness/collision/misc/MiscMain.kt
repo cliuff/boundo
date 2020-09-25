@@ -114,7 +114,7 @@ internal object MiscMain {
                 }
             }
         }
-        if ((verOri in 0 until 20092011) && X.aboveOn(X.N_MR1)) {
+        if ((verOri in 0 until 20092514) && X.aboveOn(X.N_MR1)) {
             val sm = context.getSystemService(ShortcutManager::class.java)
             if (sm != null) Instant(context, sm).refreshDynamicShortcuts(P.SC_ID_AUDIO_TIMER)
         }

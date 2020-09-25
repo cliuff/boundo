@@ -2,6 +2,294 @@
 Tag content regex: \n((((?!(<.*>)).)*)\n)*((?!(<.*>)).)+
 
 
+- **3.6.3** 20092514
+<en-US>
+App API
+• New tags: Kotlin and 64-bit
+• Long-press an app and press open to launch it
+• View app in Boundo directly from other stores (Google, Coolapk, Huawei and Samsung)
+  Just find the share button and share it to Boundo
+
+Other
+• Now support Android 11 power menu device controls
+• Added translation program link in about page
+• Now use decimal units (1000) instead of binary ones (1024)
+• Fixed shortcut redirecting
+• The animation when changing wallpaper is now removed
+</en-US>
+<ar>
+API التطبيق
+• علامات جديدة: Kotlin و 64 بت
+• اضغط لفترة طويلة على التطبيق واضغط على فتح لتشغيله
+• عرض التطبيق في Boundo مباشرة من المتاجر الأخرى (Google و Coolapk و Huawei و Samsung)
+   ما عليك سوى العثور على زر المشاركة ومشاركته مع Boundo
+
+آخر
+• يدعم الآن عناصر التحكم في قائمة الطاقة في جهاز Android 11
+• تمت إضافة رابط برنامج الترجمة في صفحة "حول"
+• استخدم الآن الوحدات العشرية (1000) بدلاً من الوحدات الثنائية (1024)
+• إصلاح إعادة توجيه الاختصار
+• يتم الآن إزالة الرسوم المتحركة عند تغيير الخلفية
+</ar>
+<de-DE>
+App API
+• Neue Tags: Kotlin und 64-Bit
+• Drücken Sie lange auf eine App und drücken Sie auf Öffnen, um sie zu starten
+• App in Boundo direkt in anderen Geschäften anzeigen (Google, Coolapk, Huawei und Samsung)
+   Suchen Sie einfach den Share-Button und teilen Sie ihn mit Boundo
+
+Andere
+• Unterstützt jetzt Android 11 Power Menu-Gerätesteuerungen
+• Übersetzungsprogramm-Link in Info-Seite hinzugefügt
+• Verwenden Sie jetzt Dezimaleinheiten (1000) anstelle von binären (1024).
+• Die Umleitung von Verknüpfungen wurde korrigiert
+• Die Animation beim Ändern des Hintergrundbilds wird jetzt entfernt
+</de-DE>
+<el-GR>
+API εφαρμογών
+• Νέες ετικέτες: Kotlin και 64-bit
+• Πατήστε παρατεταμένα μια εφαρμογή και πατήστε ανοιχτή για να την ξεκινήσετε
+• Προβολή εφαρμογής στο Boundo απευθείας από άλλα καταστήματα (Google, Coolapk, Huawei και Samsung)
+   Απλώς βρείτε το κουμπί κοινής χρήσης και μοιραστείτε το στο Boundo
+
+Αλλα
+• Τώρα υποστηρίξτε τα στοιχεία ελέγχου της συσκευής μενού Android 11
+• Προστέθηκε σύνδεσμος προγράμματος μετάφρασης στη σελίδα σχετικά
+• Τώρα χρησιμοποιήστε δεκαδικές μονάδες (1000) αντί δυαδικών (1024)
+• Διορθώθηκε η ανακατεύθυνση συντόμευσης
+• Το κινούμενο σχέδιο κατά την αλλαγή ταπετσαρίας έχει πλέον καταργηθεί
+</el-GR>
+<en-GB>
+App API
+• New tags: Kotlin and 64-bit
+• Long-press an app and press open to launch it
+• View app in Boundo directly from other stores (Google, Coolapk, Huawei and Samsung)
+  Just find the share button and share it to Boundo
+
+Other
+• Now support Android 11 power menu device controls
+• Added translation program link in about page
+• Now use decimal units (1000) instead of binary ones (1024)
+• Fixed shortcut redirecting
+• The animation when changing wallpaper is now removed
+</en-GB>
+<es-419>
+API de la aplicación
+• Nuevas etiquetas: Kotlin y 64 bits
+• Mantenga presionada una aplicación y presione abrir para iniciarla
+• Ver la aplicación en Boundo directamente desde otras tiendas (Google, Coolapk, Huawei y Samsung)
+   Solo encuentra el botón de compartir y compártelo con Boundo
+
+Otro
+• Ahora es compatible con los controles del dispositivo del menú de energía de Android 11
+• Se agregó un enlace al programa de traducción en la página Acerca de
+• Ahora use unidades decimales (1000) en lugar de binarias (1024)
+• Redireccionamiento de atajos fijo
+• La animación al cambiar el fondo de pantalla ahora se elimina
+</es-419>
+<es-ES>
+API de la aplicación
+• Nuevas etiquetas: Kotlin y 64 bits
+• Mantenga presionada una aplicación y presione abrir para iniciarla
+• Ver la aplicación en Boundo directamente desde otras tiendas (Google, Coolapk, Huawei y Samsung)
+   Solo encuentra el botón de compartir y compártelo con Boundo
+
+Otro
+• Ahora es compatible con los controles del dispositivo del menú de energía de Android 11
+• Se agregó un enlace al programa de traducción en la página Acerca de
+• Ahora use unidades decimales (1000) en lugar de binarias (1024)
+• Redireccionamiento de atajos fijo
+• La animación al cambiar el fondo de pantalla ahora se elimina
+</es-ES>
+<es-US>
+API de la aplicación
+• Nuevas etiquetas: Kotlin y 64 bits
+• Mantenga presionada una aplicación y presione abrir para iniciarla
+• Ver la aplicación en Boundo directamente desde otras tiendas (Google, Coolapk, Huawei y Samsung)
+   Solo encuentra el botón de compartir y compártelo con Boundo
+
+Otro
+• Ahora es compatible con los controles del dispositivo del menú de energía de Android 11
+• Se agregó un enlace al programa de traducción en la página Acerca de
+• Ahora use unidades decimales (1000) en lugar de binarias (1024)
+• Redireccionamiento de atajos fijo
+• La animación al cambiar el fondo de pantalla ahora se elimina
+</es-US>
+<fr-FR>
+API d'application
+• Nouvelles balises: Kotlin et 64 bits
+• Appuyez longuement sur une application et appuyez sur Ouvrir pour la lancer
+• Affichez l'application dans Boundo directement à partir d'autres magasins (Google, Coolapk, Huawei et Samsung)
+   Trouvez simplement le bouton de partage et partagez-le avec Boundo
+
+Autre
+• Prend désormais en charge les commandes de l'appareil du menu d'alimentation Android 11
+• Ajout du lien du programme de traduction dans la page À propos
+• Utilisez maintenant les unités décimales (1000) au lieu des unités binaires (1024)
+• Correction de la redirection des raccourcis
+• L'animation lors du changement de fond d'écran est maintenant supprimée
+</fr-FR>
+<it-IT>
+API dell'app
+• Nuovi tag: Kotlin e 64 bit
+• Tenere premuta un'app e premere Apri per avviarla
+• Visualizza l'app in Boundo direttamente da altri negozi (Google, Coolapk, Huawei e Samsung)
+   Trova il pulsante di condivisione e condividilo con Boundo
+
+Altro
+• Ora supporta i controlli del dispositivo con menu di alimentazione Android 11
+• Aggiunto collegamento al programma di traduzione nella pagina delle informazioni
+• Ora usa le unità decimali (1000) invece di quelle binarie (1024)
+• Corretto il reindirizzamento del collegamento
+• L'animazione quando si cambia lo sfondo è ora rimossa
+</it-IT>
+<ja-JP>
+アプリケーションAPI
+•新しいタグ：「Kotlin」、「64ビット」
+•長押しして[開く]をタップし、アプリを開きます
+•他のアプリストアからBoundoへの直接ジャンプをサポート
+   Google、CoolApk、Huawei、Samsung
+   共有ボタンを見つけてBoundoに共有する
+
+その他の
+•Android 11の電源メニューデバイス管理センターをサポート
+•バージョン情報ページに「翻訳プラン」リンクを追加
+•ファイルサイズとトラフィックは、バイナリ（1024）ではなく、10進単位（1000）になりました。
+•ショートカットジャンプを修正する
+•壁紙を変更したときのアニメーション効果を削除
+</ja-JP>
+<ko-KR>
+애플리케이션 API
+• 새 태그 : "Kotlin", "64 비트"
+• 길게 누른 다음 "열기"를 눌러 앱을 엽니 다.
+• 다른 앱 스토어에서 Boundo로 바로 이동 지원
+   구글, CoolApk, 화웨이, 삼성
+   공유 버튼을 찾아 Boundo에 공유
+
+다른
+• 이제 Android 11의 전원 메뉴 "장치 관리 센터"를 지원합니다.
+• 정보 페이지에 "번역 계획"링크 추가
+• 파일 크기 및 트래픽이 이제 바이너리 (1024) 대신 10 진수 단위 (1000)로 표시됩니다.
+• 바로 가기 점프 수정
+• 배경 화면 변경시 애니메이션 효과 제거
+</ko-KR>
+<pt-PT>
+API de aplicativo
+• Novas tags: Kotlin e 64 bits
+• Mantenha um aplicativo pressionado e abra para iniciá-lo
+• Visualize o aplicativo no Boundo diretamente de outras lojas (Google, Coolapk, Huawei e Samsung)
+   Basta encontrar o botão de compartilhamento e compartilhá-lo com Boundo
+
+De outros
+• Agora é compatível com controles de dispositivo do menu de energia do Android 11
+• Adicionado link do programa de tradução na página sobre
+• Agora use unidades decimais (1000) em vez de binárias (1024)
+• Redirecionamento de atalho fixo
+• A animação ao mudar o papel de parede agora é removida
+</pt-PT>
+<ru-RU>
+API приложения
+• Новые теги: Kotlin и 64-бит.
+• Нажмите и удерживайте приложение, а затем нажмите "Открыть", чтобы запустить его.
+• Просмотр приложения в Boundo прямо из других магазинов (Google, Coolapk, Huawei и Samsung)
+   Просто найдите кнопку «Поделиться» и поделитесь ею с Boundo
+
+Другой
+• Теперь поддерживаются элементы управления устройством в меню питания Android 11.
+• Добавлена ссылка на программу перевода на странице "О программе"
+• Теперь используйте десятичные единицы (1000) вместо двоичных (1024)
+• Исправлено перенаправление ярлыков.
+• Убрана анимация при смене обоев.
+</ru-RU>
+<th>
+App API
+•แท็กใหม่: Kotlin และ 64 บิต
+•กดแอพค้างไว้แล้วกดเปิดเพื่อเปิดใช้งาน
+•ดูแอปใน Boundo โดยตรงจากร้านค้าอื่น ๆ (Google, Coolapk, Huawei และ Samsung)
+   เพียงแค่ค้นหาปุ่มแชร์และแชร์ไปที่ Boundo
+
+อื่น ๆ
+•ตอนนี้รองรับการควบคุมอุปกรณ์เมนูพลังงาน Android 11
+•เพิ่มลิงค์โปรแกรมแปลในหน้าเกี่ยวกับ
+ตอนนี้ใช้หน่วยทศนิยม (1,000) แทนไบนารี (1024)
+•แก้ไขทางลัดเปลี่ยนเส้นทาง
+•ตอนนี้ภาพเคลื่อนไหวเมื่อเปลี่ยนวอลเปเปอร์จะถูกลบออก
+</th>
+<tr-TR>
+Uygulama API'si
+• Yeni etiketler: Kotlin ve 64-bit
+• Bir uygulamaya uzun basın ve başlatmak için aç düğmesine basın
+• Uygulamayı doğrudan diğer mağazalardan Boundo'da görüntüleyin (Google, Coolapk, Huawei ve Samsung)
+   Paylaş düğmesini bulun ve Boundo ile paylaşın
+
+Diğer
+• Artık Android 11 güç menüsü cihaz kontrollerini destekleyin
+• Yaklaşık sayfasına çeviri programı bağlantısı eklendi
+• Şimdi ikili birimler (1024) yerine ondalık birimleri (1000) kullanın
+• Kısayol yeniden yönlendirme düzeltildi
+• Duvar kağıdını değiştirirken oluşan animasyon artık kaldırılmıştır
+</tr-TR>
+<vi>
+API ứng dụng
+• Thẻ mới: Kotlin và 64-bit
+• Nhấn và giữ một ứng dụng và nhấn mở để khởi chạy nó
+• Xem ứng dụng trong Boundo trực tiếp từ các cửa hàng khác (Google, Coolapk, Huawei và Samsung)
+   Chỉ cần tìm nút chia sẻ và chia sẻ nó với Boundo
+
+Khác
+• Hiện hỗ trợ điều khiển thiết bị menu nguồn của Android 11
+• Đã thêm liên kết chương trình dịch trong trang giới thiệu
+• Bây giờ sử dụng đơn vị thập phân (1000) thay vì đơn vị nhị phân (1024)
+• Đã sửa lỗi chuyển hướng lối tắt
+• Hoạt ảnh khi thay đổi hình nền hiện đã bị xóa
+</vi>
+<zh-CN>
+应用 API
+• 新标签：“Kotlin”、“64位”
+• 长按然后点击“打开”以打开应用
+• 支持从其它应用商店直接跳转到斑朵
+  谷歌、酷安、华为、三星
+  找到分享按钮然后分享到斑朵即可
+
+其它
+• 现支持安卓11的电源菜单“设备管理中心”
+• 关于页面新增“翻译计划”链接
+• 文件大小和流量多少现使用十进制单位（1000）而非二进制（1024）
+• 修复了快捷方式的跳转
+• 移除了更换壁纸时的动画效果
+</zh-CN>
+<zh-HK>
+應用 API
+• 新標籤：“Kotlin”、“64位”
+• 長按然後點擊“打開”以打開應用
+• 支持從其它應用商店直接跳轉到斑朵
+  谷歌、酷安、華為、三星
+  找到分享按鈕然後分享到斑朵即可
+
+其它
+• 現支持安卓11的電源菜單“設備管理中心”
+• 關於頁面新增“翻譯計劃”鏈接
+• 文件大小和流量多少現使用十進制單位（1000）而非二進制（1024）
+• 修復了快捷方式的跳轉
+• 移除了更換壁紙時的動畫效果
+</zh-HK>
+<zh-TW>
+應用 API
+• 新標籤：“Kotlin”、“64位”
+• 長按然後點擊“打開”以打開應用
+• 支持從其它應用商店直接跳轉到斑朵
+  谷歌、酷安、華為、三星
+  找到分享按鈕然後分享到斑朵即可
+
+其它
+• 現支持安卓11的電源菜單“設備管理中心”
+• 關於頁面新增“翻譯計劃”鏈接
+• 文件大小和流量多少現使用十進制單位（1000）而非二進制（1024）
+• 修復了快捷方式的跳轉
+• 移除了更換壁紙時的動畫效果
+</zh-TW>
+
+
 - **3.6.1** 20072913
 <en-US>
 • Now it is possible to filter app list by tag
