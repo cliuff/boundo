@@ -500,7 +500,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
                 // below: from text processing activity or text sharing
                 LAUNCH_MODE_SEARCH
             }
-            apiSpinnerDisplayBack.visibility = View.GONE
+            apiDisplay.visibility = View.GONE
             ApiTaskManager.now {
                 loadSortedList(ApiUnit.NON, sortEfficiently = true, fg = true)
             }
