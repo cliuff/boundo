@@ -21,9 +21,13 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="12dp"
     android:drawablePadding="12dp"
-    android:drawableTint="?android:textColor"
+    android:drawableTint="?colorTextSub"
     android:paddingStart="20dp"
     android:paddingEnd="20dp"
     android:paddingTop="5dp"
     android:paddingBottom="5dp"
-    android:textSize="15sp" />
+    android:gravity="center_vertical"
+    android:alpha="0.8"
+    android:textStyle="bold"
+    android:textColor="?colorTextSub"
+    android:textSize="12sp" />
