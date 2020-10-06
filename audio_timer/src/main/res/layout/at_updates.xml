@@ -27,9 +27,11 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginStart="20dp"
         android:layout_marginTop="5dp"
-        android:textColor="?colorAOnBackground"
-        android:textSize="20sp"
-        tools:text="Tick tick"
+        android:textColor="?colorTextSub"
+        android:textSize="35sp"
+        android:textStyle="bold"
+        tools:text="1:43:42"
+        android:alpha="0.9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
