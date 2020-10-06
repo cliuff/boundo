@@ -73,12 +73,10 @@ import com.madness.collision.unit.api_viewing.R as MyR
 internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>(context) {
 
     companion object {
-        private val isExterior: Boolean
-            get() = mainApplication.exterior
         private val isSweet: Boolean
             get() = EasyAccess.isSweet
         val shouldShowDesserts: Boolean
-            get() = !isExterior && isSweet && (mainApplication.isPaleTheme || mainApplication.isDarkTheme)
+            get() = isSweet
 
         var seals = HashMap<Char, Bitmap>().toMutableMap()
         var sealBack = HashMap<Char, Bitmap>().toMutableMap()
@@ -161,7 +159,7 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
         }
 
         private fun itemColorInfo(context: Context, apiLevel: Int, isAccent: Boolean, isForIllustration: Boolean = false): Int {
-            if (mainApplication.exterior && !isForIllustration){
+            if (!shouldShowDesserts && !isForIllustration) {
                 val attrRes = if (isAccent) android.R.attr.textColor else R.attr.colorASurface
                 return ThemeUtil.getColor(context, attrRes)
             }

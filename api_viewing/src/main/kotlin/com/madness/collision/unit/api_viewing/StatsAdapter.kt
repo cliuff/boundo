@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020 Clifford Liu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.madness.collision.unit.api_viewing
 
 import android.annotation.SuppressLint
@@ -17,7 +33,6 @@ import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.util.X
 import com.madness.collision.util.dartFuture
-import com.madness.collision.util.mainApplication
 import kotlin.math.roundToInt
 
 internal class StatsAdapter(context: Context) : SandwichAdapter<StatsAdapter.Holder>(context) {
@@ -57,9 +72,8 @@ internal class StatsAdapter(context: Context) : SandwichAdapter<StatsAdapter.Hol
     val indexOffset: Int
         get() = spanCount
 
-    private val isExterior = mainApplication.exterior
     private val isSweet = EasyAccess.isSweet
-    private val shouldShowDesserts = !isExterior && isSweet && (mainApplication.isPaleTheme || mainApplication.isDarkTheme)
+    private val shouldShowDesserts = isSweet
 //    private val sweetElevation = if (shouldShowDesserts) X.size(context, 1f, X.DP) else 0f
     private val sweetMargin = if (shouldShowDesserts) X.size(context, 5f, X.DP).roundToInt() else 0
     private val itemLength: Int = X.size(context, 70f, X.DP).roundToInt()
