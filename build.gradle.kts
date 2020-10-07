@@ -36,7 +36,7 @@ buildscript {
         val androidxNavigation = "2.3.0"
         val googlePlayServicesOSSLicensesPlugin = "0.10.2"
         // Associated (the same) with Android Studio version
-        val androidGradlePlugin = "4.0.1"
+        val androidGradlePlugin = "4.0.2"
     }
     dependencies {
         classpath("com.android.tools.build:gradle:${versions.androidGradlePlugin}")
