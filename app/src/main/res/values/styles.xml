@@ -513,6 +513,44 @@
         <item name="android:gravity">center_horizontal</item>
     </style>
 
+    <style name="VerIconActionContainer">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:paddingTop">14dp</item>
+        <item name="android:paddingBottom">14dp</item>
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:paddingEnd">12dp</item>
+        <item name="android:minWidth">250dp</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+    </style>
+
+    <style name="VerIconActionCard" parent="MainCard">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_marginTop">0dp</item>
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:layout_marginEnd">18dp</item>
+        <item name="cardCornerRadius">27dp</item>
+    </style>
+
+    <style name="VerIconActionIcon">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:padding">15dp</item>
+        <item name="android:tint">?colorAOnItem</item>
+    </style>
+
+    <style name="VerIconActionText" parent="Widget.MaterialComponents.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_marginTop">3dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:gravity">center_horizontal</item>
+    </style>
+
     <style name="TTRadio" parent="Widget.MaterialComponents.CompoundButton.RadioButton">
         <item name="android:button">@android:color/transparent</item>
         <item name="android:background">@drawable/res_radio_week</item>

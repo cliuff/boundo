@@ -15,81 +15,78 @@
   ~ limitations under the License.
   -->
 
-<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:overScrollMode="never"
     android:scrollbars="none">
 
     <LinearLayout
-        android:paddingStart="20dp"
-        android:paddingTop="5dp"
-        android:paddingEnd="20dp"
-        android:orientation="horizontal"
+        android:paddingTop="15dp"
+        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <LinearLayout
-            style="@style/IconActionContainer">
+            android:id="@+id/avAdapterActionsDetails"
+            style="@style/VerIconActionContainer">
             <com.google.android.material.card.MaterialCardView
-                style="@style/IconActionCard">
+                style="@style/VerIconActionCard">
                 <ImageView
-                    android:id="@+id/avAdapterActionsDetails"
-                    style="@style/IconActionIcon"
+                    style="@style/VerIconActionIcon"
                     android:src="@drawable/ic_info_24" />
             </com.google.android.material.card.MaterialCardView>
             <TextView
-                style="@style/IconActionText"
+                style="@style/VerIconActionText"
                 android:textColor="?colorAOnSurface"
                 android:text="@string/avAdapterActionsDetails" />
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/avAdapterActionsOpenContainer"
-            style="@style/IconActionContainer">
+            android:id="@+id/avAdapterActionsOpen"
+            style="@style/VerIconActionContainer">
             <com.google.android.material.card.MaterialCardView
-                style="@style/IconActionCard">
+                style="@style/VerIconActionCard">
                 <ImageView
-                    android:id="@+id/avAdapterActionsOpen"
-                    style="@style/IconActionIcon"
+                    style="@style/VerIconActionIcon"
                     android:src="@drawable/ic_open_in_new_24" />
             </com.google.android.material.card.MaterialCardView>
             <TextView
-                style="@style/IconActionText"
+                style="@style/VerIconActionText"
                 android:textColor="?colorAOnSurface"
                 android:text="@string/fileActionsOpen" />
         </LinearLayout>
 
         <LinearLayout
-            style="@style/IconActionContainer">
+            android:id="@+id/avAdapterActionsIcon"
+            style="@style/VerIconActionContainer">
             <com.google.android.material.card.MaterialCardView
-                style="@style/IconActionCard">
+                style="@style/VerIconActionCard">
                 <ImageView
-                    android:id="@+id/avAdapterActionsIcon"
-                    style="@style/IconActionIcon"
+                    style="@style/VerIconActionIcon"
                     android:src="@drawable/ic_landscape_24" />
             </com.google.android.material.card.MaterialCardView>
             <TextView
-                style="@style/IconActionText"
+                style="@style/VerIconActionText"
                 android:textColor="?colorAOnSurface"
                 android:text="@string/avAdapterActionsIcon" />
         </LinearLayout>
 
         <LinearLayout
-            style="@style/IconActionContainer">
+            android:id="@+id/avAdapterActionsApk"
+            style="@style/VerIconActionContainer">
             <com.google.android.material.card.MaterialCardView
-                style="@style/IconActionCard">
+                style="@style/VerIconActionCard">
                 <ImageView
-                    android:id="@+id/avAdapterActionsApk"
-                    style="@style/IconActionIcon"
+                    style="@style/VerIconActionIcon"
                     android:src="@drawable/ic_app_24" />
             </com.google.android.material.card.MaterialCardView>
             <TextView
-                style="@style/IconActionText"
+                style="@style/VerIconActionText"
                 android:textColor="?colorAOnSurface"
                 android:text="@string/avAdapterActionsApk" />
         </LinearLayout>
 
     </LinearLayout>
 
-</HorizontalScrollView>
+</ScrollView>

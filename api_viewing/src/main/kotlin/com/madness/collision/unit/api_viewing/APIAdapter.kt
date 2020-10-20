@@ -454,7 +454,7 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
                     actionOpen(context, appInfo)
                 }
             } else {
-                popActions.findViewById<View>(MyR.id.avAdapterActionsOpenContainer).visibility = View.GONE
+                popActions.findViewById<View>(MyR.id.avAdapterActionsOpen).visibility = View.GONE
             }
             popActions.findViewById<View>(MyR.id.avAdapterActionsIcon).setOnClickListener {
                 popActions.dismiss()
