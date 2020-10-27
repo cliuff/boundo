@@ -41,6 +41,7 @@ import com.madness.collision.unit.school_timetable.data.CourseSingleton
 import com.madness.collision.unit.school_timetable.data.Timetable
 import com.madness.collision.unit.school_timetable.parser.Parser
 import com.madness.collision.util.*
+import com.madness.collision.util.MathUtils.boundMin
 import kotlinx.android.synthetic.main.unit_school_timetable.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -146,7 +147,7 @@ class MyUnit: Unit(), View.OnClickListener{
         val gapMargin = X.size(context, 30f, X.DP).roundToInt()
         mainViewModel.contentWidthBottom.observe(viewLifecycleOwner) {
             val margin = it + gapMargin
-            ttImport.alterMargin(bottom = if (margin < minMargin) minMargin else margin)
+            ttImport.alterMargin(bottom = margin.boundMin(minMargin))
             // update view
             ttImport.requestLayout()
         }

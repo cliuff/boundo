@@ -27,6 +27,7 @@ import androidx.core.content.edit
 import com.madness.collision.R
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.audio_timer.databinding.UnitAudioTimerBinding
+import com.madness.collision.util.MathUtils.boundMin
 import com.madness.collision.util.P
 import com.madness.collision.util.X
 import com.madness.collision.util.alterMargin
@@ -119,7 +120,7 @@ class MyUnit : Unit() {
         val gapMargin = X.size(context, 30f, X.DP).roundToInt()
         mainViewModel.contentWidthBottom.observe(viewLifecycleOwner) {
             val margin = it + gapMargin
-            viewBinding.atStart.alterMargin(bottom = if (margin < minMargin) minMargin else margin)
+            viewBinding.atStart.alterMargin(bottom = margin.boundMin(minMargin))
             // update view
             viewBinding.atStart.requestLayout()
         }

@@ -16,18 +16,19 @@
   -->
 
 <androidx.constraintlayout.widget.ConstraintLayout
-    android:orientation="vertical"
     android:animateLayoutChanges="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <ScrollView
         app:layout_constraintTop_toTopOf="parent"
         android:requiresFadingEdge="vertical"
         android:scrollbarThumbVertical="@drawable/scrollbar_vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
             android:id="@+id/ttManualContainer"
             android:orientation="vertical"
@@ -112,20 +113,22 @@
         android:id="@+id/ttManualActions"
         android:background="?colorABackground"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
         android:layout_marginTop="20dp"
         android:paddingTop="10dp">
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/ttManualOK"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
+            android:layout_gravity="center"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             app:strokeColor="?colorStroke"
             android:text="@string/ics_Part1_Button_OK_Text"
             android:textAllCaps="false"

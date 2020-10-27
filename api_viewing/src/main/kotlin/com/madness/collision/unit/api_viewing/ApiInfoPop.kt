@@ -218,8 +218,11 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
             SystemUtil.applyNavBarColor(context, it, isDarkNav, transparentNavBar, color = color)
         }
 
-        val marginBottom = X.size(context, 10f, X.DP).roundToInt()
-        if (mainApplication.insetBottom < marginBottom) mViews.guidelineBottom.setGuidelineEnd(marginBottom - mainApplication.insetBottom)
+        val minMargin = X.size(context, 10f, X.DP).roundToInt()
+        if (mainApplication.insetBottom < minMargin) {
+            val extraMargin = minMargin - mainApplication.insetBottom
+            mViews.guidelineBottom.setGuidelineEnd(extraMargin)
+        }
 
         // below: configure views
         mvApp.run {

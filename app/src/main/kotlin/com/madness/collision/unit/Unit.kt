@@ -79,9 +79,7 @@ abstract class Unit: TaggedFragment(), Democratic {
             )
             UNIT_DESCRIPTIONS = mUnitDescriptions.associateBy { it.unitName }
             UNITS = UNIT_DESCRIPTIONS.keys.toList().sorted()
-            STATIC_UNITS = mUnitDescriptions.filter {
-                it is StaticDescription
-            }.map { it.unitName }
+            STATIC_UNITS = mUnitDescriptions.filterIsInstance<StaticDescription>().map { it.unitName }
             DYNAMIC_UNITS = mUnitDescriptions.filter {
                 it !is StaticDescription
             }.map { it.unitName }
