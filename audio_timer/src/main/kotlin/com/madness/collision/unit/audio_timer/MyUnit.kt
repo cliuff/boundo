@@ -23,14 +23,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.edit
-import androidx.lifecycle.observe
 import com.madness.collision.R
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.audio_timer.databinding.UnitAudioTimerBinding
 import com.madness.collision.util.P
 import com.madness.collision.util.X
+import com.madness.collision.util.alterMargin
 import com.madness.collision.util.alterPadding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -116,9 +115,13 @@ class MyUnit : Unit() {
         super.onActivityCreated(savedInstanceState)
         democratize()
         val context = context ?: return
+        val minMargin = X.size(context, 80f, X.DP).roundToInt()
+        val gapMargin = X.size(context, 30f, X.DP).roundToInt()
         mainViewModel.contentWidthBottom.observe(viewLifecycleOwner) {
-            val params = viewBinding.atStart.layoutParams as ConstraintLayout.LayoutParams
-            params.bottomMargin = it + X.size(context, 10f,X.DP).roundToInt()
+            val margin = it + gapMargin
+            viewBinding.atStart.alterMargin(bottom = if (margin < minMargin) minMargin else margin)
+            // update view
+            viewBinding.atStart.requestLayout()
         }
         mainViewModel.contentWidthTop.observe(viewLifecycleOwner) {
             viewBinding.atContainer.alterPadding(top = it)

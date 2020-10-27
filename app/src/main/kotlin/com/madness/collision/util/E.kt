@@ -26,10 +26,12 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.LeadingMarginSpan
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.FileProvider
 import androidx.core.text.PrecomputedTextCompat
+import androidx.core.view.updateMarginsRelative
 import androidx.core.widget.TextViewCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -131,6 +133,15 @@ fun View.alterPadding(
         end: Int = this.paddingEnd,
         bottom: Int = this.paddingBottom
 ) = setPadding(start, top, end, bottom)
+
+fun View.alterMargin(
+        start: Int = (layoutParams as ViewGroup.MarginLayoutParams).marginStart,
+        top: Int = (layoutParams as ViewGroup.MarginLayoutParams).topMargin,
+        end: Int = (layoutParams as ViewGroup.MarginLayoutParams).marginEnd,
+        bottom: Int = (layoutParams as ViewGroup.MarginLayoutParams).bottomMargin) {
+    val params = layoutParams as ViewGroup.MarginLayoutParams
+    params.updateMarginsRelative(start, top, end, bottom)
+}
 
 fun View.measure(shouldLimitHor: Boolean = false, shouldLimitVer: Boolean = false) {
     val msHor: Int

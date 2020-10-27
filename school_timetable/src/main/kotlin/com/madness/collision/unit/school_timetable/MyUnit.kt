@@ -53,6 +53,7 @@ import java.io.IOException
 import java.lang.ref.WeakReference
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.roundToInt
 import com.madness.collision.unit.school_timetable.R as MyR
 
 class MyUnit: Unit(), View.OnClickListener{
@@ -142,9 +143,13 @@ class MyUnit: Unit(), View.OnClickListener{
         mainViewModel.contentWidthTop.observe(viewLifecycleOwner) {
             ttContainer.alterPadding(top = it)
         }
+        val minMargin = X.size(context, 80f, X.DP).roundToInt()
+        val gapMargin = X.size(context, 30f, X.DP).roundToInt()
         mainViewModel.contentWidthBottom.observe(viewLifecycleOwner) {
-            val layoutParams = ttImport.layoutParams as ViewGroup.MarginLayoutParams
-            layoutParams.bottomMargin = it + X.size(context, 20f, X.DP).toInt()
+            val margin = it + gapMargin
+            ttImport.alterMargin(bottom = if (margin < minMargin) minMargin else margin)
+            // update view
+            ttImport.requestLayout()
         }
 
         if (settingsPreferences.getBoolean(P.TT_CAL_DEFAULT_GOOGLE, true))

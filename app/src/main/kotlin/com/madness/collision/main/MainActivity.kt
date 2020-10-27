@@ -106,6 +106,7 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
     private lateinit var prefSettings: SharedPreferences
     private lateinit var mWindow: Window
     private var launchItem: String? = null
+    private var bottomNavHeight: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -430,16 +431,15 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
             mainSideNav?.alterPadding(top = it)
         }
         viewModel.insetBottom.observe(this) {
-            viewModel.contentWidthBottom.value = mainBottomNav?.run {
+            bottomNavHeight = mainBottomNav?.run {
                 alterPadding(bottom = it)
                 measure()
                 measuredHeight
             } ?: it
+            viewModel.contentWidthBottom.value = bottomNavHeight
             mainShowBottomNav?.let { showingBtn ->
                 val margin = it + X.size(mContext, 20f, X.DP).roundToInt()
-                val params = showingBtn.layoutParams
-                        as CoordinatorLayout.LayoutParams
-                params.bottomMargin = margin
+                showingBtn.alterMargin(bottom = margin)
             }
             mainSideNav?.alterPadding(bottom = it)
         }
@@ -484,6 +484,8 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
                 isNavUp = true
                 // hide bottom nav showing button
                 mainShowBottomNav?.visibility = View.GONE
+                // change bottom content height
+                viewModel.contentWidthBottom.value = bottomNavHeight
                 // adjust nav bar
                 val config = primaryNavBarConfig
                 if (config != null && !config.isTransparentBar) {
@@ -495,6 +497,8 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
                 isNavUp = false
                 // show bottom nav showing button
                 mainShowBottomNav?.visibility = View.VISIBLE
+                // change bottom content height
+                viewModel.contentWidthBottom.value = viewModel.insetBottom.value
                 // adjust nav bar
                 primaryNavBarConfig?.let {
                     SystemUtil.applyNavBarConfig(mContext, mWindow, it)
