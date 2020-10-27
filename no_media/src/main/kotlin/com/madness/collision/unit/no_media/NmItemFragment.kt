@@ -24,7 +24,6 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
@@ -93,9 +92,7 @@ internal class NmItemFragment: TaggedFragment(), Democratic, View.OnClickListene
 
         democratize(mainViewModel)
         mainViewModel.contentWidthBottom.observe(viewLifecycleOwner){
-            (nmItemPath.layoutParams as ConstraintLayout.LayoutParams).run {
-                this.bottomMargin = it + X.size(context, 10f, X.DP).roundToInt()
-            }
+            nmItemPath.alterMargin(bottom = it + X.size(context, 10f, X.DP).roundToInt())
         }
 
         val bundle: Bundle? = arguments

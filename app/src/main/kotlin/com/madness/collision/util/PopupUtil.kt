@@ -20,7 +20,6 @@ import android.content.Context
 import android.content.res.TypedArray
 import android.view.ViewGroup
 import android.widget.CompoundButton
-import android.widget.LinearLayout
 import android.widget.RadioGroup
 import androidx.core.content.res.use
 import androidx.core.view.get
@@ -49,7 +48,7 @@ object PopupUtil {
             for (i in 0 until it.length()) {
                 layoutInflater.inflate(R.layout.pref_list_item, radioGroup)
                 val item = radioGroup[i] as MaterialRadioButton
-                if (i == 0) (item.layoutParams as RadioGroup.LayoutParams).topMargin = 0
+                if (i == 0) item.alterMargin(top = 0)
                 item.id = R.id.prefListGroup + i + 1
                 item.text = it.getString(i)
                 item.tag = i
@@ -80,7 +79,7 @@ object PopupUtil {
             for (i in 0 until it.length()) {
                 layoutInflater.inflate(R.layout.popup_select_multi_item, radioGroup)
                 val item = radioGroup[i] as MaterialCheckBox
-                if (i == 0) (item.layoutParams as LinearLayout.LayoutParams).topMargin = 0
+                if (i == 0) item.alterMargin(top = 0)
                 item.id = R.id.popupSelectMultiContainer + i + 1
                 item.text = it.getString(i)
                 item.tag = i

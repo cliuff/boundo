@@ -341,10 +341,7 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
 //        if (shouldShowDesserts && !holder.card.cardBackgroundColor.isOpaque) {
 //            holder.card.setCardBackgroundColor(colorSurface)
 //        }
-        (holder.card.layoutParams as RecyclerView.LayoutParams).run {
-            topMargin = margin
-            bottomMargin = margin
-        }
+        holder.card.alterMargin(top = margin, bottom = margin)
         val appInfo = apps[index]
         holder.name.dartFuture(appInfo.name)
         holder.logo.setTag(R.bool.tagKeyAvAdapterItemId, appInfo)

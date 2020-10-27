@@ -225,9 +225,8 @@ class CollisionDialog private constructor(private val mContext: Context, private
             textView.setSelectAllOnFocus(true)
         }
         textView.setText(title)
-        val params = textView.layoutParams as LinearLayout.LayoutParams
         val dp20 = X.size(mContext, 20f, X.DP).toInt()
-        params.setMargins(dp20, dp20, dp20, 0)
+        textView.alterMargin(dp20, dp20, dp20, 0)
     }
 
     fun setTitleCollision(titleId: Int, hint: Int, type: Int) {
@@ -250,9 +249,8 @@ class CollisionDialog private constructor(private val mContext: Context, private
             val title = mContext.getString(titleId)
             textView.setText(title)
         }
-        val params = textView.layoutParams as LinearLayout.LayoutParams
         val dp20 = X.size(mContext, 20f, X.DP).toInt()
-        params.setMargins(dp20, dp20, dp20, 0)
+        textView.alterMargin(dp20, dp20, dp20, 0)
     }
 
     fun setContent(contentId: Int) {
@@ -267,9 +265,8 @@ class CollisionDialog private constructor(private val mContext: Context, private
         val textView: AppCompatTextView = this.content
         textView.dartFuture(content)
         textView.visibility = View.VISIBLE
-        val params = textView.layoutParams as LinearLayout.LayoutParams
         val dpDiez = X.size(mContext, 10f, X.DP).toInt()
-        params.setMargins(dpDiez * 2, dpDiez, dpDiez * 2, 0)
+        textView.alterMargin(dpDiez * 2, dpDiez, dpDiez * 2, 0)
     }
 
     fun setCustomContent(contentId: Int) {
@@ -285,8 +282,7 @@ class CollisionDialog private constructor(private val mContext: Context, private
         container.addView(content)
         val textView: TextView = this.content
         if (textView.visibility == View.GONE && title.visibility == View.GONE) return
-        val params = scrollView.layoutParams as LinearLayout.LayoutParams
-        params.setMargins(0, X.size(mContext, 10f, X.DP).toInt(), 0, 0)
+        scrollView.alterMargin(0, X.size(mContext, 10f, X.DP).toInt(), 0, 0)
     }
 
     /**

@@ -32,6 +32,7 @@ import com.madness.collision.diy.SandwichAdapter
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.util.X
+import com.madness.collision.util.alterMargin
 import com.madness.collision.util.dartFuture
 import kotlin.math.roundToInt
 
@@ -50,10 +51,7 @@ internal class StatsAdapter(context: Context) : SandwichAdapter<StatsAdapter.Hol
         constructor(itemView: View, sweetMargin: Int): this(itemView) {
 //            mViews.avStatsAdapterCard.cardElevation = sweetElevation
 //            mViews.avStatsAdapterCard.stateListAnimator = AnimatorInflater.loadStateListAnimator(context, R.animator.res_lift_card_on_touch)
-            (card.layoutParams as RecyclerView.LayoutParams).run {
-                topMargin = sweetMargin
-                bottomMargin = sweetMargin
-            }
+            card.alterMargin(top = sweetMargin, bottom = sweetMargin)
         }
 
     }
