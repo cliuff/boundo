@@ -40,7 +40,6 @@ import androidx.core.view.forEach
 import androidx.core.view.get
 import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.checkbox.MaterialCheckBox

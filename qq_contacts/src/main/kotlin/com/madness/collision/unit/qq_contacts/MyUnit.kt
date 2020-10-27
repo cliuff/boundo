@@ -30,7 +30,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.observe
 import com.google.android.material.card.MaterialCardView
 import com.madness.collision.R
 import com.madness.collision.databinding.InstantQqItemBinding

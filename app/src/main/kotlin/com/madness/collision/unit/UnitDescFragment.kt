@@ -29,7 +29,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.observe
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import com.madness.collision.Democratic
 import com.madness.collision.R

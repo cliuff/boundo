@@ -29,7 +29,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.observe
 import com.madness.collision.R
 import com.madness.collision.settings.ExteriorFragment
 import com.madness.collision.unit.Unit

@@ -34,8 +34,6 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.Observer
-import androidx.lifecycle.observe
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
@@ -366,12 +364,10 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
         )
 
     private fun setupViewModel() {
-        // todo SAM interface construction, check lifecycle support or convert my own code
-        // this one is converted, others are not
-        viewModel.democratic.observe(this, Observer {
+        viewModel.democratic.observe(this) {
             clearDemocratic()
             it.createOptions(mContext, mainTB, colorIcon)
-        })
+        }
         viewModel.unit.observe(this) {
             it ?: return@observe
             val (unitFragment, flags) = it

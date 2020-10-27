@@ -30,7 +30,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.edit
 import androidx.core.content.res.use
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.observe
 import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.databinding.FragmentSettingsBinding

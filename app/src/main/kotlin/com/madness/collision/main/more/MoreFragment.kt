@@ -26,7 +26,6 @@ import android.widget.LinearLayout
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.observe
 import com.google.android.material.card.MaterialCardView
 import com.madness.collision.Democratic
 import com.madness.collision.R
