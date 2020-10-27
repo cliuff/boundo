@@ -38,6 +38,7 @@ import com.madness.collision.databinding.SettingsUnitItemBinding
 import com.madness.collision.main.MainActivity
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.pref.PrefExterior
+import com.madness.collision.unit.DescRetriever
 import com.madness.collision.unit.Unit
 import com.madness.collision.util.*
 
@@ -100,14 +101,14 @@ internal class SettingsFragment : TaggedFragment(), Democratic, NavNode {
             navigate(SettingsFragmentDirections.actionSettingsFragmentToAdviceFragment())
         }
 
-        val installedUnits = Unit.getInstalledUnits(context)
+        val installedUnits = DescRetriever(context).retrieveInstalled()
         val inflater = LayoutInflater.from(context)
         val parent = viewBinding.settingsUnits
-        for (unit in Unit.UNITS) {
-            if (!installedUnits.contains(unit)) continue
+        for (state in installedUnits) {
+            val unit = state.unitName
             val unitBridge = Unit.getBridge(unit) ?: continue
             val settingsPage = unitBridge.getSettings() ?: continue
-            val unitDesc = Unit.getDescription(unit) ?: continue
+            val unitDesc = state.description
             val checkerBinding = SettingsUnitItemBinding.inflate(inflater, parent, true)
             checkerBinding.settingsUnitItemContainer.setOnClickListener {
                 mainViewModel.displayFragment(settingsPage)

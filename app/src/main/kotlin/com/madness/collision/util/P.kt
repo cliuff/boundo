@@ -27,6 +27,7 @@ object P {
 
     const val UNIT_FREQUENCIES = "unitFrequencies"
     const val UNIT_PINNED = "unitPinned"
+    const val UNIT_DISABLED = "unitDisabled"
 
     const val PACKAGE_CHANGED_BOOT_COUNT = "changedPkgBootCount"
     const val PACKAGE_CHANGED_SEQUENCE_NO = "changedPkgSequenceNo"

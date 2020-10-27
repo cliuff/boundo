@@ -26,8 +26,9 @@ import com.google.android.material.card.MaterialCardView
 import com.madness.collision.databinding.AdapterFrequentUnitsBinding
 import com.madness.collision.diy.SandwichAdapter
 import com.madness.collision.main.MainViewModel
+import com.madness.collision.unit.DescRetriever
 import com.madness.collision.unit.Unit
-import com.madness.collision.util.StringUtils
+import com.madness.collision.util.sortedWithUtilsBy
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -42,11 +43,8 @@ internal class PinnedUnitsAdapter(context: Context, private val mainViewModel: M
 
     private val mContext = context
     private val mInflater: LayoutInflater = LayoutInflater.from(mContext)
-    private val pinnedUnitsDescriptions = Unit.getPinnedUnits(mContext).mapNotNull {
-        Unit.getDescription(it)
-    }.filter { it.isAvailable(mContext) }.sortedWith { o1, o2 ->
-        StringUtils.compareName(o1.getName(context), o2.getName(context))
-    }
+    private val pinnedUnitsDescriptions = DescRetriever(mContext).includePinState().doFilter()
+            .retrieveInstalled().sortedWithUtilsBy { it.description.getName(context) }
 
     override var spanCount: Int = 1
     override val listCount: Int = pinnedUnitsDescriptions.size
@@ -56,7 +54,7 @@ internal class PinnedUnitsAdapter(context: Context, private val mainViewModel: M
     }
 
     override fun onMakeBody(holder: UnitsHolder, index: Int) {
-        val description = pinnedUnitsDescriptions[index]
+        val description = pinnedUnitsDescriptions[index].description
         holder.name.text = description.getName(mContext)
         holder.icon.setImageDrawable(description.getIcon(mContext))
         holder.card.setOnClickListener {

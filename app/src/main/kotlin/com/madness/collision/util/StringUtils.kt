@@ -19,6 +19,7 @@ package com.madness.collision.util
 import android.os.LocaleList
 import java.text.Collator
 import java.util.*
+import kotlin.Comparator
 
 object StringUtils {
     private val MIXABLE_LANG = mapOf(
@@ -60,4 +61,14 @@ object StringUtils {
         }
         return compareName(locales, name1, name2)
     }
+
+    /**
+     * Used with a list of String
+     */
+    val comparator: Comparator<in String>
+        get() = Comparator(StringUtils::compareName)
+}
+
+inline fun <T> Iterable<T>.sortedWithUtilsBy(crossinline selector: (T) -> String): List<T> {
+    return this.sortedWith(compareBy(StringUtils.comparator, selector))
 }

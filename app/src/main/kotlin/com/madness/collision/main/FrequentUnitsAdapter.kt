@@ -24,9 +24,7 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.madness.collision.databinding.AdapterFrequentUnitsBinding
-import com.madness.collision.databinding.AdapterUnitsBinding
 import com.madness.collision.diy.SandwichAdapter
-import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.Unit
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

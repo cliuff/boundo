@@ -27,7 +27,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.instant.other.InstantOthers
@@ -35,6 +34,7 @@ import com.madness.collision.instant.shortcut.InstantShortcuts
 import com.madness.collision.instant.tile.InstantTiles
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.settings.SettingsFunc
+import com.madness.collision.unit.Unit
 import com.madness.collision.util.*
 import kotlinx.android.synthetic.main.activity_instant_manager.*
 import kotlin.math.roundToInt
@@ -90,7 +90,7 @@ internal class InstantFragment: TaggedFragment(), Democratic {
             if (this < 2) 1 else this
         }
 
-        val installedUnits = SplitInstallManagerFactory.create(context).installedModules
+        val installedUnits = Unit.getInstalledUnits(context)
         val predicate: (InstantItem) -> Boolean = {
             (!it.hasRequiredUnit || installedUnits.contains(it.requiredUnitName)) && it.isAvailable(context)
         }

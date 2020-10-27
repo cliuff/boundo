@@ -24,15 +24,14 @@ import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
-import com.google.android.play.core.splitinstall.SplitInstallManager
 import com.madness.collision.R
 import com.madness.collision.databinding.AdapterUnitsManagerBinding
 import com.madness.collision.diy.SandwichAdapter
 import com.madness.collision.main.MainViewModel
-import com.madness.collision.util.StringUtils
 import com.madness.collision.util.ThemeUtil
+import com.madness.collision.util.sortedWithUtilsBy
 
-internal class UnitsManagerAdapter(context: Context, splitInstallManager: SplitInstallManager, private val mainViewModel: MainViewModel)
+internal class UnitsManagerAdapter(context: Context, private val mainViewModel: MainViewModel)
     : SandwichAdapter<UnitsManagerAdapter.UnitViewHolder>(context) {
 
     class UnitViewHolder(binding: AdapterUnitsManagerBinding): RecyclerView.ViewHolder(binding.root) {
@@ -44,13 +43,8 @@ internal class UnitsManagerAdapter(context: Context, splitInstallManager: SplitI
 
     private val mContext = context
     private val mInflater: LayoutInflater = LayoutInflater.from(mContext)
-    private val installedUnits = Unit.getInstalledUnits(splitInstallManager)
-    private val mDescriptions: List<Description>
-    init {
-        mDescriptions = Unit.UNITS.mapNotNull { Unit.getDescription(it) }.sortedWith { o1, o2 ->
-            StringUtils.compareName(o1.getName(context), o2.getName(context))
-        }
-    }
+    private val mDescriptions = DescRetriever(mContext).includePinState()
+            .retrieveAll().sortedWithUtilsBy { it.description.getName(context) }
     private val colorPass: Int by lazy { ThemeUtil.getColor(context, R.attr.colorActionPass) }
 
     override var spanCount: Int = 1
@@ -61,14 +55,14 @@ internal class UnitsManagerAdapter(context: Context, splitInstallManager: SplitI
     }
 
     override fun onMakeBody(holder: UnitViewHolder, index: Int) {
-        val description = mDescriptions[index]
+        val stateful = mDescriptions[index]
+        val description = stateful.description
         holder.name.text = description.getName(mContext)
         holder.name.setCompoundDrawablesRelativeWithIntrinsicBounds(description.getIcon(mContext), null, null, null)
         holder.container.setOnClickListener {
             description.descriptionPage?.let { mainViewModel.displayFragment(it) }
         }
-        val isInstalled = installedUnits.contains(description.unitName)
-        if (isInstalled) {
+        if (stateful.isInstalled) {
             holder.status.visibility = View.VISIBLE
             holder.status.drawable.setTint(colorPass)
         } else {

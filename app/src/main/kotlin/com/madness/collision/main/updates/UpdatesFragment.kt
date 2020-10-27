@@ -30,6 +30,7 @@ import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.databinding.MainUpdatesHeaderBinding
 import com.madness.collision.main.MainViewModel
+import com.madness.collision.unit.DescRetriever
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.UpdatesProvider
 import com.madness.collision.util.TaggedFragment
@@ -82,9 +83,10 @@ internal class UpdatesFragment : TaggedFragment(), Democratic {
         mContext = context ?: return
         mode = arguments?.getInt(ARG_MODE) ?: MODE_NORMAL
         if (isNoUpdatesMode) return
-        updatesProviders = Unit.getPinnedUnits(mContext).mapNotNull {
-            Unit.getUpdates(it)?.run { it to this }
-        }.toMutableList()
+        updatesProviders = DescRetriever(mContext).includePinState().doFilter()
+                .retrieveInstalled().mapNotNull {
+                    Unit.getUpdates(it.unitName)?.run { it.unitName to this }
+                }.toMutableList()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

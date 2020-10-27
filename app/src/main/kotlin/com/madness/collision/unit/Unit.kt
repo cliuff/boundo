@@ -50,30 +50,42 @@ abstract class Unit: TaggedFragment(), Democratic {
         const val UNIT_NAME_QQ_CONTACTS = "qq_contacts"
         private val UNIT_CLASSES: MutableMap<String, Class<Unit>> = hashMapOf()
         private val UNIT_BRIDGE_CLASSES: MutableMap<String, Class<Bridge>> = hashMapOf()
-        private val mUnitDescriptions: List<Description> = listOf(
-                Description(UNIT_NAME_API_VIEWING, R.string.apiViewer, R.drawable.ic_app_24).setDescResId(R.string.unit_desc_av),
-                Description(UNIT_NAME_SCHOOL_TIMETABLE, R.string.unit_school_timetable, R.drawable.ic_tt_24).setDescResId(R.string.unit_desc_st),
-                Description(UNIT_NAME_IMAGE_MODIFYING, R.string.developertools_cropimage, R.drawable.ic_landscape_24).setDescResId(R.string.unit_desc_im),
-                Description(UNIT_NAME_COOL_APP, R.string.developertools_appinfowidget, R.drawable.ic_widgets_24).setDescResId(R.string.unit_desc_ca),
-                Description(UNIT_NAME_NO_MEDIA, R.string.tools_nm, R.drawable.ic_flip_24).setDescResId(R.string.unit_desc_nm)
-                        .setRequirement(Description.Checker(R.string.unit_desc_requirement_nm) { X.belowOff(X.Q) }),
-                Description(UNIT_NAME_THEMED_WALLPAPER, R.string.twService, R.drawable.ic_image_24).setDescResId(R.string.unit_desc_tw),
-                Description(UNIT_NAME_AUDIO_TIMER, R.string.unit_audio_timer, R.drawable.ic_timer_24).setDescResId(R.string.unit_desc_at),
-                Description(UNIT_NAME_WE_CHAT_EVO, R.string.unit_we_chat_evo, R.drawable.ic_we_chat_24).setDescResId(R.string.unit_desc_we)
-                        .setRequirement(
-                                Description.Checker(R.string.unit_desc_requirement_shortcut) { X.aboveOn(X.N_MR1) },
-                                Description.Checker(R.string.unit_desc_requirement_we) {
-                                    MiscApp.isAppAvailable(it, "com.tencent.mm")
-                                }),
-                Description(UNIT_NAME_QQ_CONTACTS, R.string.unit_qq_contacts, R.drawable.ic_qq_24).setDescResId(R.string.unit_desc_qc)
-                        .setRequirement(
-                                Description.Checker(R.string.unit_desc_requirement_shortcut) { X.aboveOn(X.N_MR1) },
-                                Description.Checker(R.string.unit_desc_requirement_qc) {
-                                    MiscApp.isAppAvailable(it, "com.tencent.mobileqq")
-                                })
-        )
-        private val UNIT_DESCRIPTIONS: Map<String, Description> = mUnitDescriptions.associateBy { it.unitName }
-        val UNITS: List<String> = UNIT_DESCRIPTIONS.keys.toList().sorted()
+        private val UNIT_DESCRIPTIONS: Map<String, Description>
+        val UNITS: List<String>
+        val STATIC_UNITS: List<String>
+        val DYNAMIC_UNITS: List<String>
+        init {
+            val mUnitDescriptions: List<Description> = listOf(
+                    Description(UNIT_NAME_API_VIEWING, R.string.apiViewer, R.drawable.ic_app_24).setDescResId(R.string.unit_desc_av),
+                    Description(UNIT_NAME_SCHOOL_TIMETABLE, R.string.unit_school_timetable, R.drawable.ic_tt_24).setDescResId(R.string.unit_desc_st),
+                    Description(UNIT_NAME_IMAGE_MODIFYING, R.string.developertools_cropimage, R.drawable.ic_landscape_24).setDescResId(R.string.unit_desc_im),
+                    Description(UNIT_NAME_COOL_APP, R.string.developertools_appinfowidget, R.drawable.ic_widgets_24).setDescResId(R.string.unit_desc_ca),
+                    Description(UNIT_NAME_NO_MEDIA, R.string.tools_nm, R.drawable.ic_flip_24).setDescResId(R.string.unit_desc_nm)
+                            .setRequirement(Description.Checker(R.string.unit_desc_requirement_nm) { X.belowOff(X.Q) }),
+                    Description(UNIT_NAME_THEMED_WALLPAPER, R.string.twService, R.drawable.ic_image_24).setDescResId(R.string.unit_desc_tw),
+                    Description(UNIT_NAME_AUDIO_TIMER, R.string.unit_audio_timer, R.drawable.ic_timer_24).setDescResId(R.string.unit_desc_at),
+                    Description(UNIT_NAME_WE_CHAT_EVO, R.string.unit_we_chat_evo, R.drawable.ic_we_chat_24).setDescResId(R.string.unit_desc_we)
+                            .setRequirement(
+                                    Description.Checker(R.string.unit_desc_requirement_shortcut) { X.aboveOn(X.N_MR1) },
+                                    Description.Checker(R.string.unit_desc_requirement_we) {
+                                        MiscApp.isAppAvailable(it, "com.tencent.mm")
+                                    }),
+                    Description(UNIT_NAME_QQ_CONTACTS, R.string.unit_qq_contacts, R.drawable.ic_qq_24).setDescResId(R.string.unit_desc_qc)
+                            .setRequirement(
+                                    Description.Checker(R.string.unit_desc_requirement_shortcut) { X.aboveOn(X.N_MR1) },
+                                    Description.Checker(R.string.unit_desc_requirement_qc) {
+                                        MiscApp.isAppAvailable(it, "com.tencent.mobileqq")
+                                    })
+            )
+            UNIT_DESCRIPTIONS = mUnitDescriptions.associateBy { it.unitName }
+            UNITS = UNIT_DESCRIPTIONS.keys.toList().sorted()
+            STATIC_UNITS = mUnitDescriptions.filter {
+                it is StaticDescription
+            }.map { it.unitName }
+            DYNAMIC_UNITS = mUnitDescriptions.filter {
+                it !is StaticDescription
+            }.map { it.unitName }
+        }
 
         fun getInstalledUnits(context: Context): List<String> {
             return getInstalledUnits(SplitInstallManagerFactory.create(context))
@@ -81,7 +93,11 @@ abstract class Unit: TaggedFragment(), Democratic {
 
         fun getInstalledUnits(splitInstallManager: SplitInstallManager): List<String> {
             val installedModules = splitInstallManager.installedModules
-            if (!installedModules.isNullOrEmpty()) return installedModules.toList()
+            if (!installedModules.isNullOrEmpty()) {
+                val result = installedModules.toMutableList()
+                result.addAll(STATIC_UNITS)
+                return result
+            }
             return UNITS.mapNotNull { if (getUnitClass(it) != null) it else null }
         }
 
@@ -132,7 +148,8 @@ abstract class Unit: TaggedFragment(), Democratic {
         ): Set<String> {
             val json = pref.getString(P.UNIT_PINNED, "")
             if (json.isNullOrEmpty()) return emptySet()
-            return Gson().fromJson(json, TypeToken.getParameterized(Set::class.java, String::class.java).type) ?: emptySet()
+            val type = TypeToken.getParameterized(Set::class.java, String::class.java).type
+            return Gson().fromJson(json, type) ?: emptySet()
         }
 
         fun getIsPinned(context: Context, unitName: String,
@@ -156,7 +173,8 @@ abstract class Unit: TaggedFragment(), Democratic {
             val pinnedUnits = getPinnedUnits(context, pref).toMutableSet()
             if (pinnedUnits.contains(unitName)) return
             pinnedUnits.add(unitName)
-            pref.edit { putString(P.UNIT_PINNED, Gson().toJson(pinnedUnits, TypeToken.getParameterized(Set::class.java, String::class.java).type)) }
+            val type = TypeToken.getParameterized(Set::class.java, String::class.java).type
+            pref.edit { putString(P.UNIT_PINNED, Gson().toJson(pinnedUnits, type)) }
         }
 
         fun unpinUnit(context: Context, unitName: String,
@@ -165,7 +183,52 @@ abstract class Unit: TaggedFragment(), Democratic {
             val pinnedUnits = getPinnedUnits(context, pref).toMutableSet()
             if (!pinnedUnits.contains(unitName)) return
             pinnedUnits.remove(unitName)
-            pref.edit { putString(P.UNIT_PINNED, Gson().toJson(pinnedUnits, TypeToken.getParameterized(Set::class.java, String::class.java).type)) }
+            val type = TypeToken.getParameterized(Set::class.java, String::class.java).type
+            pref.edit { putString(P.UNIT_PINNED, Gson().toJson(pinnedUnits, type)) }
+        }
+
+        fun getDisabledUnits(context: Context,
+                           pref: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
+        ): Set<String> {
+            val json = pref.getString(P.UNIT_DISABLED, "")
+            if (json.isNullOrEmpty()) return emptySet()
+            val type = TypeToken.getParameterized(Set::class.java, String::class.java).type
+            return Gson().fromJson(json, type) ?: emptySet()
+        }
+
+        fun getIsDisabled(context: Context, unitName: String,
+                        pref: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
+        ): Boolean {
+            val disabledUnits = getDisabledUnits(context, pref)
+            return disabledUnits.contains(unitName)
+        }
+
+        fun toggleDisabled(context: Context, unitName: String,
+                         pref: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE),
+                         isDisabled: Boolean = getIsDisabled(context, unitName, pref)
+        ) {
+            if (isDisabled) enableUnit(context, unitName, pref)
+            else disableUnit(context, unitName, pref)
+        }
+
+        fun disableUnit(context: Context, unitName: String,
+                    pref: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
+        ) {
+            val disabledUnits = getDisabledUnits(context, pref).toMutableSet()
+            if (disabledUnits.contains(unitName)) return
+            disabledUnits.add(unitName)
+            val type = TypeToken.getParameterized(Set::class.java, String::class.java).type
+            pref.edit { putString(P.UNIT_DISABLED, Gson().toJson(disabledUnits, type)) }
+        }
+
+        fun enableUnit(context: Context, unitName: String,
+                      pref: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
+        ) {
+            val disabledUnits = getDisabledUnits(context, pref).toMutableSet()
+            if (!disabledUnits.contains(unitName)) return
+            disabledUnits.remove(unitName)
+            val type = TypeToken.getParameterized(Set::class.java, String::class.java).type
+            pref.edit { putString(P.UNIT_DISABLED, Gson().toJson(disabledUnits, type)) }
         }
 
         @Suppress("UNCHECKED_CAST")

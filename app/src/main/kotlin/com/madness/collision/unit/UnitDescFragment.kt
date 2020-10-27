@@ -117,7 +117,11 @@ internal class UnitDescFragment() : TaggedFragment(), Democratic {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mViewModel.description.value = description
+        val context = context ?: return
+        val unit = description?.unitName ?: return
+        val states = DescRetriever(context).includePinState().retrieve(unit)
+        if (states.isEmpty()) return
+        mViewModel.description.value = states[0]
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -128,11 +132,9 @@ internal class UnitDescFragment() : TaggedFragment(), Democratic {
         val colorAlertBack: Int by lazy { ThemeUtil.getColor(context, R.attr.colorActionAlertBack) }
         mViewModel.description.observe(viewLifecycleOwner) {
             val description = it ?: return@observe
-            val splitInstallManager = SplitInstallManagerFactory.create(context)
-            val installedUnits = Unit.getInstalledUnits(splitInstallManager)
-            val isInstalled = installedUnits.contains(it.unitName)
-            val isAvailable = it.isAvailable(context)
-            viewBinding.unitDescIcon.setImageDrawable(it.getIcon(context))
+            val isInstalled = it.isInstalled
+            val isAvailable = it.isAvailable
+            viewBinding.unitDescIcon.setImageDrawable(it.description.getIcon(context))
 
             val iconTint = viewBinding.unitDescIcon.imageTintList
             val installStatusColor = if (isInstalled) ColorStateList.valueOf(colorPass) else iconTint
@@ -147,6 +149,8 @@ internal class UnitDescFragment() : TaggedFragment(), Democratic {
                 compoundDrawablesRelative[0].setTint(if (isAvailable) colorPass else colorAlert)
             }
 
+            val splitInstallManager = SplitInstallManagerFactory.create(context)
+            val installedUnits = Unit.getInstalledUnits(splitInstallManager)
             viewBinding.unitDescAction.run {
                 when {
                     isInstalled -> {
@@ -158,7 +162,7 @@ internal class UnitDescFragment() : TaggedFragment(), Democratic {
                             val unitManager = UnitManager(context, splitInstallManager)
                             if (!installedUnits.contains(description.unitName)) return@setOnClickListener
                             notifyBriefly(R.string.unit_desc_uninstall_notice)
-                            GlobalScope.launch { unitManager.uninstallUnit(description, getView()) }
+                            GlobalScope.launch { unitManager.uninstallUnit(description.description, getView()) }
                         }
                     }
                     isAvailable -> {
@@ -170,7 +174,7 @@ internal class UnitDescFragment() : TaggedFragment(), Democratic {
                             val unitManager = UnitManager(context, splitInstallManager)
                             if (installedUnits.contains(description.unitName)) return@setOnClickListener
                             notifyBriefly(R.string.unit_desc_install_notice)
-                            GlobalScope.launch { unitManager.installUnit(description, getView()) }
+                            GlobalScope.launch { unitManager.installUnit(description.description, getView()) }
                         }
                     }
                     else -> {
@@ -183,10 +187,10 @@ internal class UnitDescFragment() : TaggedFragment(), Democratic {
                 viewBinding.unitDescAction.isEnabled = false
             }
 
-            if (it.hasChecker) {
+            if (it.description.hasChecker) {
                 val inflater = LayoutInflater.from(context)
                 val parent = viewBinding.unitDescCheckers
-                it.checkers.forEach { checker ->
+                it.description.checkers.forEach { checker ->
                     val checkerBinding = UnitDescCheckerBinding.inflate(inflater, parent, true)
                     val isCheckPassed = checker.check(context)
                     val icRes = if (isCheckPassed) R.drawable.ic_done_24 else R.drawable.ic_clear_24
@@ -198,10 +202,10 @@ internal class UnitDescFragment() : TaggedFragment(), Democratic {
                 }
             }
 
-            viewBinding.unitDescDesc.setMarginText(context, it.descRes)
+            viewBinding.unitDescDesc.setText(it.description.descRes)
 
             toolbar?.run {
-                menu.findItem(R.id.unitDescToolbarPin).icon = getStarIcon(context, Unit.getIsPinned(context, it.unitName))
+                menu.findItem(R.id.unitDescToolbarPin).icon = getStarIcon(context, it.isPinned)
             }
         }
     }

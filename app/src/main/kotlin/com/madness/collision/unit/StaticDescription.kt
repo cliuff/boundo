@@ -16,9 +16,5 @@
 
 package com.madness.collision.unit
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-
-internal class UnitDescViewModel : ViewModel() {
-    var description: MutableLiveData<StatefulDescription> = MutableLiveData()
-}
+class StaticDescription(unitName: String, displayNameResId: Int, iconResId: Int)
+    : Description(unitName, displayNameResId, iconResId)
