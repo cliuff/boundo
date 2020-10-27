@@ -65,7 +65,7 @@ android {
     compileSdkVersion(30)
     defaultConfig {
         // below: manifest placeholders
-        manifestPlaceholders = mapOf<String, String>("buildPackage" to buildPackage)
+        manifestPlaceholders["buildPackage"] = buildPackage
         applicationId = "com.madness.collision"
         minSdkVersion(22)
         targetSdkVersion(30)
@@ -102,14 +102,14 @@ android {
         }
         create("arm") {
             dimension = "arch"
-            ndk{
-                abiFilters("armeabi-v7a", "arm64-v8a")
+            ndk {
+                abiFilters.addAll(listOf("armeabi-v7a", "arm64-v8a"))
             }
         }
         create("x86") {
             dimension = "arch"
-            ndk{
-                abiFilters("x86", "x86_64")
+            ndk {
+                abiFilters.addAll(listOf("x86", "x86_64"))
             }
         }
     }

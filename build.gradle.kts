@@ -33,10 +33,10 @@ buildscript {
         val kotlin = "1.4.10"
 //        val dokka = "0.10.1" // dokka and dokka gradle plugin
 //        val dokkaAndroidGradlePlugin = "0.9.18" // dokka android gradle plugin
-        val androidxNavigation = "2.3.0"
+        val androidxNavigation = "2.3.1"
         val googlePlayServicesOSSLicensesPlugin = "0.10.2"
         // Associated (the same) with Android Studio version
-        val androidGradlePlugin = "4.0.2"
+        val androidGradlePlugin = "4.1.0"
     }
     dependencies {
         classpath("com.android.tools.build:gradle:${versions.androidGradlePlugin}")

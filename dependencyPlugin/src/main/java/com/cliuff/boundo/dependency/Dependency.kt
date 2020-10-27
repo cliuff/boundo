@@ -29,7 +29,7 @@ object Versions {
     const val androidxAppcompat = "1.1.0"
     const val androidxLifecycle = "2.2.0"
     const val androidxRoom = "2.2.5"
-    const val androidxNavigation = "2.3.0"
+    const val androidxNavigation = "2.3.1"
     const val androidxCoreTesing = "2.1.0"
     const val androidxFragment = "1.2.5"
     const val androidxDrawerLayout = "1.1.1"
@@ -49,7 +49,7 @@ object Versions {
     const val androidxLegacyV4 = "1.0.0"
     // This dependency is for the Wear UI Library,
     // which has classes that exemplify best practices
-    const val androidxWear = "1.0.0"
+    const val androidxWear = "1.1.0"
 
     const val googleTruth = "1.0.1"
     const val googleMaterialComponents = "1.2.1"

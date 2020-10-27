@@ -39,14 +39,14 @@ android {
         }
         create("arm") {
             dimension = "arch"
-            ndk{
-                abiFilters("armeabi-v7a", "arm64-v8a")
+            ndk {
+                abiFilters.addAll(listOf("armeabi-v7a", "arm64-v8a"))
             }
         }
         create("x86") {
             dimension = "arch"
-            ndk{
-                abiFilters("x86", "x86_64")
+            ndk {
+                abiFilters.addAll(listOf("x86", "x86_64"))
             }
         }
     }
