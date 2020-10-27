@@ -52,6 +52,7 @@ import com.madness.collision.util.*
 import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.coroutines.*
 import java.lang.ref.WeakReference
+import kotlin.math.roundToInt
 import kotlin.random.Random
 
 class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
@@ -434,6 +435,12 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
                 measure()
                 measuredHeight
             } ?: it
+            mainShowBottomNav?.let { showingBtn ->
+                val margin = it + X.size(mContext, 20f, X.DP).roundToInt()
+                val params = showingBtn.layoutParams
+                        as CoordinatorLayout.LayoutParams
+                params.bottomMargin = margin
+            }
             mainSideNav?.alterPadding(bottom = it)
         }
         viewModel.insetLeft.observe(this) {
@@ -475,17 +482,27 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
         navScrollBehavior?.run {
             onSlidedUpCallback = {
                 isNavUp = true
+                // hide bottom nav showing button
+                mainShowBottomNav?.visibility = View.GONE
+                // adjust nav bar
                 val config = primaryNavBarConfig
-                if (config != null && !config.isTransparentBar)
-                    SystemUtil.applyNavBarConfig(mContext, mWindow, SystemBarConfig(config.isDarkIcon, isTransparentBar = true))
+                if (config != null && !config.isTransparentBar) {
+                    val newConfig = SystemBarConfig(config.isDarkIcon, isTransparentBar = true)
+                    SystemUtil.applyNavBarConfig(mContext, mWindow, newConfig)
+                }
             }
             onSlidedDownCallback = {
                 isNavUp = false
+                // show bottom nav showing button
+                mainShowBottomNav?.visibility = View.VISIBLE
+                // adjust nav bar
                 primaryNavBarConfig?.let {
                     SystemUtil.applyNavBarConfig(mContext, mWindow, it)
                 }
             }
         }
+        // show bottom navigation bar once clicking the button
+        mainShowBottomNav?.setOnClickListener { showNav() }
 
         mainSideNav?.also {
             listOf(

@@ -49,4 +49,25 @@
         android:layout_gravity="bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mainShowBottomNav"
+        android:visibility="gone"
+        android:layout_marginStart="30dp"
+        android:layout_gravity="bottom|start"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="0dp"
+        app:cardBackgroundColor="?colorAItem"
+        android:alpha="@fraction/floatingAlpha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:contentDescription="@null"
+            android:src="@drawable/ic_more_horiz_24"
+            app:tint="?colorTextSub"
+            android:padding="8dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"/>
+    </com.google.android.material.card.MaterialCardView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
