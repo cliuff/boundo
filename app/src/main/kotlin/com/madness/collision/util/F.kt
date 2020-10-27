@@ -54,7 +54,12 @@ object F {
     /**
      * used below Android 10
      */
-    fun externalRoot(sub: String) = Environment.getExternalStoragePublicDirectory(sub)?.path ?: ""
+    fun externalRoot(sub: String) = getExternalStoragePublicDirectory(sub).path ?: ""
+
+    @Suppress("deprecation")
+    private fun getExternalStoragePublicDirectory(sub: String): File {
+        return Environment.getExternalStoragePublicDirectory(sub)
+    }
 
     fun cachePrivateFile(context: Context) = context.cacheDir
 

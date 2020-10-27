@@ -198,7 +198,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
                         }
                         refreshLayout.isRefreshing = true
                         if (sAft.isEmpty()) {
-                            context?.let { context -> ApiTaskManager.now { handleRefreshList(context) } }
+                            ApiTaskManager.now { handleRefreshList() }
                         }else {
                             val isAddition = sAft.startsWith(sOri)
                             getFilter(isAddition, displayList).filter(sAft)
@@ -359,7 +359,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
         return inflater.inflate(MyR.layout.fragment_api, container, false)
     }
 
-    private fun handleRefreshList(context: Context){
+    private fun handleRefreshList(){
         refreshAdapterList(viewModel.screen4Display(loadItem))
         if (loadedItems.isLoading(loadItem)) return
     }
@@ -449,7 +449,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
             viewModel.addApps(apps)
         }
         viewModel.sortApps(sortItem)
-        handleRefreshList(context)
+        handleRefreshList()
     }
 
     /**
@@ -808,7 +808,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
 //            viewModel.updateApps4Display()
             loadedItems.unLoad(loadItem)
             loadSortedList(loadItem, sortEfficiently = true, fg = true)
-            context?.let { handleRefreshList(it) }
+            handleRefreshList()
         }
     }
 
@@ -888,8 +888,8 @@ class MyUnit: com.madness.collision.unit.Unit() {
                         }
                     } else {
                         try {
-                            val external: File = Environment.getExternalStorageDirectory()
-                            X.listFiles4API(object : Handler(Looper.getMainLooper()){
+                            val external: File = getExternalStorageDirectory()
+                            X.listFiles4API(object : Handler(Looper.getMainLooper()) {
                                 override fun handleMessage(msg: Message) {
                                     super.handleMessage(msg)
                                     if (msg.what == HANDLE_DISPLAY_APK) {
@@ -942,6 +942,11 @@ class MyUnit: com.madness.collision.unit.Unit() {
             }
         }
         ApiTaskManager.now { loadSortedList(item2Load, sortEfficiently = true, fg = false) }
+    }
+
+    @Suppress("deprecation")
+    private fun getExternalStorageDirectory(): File {
+        return Environment.getExternalStorageDirectory()
     }
 
     private fun accessiblePrimaryExternal(context: Context, task: ((uri: Uri) -> Unit)?): Boolean{
@@ -1073,7 +1078,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
             adapter.setSortMethod(position)
             settingsPreferences.edit { putInt(PrefUtil.AV_SORT_ITEM, position) }
             viewModel.sortApps(sortItem)
-            context?.let { handleRefreshList(it) }
+            handleRefreshList()
         }
     }
 
@@ -1084,7 +1089,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
             }
             loadSortedList(loadItem, sortEfficiently = true, fg = true)
             viewModel.sortApps(sortItem)
-            context?.let { handleRefreshList(it) }
+            handleRefreshList()
         }
     }
 

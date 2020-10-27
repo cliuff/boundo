@@ -75,7 +75,7 @@ internal class Adapter(
         val dirLimit = 50
 //        the root of the primary shared storage
 //        used below Android 10
-        val externalRoot = Environment.getExternalStorageDirectory()?.path ?: ""
+        val externalRoot = getExternalStorageDirectory().path ?: ""
         val dir = folder.getCleanPath(externalRoot).run {
             if (this.length > dirLimit) "..." + this.substring(this.length - dirLimit, this.length)
             else this
@@ -101,6 +101,11 @@ internal class Adapter(
                 mainViewModel.displayFragment(it)
             }
         }
+    }
+
+    @Suppress("deprecation")
+    private fun getExternalStorageDirectory(): File {
+        return Environment.getExternalStorageDirectory()
     }
 
 }

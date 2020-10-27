@@ -28,6 +28,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.activityViewModels
 import com.madness.collision.Democratic
 import com.madness.collision.R
@@ -111,13 +112,13 @@ internal class AppIconFragment : TaggedFragment(), Democratic {
         val res = context.packageManager.getResourcesForApplication(applicationInfo)
         try {
             val resID = ManifestUtil.getManifestAttr(apkPath, arrayOf("application", "icon"))
-            if (resID.isNotEmpty()) dIcon = res.getDrawable(resID.toInt(), null)
+            if (resID.isNotEmpty()) dIcon = ResourcesCompat.getDrawable(res, resID.toInt(), null)
         } catch (e: Exception) {
             e.printStackTrace()
         }
         try {
             val resID = ManifestUtil.getManifestAttr(apkPath, arrayOf("application", "roundIcon"))
-            if (resID.isNotEmpty()) dIconR = res.getDrawable(resID.toInt(), null)
+            if (resID.isNotEmpty()) dIconR = ResourcesCompat.getDrawable(res, resID.toInt(), null)
         } catch (e: Exception) {
             e.printStackTrace()
         }
