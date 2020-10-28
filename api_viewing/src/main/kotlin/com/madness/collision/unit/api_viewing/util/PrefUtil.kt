@@ -23,7 +23,7 @@ internal object PrefUtil {
     const val API_APK_PRELOAD = "apiAPKPreload"
     const val API_APK_PRELOAD_DEFAULT = false
     const val API_CIRCULAR_ICON = "SDKCircularIcon"
-    // render round icon only when user specified
+    // render round icon only when user specifies
     const val API_CIRCULAR_ICON_DEFAULT = false
     const val API_PACKAGE_ROUND_ICON = "APIPackageRoundIcon"
     const val API_PACKAGE_ROUND_ICON_DEFAULT = false
