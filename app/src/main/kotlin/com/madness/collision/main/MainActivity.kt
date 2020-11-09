@@ -105,6 +105,7 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
     private lateinit var mWindow: Window
     private var launchItem: String? = null
     private var bottomNavHeight: Int = 0
+    private val animator = MainAnimator()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -476,10 +477,13 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
         }
         mainBottomNavRef = WeakReference(mainBottomNav)
         navScrollBehavior?.run {
-            onSlidedUpCallback = {
+            onSlidedUpCallback = up@{
+                if (isNavUp) return@up
                 isNavUp = true
                 // hide bottom nav showing button
-                mainShowBottomNav?.visibility = View.GONE
+                mainShowBottomNav?.let {
+                    animator.hideBottomNavShowing(it)
+                }
                 // change bottom content height
                 viewModel.contentWidthBottom.value = bottomNavHeight
                 // adjust nav bar
@@ -489,10 +493,13 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
                     SystemUtil.applyNavBarConfig(mContext, mWindow, newConfig)
                 }
             }
-            onSlidedDownCallback = {
+            onSlidedDownCallback = down@{
+                if (!isNavUp) return@down
                 isNavUp = false
                 // show bottom nav showing button
-                mainShowBottomNav?.visibility = View.VISIBLE
+                mainShowBottomNav?.let {
+                    animator.showBottomNavShowing(it)
+                }
                 // change bottom content height
                 viewModel.contentWidthBottom.value = viewModel.insetBottom.value
                 // adjust nav bar
