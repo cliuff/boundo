@@ -85,8 +85,18 @@ internal class PrefExterior: PreferenceFragmentCompat(), NavNode {
         if (context != null) SettingsFunc.updateLanguage(context)
         setPreferencesFromResource(R.xml.pref_exterior, rootKey)
         if (X.belowOff(X.Q)) {
-            preferenceManager.findPreference<Preference>(getString(R.string.prefExteriorKeyForceDarkDesc))?.isVisible = false
+            findPref<Preference>(R.string.prefExteriorKeyForceDarkDesc)?.isVisible = false
         }
+
+        keyApplyDarkPlan = getString(R.string.prefExteriorKeyDarkPlan)
+        keyScheduleStart = getString(R.string.prefExteriorKeyDarkPlanScheduleStart)
+        keyScheduleEnd = getString(R.string.prefExteriorKeyDarkPlanScheduleEnd)
+
+        prefScheduleStart = findPref(keyScheduleStart) ?: return
+        prefScheduleEnd = findPref(keyScheduleEnd) ?: return
+
+        val planValue = pref.getString(keyApplyDarkPlan, getString(R.string.prefExteriorDefaultDarkPlan)) ?: ""
+        updateScheduleEnabling(planValue)
     }
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
@@ -190,24 +200,16 @@ internal class PrefExterior: PreferenceFragmentCompat(), NavNode {
 
         keyLightTheme = getString(R.string.prefExteriorKeyLightTheme)
         keyDarkTheme = getString(R.string.prefExteriorKeyDarkTheme)
-        keyApplyDarkPlan = getString(R.string.prefExteriorKeyDarkPlan)
-        keyScheduleStart = getString(R.string.prefExteriorKeyDarkPlanScheduleStart)
-        keyScheduleEnd = getString(R.string.prefExteriorKeyDarkPlanScheduleEnd)
 
-        prefLightTheme = preferenceManager.findPreference(keyLightTheme) ?: return
-        prefDarkTheme = preferenceManager.findPreference(keyDarkTheme) ?: return
-        prefApplyDark = preferenceManager.findPreference(keyApplyDarkPlan) ?: return
-        prefScheduleStart = preferenceManager.findPreference(keyScheduleStart) ?: return
-        prefScheduleEnd = preferenceManager.findPreference(keyScheduleEnd) ?: return
+        prefLightTheme = findPref(keyLightTheme) ?: return
+        prefDarkTheme = findPref(keyDarkTheme) ?: return
+        prefApplyDark = findPref(keyApplyDarkPlan) ?: return
 
         prefLightTheme.summaryProvider = summaryProvider
         prefDarkTheme.summaryProvider = summaryProvider
         prefApplyDark.summaryProvider = summaryProvider
         prefScheduleStart.summaryProvider = summaryProvider
         prefScheduleEnd.summaryProvider = summaryProvider
-
-        val planValue = pref.getString(keyApplyDarkPlan, getString(R.string.prefExteriorDefaultDarkPlan)) ?: ""
-        updateScheduleEnabling(planValue)
 
         val keyBS = getString(R.string.prefExteriorKeyDarkByBatterySaver)
         findPreference<SwitchPreference>(keyBS)?.setOnPreferenceChangeListener { _, newVal ->
@@ -217,10 +219,10 @@ internal class PrefExterior: PreferenceFragmentCompat(), NavNode {
         }
     }
 
-    private fun updateScheduleEnabling(planValue: String){
+    private fun updateScheduleEnabling(planValue: String) {
         val scheduleEnabled = planValue == getString(R.string.prefExteriorDarkPlanValueSchedule)
-        prefScheduleStart.isEnabled = scheduleEnabled
-        prefScheduleEnd.isEnabled = scheduleEnabled
+        prefScheduleStart.isVisible = scheduleEnabled
+        prefScheduleEnd.isVisible = scheduleEnabled
     }
 
     private fun updateTheme(){

@@ -25,6 +25,7 @@ import com.madness.collision.unit.api_viewing.util.PrefUtil
 import com.madness.collision.util.F
 import com.madness.collision.util.P
 import com.madness.collision.util.X
+import com.madness.collision.util.findPref
 
 internal class PrefAv: PreferenceFragmentCompat() {
     companion object {
@@ -40,24 +41,21 @@ internal class PrefAv: PreferenceFragmentCompat() {
         if (context != null) SettingsFunc.updateLanguage(context)
         setPreferencesFromResource(R.xml.pref_settings_av, rootKey)
         if (X.aboveOn(X.Q)) {
-            preferenceManager.findPreference<SwitchPreference>(PrefUtil.API_APK_PRELOAD)?.run {
+            findPref<SwitchPreference>(PrefUtil.API_APK_PRELOAD)?.run {
                 isVisible = false
                 // category preference
                 parent?.isVisible = false
             }
         }
-    }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        preferenceManager.findPreference<SwitchPreference>(PrefUtil.API_CIRCULAR_ICON)?.apply {
+        findPref<SwitchPreference>(PrefUtil.API_CIRCULAR_ICON)?.apply {
             updatePrefRound(this.isChecked)
             onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 if(newValue is Boolean) updatePrefRound(newValue)
                 true
             }
         }
-        preferenceManager.findPreference<SwitchPreference>(PrefUtil.AV_SWEET)?.apply {
+        findPref<SwitchPreference>(PrefUtil.AV_SWEET)?.apply {
             updatePrefSweet(this.isChecked)
             onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 if(newValue is Boolean) updatePrefSweet(newValue)
@@ -66,16 +64,12 @@ internal class PrefAv: PreferenceFragmentCompat() {
         }
     }
 
-    private fun updatePrefRound(newValue: Boolean){
-        preferenceManager.findPreference<SwitchPreference>(PrefUtil.API_PACKAGE_ROUND_ICON)?.apply {
-            isEnabled = newValue
-        }
-        preferenceManager.findPreference<SwitchPreference>(PrefUtil.AV_CLIP_ROUND)?.apply {
-            isEnabled = newValue
-        }
+    private fun updatePrefRound(newValue: Boolean) {
+        findPref<SwitchPreference>(PrefUtil.API_PACKAGE_ROUND_ICON)?.isVisible = newValue
+        findPref<SwitchPreference>(PrefUtil.AV_CLIP_ROUND)?.isVisible = newValue
     }
 
-    private fun updatePrefSweet(newValue: Boolean){
+    private fun updatePrefSweet(newValue: Boolean) {
         if (!newValue) {
             val context = context ?: return
             AccessAV.clearSeals()
