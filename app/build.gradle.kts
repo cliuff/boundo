@@ -69,7 +69,7 @@ android {
         applicationId = "com.madness.collision"
         minSdkVersion(22)
         targetSdkVersion(30)
-        versionCode = 20092514
+        versionCode = 20102719
         versionName = "3.6.3"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testApplicationId = "${applicationId}.test"
@@ -153,7 +153,11 @@ android {
         dataBinding = true
         viewBinding = true
     }
-    dynamicFeatures = mutableSetOf(":cool_app", ":image_modifying", ":themed_wallpaper", ":school_timetable", ":no_media", ":api_viewing", ":audio_timer", ":we_chat_evo", ":qq_contacts")
+    dynamicFeatures = mutableSetOf(
+            ":cool_app", ":image_modifying", ":themed_wallpaper",
+            ":school_timetable", ":no_media", ":api_viewing",
+            ":audio_timer", ":we_chat_evo", ":qq_contacts"
+    )
 }
 
 dependencies {
@@ -195,8 +199,8 @@ dependencies {
     ).forEach { implementation(it) }
 
     listOf(
-            Dependencies.androidxCoreTesing,
-            Dependencies.androidxRoomTesing,
+            Dependencies.androidxCoreTesting,
+            Dependencies.androidxRoomTesting,
             Dependencies.googleTruth,
             Dependencies.googleTruthExtensions,
             Dependencies.junitJupiter

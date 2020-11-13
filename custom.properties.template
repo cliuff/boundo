@@ -1,0 +1,5 @@
+packageName=com.madness.collision
+signingKeyStorePath=C:\\path\\to\\your\\keystore.jks
+signingKeyStorePassword=
+signingKeyAlias=
+signingKeyPassword=

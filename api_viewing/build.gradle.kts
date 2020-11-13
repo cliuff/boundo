@@ -84,7 +84,7 @@ dependencies {
     Dependencies.dynamicFeatureBasics.forEach { implementation(it) }
 
     listOf(
-            Dependencies.androidxRoomTesing,
+            Dependencies.androidxRoomTesting,
             Dependencies.googleTruth,
             Dependencies.googleTruthExtensions,
             Dependencies.junitJupiter

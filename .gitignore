@@ -93,3 +93,4 @@ lint/tmp/
 
 #custom
 /custom.properties
+.idea/shelf

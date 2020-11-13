@@ -16,6 +16,7 @@
 
 <manifest xmlns:dist="http://schemas.android.com/apk/distribution"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.madness.collision.unit.api_viewing">
 
     <dist:module
@@ -28,6 +29,7 @@
     </dist:module>
 
     <!-- query apps on Android 11 -->
-    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission" />
 </manifest>
 

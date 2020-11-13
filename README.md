@@ -1,16 +1,12 @@
 # Boundo
 
 **Requirements**
-- Android Studio 4.0
-- Gradle 6.6.1
+- Android Studio 4.1
+- Gradle 6.7
 
 **After Git check-out**
-- Add a file named `custom.properties` in project root directory, within add the following lines:
-> packageName=com.madness.collision  
-> signingKeyStorePath=**KeyStorePath**  
-> signingKeyStorePassword=**KeyStorePassword**  
-> signingKeyAlias=**KeyAlias**  
-> signingKeyPassword=**KeyPassword**  
+- Copy the file named `custom.properties.template` in project root directory and rename it to `custom.properties`
+- Make necessary changes to `custom.properties`
 
 **After Gradle sync**
 - Adjust **Run/Debug Configurations** settings
