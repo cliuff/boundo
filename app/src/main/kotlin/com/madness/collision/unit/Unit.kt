@@ -18,6 +18,7 @@ package com.madness.collision.unit
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import androidx.core.content.edit
 import androidx.fragment.app.activityViewModels
 import com.google.android.play.core.splitinstall.SplitInstallManager
@@ -62,7 +63,10 @@ abstract class Unit: TaggedFragment(), Democratic {
                     Description(UNIT_NAME_COOL_APP, R.string.developertools_appinfowidget, R.drawable.ic_widgets_24).setDescResId(R.string.unit_desc_ca),
                     Description(UNIT_NAME_NO_MEDIA, R.string.tools_nm, R.drawable.ic_flip_24).setDescResId(R.string.unit_desc_nm)
                             .setRequirement(Description.Checker(R.string.unit_desc_requirement_nm) { X.belowOff(X.Q) }),
-                    Description(UNIT_NAME_THEMED_WALLPAPER, R.string.twService, R.drawable.ic_image_24).setDescResId(R.string.unit_desc_tw),
+                    Description(UNIT_NAME_THEMED_WALLPAPER, R.string.twService, R.drawable.ic_image_24).setDescResId(R.string.unit_desc_tw)
+                            .setRequirement(Description.Checker(R.string.unit_desc_requirement_tw) {
+                                it.packageManager.hasSystemFeature(PackageManager.FEATURE_LIVE_WALLPAPER)
+                            }),
                     Description(UNIT_NAME_AUDIO_TIMER, R.string.unit_audio_timer, R.drawable.ic_timer_24).setDescResId(R.string.unit_desc_at),
                     Description(UNIT_NAME_WE_CHAT_EVO, R.string.unit_we_chat_evo, R.drawable.ic_we_chat_24).setDescResId(R.string.unit_desc_we)
                             .setRequirement(

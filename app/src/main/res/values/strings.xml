@@ -266,4 +266,5 @@
     <string name="advice_translation_program">Translation program</string>
     <string name="advice_source_sub">Redirect to Github</string>
     <string name="advice_translation_sub">Redirect to Google Docs</string>
+    <string name="unit_desc_requirement_tw">Live wallpaper support</string>
 </resources>
