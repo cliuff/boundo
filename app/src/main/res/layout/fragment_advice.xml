@@ -157,6 +157,13 @@
                             android:text="@string/advice_source_code"
                             android:textColor="?android:textColor"
                             android:textSize="18sp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/advice_source_sub"
+                            android:textColor="?colorTextSub"
+                            android:textSize="12sp" />
                     </LinearLayout>
 
                     <View
@@ -183,6 +190,13 @@
                             android:text="@string/advice_translation_program"
                             android:textColor="?android:textColor"
                             android:textSize="18sp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/advice_translation_sub"
+                            android:textColor="?colorTextSub"
+                            android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

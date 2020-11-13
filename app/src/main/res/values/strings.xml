@@ -264,4 +264,6 @@
     <string name="versatile_device_controls_mdu_hint">Tap to refresh</string>
     <string name="advice_source_code">Source code</string>
     <string name="advice_translation_program">Translation program</string>
+    <string name="advice_source_sub">Redirect to Github</string>
+    <string name="advice_translation_sub">Redirect to Google Docs</string>
 </resources>
