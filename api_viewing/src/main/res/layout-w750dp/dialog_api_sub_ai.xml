@@ -92,7 +92,7 @@
             android:layout_marginStart="15dp"
             android:layout_marginEnd="15dp"
             android:alpha="@fraction/surfaceAlpha"
-            android:tint="?colorApiPopItemBack"
+            app:tint="?colorApiPopItemBack"
             android:src="@drawable/res_dialog_md2"/>
 
         <ImageView
@@ -252,7 +252,7 @@
             android:layout_marginStart="15dp"
             android:layout_marginEnd="15dp"
             android:alpha="@fraction/surfaceAlpha"
-            android:tint="?colorApiPopItemBack"
+            app:tint="?colorApiPopItemBack"
             android:src="@drawable/res_dialog_md2"/>
 
         <ImageView

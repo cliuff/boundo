@@ -30,7 +30,7 @@
         android:layout_marginTop="10dp"
         android:padding="10dp"
         android:contentDescription="@null"
-        android:tint="?colorTextSub"
+        app:tint="?colorTextSub"
         android:background="@drawable/res_circle"
         android:backgroundTint="?colorAItem"
         android:layout_width="wrap_content"

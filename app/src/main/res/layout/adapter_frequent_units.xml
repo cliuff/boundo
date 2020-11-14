@@ -40,7 +40,7 @@
             android:id="@+id/frequentUnitsAdapterIcon"
             android:background="@drawable/res_circle"
             android:backgroundTint="?colorAItem"
-            android:tint="?colorAOnItem"
+            app:tint="?colorAOnItem"
             android:alpha="@fraction/surfaceAlpha"
             android:padding="12dp"
             android:layout_marginStart="10dp"

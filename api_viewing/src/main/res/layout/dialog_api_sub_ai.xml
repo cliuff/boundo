@@ -76,7 +76,7 @@
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
             android:alpha="@fraction/surfaceAlpha"
-            android:tint="?colorApiPopItemBack"
+            app:tint="?colorApiPopItemBack"
             android:src="@drawable/res_dialog_md2"/>
 
         <ImageView
@@ -208,7 +208,7 @@
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
             android:alpha="@fraction/surfaceAlpha"
-            android:tint="?colorApiPopItemBack"
+            app:tint="?colorApiPopItemBack"
             android:src="@drawable/res_dialog_md2"/>
 
         <ImageView

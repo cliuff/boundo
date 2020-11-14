@@ -40,7 +40,7 @@
 
             <ImageView
                 android:id="@+id/unitDescIcon"
-                android:tint="?colorAOnItem"
+                app:tint="?colorAOnItem"
                 android:alpha="@fraction/surfaceAlpha"
                 android:layout_gravity="center_horizontal"
                 android:layout_width="200dp"

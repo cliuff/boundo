@@ -113,7 +113,7 @@
 
                         <ImageView
                             android:src="@drawable/ic_filter_24"
-                            android:tint="?colorText"
+                            app:tint="?colorText"
                             android:layout_width="18dp"
                             android:layout_height="18dp"/>
 
@@ -158,7 +158,7 @@
 
                         <ImageView
                             android:src="@drawable/ic_pie_chart_24"
-                            android:tint="?colorText"
+                            app:tint="?colorText"
                             android:layout_width="18dp"
                             android:layout_height="18dp"/>
 
