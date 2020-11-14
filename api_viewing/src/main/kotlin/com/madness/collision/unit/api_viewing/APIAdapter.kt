@@ -413,13 +413,26 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
                 popActions.dismiss()
                 actionDetails(appInfo)
             }
+            val vActionOpen = popActions.findViewById<View>(MyR.id.avAdapterActionsOpen)
             if (appInfo.isLaunchable) {
-                popActions.findViewById<View>(MyR.id.avAdapterActionsOpen).setOnClickListener {
+                val launchIntent = service.getLaunchIntent(context, appInfo)
+                val activityName = launchIntent?.component?.className ?: ""
+                val vOpenActivity = popActions.findViewById<TextView>(MyR.id.avAdapterActionsOpenActivity)
+                vOpenActivity.text = activityName
+                vActionOpen.setOnClickListener {
                     popActions.dismiss()
-                    actionOpen(context, appInfo)
+                    if (launchIntent == null) {
+                        activity.notifyBriefly(R.string.text_error)
+                    } else {
+                        context.startActivity(launchIntent)
+                    }
+                }
+                vActionOpen.setOnLongClickListener {
+                    X.copyText2Clipboard(context, activityName, R.string.text_copy_content)
+                    true
                 }
             } else {
-                popActions.findViewById<View>(MyR.id.avAdapterActionsOpen).visibility = View.GONE
+                vActionOpen.visibility = View.GONE
             }
             popActions.findViewById<View>(MyR.id.avAdapterActionsIcon).setOnClickListener {
                 popActions.dismiss()
@@ -430,16 +443,6 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
                 actionApk(appInfo)
             }
             return@setOnLongClickListener true
-        }
-    }
-
-    private fun actionOpen(context: Context, app: ApiViewingApp) {
-        if (!app.isLaunchable) return
-        val intent = context.packageManager.getLaunchIntentForPackage(app.packageName)
-        if (intent == null) {
-            activity.notifyBriefly(R.string.text_error)
-        } else {
-            context.startActivity(intent)
         }
     }
 

@@ -18,6 +18,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:overScrollMode="never"
     android:scrollbars="none">
 
@@ -51,10 +52,25 @@
                     style="@style/VerIconActionIcon"
                     android:src="@drawable/ic_open_in_new_24" />
             </com.google.android.material.card.MaterialCardView>
-            <TextView
-                style="@style/VerIconActionText"
-                android:textColor="?colorAOnSurface"
-                android:text="@string/fileActionsOpen" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    style="@style/VerIconActionText"
+                    android:textColor="?colorAOnSurface"
+                    android:text="@string/fileActionsOpen" />
+                <TextView
+                    android:id="@+id/avAdapterActionsOpenActivity"
+                    style="@style/VerIconActionText"
+                    android:textColor="?colorTextSub"
+                    android:textSize="12sp"
+                    android:gravity="center_vertical|start"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    tools:text="com.madness.collision.main.MainActivity" />
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout

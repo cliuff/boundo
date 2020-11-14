@@ -17,6 +17,7 @@
 package com.madness.collision.unit.api_viewing.list.item
 
 import android.content.Context
+import android.content.Intent
 import android.content.pm.*
 import android.graphics.Typeface
 import android.text.Spannable
@@ -321,5 +322,9 @@ internal class AppItemService {
             Log.e("APIAdapter", String.format("failed to retrieve %s of %s", subject, appInfo.packageName))
             false to pi
         }
+    }
+
+    fun getLaunchIntent(context: Context, app: ApiViewingApp): Intent? {
+        return context.packageManager.getLaunchIntentForPackage(app.packageName)
     }
 }
