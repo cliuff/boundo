@@ -17,6 +17,7 @@
 package com.madness.collision.unit.api_viewing
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.drawable.AdaptiveIconDrawable
 import android.graphics.drawable.BitmapDrawable
@@ -27,17 +28,23 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.misc.MiscApp
 import com.madness.collision.unit.api_viewing.data.AppIcon
+import com.madness.collision.unit.api_viewing.util.ApkUtil
 import com.madness.collision.unit.api_viewing.util.ManifestUtil
 import com.madness.collision.util.*
 import kotlinx.android.synthetic.main.dialog_api_sub_ai.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.File
 import com.madness.collision.unit.api_viewing.R as MyR
 
@@ -64,6 +71,7 @@ internal class AppIconFragment : TaggedFragment(), Democratic {
     }
 
     private val mainViewModel: MainViewModel by activityViewModels()
+    private var iconWidth: Int = 0
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
         toolbar.title = arguments?.getString(ARG_APP_NAME) ?: ""
@@ -100,99 +108,128 @@ internal class AppIconFragment : TaggedFragment(), Democratic {
 //            apiInfoAiSpace.layoutParams = ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, it)
         }
 
-        val appName = arguments?.getString(ARG_APP_NAME) ?: ""
-        val packageName = arguments?.getString(ARG_PACKAGE_NAME) ?: ""
-        val apkPath = arguments?.getString(ARG_APK_Path) ?: ""
-        val isArchive = arguments?.getBoolean(ARG_IS_ARCHIVE) ?: false
-        val applicationInfo = if (isArchive) MiscApp.getApplicationInfo(context, apkPath = apkPath)
-        else MiscApp.getApplicationInfo(context, packageName = packageName)
-        applicationInfo ?: return
-        var dIcon: Drawable? = null
-        var dIconR: Drawable? = null
-        val res = context.packageManager.getResourcesForApplication(applicationInfo)
-        try {
-            val resID = ManifestUtil.getManifestAttr(apkPath, arrayOf("application", "icon"))
-            if (resID.isNotEmpty()) dIcon = ResourcesCompat.getDrawable(res, resID.toInt(), null)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        try {
-            val resID = ManifestUtil.getManifestAttr(apkPath, arrayOf("application", "roundIcon"))
-            if (resID.isNotEmpty()) dIconR = ResourcesCompat.getDrawable(res, resID.toInt(), null)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        if (dIcon == null) {
-            dIcon = applicationInfo.loadIcon(context.packageManager)
-            apiInfoAiIconDes.setText(MyR.string.apiInfoAiIconDesSys)
-        }
-        if (dIcon != null){
-            val icon = AppIcon(context, dIcon)
-            if (icon.isAdaptive && X.aboveOn(X.O)) {
-                val logoDrawable = icon.drawable as AdaptiveIconDrawable
-                apiInfoAiIcon.setImageBitmap(icon.bitmap)
-                apiInfoAiIcon.setOnLongClickListener { actionIcon(context, icon.bitmap, "$appName-Full"); true }
-                apiInfoAiIconFore.setImageDrawable(logoDrawable.foreground)
-                apiInfoAiIconFore.setOnLongClickListener { actionIcon(context, logoDrawable.foreground, "$appName-Fore"); true }
-                apiInfoAiIconBack.setImageDrawable(logoDrawable.background)
-                apiInfoAiIconBack.setOnLongClickListener { actionIcon(context, logoDrawable.background, "$appName-Back"); true }
+        lifecycleScope.launch {
+            val appName = arguments?.getString(ARG_APP_NAME) ?: ""
+            val packageName = arguments?.getString(ARG_PACKAGE_NAME) ?: ""
+            val apkPath = arguments?.getString(ARG_APK_Path) ?: ""
+            val isArchive = arguments?.getBoolean(ARG_IS_ARCHIVE) ?: false
 
-                val dp80 = X.size(context, 72f, X.DP).toInt()
-                val drawableRound = BitmapDrawable(context.resources, icon.round)
-                drawableRound.setBounds(0, 0, dp80, dp80)
-                apiInfoAiIconRound.setCompoundDrawablesRelative(null, drawableRound, null, null)
-                apiInfoAiIconRound.setOnLongClickListener { actionIcon(context, icon.round, "$appName-Round"); true }
+            val applicationInfo = if (isArchive) MiscApp.getApplicationInfo(context, apkPath = apkPath)
+            else MiscApp.getApplicationInfo(context, packageName = packageName)
+            applicationInfo ?: return@launch
 
-                val drawableRounded = BitmapDrawable(context.resources, icon.rounded)
-                drawableRounded.setBounds(0, 0, dp80, dp80)
-                apiInfoAiIconRounded.setCompoundDrawablesRelative(null, drawableRounded, null, null)
-                apiInfoAiIconRounded.setOnLongClickListener { actionIcon(context, icon.rounded, "$appName-Rounded"); true }
-
-                val drawableSquircle = BitmapDrawable(context.resources, icon.squircle)
-                drawableSquircle.setBounds(0, 0, dp80, dp80)
-                apiInfoAiIconSquircle.setCompoundDrawablesRelative(null, drawableSquircle, null, null)
-                apiInfoAiIconSquircle.setOnLongClickListener { actionIcon(context, icon.squircle, "$appName-Squircle"); true }
-            } else {
-                apiInfoAiIcon.setImageBitmap(icon.bitmap)
-                apiInfoAiIcon.setOnLongClickListener { actionIcon(context, icon.bitmap, "$appName-Full"); true }
-                X.makeGone(apiInfoAiIconGroupAi)
+            var idIcon = 0
+            var idIconR = 0
+            var dIcon: Drawable? = null
+            var dIconR: Drawable? = null
+            // reuse this resources object
+            val res = context.packageManager.getResourcesForApplication(applicationInfo)
+            try {
+                val resID = ManifestUtil.getManifestAttr(apkPath, arrayOf("application", "icon"))
+                if (resID.isNotEmpty()) {
+                    idIcon = resID.toInt()
+                    dIcon = ResourcesCompat.getDrawable(res, idIcon, null)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
-        }else{
-            X.makeGone(apiInfoAiIconGroup, apiInfoAiIconGroupAi)
-        }
-        if (dIconR != null){
-            val icon = AppIcon(context, dIconR)
-            if (icon.isAdaptive && X.aboveOn(X.O)) {
-                val logoDrawable = icon.drawable as AdaptiveIconDrawable
-                apiInfoAiIconR.setImageBitmap(icon.bitmap)
-                apiInfoAiIconR.setOnLongClickListener { actionIcon(context, icon.bitmap, "$appName-R-Full"); true }
-                apiInfoAiIconRFore.setImageDrawable(logoDrawable.foreground)
-                apiInfoAiIconRFore.setOnLongClickListener { actionIcon(context, logoDrawable.foreground, "$appName-R-Fore"); true }
-                apiInfoAiIconRBack.setImageDrawable(logoDrawable.background)
-                apiInfoAiIconRBack.setOnLongClickListener { actionIcon(context, logoDrawable.background, "$appName-R-Back"); true }
-
-                val dp80 = X.size(context, 72f, X.DP).toInt()
-                val drawableRound = BitmapDrawable(context.resources, icon.round)
-                drawableRound.setBounds(0, 0, dp80, dp80)
-                apiInfoAiIconRRound.setCompoundDrawablesRelative(null, drawableRound, null, null)
-                apiInfoAiIconRRound.setOnLongClickListener { actionIcon(context, icon.round, "$appName-R-Round"); true }
-
-                val drawableRounded = BitmapDrawable(context.resources, icon.rounded)
-                drawableRounded.setBounds(0, 0, dp80, dp80)
-                apiInfoAiIconRRounded.setCompoundDrawablesRelative(null, drawableRounded, null, null)
-                apiInfoAiIconRRounded.setOnLongClickListener { actionIcon(context, icon.rounded, "$appName-R-Rounded"); true }
-
-                val drawableSquircle = BitmapDrawable(context.resources, icon.squircle)
-                drawableSquircle.setBounds(0, 0, dp80, dp80)
-                apiInfoAiIconRSquircle.setCompoundDrawablesRelative(null, drawableSquircle, null, null)
-                apiInfoAiIconRSquircle.setOnLongClickListener { actionIcon(context, icon.squircle, "$appName-R-Squircle"); true }
-            } else {
-                apiInfoAiIconR.setImageBitmap(icon.bitmap)
-                apiInfoAiIconR.setOnLongClickListener { actionIcon(context, icon.bitmap, "$appName-R-Full"); true }
-                X.makeGone(apiInfoAiIconRGroupAi)
+            try {
+                val resID = ManifestUtil.getManifestAttr(apkPath, arrayOf("application", "roundIcon"))
+                if (resID.isNotEmpty()) {
+                    idIconR = resID.toInt()
+                    dIconR = ResourcesCompat.getDrawable(res, idIconR, null)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
-        }else {
-            X.makeGone(apiInfoAiIconRGroup, apiInfoAiIconRGroupAi)
+
+            if (dIcon == null) {
+                dIcon = applicationInfo.loadIcon(context.packageManager)
+                launch(Dispatchers.Main) {
+                    apiInfoAiIconDes.setText(MyR.string.apiInfoAiIconDesSys)
+                }
+            }
+
+            iconWidth = X.size(context, 72f, X.DP).toInt()
+
+            launch(Dispatchers.Main) {
+                setIcon(dIcon, res, idIcon, apkPath, appName,
+                        apiInfoAiIcon, apiInfoAiIconFore, apiInfoAiIconBack,
+                        apiInfoAiIconRound, apiInfoAiIconRounded, apiInfoAiIconSquircle,
+                        apiInfoAiIconGroup, apiInfoAiIconGroupAi)
+
+                setIcon(dIconR, res, idIconR, apkPath, "$appName-R",
+                        apiInfoAiIconR, apiInfoAiIconRFore, apiInfoAiIconRBack,
+                        apiInfoAiIconRRound, apiInfoAiIconRRounded, apiInfoAiIconRSquircle,
+                        apiInfoAiIconRGroup, apiInfoAiIconRGroupAi)
+            }
+        }
+    }
+
+    private fun setIcon(drawable: Drawable?, res: Resources, iconId: Int, apkPath: String, exportPrefix: String,
+                        vIcon: ImageView, vIconFore: ImageView, vIconBack: ImageView,
+                        vIconRound: TextView, vIconRounded: TextView, vIconSquircle: TextView,
+                        vIconGroup: View, vAiGroup: View) {
+        if (drawable == null) {
+            X.makeGone(vIconGroup, vAiGroup)
+            return
+        }
+        val context = context ?: return
+        val icon = AppIcon(context, drawable)
+        vIcon.setIcon(icon.bitmap, res, iconId, apkPath, "$exportPrefix-Full")
+        if (!icon.isAdaptive || !X.aboveOn(X.O)) {
+            X.makeGone(vAiGroup)
+            return
+        }
+        val logoDrawable = icon.drawable as AdaptiveIconDrawable
+        vIconFore.setIconLayer(logoDrawable.foreground, "$exportPrefix-Fore")
+        vIconBack.setIconLayer(logoDrawable.background, "$exportPrefix-Back")
+        vIconRound.setShapedIcon(icon.round, "$exportPrefix-Round")
+        vIconRounded.setShapedIcon(icon.rounded, "$exportPrefix-Rounded")
+        vIconSquircle.setShapedIcon(icon.squircle, "$exportPrefix-Squircle")
+    }
+
+    private fun ImageView.setIcon(icon: Bitmap, res: Resources, iconId: Int, apkPath: String, exportName: String) {
+        setImageBitmap(icon)
+        val context = context ?: return
+        setOnLongClickListener {
+            actionIcon(context, icon, exportName)
+            true
+        }
+        if (iconId == 0) return
+        setOnClickListener {
+            lifecycleScope.launch {
+                val (title, entries) = ApkUtil.getResourceEntries(res, iconId, apkPath)
+                launch(Dispatchers.Main) launchMain@ {
+                    if (title.isEmpty()) {
+                        CollisionDialog.alert(context, R.string.text_no_content).show()
+                        return@launchMain
+                    }
+                    val content = if (entries.isEmpty()) title
+                    else "$title\n\n" + entries.joinToString("\n")
+                    CollisionDialog.alert(context, content).show()
+                }
+            }
+        }
+    }
+
+    private fun ImageView.setIconLayer(icon: Drawable, exportName: String) {
+        setImageDrawable(icon)
+        val context = context ?: return
+        setOnLongClickListener {
+            actionIcon(context, icon, exportName)
+            true
+        }
+    }
+
+    private fun TextView.setShapedIcon(icon: Bitmap, exportName: String) {
+        val context = context ?: return
+        val drawable = BitmapDrawable(context.resources, icon)
+        drawable.setBounds(0, 0, iconWidth, iconWidth)
+        setCompoundDrawablesRelative(null, drawable, null, null)
+        setOnLongClickListener {
+            actionIcon(context, icon, exportName)
+            true
         }
     }
 

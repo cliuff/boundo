@@ -16,6 +16,7 @@
 
 package com.madness.collision.unit.api_viewing.util
 
+import android.content.res.Resources
 import java.io.File
 import java.util.jar.JarEntry
 import java.util.jar.JarFile
@@ -64,6 +65,40 @@ object ApkUtil {
             return BooleanArray(NATIVE_LIB_SUPPORT_SIZE) { false }
         }
         return booleanArrayOf(hasArm, hasArm64, hasX86, hasX8664, hasFlutter, hasReactNative, hasXamarin, hasKotlin)
+    }
+
+    fun getResourceEntries(resources: Resources, resId: Int, path: String): Pair<String, List<String>> {
+        return getResourceEntries(resources, resId, File(path))
+    }
+
+    /**
+     * R.mipmap.ic_launcher
+     *
+     * res/mipmap-anydpi-v26/ic_launcher.xml
+     * res/mipmap-xxxhdpi/ic_launcher.png
+     */
+    fun getResourceEntries(resources: Resources, resId: Int, file: File): Pair<String, List<String>> {
+        val type = resources.getResourceTypeName(resId)
+        val targetEntry = resources.getResourceEntryName(resId)
+        val dirPrefix = "res/$type"
+        val dirPattern = "${dirPrefix}(-[a-z\\d]+)*/"
+        val resultList = mutableListOf<String>()
+        try {
+            JarFile(file).use { jar ->
+                val iterator = jar.entries().iterator()
+                while (iterator.hasNext()) {
+                    val entry = iterator.next()
+                    val name = entry.name
+                    if (!name.startsWith(dirPrefix)) continue
+                    val namePattern = "$dirPattern$targetEntry\\.((?!\\.).)+".toRegex()
+                    if (!name.matches(namePattern)) continue
+                    resultList.add(name)
+                }
+            }
+        } catch (e: Throwable) {
+            e.printStackTrace()
+        }
+        return "R.$type.$targetEntry" to resultList
     }
 
     fun getItem(file: File, name: String): Boolean {
