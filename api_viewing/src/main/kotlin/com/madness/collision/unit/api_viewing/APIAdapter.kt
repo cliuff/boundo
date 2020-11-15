@@ -458,7 +458,7 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
             if (details.isEmpty()) return@launch
             val view = TextView(context)
             view.text = details
-            view.textSize = X.size(context, 5f, X.SP)
+            view.textSize = 10f
             val dpVeinte = X.size(context, 20f, X.DP).toInt()
             view.setPadding(dpVeinte, dpVeinte, dpVeinte, 0)
             launch(Dispatchers.Main){

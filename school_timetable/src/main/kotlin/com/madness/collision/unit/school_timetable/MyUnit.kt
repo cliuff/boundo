@@ -21,7 +21,6 @@ import android.os.Bundle
 import android.provider.CalendarContract
 import android.text.InputType
 import android.util.Log
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -435,7 +434,7 @@ class MyUnit: Unit(), View.OnClickListener{
         layout.orientation = LinearLayout.VERTICAL
         for (calendar in getCalendar(context)){
             val button = Button(context)
-            button.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f)
+            button.textSize = 18f
             button.isAllCaps = false
             (button.layoutParams as ViewGroup.LayoutParams).run {
                 width = ViewGroup.LayoutParams.MATCH_PARENT

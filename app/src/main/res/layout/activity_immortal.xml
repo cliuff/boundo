@@ -64,133 +64,145 @@
                 android:textSize="18sp"
                 app:layout_constraintTop_toBottomOf="@id/immortalLogo" />
 
-            <TextView
-                android:id="@+id/immortalBag"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:layout_marginStart="20dp"
-                android:text="@string/immortalBag"
-                android:textSize="19sp"
+            <LinearLayout
+                android:id="@+id/immortalActionContainer"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/immortalMessage" />
-
-            <HorizontalScrollView
-                android:id="@+id/immortalBagOperations"
-                app:layout_constraintTop_toBottomOf="@id/immortalBag"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.25"
+                app:layout_constraintTop_toBottomOf="@id/immortalMessage"
+                android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:overScrollMode="never"
-                android:scrollbars="none">
+                android:layout_height="wrap_content">
 
-                <LinearLayout
-                    android:paddingStart="20dp"
-                    android:paddingTop="5dp"
-                    android:paddingEnd="20dp"
-                    android:orientation="horizontal"
+                <TextView
+                    android:id="@+id/immortalBag"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginStart="20dp"
+                    android:text="@string/immortalBag"
+                    android:textSize="19sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/immortalMessage" />
 
-                    <LinearLayout
-                        style="@style/IconActionContainer">
-                        <com.google.android.material.card.MaterialCardView
-                            style="@style/IconActionCard">
-                            <ImageView
-                                android:id="@+id/immortalBagShare"
-                                android:onClick="onClick"
-                                style="@style/IconActionIcon"
-                                android:src="@drawable/ic_share_24" />
-                        </com.google.android.material.card.MaterialCardView>
-                        <TextView
-                            style="@style/IconActionText"
-                            android:textColor="?colorAOnBackground"
-                            android:text="@string/immortalShare" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        style="@style/IconActionContainer">
-                        <com.google.android.material.card.MaterialCardView
-                            style="@style/IconActionCard">
-                            <ImageView
-                                android:id="@+id/immortalBagSend"
-                                android:onClick="onClick"
-                                style="@style/IconActionIcon"
-                                android:src="@drawable/ic_arrow_forward_24" />
-                        </com.google.android.material.card.MaterialCardView>
-                        <TextView
-                            style="@style/IconActionText"
-                            android:textColor="?colorAOnBackground"
-                            android:text="@string/immortalSend" />
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </HorizontalScrollView>
-
-            <TextView
-                android:id="@+id/immortalContact"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
-                android:text="@string/immortalContact"
-                android:textSize="19sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/immortalBagOperations" />
-
-            <HorizontalScrollView
-                android:id="@+id/immortalContactOperations"
-                app:layout_constraintTop_toBottomOf="@id/immortalContact"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:overScrollMode="never"
-                android:scrollbars="none">
-
-                <LinearLayout
-                    android:paddingStart="20dp"
-                    android:paddingTop="5dp"
-                    android:paddingEnd="20dp"
-                    android:orientation="horizontal"
+                <HorizontalScrollView
+                    android:id="@+id/immortalBagOperations"
+                    app:layout_constraintTop_toBottomOf="@id/immortalBag"
+                    app:layout_constraintStart_toStartOf="parent"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:overScrollMode="never"
+                    android:scrollbars="none">
 
                     <LinearLayout
-                        style="@style/IconActionContainer">
-                        <com.google.android.material.card.MaterialCardView
-                            style="@style/IconActionCard">
-                            <ImageView
-                                android:id="@+id/immortalContactEmail"
-                                android:onClick="onClick"
-                                style="@style/IconActionIcon"
-                                android:src="@drawable/ic_email_24" />
-                        </com.google.android.material.card.MaterialCardView>
-                        <TextView
-                            style="@style/IconActionText"
-                            android:textColor="?colorAOnBackground"
-                            android:text="@string/textEmail" />
+                        android:paddingStart="20dp"
+                        android:paddingTop="5dp"
+                        android:paddingEnd="20dp"
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            style="@style/IconActionContainer">
+                            <com.google.android.material.card.MaterialCardView
+                                style="@style/IconActionCard">
+                                <ImageView
+                                    android:id="@+id/immortalBagShare"
+                                    android:onClick="onClick"
+                                    style="@style/IconActionIcon"
+                                    android:src="@drawable/ic_share_24" />
+                            </com.google.android.material.card.MaterialCardView>
+                            <TextView
+                                style="@style/IconActionText"
+                                android:textColor="?colorAOnBackground"
+                                android:text="@string/immortalShare" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            style="@style/IconActionContainer">
+                            <com.google.android.material.card.MaterialCardView
+                                style="@style/IconActionCard">
+                                <ImageView
+                                    android:id="@+id/immortalBagSend"
+                                    android:onClick="onClick"
+                                    style="@style/IconActionIcon"
+                                    android:src="@drawable/ic_arrow_forward_24" />
+                            </com.google.android.material.card.MaterialCardView>
+                            <TextView
+                                style="@style/IconActionText"
+                                android:textColor="?colorAOnBackground"
+                                android:text="@string/immortalSend" />
+                        </LinearLayout>
+
                     </LinearLayout>
+
+                </HorizontalScrollView>
+
+                <TextView
+                    android:id="@+id/immortalContact"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/immortalContact"
+                    android:textSize="19sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/immortalBagOperations" />
+
+                <HorizontalScrollView
+                    android:id="@+id/immortalContactOperations"
+                    app:layout_constraintTop_toBottomOf="@id/immortalContact"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:overScrollMode="never"
+                    android:scrollbars="none">
 
                     <LinearLayout
-                        style="@style/IconActionContainer">
-                        <com.google.android.material.card.MaterialCardView
-                            style="@style/IconActionCard">
-                            <ImageView
-                                android:id="@+id/immortalContactQQ"
-                                android:onClick="onClick"
-                                style="@style/IconActionIcon"
-                                android:src="@drawable/ic_qq_24" />
-                        </com.google.android.material.card.MaterialCardView>
-                        <TextView
-                            style="@style/IconActionText"
-                            android:textColor="?colorAOnBackground"
-                            android:text="@string/textQQ" />
+                        android:paddingStart="20dp"
+                        android:paddingTop="5dp"
+                        android:paddingEnd="20dp"
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            style="@style/IconActionContainer">
+                            <com.google.android.material.card.MaterialCardView
+                                style="@style/IconActionCard">
+                                <ImageView
+                                    android:id="@+id/immortalContactEmail"
+                                    android:onClick="onClick"
+                                    style="@style/IconActionIcon"
+                                    android:src="@drawable/ic_email_24" />
+                            </com.google.android.material.card.MaterialCardView>
+                            <TextView
+                                style="@style/IconActionText"
+                                android:textColor="?colorAOnBackground"
+                                android:text="@string/textEmail" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            style="@style/IconActionContainer">
+                            <com.google.android.material.card.MaterialCardView
+                                style="@style/IconActionCard">
+                                <ImageView
+                                    android:id="@+id/immortalContactQQ"
+                                    android:onClick="onClick"
+                                    style="@style/IconActionIcon"
+                                    android:src="@drawable/ic_qq_24" />
+                            </com.google.android.material.card.MaterialCardView>
+                            <TextView
+                                style="@style/IconActionText"
+                                android:textColor="?colorAOnBackground"
+                                android:text="@string/textQQ" />
+                        </LinearLayout>
+
                     </LinearLayout>
 
-                </LinearLayout>
+                </HorizontalScrollView>
 
-            </HorizontalScrollView>
+            </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/immortalRestart"
@@ -207,7 +219,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/immortalContactOperations" />
+                app:layout_constraintTop_toBottomOf="@id/immortalActionContainer" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
