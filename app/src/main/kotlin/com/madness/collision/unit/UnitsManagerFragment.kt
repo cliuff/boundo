@@ -29,6 +29,7 @@ import com.madness.collision.R
 import com.madness.collision.databinding.FragmentUnitsManagerBinding
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.settings.SettingsFunc
+import com.madness.collision.util.AppUtils.asBottomMargin
 import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.X
 import com.madness.collision.util.availableWidth
@@ -82,7 +83,7 @@ internal class UnitsManagerFragment : TaggedFragment(), Democratic {
             mAdapter.topCover = it
         }
         mainViewModel.contentWidthBottom.observe(viewLifecycleOwner) {
-            mAdapter.bottomCover = it
+            mAdapter.bottomCover = asBottomMargin(it)
         }
     }
 

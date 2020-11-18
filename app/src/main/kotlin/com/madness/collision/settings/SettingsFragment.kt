@@ -40,6 +40,7 @@ import com.madness.collision.pref.PrefExterior
 import com.madness.collision.unit.DescRetriever
 import com.madness.collision.unit.Unit
 import com.madness.collision.util.*
+import com.madness.collision.util.AppUtils.asBottomMargin
 
 internal class SettingsFragment : TaggedFragment(), Democratic, NavNode {
 
@@ -152,7 +153,7 @@ internal class SettingsFragment : TaggedFragment(), Democratic, NavNode {
             viewBinding.settingsUnits.alterPadding(top = it)
         }
         mainViewModel.contentWidthBottom.observe(viewLifecycleOwner) {
-            viewBinding.settingsUnits.alterPadding(bottom = it)
+            viewBinding.settingsUnits.alterPadding(bottom = asBottomMargin(it))
         }
     }
 

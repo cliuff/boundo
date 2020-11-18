@@ -55,6 +55,7 @@ import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.util.PrefUtil
 import com.madness.collision.unit.api_viewing.util.SheetUtil
 import com.madness.collision.util.*
+import com.madness.collision.util.AppUtils.asBottomMargin
 import kotlinx.android.synthetic.main.fragment_api.*
 import kotlinx.coroutines.*
 import java.io.File
@@ -529,7 +530,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
             adapter.topCover = listInsetTop
         }
         mainViewModel.contentWidthBottom.observe(viewLifecycleOwner) {
-            adapter.bottomCover = if (it == 0) dp5 * 7 else it
+            adapter.bottomCover = asBottomMargin(it)
         }
 
         refreshLayout.setOnRefreshListener(this::refreshList)

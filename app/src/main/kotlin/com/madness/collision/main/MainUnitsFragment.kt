@@ -27,6 +27,7 @@ import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.databinding.FragmentMainUnitsBinding
 import com.madness.collision.settings.SettingsFunc
+import com.madness.collision.util.AppUtils.asBottomMargin
 import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.alterPadding
 
@@ -66,7 +67,7 @@ internal class MainUnitsFragment : TaggedFragment(), Democratic {
             mViews.mainUnitsContainer.alterPadding(top = it)
         }
         mainViewModel.contentWidthBottom.observe(viewLifecycleOwner) {
-            mViews.mainUnitsContainer.alterPadding(bottom = it)
+            mViews.mainUnitsContainer.alterPadding(bottom = asBottomMargin(it))
         }
     }
 }

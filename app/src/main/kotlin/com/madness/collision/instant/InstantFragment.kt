@@ -35,6 +35,7 @@ import com.madness.collision.main.MainViewModel
 import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.Unit
 import com.madness.collision.util.*
+import com.madness.collision.util.AppUtils.asBottomMargin
 import kotlinx.android.synthetic.main.activity_instant_manager.*
 import kotlin.math.roundToInt
 
@@ -81,7 +82,7 @@ internal class InstantFragment: TaggedFragment(), Democratic {
             instantContainer.alterPadding(top = it)
         }
         mainViewModel.contentWidthBottom.observe(viewLifecycleOwner) {
-            instantContainer.alterPadding(bottom = it)
+            instantContainer.alterPadding(bottom = asBottomMargin(it))
         }
 
         val itemWidth = X.size(context, 400f, X.DP)

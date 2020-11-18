@@ -36,6 +36,7 @@ import com.madness.collision.databinding.UnitDescBinding
 import com.madness.collision.databinding.UnitDescCheckerBinding
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.util.*
+import com.madness.collision.util.AppUtils.asBottomMargin
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -218,7 +219,7 @@ internal class UnitDescFragment() : TaggedFragment(), Democratic {
             viewBinding.unitDescContainer.alterPadding(top = it)
         }
         mainViewModel.contentWidthBottom.observe(viewLifecycleOwner) {
-            viewBinding.unitDescContainer.alterPadding(bottom = it)
+            viewBinding.unitDescContainer.alterPadding(bottom = asBottomMargin(it))
         }
     }
 }

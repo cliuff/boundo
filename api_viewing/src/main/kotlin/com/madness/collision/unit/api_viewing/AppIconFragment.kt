@@ -42,6 +42,7 @@ import com.madness.collision.unit.api_viewing.data.AppIcon
 import com.madness.collision.unit.api_viewing.util.ApkUtil
 import com.madness.collision.unit.api_viewing.util.ManifestUtil
 import com.madness.collision.util.*
+import com.madness.collision.util.AppUtils.asBottomMargin
 import kotlinx.android.synthetic.main.dialog_api_sub_ai.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -103,7 +104,7 @@ internal class AppIconFragment : TaggedFragment(), Democratic {
             apiInfoAiGuideTop.setGuidelineBegin(it)
         }
         mainViewModel.contentWidthBottom.observe(viewLifecycleOwner) {
-            apiInfoAiGuideBottom.setGuidelineEnd(it)
+            apiInfoAiGuideBottom.setGuidelineEnd(asBottomMargin(it))
 //            (apiInfoAiSpace.layoutParams as ConstraintLayout.LayoutParams).height = it
 //            apiInfoAiSpace.layoutParams = ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, it)
         }

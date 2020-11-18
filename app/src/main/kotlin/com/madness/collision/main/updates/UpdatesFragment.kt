@@ -32,6 +32,7 @@ import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.DescRetriever
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.UpdatesProvider
+import com.madness.collision.util.AppUtils.asBottomMargin
 import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.X
 import com.madness.collision.util.alterPadding
@@ -105,7 +106,7 @@ internal class UpdatesFragment : TaggedFragment(), Democratic {
             mainUpdatesContainer.alterPadding(top = it + extra)
         }
         mainViewModel.contentWidthBottom.observe(viewLifecycleOwner) {
-            mainUpdatesContainer.alterPadding(bottom = it + extra)
+            mainUpdatesContainer.alterPadding(bottom = asBottomMargin(it + extra))
         }
     }
 

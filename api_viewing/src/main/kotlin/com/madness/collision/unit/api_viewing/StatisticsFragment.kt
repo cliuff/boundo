@@ -29,6 +29,7 @@ import com.madness.collision.main.MainViewModel
 import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.EasyAccess
+import com.madness.collision.util.AppUtils.asBottomMargin
 import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.alterPadding
 import com.madness.collision.util.ensureAdded
@@ -77,7 +78,7 @@ internal class StatisticsFragment: TaggedFragment(), Democratic {
                 container.alterPadding(top = it)
             }
             mainViewModel.contentWidthBottom.observe(viewLifecycleOwner) {
-                container.alterPadding(bottom = it)
+                container.alterPadding(bottom = asBottomMargin(it))
             }
         }
     }

@@ -22,6 +22,8 @@ import com.madness.collision.BuildConfig
 import java.util.*
 
 object P {
+    const val APP_MARGIN_BOTTOM_MIN = 80f
+
     const val AT_TIME_HOUR = "atTimeHour"
     const val AT_TIME_MINUTE = "atTimeMinute"
 

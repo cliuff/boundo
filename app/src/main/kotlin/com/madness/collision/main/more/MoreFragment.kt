@@ -33,6 +33,7 @@ import com.madness.collision.main.ImmortalActivity
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.util.*
+import com.madness.collision.util.AppUtils.asBottomMargin
 
 class MoreFragment : TaggedFragment(), Democratic, View.OnClickListener, NavNode {
 
@@ -86,7 +87,7 @@ class MoreFragment : TaggedFragment(), Democratic, View.OnClickListener, NavNode
             mViews.findViewById<LinearLayout>(R.id.moreContainer)?.alterPadding(top = it)
         }
         viewModel.contentWidthBottom.observe(viewLifecycleOwner){
-            mViews.findViewById<LinearLayout>(R.id.moreContainer)?.alterPadding(bottom = it)
+            mViews.findViewById<LinearLayout>(R.id.moreContainer)?.alterPadding(bottom = asBottomMargin(it))
         }
         val cardInstant = mViews.findViewById<MaterialCardView>(R.id.moreInstant)
         val cardSettings = mViews.findViewById<MaterialCardView>(R.id.moreSettings)

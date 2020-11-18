@@ -35,6 +35,7 @@ import com.madness.collision.unit.no_media.data.BasicInfo
 import com.madness.collision.unit.no_media.data.Dir
 import com.madness.collision.unit.no_media.data.Media
 import com.madness.collision.util.*
+import com.madness.collision.util.AppUtils.asBottomMargin
 import kotlinx.android.synthetic.main.nm_item.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -90,8 +91,9 @@ internal class NmItemFragment: TaggedFragment(), Democratic, View.OnClickListene
         val context = context ?: return
 
         democratize(mainViewModel)
+        val gapMargin = X.size(context, 10f, X.DP).roundToInt()
         mainViewModel.contentWidthBottom.observe(viewLifecycleOwner){
-            nmItemPath.alterMargin(bottom = it + X.size(context, 10f, X.DP).roundToInt())
+            nmItemPath.alterMargin(bottom = asBottomMargin(it + gapMargin))
         }
 
         val bundle: Bundle? = arguments

@@ -30,6 +30,7 @@ import androidx.fragment.app.activityViewModels
 import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.main.MainViewModel
+import com.madness.collision.util.AppUtils.asBottomMargin
 import kotlinx.android.synthetic.main.fragment_page.*
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
@@ -144,7 +145,7 @@ class Page(fragment: Fragment? = null, private var titleId: Int = 0, private val
             pageContainer.alterPadding(top = it)
         }
         mainViewModel.contentWidthBottom.observe(viewLifecycleOwner) {
-            pageContainer.alterPadding(bottom = it)
+            pageContainer.alterPadding(bottom = asBottomMargin(it))
         }
     }
 
