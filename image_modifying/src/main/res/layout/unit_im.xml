@@ -25,7 +25,7 @@
     android:layout_height="match_parent">
 
     <ScrollView
-        android:scrollbarThumbVertical="@drawable/scrollbar_vertical"
+        android:scrollbars="none"
         android:requiresFadingEdge="vertical"
         android:layout_gravity="center_vertical"
         android:layout_width="match_parent"

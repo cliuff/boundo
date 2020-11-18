@@ -25,7 +25,7 @@
     <ScrollView
         app:layout_constraintTop_toTopOf="parent"
         android:requiresFadingEdge="vertical"
-        android:scrollbarThumbVertical="@drawable/scrollbar_vertical"
+        android:scrollbars="none"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
