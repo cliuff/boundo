@@ -22,6 +22,14 @@
     <uses-feature
         android:name="android.software.live_wallpaper"
         android:required="false" />
+    <uses-feature
+        android:name="android.hardware.bluetooth"
+        android:required="false" />
+<!--
+    <uses-feature
+        android:name="android.hardware.location"
+        android:required="false" />
+-->
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -39,6 +47,14 @@
     <!--<uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>-->
     <!-- Legacy shortcut -->
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <!-- initiate device discovery or manipulate Bluetooth settings -->
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <!-- a Bluetooth scan can be used to gather information about the location of the user -->
+    <!-- on API level 26+, you can use the CompanionDeviceManager -->
+    <!-- to perform a scan of nearby companion devices on behalf of your app -->
+    <!-- without requiring the location permission -->
+    <!--<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />-->
 
     <queries>
         <!-- check if QQ is installed -->

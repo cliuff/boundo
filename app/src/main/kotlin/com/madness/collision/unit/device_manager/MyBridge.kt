@@ -14,21 +14,19 @@
  * limitations under the License.
  */
 
-package com.madness.collision.instant.shortcut
+package com.madness.collision.unit.device_manager
 
-import android.annotation.TargetApi
-import com.madness.collision.R
+import com.madness.collision.unit.Bridge
 import com.madness.collision.unit.Unit
-import com.madness.collision.util.P
-import com.madness.collision.util.X
 
-@TargetApi(X.N_MR1)
-internal object InstantShortcuts {
+object MyBridge: Bridge() {
 
-    val SHORTCUTS = listOf(
-            InstantShortcut(P.SC_ID_API_VIEWER, R.string.apiViewer, Unit.UNIT_NAME_API_VIEWING),
-            InstantShortcut(P.SC_ID_AUDIO_TIMER, R.string.unit_audio_timer, Unit.UNIT_NAME_AUDIO_TIMER),
-            InstantShortcut(P.SC_ID_DEVICE_MANAGER, R.string.unit_device_manager, Unit.UNIT_NAME_DEVICE_MANAGER),
-    )
+    override val unitName: String = Unit.UNIT_NAME_DEVICE_MANAGER
 
+    /**
+     * @param args empty
+     */
+    override fun getUnitInstance(vararg args: Any?): Unit {
+        return MyUnit()
+    }
 }

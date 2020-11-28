@@ -267,4 +267,18 @@
     <string name="advice_source_sub">Redirect to Github</string>
     <string name="advice_translation_sub">Redirect to Google Docs</string>
     <string name="unit_desc_requirement_tw">Live wallpaper support</string>
+    <string name="unit_device_manager">Device Manager</string>
+    <string name="versatile_device_controls_dm_hint_off">Tap to connect</string>
+    <string name="versatile_device_controls_dm_hint_on">Tap to disconnect</string>
+    <string name="versatile_device_controls_dm_ctrl_desc_off">Connect device</string>
+    <string name="versatile_device_controls_dm_ctrl_desc_on">Disconnect device</string>
+    <string name="versatile_device_controls_dm_title_unknown">Unknown device</string>
+    <string name="dm_main_paired_devices">Paired devices</string>
+    <string name="dm_list_item_state_connecting">Connecting…</string>
+    <string name="dm_list_item_state_disconnecting">Disconnecting…</string>
+    <string name="dm_list_item_state_connected">Connected</string>
+    <string name="dm_list_item_state_disconnected">Disconnected</string>
+    <string name="dm_list_item_hint_connected">Connected, tap to disconnect</string>
+    <string name="dm_list_item_hint_disconnected">Disconnected, tap to connect</string>
+    <string name="unit_desc_requirement_dm">Bluetooth support</string>
 </resources>

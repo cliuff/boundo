@@ -18,6 +18,9 @@ package com.madness.collision.versatile
 
 import android.annotation.TargetApi
 import android.app.PendingIntent
+import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothProfile
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.provider.Settings
@@ -38,6 +41,9 @@ import com.madness.collision.main.MainActivity
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.audio_timer.AccessAT
 import com.madness.collision.unit.audio_timer.AtCallback
+import com.madness.collision.unit.device_manager.list.DeviceItem
+import com.madness.collision.unit.device_manager.list.StateObservable
+import com.madness.collision.unit.device_manager.manager.DeviceManager
 import com.madness.collision.util.SysServiceUtils
 import com.madness.collision.util.SystemUtil
 import com.madness.collision.util.X
@@ -53,61 +59,14 @@ import kotlin.math.min
 import kotlin.math.roundToLong
 
 @TargetApi(X.R)
-class MyControlService : ControlsProviderService() {
+class MyControlService : ControlsProviderService(), StateObservable {
     companion object {
         private const val DEV_ID_AT = "dev_at_timer"
         private const val DEV_ID_MDU = "dev_mdu_data"
+        private val STATIC_DEVICE_IDS = listOf(DEV_ID_AT, DEV_ID_MDU)
+        private const val DEV_PREFIX_DM = "dev_dm"
 
-        private val DEVICE_IDS = listOf(DEV_ID_AT, DEV_ID_MDU)
-
-        private fun getStatefulBuilder(context: Context, controlId: String): Control.StatefulBuilder? {
-            val localeContext = SystemUtil.getLocaleContextSys(context)
-            return when(controlId) {
-                DEV_ID_AT -> {
-                    val intent = Intent(context, MainActivity::class.java).apply {
-                        putExtras(MainActivity.forItem(Unit.UNIT_NAME_AUDIO_TIMER))
-                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    }
-                    val pi = PendingIntent.getActivity(context, 0, intent,
-                            PendingIntent.FLAG_UPDATE_CURRENT)
-                    val color = context.getColor(R.color.primaryAWhite)
-                    val title = localeContext.getString(R.string.unit_audio_timer)
-                    val iconDrawable = ContextCompat.getDrawable(context, R.drawable.ic_timer_24)
-                    iconDrawable?.setTint(color)
-                    val icon = iconDrawable?.toBitmap()?.toIcon()
-                    Control.StatefulBuilder(DEV_ID_AT, pi)
-                            .setTitle(title)
-                            .setDeviceType(DeviceTypes.TYPE_GENERIC_START_STOP)
-                            .setStatus(Control.STATUS_OK)
-                            .setCustomIcon(icon)
-                }
-                DEV_ID_MDU -> {
-                    val intent = Intent(context, MainActivity::class.java)
-                    val pi = PendingIntent.getActivity(context, 0, intent,
-                            PendingIntent.FLAG_UPDATE_CURRENT)
-                    val actionDesc = localeContext.getString(R.string.versatile_device_controls_mdu_ctrl_desc)
-                    val controlButton = ControlButton(false, actionDesc)
-                    val color = context.getColor(R.color.primaryAWhite)
-                    val title = localeContext.getString(R.string.tileData)
-                    val template = ToggleTemplate(DEV_ID_MDU, controlButton)
-                    val iconDrawable = ContextCompat.getDrawable(context, R.drawable.ic_data_usage_24)
-                    iconDrawable?.setTint(color)
-                    val icon = iconDrawable?.toBitmap()?.toIcon()
-                    Control.StatefulBuilder(DEV_ID_MDU, pi)
-                            .setTitle(title)
-                            .setSubtitle(context.getString(R.string.versatile_device_controls_mdu_hint))
-                            .setDeviceType(DeviceTypes.TYPE_GENERIC_VIEWSTREAM)
-                            .setStatus(Control.STATUS_OK)
-                            .setCustomIcon(icon)
-                            .setControlTemplate(template)
-                }
-                else -> null
-            }
-        }
-
-        private fun getStatelessBuilder(context: Context, controlId: String): Control.StatelessBuilder? {
-            return null
-        }
+        private const val ARG_DM_DEV_DEVICE = "dm_dev_device"
     }
 
     private lateinit var updatePublisher: ReplayProcessor<Control>
@@ -119,19 +78,133 @@ class MyControlService : ControlsProviderService() {
     // during which time constant regular state updates are happening,
     // which causes glitches because of rapid switching between states
     private var isAtUpdateBlocked = false
+    private var dmManager: DeviceManager? = null
+    private var dmSessionNo: Long = 0
+    override val stateReceiver: BroadcastReceiver = stateReceiverImp
+
+    override fun onBluetoothStateChanged(state: Int) {
+    }
+
+    override fun onDeviceStateChanged(device: BluetoothDevice, state: Int) {
+        // manager not used yet, no device added and updatePublisher may not be initialized
+        if (dmSessionNo == 0L) return
+        val context = baseContext ?: return
+        prepareDmManager(context, dmSessionNo) ?: return
+        val id = getDmDeviceIds().find { getDmMacByDeviceId(it) == device.address } ?: return
+        val deviceItem = DeviceItem(device).apply { this.state = state }
+        val args = mapOf(ARG_DM_DEV_DEVICE to deviceItem)
+        getControl(context, id, dmSessionNo, args = args)?.apply {
+            updatePublisher.onNext(this)
+        }
+    }
+
+    private fun getDeviceIds(context: Context, sessionNo: Long): List<String> {
+        val dmManager = prepareDmManager(context, sessionNo)
+        return if (dmManager != null) STATIC_DEVICE_IDS + getDmDeviceIds()
+        else STATIC_DEVICE_IDS
+    }
+
+    private fun getDmDeviceIds(): List<String> {
+        val dmManager = dmManager ?: return emptyList()
+        return dmManager.getPairedDevices().map {
+            "${DEV_PREFIX_DM}_${it.address}"
+        }
+    }
+
+    private fun prepareDmManager(context: Context, sessionNo: Long): DeviceManager? {
+        val dmManager = this.dmManager ?: DeviceManager()
+        if (this.dmManager == null) this.dmManager = dmManager
+        if (dmManager.isDisabled) return null
+        if (!dmManager.hasProxy && sessionNo != dmSessionNo) {
+            dmSessionNo = sessionNo
+            dmManager.initProxy(context, 0)
+        }
+        return if (dmManager.hasProxy) dmManager else null
+    }
+
+    private fun getDmMacByDeviceId(deviceId: String): String {
+        return "${DEV_PREFIX_DM}_(.*)".toRegex().find(deviceId)?.destructured?.component1() ?: deviceId
+    }
+
+    private fun getStatefulBuilder(context: Context, controlId: String): Control.StatefulBuilder? {
+        val localeContext = SystemUtil.getLocaleContextSys(context)
+        return when(controlId) {
+            DEV_ID_AT -> {
+                val intent = Intent(context, MainActivity::class.java).apply {
+                    putExtras(MainActivity.forItem(Unit.UNIT_NAME_AUDIO_TIMER))
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                val pi = PendingIntent.getActivity(context, 0, intent,
+                        PendingIntent.FLAG_UPDATE_CURRENT)
+                val color = context.getColor(R.color.primaryAWhite)
+                val title = localeContext.getString(R.string.unit_audio_timer)
+                val iconDrawable = ContextCompat.getDrawable(context, R.drawable.ic_timer_24)
+                iconDrawable?.setTint(color)
+                val icon = iconDrawable?.toBitmap()?.toIcon()
+                Control.StatefulBuilder(DEV_ID_AT, pi)
+                        .setTitle(title)
+                        .setDeviceType(DeviceTypes.TYPE_GENERIC_START_STOP)
+                        .setStatus(Control.STATUS_OK)
+                        .setCustomIcon(icon)
+            }
+            DEV_ID_MDU -> {
+                val intent = Intent(context, MainActivity::class.java)
+                val pi = PendingIntent.getActivity(context, 0, intent,
+                        PendingIntent.FLAG_UPDATE_CURRENT)
+                val actionDesc = localeContext.getString(R.string.versatile_device_controls_mdu_ctrl_desc)
+                val controlButton = ControlButton(false, actionDesc)
+                val color = context.getColor(R.color.primaryAWhite)
+                val title = localeContext.getString(R.string.tileData)
+                val template = ToggleTemplate(DEV_ID_MDU, controlButton)
+                val iconDrawable = ContextCompat.getDrawable(context, R.drawable.ic_data_usage_24)
+                iconDrawable?.setTint(color)
+                val icon = iconDrawable?.toBitmap()?.toIcon()
+                Control.StatefulBuilder(DEV_ID_MDU, pi)
+                        .setTitle(title)
+                        .setSubtitle(context.getString(R.string.versatile_device_controls_mdu_hint))
+                        .setDeviceType(DeviceTypes.TYPE_GENERIC_VIEWSTREAM)
+                        .setStatus(Control.STATUS_OK)
+                        .setCustomIcon(icon)
+                        .setControlTemplate(template)
+            }
+            else -> if (controlId.startsWith(DEV_PREFIX_DM)) {
+                val intent = Intent(context, MainActivity::class.java).apply {
+                    putExtras(MainActivity.forItem(Unit.UNIT_NAME_DEVICE_MANAGER))
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                val pi = PendingIntent.getActivity(context, 0, intent,
+                        PendingIntent.FLAG_UPDATE_CURRENT)
+                Control.StatefulBuilder(controlId, pi)
+                        .setDeviceType(DeviceTypes.TYPE_GENERIC_ON_OFF)
+                        .setStatus(Control.STATUS_OK)
+            } else null
+        }
+    }
+
+    private fun getStatelessBuilder(context: Context, controlId: String): Control.StatelessBuilder? {
+        return null
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        val context = baseContext ?: return
+        registerStateReceiver(context)
+    }
 
     override fun createPublisherForAllAvailable(): Flow.Publisher<Control> {
         val context = baseContext
-        val controls = DEVICE_IDS.mapNotNull { getControl(context, it) }
+        val sessionNo = System.currentTimeMillis()
+        val controls = getDeviceIds(context, sessionNo).mapNotNull { getControl(context, it, sessionNo) }
         return FlowAdapters.toFlowPublisher(Flowable.fromIterable(controls))
     }
 
     override fun createPublisherFor(controlIds: MutableList<String>): Flow.Publisher<Control> {
         val context = baseContext
         updatePublisher = ReplayProcessor.create()
+        val sessionNo = System.currentTimeMillis()
         controlIds.forEach {
-            getControl(context, it)?.let { control ->
-                updatePublisher.onNext(control)
+            getControl(context, it, sessionNo)?.apply {
+                updatePublisher.onNext(this)
             }
         }
         return FlowAdapters.toFlowPublisher(updatePublisher)
@@ -141,12 +214,20 @@ class MyControlService : ControlsProviderService() {
         val context = baseContext
         // Inform SystemUI that the action has been received and is being processed
         consumer.accept(ControlAction.RESPONSE_OK)
-        getControl(context, controlId, action)?.let { control ->
-            updatePublisher.onNext(control)
+        val sessionNo = System.currentTimeMillis()
+        getControl(context, controlId, sessionNo, action)?.apply {
+            updatePublisher.onNext(this)
         }
     }
 
-    private fun getControl(context: Context, controlId: String, action: ControlAction? = null): Control? {
+    override fun onDestroy() {
+        super.onDestroy()
+        dmManager?.close()
+        val context = baseContext ?: return
+        unregisterStateReceiver(context)
+    }
+
+    private fun getControl(context: Context, controlId: String, sessionNo: Long, action: ControlAction? = null, args: Map<String, Any?>? = null): Control? {
         val localeContext = SystemUtil.getLocaleContextSys(context)
         return when(controlId) {
             DEV_ID_AT -> {
@@ -174,9 +255,9 @@ class MyControlService : ControlsProviderService() {
                             }
                             atCurrentValue = newCurrentValue
                             // update control status
-                            if (!isAtUpdateBlocked && doUpdate) GlobalScope.launch {
-                                getControl(context, controlId)?.let { control ->
-                                    updatePublisher.onNext(control)
+                            if (!isAtUpdateBlocked && doUpdate) {
+                                getControl(context, controlId, sessionNo)?.apply {
+                                    updatePublisher.onNext(this)
                                 }
                             }
                         }
@@ -191,37 +272,35 @@ class MyControlService : ControlsProviderService() {
                     // reset current value
                     atCurrentValue = atMaxValue
                 }
-                if (action != null) {
-                    when(action) {
-                        is BooleanAction -> {
-                            val isStarting = action.newState
-                            if (isStarting && !isRunning) {
-                                AccessAT.start(context, atCurrentValue.roundToLong() * 60000)
-                            } else if (isRunning) {
-                                AccessAT.stop(context)
-                                // reset current value
-                                atCurrentValue = atMaxValue
-                            }
-                            isRunning = isStarting
+                if (action != null) when(action) {
+                    is BooleanAction -> {
+                        val isStarting = action.newState
+                        if (isStarting && !isRunning) {
+                            AccessAT.start(context, atCurrentValue.roundToLong() * 60000)
+                        } else if (isRunning) {
+                            AccessAT.stop(context)
+                            // reset current value
+                            atCurrentValue = atMaxValue
                         }
-                        is FloatAction -> {
-                            if (atCurrentValue != action.newValue) {
-                                // block update
-                                isAtUpdateBlocked = true
-                                AccessAT.stop(context)
-                                atCurrentValue = action.newValue
-                                GlobalScope.launch {
-                                    delay(500)
-                                    AccessAT.start(context, atCurrentValue.roundToLong() * 60000)
-                                    delay(500)
-                                    isAtUpdateBlocked = false
-                                }
-                                isRunning = true
-                            }
-                        }
-//                        is ModeAction -> {
-//                        }
+                        isRunning = isStarting
                     }
+                    is FloatAction -> {
+                        if (atCurrentValue != action.newValue) {
+                            // block update
+                            isAtUpdateBlocked = true
+                            AccessAT.stop(context)
+                            atCurrentValue = action.newValue
+                            GlobalScope.launch {
+                                delay(500)
+                                AccessAT.start(context, atCurrentValue.roundToLong() * 60000)
+                                delay(500)
+                                isAtUpdateBlocked = false
+                            }
+                            isRunning = true
+                        }
+                    }
+//                    is ModeAction -> {
+//                    }
                 }
                 val currentValDisplay = if (atCurrentValue < atStepValue) atStepValue else atCurrentValue
                 val formatRes = R.string.versatile_device_controls_at_status_on
@@ -244,16 +323,19 @@ class MyControlService : ControlsProviderService() {
 //                val template = TemperatureControlTemplate(DEV_ID_AT, toggleRangeTemplate,
 //                        TemperatureControlTemplate.MODE_COOL,
 //                        TemperatureControlTemplate.MODE_COOL, modeFlags)
-                getStatefulBuilder(context, controlId)?.setSubtitle(sub)?.setStatusText(status)
-                        ?.setControlTemplate(toggleRangeTemplate)
+                getStatefulBuilder(context, controlId)?.apply {
+                    setSubtitle(sub)
+                    setStatusText(status)
+                    setControlTemplate(toggleRangeTemplate)
+                }
             }
             DEV_ID_MDU -> {
                 val hasAccess = ensurePermission(context)
                 val doUpdate = action != null && action is BooleanAction
                 if (doUpdate && hasAccess) GlobalScope.launch {
                     delay(800)
-                    getControl(context, controlId)?.let { control ->
-                        updatePublisher.onNext(control)
+                    getControl(context, controlId, sessionNo)?.apply {
+                        updatePublisher.onNext(this)
                     }
                 }
                 val status = if (!hasAccess) {
@@ -268,7 +350,67 @@ class MyControlService : ControlsProviderService() {
                 }
                 getStatefulBuilder(context, controlId)?.setStatusText(status)
             }
-            else -> null
+            else -> if (controlId.startsWith(DEV_PREFIX_DM)) {
+                var deviceItem = args?.get(ARG_DM_DEV_DEVICE) as DeviceItem?
+                // get device and perform action
+                if (deviceItem == null) {
+                    val dmManager = prepareDmManager(context, sessionNo)
+                    if (dmManager != null) {
+                        val mac = getDmMacByDeviceId(controlId)
+                        val device = dmManager.getPairedDevices().find { it.address == mac }
+                        if (device != null) deviceItem = DeviceItem(device)
+                        val isConnected = dmManager.getConnectedDevices().find { it.address == mac } != null
+                        deviceItem?.state = if (isConnected) BluetoothProfile.STATE_CONNECTED
+                        else BluetoothProfile.STATE_DISCONNECTED
+                        // perform action
+                        if (action != null && action is BooleanAction && device != null) {
+                            val doConnect = action.newState
+                            if (doConnect && !isConnected) {
+                                dmManager.connect(device)
+                                deviceItem?.state = BluetoothProfile.STATE_CONNECTING
+                            } else if (isConnected) {
+                                dmManager.disconnect(device)
+                                deviceItem?.state = BluetoothProfile.STATE_DISCONNECTING
+                            }
+                        }
+                    } else GlobalScope.launch {
+                        // update status in 600ms
+                        delay(600)
+                        getControl(context, controlId, sessionNo)?.apply {
+                            updatePublisher.onNext(this)
+                        }
+                    }
+                }
+
+                val color = context.getColor(R.color.primaryAWhite)
+                val iconRes = deviceItem?.iconRes ?: R.drawable.ic_devices_other_24
+                val iconDrawable = ContextCompat.getDrawable(context, iconRes)
+                iconDrawable?.setTint(color)
+                val icon = iconDrawable?.toBitmap()?.toIcon()
+                val isConnected = deviceItem?.state == BluetoothProfile.STATE_CONNECTED
+                val title = deviceItem?.name ?: localeContext.getString(R.string.versatile_device_controls_dm_title_unknown)
+                val subRes = if (isConnected) R.string.versatile_device_controls_dm_hint_on
+                else R.string.versatile_device_controls_dm_hint_off
+                val sub = localeContext.getString(subRes)
+                val status = when (deviceItem?.state) {
+                    BluetoothProfile.STATE_CONNECTED -> R.string.dm_list_item_state_connected
+                    BluetoothProfile.STATE_CONNECTING -> R.string.dm_list_item_state_connecting
+                    BluetoothProfile.STATE_DISCONNECTING -> R.string.dm_list_item_state_disconnecting
+                    else -> R.string.dm_list_item_state_disconnected
+                }.let { localeContext.getString(it) }
+                val actionDescRes = if (isConnected) R.string.versatile_device_controls_dm_ctrl_desc_on
+                else R.string.versatile_device_controls_dm_ctrl_desc_off
+                val actionDesc = localeContext.getString(actionDescRes)
+                val controlButton = ControlButton(isConnected, actionDesc)
+                val toggleTemplate = ToggleTemplate(controlId, controlButton)
+                getStatefulBuilder(context, controlId)?.apply {
+                    setCustomIcon(icon)
+                    setTitle(title)
+                    setSubtitle(sub)
+                    setStatusText(status)
+                    setControlTemplate(toggleTemplate)
+                }
+            } else null
         }?.build()
     }
 

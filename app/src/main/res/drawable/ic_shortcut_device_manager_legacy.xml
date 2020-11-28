@@ -1,0 +1,29 @@
+<!--
+  ~ Copyright 2020 Clifford Liu
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="75dp"
+    android:height="75dp"
+    android:viewportWidth="75"
+    android:viewportHeight="75">
+  <path
+      android:pathData="M37.5,37.5m-37.5,0a37.5,37.5 0,1 1,75 0a37.5,37.5 0,1 1,-75 0"
+      android:fillColor="#f4f4f4"
+      android:fillType="evenOdd"/>
+  <path
+      android:pathData="M17.8636,26.5455C17.8636,25.3455 18.8455,24.3636 20.0455,24.3636L54.9545,24.3636C56.1545,24.3636 57.1364,23.3818 57.1364,22.1818 57.1364,20.9818 56.1545,20 54.9545,20L17.8636,20C15.4636,20 13.5,21.9636 13.5,24.3636l0,26.1818c0,2.4 1.9636,4.3636 4.3636,4.3636L24.4091,54.9091C25.6091,54.9091 26.5909,53.9273 26.5909,52.7273 26.5909,51.5273 25.6091,50.5455 24.4091,50.5455L20.0455,50.5455C18.8455,50.5455 17.8636,49.5636 17.8636,48.3636ZM37.5,37.4545l-4.3636,0c-1.2,0 -2.1818,0.9818 -2.1818,2.1818l0,1.7018C29.6236,42.5382 28.7727,44.24 28.7727,46.1818c0,1.9418 0.8509,3.6436 2.1818,4.8436L30.9545,52.7273c0,1.2 0.9818,2.1818 2.1818,2.1818l4.3636,0c1.2,0 2.1818,-0.9818 2.1818,-2.1818l0,-1.7018c1.3309,-1.2 2.1818,-2.9236 2.1818,-4.8436 0,-1.92 -0.8509,-3.6436 -2.1818,-4.8436L39.6818,39.6364c0,-1.2 -0.9818,-2.1818 -2.1818,-2.1818zM35.3182,49.4545c-1.8109,0 -3.2727,-1.4618 -3.2727,-3.2727 0,-1.8109 1.4618,-3.2727 3.2727,-3.2727 1.8109,0 3.2727,1.4618 3.2727,3.2727 0,1.8109 -1.4618,3.2727 -3.2727,3.2727zM59.3182,28.7273l-13.0909,0c-1.0909,0 -2.1818,1.0909 -2.1818,2.1818l0,21.8182c0,1.0909 1.0909,2.1818 2.1818,2.1818l13.0909,0c1.0909,0 2.1818,-1.0909 2.1818,-2.1818L61.5,30.9091C61.5,29.8182 60.4091,28.7273 59.3182,28.7273ZM57.1364,50.5455l-8.7273,0l0,-17.4545l8.7273,0z"
+      android:fillColor="#000000"/>
+</vector>

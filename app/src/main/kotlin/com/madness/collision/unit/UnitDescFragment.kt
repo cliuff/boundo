@@ -202,7 +202,8 @@ internal class UnitDescFragment() : TaggedFragment(), Democratic {
                 }
             }
 
-            viewBinding.unitDescDesc.setText(it.description.descRes)
+            val descResId = it.description.descRes
+            if (descResId != 0) viewBinding.unitDescDesc.setText(descResId)
 
             toolbar?.run {
                 menu.findItem(R.id.unitDescToolbarPin).icon = getStarIcon(context, it.isPinned)

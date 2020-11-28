@@ -49,6 +49,7 @@ abstract class Unit: TaggedFragment(), Democratic {
         const val UNIT_NAME_AUDIO_TIMER = "audio_timer"
         const val UNIT_NAME_WE_CHAT_EVO = "we_chat_evo"
         const val UNIT_NAME_QQ_CONTACTS = "qq_contacts"
+        const val UNIT_NAME_DEVICE_MANAGER = "device_manager"
         private val UNIT_CLASSES: MutableMap<String, Class<Unit>> = hashMapOf()
         private val UNIT_BRIDGE_CLASSES: MutableMap<String, Class<Bridge>> = hashMapOf()
         private val UNIT_DESCRIPTIONS: Map<String, Description>
@@ -79,7 +80,11 @@ abstract class Unit: TaggedFragment(), Democratic {
                                     Description.Checker(R.string.unit_desc_requirement_shortcut) { X.aboveOn(X.N_MR1) },
                                     Description.Checker(R.string.unit_desc_requirement_qc) {
                                         MiscApp.isAppAvailable(it, "com.tencent.mobileqq")
-                                    })
+                                    }),
+                    StaticDescription(UNIT_NAME_DEVICE_MANAGER, R.string.unit_device_manager, R.drawable.ic_devices_other_24)
+                            .setRequirement(Description.Checker(R.string.unit_desc_requirement_dm) {
+                                it.packageManager.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH)
+                            }),
             )
             UNIT_DESCRIPTIONS = mUnitDescriptions.associateBy { it.unitName }
             UNITS = UNIT_DESCRIPTIONS.keys.toList().sorted()
