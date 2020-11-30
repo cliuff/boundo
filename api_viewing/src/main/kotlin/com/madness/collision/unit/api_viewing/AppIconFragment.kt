@@ -39,11 +39,11 @@ import com.madness.collision.R
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.misc.MiscApp
 import com.madness.collision.unit.api_viewing.data.AppIcon
+import com.madness.collision.unit.api_viewing.databinding.DialogApiSubAiBinding
 import com.madness.collision.unit.api_viewing.util.ApkUtil
 import com.madness.collision.unit.api_viewing.util.ManifestUtil
 import com.madness.collision.util.*
 import com.madness.collision.util.AppUtils.asBottomMargin
-import kotlinx.android.synthetic.main.dialog_api_sub_ai.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
@@ -73,6 +73,7 @@ internal class AppIconFragment : TaggedFragment(), Democratic {
 
     private val mainViewModel: MainViewModel by activityViewModels()
     private var iconWidth: Int = 0
+    private lateinit var viewBinding: DialogApiSubAiBinding
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
         toolbar.title = arguments?.getString(ARG_APP_NAME) ?: ""
@@ -91,8 +92,9 @@ internal class AppIconFragment : TaggedFragment(), Democratic {
         return false
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(MyR.layout.dialog_api_sub_ai, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        viewBinding = DialogApiSubAiBinding.inflate(inflater, container, false)
+        return viewBinding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -101,15 +103,15 @@ internal class AppIconFragment : TaggedFragment(), Democratic {
 
         democratize(mainViewModel)
         mainViewModel.contentWidthTop.observe(viewLifecycleOwner) {
-            apiInfoAiGuideTop.setGuidelineBegin(it)
+            viewBinding.apiInfoAiGuideTop.setGuidelineBegin(it)
         }
         mainViewModel.contentWidthBottom.observe(viewLifecycleOwner) {
-            apiInfoAiGuideBottom.setGuidelineEnd(asBottomMargin(it))
+            viewBinding.apiInfoAiGuideBottom.setGuidelineEnd(asBottomMargin(it))
 //            (apiInfoAiSpace.layoutParams as ConstraintLayout.LayoutParams).height = it
 //            apiInfoAiSpace.layoutParams = ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, it)
         }
 
-        lifecycleScope.launch {
+        lifecycleScope.launch(Dispatchers.Default) {
             val appName = arguments?.getString(ARG_APP_NAME) ?: ""
             val packageName = arguments?.getString(ARG_PACKAGE_NAME) ?: ""
             val apkPath = arguments?.getString(ARG_APK_Path) ?: ""
@@ -147,7 +149,7 @@ internal class AppIconFragment : TaggedFragment(), Democratic {
             if (dIcon == null) {
                 dIcon = applicationInfo.loadIcon(context.packageManager)
                 launch(Dispatchers.Main) {
-                    apiInfoAiIconDes.setText(MyR.string.apiInfoAiIconDesSys)
+                    viewBinding.apiInfoAiIconDes.setText(MyR.string.apiInfoAiIconDesSys)
                 }
             }
 
@@ -155,14 +157,14 @@ internal class AppIconFragment : TaggedFragment(), Democratic {
 
             launch(Dispatchers.Main) {
                 setIcon(dIcon, res, idIcon, apkPath, appName,
-                        apiInfoAiIcon, apiInfoAiIconFore, apiInfoAiIconBack,
-                        apiInfoAiIconRound, apiInfoAiIconRounded, apiInfoAiIconSquircle,
-                        apiInfoAiIconGroup, apiInfoAiIconGroupAi)
+                        viewBinding.apiInfoAiIcon, viewBinding.apiInfoAiIconFore, viewBinding.apiInfoAiIconBack,
+                        viewBinding.apiInfoAiIconRound, viewBinding.apiInfoAiIconRounded, viewBinding.apiInfoAiIconSquircle,
+                        viewBinding.apiInfoAiIconGroup, viewBinding.apiInfoAiIconGroupAi)
 
                 setIcon(dIconR, res, idIconR, apkPath, "$appName-R",
-                        apiInfoAiIconR, apiInfoAiIconRFore, apiInfoAiIconRBack,
-                        apiInfoAiIconRRound, apiInfoAiIconRRounded, apiInfoAiIconRSquircle,
-                        apiInfoAiIconRGroup, apiInfoAiIconRGroupAi)
+                        viewBinding.apiInfoAiIconR, viewBinding.apiInfoAiIconRFore, viewBinding.apiInfoAiIconRBack,
+                        viewBinding.apiInfoAiIconRRound, viewBinding.apiInfoAiIconRRounded, viewBinding.apiInfoAiIconRSquircle,
+                        viewBinding.apiInfoAiIconRGroup, viewBinding.apiInfoAiIconRGroupAi)
             }
         }
     }
@@ -199,7 +201,7 @@ internal class AppIconFragment : TaggedFragment(), Democratic {
         }
         if (iconId == 0) return
         setOnClickListener {
-            lifecycleScope.launch {
+            lifecycleScope.launch(Dispatchers.Default) {
                 val (title, entries) = ApkUtil.getResourceEntries(res, iconId, apkPath)
                 launch(Dispatchers.Main) launchMain@ {
                     if (title.isEmpty()) {

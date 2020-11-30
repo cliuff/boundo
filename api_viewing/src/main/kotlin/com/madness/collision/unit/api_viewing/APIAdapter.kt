@@ -52,6 +52,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.IOException
+import java.lang.Runnable
 import kotlin.collections.HashMap
 import kotlin.math.min
 import kotlin.math.roundToInt
@@ -446,24 +447,24 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
         }
     }
 
-    private fun actionDetails(appInfo: ApiViewingApp) {
-        val pop = CollisionDialog(context, R.string.text_alright)
-        pop.setContent(0)
-        pop.setTitleCollision(appInfo.name, 0, 0)
-        val dp350 = X.size(context, 350f, X.DP).toInt()
-        pop.showAsContentHolder(dp350, dp350)
-        GlobalScope.launch(Dispatchers.IO) {
-            pop.setListener { pop.dismiss() }
-            val details = service.getAppDetails(context, appInfo)
-            if (details.isEmpty()) return@launch
-            val view = TextView(context)
-            view.text = details
-            view.textSize = 10f
-            val dpVeinte = X.size(context, 20f, X.DP).toInt()
-            view.setPadding(dpVeinte, dpVeinte, dpVeinte, 0)
-            launch(Dispatchers.Main){
-                pop.setCustomContent(view)
-                pop.decentHeight()
+    private fun actionDetails(appInfo: ApiViewingApp) = GlobalScope.launch {
+        val view: TextView
+        val details = service.getAppDetails(context, appInfo)
+        if (details.isEmpty()) return@launch
+        val contentView = TextView(context)
+        contentView.text = details
+        contentView.textSize = 10f
+        val padding = X.size(context, 20f, X.DP).toInt()
+        contentView.setPadding(padding, padding, padding, 0)
+        view = contentView
+        launch(Dispatchers.Main) {
+            CollisionDialog(context, R.string.text_alright).run {
+                setContent(0)
+                setTitleCollision(appInfo.name, 0, 0)
+                setCustomContent(view)
+                decentHeight()
+                setListener { dismiss() }
+                show()
             }
         }
     }

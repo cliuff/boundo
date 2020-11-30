@@ -234,7 +234,7 @@ class FilePop: BottomSheetDialogFragment(){
             // Title set as file type, show size only
             mViews.fileActionsInfoSubtitle.text = displayFileSize
         }
-        if (typeIcon != null && X.aboveOn(X.M) && typeIcon is Icon) lifecycleScope.launch {
+        if (typeIcon != null && X.aboveOn(X.M) && typeIcon is Icon) lifecycleScope.launch(Dispatchers.Default) {
             val d = typeIcon.loadDrawable(mContext)
             launch(Dispatchers.Main) {
                 mViews.fileActionsInfoSubtitle.setCompoundDrawablesRelativeWithIntrinsicBounds(

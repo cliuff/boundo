@@ -41,12 +41,12 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import com.madness.collision.Democratic
 import com.madness.collision.R
+import com.madness.collision.databinding.ActivityExteriorBinding
 import com.madness.collision.main.MainActivity
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.themed_wallpaper.AccessTw
 import com.madness.collision.unit.themed_wallpaper.ThemedWallpaperEasyAccess
 import com.madness.collision.util.*
-import kotlinx.android.synthetic.main.activity_exterior.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -104,6 +104,7 @@ class ExteriorFragment: TaggedFragment(), Democratic, View.OnClickListener{
     private val mainViewModel: MainViewModel by activityViewModels()
     private lateinit var backPath: String
     private var mImgGallery: Drawable? = null
+    private lateinit var viewBinding: ActivityExteriorBinding
 
     private fun getImgGallery(context: Context): Drawable? {
         if (mImgGallery == null) mImgGallery = ContextCompat.getDrawable(context, R.drawable.img_gallery)
@@ -134,9 +135,10 @@ class ExteriorFragment: TaggedFragment(), Democratic, View.OnClickListener{
         return false
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         activity?.let { SettingsFunc.updateLanguage(it) }
-        return inflater.inflate(R.layout.activity_exterior, container, false)
+        viewBinding = ActivityExteriorBinding.inflate(inflater, container, false)
+        return viewBinding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -144,20 +146,20 @@ class ExteriorFragment: TaggedFragment(), Democratic, View.OnClickListener{
         val context = context ?: return
         democratize(mainViewModel)
         mainViewModel.contentWidthTop.observe(viewLifecycleOwner) {
-            exteriorContainer?.alterPadding(top = it)
+            viewBinding.exteriorContainer?.alterPadding(top = it)
         }
 
-        sb = exteriorSeekBar
+        sb = viewBinding.exteriorSeekBar
         rs = GaussianBlur(context)
         sb.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, i : Int, b: Boolean) {
-                exteriorBlurValue.text = String.format("%d/100", i)
+                viewBinding.exteriorBlurValue.text = String.format("%d/100", i)
                 updateBlur(i)
             }
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         })
-        exteriorImage.listenedBy(this)
+        viewBinding.exteriorImage.listenedBy(this)
 
         GlobalScope.launch {
             val args = arguments
@@ -216,10 +218,10 @@ class ExteriorFragment: TaggedFragment(), Democratic, View.OnClickListener{
         try {
             if (uri != null) {
                 imagePreview = ImageUtil.getSampledBitmap(context, uri, previewSize, previewSize)
-                backPreview = ImageUtil.getSampledBitmap(context, uri, exteriorBack.width, exteriorBack.height)
+                backPreview = ImageUtil.getSampledBitmap(context, uri, viewBinding.exteriorBack.width, viewBinding.exteriorBack.height)
             } else if (file != null) {
                 imagePreview = ImageUtil.getSampledBitmap(file, previewSize, previewSize)
-                backPreview = ImageUtil.getSampledBitmap(file, exteriorBack.width, exteriorBack.height)
+                backPreview = ImageUtil.getSampledBitmap(file, viewBinding.exteriorBack.width, viewBinding.exteriorBack.height)
             }
         } catch (e: OutOfMemoryError) {
             e.printStackTrace()
@@ -240,8 +242,8 @@ class ExteriorFragment: TaggedFragment(), Democratic, View.OnClickListener{
 
     private fun clearViewRes() {
         GlobalScope.launch(Dispatchers.Main) {
-            exteriorBack.background = null
-            exteriorImage.setImageDrawable(null)
+            viewBinding.exteriorBack.background = null
+            viewBinding.exteriorImage.setImageDrawable(null)
         }
     }
 
@@ -256,13 +258,13 @@ class ExteriorFragment: TaggedFragment(), Democratic, View.OnClickListener{
                 clearViewRes()
                 val imgGallery = getImgGallery(context)
                 launch(Dispatchers.Main){
-                    (exteriorImage.layoutParams as FrameLayout.LayoutParams).run {
+                    (viewBinding.exteriorImage.layoutParams as FrameLayout.LayoutParams).run {
                         width = previewSize
                         height = previewSize
                     }
-                    exteriorImage.setImageDrawable(imgGallery)
-                    exteriorCardImage.cardElevation = 0f
-                    exteriorBack.background = null
+                    viewBinding.exteriorImage.setImageDrawable(imgGallery)
+                    viewBinding.exteriorCardImage.cardElevation = 0f
+                    viewBinding.exteriorBack.background = null
                 }
                 return@launch
             }
@@ -273,12 +275,12 @@ class ExteriorFragment: TaggedFragment(), Democratic, View.OnClickListener{
             // update UI
             launch(Dispatchers.Main){
                 // set image
-                (exteriorImage.layoutParams as FrameLayout.LayoutParams).run {
+                (viewBinding.exteriorImage.layoutParams as FrameLayout.LayoutParams).run {
                     width = ViewGroup.LayoutParams.WRAP_CONTENT
                     height = ViewGroup.LayoutParams.WRAP_CONTENT
                 }
-                exteriorImage.setImageBitmap(previewImage)
-                exteriorCardImage.cardElevation = elevation
+                viewBinding.exteriorImage.setImageBitmap(previewImage)
+                viewBinding.exteriorCardImage.cardElevation = elevation
             }
             updateBlur(sb.progress)
         }
@@ -287,14 +289,14 @@ class ExteriorFragment: TaggedFragment(), Democratic, View.OnClickListener{
     private fun updateBlur(progress: Int) {
         if (backPreview == null) return
         GlobalScope.launch {
-            val size = Point(exteriorBack.width, exteriorBack.height)
+            val size = Point(viewBinding.exteriorBack.width, viewBinding.exteriorBack.height)
             val blurDegree = progress / 4f
             val shouldBlur = blurDegree != 0f
             blurred = if (shouldBlur) rs.blur(forBlurry!!, blurDegree) else backPreview
             blurred = X.toTarget(blurred!!, size.x, size.y)
             val targetBack = BitmapDrawable(resources, blurred)
             launch(Dispatchers.Main){
-                exteriorBack.background = targetBack
+                viewBinding.exteriorBack.background = targetBack
             }
         }
     }

@@ -35,12 +35,11 @@ import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
+import com.madness.collision.unit.api_viewing.databinding.ApiDecentFragmentBinding
 import com.madness.collision.util.SystemUtil
 import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.X
 import com.madness.collision.util.mainApplication
-import kotlinx.android.synthetic.main.api_decent_fragment.*
-import com.madness.collision.unit.api_viewing.R as MyR
 
 internal class ApiDecentFragment : TaggedFragment(), Democratic {
 
@@ -68,6 +67,7 @@ internal class ApiDecentFragment : TaggedFragment(), Democratic {
 
     private val viewModel: ApiDecentViewModel by viewModels()
     private var isDarkBar = false
+    private lateinit var viewBinding: ApiDecentFragmentBinding
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
         toolbar.visibility = View.GONE
@@ -91,8 +91,9 @@ internal class ApiDecentFragment : TaggedFragment(), Democratic {
         decorView.systemUiVisibility = decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_LOW_PROFILE
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(MyR.layout.api_decent_fragment, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        viewBinding = ApiDecentFragmentBinding.inflate(inflater, container, false)
+        return viewBinding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -111,46 +112,48 @@ internal class ApiDecentFragment : TaggedFragment(), Democratic {
         }
         viewModel.app.observe(viewLifecycleOwner) {
             it?.run {
-                apiDecentLogo.setImageBitmap(getOriginalIcon(context))
-                apiDecentLabel.text = name
-                apiDecentVer.text = verName
+                viewBinding.apiDecentLogo.setImageBitmap(getOriginalIcon(context))
+                viewBinding.apiDecentLabel.text = name
+                viewBinding.apiDecentVer.text = verName
                 when(viewModel.type.value) {
                      TYPE_TARGET -> VerInfo(targetAPI, Utils.getAndroidVersionByAPI(targetAPI, true), targetSDKLetter)
                     TYPE_MINIMUM -> VerInfo(minAPI, Utils.getAndroidVersionByAPI(minAPI, true), minSDKLetter)
                     else -> VerInfo(-1, "", ' ')
                 }.run {
-                    apiDecentChipAPI.text = api.toString()
-                    apiDecentChipVer.text = sdk
+                    viewBinding.apiDecentChipAPI.text = api.toString()
+                    viewBinding.apiDecentChipVer.text = sdk
                     if (EasyAccess.isSweet){
-                        apiDecentChipCodeName.text = Utils.getAndroidCodenameByAPI(context, api)
-                        if (apiDecentChipCodeName.text.isBlank()) apiDecentChipCodeName.visibility = View.GONE
+                        viewBinding.apiDecentChipCodeName.text = Utils.getAndroidCodenameByAPI(context, api)
+                        if (viewBinding.apiDecentChipCodeName.text.isBlank()) viewBinding.apiDecentChipCodeName.visibility = View.GONE
                         val resId = APIAdapter.getAndroidCodenameImageRes(letter)
-                        apiDecentChipCodeName.chipIcon = if (resId == 0) null else ContextCompat.getDrawable(context, resId)
+                        viewBinding.apiDecentChipCodeName.chipIcon = if (resId == 0) null else ContextCompat.getDrawable(context, resId)
                         val colorText = APIAdapter.getItemColorText(api)
-                        arrayOf(apiDecentLabel, apiDecentChipAPI, apiDecentChipVer, apiDecentChipCodeName, apiDecentAPILabel, apiDecentVer).forEach { view ->
+                        arrayOf(viewBinding.apiDecentLabel, viewBinding.apiDecentChipAPI,
+                                viewBinding.apiDecentChipVer, viewBinding.apiDecentChipCodeName,
+                                viewBinding.apiDecentAPILabel, viewBinding.apiDecentVer).forEach { view ->
                             view.setTextColor(colorText)
                         }
-                        apiDecentHeart.drawable.mutate().setTint(colorText)
+                        viewBinding.apiDecentHeart.drawable.mutate().setTint(colorText)
 
                         isDarkBar = colorText == Color.BLACK
                         updateBars()
                     } else {
-                        apiDecentChipCodeName.visibility = View.GONE
+                        viewBinding.apiDecentChipCodeName.visibility = View.GONE
                     }
-                    apiDecentGB.setGuidelineEnd(mainApplication.insetBottom)
+                    viewBinding.apiDecentGB.setGuidelineEnd(mainApplication.insetBottom)
                 }
             }
         }
         viewModel.type.observe(viewLifecycleOwner) {
             when(it){
-                TYPE_TARGET -> apiDecentAPILabel.text = getString(R.string.apiSdkTarget)
-                TYPE_MINIMUM -> apiDecentAPILabel.text = getString(R.string.apiSdkMin)
+                TYPE_TARGET -> viewBinding.apiDecentAPILabel.text = getString(R.string.apiSdkTarget)
+                TYPE_MINIMUM -> viewBinding.apiDecentAPILabel.text = getString(R.string.apiSdkMin)
             }
         }
         viewModel.back.observe(viewLifecycleOwner) {
-            apiDecentShade.visibility = if (mainApplication.isDarkTheme) View.VISIBLE else View.GONE
+            viewBinding.apiDecentShade.visibility = if (mainApplication.isDarkTheme) View.VISIBLE else View.GONE
             val reso = X.getCurrentAppResolution(context)
-            apiDecentBack.background = BitmapDrawable(resources, X.toTarget(it, reso.x, reso.y))
+            viewBinding.apiDecentBack.background = BitmapDrawable(resources, X.toTarget(it, reso.x, reso.y))
         }
     }
 

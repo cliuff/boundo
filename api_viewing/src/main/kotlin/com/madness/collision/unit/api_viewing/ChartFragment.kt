@@ -32,12 +32,11 @@ import com.madness.collision.R
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
+import com.madness.collision.unit.api_viewing.databinding.FragmentChartBinding
 import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.ThemeUtil
 import com.madness.collision.util.X
-import kotlinx.android.synthetic.main.fragment_chart.*
 import kotlin.math.roundToInt
-import com.madness.collision.unit.api_viewing.R as MyR
 
 internal class ChartFragment: TaggedFragment(){
 
@@ -55,15 +54,18 @@ internal class ChartFragment: TaggedFragment(){
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(MyR.layout.fragment_chart, container, false)
+    private lateinit var viewBinding: FragmentChartBinding
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        viewBinding = FragmentChartBinding.inflate(inflater, container, false)
+        return viewBinding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val context = context ?: return
 
-        val pieChart = avChartPieChart
+        val pieChart = viewBinding.avChartPieChart
 
         val unit: Int = arguments?.getInt(ARG_TYPE) ?: ApiUnit.ALL_APPS
         val viewModel: ApiViewingViewModel by activityViewModels()

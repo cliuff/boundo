@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:textColorHint="?android:textColorHint"
             android:hint="@string/im_edit_width">
-            <!-- below: add hint & it's color transparent to fix bug on Meizu devices running Android 6, 7-->
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/imageEditWidth"
                 style="@style/Widget.MaterialComponents.TextInputEditText.OutlinedBox"
@@ -204,3 +204,4 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>
+    <!-- add hint and its color transparent on TextInputEditText to fix bug on Meizu devices running Android 6, 7-->

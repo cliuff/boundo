@@ -29,11 +29,11 @@ import com.madness.collision.main.MainViewModel
 import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.EasyAccess
+import com.madness.collision.unit.api_viewing.databinding.FragmentStatisticsBinding
 import com.madness.collision.util.AppUtils.asBottomMargin
 import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.alterPadding
 import com.madness.collision.util.ensureAdded
-import kotlinx.android.synthetic.main.fragment_statistics.*
 
 internal class StatisticsFragment: TaggedFragment(), Democratic {
 
@@ -50,15 +50,18 @@ internal class StatisticsFragment: TaggedFragment(), Democratic {
         }
     }
 
+    private lateinit var viewBinding: FragmentStatisticsBinding
+
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
         toolbar.setTitle(if (EasyAccess.isViewingTarget) MainR.string.apiSdkTarget else MainR.string.apiSdkMin)
         return true
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val context = context
         if (context != null) SettingsFunc.updateLanguage(context)
-        return inflater.inflate(R.layout.fragment_statistics, container, false)
+        viewBinding = FragmentStatisticsBinding.inflate(inflater, container, false)
+        return viewBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -73,7 +76,7 @@ internal class StatisticsFragment: TaggedFragment(), Democratic {
         activity?.run {
             val mainViewModel: MainViewModel by activityViewModels()
             democratize(mainViewModel)
-            val container = avStatisticsContainer ?: avStatisticsRoot
+            val container = viewBinding.avStatisticsContainer ?: viewBinding.avStatisticsRoot
             mainViewModel.contentWidthTop.observe(viewLifecycleOwner) {
                 container.alterPadding(top = it)
             }

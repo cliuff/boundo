@@ -23,10 +23,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.madness.collision.unit.api_viewing.databinding.AvListBinding
 import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.X
 import com.madness.collision.util.availableWidth
-import kotlinx.android.synthetic.main.av_list.*
 import kotlin.math.roundToInt
 
 internal class AppListFragment : TaggedFragment() {
@@ -57,6 +57,7 @@ internal class AppListFragment : TaggedFragment() {
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mAdapter: APIAdapter
     private lateinit var mManager: RecyclerView.LayoutManager
+    private lateinit var viewBinding: AvListBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,12 +71,13 @@ internal class AppListFragment : TaggedFragment() {
         mAdapter.spanCount = spanCount
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.av_list, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        viewBinding = AvListBinding.inflate(inflater, container, false)
+        return viewBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        mRecyclerView = avListRecyclerView
+        mRecyclerView = viewBinding.avListRecyclerView
 
         arguments?.run {
             mRecyclerView.isVerticalScrollBarEnabled = getBoolean(ARG_IS_SCROLLBAR_ENABLED, mRecyclerView.isVerticalScrollBarEnabled)

@@ -35,11 +35,11 @@ import com.madness.collision.R
 import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.school_timetable.data.Timetable
+import com.madness.collision.unit.school_timetable.databinding.TtTimeBinding
 import com.madness.collision.util.P
 import com.madness.collision.util.SystemUtil
 import com.madness.collision.util.ThemeUtil
 import com.madness.collision.util.alterPadding
-import kotlinx.android.synthetic.main.tt_time.*
 import java.text.SimpleDateFormat
 import java.util.*
 import com.madness.collision.unit.school_timetable.R as MyR
@@ -68,6 +68,7 @@ internal class TimeFragment: Unit() {
     private lateinit var durationRestSuperiorPm: TextInputEditText
     private lateinit var durationRestInferiorEve: TextInputEditText
     private lateinit var durationRestSuperiorEve: TextInputEditText
+    private lateinit var viewBinding: TtTimeBinding
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
         val menu = toolbar.menu
@@ -93,10 +94,11 @@ internal class TimeFragment: Unit() {
         return false
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val context = context
         if (context != null) SettingsFunc.updateLanguage(context)
-        return inflater.inflate(MyR.layout.tt_time, container, false)
+        viewBinding = TtTimeBinding.inflate(inflater, container, false)
+        return viewBinding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -106,7 +108,7 @@ internal class TimeFragment: Unit() {
         iCalendarPreferences = context.getSharedPreferences(P.PREF_TIMETABLE, Context.MODE_PRIVATE)
         democratize(mainViewModel)
         mainViewModel.contentWidthTop.observe(viewLifecycleOwner) {
-            ttTimeContainer.alterPadding(top = it)
+            viewBinding.ttTimeContainer.alterPadding(top = it)
         }
         durationClassInferior = views.findViewById(MyR.id.ttTimeInputDurationClass)
         durationRestInferior = views.findViewById(MyR.id.ttTimeInputDurationBreakShort)
@@ -156,15 +158,15 @@ internal class TimeFragment: Unit() {
 
         loadTimeSettings()
 
-        ttTimeInputDurationClass.nextFocusDownId = MyR.id.ttTimeInputDurationBreakShort
-        ttTimeInputDurationBreakShort.nextFocusDownId = MyR.id.ttTimeInputDurationBreakLong
-        ttTimeInputDurationBreakLong.imeOptions = EditorInfo.IME_ACTION_DONE
-        ttTimeInputDurationBreakMorningShort.nextFocusDownId = MyR.id.ttTimeInputDurationBreakMorningLong
-        ttTimeInputDurationBreakMorningLong.nextFocusDownId = MyR.id.ttTimeInputDurationBreakAfternoonShort
-        ttTimeInputDurationBreakAfternoonShort.nextFocusDownId = MyR.id.ttTimeInputDurationBreakAfternoonLong
-        ttTimeInputDurationBreakAfternoonLong.nextFocusDownId = MyR.id.ttTimeInputDurationBreakEveningShort
-        ttTimeInputDurationBreakEveningShort.nextFocusDownId = MyR.id.ttTimeInputDurationBreakEveningLong
-        ttTimeInputDurationBreakEveningLong.imeOptions = EditorInfo.IME_ACTION_DONE
+        viewBinding.ttTimeInputDurationClass.nextFocusDownId = MyR.id.ttTimeInputDurationBreakShort
+        viewBinding.ttTimeInputDurationBreakShort.nextFocusDownId = MyR.id.ttTimeInputDurationBreakLong
+        viewBinding.ttTimeInputDurationBreakLong.imeOptions = EditorInfo.IME_ACTION_DONE
+        viewBinding.ttTimeInputDurationBreakMorningShort.nextFocusDownId = MyR.id.ttTimeInputDurationBreakMorningLong
+        viewBinding.ttTimeInputDurationBreakMorningLong.nextFocusDownId = MyR.id.ttTimeInputDurationBreakAfternoonShort
+        viewBinding.ttTimeInputDurationBreakAfternoonShort.nextFocusDownId = MyR.id.ttTimeInputDurationBreakAfternoonLong
+        viewBinding.ttTimeInputDurationBreakAfternoonLong.nextFocusDownId = MyR.id.ttTimeInputDurationBreakEveningShort
+        viewBinding.ttTimeInputDurationBreakEveningShort.nextFocusDownId = MyR.id.ttTimeInputDurationBreakEveningLong
+        viewBinding.ttTimeInputDurationBreakEveningLong.imeOptions = EditorInfo.IME_ACTION_DONE
     }
 
     private fun getTimeValue(timeMode: Int) = when(timeMode){
@@ -175,10 +177,10 @@ internal class TimeFragment: Unit() {
     }
 
     private fun getTimeBtn(timeMode: Int) = when(timeMode){
-        TIME_AM -> ttTimePickTimeAm
-        TIME_PM -> ttTimePickTimePm
-        TIME_EVE -> ttTimePickTimeEve
-        else -> ttTimePickTimeAm
+        TIME_AM -> viewBinding.ttTimePickTimeAm
+        TIME_PM -> viewBinding.ttTimePickTimePm
+        TIME_EVE -> viewBinding.ttTimePickTimeEve
+        else -> viewBinding.ttTimePickTimeAm
     }
 
     private fun pickTime(timeMode: Int){
@@ -216,7 +218,7 @@ internal class TimeFragment: Unit() {
 
     private fun formatDate(){
         val (y, m, d) = getDateDestructured()
-        ttTimePickDate.setText(String.format("%s.%s.%s", y, m, d))
+        viewBinding.ttTimePickDate.setText(String.format("%s.%s.%s", y, m, d))
     }
 
     private fun formatTime(timeMode: Int){

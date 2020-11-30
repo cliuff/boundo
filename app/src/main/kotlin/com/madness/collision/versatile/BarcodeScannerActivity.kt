@@ -31,17 +31,17 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.service.quicksettings.Tile
-import android.view.View
+import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.app.ActivityCompat
 import com.madness.collision.R
+import com.madness.collision.databinding.ActivityScannerBinding
 import com.madness.collision.qs.TileCommon
 import com.madness.collision.qs.TileServiceBarcodeScanner
 import com.madness.collision.qs.TileServiceBarcodeScannerMm
 import com.madness.collision.util.*
-import kotlinx.android.synthetic.main.activity_scanner.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -63,6 +63,7 @@ internal class BarcodeScannerActivity: AppCompatActivity() {
 
     private var mode = MODE_ALIPAY
     private var dirCapture = ""
+    private lateinit var viewBinding: ActivityScannerBinding
 
     private fun processCapture(bitmap: Bitmap){
         // write bitmap to a file
@@ -143,10 +144,10 @@ internal class BarcodeScannerActivity: AppCompatActivity() {
         val pref = getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
         val themeId = ThemeUtil.updateTheme(this, pref, false)
         val themedContext = ContextThemeWrapper(this, themeId)
-        val contentView = View.inflate(themedContext, R.layout.activity_scanner, null)
-        setContentView(contentView)
+        viewBinding = ActivityScannerBinding.inflate(LayoutInflater.from(themedContext))
+        setContentView(viewBinding.root)
         val colorSurface = ThemeUtil.getColor(themedContext, R.attr.colorASurface)
-        scannerContent.background.setTint(colorSurface and 0xf0ffffff.toInt())
+        viewBinding.scannerContent.background.setTint(colorSurface and 0xf0ffffff.toInt())
         val intent = intent
         if (intent == null){
             finish()

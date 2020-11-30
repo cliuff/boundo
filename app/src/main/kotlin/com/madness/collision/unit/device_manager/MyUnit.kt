@@ -27,16 +27,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import com.madness.collision.R
+import com.madness.collision.databinding.UnitDeviceManagerBinding
 import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.device_manager.list.DeviceListFragment
 import com.madness.collision.util.alterPadding
 import com.madness.collision.util.ensureAdded
-import kotlinx.android.synthetic.main.unit_device_manager.*
 
 class MyUnit : Unit() {
 
     override val id: String = "DM"
+
+    private lateinit var viewBinding: UnitDeviceManagerBinding
 
     // observe bluetooth on/off events
     private val receiver = object : BroadcastReceiver() {
@@ -59,9 +61,10 @@ class MyUnit : Unit() {
         context.registerReceiver(receiver, IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED))
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         activity?.let { SettingsFunc.updateLanguage(it) }
-        return inflater.inflate(R.layout.unit_device_manager, container, false)
+        viewBinding = UnitDeviceManagerBinding.inflate(inflater, container, false)
+        return viewBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -73,7 +76,7 @@ class MyUnit : Unit() {
         super.onActivityCreated(savedInstanceState)
         democratize()
         mainViewModel.contentWidthTop.observe(viewLifecycleOwner) {
-            dmContainer.alterPadding(top = it)
+            viewBinding.dmContainer.alterPadding(top = it)
         }
     }
 

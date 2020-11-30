@@ -20,7 +20,6 @@ import com.cliuff.boundo.dependency.Dependencies
 plugins {
     id("com.android.dynamic-feature")
     kotlin("android")
-    kotlin("android.extensions")
     id("kotlin-kapt")
     id("com.cliuff.boundo.dependencies")
 }

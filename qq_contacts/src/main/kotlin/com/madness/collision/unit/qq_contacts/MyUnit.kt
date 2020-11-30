@@ -36,8 +36,8 @@ import com.madness.collision.databinding.InstantQqItemBinding
 import com.madness.collision.instant.Instant
 import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.Unit
+import com.madness.collision.unit.qq_contacts.databinding.ActivityInstantQqManagerBinding
 import com.madness.collision.util.*
-import kotlinx.android.synthetic.main.activity_instant_qq_manager.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.File
@@ -55,6 +55,7 @@ class MyUnit : Unit() {
 
     private var selectionCount = 0
     private lateinit var instant: Instant
+    private lateinit var viewBinding: ActivityInstantQqManagerBinding
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
         toolbar.setTitle(R.string.unit_qq_contacts)
@@ -70,7 +71,7 @@ class MyUnit : Unit() {
             }
             MyR.id.instantQqManagerTbRemove -> {
                 val context = context ?: return false
-                if (instantQqList.childCount == 0){
+                if (viewBinding.instantQqList.childCount == 0){
                     notifyBriefly(R.string.text_no_content)
                     return true
                 }
@@ -87,15 +88,15 @@ class MyUnit : Unit() {
                 }
                 val list = mutableListOf<View>()
                 val contacts = mutableListOf<QqContact>()
-                for(i in 0 until instantQqList.childCount){
-                    val v = instantQqList.getChildAt(i)
+                for(i in 0 until viewBinding.instantQqList.childCount){
+                    val v = viewBinding.instantQqList.getChildAt(i)
                     val isSelected = v.getTag(KEY_SELECTION) as Boolean? ?: false
                     if (!isSelected) continue
                     list.add(v)
                 }
                 list.forEach { view ->
                     contacts.add(view.getTag(KEY_CONTACT) as QqContact)
-                    instantQqList.post { instantQqList.removeView(view) }
+                    viewBinding.instantQqList.post { viewBinding.instantQqList.removeView(view) }
                     selectionCount --
                 }
                 GlobalScope.launch { removeData(context, *contacts.toTypedArray()) }
@@ -105,9 +106,10 @@ class MyUnit : Unit() {
         return false
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         activity?.let { SettingsFunc.updateLanguage(it) }
-        return inflater.inflate(MyR.layout.activity_instant_qq_manager, container, false)
+        viewBinding = ActivityInstantQqManagerBinding.inflate(inflater, container, false)
+        return viewBinding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -115,7 +117,7 @@ class MyUnit : Unit() {
         val context = context ?: return
         democratize()
         mainViewModel.contentWidthTop.observe(viewLifecycleOwner) {
-            instantQqListContainer.alterPadding(top = it)
+            viewBinding.instantQqListContainer.alterPadding(top = it)
         }
         if (X.aboveOn(X.N_MR1)) {
             val shortcutManager: ShortcutManager = context.getSystemService(ShortcutManager::class.java) ?: return
@@ -138,7 +140,7 @@ class MyUnit : Unit() {
 
     @TargetApi(Build.VERSION_CODES.N_MR1)
     private fun removeAll(context: Context){
-        instantQqList.post { instantQqList.removeAllViews() }
+        viewBinding.instantQqList.post { viewBinding.instantQqList.removeAllViews() }
         instant.dynamicShortcuts.filter {
             it.id.startsWith(QqContact.SHORTCUT_ID_PREFIX)
         }.map { it.id }.let {
@@ -150,7 +152,7 @@ class MyUnit : Unit() {
     @RequiresApi(api = Build.VERSION_CODES.N_MR1)
     private fun updateList(context: Context) {
         selectionCount = 0
-        instantQqList.removeAllViews()
+        viewBinding.instantQqList.removeAllViews()
         val dynamicShortcuts = instant.dynamicShortcuts
         if (dynamicShortcuts.isEmpty()) return
         val color = ThemeUtil.getColor(context, R.attr.colorAPrimary)
@@ -187,7 +189,7 @@ class MyUnit : Unit() {
         val profilePhotoWidth = X.size(context, 50f, X.DP).roundToInt()
         for (s in dynamicShortcuts) {
             if (!s.id.startsWith(QqContact.SHORTCUT_ID_PREFIX)) continue
-            val mViews = InstantQqItemBinding.inflate(layoutInflater, instantQqList, true)
+            val mViews = InstantQqItemBinding.inflate(layoutInflater, viewBinding.instantQqList, true)
             val card = mViews.instantQqItem
             val textView = mViews.instantQqItemText
             val contact = QqContact.fromShortcut(s)

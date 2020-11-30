@@ -29,9 +29,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.madness.collision.Democratic
 import com.madness.collision.R
+import com.madness.collision.databinding.FragmentPageBinding
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.util.AppUtils.asBottomMargin
-import kotlinx.android.synthetic.main.fragment_page.*
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
 
@@ -98,6 +98,7 @@ class Page(fragment: Fragment? = null, private var titleId: Int = 0, private val
             mFragment = fragment
         }
     }
+    private lateinit var viewBinding: FragmentPageBinding
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
         if (democratic != null) {
@@ -129,8 +130,9 @@ class Page(fragment: Fragment? = null, private var titleId: Int = 0, private val
         titleId = args.getInt("titleId")
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_page, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        viewBinding = FragmentPageBinding.inflate(inflater, container, false)
+        return viewBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -142,10 +144,10 @@ class Page(fragment: Fragment? = null, private var titleId: Int = 0, private val
         super.onActivityCreated(savedInstanceState)
         democratize(mainViewModel)
         mainViewModel.contentWidthTop.observe(viewLifecycleOwner) {
-            pageContainer.alterPadding(top = it)
+            viewBinding.pageContainer.alterPadding(top = it)
         }
         mainViewModel.contentWidthBottom.observe(viewLifecycleOwner) {
-            pageContainer.alterPadding(bottom = asBottomMargin(it))
+            viewBinding.pageContainer.alterPadding(bottom = asBottomMargin(it))
         }
     }
 

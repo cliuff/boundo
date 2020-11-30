@@ -32,8 +32,8 @@ import androidx.appcompat.widget.Toolbar
 import com.madness.collision.R
 import com.madness.collision.settings.ExteriorFragment
 import com.madness.collision.unit.Unit
+import com.madness.collision.unit.themed_wallpaper.databinding.UnitThemedWallpaperBinding
 import com.madness.collision.util.*
-import kotlinx.android.synthetic.main.unit_themed_wallpaper.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -45,6 +45,7 @@ class MyUnit: Unit() {
     override val id: String = "TW"
 
     private var timestamp: Long = 0L
+    private lateinit var viewBinding: UnitThemedWallpaperBinding
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
         toolbar.setTitle(R.string.twService)
@@ -70,15 +71,16 @@ class MyUnit: Unit() {
         timestamp = System.currentTimeMillis()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(MyR.layout.unit_themed_wallpaper, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        viewBinding = UnitThemedWallpaperBinding.inflate(inflater, container, false)
+        return viewBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        twCardLight.setOnClickListener {
+        viewBinding.twCardLight.setOnClickListener {
             ExteriorFragment.newInstance(ExteriorFragment.MODE_TW_LIGHT).let { mainViewModel.displayFragment(it) }
         }
-        twCardDark.setOnClickListener {
+        viewBinding.twCardDark.setOnClickListener {
             ExteriorFragment.newInstance(ExteriorFragment.MODE_TW_DARK).let { mainViewModel.displayFragment(it) }
         }
         val context = context ?: return
@@ -117,8 +119,8 @@ class MyUnit: Unit() {
                 X.toTarget(X.drawableToBitmap(ColorDrawable(Color.BLACK)), width, width)
             }
             launch(Dispatchers.Main){
-                twImgLight.setImageBitmap(imgLight ?: imageDefaultLight)
-                twImgDark.setImageBitmap(imgDark ?: imageDefaultDark)
+                viewBinding.twImgLight.setImageBitmap(imgLight ?: imageDefaultLight)
+                viewBinding.twImgDark.setImageBitmap(imgDark ?: imageDefaultDark)
             }
         }
     }
@@ -127,7 +129,7 @@ class MyUnit: Unit() {
         super.onActivityCreated(savedInstanceState)
         democratize()
         mainViewModel.contentWidthTop.observe(viewLifecycleOwner){
-            twRoot.alterPadding(top = it)
+            viewBinding.twRoot.alterPadding(top = it)
         }
     }
 

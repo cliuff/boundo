@@ -52,11 +52,11 @@ import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
+import com.madness.collision.unit.api_viewing.databinding.FragmentApiBinding
 import com.madness.collision.unit.api_viewing.util.PrefUtil
 import com.madness.collision.unit.api_viewing.util.SheetUtil
 import com.madness.collision.util.*
 import com.madness.collision.util.AppUtils.asBottomMargin
-import kotlinx.android.synthetic.main.fragment_api.*
 import kotlinx.coroutines.*
 import java.io.File
 import java.lang.Runnable
@@ -133,6 +133,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
     private lateinit var settingsPreferences: SharedPreferences
     private lateinit var toolbar: Toolbar
     private lateinit var listFragment: AppListFragment
+    private lateinit var viewBinding: FragmentApiBinding
 
     private var searchBackPressedCallback: OnBackPressedCallback? = null
 
@@ -158,17 +159,17 @@ class MyUnit: com.madness.collision.unit.Unit() {
         return true
     }
 
-    private val mScrollBehavior: MyHideBottomViewOnScrollBehavior<View>?
+    private val mScrollBehavior: MyHideBottomViewOnScrollBehavior<View>
         get() {
-            val params = apiDisplay.layoutParams as CoordinatorLayout.LayoutParams
+            val params = viewBinding.apiDisplay.layoutParams as CoordinatorLayout.LayoutParams
             return params.behavior as MyHideBottomViewOnScrollBehavior
         }
 
     private fun scrollToTop() {
         if (!isAdded) return
         listFragment.scrollToTop()
-        if (apiSpinnerDisplayBack.visibility == View.GONE) return
-        mScrollBehavior?.slideUp(apiDisplay)
+        if (viewBinding.apiSpinnerDisplayBack.visibility == View.GONE) return
+        mScrollBehavior.slideUp(viewBinding.apiDisplay)
     }
 
     override fun selectOption(item: MenuItem): Boolean {
@@ -337,8 +338,8 @@ class MyUnit: com.madness.collision.unit.Unit() {
                 if (isChanged) {
                     delay(1)
                     launch(Dispatchers.Main) {
-                        avMainFilterText.text = null
-                        avMainFilterText.visibility = View.GONE
+                        viewBinding.avMainFilterText.text = null
+                        viewBinding.avMainFilterText.visibility = View.GONE
                         adapter.notifyDataSetChanged()
                     }
                 }
@@ -354,10 +355,11 @@ class MyUnit: com.madness.collision.unit.Unit() {
         super.onStop()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val context = context
         if (context != null) SettingsFunc.updateLanguage(context)
-        return inflater.inflate(MyR.layout.fragment_api, container, false)
+        viewBinding = FragmentApiBinding.inflate(inflater, container, false)
+        return viewBinding.root
     }
 
     private fun handleRefreshList(){
@@ -471,7 +473,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
         super.onActivityCreated(savedInstanceState)
         val context = context ?: return
 
-        refreshLayout = apiSwipeRefresh
+        refreshLayout = viewBinding.apiSwipeRefresh
         refreshLayout.isRefreshing = true
         pm = context.packageManager
 
@@ -500,7 +502,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
                 // below: from text processing activity or text sharing
                 LAUNCH_MODE_SEARCH
             }
-            apiDisplay.visibility = View.GONE
+            viewBinding.apiDisplay.visibility = View.GONE
             ApiTaskManager.now {
                 loadSortedList(ApiUnit.NON, sortEfficiently = true, fg = true)
             }
@@ -520,9 +522,9 @@ class MyUnit: com.madness.collision.unit.Unit() {
                     listInsetTop = floatTop + dp5
                 }
                 else -> {
-                    apiDisplay.run { alterPadding(top = it) }
-                    apiSpinnerDisplayBack.measure()
-                    floatTop = apiSpinnerDisplayBack.measuredHeight + it + dp5 * 2
+                    viewBinding.apiDisplay.run { alterPadding(top = it) }
+                    viewBinding.apiSpinnerDisplayBack.measure()
+                    floatTop = viewBinding.apiSpinnerDisplayBack.measuredHeight + it + dp5 * 2
                     listInsetTop = floatTop + dp5
                 }
             }
@@ -539,7 +541,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
 
         if (mode != LAUNCH_MODE_SEARCH && mode != LAUNCH_MODE_LINK){
             displayItem = settingsPreferences.getInt(PrefUtil.AV_LIST_SRC_ITEM, PrefUtil.AV_LIST_SRC_ITEM_DEFAULT)
-            popSrc = PopupMenu(context, apiSpinnerDisplayBack).apply {
+            popSrc = PopupMenu(context, viewBinding.apiSpinnerDisplayBack).apply {
                 if (X.aboveOn(X.Q)) {
                     setForceShowIcon(true)
                 }
@@ -548,7 +550,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
                     clickListSrcItem(it)
                 }
             }
-            avListSrc.setOnClickListener {
+            viewBinding.avListSrc.setOnClickListener {
                 popSrc?.show()
             }
             rDisplay = RunnableDisplay(displayItem)
@@ -581,13 +583,13 @@ class MyUnit: com.madness.collision.unit.Unit() {
 //                setOnDismissListener {
 //                }
 //            }
-            avMainFilterContainer.setOnClickListener {
+            viewBinding.avMainFilterContainer.setOnClickListener {
 //                popTags?.showAsDropDown(avMainFilterCard)
                 popTags.show()
             }
-            X.curvedCard(apiStatsBack)
-            X.curvedCard(avMainFilterCard)
-            X.curvedCard(apiSpinnerDisplayBack)
+            X.curvedCard(viewBinding.apiStatsBack)
+            X.curvedCard(viewBinding.avMainFilterCard)
+            X.curvedCard(viewBinding.apiSpinnerDisplayBack)
         }
 
         if (X.aboveOn(X.N)){
@@ -608,7 +610,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
                     return true
                 }
             }
-            apiContainer.setOnDragListener(apkDisplayDragListener)
+            viewBinding.apiContainer.setOnDragListener(apkDisplayDragListener)
         }
     }
 
@@ -676,7 +678,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
 
     private fun clickListSrcItem(item: MenuItem): Boolean {
         refreshLayout.isRefreshing = true
-        avListSrc.text = item.title
+        viewBinding.avListSrc.text = item.title
         item.isChecked = true
         var isStatsAvailable = false
         when (item.itemId){
@@ -722,7 +724,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
             val listener = if (isStatsAvailable) View.OnClickListener {
                 mainViewModel.displayFragment(StatisticsFragment.newInstance(loadItem))
             } else null
-            avMainStatsContainer.setOnClickListener(listener)
+            viewBinding.avMainStatsContainer.setOnClickListener(listener)
         }
         return true
     }
@@ -746,23 +748,23 @@ class MyUnit: com.madness.collision.unit.Unit() {
             }
             launch(Dispatchers.Main) {
                 if (value.isEmpty()) {
-                    avMainFilterText.text = null
-                    avMainFilterText.visibility = View.GONE
-                    avMainFilterContainer.setOnLongClickListener(null)
+                    viewBinding.avMainFilterText.text = null
+                    viewBinding.avMainFilterText.visibility = View.GONE
+                    viewBinding.avMainFilterContainer.setOnLongClickListener(null)
                 } else {
                     if (value.size == 1) {
-                        avMainFilterText.text = singleTitle?.toString()
-                        avMainFilterText.visibility = View.VISIBLE
+                        viewBinding.avMainFilterText.text = singleTitle?.toString()
+                        viewBinding.avMainFilterText.visibility = View.VISIBLE
                         if (checkedIndexes.first() in antiSelectedIndexes) {
-                            avMainFilterText.paintFlags = avMainFilterText.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                            viewBinding.avMainFilterText.paintFlags = viewBinding.avMainFilterText.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
                         } else {
-                            avMainFilterText.paintFlags = avMainFilterText.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                            viewBinding.avMainFilterText.paintFlags = viewBinding.avMainFilterText.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
                         }
                     } else {
-                        avMainFilterText.text = null
-                        avMainFilterText.visibility = View.GONE
+                        viewBinding.avMainFilterText.text = null
+                        viewBinding.avMainFilterText.visibility = View.GONE
                     }
-                    avMainFilterContainer.setOnLongClickListener {
+                    viewBinding.avMainFilterContainer.setOnLongClickListener {
                         clearTagFilter(context)
                         refreshAdapterList(viewModel.screen4Display(loadItem))
                         true
@@ -791,8 +793,8 @@ class MyUnit: com.madness.collision.unit.Unit() {
     }
 
     private fun clearTagFilter(context: Context) {
-        avMainFilterText.text = null
-        avMainFilterText.visibility = View.GONE
+        viewBinding.avMainFilterText.text = null
+        viewBinding.avMainFilterText.visibility = View.GONE
         AppTag.loadTagSettings(context, settingsPreferences, false)
     }
 
@@ -816,8 +818,8 @@ class MyUnit: com.madness.collision.unit.Unit() {
     private fun refreshAdapterList(list: List<ApiViewingApp> = viewModel.apps4Cache) {
         viewModel.updateApps4Display(list)
         ApiTaskManager.now(Dispatchers.Main) {
-            apiStats?.text = adapter.listCount.toString()
-            apiStats?.visibility = View.VISIBLE
+            viewBinding.apiStats.text = adapter.listCount.toString()
+            viewBinding.apiStats.visibility = View.VISIBLE
             scrollToTop()
         }
     }

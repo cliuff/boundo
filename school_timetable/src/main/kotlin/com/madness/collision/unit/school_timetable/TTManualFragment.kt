@@ -25,11 +25,11 @@ import androidx.appcompat.widget.Toolbar
 import com.madness.collision.R
 import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.Unit
+import com.madness.collision.unit.school_timetable.databinding.ActivityTtPart1Binding
 import com.madness.collision.util.CollisionDialog
 import com.madness.collision.util.X
 import com.madness.collision.util.alterPadding
 import com.madness.collision.util.measure
-import kotlinx.android.synthetic.main.activity_tt_part1.*
 import kotlin.math.roundToInt
 import com.madness.collision.unit.school_timetable.R as MyR
 
@@ -42,15 +42,18 @@ internal class TTManualFragment: Unit(), View.OnClickListener{
         fun newInstance() = TTManualFragment()
     }
 
+    private lateinit var viewBinding: ActivityTtPart1Binding
+
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
         toolbar.setTitle(R.string.textManual)
         return true
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val context = context
         if (context != null) SettingsFunc.updateLanguage(context)
-        return inflater.inflate(MyR.layout.activity_tt_part1, container, false)
+        viewBinding = ActivityTtPart1Binding.inflate(inflater, container, false)
+        return viewBinding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -58,18 +61,18 @@ internal class TTManualFragment: Unit(), View.OnClickListener{
         val context = context ?: return
         democratize(mainViewModel)
         mainViewModel.contentWidthTop.observe(viewLifecycleOwner) {
-            ttManualContainer.alterPadding(top = it)
+            viewBinding.ttManualContainer.alterPadding(top = it)
         }
         mainViewModel.insetBottom.observe(viewLifecycleOwner) {
             val marginBottom = X.size(context, 10f, X.DP).roundToInt()
-            ttManualActions.alterPadding(bottom = if (it > marginBottom) it else (marginBottom - it))
+            viewBinding.ttManualActions.alterPadding(bottom = if (it > marginBottom) it else (marginBottom - it))
 
-            ttManualActions.measure()
-            ttManualContainer.alterPadding(bottom = ttManualActions.measuredHeight)
+            viewBinding.ttManualActions.measure()
+            viewBinding.ttManualContainer.alterPadding(bottom = viewBinding.ttManualActions.measuredHeight)
         }
 
-        ttManualBrowsers.setOnClickListener(this)
-        ttManualOK.setOnClickListener(this)
+        viewBinding.ttManualBrowsers.setOnClickListener(this)
+        viewBinding.ttManualOK.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {

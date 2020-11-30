@@ -23,11 +23,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.EasyAccess
+import com.madness.collision.unit.api_viewing.databinding.FragmentStatsBinding
 import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.X
-import kotlinx.android.synthetic.main.fragment_stats.*
 import kotlin.math.roundToInt
-import com.madness.collision.unit.api_viewing.R as MyR
 
 internal class StatsFragment: TaggedFragment(){
 
@@ -45,8 +44,11 @@ internal class StatsFragment: TaggedFragment(){
         }
     }
 
+    private lateinit var viewBinding: FragmentStatsBinding
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(MyR.layout.fragment_stats, container, false)
+        viewBinding = FragmentStatsBinding.inflate(inflater, container, false)
+        return viewBinding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -58,21 +60,21 @@ internal class StatsFragment: TaggedFragment(){
         val unit: Int = arguments?.getInt(ARG_TYPE) ?: ApiUnit.ALL_APPS
         val viewModel: ApiViewingViewModel by activityViewModels()
 //        val (aiCountUser, aiCountSystem) = viewModel.aiCount
-        val fWidth = avStatsRecycler.width
+        val fWidth = viewBinding.avStatsRecycler.width
         val unitWidth = X.size(context, 500f, X.DP)
         val spanCount = (fWidth / unitWidth).roundToInt().run {
             if (this < 2) 1 else this
         }
         adapter.spanCount = spanCount
-        avStatsRecycler.layoutManager = adapter.suggestLayoutManager(context)
+        viewBinding.avStatsRecycler.layoutManager = adapter.suggestLayoutManager(context)
         when (unit) {
             ApiUnit.USER -> if (EasyAccess.isViewingTarget) viewModel.apiCountUser else viewModel.minApiCountUser
             ApiUnit.SYS -> if (EasyAccess.isViewingTarget) viewModel.apiCountSystem else viewModel.minApiCountSystem
             ApiUnit.ALL_APPS -> if (EasyAccess.isViewingTarget) viewModel.apiCountAll else viewModel.minApiCountAll
             else -> null
         }?.let { adapter.stats = it }
-        avStatsRecycler.setHasFixedSize(true)
-        avStatsRecycler.setItemViewCacheSize(adapter.itemCount)
-        avStatsRecycler.adapter = adapter
+        viewBinding.avStatsRecycler.setHasFixedSize(true)
+        viewBinding.avStatsRecycler.setItemViewCacheSize(adapter.itemCount)
+        viewBinding.avStatsRecycler.adapter = adapter
     }
 }

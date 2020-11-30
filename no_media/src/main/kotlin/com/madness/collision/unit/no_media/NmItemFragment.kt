@@ -34,9 +34,9 @@ import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.no_media.data.BasicInfo
 import com.madness.collision.unit.no_media.data.Dir
 import com.madness.collision.unit.no_media.data.Media
+import com.madness.collision.unit.no_media.databinding.NmItemBinding
 import com.madness.collision.util.*
 import com.madness.collision.util.AppUtils.asBottomMargin
-import kotlinx.android.synthetic.main.nm_item.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.File
@@ -69,11 +69,12 @@ internal class NmItemFragment: TaggedFragment(), Democratic, View.OnClickListene
         }
     }
 
+    private lateinit var viewBinding: NmItemBinding
     private lateinit var folder: Dir
     private var nm = false
         set(value) {
             field = value
-            nmItemFab.isActivated = !value
+            viewBinding.nmItemFab.isActivated = !value
         }
 
     private lateinit var manager: RecyclerView.LayoutManager
@@ -83,7 +84,8 @@ internal class NmItemFragment: TaggedFragment(), Democratic, View.OnClickListene
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val context = context ?: return null
         SettingsFunc.updateLanguage(context)
-        return inflater.inflate(MyR.layout.nm_item, container, false)
+        viewBinding = NmItemBinding.inflate(inflater, container, false)
+        return viewBinding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -93,7 +95,7 @@ internal class NmItemFragment: TaggedFragment(), Democratic, View.OnClickListene
         democratize(mainViewModel)
         val gapMargin = X.size(context, 10f, X.DP).roundToInt()
         mainViewModel.contentWidthBottom.observe(viewLifecycleOwner){
-            nmItemPath.alterMargin(bottom = asBottomMargin(it + gapMargin))
+            viewBinding.nmItemPath.alterMargin(bottom = asBottomMargin(it + gapMargin))
         }
 
         val bundle: Bundle? = arguments
@@ -107,18 +109,18 @@ internal class NmItemFragment: TaggedFragment(), Democratic, View.OnClickListene
             bundle.getParcelableArray(EXTRA_FILES)?.forEach { if (it is BasicInfo) list.add(it) }
             folder = Dir(context, path, list, false)
             manager = GridLayoutManager(context, spanCount)
-            nmItemRv.layoutManager = manager
-            nmItemRv.adapter = ItemAdapter(context, folder.images, itemWidth, itemHeight).apply {
+            viewBinding.nmItemRv.layoutManager = manager
+            viewBinding.nmItemRv.adapter = ItemAdapter(context, folder.images, itemWidth, itemHeight).apply {
                 this.spanCount = spanCount
                 topCover = mainViewModel.contentWidthTop.value ?: 0
                 bottomCover = mainViewModel.contentWidthBottom.value ?: 0
             }
-            nmItemPath.text = folder.path
-            nmItemProgressBar.visibility = View.GONE
+            viewBinding.nmItemPath.text = folder.path
+            viewBinding.nmItemProgressBar.visibility = View.GONE
             nm = folder.nm
-            nmItemFab.setOnClickListener(this)
+            viewBinding.nmItemFab.setOnClickListener(this)
         } else {
-            nmItemProgressBar.visibility = View.GONE
+            viewBinding.nmItemProgressBar.visibility = View.GONE
             notifyBriefly(R.string.text_error)
         }
     }

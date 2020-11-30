@@ -23,8 +23,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import com.madness.collision.unit.school_timetable.data.Timetable
+import com.madness.collision.unit.school_timetable.databinding.StTimetableBinding
 import com.madness.collision.util.TaggedFragment
-import kotlinx.android.synthetic.main.st_timetable.*
 
 internal class TimetableFragment : TaggedFragment() {
 
@@ -41,16 +41,13 @@ internal class TimetableFragment : TaggedFragment() {
     private lateinit var mContext: Context
     private lateinit var mAdapter: TimetableAdapter
     private var timetableToLoad: Timetable? = null
+    private lateinit var viewBinding: StTimetableBinding
 
     fun setTimetable(timetable: Timetable?) {
-        if (stTimetableRecycler == null) {
-            timetableToLoad = timetable
-            return
-        }
         mAdapter.timetable = timetable ?: Timetable()
-        val lm = stTimetableRecycler.layoutManager as GridLayoutManager?
+        val lm = viewBinding.stTimetableRecycler.layoutManager as GridLayoutManager?
         if (timetable != null && lm?.spanCount != timetable.columns && timetable.columns > 0) {
-            stTimetableRecycler.layoutManager = GridLayoutManager(context, timetable.columns)
+            viewBinding.stTimetableRecycler.layoutManager = GridLayoutManager(context, timetable.columns)
         }
         mAdapter.notifyDataSetChanged()
     }
@@ -60,14 +57,15 @@ internal class TimetableFragment : TaggedFragment() {
         mContext = context ?: return
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.st_timetable, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        viewBinding = StTimetableBinding.inflate(inflater, container, false)
+        return viewBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // initializing mAdapter in onCreate causes inflating error when rotating device
         mAdapter = TimetableAdapter(mContext, Timetable())
-        stTimetableRecycler.adapter = mAdapter
+        viewBinding.stTimetableRecycler.adapter = mAdapter
         if (timetableToLoad != null) {
             setTimetable(timetableToLoad)
             timetableToLoad = null

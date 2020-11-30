@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.madness.collision.unit.device_manager.list.item
+package com.madness.collision.unit.device_manager.list
 
 import android.bluetooth.BluetoothProfile
 import android.content.Context
@@ -24,13 +24,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.madness.collision.R
 import com.madness.collision.databinding.UnitDmDeviceItemBinding
-import com.madness.collision.unit.device_manager.list.DeviceItem
-import com.madness.collision.unit.device_manager.manager.DeviceManager
-import com.madness.collision.util.notifyBriefly
 
-internal class DeviceItemAdapter(private val context: Context, private val manager: DeviceManager,
-                                 private var data: List<DeviceItem> = emptyList())
-    : RecyclerView.Adapter<DeviceItemAdapter.ViewHolder>() {
+internal class DeviceItemAdapter(
+        context: Context, private val listener: Listener, private var data: List<DeviceItem> = emptyList()
+) : RecyclerView.Adapter<DeviceItemAdapter.ViewHolder>() {
 
     class ViewHolder(binding: UnitDmDeviceItemBinding) : RecyclerView.ViewHolder(binding.root) {
         val container = binding.dmDeviceItemContainer
@@ -38,6 +35,10 @@ internal class DeviceItemAdapter(private val context: Context, private val manag
         val name = binding.dmDeviceItemName
         val hint = binding.dmDeviceItemHint
         val indicator = binding.dmDeviceItemIndicator
+    }
+
+    interface Listener {
+        val click: (DeviceItem) -> Unit
     }
 
     private val layoutInflater = LayoutInflater.from(context)
@@ -64,13 +65,7 @@ internal class DeviceItemAdapter(private val context: Context, private val manag
             else -> R.string.dm_list_item_hint_disconnected
         }.let { holder.hint.setText(it) }
         holder.container.setOnClickListener {
-            val op = when (item.state) {
-                BluetoothProfile.STATE_CONNECTED,
-                BluetoothProfile.STATE_CONNECTING -> DeviceManager.OP_DISCONNECT
-                else -> DeviceManager.OP_CONNECT
-            }
-            val re = manager.operate(item.device, op)
-            if (!re) context.notifyBriefly(R.string.text_error)
+            listener.click.invoke(item)
         }
     }
 

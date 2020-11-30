@@ -41,11 +41,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.HtmlCompat
 import com.madness.collision.BuildConfig
 import com.madness.collision.R
+import com.madness.collision.databinding.ActivityImmortalBinding
 import com.madness.collision.diy.WindowInsets
 import com.madness.collision.instant.Instant
 import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.util.*
-import kotlinx.android.synthetic.main.activity_immortal.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -65,6 +65,7 @@ internal class ImmortalActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private var logFile: File? = null
+    private lateinit var viewBinding: ActivityImmortalBinding
 
     override fun onClick(v: View?) {
         when (v?.id) {
@@ -154,29 +155,30 @@ internal class ImmortalActivity : AppCompatActivity(), View.OnClickListener {
         ThemeUtil.updateTheme(this, getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE))
         window?.let { SystemUtil.applyEdge2Edge(it) }
         SettingsFunc.updateLanguage(this)
-        setContentView(R.layout.activity_immortal)
+        viewBinding = ActivityImmortalBinding.inflate(layoutInflater)
+        setContentView(viewBinding.root)
         applyInsets()
         window?.let {
             val darkBar = mainApplication.isPaleTheme
             SystemUtil.applyStatusBarColor(this, it, darkBar, true)
             SystemUtil.applyNavBarColor(this, it, darkBar, true)
         }
-        if (isMortal) immortalMessage.setText(R.string.textWaitASecond)
+        if (isMortal) viewBinding.immortalMessage.setText(R.string.textWaitASecond)
         GlobalScope.launch {
             try {
                 logFile = log()
                 launch(Dispatchers.Main) {
-                    if (isMortal) immortalMessage.setText(R.string.immortalMessageMortal)
+                    if (isMortal) viewBinding.immortalMessage.setText(R.string.immortalMessageMortal)
                 }
             } catch (e: Exception){
                 e.printStackTrace()
                 launch(Dispatchers.Main) {
-                    immortalMessage.setText(R.string.text_error)
+                    viewBinding.immortalMessage.setText(R.string.text_error)
                 }
             }
         }
-        (immortalLogo.drawable as AnimatedVectorDrawable).start()
-        immortalLogo.setOnLongClickListener {
+        (viewBinding.immortalLogo.drawable as AnimatedVectorDrawable).start()
+        viewBinding.immortalLogo.setOnLongClickListener {
             if (X.belowOff(X.N_MR1)) return@setOnLongClickListener true
             val manager = getSystemService(ShortcutManager::class.java) ?: return@setOnLongClickListener true
             Instant(this, manager).let {
@@ -192,7 +194,7 @@ internal class ImmortalActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun applyInsets(){
-        immortalRoot.setOnApplyWindowInsetsListener { _, insets ->
+        viewBinding.immortalRoot.setOnApplyWindowInsetsListener { _, insets ->
             consumeInsets(WindowInsets(insets))
             insets
         }
@@ -203,7 +205,7 @@ internal class ImmortalActivity : AppCompatActivity(), View.OnClickListener {
         mainApplication.insetBottom = insets.bottom
         mainApplication.insetLeft = insets.left
         mainApplication.insetRight = insets.right
-        immortalRoot.alterPadding(start = insets.left, end = insets.right)
+        viewBinding.immortalRoot.alterPadding(start = insets.left, end = insets.right)
     }
 
     private fun log(): File {

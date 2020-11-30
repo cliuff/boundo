@@ -33,14 +33,13 @@ import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.no_media.data.BasicInfo
 import com.madness.collision.unit.no_media.data.Dir
+import com.madness.collision.unit.no_media.databinding.UnitNoMediaBinding
 import com.madness.collision.util.*
-import kotlinx.android.synthetic.main.unit_no_media.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
-import com.madness.collision.unit.no_media.R as MyR
 
 class MyUnit : Unit() {
 
@@ -55,6 +54,7 @@ class MyUnit : Unit() {
     private var itemWidth = 0
     private var itemHeight = 0
     private var spanCount = 0
+    private lateinit var viewBinding: UnitNoMediaBinding
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var manager: RecyclerView.LayoutManager
@@ -70,7 +70,8 @@ class MyUnit : Unit() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val context = context ?: return null
         SettingsFunc.updateLanguage(context)
-        return inflater.inflate(MyR.layout.unit_no_media, container, false)
+        viewBinding = UnitNoMediaBinding.inflate(inflater, container, false)
+        return viewBinding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -105,7 +106,7 @@ class MyUnit : Unit() {
                         init(context, activity)
                     }
                     else -> {
-                        nmProgressBar.visibility = View.GONE
+                        viewBinding.nmProgressBar.visibility = View.GONE
                         notifyBriefly(R.string.toast_permission_storage_denied)
                     }
                 }
@@ -115,7 +116,7 @@ class MyUnit : Unit() {
 
     private fun init(context: Context, activity: FragmentActivity){
         GlobalScope.launch(Dispatchers.Main) {
-            recyclerView = nmRv
+            recyclerView = viewBinding.nmRv
             recyclerView.adapter = withContext(Dispatchers.Default) {
                 //todo calculate span count
                 spanCount = if (X.aboveOn(X.N) && activity.isInMultiWindowMode) 2 else {
@@ -141,7 +142,7 @@ class MyUnit : Unit() {
                 }
             }
             recyclerView.layoutManager = manager
-            nmProgressBar.visibility = View.GONE
+            viewBinding.nmProgressBar.visibility = View.GONE
         }
     }
 

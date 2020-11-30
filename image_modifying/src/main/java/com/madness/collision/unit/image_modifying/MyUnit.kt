@@ -44,8 +44,8 @@ import androidx.heifwriter.HeifWriter
 import com.madness.collision.R
 import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.Unit
+import com.madness.collision.unit.image_modifying.databinding.UnitImBinding
 import com.madness.collision.util.*
-import kotlinx.android.synthetic.main.unit_im.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -65,6 +65,7 @@ class MyUnit: Unit(){
     private var sampleImage: Bitmap? = null
     private var imageGetter: (() -> Pair<String, Bitmap>?)? = null
     private var previewSize = 0
+    private lateinit var viewBinding: UnitImBinding
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
         toolbar.setTitle(R.string.developertools_cropimage)
@@ -84,10 +85,11 @@ class MyUnit: Unit(){
         return false
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val context = context
         if (context != null) SettingsFunc.updateLanguage(context)
-        return inflater.inflate(MyR.layout.unit_im, container, false)
+        viewBinding = UnitImBinding.inflate(inflater, container, false)
+        return viewBinding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -95,9 +97,9 @@ class MyUnit: Unit(){
         val context = context ?: return
         democratize()
         mainViewModel.contentWidthTop.observe(viewLifecycleOwner) {
-            imageContainer?.alterPadding(top = it)
+            viewBinding.imageContainer.alterPadding(top = it)
         }
-        imagePreview.setOnClickListener{
+        viewBinding.imagePreview.setOnClickListener{
             val getImage = Intent(Intent.ACTION_GET_CONTENT)
             getImage.type = "image/*"
             startActivityForResult(getImage, REQUEST_GET_IMAGE)
@@ -109,14 +111,14 @@ class MyUnit: Unit(){
         } else {
             arrayOf("png", "jpg", "webp")
         }
-        toolsImageFormat.setText(formatItems[0])
-        toolsImageFormat.dropDownBackground.setTint(ThemeUtil.getColor(context, R.attr.colorASurface))
-        toolsImageFormat.setAdapter(ArrayAdapter(context, R.layout.pop_list_item, formatItems))
+        viewBinding.toolsImageFormat.setText(formatItems[0])
+        viewBinding.toolsImageFormat.dropDownBackground.setTint(ThemeUtil.getColor(context, R.attr.colorASurface))
+        viewBinding.toolsImageFormat.setAdapter(ArrayAdapter(context, R.layout.pop_list_item, formatItems))
         val onSeek = object : SeekBar.OnSeekBarChangeListener{
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
                 val v = when(p0?.id){
-                    MyR.id.imageBlur -> imageBlurValue
-                    MyR.id.imageCompress -> imageCompressValue
+                    MyR.id.imageBlur -> viewBinding.imageBlurValue
+                    MyR.id.imageCompress -> viewBinding.imageCompressValue
                     else -> null
                 } as AppCompatTextView? ?: return
                 v.dartFuture(String.format("%d/100", p1))
@@ -124,19 +126,19 @@ class MyUnit: Unit(){
             override fun onStartTrackingTouch(p0: SeekBar?) {}
             override fun onStopTrackingTouch(p0: SeekBar?) {}
         }
-        imageBlur.setOnSeekBarChangeListener(onSeek)
-        imageCompress.setOnSeekBarChangeListener(onSeek)
+        viewBinding.imageBlur.setOnSeekBarChangeListener(onSeek)
+        viewBinding.imageCompress.setOnSeekBarChangeListener(onSeek)
     }
 
     private fun setDefaultImage(context: Context) {
-        (imagePreview.layoutParams as FrameLayout.LayoutParams).run {
+        (viewBinding.imagePreview.layoutParams as FrameLayout.LayoutParams).run {
             width = previewSize
             height = previewSize
         }
-        imagePreview.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.img_gallery))
-        imageCard.cardElevation = 0f
-        imageEditWidth.setText("")
-        imageEditHeight.setText("")
+        viewBinding.imagePreview.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.img_gallery))
+        viewBinding.imageCard.cardElevation = 0f
+        viewBinding.imageEditWidth.setText("")
+        viewBinding.imageEditHeight.setText("")
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -164,7 +166,7 @@ class MyUnit: Unit(){
                 MemoryManager.clearSpace(activity)
                 sampleImage = null
                 launch(Dispatchers.Main) {
-                    imagePreview.setImageDrawable(null)
+                    viewBinding.imagePreview.setImageDrawable(null)
                 }
                 try {
                     sampleImage = ImageUtil.getSampledBitmap(context, dataUri, previewSize, previewSize)
@@ -216,14 +218,14 @@ class MyUnit: Unit(){
             val targetImage = X.toMax(image, previewSize)
             val elevation = X.size(context, 4f, X.DP)
             launch(Dispatchers.Main) {
-                (imagePreview.layoutParams as FrameLayout.LayoutParams).run {
+                (viewBinding.imagePreview.layoutParams as FrameLayout.LayoutParams).run {
                     width = ViewGroup.LayoutParams.WRAP_CONTENT
                     height = ViewGroup.LayoutParams.WRAP_CONTENT
                 }
-                imagePreview.setImageBitmap(targetImage)
-                imageCard.cardElevation = elevation
-                imageEditWidth.setText(image.width.toString())
-                imageEditHeight.setText(image.height.toString())
+                viewBinding.imagePreview.setImageBitmap(targetImage)
+                viewBinding.imageCard.cardElevation = elevation
+                viewBinding.imageEditWidth.setText(image.width.toString())
+                viewBinding.imageEditHeight.setText(image.height.toString())
             }
         }
     }
@@ -246,12 +248,12 @@ class MyUnit: Unit(){
         GlobalScope.launch {
             sampleImage = null
             launch(Dispatchers.Main) {
-                imagePreview.setImageDrawable(null)
+                viewBinding.imagePreview.setImageDrawable(null)
             }
             val (imageName, image) = imageGetter?.invoke() ?: "" to null
             val isSuccessful = if (image != null) {
                 try {
-                    processImage(context, image)?.run { saveImage(context, this, imageName) } ?: false
+                    processImage(context, image).run { saveImage(context, this, imageName) }
                 } catch (e: OutOfMemoryError) {
                     e.printStackTrace()
                     notifyBriefly(R.string.text_error)
@@ -277,10 +279,10 @@ class MyUnit: Unit(){
         }
     }
 
-    private fun processImage(context: Context, targetImage: Bitmap): Bitmap? {
+    private fun processImage(context: Context, targetImage: Bitmap): Bitmap {
         var image = targetImage
-        val tX: Int = if (!imageEditWidth.text.isNullOrEmpty())
-            imageEditWidth.text!!.toString().toInt().let {
+        val tX: Int = if (!viewBinding.imageEditWidth.text.isNullOrEmpty())
+            viewBinding.imageEditWidth.text!!.toString().toInt().let {
                 if (it < 8000) it
                 else {
                     X.toast(context, "limit width 8000", Toast.LENGTH_SHORT)
@@ -290,8 +292,8 @@ class MyUnit: Unit(){
         else {
             image.width
         }
-        val tH: Int = if (!imageEditHeight.text.isNullOrEmpty())
-            imageEditHeight.text!!.toString().toInt().let {
+        val tH: Int = if (!viewBinding.imageEditHeight.text.isNullOrEmpty())
+            viewBinding.imageEditHeight.text!!.toString().toInt().let {
                 if (it < 8000) it
                 else {
                     X.toast(context, "limit height 8000", Toast.LENGTH_SHORT)
@@ -302,7 +304,7 @@ class MyUnit: Unit(){
             image.height
         }
         image = X.toTarget(image, tX, tH)
-        val blurDegree = imageBlur.progress / 4f
+        val blurDegree = viewBinding.imageBlur.progress / 4f
         if (blurDegree != 0f) {
             val blurred = X.toMin(image.collisionBitmap, 100).let {
                 GaussianBlur(context).blurOnce(it, blurDegree)
@@ -314,7 +316,7 @@ class MyUnit: Unit(){
     }
 
     private fun saveImage(context: Context, image: Bitmap, imageName: String): Boolean{
-        val formatExtension: String = toolsImageFormat.text.toString()
+        val formatExtension: String = viewBinding.toolsImageFormat.text.toString()
         var isHeif = false
         var name = imageName.substring(0, imageName.lastIndexOf("."))
         val formatMimeType: String
@@ -349,7 +351,7 @@ class MyUnit: Unit(){
             e.printStackTrace()
             null
         }
-        val compressQuality = imageCompress.progress
+        val compressQuality = viewBinding.imageCompress.progress
         val isSucceful = fd?.let {
             if (isHeif) {
                 if (X.aboveOn(X.P)) saveAsHeif(image, fd, compressQuality) else false

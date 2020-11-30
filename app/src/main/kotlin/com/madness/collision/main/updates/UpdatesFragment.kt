@@ -27,6 +27,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.madness.collision.Democratic
 import com.madness.collision.R
+import com.madness.collision.databinding.FragmentUpdatesBinding
 import com.madness.collision.databinding.MainUpdatesHeaderBinding
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.DescRetriever
@@ -37,7 +38,6 @@ import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.X
 import com.madness.collision.util.alterPadding
 import com.madness.collision.util.ensureAdded
-import kotlinx.android.synthetic.main.fragment_updates.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -72,6 +72,7 @@ internal class UpdatesFragment : TaggedFragment(), Democratic {
     private var mode = MODE_NORMAL
     private val isNoUpdatesMode: Boolean
         get() = mode == MODE_NO_UPDATES
+    private lateinit var viewBinding: FragmentUpdatesBinding
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
         toolbar.setTitle(R.string.main_updates)
@@ -89,13 +90,14 @@ internal class UpdatesFragment : TaggedFragment(), Democratic {
                 }.toMutableList()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_updates, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        viewBinding = FragmentUpdatesBinding.inflate(inflater, container, false)
+        return viewBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _fixedChildCount = mainUpdatesContainer.childCount
+        _fixedChildCount = viewBinding.mainUpdatesContainer.childCount
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -103,10 +105,10 @@ internal class UpdatesFragment : TaggedFragment(), Democratic {
         democratize(mainViewModel)
         val extra = X.size(mContext, 5f, X.DP).roundToInt()
         mainViewModel.contentWidthTop.observe(viewLifecycleOwner) {
-            mainUpdatesContainer.alterPadding(top = it + extra)
+            viewBinding.mainUpdatesContainer.alterPadding(top = it + extra)
         }
         mainViewModel.contentWidthBottom.observe(viewLifecycleOwner) {
-            mainUpdatesContainer.alterPadding(bottom = asBottomMargin(it + extra))
+            viewBinding.mainUpdatesContainer.alterPadding(bottom = asBottomMargin(it + extra))
         }
     }
 
@@ -126,8 +128,8 @@ internal class UpdatesFragment : TaggedFragment(), Democratic {
         }
         transaction.commitNowAllowingStateLoss()
         // clear headers
-        if (mainUpdatesContainer.childCount > fixedChildCount) {
-            mainUpdatesContainer.removeViews(fixedChildCount, mainUpdatesContainer.childCount - fixedChildCount)
+        if (viewBinding.mainUpdatesContainer.childCount > fixedChildCount) {
+            viewBinding.mainUpdatesContainer.removeViews(fixedChildCount, viewBinding.mainUpdatesContainer.childCount - fixedChildCount)
         }
     }
 
@@ -140,20 +142,20 @@ internal class UpdatesFragment : TaggedFragment(), Democratic {
                 it.first to this
             } else null
         }.toMutableList()
-        mainUpdatesSecUpdates.visibility = if (fragments.isEmpty()) View.GONE else View.VISIBLE
+        viewBinding.mainUpdatesSecUpdates.visibility = if (fragments.isEmpty()) View.GONE else View.VISIBLE
         if (fragments.isEmpty()) return
         for ((_, f) in fragments) {
             ensureAdded(R.id.mainUpdatesContainer, f, true)
         }
-        lifecycleScope.launch {
+        lifecycleScope.launch(Dispatchers.Default) {
             delay(100)
             val inflater = LayoutInflater.from(context)
             launch(Dispatchers.Main) {
                 for (i in fragments.indices) {
                     val (unitName, _) = fragments[i]
-                    val header = MainUpdatesHeaderBinding.inflate(inflater, mainUpdatesContainer, false)
+                    val header = MainUpdatesHeaderBinding.inflate(inflater, viewBinding.mainUpdatesContainer, false)
                     val description = Unit.getDescription(unitName) ?: continue
-                    mainUpdatesContainer.addView(header.root, fixedChildCount + i * 2)
+                    viewBinding.mainUpdatesContainer.addView(header.root, fixedChildCount + i * 2)
                     header.mainUpdatesHeader.setCompoundDrawablesRelativeWithIntrinsicBounds(description.getIcon(mContext), null, null, null)
                     header.mainUpdatesHeader.text = description.getName(mContext)
                     header.mainUpdatesHeader.setOnClickListener {

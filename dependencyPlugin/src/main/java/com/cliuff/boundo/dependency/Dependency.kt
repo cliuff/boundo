@@ -29,7 +29,7 @@ object Versions {
     const val androidxAppcompat = "1.1.0"
     const val androidxLifecycle = "2.2.0"
     const val androidxRoom = "2.2.5"
-    const val androidxNavigation = "2.3.1"
+    const val androidxNavigation = "2.3.2"
     const val androidxCoreTesting = "2.1.0"
     const val androidxFragment = "1.2.5"
     const val androidxDrawerLayout = "1.1.1"
@@ -67,7 +67,7 @@ object Versions {
     const val glide = "4.11.0"
     const val jsoup = "1.13.1"
     const val junitJupiter = "5.6.2"
-    const val kotlin = "1.4.10"
+    const val kotlin = "1.4.20"
     const val kotlinCoroutines = "1.3.8"
     const val mpChart = "v3.1.0"
     const val openCsv = "5.2"
@@ -84,7 +84,6 @@ class Dependencies : Plugin<Project> {
     companion object {
         // gradle plugins
         const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
-        const val kotlinAndroidExtensions = "org.jetbrains.kotlin:kotlin-android-extensions:${Versions.kotlin}"
 
         const val androidxTestCore = "androidx.test:core:${Versions.androidxTestCore}"
         const val androidxTestRunner = "androidx.test:runner:${Versions.androidxTestRunner}"

@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.madness.collision.Democratic
 import com.madness.collision.R
+import com.madness.collision.databinding.ActivityInstantManagerBinding
 import com.madness.collision.instant.other.InstantOthers
 import com.madness.collision.instant.shortcut.InstantShortcuts
 import com.madness.collision.instant.tile.InstantTiles
@@ -36,7 +37,6 @@ import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.Unit
 import com.madness.collision.util.*
 import com.madness.collision.util.AppUtils.asBottomMargin
-import kotlinx.android.synthetic.main.activity_instant_manager.*
 import kotlin.math.roundToInt
 
 internal class InstantFragment: TaggedFragment(), Democratic {
@@ -50,6 +50,7 @@ internal class InstantFragment: TaggedFragment(), Democratic {
     }
 
     private val mainViewModel: MainViewModel by activityViewModels()
+    private lateinit var viewBinding: ActivityInstantManagerBinding
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
         toolbar.setTitle(R.string.Main_TextView_Launcher)
@@ -68,10 +69,11 @@ internal class InstantFragment: TaggedFragment(), Democratic {
         return false
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val context = context
         if (context != null) SettingsFunc.updateLanguage(context)
-        return inflater.inflate(R.layout.activity_instant_manager, container, false)
+        viewBinding = ActivityInstantManagerBinding.inflate(inflater, container, false)
+        return viewBinding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -79,10 +81,10 @@ internal class InstantFragment: TaggedFragment(), Democratic {
         val context = context ?: return
         democratize(mainViewModel)
         mainViewModel.contentWidthTop.observe(viewLifecycleOwner) {
-            instantContainer.alterPadding(top = it)
+            viewBinding.instantContainer.alterPadding(top = it)
         }
         mainViewModel.contentWidthBottom.observe(viewLifecycleOwner) {
-            instantContainer.alterPadding(bottom = asBottomMargin(it))
+            viewBinding.instantContainer.alterPadding(bottom = asBottomMargin(it))
         }
 
         val itemWidth = X.size(context, 400f, X.DP)
@@ -99,22 +101,22 @@ internal class InstantFragment: TaggedFragment(), Democratic {
         if (X.aboveOn(X.N) && availableTiles.isNotEmpty()) {
             val adapterTile = InstantAdapter(context,
                     mainViewModel, InstantAdapter.TYPE_TILE, availableTiles)
-            instantRecyclerTile.run {
+            viewBinding.instantRecyclerTile.run {
                 setHasFixedSize(true)
                 setItemViewCacheSize(availableTiles.size)
                 layoutManager = if (spanCount == 1) LinearLayoutManager(context) else GridLayoutManager(context, spanCount)
                 adapter = adapterTile
             }
         } else {
-            instantRecyclerTile.visibility = View.GONE
-            instantIntroTile.visibility = View.GONE
+            viewBinding.instantRecyclerTile.visibility = View.GONE
+            viewBinding.instantIntroTile.visibility = View.GONE
         }
         // shortcuts
         val availableShortcuts = InstantShortcuts.SHORTCUTS.filter(predicate)
         if (availableShortcuts.isNotEmpty()) {
             val adapterShortcut = InstantAdapter(context, mainViewModel,
                     InstantAdapter.TYPE_SHORTCUT, availableShortcuts)
-            instantRecyclerShortcut.run {
+            viewBinding.instantRecyclerShortcut.run {
                 setHasFixedSize(true)
                 setItemViewCacheSize(availableShortcuts.size)
                 layoutManager = if (spanCount == 1) LinearLayoutManager(context)
@@ -122,8 +124,8 @@ internal class InstantFragment: TaggedFragment(), Democratic {
                 adapter = adapterShortcut
             }
         } else {
-            instantRecyclerShortcut.visibility = View.GONE
-            instantIntroShortcut.visibility = View.GONE
+            viewBinding.instantRecyclerShortcut.visibility = View.GONE
+            viewBinding.instantIntroShortcut.visibility = View.GONE
         }
         // other
         val availableOther = InstantOthers.OTHERS.filter {
@@ -132,15 +134,15 @@ internal class InstantFragment: TaggedFragment(), Democratic {
         if (availableOther.isNotEmpty()) {
             val adapterOther = InstantAdapter(context,
                     mainViewModel, InstantAdapter.TYPE_OTHER, availableOther)
-            instantRecyclerOther.run {
+            viewBinding.instantRecyclerOther.run {
                 setHasFixedSize(true)
                 setItemViewCacheSize(availableOther.size)
                 layoutManager = if (spanCount == 1) LinearLayoutManager(context) else GridLayoutManager(context, spanCount)
                 adapter = adapterOther
             }
         } else {
-            instantRecyclerOther.visibility = View.GONE
-            instantIntroOther.visibility = View.GONE
+            viewBinding.instantRecyclerOther.visibility = View.GONE
+            viewBinding.instantIntroOther.visibility = View.GONE
         }
     }
 

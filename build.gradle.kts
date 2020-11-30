@@ -30,19 +30,18 @@ buildscript {
         }
     }
     val versions = object {
-        val kotlin = "1.4.10"
+        val kotlin = "1.4.20"
 //        val dokka = "0.10.1" // dokka and dokka gradle plugin
 //        val dokkaAndroidGradlePlugin = "0.9.18" // dokka android gradle plugin
-        val androidxNavigation = "2.3.1"
+        val androidxNavigation = "2.3.2"
         val googlePlayServicesOSSLicensesPlugin = "0.10.2"
         // Associated (the same) with Android Studio version
-        val androidGradlePlugin = "4.1.0"
+        val androidGradlePlugin = "4.1.1"
     }
     dependencies {
         classpath("com.android.tools.build:gradle:${versions.androidGradlePlugin}")
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:${versions.androidxNavigation}")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}")
-        classpath("org.jetbrains.kotlin:kotlin-android-extensions:${versions.kotlin}")
 //        classpath("org.jetbrains.dokka:dokka-gradle-plugin:${versions.dokka}")
 //        classpath("org.jetbrains.dokka:dokka-android-gradle-plugin:${versions.dokkaAndroidGradlePlugin}")
         classpath("com.google.android.gms:oss-licenses-plugin:${versions.googlePlayServicesOSSLicensesPlugin}")

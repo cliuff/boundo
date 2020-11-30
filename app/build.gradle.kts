@@ -21,7 +21,6 @@ import com.cliuff.boundo.dependency.Dependencies
 plugins {
     id("com.android.application")
     kotlin("android")
-    kotlin("android.extensions")
     id("androidx.navigation.safeargs")
     id("kotlin-kapt")
 //    id("org.jetbrains.dokka")

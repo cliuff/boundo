@@ -38,10 +38,10 @@ import com.madness.collision.unit.school_timetable.calendar.getCalendar
 import com.madness.collision.unit.school_timetable.calendar.getTime4Calendar
 import com.madness.collision.unit.school_timetable.data.CourseSingleton
 import com.madness.collision.unit.school_timetable.data.Timetable
+import com.madness.collision.unit.school_timetable.databinding.UnitSchoolTimetableBinding
 import com.madness.collision.unit.school_timetable.parser.Parser
 import com.madness.collision.util.*
 import com.madness.collision.util.MathUtils.boundMin
-import kotlinx.android.synthetic.main.unit_school_timetable.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -75,6 +75,7 @@ class MyUnit: Unit(), View.OnClickListener{
 
     private var isTimeInformed = false
     private lateinit var mTimetable: Timetable
+    private lateinit var viewBinding: UnitSchoolTimetableBinding
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
         toolbar.setTitle(R.string.unit_school_timetable)
@@ -116,10 +117,11 @@ class MyUnit: Unit(), View.OnClickListener{
         super.onDestroy()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val context = context
         if (context != null) SettingsFunc.updateLanguage(context)
-        return inflater.inflate(MyR.layout.unit_school_timetable, container, false)
+        viewBinding = UnitSchoolTimetableBinding.inflate(inflater, container, false)
+        return viewBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -140,31 +142,32 @@ class MyUnit: Unit(), View.OnClickListener{
         settingsPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
         democratize()
         mainViewModel.contentWidthTop.observe(viewLifecycleOwner) {
-            ttContainer.alterPadding(top = it)
+            viewBinding.ttContainer.alterPadding(top = it)
         }
         val minMargin = X.size(context, 80f, X.DP).roundToInt()
         val gapMargin = X.size(context, 30f, X.DP).roundToInt()
         mainViewModel.contentWidthBottom.observe(viewLifecycleOwner) {
             val margin = it + gapMargin
-            ttImport.alterMargin(bottom = margin.boundMin(minMargin))
+            viewBinding.ttImport.alterMargin(bottom = margin.boundMin(minMargin))
             // update view
-            ttImport.requestLayout()
+            viewBinding.ttImport.requestLayout()
         }
 
         if (settingsPreferences.getBoolean(P.TT_CAL_DEFAULT_GOOGLE, true))
-            ttCalendarDefault.isChecked = true
-        ttCalendarDefault.setOnCheckedChangeListener{ _, isChecked ->
+            viewBinding.ttCalendarDefault.isChecked = true
+        viewBinding.ttCalendarDefault.setOnCheckedChangeListener{ _, isChecked ->
             settingsPreferences.edit { putBoolean(P.TT_CAL_DEFAULT_GOOGLE, isChecked) }
         }
 
         if (iCalendarPreferences.getBoolean(P.TT_APP_MODE, true))
-            ttAppMode.isChecked = true
-        ttAppMode.setOnCheckedChangeListener { _, isChecked ->
+            viewBinding.ttAppMode.isChecked = true
+        viewBinding.ttAppMode.setOnCheckedChangeListener { _, isChecked ->
             iCalendarPreferences.edit { putBoolean(P.TT_APP_MODE, isChecked) }
             mTimetable.produceICal(context)
         }
 
-        val v: Array<View> = arrayOf(ttTime, ttImport, ttExport, ttWeekIndicator, ttCodeHtml)
+        val v: Array<View> = arrayOf(viewBinding.ttTime, viewBinding.ttImport, viewBinding.ttExport,
+                viewBinding.ttWeekIndicator, viewBinding.ttCodeHtml)
         v.forEach {
             it.setOnClickListener(this)
         }

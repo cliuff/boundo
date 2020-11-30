@@ -30,13 +30,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.madness.collision.R
+import com.madness.collision.databinding.UnitDmDeviceListBinding
 import com.madness.collision.settings.SettingsFunc
-import com.madness.collision.unit.device_manager.list.item.DeviceItemAdapter
 import com.madness.collision.unit.device_manager.manager.DeviceManager
 import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.X
 import com.madness.collision.util.availableWidth
-import kotlinx.android.synthetic.main.unit_dm_device_list.*
+import com.madness.collision.util.notifyBriefly
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -53,6 +54,7 @@ internal class DeviceListFragment: TaggedFragment(), StateObservable {
     private val manager = DeviceManager()
     private val service = DeviceListService(manager)
     private lateinit var adapter: DeviceItemAdapter
+    private lateinit var viewBinding: UnitDmDeviceListBinding
     override val stateReceiver: BroadcastReceiver = stateReceiverImp
 
     override fun onBluetoothStateChanged(state: Int) {
@@ -67,13 +69,13 @@ internal class DeviceListFragment: TaggedFragment(), StateObservable {
         super.onCreate(savedInstanceState)
         val context = context ?: return
         registerStateReceiver(context)
-        adapter = DeviceItemAdapter(context, manager)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val context = context
         if (context != null) SettingsFunc.updateLanguage(context)
-        return inflater.inflate(R.layout.unit_dm_device_list, container, false)
+        viewBinding = UnitDmDeviceListBinding.inflate(inflater, container, false)
+        return viewBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -83,7 +85,7 @@ internal class DeviceListFragment: TaggedFragment(), StateObservable {
             val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
         }
-        lifecycleScope.launch {
+        lifecycleScope.launch(Dispatchers.Default) {
             if (manager.isEnabled) manager.initProxy(context)
             loadDeviceItems()
         }
@@ -92,7 +94,18 @@ internal class DeviceListFragment: TaggedFragment(), StateObservable {
         val spanCount = (availableWidth / itemWidth).roundToInt().run {
             if (this < 2) 1 else this
         }
-        dmDeviceListRecycler.run {
+        adapter = DeviceItemAdapter(context, object : DeviceItemAdapter.Listener {
+            override val click: (DeviceItem) -> Unit = {
+                val op = when (it.state) {
+                    BluetoothProfile.STATE_CONNECTED,
+                    BluetoothProfile.STATE_CONNECTING -> DeviceManager.OP_DISCONNECT
+                    else -> DeviceManager.OP_CONNECT
+                }
+                val re = manager.operate(it.device, op)
+                if (!re) notifyBriefly(R.string.text_error)
+            }
+        })
+        viewBinding.dmDeviceListRecycler.run {
             layoutManager = if (spanCount == 1) LinearLayoutManager(context)
             else GridLayoutManager(context, spanCount)
             adapter = this@DeviceListFragment.adapter
@@ -109,9 +122,12 @@ internal class DeviceListFragment: TaggedFragment(), StateObservable {
      * Get device items from service and load them
      */
     private fun loadDeviceItems() {
-        lifecycleScope.launch {
-            viewModel.data.value = service.getDeviceItems() to {
-                adapter.notifyDataSetChanged()
+        lifecycleScope.launch(Dispatchers.Default) {
+            val items = service.getDeviceItems()
+            launch(Dispatchers.Main) {
+                viewModel.data.value = items to {
+                    adapter.notifyDataSetChanged()
+                }
             }
         }
     }
@@ -139,7 +155,7 @@ internal class DeviceListFragment: TaggedFragment(), StateObservable {
             if (resultCode != Activity.RESULT_OK) return
             val context = context ?: return
             if (manager.isDisabled) return
-            lifecycleScope.launch {
+            lifecycleScope.launch(Dispatchers.Default) {
                 manager.initProxy(context)
                 loadDeviceItems()
             }

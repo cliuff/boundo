@@ -40,8 +40,8 @@ import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.settings.SettingsFunc
+import com.madness.collision.unit.qq_contacts.databinding.ActivityInstantQqBinding
 import com.madness.collision.util.*
-import kotlinx.android.synthetic.main.activity_instant_qq.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -72,6 +72,7 @@ internal class QqFragment : TaggedFragment(), Democratic {
     private var avatar: Bitmap? = null
     private var circularAvatar: Bitmap? = null
     private val mainViewModel: MainViewModel by activityViewModels()
+    private lateinit var viewBinding: ActivityInstantQqBinding
 
     private var is4Update = false
     private lateinit var contact: QqContact
@@ -94,10 +95,11 @@ internal class QqFragment : TaggedFragment(), Democratic {
         return false
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val context = context
         if (context != null) SettingsFunc.updateLanguage(context)
-        return inflater.inflate(MyR.layout.activity_instant_qq, container, false)
+        viewBinding = ActivityInstantQqBinding.inflate(inflater, container, false)
+        return viewBinding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -111,19 +113,19 @@ internal class QqFragment : TaggedFragment(), Democratic {
         contact = extras?.getParcelable(ARG_CONTACT) ?: QqContact("")
         is4Update = extras != null
         if (is4Update){
-            instantQqId.isFocusable = false
-            instantQqId.setTextColor(Color.GRAY)
-            instantQqId.setText(contact.no)
-            instantQqLabelLong.setText(contact.name)
-            instantQqLabelLong.setSelectAllOnFocus(true)
-            instantQqLabelShort.setText(contact.miniName)
-            instantQqLabelShort.setSelectAllOnFocus(true)
+            viewBinding.instantQqId.isFocusable = false
+            viewBinding.instantQqId.setTextColor(Color.GRAY)
+            viewBinding.instantQqId.setText(contact.no)
+            viewBinding.instantQqLabelLong.setText(contact.name)
+            viewBinding.instantQqLabelLong.setSelectAllOnFocus(true)
+            viewBinding.instantQqLabelShort.setText(contact.miniName)
+            viewBinding.instantQqLabelShort.setSelectAllOnFocus(true)
         }
         contact.getProfilePhoto(context)?.let {
             avatar = it
             setCircularAvatar(context)
         } ?: setAvatarDefault(context)
-        instantQqLabelShort.setOnEditorActionListener { _, actionId, event ->
+        viewBinding.instantQqLabelShort.setOnEditorActionListener { _, actionId, event ->
             if ((event != null && event.keyCode == KeyEvent.KEYCODE_ENTER) || actionId == EditorInfo.IME_ACTION_DONE) {
                 actionDone(context)
                 return@setOnEditorActionListener true
@@ -131,7 +133,7 @@ internal class QqFragment : TaggedFragment(), Democratic {
             false
         }
 
-        instantQqProfile.setOnClickListener { actionGetImage() }
+        viewBinding.instantQqProfile.setOnClickListener { actionGetImage() }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -164,7 +166,7 @@ internal class QqFragment : TaggedFragment(), Democratic {
         val imgGallery = ContextCompat.getDrawable(context, R.drawable.img_gallery) ?: return
         avatar = X.drawableToBitmap(imgGallery)
         circularAvatar = avatar
-        instantQqProfile.setImageBitmap(avatar)
+        viewBinding.instantQqProfile.setImageBitmap(avatar)
     }
 
     private fun setCircularAvatar(context: Context){
@@ -173,16 +175,16 @@ internal class QqFragment : TaggedFragment(), Democratic {
             val tg200dp = X.size(context, 200f, X.DP).roundToInt()
             val target = X.toMax(circularAvatar!!, tg200dp)
             launch(Dispatchers.Main) {
-                instantQqProfile.setImageBitmap(target)
+                viewBinding.instantQqProfile.setImageBitmap(target)
             }
         }
     }
 
     private fun actionDone(context: Context){
         if (X.belowOff(X.N_MR1)) return
-        val inId = instantQqId.text.toString()
-        val inLabelLong = instantQqLabelLong.text.toString()
-        val inLabelShort = instantQqLabelShort.text.toString()
+        val inId = viewBinding.instantQqId.text.toString()
+        val inLabelLong = viewBinding.instantQqLabelLong.text.toString()
+        val inLabelShort = viewBinding.instantQqLabelShort.text.toString()
         if (inId.isEmpty() || inLabelLong.isEmpty() || inLabelShort.isEmpty()) {
             notify(MyR.string.launcher_qqcontacts_toast_input_notcomplete)
             return

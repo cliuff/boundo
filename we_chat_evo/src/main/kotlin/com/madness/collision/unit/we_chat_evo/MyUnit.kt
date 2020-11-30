@@ -28,37 +28,40 @@ import androidx.appcompat.widget.Toolbar
 import com.madness.collision.R
 import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.Unit
+import com.madness.collision.unit.we_chat_evo.databinding.UnitWeChatEvoBinding
 import com.madness.collision.util.alterPadding
 import com.madness.collision.util.notify
-import kotlinx.android.synthetic.main.unit_we_chat_evo.*
 import com.madness.collision.unit.we_chat_evo.R as MyR
 
 class MyUnit : Unit(), CompoundButton.OnCheckedChangeListener {
 
     override val id: String = "WE"
 
+    private lateinit var viewBinding: UnitWeChatEvoBinding
+
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
         toolbar.setTitle(R.string.unit_we_chat_evo)
         return true
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         activity?.let { SettingsFunc.updateLanguage(it) }
-        return inflater.inflate(MyR.layout.unit_we_chat_evo, container, false)
+        viewBinding = UnitWeChatEvoBinding.inflate(inflater, container, false)
+        return viewBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val context = context ?: return
-        weNote.setText(MyR.string.we_note)
-        weSwitch.isChecked = componentEnabled<InstantWeChatActivity>(context)
-        weSwitch.setOnCheckedChangeListener(this)
+        viewBinding.weNote.setText(MyR.string.we_note)
+        viewBinding.weSwitch.isChecked = componentEnabled<InstantWeChatActivity>(context)
+        viewBinding.weSwitch.setOnCheckedChangeListener(this)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         democratize()
         mainViewModel.contentWidthTop.observe(viewLifecycleOwner) {
-            weContainer.alterPadding(top = it)
+            viewBinding.weContainer.alterPadding(top = it)
         }
     }
 
