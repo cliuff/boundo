@@ -40,7 +40,7 @@ import com.madness.collision.versatile.TextProcessingActivity
 import java.lang.ref.WeakReference
 import kotlin.reflect.KClass
 
-internal class UnitManager(private val context: Context, private val splitInstallManager: SplitInstallManager) {
+internal class UnitManager(private val context: Context, private val splitInstallManager: SplitInstallManager? = null) {
 
     private fun updateUnitState(description: Description) {
 //        val index = mDescriptions.indexOf(description)
@@ -48,6 +48,7 @@ internal class UnitManager(private val context: Context, private val splitInstal
     }
 
     fun installUnit(description: Description, view: View? = null) {
+        val splitInstallManager = splitInstallManager ?: return
         val viewRef = WeakReference(view)
         val request: SplitInstallRequest = SplitInstallRequest.newBuilder().addModule(description.unitName).build()
         splitInstallManager.startInstall(request).addOnSuccessListener {
@@ -68,6 +69,7 @@ internal class UnitManager(private val context: Context, private val splitInstal
     }
 
     fun uninstallUnit(description: Description, view: View? = null) {
+        val splitInstallManager = splitInstallManager ?: return
         val viewRef = WeakReference(view)
         splitInstallManager.deferredUninstall(listOf(description.unitName)).addOnSuccessListener {
             viewRef.notify(R.string.unit_manager_uninstall_success, true)
@@ -79,6 +81,16 @@ internal class UnitManager(private val context: Context, private val splitInstal
             Unit.unpinUnit(context, description.unitName)
             updateUnitState(description)
         }
+    }
+
+    fun enableUnit(description: Description) {
+        Unit.enableUnit(context, description.unitName)
+        doAftermath(context, description, false)
+    }
+
+    fun disableUnit(description: Description) {
+        Unit.disableUnit(context, description.unitName)
+        doAftermath(context, description, true)
     }
 
     private fun doAftermath(context: Context, description: Description, isUninstall: Boolean) {
@@ -95,7 +107,7 @@ internal class UnitManager(private val context: Context, private val splitInstal
     private fun WeakReference<View?>.notify(textResId: Int, shouldLastLong: Boolean = false) {
         val v = this.get()
         if (v != null) {
-            (if (shouldLastLong) View::notify else View::notifyBriefly).invoke(v!!, textResId, true)
+            (if (shouldLastLong) View::notify else View::notifyBriefly).invoke(v, textResId, true)
         } else {
             X.toast(context, textResId, if (shouldLastLong) Toast.LENGTH_LONG else Toast.LENGTH_SHORT)
         }

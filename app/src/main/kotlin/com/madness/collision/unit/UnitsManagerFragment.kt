@@ -33,6 +33,7 @@ import com.madness.collision.util.AppUtils.asBottomMargin
 import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.X
 import com.madness.collision.util.availableWidth
+import kotlin.Unit
 import kotlin.math.roundToInt
 
 internal class UnitsManagerFragment : TaggedFragment(), Democratic {
@@ -55,7 +56,7 @@ internal class UnitsManagerFragment : TaggedFragment(), Democratic {
         return true
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val context = context
         if (context != null) SettingsFunc.updateLanguage(context)
         mViews = FragmentUnitsManagerBinding.inflate(inflater, container, false)
@@ -67,6 +68,7 @@ internal class UnitsManagerFragment : TaggedFragment(), Democratic {
         val context: Context = context ?: return
         val mainViewModel: MainViewModel by activityViewModels()
         democratize(mainViewModel)
+        val descViewModel: UnitDescViewModel by activityViewModels()
 
         mRecyclerView = mViews.unitsManagerRecyclerView
 
@@ -74,7 +76,13 @@ internal class UnitsManagerFragment : TaggedFragment(), Democratic {
         val spanCount = (availableWidth / unitWidth).roundToInt().run {
             if (this < 2) 1 else this
         }
-        val mAdapter = UnitsManagerAdapter(context, mainViewModel)
+        val mAdapter = UnitsManagerAdapter(context, object : UnitsManagerAdapter.Listener {
+            override val click: (StatefulDescription) -> Unit = {
+                it.description.descriptionPage?.run {
+                    mainViewModel.displayFragment(this)
+                }
+            }
+        })
         mAdapter.spanCount = spanCount
         mRecyclerView.layoutManager = mAdapter.suggestLayoutManager(context)
         mRecyclerView.adapter = mAdapter
@@ -84,6 +92,9 @@ internal class UnitsManagerFragment : TaggedFragment(), Democratic {
         }
         mainViewModel.contentWidthBottom.observe(viewLifecycleOwner) {
             mAdapter.bottomCover = asBottomMargin(it)
+        }
+        descViewModel.updated.observe(viewLifecycleOwner) {
+            mAdapter.updateItem(it)
         }
     }
 

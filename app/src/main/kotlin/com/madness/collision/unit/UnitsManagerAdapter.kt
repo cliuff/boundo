@@ -27,11 +27,11 @@ import com.google.android.material.card.MaterialCardView
 import com.madness.collision.R
 import com.madness.collision.databinding.AdapterUnitsManagerBinding
 import com.madness.collision.diy.SandwichAdapter
-import com.madness.collision.main.MainViewModel
 import com.madness.collision.util.ThemeUtil
 import com.madness.collision.util.sortedWithUtilsBy
+import kotlin.Unit
 
-internal class UnitsManagerAdapter(context: Context, private val mainViewModel: MainViewModel)
+internal class UnitsManagerAdapter(context: Context, private val listener: Listener)
     : SandwichAdapter<UnitsManagerAdapter.UnitViewHolder>(context) {
 
     class UnitViewHolder(binding: AdapterUnitsManagerBinding): RecyclerView.ViewHolder(binding.root) {
@@ -41,28 +41,46 @@ internal class UnitsManagerAdapter(context: Context, private val mainViewModel: 
         val container: View = binding.unitManagerContainer
     }
 
+    interface Listener {
+        val click: (StatefulDescription) -> Unit
+    }
+
     private val mContext = context
     private val mInflater: LayoutInflater = LayoutInflater.from(mContext)
-    private val mDescriptions = DescRetriever(mContext).includePinState()
+    private val descriptions = DescRetriever(mContext).includePinState()
             .retrieveAll().sortedWithUtilsBy { it.description.getName(context) }
     private val colorPass: Int by lazy { ThemeUtil.getColor(context, R.attr.colorActionPass) }
 
     override var spanCount: Int = 1
-    override val listCount: Int = mDescriptions.size
+    override val listCount: Int = descriptions.size
+
+    /**
+     * Update is the only possible list change, no addition or deletion
+     */
+    fun updateItem(stateful: StatefulDescription) {
+        for (i in descriptions.indices) {
+            val desc = descriptions[i]
+            if (desc.unitName != stateful.unitName) continue
+            // update
+            desc.updateState(stateful)
+            notifyListItemChanged(i)
+            break
+        }
+    }
 
     override fun onCreateBodyItemViewHolder(parent: ViewGroup, viewType: Int): UnitViewHolder {
         return UnitViewHolder(AdapterUnitsManagerBinding.inflate(mInflater, parent, false))
     }
 
     override fun onMakeBody(holder: UnitViewHolder, index: Int) {
-        val stateful = mDescriptions[index]
+        val stateful = descriptions[index]
         val description = stateful.description
         holder.name.text = description.getName(mContext)
         holder.name.setCompoundDrawablesRelativeWithIntrinsicBounds(description.getIcon(mContext), null, null, null)
         holder.container.setOnClickListener {
-            description.descriptionPage?.let { mainViewModel.displayFragment(it) }
+            listener.click.invoke(stateful)
         }
-        if (stateful.isInstalled) {
+        if (stateful.isAvailable && stateful.isEnabled) {
             holder.status.visibility = View.VISIBLE
             holder.status.drawable.setTint(colorPass)
         } else {

@@ -25,11 +25,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.madness.collision.databinding.AdapterFrequentUnitsBinding
 import com.madness.collision.diy.SandwichAdapter
+import com.madness.collision.unit.Description
+import com.madness.collision.unit.StatefulDescription
 import com.madness.collision.unit.Unit
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import com.madness.collision.util.P
 
-internal class FrequentUnitsAdapter(context: Context, private val mainViewModel: MainViewModel)
+internal class FrequentUnitsAdapter(context: Context, private val listener: Listener)
     : SandwichAdapter<FrequentUnitsAdapter.UnitsHolder>(context) {
 
     class UnitsHolder(binding: AdapterFrequentUnitsBinding): RecyclerView.ViewHolder(binding.root) {
@@ -38,30 +39,66 @@ internal class FrequentUnitsAdapter(context: Context, private val mainViewModel:
         val icon: ImageView = binding.frequentUnitsAdapterIcon
     }
 
+    interface Listener {
+        val click: (Description) -> kotlin.Unit
+        val longClick: (Description) -> Boolean
+    }
+
     private val mContext = context
     private val mInflater: LayoutInflater = LayoutInflater.from(mContext)
-    private val mAvailableDescriptions = Unit.getSortedUnitNamesByFrequency(mContext).mapNotNull {
-        Unit.getDescription(it)
-    }.filter { it.isAvailable(mContext) }
+    private val descriptions: MutableList<Description>
+    init {
+        val pref = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
+        val frequencies = Unit.getFrequencies(context, pref)
+        val allUnits = Unit.getSortedUnitNamesByFrequency(mContext, frequencies = frequencies)
+        val disabledUnits = Unit.getDisabledUnits(context, pref)
+        descriptions = allUnits.mapNotNull {
+            if (disabledUnits.contains(it)) null
+            else Unit.getDescription(it)?.run {
+                if (isAvailable(mContext)) this else null
+            }
+        }.toMutableList()
+    }
 
     override var spanCount: Int = 1
-    override val listCount: Int = mAvailableDescriptions.size
+    override val listCount: Int
+        get() = descriptions.size
+
+    /**
+     * List changes include addition and deletion but no update
+     */
+    fun updateItem(stateful: StatefulDescription) {
+        val isAddition = stateful.isEnabled && stateful.isInstalled
+        if (isAddition) {
+            if (descriptions.find { it.unitName == stateful.unitName } != null) return
+            val i = listCount
+            descriptions.add(stateful.description)
+            notifyItemInserted(i + frontCount)
+        } else {
+            for (i in descriptions.indices) {
+                if (descriptions[i].unitName != stateful.unitName) continue
+                descriptions.removeAt(i)
+                // when the only item is removed, adapter size changes to 0
+                if (listCount == 0) notifyDataSetChanged()
+                else notifyItemRemoved(i + frontCount)
+                break
+            }
+        }
+    }
 
     override fun onCreateBodyItemViewHolder(parent: ViewGroup, viewType: Int): UnitsHolder {
         return UnitsHolder(AdapterFrequentUnitsBinding.inflate(mInflater, parent, false))
     }
 
     override fun onMakeBody(holder: UnitsHolder, index: Int) {
-        val description = mAvailableDescriptions[index]
+        val description = descriptions[index]
         holder.name.text = description.getName(mContext)
         holder.icon.setImageDrawable(description.getIcon(mContext))
         holder.card.setOnClickListener {
-            mainViewModel.displayUnit(description.unitName, shouldShowNavAfterBack = true)
-            GlobalScope.launch { Unit.increaseFrequency(mContext, description.unitName) }
+            listener.click.invoke(description)
         }
         holder.card.setOnLongClickListener {
-            description.descriptionPage?.let { mainViewModel.displayFragment(it, shouldShowNavAfterBack = true) }
-            true
+            listener.longClick.invoke(description)
         }
     }
 }

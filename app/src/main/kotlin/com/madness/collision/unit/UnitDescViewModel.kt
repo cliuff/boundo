@@ -20,5 +20,21 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 internal class UnitDescViewModel : ViewModel() {
-    var description: MutableLiveData<StatefulDescription> = MutableLiveData()
+    val description: MutableLiveData<StatefulDescription> = MutableLiveData()
+    val updated: MutableLiveData<StatefulDescription> = MutableLiveData()
+
+    fun updateState(desc: StatefulDescription) {
+        description.value = desc
+    }
+
+    fun notifyState(desc: StatefulDescription) {
+        updated.value = desc
+    }
+
+    fun updateAndNotifyState(desc: StatefulDescription) {
+        // update ui
+        updateState(desc)
+        // signal external observers
+        notifyState(desc)
+    }
 }

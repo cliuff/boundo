@@ -280,5 +280,7 @@
     <string name="dm_list_item_state_disconnected">Disconnected</string>
     <string name="dm_list_item_hint_connected">Connected, tap to disconnect</string>
     <string name="dm_list_item_hint_disconnected">Disconnected, tap to connect</string>
+    <string name="unit_desc_enable">Enable</string>
+    <string name="unit_desc_disable">Disable</string>
     <string name="unit_desc_requirement_dm">Bluetooth support</string>
 </resources>

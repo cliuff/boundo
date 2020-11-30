@@ -22,6 +22,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.madness.collision.databinding.FragmentUnitsBinding
 import com.madness.collision.main.MainViewModel
@@ -29,6 +30,8 @@ import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.X
 import com.madness.collision.util.availableWidth
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 internal class UnitsFragment : TaggedFragment() {
@@ -47,7 +50,7 @@ internal class UnitsFragment : TaggedFragment() {
     private lateinit var mViews: FragmentUnitsBinding
     private lateinit var mRecyclerView: RecyclerView
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val context = context
         if (context != null) SettingsFunc.updateLanguage(context)
         mViews = FragmentUnitsBinding.inflate(inflater, container, false)
@@ -58,6 +61,7 @@ internal class UnitsFragment : TaggedFragment() {
         super.onActivityCreated(savedInstanceState)
         val context: Context = context ?: return
         val mainViewModel: MainViewModel by activityViewModels()
+        val descViewModel: UnitDescViewModel by activityViewModels()
 
         mRecyclerView = mViews.unitsRecyclerView
 
@@ -65,11 +69,26 @@ internal class UnitsFragment : TaggedFragment() {
         val spanCount = (availableWidth / unitWidth).roundToInt().run {
             if (this < 2) 1 else this
         }
-        val mAdapter = UnitsAdapter(context, mainViewModel)
+        val mAdapter = UnitsAdapter(context, object : UnitsAdapter.Listener {
+            override val click: (StatefulDescription) -> kotlin.Unit = {
+                mainViewModel.displayUnit(it.unitName, shouldShowNavAfterBack = true)
+                lifecycleScope.launch(Dispatchers.Default) {
+                    Unit.increaseFrequency(context, it.unitName)
+                }
+            }
+            override val longClick: (StatefulDescription) -> Boolean = {
+                it.description.descriptionPage?.run {
+                    mainViewModel.displayFragment(this, shouldShowNavAfterBack = true)
+                }
+                true
+            }
+        })
         mAdapter.spanCount = spanCount
         mRecyclerView.layoutManager = mAdapter.suggestLayoutManager(context)
         mRecyclerView.adapter = mAdapter
-        mRecyclerView.setHasFixedSize(true)
-        mRecyclerView.setItemViewCacheSize(mAdapter.itemCount)
+
+        descViewModel.updated.observe(viewLifecycleOwner) {
+            mAdapter.updateItem(it)
+        }
     }
 }

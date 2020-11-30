@@ -25,14 +25,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.madness.collision.databinding.AdapterFrequentUnitsBinding
 import com.madness.collision.diy.SandwichAdapter
-import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.DescRetriever
-import com.madness.collision.unit.Unit
+import com.madness.collision.unit.StatefulDescription
 import com.madness.collision.util.sortedWithUtilsBy
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
-internal class PinnedUnitsAdapter(context: Context, private val mainViewModel: MainViewModel)
+internal class PinnedUnitsAdapter(context: Context, private val listener: Listener)
     : SandwichAdapter<PinnedUnitsAdapter.UnitsHolder>(context) {
 
     class UnitsHolder(binding: AdapterFrequentUnitsBinding): RecyclerView.ViewHolder(binding.root) {
@@ -41,29 +38,64 @@ internal class PinnedUnitsAdapter(context: Context, private val mainViewModel: M
         val icon: ImageView = binding.frequentUnitsAdapterIcon
     }
 
+    interface Listener {
+        val click: (StatefulDescription) -> Unit
+        val longClick: (StatefulDescription) -> Boolean
+    }
+
     private val mContext = context
     private val mInflater: LayoutInflater = LayoutInflater.from(mContext)
-    private val pinnedUnitsDescriptions = DescRetriever(mContext).includePinState().doFilter()
-            .retrieveInstalled().sortedWithUtilsBy { it.description.getName(context) }
+    private var descriptions = DescRetriever(mContext).includePinState().doFilter()
+            .retrieveInstalled().dataSorted()
 
     override var spanCount: Int = 1
-    override val listCount: Int = pinnedUnitsDescriptions.size
+    override val listCount: Int
+        get() = descriptions.size
+
+    private fun List<StatefulDescription>.dataSorted(): MutableList<StatefulDescription> {
+        return sortedWithUtilsBy { it.description.getName(context) }.toMutableList()
+    }
+
+    /**
+     * List changes include addition and deletion but no update
+     */
+    fun updateItem(stateful: StatefulDescription) {
+        val isAddition = stateful.isPinned
+        if (isAddition) {
+            if (descriptions.find { it.unitName == stateful.unitName } != null) return
+            descriptions.add(stateful)
+            descriptions = descriptions.dataSorted()
+            for (i in descriptions.indices) {
+                if (descriptions[i].unitName != stateful.unitName) continue
+                notifyItemInserted(i + frontCount)
+                break
+            }
+        } else {
+            for (i in descriptions.indices) {
+                if (descriptions[i].unitName != stateful.unitName) continue
+                descriptions.removeAt(i)
+                // when the only item is removed, adapter size changes to 0
+                if (listCount == 0) notifyDataSetChanged()
+                else notifyItemRemoved(i + frontCount)
+                break
+            }
+        }
+    }
 
     override fun onCreateBodyItemViewHolder(parent: ViewGroup, viewType: Int): UnitsHolder {
         return UnitsHolder(AdapterFrequentUnitsBinding.inflate(mInflater, parent, false))
     }
 
     override fun onMakeBody(holder: UnitsHolder, index: Int) {
-        val description = pinnedUnitsDescriptions[index].description
+        val stateful = descriptions[index]
+        val description = stateful.description
         holder.name.text = description.getName(mContext)
         holder.icon.setImageDrawable(description.getIcon(mContext))
         holder.card.setOnClickListener {
-            mainViewModel.displayUnit(description.unitName, shouldShowNavAfterBack = true)
-            GlobalScope.launch { Unit.increaseFrequency(mContext, description.unitName) }
+            listener.click.invoke(stateful)
         }
         holder.card.setOnLongClickListener {
-            description.descriptionPage?.let { mainViewModel.displayFragment(it, shouldShowNavAfterBack = true) }
-            true
+            listener.longClick.invoke(stateful)
         }
     }
 }

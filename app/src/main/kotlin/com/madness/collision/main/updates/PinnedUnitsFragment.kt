@@ -22,12 +22,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.madness.collision.databinding.FragmentFrequentUnitsBinding
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.settings.SettingsFunc
+import com.madness.collision.unit.StatefulDescription
+import com.madness.collision.unit.Unit
+import com.madness.collision.unit.UnitDescViewModel
 import com.madness.collision.util.TaggedFragment
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 internal class PinnedUnitsFragment : TaggedFragment() {
 
@@ -45,7 +51,7 @@ internal class PinnedUnitsFragment : TaggedFragment() {
     private lateinit var mViews: FragmentFrequentUnitsBinding
     private lateinit var mRecyclerView: RecyclerView
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val context = context
         if (context != null) SettingsFunc.updateLanguage(context)
         mViews = FragmentFrequentUnitsBinding.inflate(inflater, container, false)
@@ -56,11 +62,29 @@ internal class PinnedUnitsFragment : TaggedFragment() {
         super.onActivityCreated(savedInstanceState)
         val context: Context = context ?: return
         val mainViewModel: MainViewModel by activityViewModels()
+        val descViewModel: UnitDescViewModel by activityViewModels()
 
         mRecyclerView = mViews.frequentUnitsRecyclerView
 
-        val mAdapter = PinnedUnitsAdapter(context, mainViewModel)
+        val mAdapter = PinnedUnitsAdapter(context, object : PinnedUnitsAdapter.Listener {
+            override val click: (StatefulDescription) -> kotlin.Unit = {
+                mainViewModel.displayUnit(it.unitName, shouldShowNavAfterBack = true)
+                lifecycleScope.launch(Dispatchers.Default) {
+                    Unit.increaseFrequency(context, it.unitName)
+                }
+            }
+            override val longClick: (StatefulDescription) -> Boolean = {
+                it.description.descriptionPage?.apply {
+                    mainViewModel.displayFragment(this, shouldShowNavAfterBack = true)
+                }
+                true
+            }
+        })
         mRecyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         mRecyclerView.adapter = mAdapter
+
+        descViewModel.updated.observe(viewLifecycleOwner) {
+            mAdapter.updateItem(it)
+        }
     }
 }
