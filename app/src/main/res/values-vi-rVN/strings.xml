@@ -259,4 +259,7 @@
     <string name="twWallpaperLight">Hình nền tươi sáng</string>
     <string name="twWallpaperDark">Hình nền tối</string>
     <string name="twDesc">Tính năng này được trình bày cho bạn dưới dạng hình nền sống.\nChuyển sang hình nền tối khi\n1. hệ thống Dark Theme được bật\n2. gói chủ đề tối trong cài đặt ứng dụng được đặt thành Lịch biểu và thời gian phù hợp</string>
+    <string name="Main_WeChatLauncher_Toast_State_ShiftEnabled">Bây giờ đã được bật, cần vài giây để launcher thực hiện</string>
+    <string name="Main_WeChatLauncher_Toast_State_ShiftDisabled">Bây giờ đã bị vô hiệu hóa, cần vài giây để launcher thực hiện</string>
+    <string name="we_note">Không thử tính năng này nếu bạn đang sử dụng trình khởi chạy ứng dụng không có ngăn kéo ứng dụng (hầu hết các điện thoại Trung Quốc)\n\nNếu bạn vô tình tìm thấy biểu tượng trình khởi chạy của Boundo bị mất, trước tiên hãy gỡ cài đặt sau đó cài đặt lại ứng dụng\n\nNếu bạn bật thiết bị này, xin lưu ý rằng biểu tượng Boundo WeChat (khi được gửi tới máy tính để bàn) thay đổi thành biểu tượng Boundo sau khi khởi động lại thiết bị và biểu tượng phím tắt WeChat (khi được ghim trên máy tính để bàn) sẽ bị thiếu</string>
 </resources>

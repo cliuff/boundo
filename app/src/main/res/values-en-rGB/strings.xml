@@ -276,5 +276,8 @@
     <string name="twWallpaperLight">Bright wallpaper</string>
     <string name="twWallpaperDark">Dark wallpaper</string>
     <string name="twDesc">This feature is presented to you as live wallpaper.\nSwitch to dark wallpaper when\n1. system Dark Theme is turned on\n2. dark theme plan in app settings is set to Schedule and the time is right</string>
+    <string name="Main_WeChatLauncher_Toast_State_ShiftEnabled">Now enabled, a couple of seconds needed for launcher to implement</string>
+    <string name="Main_WeChatLauncher_Toast_State_ShiftDisabled">Now disabled, a couple of seconds needed for launcher to implement</string>
+    <string name="we_note">Do not try this feature if you are using an app launcher that has no app drawer(most of the Chinese phones)\n\nIf you accidentally find Boundo\'s launcher icon missing, please first uninstall then reinstall the app\n\nIf you enable this unit, please note that the Boundo WeChat icon(when sent to desktop) changes to Boundo icon after device restart, and the WeChat shortcut icon(when pinned on desktop) will be missing</string>
     <string name="unit_desc_requirement_dm">Bluetooth support</string>
 </resources>

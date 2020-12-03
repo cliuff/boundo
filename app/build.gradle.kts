@@ -155,7 +155,7 @@ android {
     dynamicFeatures = mutableSetOf(
             ":cool_app", ":image_modifying",
             ":school_timetable", ":no_media", ":api_viewing",
-            ":audio_timer", ":we_chat_evo", ":qq_contacts"
+            ":audio_timer", ":qq_contacts"
     )
 }
 

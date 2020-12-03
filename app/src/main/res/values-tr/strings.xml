@@ -259,4 +259,7 @@
     <string name="twWallpaperLight">Parlak duvar kağıdı</string>
     <string name="twWallpaperDark">Karanlık duvar kağıdı</string>
     <string name="twDesc">Bu özellik size canlı duvar kağıdı olarak sunulmaktadır.\nAşağıdaki durumlarda karanlık duvar kağıdına geç\n1. sistem Dark Theme açık\n2. Uygulama ayarlarındaki koyu tema planı Zamanlama olarak ayarlandı ve saat doğru</string>
+    <string name="Main_WeChatLauncher_Toast_State_ShiftEnabled">Şimdi etkinleştirildi, başlatıcıyı uygulamak için birkaç saniye gerekiyor</string>
+    <string name="Main_WeChatLauncher_Toast_State_ShiftDisabled">Artık devre dışı bırakıldı, başlatıcıyı uygulamak için birkaç saniye gerekiyor</string>
+    <string name="we_note">Uygulama çekmecesi olmayan bir uygulama başlatıcısı kullanıyorsanız (Çince telefonların çoğu) bu özelliği denemeyin\n\nBoundo\'nun başlatıcı simgesini yanlışlıkla bulursanız, lütfen önce uygulamayı kaldırıp yeniden yükleyin\n\nBu birimi etkinleştirirseniz, cihaz yeniden başlatıldıktan sonra Boundo WeChat simgesinin (masaüstüne gönderildiğinde) Boundo simgesine dönüştüğünü ve WeChat kısayol simgesinin (masaüstüne sabitlendiğinde) eksik olacağını lütfen unutmayın</string>
 </resources>

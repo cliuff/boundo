@@ -259,4 +259,7 @@
     <string name="twWallpaperLight">亮色调壁纸</string>
     <string name="twWallpaperDark">暗色调壁纸</string>
     <string name="twDesc">这是动态壁纸。\n在下列情况下使用暗色调壁纸：\n1. 系统开启了黑暗模式\n2. 本应用按时开启暗色主题且当前时间应当开启</string>
+    <string name="Main_WeChatLauncher_Toast_State_ShiftEnabled">现已启用，等待几秒以生效</string>
+    <string name="Main_WeChatLauncher_Toast_State_ShiftDisabled">现已禁用，等待几秒以生效</string>
+    <string name="we_note">如果你的手机桌面没有应用抽屉（大多数中国厂商手机），不要使用这个功能\n\n如果斑朵的图标意外地消失了，请卸载重装斑朵\n\n如果你启用这个功能，请注意，斑朵微信图标（放置在桌面上时）在设备重启后会变成斑朵图标，而微信 shortcut 图标（固定在桌面上时）则会消失</string>
 </resources>

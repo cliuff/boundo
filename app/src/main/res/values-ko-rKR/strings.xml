@@ -259,4 +259,7 @@
     <string name="twWallpaperLight">밝은 톤 벽지</string>
     <string name="twWallpaperDark">어두운 톤 벽지</string>
     <string name="twDesc">이것은 라이브 벽지입니다.\n다음과 같은 상황에서 어두운 배경 화면을 사용하십시오.\n1. 시스템이 어두운 모드로 켜졌습니다\n2.이 응용 프로그램은 시간에 어두운 테마를 시작하고 현재 시간은 열려 있어야합니다</string>
+    <string name="Main_WeChatLauncher_Toast_State_ShiftEnabled">이제 활성화되었습니다. 몇 초 동안 기다립니다.</string>
+    <string name="Main_WeChatLauncher_Toast_State_ShiftDisabled">이제 비활성화되었습니다. 몇 초 동안 기다립니다.</string>
+    <string name="we_note">전화기 데스크탑에 응용 프로그램 서랍이없는 경우 (대부분의 중국 제조업체의 전화기)이 기능을 사용하지 마십시오\n\nBoundo 아이콘이 예기치 않게 사라지면 Boundo를 제거했다가 다시 설치하십시오\n\n이 기능을 활성화하면 장치가 다시 시작된 후 Boundo WeChat 아이콘 (데스크탑에 놓인 경우)이 Boundo 아이콘이되고 WeChat 바로 가기 아이콘 (데스크톱에 고정 된 경우)이 사라집니다.</string>
 </resources>

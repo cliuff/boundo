@@ -259,4 +259,7 @@
     <string name="twDesc">Esta característica se presenta como fondo de pantalla en vivo.\nCambiar a fondo oscuro cuando\n1. El sistema Dark Theme está activado\n2. El plan de tema oscuro en la configuración de la aplicación está configurado en Programar y es el momento adecuado</string>
     <string name="twWallpaperDark">Fondo oscuro</string>
     <string name="twWallpaperLight">Fondo de pantalla brillante</string>
+    <string name="Main_WeChatLauncher_Toast_State_ShiftDisabled">Ahora deshabilitado, se necesitan un par de segundos para que se ejecute el iniciador</string>
+    <string name="Main_WeChatLauncher_Toast_State_ShiftEnabled">Ahora habilitado, se necesitan unos segundos para que se ejecute el iniciador</string>
+    <string name="we_note">No intente esta función si está utilizando un iniciador de aplicaciones que no tiene un cajón de aplicaciones (la mayoría de los teléfonos chinos)\n\nSi accidentalmente encuentra que falta el ícono del iniciador de Boundo, primero desinstale y luego reinstale la aplicación\n\nSi habilita esta unidad, tenga en cuenta que el ícono de Boundo WeChat (cuando se envía al escritorio) cambia al ícono de Boundo después de reiniciar el dispositivo, y el ícono de acceso directo de WeChat (cuando se fija en el escritorio) no se encuentra</string>
 </resources>

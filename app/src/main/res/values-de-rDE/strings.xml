@@ -259,4 +259,7 @@
     <string name="twWallpaperLight">Helle Tapete</string>
     <string name="twWallpaperDark">Dunkle Tapete</string>
     <string name="twDesc">Diese Funktion wird Ihnen als Live-Hintergrund angezeigt.\nWechseln Sie zu einem dunklen Hintergrundbild, wenn\n1. System Dark Theme ist aktiviert\n2. Der dunkle Themenplan in den App-Einstellungen ist auf Zeitplan eingestellt und die Zeit ist richtig</string>
+    <string name="Main_WeChatLauncher_Toast_State_ShiftEnabled">Jetzt aktiviert, benötigt der Launcher einige Sekunden, um implementiert zu werden</string>
+    <string name="Main_WeChatLauncher_Toast_State_ShiftDisabled">Jetzt deaktiviert, benötigt Launcher einige Sekunden, um implementiert zu werden</string>
+    <string name="we_note">Probieren Sie diese Funktion nicht aus, wenn Sie einen App-Launcher ohne App-Schublade verwenden (die meisten chinesischen Telefone)\n\nWenn Sie versehentlich feststellen, dass das Startsymbol von Boundo fehlt, deinstallieren Sie zuerst die App und installieren Sie sie erneut\n\nWenn Sie dieses Gerät aktivieren, beachten Sie bitte, dass das Boundo WeChat-Symbol (wenn es an den Desktop gesendet wird) nach dem Neustart des Geräts in das Boundo-Symbol geändert wird und das WeChat-Verknüpfungssymbol (wenn es auf dem Desktop angeheftet ist) fehlt</string>
 </resources>

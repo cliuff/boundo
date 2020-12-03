@@ -26,12 +26,11 @@ import android.view.ViewGroup
 import android.widget.CompoundButton
 import androidx.appcompat.widget.Toolbar
 import com.madness.collision.R
+import com.madness.collision.databinding.UnitWeChatEvoBinding
 import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.Unit
-import com.madness.collision.unit.we_chat_evo.databinding.UnitWeChatEvoBinding
 import com.madness.collision.util.alterPadding
 import com.madness.collision.util.notify
-import com.madness.collision.unit.we_chat_evo.R as MyR
 
 class MyUnit : Unit(), CompoundButton.OnCheckedChangeListener {
 
@@ -52,7 +51,7 @@ class MyUnit : Unit(), CompoundButton.OnCheckedChangeListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val context = context ?: return
-        viewBinding.weNote.setText(MyR.string.we_note)
+        viewBinding.weNote.setText(R.string.we_note)
         viewBinding.weSwitch.isChecked = componentEnabled<InstantWeChatActivity>(context)
         viewBinding.weSwitch.setOnCheckedChangeListener(this)
     }
@@ -83,15 +82,15 @@ class MyUnit : Unit(), CompoundButton.OnCheckedChangeListener {
     }
 
     override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
-        if (buttonView?.id != MyR.id.weSwitch) return
+        if (buttonView?.id != R.id.weSwitch) return
         val context = context ?: return
         if (componentEnabled<InstantWeChatActivity>(context) != isChecked) {
             setComponentState<InstantWeChatActivity>(context, getCompState(isChecked))
         }
         val toastRes = if (isChecked)
-            MyR.string.Main_WeChatLauncher_Toast_State_ShiftEnabled
+            R.string.Main_WeChatLauncher_Toast_State_ShiftEnabled
         else
-            MyR.string.Main_WeChatLauncher_Toast_State_ShiftDisabled
+            R.string.Main_WeChatLauncher_Toast_State_ShiftDisabled
         notify(toastRes)
     }
 

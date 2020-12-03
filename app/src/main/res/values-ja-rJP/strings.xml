@@ -259,4 +259,7 @@
     <string name="twWallpaperLight">明るいトーンの壁紙</string>
     <string name="twWallpaperDark">ダークトーン壁紙</string>
     <string name="twDesc">ライブ壁紙です。\n次の状況では、暗い壁紙を使用します。\n1.システムがダークモードをオンにしました\n2.このアプリケーションは時間どおりにダークテーマを開始し、現在の時間が開いているはずです</string>
+    <string name="Main_WeChatLauncher_Toast_State_ShiftEnabled">有効になりました。有効になるまで数秒待ちます</string>
+    <string name="Main_WeChatLauncher_Toast_State_ShiftDisabled">無効になりました。有効になるまで数秒待ちます</string>
+    <string name="we_note">電話のデスクトップにアプリケーションドロワーがない場合（ほとんどの中国メーカーの電話）、この機能を使用しないでください\n\nBoundoアイコンが予期せず消えた場合は、Boundoをアンインストールして再インストールします\n\nこの機能を有効にすると、Boundo WeChatアイコン（デスクトップに配置された場合）がデバイスの再起動後にBoundoアイコンになり、WeChatショートカットアイコン（デスクトップに固定された場合）が消えることに注意してください</string>
 </resources>
