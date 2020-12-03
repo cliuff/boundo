@@ -255,4 +255,7 @@
     <string name="app_device_controls">Commandes Boundo</string>
     <string name="access_sys_usage">Autoriser Boundo à accéder aux données d\'utilisation</string>
     <string name="versatile_device_controls_at_status_on">%.0f min</string>
+    <string name="twWallpaperLight">Papier peint clair</string>
+    <string name="twWallpaperDark">Papier peint sombre</string>
+    <string name="twDesc">Cette fonctionnalité vous est présentée comme fond d\'écran en direct. \nPassez au fond d\'écran sombre lorsque\n1. les paramètres système sont défini sur le Thème sombre\n2. L\'option d\'arrière plan sombre présente dans les paramètres de l\'application est défini sur Planifier, et le moment est venu</string>
 </resources>

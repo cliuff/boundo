@@ -256,4 +256,7 @@
     <string name="advice_translation_program">翻譯計劃</string>
     <string name="app_device_controls">斑朵控制中心</string>
     <string name="access_sys_usage">允許斑朵讀取使用情況數據</string>
+    <string name="twWallpaperLight">亮色調壁紙</string>
+    <string name="twWallpaperDark">暗色調壁紙</string>
+    <string name="twDesc">這是動態壁紙。\n在下列情況下使用暗色調壁紙：\n1. 系統開啟了黑暗模式\n2. 本應用按時開啟暗色主題且當前時間應當開啟</string>
 </resources>

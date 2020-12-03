@@ -256,4 +256,7 @@
     <string name="advice_translation_program">번역 계획</string>
     <string name="app_device_controls">Boundo 제어 센터</string>
     <string name="access_sys_usage">Boundo가 사용 데이터를 읽도록 허용</string>
+    <string name="twWallpaperLight">밝은 톤 벽지</string>
+    <string name="twWallpaperDark">어두운 톤 벽지</string>
+    <string name="twDesc">이것은 라이브 벽지입니다.\n다음과 같은 상황에서 어두운 배경 화면을 사용하십시오.\n1. 시스템이 어두운 모드로 켜졌습니다\n2.이 응용 프로그램은 시간에 어두운 테마를 시작하고 현재 시간은 열려 있어야합니다</string>
 </resources>

@@ -256,4 +256,7 @@
     <string name="advice_translation_program">翻訳プラン</string>
     <string name="app_device_controls">Boundoコントロールセンター</string>
     <string name="access_sys_usage">Boundoに使用状況データの読み取りを許可する</string>
+    <string name="twWallpaperLight">明るいトーンの壁紙</string>
+    <string name="twWallpaperDark">ダークトーン壁紙</string>
+    <string name="twDesc">ライブ壁紙です。\n次の状況では、暗い壁紙を使用します。\n1.システムがダークモードをオンにしました\n2.このアプリケーションは時間どおりにダークテーマを開始し、現在の時間が開いているはずです</string>
 </resources>

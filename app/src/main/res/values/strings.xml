@@ -206,7 +206,6 @@
     <string name="units">Units</string>
     <string name="av_details_native_libs">"Native libraries: "</string>
     <string name="title_image_modifying" translatable="false">Image Modifying</string>
-    <string name="title_themed_wallpaper" translatable="false">Themed Wallpaper</string>
     <string name="twService">Themed Live Wallpaper</string>
     <string name="twLiveWallpaperDesc">Switch to dark wallpaper automatically when dark theme is enabled</string>
     <string name="title_school_timetable" translatable="false">School Timetable</string>
@@ -264,6 +263,9 @@
     <string name="versatile_device_controls_mdu_hint">Tap to refresh</string>
     <string name="advice_source_code">Source code</string>
     <string name="advice_translation_program">Translation program</string>
+    <string name="twWallpaperLight">Bright wallpaper</string>
+    <string name="twWallpaperDark">Dark wallpaper</string>
+    <string name="twDesc">This feature is presented to you as live wallpaper.\nSwitch to dark wallpaper when\n1. system Dark Theme is turned on\n2. dark theme plan in app settings is set to Schedule and the time is right</string>
     <string name="advice_source_sub">Redirect to Github</string>
     <string name="advice_translation_sub">Redirect to Google Docs</string>
     <string name="unit_desc_requirement_tw">Live wallpaper support</string>

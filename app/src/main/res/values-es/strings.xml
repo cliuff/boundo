@@ -256,4 +256,7 @@
     <string name="app_device_controls">Controles Boundo</string>
     <string name="access_sys_usage">Permitir que Boundo acceda a los datos de uso</string>
     <string name="versatile_device_controls_at_status_on">%.0f min</string>
+    <string name="twDesc">Esta característica se presenta como fondo de pantalla en vivo.\nCambiar a fondo oscuro cuando\n1. El sistema Dark Theme está activado\n2. El plan de tema oscuro en la configuración de la aplicación está configurado en Programar y es el momento adecuado</string>
+    <string name="twWallpaperDark">Fondo oscuro</string>
+    <string name="twWallpaperLight">Fondo de pantalla brillante</string>
 </resources>

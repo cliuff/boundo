@@ -256,4 +256,7 @@
     <string name="app_device_controls">Boundo Controls</string>
     <string name="access_sys_usage">Consenti a Boundo di accedere ai dati di utilizzo</string>
     <string name="versatile_device_controls_at_status_on">%.0f min</string>
+    <string name="twWallpaperLight">Carta da parati luminosa</string>
+    <string name="twWallpaperDark">Carta da parati scura</string>
+    <string name="twDesc">Questa funzione ti viene presentata come sfondo animato.\nPassa allo sfondo scuro quando\n1. il sistema Tema scuro è attivato\n2. Il piano temi scuro nelle impostazioni dell\'app è impostato su Pianifica e il momento è giusto</string>
 </resources>

@@ -256,4 +256,7 @@
     <string name="app_device_controls">Boundo Controls</string>
     <string name="access_sys_usage">Разрешить Boundo доступ к данным об использовании</string>
     <string name="versatile_device_controls_at_status_on">%.0f мин</string>
+    <string name="twWallpaperLight">Яркие обои</string>
+    <string name="twWallpaperDark">Темные обои</string>
+    <string name="twDesc">Эта функция представлена вам как живые обои.\nПереключаться на темные обои, когда\n1. Система Dark Theme включена\n2. Темный план темы в настройках приложения установлен на Расписание, и время подходит</string>
 </resources>

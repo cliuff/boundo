@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="twWallpaperLight">Яркие обои</string>
-    <string name="twWallpaperDark">Темные обои</string>
-    <string name="twDesc">Эта функция представлена вам как живые обои.\nПереключаться на темные обои, когда\n1. Система Dark Theme включена\n2. Темный план темы в настройках приложения установлен на Расписание, и время подходит</string>
-</resources>

@@ -30,15 +30,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import com.madness.collision.R
+import com.madness.collision.databinding.UnitThemedWallpaperBinding
 import com.madness.collision.settings.ExteriorFragment
 import com.madness.collision.unit.Unit
-import com.madness.collision.unit.themed_wallpaper.databinding.UnitThemedWallpaperBinding
 import com.madness.collision.util.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
-import com.madness.collision.unit.themed_wallpaper.R as MyR
 
 class MyUnit: Unit() {
 
@@ -49,13 +48,13 @@ class MyUnit: Unit() {
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
         toolbar.setTitle(R.string.twService)
-        inflateAndTint(MyR.menu.toolbar_tw, toolbar, iconColor)
+        inflateAndTint(R.menu.toolbar_tw, toolbar, iconColor)
         return true
     }
 
     override fun selectOption(item: MenuItem): Boolean {
         when (item.itemId){
-            MyR.id.twToolbarDone -> {
+            R.id.twToolbarDone -> {
                 val context = context ?: return false
                 val intent = Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER)
                 intent.putExtra(WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT, ComponentName(context, ThemedWallpaperService::class.java))

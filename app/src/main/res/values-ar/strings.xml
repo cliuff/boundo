@@ -256,4 +256,7 @@
     <string name="app_device_controls">ضوابط Boundo</string>
     <string name="access_sys_usage">السماح لـ Boundo بالوصول إلى بيانات الاستخدام</string>
     <string name="versatile_device_controls_at_status_on">%.0f min</string>
+    <string name="twWallpaperLight">خلفية مشرق</string>
+    <string name="twWallpaperDark">خلفية الظلام</string>
+    <string name="twDesc">يتم تقديم هذه الميزة لك كخلفية حية.\nقم بالتبديل إلى الخلفية المظلمة عندما\1n. نظام Dark Theme قيد التشغيل\2n. تم تعيين خطة سمة مظلمة في إعدادات التطبيق على الجدول الزمني والوقت المناسب</string>
 </resources>

@@ -256,4 +256,7 @@
     <string name="app_device_controls">การควบคุม Boundo</string>
     <string name="access_sys_usage">อนุญาตให้ Boundo เข้าถึงข้อมูลการใช้งาน</string>
     <string name="versatile_device_controls_at_status_on">%.0f นาที</string>
+    <string name="twWallpaperLight">วอลล์เปเปอร์ที่สดใส</string>
+    <string name="twWallpaperDark">วอลล์เปเปอร์เข้ม</string>
+    <string name="twDesc">คุณสมบัตินี้นำเสนอให้คุณเป็นวอลล์เปเปอร์สด\nเปลี่ยนเป็นวอลล์เปเปอร์สีเข้มเมื่อ\n1. ระบบเปิดใช้ธีมมืด\n2. แผนธีมมืดในการตั้งค่าแอพถูกตั้งเป็นกำหนดเวลาและเวลาเหมาะสม</string>
 </resources>

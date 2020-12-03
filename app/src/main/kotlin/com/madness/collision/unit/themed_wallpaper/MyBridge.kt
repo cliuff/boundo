@@ -30,10 +30,4 @@ object MyBridge: Bridge() {
     override fun getUnitInstance(vararg args: Any?): Unit {
         return MyUnit()
     }
-
-    @Suppress("unused")
-    fun updateChangeTimestamp() {
-        changeTimestamp = System.currentTimeMillis()
-    }
-
 }

@@ -15,8 +15,12 @@
   ~ limitations under the License.
   -->
 
-<resources>
-    <string name="twWallpaperLight">明るいトーンの壁紙</string>
-    <string name="twWallpaperDark">ダークトーン壁紙</string>
-    <string name="twDesc">ライブ壁紙です。\n次の状況では、暗い壁紙を使用します。\n1.システムがダークモードをオンにしました\n2.このアプリケーションは時間どおりにダークテーマを開始し、現在の時間が開いているはずです</string>
-</resources>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/twToolbarDone"
+        android:icon="@drawable/ic_image_24"
+        app:showAsAction="always"
+        android:title="@string/text_done"/>
+</menu>

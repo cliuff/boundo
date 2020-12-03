@@ -256,4 +256,7 @@
     <string name="app_device_controls">Έλεγχοι Boundo</string>
     <string name="access_sys_usage">Επιτρέψτε στο Boundo να έχει πρόσβαση στα δεδομένα χρήσης</string>
     <string name="versatile_device_controls_at_status_on">%.0f min</string>
+    <string name="twWallpaperLight">Φωτεινή ταπετσαρία</string>
+    <string name="twWallpaperDark">Σκούρο ταπετσαρία</string>
+    <string name="twDesc">Αυτή η δυνατότητα σας παρουσιάζεται ως ζωντανή ταπετσαρία.\nΜετάβαση σε σκοτεινή ταπετσαρία όταν\n1. Το σύστημα Dark Theme είναι ενεργοποιημένο\n2. Το σχέδιο σκοτεινού θέματος στις ρυθμίσεις της εφαρμογής έχει ρυθμιστεί σε Προγραμματισμός και ο χρόνος είναι σωστός</string>
 </resources>

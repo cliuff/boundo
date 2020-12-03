@@ -17,7 +17,7 @@
 
 includeBuild("dependencyPlugin")
 include(":app", ":cool_app", ":image_modifying",
-        ":themed_wallpaper", ":school_timetable", ":no_media",
+        ":school_timetable", ":no_media",
         ":api_viewing", ":audio_timer", ":we_chat_evo",
         ":qq_contacts",
         ":wearable")

@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="twWallpaperLight">Bright wallpaper</string>
-    <string name="twWallpaperDark">Dark wallpaper</string>
-    <string name="twDesc">This feature is presented to you as live wallpaper.\nSwitch to dark wallpaper when\n1. system Dark Theme is turned on\n2. dark theme plan in app settings is set to Schedule and the time is right</string>
-</resources>

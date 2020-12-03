@@ -22,6 +22,6 @@ import com.madness.collision.unit.UnitAccess
 object AccessTw: UnitAccess(Unit.UNIT_NAME_THEMED_WALLPAPER) {
 
     fun updateChangeTimestamp() {
-        invokeWithoutArg("updateChangeTimestamp")
+        MyBridge.changeTimestamp = System.currentTimeMillis()
     }
 }

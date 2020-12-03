@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="twWallpaperLight">Carta da parati luminosa</string>
-    <string name="twWallpaperDark">Carta da parati scura</string>
-    <string name="twDesc">Questa funzione ti viene presentata come sfondo animato.\nPassa allo sfondo scuro quando\n1. il sistema Tema scuro è attivato\n2. Il piano temi scuro nelle impostazioni dell\'app è impostato su Pianifica e il momento è giusto</string>
-</resources>

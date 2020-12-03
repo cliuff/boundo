@@ -273,5 +273,8 @@
     <string name="dm_list_item_hint_disconnected">Disconnected, tap to connect</string>
     <string name="unit_desc_enable">Enable</string>
     <string name="unit_desc_disable">Disable</string>
+    <string name="twWallpaperLight">Bright wallpaper</string>
+    <string name="twWallpaperDark">Dark wallpaper</string>
+    <string name="twDesc">This feature is presented to you as live wallpaper.\nSwitch to dark wallpaper when\n1. system Dark Theme is turned on\n2. dark theme plan in app settings is set to Schedule and the time is right</string>
     <string name="unit_desc_requirement_dm">Bluetooth support</string>
 </resources>
