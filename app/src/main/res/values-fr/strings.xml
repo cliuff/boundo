@@ -261,4 +261,7 @@
     <string name="Main_WeChatLauncher_Toast_State_ShiftEnabled">Maintenant activé, il faut quelques secondes au lanceur pour sa mise en œuvre</string>
     <string name="Main_WeChatLauncher_Toast_State_ShiftDisabled">Désormais désactivé, il faut quelques secondes au lanceur pour cette mise en œuvre</string>
     <string name="we_note">N\'essayez pas cette fonctionnalité si vous utilisez un lanceur d\'application qui n\'a pas de tiroir d\'application (la plupart des téléphones chinois)\n\nSi vous trouvez accidentellement l\'icône du lanceur de Boundo manquante, veuillez d\'abord désinstaller puis réinstaller l\'application\n\nSi vous activez ceci, veuillez noter que l\'icône WeChat de Boundo (lorsqu\'elle est envoyée au bureau) devient l\'icône Boundo après le redémarrage de l\'appareil et que l\'icône de raccourci WeChat (lorsqu\'elle est épinglée sur le bureau) sera manquante</string>
+    <string name="at_title">Régler le minuteur</string>
+    <string name="at_hour_hint">Heure</string>
+    <string name="at_minute_hint">Minute</string>
 </resources>

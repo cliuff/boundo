@@ -282,6 +282,12 @@
             android:enabled="true"
             android:foregroundServiceType="mediaProjection"
             tools:ignore="UnusedAttribute" />
+        <service
+            android:name=".unit.audio_timer.AudioTimerService"
+            android:enabled="true"/>
+        <service
+            android:name=".unit.audio_timer.NotificationActions"
+            android:enabled="true"/>
         <!-- Device controls -->
         <service
             android:name=".versatile.MyControlService"

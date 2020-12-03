@@ -262,4 +262,7 @@
     <string name="Main_WeChatLauncher_Toast_State_ShiftEnabled">現已啟用，等待幾秒以生效</string>
     <string name="we_note">如果你的手機桌面沒有應用抽屜（大多數中國廠商手機），不要使用這個功能\n\n如果 Boundo 的圖標意外地消失了，請卸載重裝 Boundo\n\n如果你啟用這個功能，請注意，Boundo 微信圖標（放置在桌面上時）在設備重啟後會變成 Boundo 圖標，而微信 shortcut 圖標（固定在桌面上時）則會消失</string>
     <string name="Main_WeChatLauncher_Toast_State_ShiftDisabled">現已禁用，等待幾秒以生效</string>
+    <string name="at_title">倒計時</string>
+    <string name="at_hour_hint">小時</string>
+    <string name="at_minute_hint">分鐘</string>
 </resources>

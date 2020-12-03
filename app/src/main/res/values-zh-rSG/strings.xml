@@ -262,4 +262,7 @@
     <string name="Main_WeChatLauncher_Toast_State_ShiftEnabled">现已启用，等待几秒以生效</string>
     <string name="Main_WeChatLauncher_Toast_State_ShiftDisabled">现已禁用，等待几秒以生效</string>
     <string name="we_note">如果你的手机桌面没有应用抽屉（大多数中国厂商手机），不要使用这个功能\n\n如果斑朵的图标意外地消失了，请卸载重装斑朵\n\n如果你启用这个功能，请注意，斑朵微信图标（放置在桌面上时）在设备重启后会变成斑朵图标，而微信 shortcut 图标（固定在桌面上时）则会消失</string>
+    <string name="at_title">倒计时</string>
+    <string name="at_hour_hint">小时</string>
+    <string name="at_minute_hint">分钟</string>
 </resources>

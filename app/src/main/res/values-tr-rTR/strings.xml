@@ -262,4 +262,7 @@
     <string name="Main_WeChatLauncher_Toast_State_ShiftEnabled">Şimdi etkinleştirildi, başlatıcıyı uygulamak için birkaç saniye gerekiyor</string>
     <string name="Main_WeChatLauncher_Toast_State_ShiftDisabled">Artık devre dışı bırakıldı, başlatıcıyı uygulamak için birkaç saniye gerekiyor</string>
     <string name="we_note">Uygulama çekmecesi olmayan bir uygulama başlatıcısı kullanıyorsanız (Çince telefonların çoğu) bu özelliği denemeyin\n\nBoundo\'nun başlatıcı simgesini yanlışlıkla bulursanız, lütfen önce uygulamayı kaldırıp yeniden yükleyin\n\nBu birimi etkinleştirirseniz, cihaz yeniden başlatıldıktan sonra Boundo WeChat simgesinin (masaüstüne gönderildiğinde) Boundo simgesine dönüştüğünü ve WeChat kısayol simgesinin (masaüstüne sabitlendiğinde) eksik olacağını lütfen unutmayın</string>
+    <string name="at_title">Zamanlayıcıyı Kur</string>
+    <string name="at_hour_hint">Saat</string>
+    <string name="at_minute_hint">Dakika</string>
 </resources>

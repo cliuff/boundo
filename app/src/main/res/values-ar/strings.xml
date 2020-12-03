@@ -262,4 +262,7 @@
     <string name="Main_WeChatLauncher_Toast_State_ShiftEnabled">مُمكّن الآن ، بضع ثوانٍ اللازمة لتشغيل المشغّل</string>
     <string name="Main_WeChatLauncher_Toast_State_ShiftDisabled">الآن معطلة ، بضع ثوان اللازمة لقاذفة لتنفيذ</string>
     <string name="we_note">لا تجرب هذه الميزة إذا كنت تستخدم مشغل تطبيقات لا يحتوي على درج تطبيقات (معظم الهواتف الصينية)\n\nإذا وجدت عن طريق الخطأ رمز مشغل Boundo مفقودًا ، فالرجاء إلغاء التثبيت أولاً ثم إعادة تثبيت التطبيق\n\nإذا قمت بتمكين هذه الوحدة ، يرجى ملاحظة أن رمز Boundo WeChat (عند إرسالها إلى سطح المكتب) يتغير إلى رمز Boundo بعد إعادة تشغيل الجهاز ، وسوف يكون رمز اختصار WeChat (عند تثبيته على سطح المكتب) مفقودًا</string>
+    <string name="at_title">توقيت مجموعة</string>
+    <string name="at_hour_hint">ساعة</string>
+    <string name="at_minute_hint">دقيقة</string>
 </resources>

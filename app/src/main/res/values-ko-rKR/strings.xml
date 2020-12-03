@@ -262,4 +262,7 @@
     <string name="Main_WeChatLauncher_Toast_State_ShiftEnabled">이제 활성화되었습니다. 몇 초 동안 기다립니다.</string>
     <string name="Main_WeChatLauncher_Toast_State_ShiftDisabled">이제 비활성화되었습니다. 몇 초 동안 기다립니다.</string>
     <string name="we_note">전화기 데스크탑에 응용 프로그램 서랍이없는 경우 (대부분의 중국 제조업체의 전화기)이 기능을 사용하지 마십시오\n\nBoundo 아이콘이 예기치 않게 사라지면 Boundo를 제거했다가 다시 설치하십시오\n\n이 기능을 활성화하면 장치가 다시 시작된 후 Boundo WeChat 아이콘 (데스크탑에 놓인 경우)이 Boundo 아이콘이되고 WeChat 바로 가기 아이콘 (데스크톱에 고정 된 경우)이 사라집니다.</string>
+    <string name="at_title">카운트 다운</string>
+    <string name="at_hour_hint">시</string>
+    <string name="at_minute_hint">분</string>
 </resources>

@@ -262,4 +262,7 @@
     <string name="Main_WeChatLauncher_Toast_State_ShiftEnabled">เปิดใช้งานแล้วสองสามวินาทีที่จำเป็นสำหรับตัวเรียกใช้งาน</string>
     <string name="Main_WeChatLauncher_Toast_State_ShiftDisabled">ตอนนี้ถูกปิดใช้งานสองสามวินาทีที่จำเป็นสำหรับตัวเรียกใช้งาน</string>
     <string name="we_note">อย่าลองใช้คุณสมบัตินี้หากคุณใช้ตัวเรียกใช้งานแอปที่ไม่มีลิ้นชักเก็บแอพ (โทรศัพท์จีนส่วนใหญ่)\n\nหากคุณพบไอคอนตัวเปิดใช้งาน Boundo หายไปโปรดถอนการติดตั้งก่อนจากนั้นติดตั้งแอปใหม่\n\nหากคุณเปิดใช้งานเครื่องนี้โปรดทราบว่าไอคอน Boundo WeChat (เมื่อส่งไปยังเดสก์ท็อป) จะเปลี่ยนเป็นไอคอน Boundo หลังจากรีสตาร์ทอุปกรณ์และไอคอนทางลัด WeChat (เมื่อตรึงบนเดสก์ท็อป) จะหายไป</string>
+    <string name="at_title">ตั้งเวลา</string>
+    <string name="at_hour_hint">ชั่วโมง</string>
+    <string name="at_minute_hint">นาที</string>
 </resources>

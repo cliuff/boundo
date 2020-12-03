@@ -68,7 +68,7 @@ abstract class Unit: TaggedFragment(), Democratic {
                             .setRequirement(Description.Checker(R.string.unit_desc_requirement_tw) {
                                 it.packageManager.hasSystemFeature(PackageManager.FEATURE_LIVE_WALLPAPER)
                             }),
-                    Description(UNIT_NAME_AUDIO_TIMER, R.string.unit_audio_timer, R.drawable.ic_timer_24).setDescResId(R.string.unit_desc_at),
+                    StaticDescription(UNIT_NAME_AUDIO_TIMER, R.string.unit_audio_timer, R.drawable.ic_timer_24).setDescResId(R.string.unit_desc_at),
                     StaticDescription(UNIT_NAME_WE_CHAT_EVO, R.string.unit_we_chat_evo, R.drawable.ic_we_chat_24).setDescResId(R.string.unit_desc_we)
                             .setRequirement(
                                     Description.Checker(R.string.unit_desc_requirement_shortcut) { X.aboveOn(X.N_MR1) },

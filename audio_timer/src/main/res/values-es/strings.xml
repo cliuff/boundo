@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="at_title">Establecer temporizador</string>
-    <string name="at_hour_hint">Hora</string>
-    <string name="at_minute_hint">Minuto</string>
-</resources>

@@ -279,5 +279,8 @@
     <string name="Main_WeChatLauncher_Toast_State_ShiftEnabled">Now enabled, a couple of seconds needed for launcher to implement</string>
     <string name="Main_WeChatLauncher_Toast_State_ShiftDisabled">Now disabled, a couple of seconds needed for launcher to implement</string>
     <string name="we_note">Do not try this feature if you are using an app launcher that has no app drawer(most of the Chinese phones)\n\nIf you accidentally find Boundo\'s launcher icon missing, please first uninstall then reinstall the app\n\nIf you enable this unit, please note that the Boundo WeChat icon(when sent to desktop) changes to Boundo icon after device restart, and the WeChat shortcut icon(when pinned on desktop) will be missing</string>
+    <string name="at_title">Set timer</string>
+    <string name="at_hour_hint">Hour</string>
+    <string name="at_minute_hint">Minute</string>
     <string name="unit_desc_requirement_dm">Bluetooth support</string>
 </resources>

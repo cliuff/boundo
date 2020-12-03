@@ -262,4 +262,7 @@
     <string name="Main_WeChatLauncher_Toast_State_ShiftEnabled">Agora ativado, são necessários alguns segundos para o lançador implementar</string>
     <string name="Main_WeChatLauncher_Toast_State_ShiftDisabled">Agora desativado, são necessários alguns segundos para o lançador implementar</string>
     <string name="we_note">Não tente esse recurso se você estiver usando um iniciador de aplicativos que não possui gaveta de aplicativos (a maioria dos telefones chineses)\n\nSe você encontrar o ícone do iniciador do Boundo acidentalmente, primeiro desinstale e reinstale o aplicativo\n\nSe você ativar esta unidade, observe que o ícone Boundo WeChat (quando enviado para a área de trabalho) muda para o ícone Boundo após a reinicialização do dispositivo, e o ícone de atalho WeChat (quando fixado na área de trabalho) estará ausente</string>
+    <string name="at_title">Definir temporizador</string>
+    <string name="at_hour_hint">Hora</string>
+    <string name="at_minute_hint">Minuto</string>
 </resources>

@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="at_title">Установить таймер</string>
-    <string name="at_hour_hint">Час</string>
-    <string name="at_minute_hint">минут</string>
-</resources>

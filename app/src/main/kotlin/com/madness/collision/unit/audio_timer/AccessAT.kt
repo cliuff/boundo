@@ -23,31 +23,29 @@ import com.madness.collision.unit.UnitAccess
 object AccessAT: UnitAccess(Unit.UNIT_NAME_AUDIO_TIMER) {
 
     fun start(context: Context) {
-        getMethod("start", Context::class).invoke(context)
+        MyBridge.timerService.start(context)
     }
 
     fun start(context: Context, duration: Long) {
-        getMethod("start", Context::class, Long::class).invoke(context, duration)
+        MyBridge.timerService.start(context, duration)
     }
 
     fun stop(context: Context) {
-        getMethod("stop", Context::class).invoke(context)
+        MyBridge.timerService.stop(context)
     }
 
     fun isRunning(): Boolean {
-        val re = invokeWithoutArg("isRunning")
-        if (re !is Boolean) return false
-        return re
+        return MyBridge.timerService.isRunning
     }
 
     fun addCallback(callback: AtCallback?) {
         callback ?: return
-        getMethod("addCallback", AtCallback::class).invoke(callback)
+        MyBridge.addCallback(callback)
     }
 
     fun removeCallback(callback: AtCallback?) {
         callback ?: return
-        getMethod("removeCallback", AtCallback::class).invoke(callback)
+        MyBridge.removeCallback(callback)
     }
 }
 

@@ -262,4 +262,7 @@
     <string name="Main_WeChatLauncher_Toast_State_ShiftEnabled">有効になりました。有効になるまで数秒待ちます</string>
     <string name="Main_WeChatLauncher_Toast_State_ShiftDisabled">無効になりました。有効になるまで数秒待ちます</string>
     <string name="we_note">電話のデスクトップにアプリケーションドロワーがない場合（ほとんどの中国メーカーの電話）、この機能を使用しないでください\n\nBoundoアイコンが予期せず消えた場合は、Boundoをアンインストールして再インストールします\n\nこの機能を有効にすると、Boundo WeChatアイコン（デスクトップに配置された場合）がデバイスの再起動後にBoundoアイコンになり、WeChatショートカットアイコン（デスクトップに固定された場合）が消えることに注意してください</string>
+    <string name="at_title">秒読み</string>
+    <string name="at_hour_hint">時間</string>
+    <string name="at_minute_hint">分</string>
 </resources>

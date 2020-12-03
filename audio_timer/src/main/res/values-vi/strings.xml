@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="at_title">Đặt hẹn giờ</string>
-    <string name="at_hour_hint">Giờ</string>
-    <string name="at_minute_hint">Phút</string>
-</resources>

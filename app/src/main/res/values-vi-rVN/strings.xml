@@ -262,4 +262,7 @@
     <string name="Main_WeChatLauncher_Toast_State_ShiftEnabled">Bây giờ đã được bật, cần vài giây để launcher thực hiện</string>
     <string name="Main_WeChatLauncher_Toast_State_ShiftDisabled">Bây giờ đã bị vô hiệu hóa, cần vài giây để launcher thực hiện</string>
     <string name="we_note">Không thử tính năng này nếu bạn đang sử dụng trình khởi chạy ứng dụng không có ngăn kéo ứng dụng (hầu hết các điện thoại Trung Quốc)\n\nNếu bạn vô tình tìm thấy biểu tượng trình khởi chạy của Boundo bị mất, trước tiên hãy gỡ cài đặt sau đó cài đặt lại ứng dụng\n\nNếu bạn bật thiết bị này, xin lưu ý rằng biểu tượng Boundo WeChat (khi được gửi tới máy tính để bàn) thay đổi thành biểu tượng Boundo sau khi khởi động lại thiết bị và biểu tượng phím tắt WeChat (khi được ghim trên máy tính để bàn) sẽ bị thiếu</string>
+    <string name="at_title">Đặt hẹn giờ</string>
+    <string name="at_hour_hint">Giờ</string>
+    <string name="at_minute_hint">Phút</string>
 </resources>

@@ -25,8 +25,8 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.edit
 import com.madness.collision.R
+import com.madness.collision.databinding.UnitAudioTimerBinding
 import com.madness.collision.unit.Unit
-import com.madness.collision.unit.audio_timer.databinding.UnitAudioTimerBinding
 import com.madness.collision.util.MathUtils.boundMin
 import com.madness.collision.util.P
 import com.madness.collision.util.X
@@ -51,7 +51,7 @@ class MyUnit : Unit() {
         return true
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _viewBinding = UnitAudioTimerBinding.inflate(inflater, container, false)
         return viewBinding.root
     }

@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="at_title">Set timer</string>
-    <string name="at_hour_hint">Hour</string>
-    <string name="at_minute_hint">Minute</string>
-</resources>
