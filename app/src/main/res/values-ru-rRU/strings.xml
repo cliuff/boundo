@@ -265,4 +265,23 @@
     <string name="at_title">Установить таймер</string>
     <string name="at_hour_hint">Час</string>
     <string name="at_minute_hint">минут</string>
+    <string name="advice_source_sub">Перенаправить на Github</string>
+    <string name="advice_translation_sub">Перенаправить в Google Документы</string>
+    <string name="unit_desc_requirement_tw">Поддержка живых обоев</string>
+    <string name="unit_device_manager">Диспетчер устройств</string>
+    <string name="versatile_device_controls_dm_hint_off">Нажмите, чтобы подключиться</string>
+    <string name="versatile_device_controls_dm_hint_on">Нажмите, чтобы отключить</string>
+    <string name="versatile_device_controls_dm_ctrl_desc_off">Подключить устройство</string>
+    <string name="versatile_device_controls_dm_ctrl_desc_on">Отключить устройство</string>
+    <string name="versatile_device_controls_dm_title_unknown">Неизвестное устройство</string>
+    <string name="dm_main_paired_devices">Сопряженные устройства</string>
+    <string name="dm_list_item_state_connecting">Подключение…</string>
+    <string name="dm_list_item_state_disconnecting">Отключение…</string>
+    <string name="dm_list_item_state_connected">Связано</string>
+    <string name="dm_list_item_state_disconnected">Отключен</string>
+    <string name="dm_list_item_hint_connected">Подключено, коснитесь, чтобы отключить</string>
+    <string name="dm_list_item_hint_disconnected">Отключено, нажмите, чтобы подключиться</string>
+    <string name="unit_desc_enable">включить</string>
+    <string name="unit_desc_disable">Отключить</string>
+    <string name="unit_desc_requirement_dm">Поддержка Bluetooth</string>
 </resources>

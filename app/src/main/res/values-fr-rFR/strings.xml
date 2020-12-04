@@ -264,4 +264,23 @@
     <string name="at_title">Régler le minuteur</string>
     <string name="at_hour_hint">Heure</string>
     <string name="at_minute_hint">Minute</string>
+    <string name="advice_source_sub">Rediriger vers Github</string>
+    <string name="advice_translation_sub">Rediriger vers Google Docs</string>
+    <string name="unit_desc_requirement_tw">Support de fond d\'écran en direct</string>
+    <string name="unit_device_manager">Gestionnaire de périphériques</string>
+    <string name="versatile_device_controls_dm_hint_off">Appuyez pour vous connecter</string>
+    <string name="versatile_device_controls_dm_hint_on">Appuyez pour vous déconnecter</string>
+    <string name="versatile_device_controls_dm_ctrl_desc_off">Connecter l\'appareil</string>
+    <string name="versatile_device_controls_dm_ctrl_desc_on">Déconnecter l\'appareil</string>
+    <string name="versatile_device_controls_dm_title_unknown">Périphérique inconnu</string>
+    <string name="dm_main_paired_devices">Appareils jumelés</string>
+    <string name="dm_list_item_state_connecting">De liaison…</string>
+    <string name="dm_list_item_state_disconnecting">Déconnexion…</string>
+    <string name="dm_list_item_state_connected">Lié</string>
+    <string name="dm_list_item_state_disconnected">Débranché</string>
+    <string name="dm_list_item_hint_connected">Connecté, appuyez pour vous déconnecter</string>
+    <string name="dm_list_item_hint_disconnected">Déconnecté, appuyez pour vous connecter</string>
+    <string name="unit_desc_enable">Activer</string>
+    <string name="unit_desc_disable">Désactiver</string>
+    <string name="unit_desc_requirement_dm">Prise en charge Bluetooth</string>
 </resources>

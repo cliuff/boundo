@@ -68,8 +68,8 @@ android {
         applicationId = "com.madness.collision"
         minSdkVersion(22)
         targetSdkVersion(30)
-        versionCode = 20102719
-        versionName = "3.6.3"
+        versionCode = 20120320
+        versionName = "3.6.4"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testApplicationId = "${applicationId}.test"
         renderscriptSupportModeEnabled = true
@@ -153,9 +153,8 @@ android {
         viewBinding = true
     }
     dynamicFeatures = mutableSetOf(
-            ":cool_app", ":image_modifying",
-            ":school_timetable", ":no_media", ":api_viewing",
-            ":qq_contacts"
+            ":cool_app", ":image_modifying", ":school_timetable",
+            ":no_media", ":api_viewing", ":qq_contacts"
     )
 }
 

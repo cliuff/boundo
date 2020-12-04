@@ -265,4 +265,23 @@
     <string name="at_title">Imposta il timer</string>
     <string name="at_hour_hint">Ora</string>
     <string name="at_minute_hint">Minuto</string>
+    <string name="advice_source_sub">Reindirizza a Github</string>
+    <string name="advice_translation_sub">Reindirizza a Google Docs</string>
+    <string name="unit_desc_requirement_tw">Supporto per sfondi animati</string>
+    <string name="unit_device_manager">Gestore dispositivi</string>
+    <string name="versatile_device_controls_dm_hint_off">Tocca per connetterti</string>
+    <string name="versatile_device_controls_dm_hint_on">Tocca per disconnetterti</string>
+    <string name="versatile_device_controls_dm_ctrl_desc_off">Connetti dispositivo</string>
+    <string name="versatile_device_controls_dm_ctrl_desc_on">Disconnetti il dispositivo</string>
+    <string name="versatile_device_controls_dm_title_unknown">Dispositivo sconosciuto</string>
+    <string name="dm_main_paired_devices">Dispositivi accoppiati</string>
+    <string name="dm_list_item_state_connecting">Collegamento ...</string>
+    <string name="dm_list_item_state_disconnecting">Disconnessione ...</string>
+    <string name="dm_list_item_state_connected">Collegato</string>
+    <string name="dm_list_item_state_disconnected">Disconnesso</string>
+    <string name="dm_list_item_hint_connected">Connesso, tocca per disconnetterti</string>
+    <string name="dm_list_item_hint_disconnected">Disconnesso, tocca per connetterti</string>
+    <string name="unit_desc_enable">Abilitare</string>
+    <string name="unit_desc_disable">disattivare</string>
+    <string name="unit_desc_requirement_dm">Supporto Bluetooth</string>
 </resources>

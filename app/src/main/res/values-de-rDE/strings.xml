@@ -265,4 +265,23 @@
     <string name="at_title">Timer einstellen</string>
     <string name="at_hour_hint">Stunde</string>
     <string name="at_minute_hint">Minute</string>
+    <string name="advice_source_sub">Weiterleiten an Github</string>
+    <string name="advice_translation_sub">Weiterleiten an Google Text &amp; Tabellen</string>
+    <string name="unit_desc_requirement_tw">Live Wallpaper Unterstützung</string>
+    <string name="unit_device_manager">Gerätemanager</string>
+    <string name="versatile_device_controls_dm_hint_off">Tippen Sie auf, um eine Verbindung herzustellen</string>
+    <string name="versatile_device_controls_dm_hint_on">Tippen Sie auf, um die Verbindung zu trennen</string>
+    <string name="versatile_device_controls_dm_ctrl_desc_off">Gerät anschließen</string>
+    <string name="versatile_device_controls_dm_ctrl_desc_on">Gerät trennen</string>
+    <string name="versatile_device_controls_dm_title_unknown">Unbekanntes Gerät</string>
+    <string name="dm_main_paired_devices">Gekoppelte Geräte</string>
+    <string name="dm_list_item_state_connecting">Anschließen…</string>
+    <string name="dm_list_item_state_disconnecting">Trennen…</string>
+    <string name="dm_list_item_state_connected">In Verbindung gebracht</string>
+    <string name="dm_list_item_state_disconnected">Getrennt</string>
+    <string name="dm_list_item_hint_connected">Verbunden, tippen Sie auf, um die Verbindung zu trennen</string>
+    <string name="dm_list_item_hint_disconnected">Trennen Sie die Verbindung, um eine Verbindung herzustellen</string>
+    <string name="unit_desc_enable">Aktivieren</string>
+    <string name="unit_desc_disable">Deaktivieren</string>
+    <string name="unit_desc_requirement_dm">Bluetooth-Unterstützung</string>
 </resources>

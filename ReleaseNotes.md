@@ -2,6 +2,136 @@
 Tag content regex: \n((((?!(<.*>)).)*)\n)*((?!(<.*>)).)+
 
 
+- **3.6.4** 20120320
+<en-US>
+• New feature: "Device Manager", to help you quickly connect/disconnect Bluetooth devices right from the power menu of Android 11
+• Unit Manager: now you can disable units at will
+• App API: now you can check app's launcher Activity and launcher icon resources
+• Various optimizations and available on more devices
+</en-US>
+<ar>
+• ميزة جديدة: "إدارة الأجهزة" ، لمساعدتك على الاتصال / فصل أجهزة Bluetooth بسرعة مباشرة من قائمة الطاقة في Android 11
+• مدير الوحدة: الآن يمكنك تعطيل الوحدات حسب الرغبة
+• واجهة برمجة تطبيقات التطبيقات: الآن يمكنك التحقق من نشاط مشغل التطبيق وموارد رمز المشغل
+• تحسينات مختلفة ومتاحة على المزيد من الأجهزة
+</ar>
+<de-DE>
+• Neue Funktion: "Geräte-Manager", mit der Sie Bluetooth-Geräte direkt über das Energiemenü von Android 11 schnell verbinden / trennen können
+• Einheitenmanager: Jetzt können Sie Einheiten nach Belieben deaktivieren
+• App-API: Jetzt können Sie die Launcher-Aktivität und die Launcher-Symbolressourcen der App überprüfen
+• Verschiedene Optimierungen und auf mehr Geräten verfügbar
+</de-DE>
+<el-GR>
+• Νέα δυνατότητα: "Διαχείριση συσκευών", για να σας βοηθήσει να συνδέσετε / αποσυνδέσετε γρήγορα συσκευές Bluetooth απευθείας από το μενού τροφοδοσίας του Android 11
+• Unit Manager: τώρα μπορείτε να απενεργοποιήσετε τις μονάδες κατά βούληση
+• API εφαρμογής: τώρα μπορείτε να ελέγξετε τους πόρους του προγράμματος εκκίνησης Δραστηριότητα και εικονίδιο εκκινητή
+• Διάφορες βελτιστοποιήσεις και διαθέσιμες σε περισσότερες συσκευές
+</el-GR>
+<en-GB>
+• New feature: "Device Manager", to help you quickly connect/disconnect Bluetooth devices right from the power menu of Android 11
+• Unit Manager: now you can disable units at will
+• App API: now you can check app's launcher Activity and launcher icon resources
+• Various optimisations and available on more devices
+</en-GB>
+<es-419>
+• Nueva función: "Administrador de dispositivos", para ayudarlo a conectar / desconectar rápidamente dispositivos Bluetooth desde el menú de encendido de Android 11
+• Administrador de unidades: ahora puede desactivar unidades a voluntad
+• API de la aplicación: ahora puede consultar la actividad del iniciador de la aplicación y los recursos del icono del iniciador
+• Varias optimizaciones y disponible en más dispositivos
+</es-419>
+<es-ES>
+• Nueva función: "Administrador de dispositivos", para ayudarlo a conectar / desconectar rápidamente dispositivos Bluetooth desde el menú de encendido de Android 11
+• Administrador de unidades: ahora puede desactivar unidades a voluntad
+• API de la aplicación: ahora puede consultar la actividad del iniciador de la aplicación y los recursos del icono del iniciador
+• Varias optimizaciones y disponible en más dispositivos
+</es-ES>
+<es-US>
+• Nueva función: "Administrador de dispositivos", para ayudarlo a conectar / desconectar rápidamente dispositivos Bluetooth desde el menú de encendido de Android 11
+• Administrador de unidades: ahora puede desactivar unidades a voluntad
+• API de la aplicación: ahora puede consultar la actividad del iniciador de la aplicación y los recursos del icono del iniciador
+• Varias optimizaciones y disponible en más dispositivos
+</es-US>
+<fr-FR>
+• Nouvelle fonctionnalité: «Gestionnaire de périphériques», pour vous aider à connecter / déconnecter rapidement les appareils Bluetooth directement depuis le menu d'alimentation d'Android 11
+• Gestionnaire d'unités: maintenant vous pouvez désactiver les unités à volonté
+• API de l'application: vous pouvez maintenant vérifier l'activité du lanceur d'applications et les ressources de l'icône du lanceur
+• Diverses optimisations et disponibles sur plus d'appareils
+</fr-FR>
+<it-IT>
+• Nuova funzionalità: "Gestione dispositivi", per aiutarti a connettere / disconnettere rapidamente i dispositivi Bluetooth direttamente dal menu di alimentazione di Android 11
+• Unit Manager: ora puoi disabilitare le unità a piacimento
+• API app: ora puoi controllare l'attività del launcher dell'app e le risorse dell'icona del launcher
+• Varie ottimizzazioni e disponibile su più dispositivi
+</it-IT>
+<ja-JP>
+•新機能：「デバイス管理」、Android11電源メニューでBluetoothデバイスをすばやく接続および切断します
+•コンポーネント管理：無効なコンポーネントをサポートするようになりました
+•アプリケーションAPI：アプリケーションの「エントランスアクティビティ」とスタートアップアイコンのリソース情報の表示をサポートするようになりました
+•より多くのデバイスをサポートするためのいくつかの最適化
+</ja-JP>
+<ko-KR>
+• 새로운 기능 : "장치 관리", Android 11 전원 메뉴에서 Bluetooth 장치를 빠르게 연결 및 분리
+• 구성 요소 관리 : 이제 비활성화 된 구성 요소를 지원합니다.
+• 애플리케이션 API : 이제 애플리케이션의 "진입 활동"및 시작 아이콘의 리소스 정보보기를 지원합니다.
+• 더 많은 장치를 지원하기위한 일부 최적화
+</ko-KR>
+<pt-PT>
+• Novo recurso: "Gerenciador de Dispositivos", para ajudá-lo a conectar / desconectar rapidamente dispositivos Bluetooth direto do menu de energia do Android 11
+• Gerente de Unidade: agora você pode desativar as unidades à vontade
+• API do aplicativo: agora você pode verificar a atividade do iniciador do aplicativo e os recursos do ícone do iniciador
+• Várias otimizações e disponíveis em mais dispositivos
+</pt-PT>
+<ru-RU>
+• Новая функция: «Диспетчер устройств», которая поможет вам быстро подключать / отключать устройства Bluetooth прямо из меню питания Android 11.
+• Менеджер юнитов: теперь вы можете отключать юниты по желанию.
+• API приложения: теперь вы можете проверять активность средства запуска приложения и ресурсы значка средства запуска.
+• Различные оптимизации и доступны на большем количестве устройств.
+</ru-RU>
+<th>
+•คุณสมบัติใหม่: "Device Manager" เพื่อช่วยให้คุณเชื่อมต่อ / ตัดการเชื่อมต่ออุปกรณ์บลูทู ธ ได้อย่างรวดเร็วจากเมนูเปิด / ปิดของ Android 11
+•ผู้จัดการหน่วย: ตอนนี้คุณสามารถปิดการใช้งานหน่วยได้ตามต้องการ
+• App API: ตอนนี้คุณสามารถตรวจสอบกิจกรรมตัวเรียกใช้งานของแอปและทรัพยากรไอคอนตัวเรียกใช้งาน
+•การเพิ่มประสิทธิภาพต่างๆและพร้อมใช้งานบนอุปกรณ์อื่น ๆ
+</th>
+<tr-TR>
+• Yeni özellik: "Cihaz Yöneticisi", Bluetooth cihazlarını doğrudan Android 11'in güç menüsünden hızlı bir şekilde bağlamanıza / bağlantısını kesmenize yardımcı olur
+• Birim Yöneticisi: artık birimleri istediğiniz zaman devre dışı bırakabilirsiniz
+• Uygulama API'si: artık uygulamanın başlatıcı Etkinliğini ve başlatıcı simgesi kaynaklarını kontrol edebilirsiniz
+• Çeşitli optimizasyonlar ve daha fazla cihazda kullanılabilir
+</tr-TR>
+<vi>
+• Tính năng mới: "Device Manager", giúp bạn nhanh chóng kết nối / ngắt kết nối các thiết bị Bluetooth ngay từ menu nguồn của Android 11
+• Trình quản lý đơn vị: bây giờ bạn có thể tắt các đơn vị theo ý muốn
+• API ứng dụng: bây giờ bạn có thể kiểm tra Hoạt động của ứng dụng và tài nguyên biểu tượng trình khởi chạy
+• Các tối ưu hóa khác nhau và khả dụng trên nhiều thiết bị hơn
+</vi>
+<zh-CN>
+• 全新功能：“设备管理”，在安卓11的电源菜单里快速连接和断开蓝牙设备
+• 组件管理：现支持禁用组件
+• 应用 API：现支持查看应用的“入口Activity”、启动图标的资源信息
+• 一些优化，支持更多设备
+</zh-CN>
+<zh-HK>
+• 全新功能：“設備管理”，在安卓11的電源菜單裡快速連接和斷開藍牙設備
+• 組件管理：現支持禁用組件
+• 應用 API：現支持查看應用的“入口Activity”、啟動圖標的資源信息
+• 一些優化，支持更多設備
+</zh-HK>
+<zh-TW>
+• 全新功能：“設備管理”，在安卓11的電源菜單裡快速連接和斷開藍牙設備
+• 組件管理：現支持禁用組件
+• 應用 API：現支持查看應用的“入口Activity”、啟動圖標的資源信息
+• 一些優化，支持更多設備
+</zh-TW>
+<coolapk>
+• 全新功能：“设备管理”，在安卓11的电源菜单里快速连接和断开蓝牙设备
+• 组件管理：现支持禁用组件
+• 应用 API：现支持查看应用的“入口Activity”、启动图标的资源信息
+• 一些优化，支持更多设备，以前Play商店显示不支持该设备的可以重新试试
+• 斑朵x86版本同步上传到云盘，在应用详情内获取链接
+</coolapk>
+
+
 - **3.6.3** 20092514
 <en-US>
 App API

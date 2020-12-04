@@ -265,4 +265,23 @@
     <string name="at_title">Zamanlayıcıyı Kur</string>
     <string name="at_hour_hint">Saat</string>
     <string name="at_minute_hint">Dakika</string>
+    <string name="advice_source_sub">Github\'a yeniden yönlendir</string>
+    <string name="advice_translation_sub">Google Dokümanlar\'a yönlendirin</string>
+    <string name="unit_desc_requirement_tw">Canlı duvar kağıdı desteği</string>
+    <string name="unit_device_manager">Aygıt Yöneticisi</string>
+    <string name="versatile_device_controls_dm_hint_off">Bağlanmak için dokunun</string>
+    <string name="versatile_device_controls_dm_hint_on">Bağlantıyı kesmek için dokunun</string>
+    <string name="versatile_device_controls_dm_ctrl_desc_off">Cihazı bağlayın</string>
+    <string name="versatile_device_controls_dm_ctrl_desc_on">Cihazın bağlantısını kesin</string>
+    <string name="versatile_device_controls_dm_title_unknown">Bilinmeyen aygıt</string>
+    <string name="dm_main_paired_devices">Eşleşmiş cihazlar</string>
+    <string name="dm_list_item_state_connecting">Bağlanıyor…</string>
+    <string name="dm_list_item_state_disconnecting">Bağlantı kesiliyor…</string>
+    <string name="dm_list_item_state_connected">Bağlandı</string>
+    <string name="dm_list_item_state_disconnected">Bağlantı kesildi</string>
+    <string name="dm_list_item_hint_connected">Bağlandı, bağlantıyı kesmek için dokunun</string>
+    <string name="dm_list_item_hint_disconnected">Bağlantı kesildi, bağlanmak için dokunun</string>
+    <string name="unit_desc_enable">etkinleştirme</string>
+    <string name="unit_desc_disable">Devre dışı bırak</string>
+    <string name="unit_desc_requirement_dm">Bluetooth desteği</string>
 </resources>

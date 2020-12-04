@@ -265,4 +265,23 @@
     <string name="at_title">ตั้งเวลา</string>
     <string name="at_hour_hint">ชั่วโมง</string>
     <string name="at_minute_hint">นาที</string>
+    <string name="advice_source_sub">เปลี่ยนเส้นทางไปที่ Github</string>
+    <string name="advice_translation_sub">เปลี่ยนเส้นทางไปที่ Google เอกสาร</string>
+    <string name="unit_desc_requirement_tw">การสนับสนุนวอลล์เปเปอร์สด</string>
+    <string name="unit_device_manager">ตัวจัดการอุปกรณ์</string>
+    <string name="versatile_device_controls_dm_hint_off">แตะเพื่อเชื่อมต่อ</string>
+    <string name="versatile_device_controls_dm_hint_on">แตะเพื่อยกเลิกการเชื่อมต่อ</string>
+    <string name="versatile_device_controls_dm_ctrl_desc_off">เชื่อมต่ออุปกรณ์</string>
+    <string name="versatile_device_controls_dm_ctrl_desc_on">ยกเลิกการเชื่อมต่ออุปกรณ์</string>
+    <string name="versatile_device_controls_dm_title_unknown">อุปกรณ์ที่ไม่รู้จัก</string>
+    <string name="dm_main_paired_devices">อุปกรณ์ที่จับคู่</string>
+    <string name="dm_list_item_state_connecting">กำลังเชื่อมต่อ ...</string>
+    <string name="dm_list_item_state_disconnecting">กำลังยกเลิกการเชื่อมต่อ ...</string>
+    <string name="dm_list_item_state_connected">เชื่อมต่อแล้ว</string>
+    <string name="dm_list_item_state_disconnected">ยกเลิกการเชื่อมต่อ</string>
+    <string name="dm_list_item_hint_connected">เชื่อมต่อแล้วแตะเพื่อยกเลิกการเชื่อมต่อ</string>
+    <string name="dm_list_item_hint_disconnected">ไม่ได้เชื่อมต่อแตะเพื่อเชื่อมต่อ</string>
+    <string name="unit_desc_enable">เปิดใช้งาน</string>
+    <string name="unit_desc_disable">ปิดการใช้งาน</string>
+    <string name="unit_desc_requirement_dm">รองรับบลูทู ธ</string>
 </resources>

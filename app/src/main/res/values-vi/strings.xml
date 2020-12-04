@@ -265,4 +265,23 @@
     <string name="at_title">Đặt hẹn giờ</string>
     <string name="at_hour_hint">Giờ</string>
     <string name="at_minute_hint">Phút</string>
+    <string name="advice_source_sub">Chuyển hướng đến Github</string>
+    <string name="advice_translation_sub">Chuyển hướng đến Google Tài liệu</string>
+    <string name="unit_desc_requirement_tw">Hỗ trợ hình nền động</string>
+    <string name="unit_device_manager">Quản lý thiết bị</string>
+    <string name="versatile_device_controls_dm_hint_off">Nhấn để kết nối</string>
+    <string name="versatile_device_controls_dm_hint_on">Nhấn để ngắt kết nối</string>
+    <string name="versatile_device_controls_dm_ctrl_desc_off">Kết nối thiết bị</string>
+    <string name="versatile_device_controls_dm_ctrl_desc_on">Ngắt kết nối thiết bị</string>
+    <string name="versatile_device_controls_dm_title_unknown">Thiết bị chưa biết</string>
+    <string name="dm_main_paired_devices">Các thiết bị được ghép nối</string>
+    <string name="dm_list_item_state_connecting">Đang kết nối…</string>
+    <string name="dm_list_item_state_disconnecting">Đang ngắt kết nối…</string>
+    <string name="dm_list_item_state_connected">Đã kết nối</string>
+    <string name="dm_list_item_state_disconnected">Đã ngắt kết nối</string>
+    <string name="dm_list_item_hint_connected">Đã kết nối, nhấn để ngắt kết nối</string>
+    <string name="dm_list_item_hint_disconnected">Đã ngắt kết nối, hãy nhấn để kết nối</string>
+    <string name="unit_desc_enable">Kích hoạt</string>
+    <string name="unit_desc_disable">Vô hiệu hóa</string>
+    <string name="unit_desc_requirement_dm">Hỗ trợ Bluetooth</string>
 </resources>

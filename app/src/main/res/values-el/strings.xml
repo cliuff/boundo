@@ -265,4 +265,23 @@
     <string name="at_title">Ρύθμιση χρονοδιακόπτη</string>
     <string name="at_hour_hint">Ωρα</string>
     <string name="at_minute_hint">Λεπτό</string>
+    <string name="advice_source_sub">Ανακατεύθυνση στο Github</string>
+    <string name="advice_translation_sub">Ανακατεύθυνση στα Έγγραφα Google</string>
+    <string name="unit_desc_requirement_tw">Υποστήριξη ζωντανής ταπετσαρίας</string>
+    <string name="unit_device_manager">Διαχειριστή της συσκευής</string>
+    <string name="versatile_device_controls_dm_hint_off">Πατήστε για σύνδεση</string>
+    <string name="versatile_device_controls_dm_hint_on">Πατήστε για αποσύνδεση</string>
+    <string name="versatile_device_controls_dm_ctrl_desc_off">Συνδέστε τη συσκευή</string>
+    <string name="versatile_device_controls_dm_ctrl_desc_on">Αποσυνδέστε τη συσκευή</string>
+    <string name="versatile_device_controls_dm_title_unknown">Αγνωστη συσκευή</string>
+    <string name="dm_main_paired_devices">Σύζευξη συσκευών</string>
+    <string name="dm_list_item_state_connecting">Συνδετικός…</string>
+    <string name="dm_list_item_state_disconnecting">Αποσύνδεση…</string>
+    <string name="dm_list_item_state_connected">Συνδεδεμένος</string>
+    <string name="dm_list_item_state_disconnected">Ασύνδετος</string>
+    <string name="dm_list_item_hint_connected">Συνδεδεμένο, πατήστε για αποσύνδεση</string>
+    <string name="dm_list_item_hint_disconnected">Αποσυνδεδεμένος, πατήστε για σύνδεση</string>
+    <string name="unit_desc_enable">επιτρέπω</string>
+    <string name="unit_desc_disable">Καθιστώ ανίκανο</string>
+    <string name="unit_desc_requirement_dm">Υποστήριξη Bluetooth</string>
 </resources>

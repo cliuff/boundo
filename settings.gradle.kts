@@ -16,10 +16,9 @@
 
 
 includeBuild("dependencyPlugin")
-include(":app", ":cool_app", ":image_modifying",
-        ":school_timetable", ":no_media",
-        ":api_viewing",
-        ":qq_contacts",
+include(":app",
+        ":cool_app", ":image_modifying", ":school_timetable",
+        ":no_media", ":api_viewing", ":qq_contacts",
         ":wearable")
 /*
 

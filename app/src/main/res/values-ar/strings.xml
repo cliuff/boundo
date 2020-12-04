@@ -265,4 +265,23 @@
     <string name="at_title">توقيت مجموعة</string>
     <string name="at_hour_hint">ساعة</string>
     <string name="at_minute_hint">دقيقة</string>
+    <string name="advice_source_sub">إعادة التوجيه إلى جيثب</string>
+    <string name="advice_translation_sub">إعادة التوجيه إلى محرر مستندات Google</string>
+    <string name="unit_desc_requirement_tw">دعم خلفية حية</string>
+    <string name="unit_device_manager">مدير الجهاز</string>
+    <string name="versatile_device_controls_dm_hint_off">انقر للاتصال</string>
+    <string name="versatile_device_controls_dm_hint_on">انقر لقطع الاتصال</string>
+    <string name="versatile_device_controls_dm_ctrl_desc_off">قم بتوصيل الجهاز</string>
+    <string name="versatile_device_controls_dm_ctrl_desc_on">افصل الجهاز</string>
+    <string name="versatile_device_controls_dm_title_unknown">جهاز غير معروف</string>
+    <string name="dm_main_paired_devices">الأجهزة المقترنة</string>
+    <string name="dm_list_item_state_connecting">توصيل…</string>
+    <string name="dm_list_item_state_disconnecting">جارٍ قطع الاتصال…</string>
+    <string name="dm_list_item_state_connected">متصل</string>
+    <string name="dm_list_item_state_disconnected">انقطع الاتصال</string>
+    <string name="dm_list_item_hint_connected">متصل ، انقر لقطع الاتصال</string>
+    <string name="dm_list_item_hint_disconnected">غير متصل ، انقر للاتصال</string>
+    <string name="unit_desc_enable">ممكن</string>
+    <string name="unit_desc_disable">تعطيل</string>
+    <string name="unit_desc_requirement_dm">دعم البلوتوث</string>
 </resources>
