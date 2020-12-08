@@ -23,15 +23,12 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.Drawable
-import android.net.Uri
 import android.os.Handler
 import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -44,21 +41,18 @@ import com.madness.collision.diy.SandwichAdapter
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
-import com.madness.collision.unit.api_viewing.list.item.AppItemAnimator
-import com.madness.collision.unit.api_viewing.list.item.AppItemService
+import com.madness.collision.unit.api_viewing.list.AppListAnimator
 import com.madness.collision.util.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.File
-import java.io.IOException
-import java.lang.Runnable
-import kotlin.collections.HashMap
 import kotlin.math.min
 import kotlin.math.roundToInt
 import com.madness.collision.unit.api_viewing.R as MyR
 
-internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>(context) {
+internal class APIAdapter(context: Context, private val listener: Listener)
+    : SandwichAdapter<APIAdapter.Holder>(context) {
 
     companion object {
         private val isSweet: Boolean
@@ -212,6 +206,11 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
         }
     }
 
+    interface Listener {
+        val click: (ApiViewingApp) -> Unit
+        val longClick: (ApiViewingApp) -> Boolean
+    }
+
     @SuppressLint("WrongViewCast")
     class Holder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val logo: ImageView = itemView.findViewById(MyR.id.avAdapterInfoLogo)
@@ -235,7 +234,6 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
     override val listCount: Int
         get() = apps.size
 
-    private val activity = context as AppCompatActivity
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mLayoutManager: LinearLayoutManager
     private val inflater = LayoutInflater.from(context)
@@ -250,8 +248,7 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
     private val _colorSurface by lazy { ThemeUtil.getColor(context, R.attr.colorASurface) }
     private val colorSurface: Int
         get() = if (shouldShowDesserts) _colorSurface else 0
-    private val animator = AppItemAnimator()
-    private val service = AppItemService()
+    private val animator = AppListAnimator()
 
     fun setSortMethod(sortMethod: Int): APIAdapter {
         this.sortMethod = sortMethod
@@ -395,7 +392,7 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
         }
 
         holder.card.setOnClickListener {
-            ApiInfoPop.newInstance(appInfo).show(activity.supportFragmentManager, ApiInfoPop.TAG)
+            listener.click.invoke(appInfo)
         }
 
         holder.tags.setOnClickListener {
@@ -403,107 +400,7 @@ internal class APIAdapter(context: Context) : SandwichAdapter<APIAdapter.Holder>
         }
 
         holder.card.setOnLongClickListener {
-            val popActions = CollisionDialog(context, R.string.text_cancel).apply {
-                setTitleCollision(0, 0, 0)
-                setContent(0)
-                setCustomContent(MyR.layout.av_adapter_actions)
-                setListener { dismiss() }
-                show()
-            }
-            popActions.findViewById<View>(MyR.id.avAdapterActionsDetails).setOnClickListener {
-                popActions.dismiss()
-                actionDetails(appInfo)
-            }
-            val vActionOpen = popActions.findViewById<View>(MyR.id.avAdapterActionsOpen)
-            if (appInfo.isLaunchable) {
-                val launchIntent = service.getLaunchIntent(context, appInfo)
-                val activityName = launchIntent?.component?.className ?: ""
-                val vOpenActivity = popActions.findViewById<TextView>(MyR.id.avAdapterActionsOpenActivity)
-                vOpenActivity.text = activityName
-                vActionOpen.setOnClickListener {
-                    popActions.dismiss()
-                    if (launchIntent == null) {
-                        activity.notifyBriefly(R.string.text_error)
-                    } else {
-                        context.startActivity(launchIntent)
-                    }
-                }
-                vActionOpen.setOnLongClickListener {
-                    X.copyText2Clipboard(context, activityName, R.string.text_copy_content)
-                    true
-                }
-            } else {
-                vActionOpen.visibility = View.GONE
-            }
-            popActions.findViewById<View>(MyR.id.avAdapterActionsIcon).setOnClickListener {
-                popActions.dismiss()
-                actionIcon(appInfo)
-            }
-            popActions.findViewById<View>(MyR.id.avAdapterActionsApk).setOnClickListener {
-                popActions.dismiss()
-                actionApk(appInfo)
-            }
-            return@setOnLongClickListener true
-        }
-    }
-
-    private fun actionDetails(appInfo: ApiViewingApp) = GlobalScope.launch {
-        val view: TextView
-        val details = service.getAppDetails(context, appInfo)
-        if (details.isEmpty()) return@launch
-        val contentView = TextView(context)
-        contentView.text = details
-        contentView.textSize = 10f
-        val padding = X.size(context, 20f, X.DP).toInt()
-        contentView.setPadding(padding, padding, padding, 0)
-        view = contentView
-        launch(Dispatchers.Main) {
-            CollisionDialog(context, R.string.text_alright).run {
-                setContent(0)
-                setTitleCollision(appInfo.name, 0, 0)
-                setCustomContent(view)
-                decentHeight()
-                setListener { dismiss() }
-                show()
-            }
-        }
-    }
-
-    private fun actionIcon(app: ApiViewingApp){
-        val path = F.createPath(F.cachePublicPath(context), "App", "Logo", "${app.name}.png")
-        val image = File(path)
-        app.getOriginalIcon(context)?.let { if (F.prepare4(image)) X.savePNG(it, path) }
-        val uri: Uri = image.getProviderUri(context)
-//        val previewTitle = app.name // todo set preview title
-        activity.supportFragmentManager.let {
-            FilePop.by(context, uri, "image/png", R.string.textShareImage, uri, app.name).show(it, FilePop.TAG)
-        }
-    }
-
-    // todo split APKs
-    private fun actionApk(app: ApiViewingApp){
-        val path = F.createPath(F.cachePublicPath(context), "App", "APK", "${app.name}-${app.verName}.apk")
-        val apk = File(path)
-        if (F.prepare4(apk)) {
-            GlobalScope.launch {
-                try {
-                    X.copyFileLessTwoGB(File(app.appPackage.basePath), apk)
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-            }
-        }
-        val uri: Uri = apk.getProviderUri(context)
-        val previewTitle = "${app.name} ${app.verName}"
-//        val flag = Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-        val previewPath = F.createPath(F.cachePublicPath(context), "App", "Logo", "${app.name}.png")
-        val image = File(previewPath)
-        val appIcon = app.icon
-        if (appIcon != null && F.prepare4(image)) X.savePNG(appIcon, previewPath)
-        val imageUri = image.getProviderUri(context)
-        activity.supportFragmentManager.let {
-            val fileType = "application/vnd.android.package-archive"
-            FilePop.by(context, uri, fileType, R.string.textShareApk, imageUri, previewTitle).show(it, FilePop.TAG)
+            listener.longClick.invoke(appInfo)
         }
     }
 

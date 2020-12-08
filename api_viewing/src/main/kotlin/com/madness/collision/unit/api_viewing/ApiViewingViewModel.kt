@@ -19,11 +19,11 @@ package com.madness.collision.unit.api_viewing
 import android.app.Application
 import android.content.Context
 import android.net.Uri
-import android.os.Build
 import android.util.SparseIntArray
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.madness.collision.misc.MiscApp
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
@@ -41,7 +41,6 @@ import java.io.FileOutputStream
 import java.io.InputStream
 import java.util.stream.Collectors
 import kotlin.Comparator
-import kotlin.collections.ArrayList
 import kotlin.coroutines.CoroutineContext
 
 /**
@@ -332,102 +331,104 @@ internal class ApiViewingViewModel(application: Application): AndroidViewModel(a
         }
     }
 
+    fun loadAppIcons(adapter: APIAdapter, refreshLayout: SwipeRefreshLayout) {
+        try {
+            for (index in apps4DisplayValue.indices) {
+                if (index >= EasyAccess.preloadLimit) break
+                if (index >= apps4DisplayValue.size) break
+                adapter.ensureItem(index, refreshLayout)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun clearBottomAppIcons() {
+        try {
+            var index = apps4DisplayValue.size - 1
+            val cacheSize = EasyAccess.loadLimitHalf * 2 + 10
+            while (index >= cacheSize) {
+                val app = apps4DisplayValue[index]
+                if (!app.preload) app.clearIcons()
+                index--
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun updateCacheSize(unitSize: Int) {
+        val cacheSize = if (unitSize < 20) (30 + unitSize * 10) else (100 + unitSize * 7)
+        EasyAccess.loadLimitHalf = cacheSize
+        EasyAccess.loadAmount = unitSize
+        EasyAccess.preloadLimit = EasyAccess.loadLimitHalf - EasyAccess.loadAmount
+    }
+
     companion object {
 
         private fun compareName(o1: ApiViewingApp, o2: ApiViewingApp): Int {
             return StringUtils.compareName(o1.name, o2.name)
         }
 
-        fun sortList(list: List<ApiViewingApp>, sortItem: Int): List<ApiViewingApp> {
-            if (list.isEmpty()) return list
-            var result: MutableList<ApiViewingApp> = list.toMutableList()
-            when (sortItem) {
-                MyUnit.SORT_POSITION_API_LOW -> {
-                    if (EasyAccess.isViewingTarget){
-                        if (X.aboveOn(Build.VERSION_CODES.N)) {
-                            val comparator: Comparator<ApiViewingApp> = Comparator.comparingInt(ApiViewingApp::targetAPI)
-                                    .thenComparingDouble(ApiViewingApp::targetSDKDouble)
-                                    .thenComparing(this::compareName)
-                            result = result.parallelStream().sorted(comparator).collect(Collectors.toList())
-                        }else {
-                            result.sortWith(Comparator { o1, o2 ->
-                                val apiCompare = o1.targetAPI.compareTo(o2.targetAPI)
-                                if (apiCompare != 0) return@Comparator apiCompare
-                                val apiLevelCompare = o1.targetSDKDouble.compareTo(o2.targetSDKDouble)
-                                if (apiLevelCompare != 0) return@Comparator apiLevelCompare
-                                return@Comparator compareName(o1, o2)
-                            })
-                        }
-                    }else{
-                        if (X.aboveOn(Build.VERSION_CODES.N)) {
-                            val comparator: Comparator<ApiViewingApp> = Comparator.comparingInt(ApiViewingApp::minAPI)
-                                    .thenComparingDouble(ApiViewingApp::minSDKDouble)
-                                    .thenComparing(this::compareName)
-                            result = result.parallelStream().sorted(comparator).collect(Collectors.toList())
-                        }else {
-                            result.sortWith(Comparator { o1, o2 ->
-                                val apiCompare = o1.minAPI.compareTo(o2.minAPI)
-                                if (apiCompare != 0) return@Comparator apiCompare
-                                val apiLevelCompare = o1.minSDKDouble.compareTo(o2.minSDKDouble)
-                                if (apiLevelCompare != 0) return@Comparator apiLevelCompare
-                                return@Comparator compareName(o1, o2)
-                            })
-                        }
-                    }
+        private fun compareApi(list: List<ApiViewingApp>, isTarget: Boolean, isAsc: Boolean): List<ApiViewingApp> {
+            val compareInt = if (isTarget) ApiViewingApp::targetAPI else ApiViewingApp::minAPI
+            val compareDouble = if (isTarget) ApiViewingApp::targetSDKDouble else ApiViewingApp::minSDKDouble
+            return if (X.aboveOn(X.N)) {
+                val comparator = Comparator.comparingInt(compareInt)
+                        .thenComparingDouble(compareDouble).run {
+                            if (isAsc) this else reversed()
+                        }.thenComparing(this::compareName)
+                list.parallelStream().sorted(comparator).collect(Collectors.toList())
+            } else {
+                list.toMutableList().apply {
+                    sortWith(Comparator { o1, o2 ->
+                        val obj1 = if (isAsc) o1 else o2
+                        val obj2 = if (isAsc) o2 else o1
+                        val apiCompare = compareInt.invoke(obj1).compareTo(compareInt.invoke(obj2))
+                        if (apiCompare != 0) return@Comparator apiCompare
+                        val apiLevelCompare = compareDouble.invoke(obj1).compareTo(compareDouble.invoke(obj2))
+                        if (apiLevelCompare != 0) return@Comparator apiLevelCompare
+                        // name comparing is not reversed
+                        compareName(o1, o2)
+                    })
                 }
-                MyUnit.SORT_POSITION_API_HIGH -> {
-                    if (EasyAccess.isViewingTarget){
-                        if (X.aboveOn(Build.VERSION_CODES.N)) {
-                            val comparator: Comparator<ApiViewingApp> = Comparator.comparingInt(ApiViewingApp::targetAPI)
-                                    .thenComparingDouble(ApiViewingApp::targetSDKDouble)
-                                    .reversed()
-                                    .thenComparing(this::compareName)
-                            result = result.parallelStream().sorted(comparator).collect(Collectors.toList())
-                        }else {
-                            result.sortWith(Comparator { o1, o2 ->
-                                val apiCompare = o2.targetAPI.compareTo(o1.targetAPI)
-                                if (apiCompare != 0) return@Comparator apiCompare
-                                val apiLevelCompare = o2.targetSDKDouble.compareTo(o1.targetSDKDouble)
-                                if (apiLevelCompare != 0) return@Comparator apiLevelCompare
-                                return@Comparator compareName(o1, o2)
-                            })
-                        }
-                    }else{
-                        if (X.aboveOn(Build.VERSION_CODES.N)) {
-                            val comparator: Comparator<ApiViewingApp> = Comparator.comparingInt(ApiViewingApp::minAPI)
-                                    .thenComparingDouble(ApiViewingApp::minSDKDouble)
-                                    .reversed()
-                                    .thenComparing(this::compareName)
-                            result = result.parallelStream().sorted(comparator).collect(Collectors.toList())
-                        }else {
-                            result.sortWith(Comparator { o1, o2 ->
-                                val apiCompare = o2.minAPI.compareTo(o1.minAPI)
-                                if (apiCompare != 0) return@Comparator apiCompare
-                                val apiLevelCompare = o2.minSDKDouble.compareTo(o1.minSDKDouble)
-                                if (apiLevelCompare != 0) return@Comparator apiLevelCompare
-                                return@Comparator compareName(o1, o2)
-                            })
-                        }
-                    }
-                }
-                MyUnit.SORT_POSITION_API_NAME -> result.sortWith(Comparator(this::compareName))
-                MyUnit.SORT_POSITION_API_TIME ->
-                    if (X.aboveOn(Build.VERSION_CODES.N)) {
-                        val comparator: Comparator<ApiViewingApp> = Comparator.comparingLong(ApiViewingApp::updateTime)/*
-                            .thenComparingInt(APIApp::targetAPI)
-                            .thenComparingDouble(APIApp::targetSDK)*/
-                                .reversed()
-                                .thenComparing(this::compareName)
-                        result = result.parallelStream().sorted(comparator).collect(Collectors.toList())
-                    }else {
-                        result.sortWith(Comparator { o1, o2 ->
-                            val compareTime = o2.updateTime.compareTo(o1.updateTime)
-                            if (compareTime != 0) return@Comparator compareTime
-                            return@Comparator compareName(o1, o2)
-                        })
-                    }
             }
-            return result
+        }
+
+        private fun compareName(list: List<ApiViewingApp>): List<ApiViewingApp> {
+            return list.toMutableList().apply {
+                sortWith(Comparator(this@Companion::compareName))
+            }
+        }
+
+        private fun compareTime(list: List<ApiViewingApp>): List<ApiViewingApp> {
+            return if (X.aboveOn(X.N)) {
+                val comparator: Comparator<ApiViewingApp> = Comparator.comparingLong(ApiViewingApp::updateTime)/*
+                        .thenComparingInt(APIApp::targetAPI)
+                        .thenComparingDouble(APIApp::targetSDK)*/
+                        .reversed()
+                        .thenComparing(this::compareName)
+                list.parallelStream().sorted(comparator).collect(Collectors.toList())
+            } else {
+                list.toMutableList().apply {
+                    sortWith(Comparator { o1, o2 ->
+                        val compareTime = o2.updateTime.compareTo(o1.updateTime)
+                        if (compareTime != 0) return@Comparator compareTime
+                        return@Comparator compareName(o1, o2)
+                    })
+                }
+            }
+        }
+
+        fun sortList(list: List<ApiViewingApp>, sortItem: Int): List<ApiViewingApp> {
+            if (list.isEmpty()) return emptyList()
+            return when (sortItem) {
+                MyUnit.SORT_POSITION_API_LOW -> compareApi(list, EasyAccess.isViewingTarget, true)
+                MyUnit.SORT_POSITION_API_HIGH -> compareApi(list, EasyAccess.isViewingTarget, false)
+                MyUnit.SORT_POSITION_API_NAME -> compareName(list)
+                MyUnit.SORT_POSITION_API_TIME -> compareTime(list)
+                else -> ArrayList(list)
+            }
         }
     }
 

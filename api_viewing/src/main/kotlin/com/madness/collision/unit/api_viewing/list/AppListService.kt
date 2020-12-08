@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.madness.collision.unit.api_viewing.list.item
+package com.madness.collision.unit.api_viewing.list
 
 import android.content.Context
 import android.content.Intent
@@ -36,7 +36,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.security.cert.X509Certificate
 
-internal class AppItemService {
+internal class AppListService {
     private var regexFields: MutableMap<String, String> = HashMap()
 
     fun getAppDetails(context: Context, appInfo: ApiViewingApp): CharSequence {

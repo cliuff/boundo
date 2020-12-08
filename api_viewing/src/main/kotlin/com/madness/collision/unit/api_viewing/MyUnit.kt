@@ -40,6 +40,7 @@ import androidx.core.view.forEach
 import androidx.core.view.get
 import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.checkbox.MaterialCheckBox
@@ -54,7 +55,6 @@ import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.databinding.FragmentApiBinding
 import com.madness.collision.unit.api_viewing.util.PrefUtil
-import com.madness.collision.unit.api_viewing.util.SheetUtil
 import com.madness.collision.util.*
 import com.madness.collision.util.AppUtils.asBottomMargin
 import kotlinx.coroutines.*
@@ -118,6 +118,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
     private var iconColor = 0
     private lateinit var rSort: RunnableSort
     private lateinit var rDisplay: RunnableDisplay
+    private val service = AppMainService()
 
     // views
     lateinit var refreshLayout: SwipeRefreshLayout
@@ -259,31 +260,12 @@ class MyUnit: com.madness.collision.unit.Unit() {
         return false
     }
 
-    private fun exportList(context: Context) {
-        GlobalScope.launch {
-            val name = "AppList"
-            val label = "App List"
-            val path = F.createPath(F.cachePublicPath(context), "Temp", "AV", "$name.csv")
-            val file = File(path)
-            if (!F.prepare4(file)) return@launch
-            SheetUtil.csvWriterAll(getList(context), file)
-            launch(Dispatchers.Main) {
-                FilePop.by(context, file, "text/csv", R.string.fileActionsShare, imageLabel = label)
-                        .show(childFragmentManager, FilePop.TAG)
-            }
-        }
-    }
-
-    private fun getList(context: Context): List<Array<String>> {
-//        val list = adapter.apps
-//        val re = ArrayList<Array<String>>(list.size + 1)
-//        re.add(arrayOf(context.getString(R.string.apiDetailsPackageName)))
-//        list.forEach {
-//            re.add(arrayOf(it.name))
-//        }
-//        return re
-        return adapter.apps.map {
-            arrayOf(it.name)
+    private fun exportList(context: Context) = lifecycleScope.launch(Dispatchers.Default) {
+        val file = service.exportList(context, adapter.apps) ?: return@launch
+        val label = "App List"
+        launch(Dispatchers.Main) {
+            FilePop.by(context, file, "text/csv", R.string.fileActionsShare, imageLabel = label)
+                    .show(childFragmentManager, FilePop.TAG)
         }
     }
 
@@ -331,9 +313,9 @@ class MyUnit: com.madness.collision.unit.Unit() {
             searchBackPressedCallback?.remove()
             searchBackPressedCallback = null
         } else {
+            val context = context ?: return
             // check settings
-            GlobalScope.launch {
-                val context = context ?: return@launch
+            lifecycleScope.launch(Dispatchers.Default) {
                 val isChanged = EasyAccess.load(context, settingsPreferences, false)
                 if (isChanged) {
                     delay(1)
@@ -369,41 +351,20 @@ class MyUnit: com.madness.collision.unit.Unit() {
 
     private fun loadAppIcons() {
         ApiTaskManager.join {
-            try{
-                for (index in viewModel.apps4DisplayValue.indices){
-                    if (index >= EasyAccess.preloadLimit) break
-                    if (index >= viewModel.apps4DisplayValue.size) break
-                    adapter.ensureItem(index, refreshLayout)
-                }
-            } catch (e: Exception){
-                e.printStackTrace()
-            }
+            viewModel.loadAppIcons(adapter, refreshLayout)
         }
     }
 
     private fun clearBottomAppIcons() {
         ApiTaskManager.join {
-            try{
-                var index = viewModel.apps4DisplayValue.size - 1
-                val cacheSize = EasyAccess.loadLimitHalf * 2 + 10
-                while (index >= cacheSize){
-                    val app = viewModel.apps4DisplayValue[index]
-                    if (!app.preload) app.clearIcons()
-                    index--
-                }
-            } catch (e: Exception){
-                e.printStackTrace()
-            }
+            viewModel.clearBottomAppIcons()
         }
     }
 
     private fun updateCacheSize() {
         val manager = listFragment.getLayoutManager() as LinearLayoutManager
         val unitSize = manager.findLastVisibleItemPosition() - manager.findFirstVisibleItemPosition()
-        val cacheSize = if (unitSize < 20) (30 + unitSize * 10) else (100 + unitSize * 7)
-        EasyAccess.loadLimitHalf = cacheSize
-        EasyAccess.loadAmount = unitSize
-        EasyAccess.preloadLimit = EasyAccess.loadLimitHalf - EasyAccess.loadAmount
+        viewModel.updateCacheSize(unitSize)
     }
 
     private fun displayApk(context: Context, apkPath: String){
@@ -620,7 +581,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
         // where data is loaded already
         if (mode != LAUNCH_MODE_SEARCH && mode != LAUNCH_MODE_LINK) {
             // fix refreshing animation not shown
-            GlobalScope.launch {
+            lifecycleScope.launch(Dispatchers.Default) {
                 delay(1)
                 launch(Dispatchers.Main) {
                     selectListSrcItem(displayItem)
@@ -631,7 +592,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
             // fix refreshing animation not shown
             // invoke only the first time
             if (loadedItems.isBusy && viewModel.apps4Cache.isEmpty()) {
-                GlobalScope.launch {
+                lifecycleScope.launch(Dispatchers.Default) {
                     delay(1)
                     launch(Dispatchers.Main) {
                         refreshLayout.isRefreshing = true
@@ -732,7 +693,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
     private fun closeFilterTagMenu(container: ViewGroup, checkedIndexes: Set<Int>) {
         val context = context ?: return
         refreshLayout.isRefreshing = true
-        GlobalScope.launch {
+        lifecycleScope.launch(Dispatchers.Default) {
             var singleTitle: CharSequence? = null
             val value = context.resources.obtainTypedArray(MyR.array.prefAvTagsValues).use {
                 values ->
@@ -801,7 +762,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
     override fun onLowMemory() {
         super.onLowMemory()
         val context = context ?: return
-        X.toast(context, "out of memory", Toast.LENGTH_LONG)
+        X.toast(context, "Out of memory", Toast.LENGTH_LONG)
     }
 
     private fun refreshList() {

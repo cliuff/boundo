@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.madness.collision.unit.api_viewing.list.item
+package com.madness.collision.unit.api_viewing.list
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
@@ -24,7 +24,7 @@ import androidx.core.animation.doOnEnd
 import com.madness.collision.R
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 
-internal class AppItemAnimator {
+internal class AppListAnimator {
 
     fun animateLogo(logoView: ImageView) {
         val animFade = ObjectAnimator.ofFloat(logoView, "alpha",1f, 0.1f).apply {
