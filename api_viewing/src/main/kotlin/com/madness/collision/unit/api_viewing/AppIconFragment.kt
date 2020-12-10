@@ -180,6 +180,7 @@ internal class AppIconFragment : TaggedFragment(), Democratic {
         val context = context ?: return
         val icon = AppIcon(context, drawable)
         vIcon.setIcon(icon.bitmap, res, iconId, apkPath, "$exportPrefix-Full")
+        vIconGroup.visibility = View.VISIBLE
         if (!icon.isAdaptive || !X.aboveOn(X.O)) {
             X.makeGone(vAiGroup)
             return
@@ -190,6 +191,7 @@ internal class AppIconFragment : TaggedFragment(), Democratic {
         vIconRound.setShapedIcon(icon.round, "$exportPrefix-Round")
         vIconRounded.setShapedIcon(icon.rounded, "$exportPrefix-Rounded")
         vIconSquircle.setShapedIcon(icon.squircle, "$exportPrefix-Squircle")
+        vAiGroup.visibility = View.VISIBLE
     }
 
     private fun ImageView.setIcon(icon: Bitmap, res: Resources, iconId: Int, apkPath: String, exportName: String) {
