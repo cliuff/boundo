@@ -45,5 +45,11 @@
             android:text="@string/main_updates"
             style="@style/MainSectionHeader"/>
 
+        <LinearLayout
+            android:id="@+id/mainUpdatesUpdateContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

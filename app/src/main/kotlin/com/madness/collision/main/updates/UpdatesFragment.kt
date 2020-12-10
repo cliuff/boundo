@@ -21,26 +21,26 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.isEmpty
+import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListUpdateCallback
 import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.databinding.FragmentUpdatesBinding
 import com.madness.collision.databinding.MainUpdatesHeaderBinding
 import com.madness.collision.main.MainViewModel
-import com.madness.collision.unit.DescRetriever
+import com.madness.collision.unit.*
 import com.madness.collision.unit.Unit
-import com.madness.collision.unit.UpdatesProvider
+import com.madness.collision.unit.UnitDescViewModel
 import com.madness.collision.util.AppUtils.asBottomMargin
 import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.X
 import com.madness.collision.util.alterPadding
-import com.madness.collision.util.ensureAdded
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 internal class UpdatesFragment : TaggedFragment(), Democratic {
@@ -66,13 +66,11 @@ internal class UpdatesFragment : TaggedFragment(), Democratic {
     private val mainViewModel: MainViewModel by activityViewModels()
     private var updatesProviders: MutableList<Pair<String, UpdatesProvider>> = mutableListOf()
     private var fragments: MutableList<Pair<String, Fragment>> = mutableListOf()
-    private var _fixedChildCount: Int = 0
-    private val fixedChildCount: Int
-    get() = _fixedChildCount
     private var mode = MODE_NORMAL
     private val isNoUpdatesMode: Boolean
         get() = mode == MODE_NO_UPDATES
     private lateinit var viewBinding: FragmentUpdatesBinding
+    private lateinit var inflater: LayoutInflater
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
         toolbar.setTitle(R.string.main_updates)
@@ -82,6 +80,7 @@ internal class UpdatesFragment : TaggedFragment(), Democratic {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mContext = context ?: return
+        inflater = LayoutInflater.from(mContext)
         mode = arguments?.getInt(ARG_MODE) ?: MODE_NORMAL
         if (isNoUpdatesMode) return
         updatesProviders = DescRetriever(mContext).includePinState().doFilter()
@@ -95,11 +94,6 @@ internal class UpdatesFragment : TaggedFragment(), Democratic {
         return viewBinding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        _fixedChildCount = viewBinding.mainUpdatesContainer.childCount
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         democratize(mainViewModel)
@@ -110,11 +104,36 @@ internal class UpdatesFragment : TaggedFragment(), Democratic {
         mainViewModel.contentWidthBottom.observe(viewLifecycleOwner) {
             viewBinding.mainUpdatesContainer.alterPadding(bottom = asBottomMargin(it + extra))
         }
+
+        loadUpdates()
+
+        val descViewModel: UnitDescViewModel by activityViewModels()
+        descViewModel.updated.observe(viewLifecycleOwner) {
+            updateItem(it)
+        }
     }
 
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-        loadUpdates()
+    override fun onDestroyView() {
+        // returning from other bottom nav destination would restore added fragments
+        // but fragment containers need to be restored manually
+        // so remove the added fragments before the state is saved
+        clearUpdates()
+        super.onDestroyView()
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        fragments.forEach { (_, f) ->
+            f.onHiddenChanged(hidden)
+        }
+        if (!hidden) updateUpdates()
+    }
+
+    private fun retrieveUpdateFragments(): MutableList<Pair<String, Fragment>> {
+        return updatesProviders.mapNotNull {
+            if (it.second.hasUpdates(this)) it.second.fragment?.run {
+                it.first to this
+            } else null
+        }.toMutableList()
     }
 
     /**
@@ -122,58 +141,136 @@ internal class UpdatesFragment : TaggedFragment(), Democratic {
      */
     private fun clearUpdates() {
         if (fragments.isEmpty()) return
-        val transaction = childFragmentManager.beginTransaction()
-        fragments.forEach {
-            transaction.remove(it.second)
-        }
-        transaction.commitNowAllowingStateLoss()
-        // clear headers
-        if (viewBinding.mainUpdatesContainer.childCount > fixedChildCount) {
-            viewBinding.mainUpdatesContainer.removeViews(fixedChildCount, viewBinding.mainUpdatesContainer.childCount - fixedChildCount)
+        if (viewBinding.mainUpdatesUpdateContainer.isEmpty()) return
+        for (i in fragments.indices.reversed()) {
+            removeUpdateFragment(fragments[i], i)
         }
     }
 
     private fun loadUpdates() {
-        // clear old updates
-        clearUpdates()
-        // load latest updates
-        fragments = updatesProviders.mapNotNull {
-            if (it.second.hasUpdates(this)) it.second.getFragment()?.run {
-                it.first to this
-            } else null
-        }.toMutableList()
+        fragments = retrieveUpdateFragments()
         viewBinding.mainUpdatesSecUpdates.visibility = if (fragments.isEmpty()) View.GONE else View.VISIBLE
         if (fragments.isEmpty()) return
-        for ((_, f) in fragments) {
-            ensureAdded(R.id.mainUpdatesContainer, f, true)
-        }
-        lifecycleScope.launch(Dispatchers.Default) {
-            delay(100)
-            val inflater = LayoutInflater.from(context)
-            launch(Dispatchers.Main) {
-                for (i in fragments.indices) {
-                    val (unitName, _) = fragments[i]
-                    val header = MainUpdatesHeaderBinding.inflate(inflater, viewBinding.mainUpdatesContainer, false)
-                    val description = Unit.getDescription(unitName) ?: continue
-                    viewBinding.mainUpdatesContainer.addView(header.root, fixedChildCount + i * 2)
-                    header.mainUpdatesHeader.setCompoundDrawablesRelativeWithIntrinsicBounds(description.getIcon(mContext), null, null, null)
-                    header.mainUpdatesHeader.text = description.getName(mContext)
-                    header.mainUpdatesHeader.setOnClickListener {
-                        mainViewModel.displayUnit(unitName, shouldShowNavAfterBack = true)
-                    }
-                }
-            }
+        fragments.forEach {
+            addUpdateFragment(it)
         }
     }
 
-    override fun onHiddenChanged(hidden: Boolean) {
-        super.onHiddenChanged(hidden)
-        if (!hidden) {
-            loadUpdates()
-        } else {
-            fragments.forEach { (_, f) ->
-                f.onHiddenChanged(hidden)
+    private fun addUpdateFragment(updateFragment: Pair<String, Fragment>, index: Int = -1) {
+        val (unitName: String, fragment: Fragment) = updateFragment
+        if (fragment.isAdded) return
+        val container = getUpdateFragmentContainer(unitName) ?: return
+        viewBinding.mainUpdatesUpdateContainer.run {
+            if (index < 0) addView(container) else addView(container, index)
+        }
+        childFragmentManager.beginTransaction().add(container.id, fragment).commitNowAllowingStateLoss()
+    }
+
+    private fun getUpdateFragmentContainer(unitName: String): ViewGroup? {
+        val description = Unit.getDescription(unitName) ?: return null
+
+        val container = LinearLayout(mContext).apply {
+            id = View.generateViewId()
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            orientation = LinearLayout.VERTICAL
+        }
+
+        val header = MainUpdatesHeaderBinding.inflate(inflater, container, false)
+        val icon = description.getIcon(mContext)
+        header.mainUpdatesHeader.setCompoundDrawablesRelativeWithIntrinsicBounds(icon, null, null, null)
+        header.mainUpdatesHeader.text = description.getName(mContext)
+        header.mainUpdatesHeader.setOnClickListener {
+            mainViewModel.displayUnit(unitName, shouldShowNavAfterBack = true)
+        }
+
+        container.addView(header.root)
+        return container
+    }
+
+    private fun removeUpdateFragment(updateFragment: Pair<String, Fragment>, index: Int) {
+        if (index > viewBinding.mainUpdatesUpdateContainer.size - 1) return
+        val (_, fragment: Fragment) = updateFragment
+        childFragmentManager.beginTransaction().remove(fragment).commitNowAllowingStateLoss()
+        viewBinding.mainUpdatesUpdateContainer.removeViewAt(index)
+    }
+
+    private fun updateUpdates() {
+        val newFragments = retrieveUpdateFragments()
+        if (newFragments.isNotEmpty()) viewBinding.mainUpdatesSecUpdates.visibility = View.VISIBLE
+        DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+            override fun getOldListSize(): Int {
+                return fragments.size
             }
+
+            override fun getNewListSize(): Int {
+                return newFragments.size
+            }
+
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return fragments[oldItemPosition].first == newFragments[newItemPosition].first
+            }
+
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return fragments[oldItemPosition].first == newFragments[newItemPosition].first
+            }
+
+        }, false).dispatchUpdatesTo(object : ListUpdateCallback {
+            override fun onInserted(position: Int, count: Int) {
+                for (i in position until position + count) {
+                    addUpdateFragment(newFragments[i])
+                }
+            }
+
+            override fun onRemoved(position: Int, count: Int) {
+                for (i in (position until position + count).reversed()) {
+                    removeUpdateFragment(fragments[i], i)
+                }
+            }
+
+            override fun onMoved(fromPosition: Int, toPosition: Int) {
+            }
+
+            override fun onChanged(position: Int, count: Int, payload: Any?) {
+            }
+
+        })
+        fragments = newFragments
+        if (newFragments.isEmpty()) viewBinding.mainUpdatesSecUpdates.visibility = View.GONE
+    }
+
+    /**
+     * List changes include addition and deletion but no update
+     */
+    private fun updateItem(stateful: StatefulDescription) {
+        val isAddition = stateful.isPinned
+        if (isAddition) {
+            if (updatesProviders.find { it.first == stateful.unitName } != null) return
+            val provider = Unit.getUpdates(stateful.unitName) ?: return
+            updatesProviders.add(stateful.unitName to provider)
+            if (!provider.hasUpdates(this)) return
+            val fragment = provider.fragment ?: return
+            val updateFragment = stateful.unitName to fragment
+            fragments.add(updateFragment)
+            if (fragments.isNotEmpty()) viewBinding.mainUpdatesSecUpdates.visibility = View.VISIBLE
+            addUpdateFragment(updateFragment)
+        } else {
+            for (i in updatesProviders.indices) {
+                val provider = updatesProviders[i]
+                if (provider.first != stateful.unitName) continue
+                updatesProviders.removeAt(i)
+                break
+            }
+            for (i in fragments.indices) {
+                val fragment = fragments[i]
+                if (fragment.first != stateful.unitName) continue
+                fragments.removeAt(i)
+                removeUpdateFragment(fragment, i)
+                break
+            }
+            if (fragments.isEmpty()) viewBinding.mainUpdatesSecUpdates.visibility = View.GONE
         }
     }
 

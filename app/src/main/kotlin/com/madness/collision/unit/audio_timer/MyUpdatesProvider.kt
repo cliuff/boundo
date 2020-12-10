@@ -18,16 +18,11 @@ package com.madness.collision.unit.audio_timer
 
 import androidx.fragment.app.Fragment
 import com.madness.collision.unit.UpdatesProvider
-import java.lang.ref.WeakReference
 
 internal class MyUpdatesProvider : UpdatesProvider() {
 
-    override fun getFragment(): Fragment? {
-        if (mFragment == null) {
-            fragmentRef = WeakReference(MyUpdatesFragment())
-        }
-        return mFragment
-    }
+    override val updatesFragment: Fragment
+        get() = MyUpdatesFragment()
 
     override fun hasUpdates(hostFragment: Fragment): Boolean {
         return AudioTimerService.isRunning
