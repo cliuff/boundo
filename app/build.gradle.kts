@@ -49,7 +49,7 @@ val signingKeyPassword: String = properties.getProperty("signingKeyPassword", ""
 //}
 
 android {
-    buildToolsVersion = "30.0.2"
+    buildToolsVersion = "30.0.3"
     sourceSets {
         getByName("main").java.srcDir("src/main/kotlin")
     }

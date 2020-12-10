@@ -2,7 +2,7 @@
 
 **Requirements**
 - Android Studio 4.1
-- Gradle 6.7
+- Gradle 6.7.1
 
 **After Git check-out**
 - Copy the file named `custom.properties.template` in project root directory and rename it to `custom.properties`

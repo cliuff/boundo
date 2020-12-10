@@ -17,7 +17,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 object Versions {
-    const val kotlin = "1.4.20"
+    const val kotlin = "1.4.21"
 }
 
 buildscript {
@@ -25,7 +25,7 @@ buildscript {
         jcenter()
     }
     val versions = object {
-        val kotlin = "1.4.20"
+        val kotlin = "1.4.21"
     }
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}")
@@ -34,7 +34,7 @@ buildscript {
 
 plugins {
     val versions = object {
-        val kotlin = "1.4.20"
+        val kotlin = "1.4.21"
     }
     kotlin("jvm") version versions.kotlin
     id("java-gradle-plugin")
