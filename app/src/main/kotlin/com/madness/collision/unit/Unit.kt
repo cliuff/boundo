@@ -58,7 +58,7 @@ abstract class Unit: TaggedFragment(), Democratic {
         val DYNAMIC_UNITS: List<String>
         init {
             val mUnitDescriptions: List<Description> = listOf(
-                    Description(UNIT_NAME_API_VIEWING, R.string.apiViewer, R.drawable.ic_app_24).setDescResId(R.string.unit_desc_av),
+                    Description(UNIT_NAME_API_VIEWING, R.string.apiViewer, R.drawable.ic_android_24).setDescResId(R.string.unit_desc_av),
                     Description(UNIT_NAME_SCHOOL_TIMETABLE, R.string.unit_school_timetable, R.drawable.ic_tt_24).setDescResId(R.string.unit_desc_st),
                     Description(UNIT_NAME_IMAGE_MODIFYING, R.string.developertools_cropimage, R.drawable.ic_landscape_24).setDescResId(R.string.unit_desc_im),
                     Description(UNIT_NAME_COOL_APP, R.string.developertools_appinfowidget, R.drawable.ic_widgets_24).setDescResId(R.string.unit_desc_ca),

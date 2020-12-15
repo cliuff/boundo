@@ -30,13 +30,13 @@ import com.madness.collision.R
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.databinding.AvListBinding
 import com.madness.collision.unit.api_viewing.list.AppListService
+import com.madness.collision.unit.api_viewing.R as RAv
 import com.madness.collision.util.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.IOException
 import kotlin.math.roundToInt
-import com.madness.collision.unit.api_viewing.R as MyR
 
 internal class AppListFragment : TaggedFragment() {
 
@@ -78,46 +78,7 @@ internal class AppListFragment : TaggedFragment() {
                 ApiInfoPop.newInstance(it).show(childFragmentManager, ApiInfoPop.TAG)
             }
             override val longClick: (ApiViewingApp) -> Boolean = {
-                val popActions = CollisionDialog(context, R.string.text_cancel).apply {
-                    setTitleCollision(0, 0, 0)
-                    setContent(0)
-                    setCustomContent(MyR.layout.av_adapter_actions)
-                    setListener { dismiss() }
-                    show()
-                }
-                popActions.findViewById<View>(MyR.id.avAdapterActionsDetails).setOnClickListener { _ ->
-                    popActions.dismiss()
-                    actionDetails(context, it)
-                }
-                val vActionOpen = popActions.findViewById<View>(MyR.id.avAdapterActionsOpen)
-                if (it.isLaunchable) {
-                    val launchIntent = service.getLaunchIntent(context, it)
-                    val activityName = launchIntent?.component?.className ?: ""
-                    val vOpenActivity = popActions.findViewById<TextView>(MyR.id.avAdapterActionsOpenActivity)
-                    vOpenActivity.text = activityName
-                    vActionOpen.setOnClickListener {
-                        popActions.dismiss()
-                        if (launchIntent == null) {
-                            notifyBriefly(R.string.text_error)
-                        } else {
-                            startActivity(launchIntent)
-                        }
-                    }
-                    vActionOpen.setOnLongClickListener {
-                        X.copyText2Clipboard(context, activityName, R.string.text_copy_content)
-                        true
-                    }
-                } else {
-                    vActionOpen.visibility = View.GONE
-                }
-                popActions.findViewById<View>(MyR.id.avAdapterActionsIcon).setOnClickListener { _ ->
-                    popActions.dismiss()
-                    actionIcon(context, it)
-                }
-                popActions.findViewById<View>(MyR.id.avAdapterActionsApk).setOnClickListener { _ ->
-                    popActions.dismiss()
-                    actionApk(context, it)
-                }
+                showOptions(context, it)
                 true
             }
         })
@@ -132,6 +93,10 @@ internal class AppListFragment : TaggedFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         viewBinding = AvListBinding.inflate(inflater, container, false)
         return viewBinding.root
+    }
+
+    fun showAppOptions(app: ApiViewingApp) {
+        showOptions(mContext, app)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -171,6 +136,49 @@ internal class AppListFragment : TaggedFragment() {
         super.onPause()
     }
 
+    private fun showOptions(context: Context, app: ApiViewingApp) {
+        val popActions = CollisionDialog(context, R.string.text_cancel).apply {
+            setTitleCollision(0, 0, 0)
+            setContent(0)
+            setCustomContent(RAv.layout.av_adapter_actions)
+            setListener { dismiss() }
+            show()
+        }
+        popActions.findViewById<View>(RAv.id.avAdapterActionsDetails).setOnClickListener {
+            popActions.dismiss()
+            actionDetails(context, app)
+        }
+        val vActionOpen = popActions.findViewById<View>(RAv.id.avAdapterActionsOpen)
+        if (app.isLaunchable) {
+            val launchIntent = service.getLaunchIntent(context, app)
+            val activityName = launchIntent?.component?.className ?: ""
+            val vOpenActivity = popActions.findViewById<TextView>(RAv.id.avAdapterActionsOpenActivity)
+            vOpenActivity.text = activityName
+            vActionOpen.setOnClickListener {
+                popActions.dismiss()
+                if (launchIntent == null) {
+                    notifyBriefly(R.string.text_error)
+                } else {
+                    startActivity(launchIntent)
+                }
+            }
+            vActionOpen.setOnLongClickListener {
+                X.copyText2Clipboard(context, activityName, R.string.text_copy_content)
+                true
+            }
+        } else {
+            vActionOpen.visibility = View.GONE
+        }
+        popActions.findViewById<View>(RAv.id.avAdapterActionsIcon).setOnClickListener {
+            popActions.dismiss()
+            actionIcon(context, app)
+        }
+        popActions.findViewById<View>(RAv.id.avAdapterActionsApk).setOnClickListener {
+            popActions.dismiss()
+            actionApk(context, app)
+        }
+    }
+
     private fun actionDetails(context: Context, appInfo: ApiViewingApp) = lifecycleScope.launch(Dispatchers.Default) {
         val details = service.getAppDetails(context, appInfo)
         if (details.isEmpty()) return@launch
@@ -191,10 +199,12 @@ internal class AppListFragment : TaggedFragment() {
         }
     }
 
-    private fun actionIcon(context: Context, app: ApiViewingApp){
+    private fun actionIcon(context: Context, app: ApiViewingApp) {
         val path = F.createPath(F.cachePublicPath(context), "App", "Logo", "${app.name}.png")
         val image = File(path)
-        app.getOriginalIcon(context)?.let { if (F.prepare4(image)) X.savePNG(it, path) }
+        app.getOriginalIcon(context)?.let {
+            if (F.prepare4(image)) X.savePNG(it, path)
+        }
         val uri: Uri = image.getProviderUri(context)
 //        val previewTitle = app.name // todo set preview title
         childFragmentManager.let {
@@ -203,7 +213,7 @@ internal class AppListFragment : TaggedFragment() {
     }
 
     // todo split APKs
-    private fun actionApk(context: Context, app: ApiViewingApp){
+    private fun actionApk(context: Context, app: ApiViewingApp) {
         val path = F.createPath(F.cachePublicPath(context), "App", "APK", "${app.name}-${app.verName}.apk")
         val apk = File(path)
         if (F.prepare4(apk)) {

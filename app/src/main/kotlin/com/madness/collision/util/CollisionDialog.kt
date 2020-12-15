@@ -356,38 +356,39 @@ class CollisionDialog private constructor(private val mContext: Context, private
     }
 
     inline fun setListener(crossinline indifferent: (view: View) -> Unit) {
-        View.OnClickListener { indifferent(buttonIndifferent) }.listen2(buttonIndifferent)
+        buttonIndifferent.setOnClickListener {
+            indifferent(buttonIndifferent)
+        }
     }
 
     inline fun setListener(crossinline left: (view: View) -> Unit, crossinline right: (view: View) -> Unit) {
-        View.OnClickListener { left(buttonLeft) }.listen2(buttonLeft)
-        View.OnClickListener { right(buttonRight) }.listen2(buttonRight)
+        buttonLeft.setOnClickListener {
+            left(buttonLeft)
+        }
+        buttonRight.setOnClickListener {
+            right(buttonRight)
+        }
     }
 
-    inline fun setListener(crossinline left: (view: View) -> Unit, crossinline right: (view: View) -> Unit, crossinline indifferent: (view: View) -> Unit) {
-        View.OnClickListener { left(buttonLeft) }.listen2(buttonLeft)
-        View.OnClickListener { right(buttonRight) }.listen2(buttonRight)
-        View.OnClickListener { indifferent(buttonIndifferent) }.listen2(buttonIndifferent)
+    inline fun setListener(crossinline left: (view: View) -> Unit, crossinline right: (view: View) -> Unit,
+                           crossinline indifferent: (view: View) -> Unit) {
+        setListener(left, right)
+        setListener(indifferent)
     }
 
-    fun setListener(indifferent: View.OnClickListener) = buttonIndifferent.listenedBy(indifferent)
+    fun setListener(indifferent: View.OnClickListener) {
+        buttonIndifferent.setOnClickListener(indifferent)
+    }
 
     fun setListener(left: View.OnClickListener, right: View.OnClickListener) {
-        buttonLeft.listenedBy(left)
-        buttonRight.listenedBy(right)
+        buttonLeft.setOnClickListener(left)
+        buttonRight.setOnClickListener(right)
     }
 
     fun setListener(left: View.OnClickListener, right: View.OnClickListener, indifferent: View.OnClickListener) {
-        buttonLeft.listenedBy(left)
-        buttonRight.listenedBy(right)
-        buttonIndifferent.listenedBy(indifferent)
+        setListener(left, right)
+        setListener(indifferent)
     }
-
-    fun setListenerIndifferent(indifferent: View.OnClickListener): Unit = buttonIndifferent.listenedBy(indifferent)
-
-    fun setListenerLeft(left: View.OnClickListener): Unit = buttonLeft.listenedBy(left)
-
-    fun setListenerRight(right: View.OnClickListener): Unit = buttonRight.listenedBy(right)
 
     fun decentButtons() {
         val btn: LinearLayout = findViewById(R.id.collision_dialog_btn)

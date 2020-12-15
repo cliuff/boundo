@@ -322,7 +322,7 @@ internal class APIAdapter(context: Context, private val listener: Listener)
             taskIcon = runnable {
                 val iconApp = logoView.getTag(R.bool.tagKeyAvAdapterItemIconId) as ApiViewingApp?
                 if (appInfo !== iconApp && appInfo.hasIcon) {
-                    AppTag.tagAdaptiveIcon(context, appInfo, holder)
+                    AppTag.tagAdaptiveIcon(context, appInfo, holder.tags)
                     holder.logo.setTag(R.bool.tagKeyAvAdapterItemIconId, appInfo)
                     animator.animateLogo(logoView)
                     checkerHandler.removeCallbacks(this)
@@ -386,7 +386,7 @@ internal class APIAdapter(context: Context, private val listener: Listener)
         GlobalScope.launch {
             val installer = AppTag.ensureResources(context, appInfo)
             launch(Dispatchers.Main) {
-                AppTag.inflateTags(context, appInfo, holder, installer, !shouldWaitForIcon)
+                AppTag.inflateTags(context, appInfo, holder.tags, installer, !shouldWaitForIcon)
                 taskIcon?.run()
             }
         }

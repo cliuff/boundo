@@ -22,7 +22,6 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
-import android.content.pm.Signature
 import android.content.res.Configuration
 import android.graphics.*
 import android.graphics.drawable.AdaptiveIconDrawable
@@ -50,8 +49,6 @@ import kotlinx.coroutines.launch
 import java.io.*
 import java.nio.charset.StandardCharsets
 import java.util.concurrent.atomic.AtomicInteger
-import javax.security.cert.CertificateException
-import javax.security.cert.X509Certificate
 import kotlin.math.max
 import kotlin.math.min
 import com.madness.collision.R as MyRes
@@ -142,18 +139,11 @@ object X {
         outStream.close()
     }
 
-    fun getStatusBarHeight( context: Context): Int{
+    fun getStatusBarHeight(context: Context): Int {
         val result = AtomicInteger()
         val resourceId = context.resources.getIdentifier("status_bar_height", "dimen", "android")
         if (resourceId > 0) result.set(context.resources.getDimensionPixelSize(resourceId))
         if (result.get() == 0) result.set(size(context, 30f, DP).toInt())
-        return result.get()
-    }
-
-    fun getNavigationBarHeight( context: Context): Int{
-        val result = AtomicInteger()
-        val resourceId = context.resources.getIdentifier("navigation_bar_height", "dimen", "android")
-        if (resourceId > 0) result.set(context.resources.getDimensionPixelSize(resourceId))
         return result.get()
     }
 
@@ -508,23 +498,6 @@ object X {
 
     fun makeGone(vararg views: View){
         for (view in views) if (view.visibility != View.GONE) view.visibility = View.GONE
-    }
-
-    /**
-     * Check if a device supports adaptive icon considering Android OS support.
-     * @return adaptive icon availability
-     */
-    fun supportAdaptiveIconAvailable(): Boolean{
-        return aboveOn(O)
-    }
-
-    fun cert(signature: Signature): X509Certificate?{
-        return try {
-            X509Certificate.getInstance(signature.toByteArray())
-        } catch ( e: CertificateException) {
-            e.printStackTrace()
-            null
-        }
     }
 
     fun toast( context: Context, messageRes: Int, duration: Int){

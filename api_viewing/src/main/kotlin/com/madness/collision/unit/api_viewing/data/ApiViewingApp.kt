@@ -299,14 +299,14 @@ internal class ApiViewingApp(
         var logoDrawable = iconDrawable
         if (isDefined) {
             if (iconDetails.isDefault) {
-                logoDrawable = ContextCompat.getDrawable(context, R.drawable.res_android_robot_head) ?: return null
+                logoDrawable = ContextCompat.getDrawable(context, R.drawable.ic_android_24) ?: return null
             }
         } else {
             iconDetails.width = logoDrawable.intrinsicWidth
             iconDetails.height = logoDrawable.intrinsicHeight
             if (iconDetails.width <= 0 || iconDetails.height <= 0) {
                 iconDetails.isDefault = true
-                logoDrawable = ContextCompat.getDrawable(context, R.drawable.res_android_robot_head) ?: return null
+                logoDrawable = ContextCompat.getDrawable(context, R.drawable.ic_android_24) ?: return null
                 iconDetails.width = logoDrawable.intrinsicWidth
                 iconDetails.height = logoDrawable.intrinsicHeight
             }

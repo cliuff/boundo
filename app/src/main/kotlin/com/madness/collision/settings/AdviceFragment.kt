@@ -72,7 +72,7 @@ internal class AdviceFragment : TaggedFragment(), Democratic, View.OnClickListen
                 view.findViewById(R.id.adviceSourceCode),
                 view.findViewById(R.id.adviceTranslation),
                 vLogo as View
-        ).forEach { it.listenedTimelyBy(this) }
+        ).forEach { it.setOnClickListener(this) }
     }
 
     override fun onClick(view: View) {

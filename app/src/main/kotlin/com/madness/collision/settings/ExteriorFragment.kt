@@ -159,7 +159,7 @@ class ExteriorFragment: TaggedFragment(), Democratic, View.OnClickListener{
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         })
-        viewBinding.exteriorImage.listenedBy(this)
+        viewBinding.exteriorImage.setOnClickListener(this)
 
         GlobalScope.launch {
             val args = arguments

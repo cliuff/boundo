@@ -48,7 +48,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="center_horizontal"
-            tools:srcCompat="@drawable/ic_app_24" />
+            tools:srcCompat="@drawable/ic_android_24" />
 
         <TextView
             android:id="@+id/frequentUnitsAdapterName"

@@ -37,9 +37,11 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.chip.ChipGroup
 import com.madness.collision.R
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.misc.MiscApp
@@ -51,7 +53,6 @@ import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.databinding.AvShareBinding
 import com.madness.collision.util.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.File
 import kotlin.math.max
@@ -136,7 +137,8 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
         val ver: AppCompatTextView = view.findViewById(MyR.id.apiInfoVer) as AppCompatTextView
         val guidelineBottom: Guideline = view.findViewById(MyR.id.sdk_info_guideline_bottom)
         val content: ConstraintLayout = view.findViewById(MyR.id.api_content)
-        val capture: ImageButton = view.findViewById(MyR.id.apiCapture)
+        val capture: ImageButton = view.findViewById(MyR.id.avAppInfoCapture)
+        val options: ImageButton = view.findViewById(MyR.id.avAppInfoOptions)
 
         init {
             targetApi.apiTitle.setText(MyR.string.sdkcheck_dialog_targetsdktext)
@@ -158,6 +160,7 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
         val icon: ImageView = view.findViewById(MyR.id.sdkcheck_dialog_logo)
         val name: AppCompatTextView = view.findViewById(MyR.id.sdkcheck_dialog_appname) as AppCompatTextView
         val badge: ImageView = view.findViewById(MyR.id.api_info_ai_icon)
+        val tags: ChipGroup = view.findViewById(MyR.id.avAppInfoAppTags)
     }
 
     private val viewModel: ApiInfoViewModel by viewModels()
@@ -178,7 +181,7 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
 
     private var popStore: CollisionDialog? = null
 
-    private val aiAvailable = X.supportAdaptiveIconAvailable()
+    private val isAiAvailable = X.aboveOn(X.O)
 
     private var itemLength = 0
 
@@ -187,7 +190,7 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
         setStyle(STYLE_NORMAL, R.style.AppTheme_Pop)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         mViews = ViewHolder(inflater.inflate(MyR.layout.av_info_pop, container, false))
         return mViews.view
     }
@@ -227,10 +230,12 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
         // below: configure views
         mvApp.run {
             name.setOnClickListener { back.performClick() }
+            tags.setOnClickListener { back.performClick() }
 
             name.setOnLongClickListener { back.performLongClick() }
+            tags.setOnLongClickListener { back.performLongClick() }
 
-            if (!aiAvailable) mViews.app.badge.visibility = View.GONE
+            if (!isAiAvailable) mViews.app.badge.visibility = View.GONE
         }
         // above: configure views
 
@@ -245,11 +250,17 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
                 mViews.ver.text = verName
                 mvApp.name.text = name
                 mvApp.icon.setImageBitmap(icon)
-                if (aiAvailable) {
+                if (isAiAvailable) {
                     if (adaptiveIcon) {
                         mViews.app.badge.drawable.setTint(X.getColor(context, R.color.androidRobotGreen))
                     } else {
                         mViews.app.badge.drawable.setTint(Color.LTGRAY)
+                    }
+                }
+                lifecycleScope.launch(Dispatchers.Default) {
+                    val installer = AppTag.ensureResources(context, it)
+                    launch(Dispatchers.Main) {
+                        AppTag.inflateTags(context, it, mvApp.tags, installer, true)
                     }
                 }
 
@@ -258,7 +269,9 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
             }
         }
 
-        arrayOf(mViews.target, mViews.min, mvApp.icon, mvApp.back, mViews.capture).forEach { it.listenedTimelyBy(this) }
+        arrayOf(mViews.target, mViews.min, mvApp.icon, mvApp.back, mViews.capture, mViews.options).forEach {
+            it.setOnClickListener(this)
+        }
     }
 
     private fun disposeAPIInfo(ver: VerInfo, apiViewHolder: ApiViewHolder) {
@@ -312,13 +325,19 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
                 }
             }
             MyR.id.api_info_back -> actionStores(context, app)
-            MyR.id.apiCapture -> actionShare(context)
+            MyR.id.avAppInfoCapture -> actionShare(context)
+            MyR.id.avAppInfoOptions -> {
+                val parent = parentFragment
+                if (parent !is AppListFragment) return
+                dismiss()
+                parent.showAppOptions(app)
+            }
         }
     }
 
     private fun actionStores(context: Context, app: ApiViewingApp) {
         if (!initializedStoreLink) {
-            GlobalScope.launch {
+            lifecycleScope.launch(Dispatchers.Default) {
                 if (!initStores(context)) return@launch
                 launch(Dispatchers.Main) {
                     // dismiss after viewModel access in initStores

@@ -286,15 +286,15 @@ internal object AppTag {
         }
     }
 
-    private fun APIAdapter.Holder.inflateTag(context: Context, nameResId: Int, icon: Bitmap? = null) {
-        inflateTag(context, nameResId, icon, this.tags)
+    private fun ViewGroup.inflateTag(context: Context, nameResId: Int, icon: Bitmap? = null) {
+        inflateTag(context, nameResId, icon, this)
     }
 
-    private fun APIAdapter.Holder.inflateTag(context: Context, name: String, icon: Bitmap? = null) {
-        inflateTag(context, name, icon, this.tags)
+    private fun ViewGroup.inflateTag(context: Context, name: String, icon: Bitmap? = null) {
+        inflateTag(context, name, icon, this)
     }
 
-    private fun tagPackageInstaller(context: Context, installer: String?, holder: APIAdapter.Holder) {
+    private fun tagPackageInstaller(context: Context, installer: String?, container: ViewGroup) {
         installer ?: return
         val stateGp = displayingTags.getNonNull(context, TAG_ID_GP)
         val statePi = displayingTags.getNonNull(context, TAG_ID_PI)
@@ -306,61 +306,61 @@ internal object AppTag {
         val installerIcon = tagIcons[installer]
 //        if (name != null) holder.inflateTag(name, installerIcon)
         if (installerIcon != null) {
-            holder.inflateTag(context, installer, installerIcon)
+            container.inflateTag(context, installer, installerIcon)
         }
     }
 
-    private fun tagNativeLibs(context: Context, appInfo: ApiViewingApp, holder: APIAdapter.Holder) {
+    private fun tagNativeLibs(context: Context, appInfo: ApiViewingApp, container: ViewGroup) {
         val isAntiedFlu = isAntied(context, TAG_ID_FLU)
         val isAntiedRn = isAntied(context, TAG_ID_RN)
         val isAntiedXam = isAntied(context, TAG_ID_XAM)
         val nls = appInfo.nativeLibraries
         if ((shouldShowTagCrossPlatformFlutter || (!isAntiedFlu && (isAntiedRn || isAntiedXam))) && nls[4]) {
-            holder.inflateTag(context, "Flutter", tagIcons[TAG_KEY_FLUTTER])
+            container.inflateTag(context, "Flutter", tagIcons[TAG_KEY_FLUTTER])
         }
         if ((shouldShowTagCrossPlatformReactNative || (!isAntiedRn && (isAntiedFlu || isAntiedXam))) && nls[5]) {
-            holder.inflateTag(context, "React Native", tagIcons[TAG_KEY_REACT_NATIVE])
+            container.inflateTag(context, "React Native", tagIcons[TAG_KEY_REACT_NATIVE])
         }
         if ((shouldShowTagCrossPlatformXamarin || (!isAntiedXam && (isAntiedRn || isAntiedFlu))) && nls[6]) {
-            holder.inflateTag(context, "Xamarin", tagIcons[TAG_KEY_Xamarin])
+            container.inflateTag(context, "Xamarin", tagIcons[TAG_KEY_Xamarin])
         }
         if (shouldShowTagKotlin && !isAntied(context, TAG_ID_KOT) && nls[7]) {
-            holder.inflateTag(context, "Kotlin", tagIcons[TAG_KEY_Kotlin])
+            container.inflateTag(context, "Kotlin", tagIcons[TAG_KEY_Kotlin])
         }
         val state64B = displayingTags.getNonNull(context, TAG_ID_64B)
         // todo remove anti check
         if (state64B.isSelected && !state64B.isAntiSelected) {
             val doInf = TagRelation.TAGS[TAG_ID_64B]?.toExpressible()?.setRes(context, appInfo)?.express()
-            if (doInf == true) holder.inflateTag(context, R.string.av_settings_tag_64b)
+            if (doInf == true) container.inflateTag(context, R.string.av_settings_tag_64b)
         }
         if (shouldShowTagNativeLibArm && !isAntied(context, TAG_ID_ARM)) {
-            if (nls[0]) holder.inflateTag(context, "ARM")
-            if (nls[1]) holder.inflateTag(context, "ARM 64")
+            if (nls[0]) container.inflateTag(context, "ARM")
+            if (nls[1]) container.inflateTag(context, "ARM 64")
         }
         if (shouldShowTagNativeLibX86 && !isAntied(context, TAG_ID_X86)) {
-            if (nls[2]) holder.inflateTag(context, "x86")
-            if (nls[3]) holder.inflateTag(context, "x64")
+            if (nls[2]) container.inflateTag(context, "x86")
+            if (nls[3]) container.inflateTag(context, "x64")
         }
     }
 
-    private fun tagDirect(context: Context, appInfo: ApiViewingApp, holder: APIAdapter.Holder, includeTagAi: Boolean) {
+    private fun tagDirect(context: Context, appInfo: ApiViewingApp, container: ViewGroup, includeTagAi: Boolean) {
         if (shouldShowTagHidden && !appInfo.isLaunchable) {
-            holder.inflateTag(context, R.string.av_adapter_tag_hidden)
+            container.inflateTag(context, R.string.av_adapter_tag_hidden)
         }
         if (shouldShowTagPrivilegeSystem && appInfo.apiUnit == ApiUnit.SYS) {
-            holder.inflateTag(context, R.string.av_adapter_tag_system)
+            container.inflateTag(context, R.string.av_adapter_tag_system)
         }
         if (shouldShowTagHasSplits && appInfo.appPackage.hasSplits) {
-            holder.inflateTag(context, R.string.av_tag_has_splits)
+            container.inflateTag(context, R.string.av_tag_has_splits)
         }
         if (includeTagAi) {
-            tagAdaptiveIcon(context, appInfo, holder)
+            tagAdaptiveIcon(context, appInfo, container)
         }
     }
 
-    fun tagAdaptiveIcon(context: Context, appInfo: ApiViewingApp, holder: APIAdapter.Holder) {
+    fun tagAdaptiveIcon(context: Context, appInfo: ApiViewingApp, container: ViewGroup) {
         if (shouldShowTagIconAdaptive && appInfo.adaptiveIcon) {
-            holder.inflateTag(context, R.string.av_ai)
+            container.inflateTag(context, R.string.av_ai)
         }
     }
 
@@ -370,10 +370,10 @@ internal object AppTag {
     }
 
     // first inflate native lib tags then has splits tag and last ai tag
-    fun inflateTags(context: Context, appInfo: ApiViewingApp, holder: APIAdapter.Holder, installer: String?, includeTagAi: Boolean) {
-        tagPackageInstaller(context, installer, holder)
-        tagNativeLibs(context, appInfo, holder)
-        tagDirect(context, appInfo, holder, includeTagAi)
+    fun inflateTags(context: Context, appInfo: ApiViewingApp, container: ViewGroup, installer: String?, includeTagAi: Boolean) {
+        tagPackageInstaller(context, installer, container)
+        tagNativeLibs(context, appInfo, container)
+        tagDirect(context, appInfo, container, includeTagAi)
     }
 
     fun filterTags(context: Context, app: ApiViewingApp): Boolean {

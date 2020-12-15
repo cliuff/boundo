@@ -111,22 +111,6 @@ infix fun AppCompatTextView.dartFuture(text: CharSequence) {
     setTextFuture(textFuture)
 }
 
-fun View.listenedBy(listener: View.OnClickListener) = this.setOnClickListener(listener)
-
-fun View.listenedTimelyBy(listener: View.OnClickListener) = this.setOnClickListener(listener)
-
-fun View.listenedBy(listener: View.OnLongClickListener) = this.setOnLongClickListener(listener)
-
-fun View.listenedLengthilyBy(listener: View.OnLongClickListener) = this.setOnLongClickListener(listener)
-
-fun View.OnClickListener.listen2(view: View) = view.setOnClickListener(this)
-
-fun View.OnClickListener.listenTimely2(view: View) = view.setOnClickListener(this)
-
-fun View.OnLongClickListener.listen2(view: View) = view.setOnLongClickListener(this)
-
-fun View.OnLongClickListener.listenLengthily2(view: View) = view.setOnLongClickListener(this)
-
 fun View.alterPadding(
         start: Int = this.paddingStart,
         top: Int = this.paddingTop,

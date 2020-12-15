@@ -34,7 +34,9 @@ import com.madness.collision.util.SystemUtil
 import com.madness.collision.util.X
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.security.cert.CertificateException
 import javax.security.cert.X509Certificate
+import com.madness.collision.unit.api_viewing.R as RAv
 
 internal class AppListService {
     private var regexFields: MutableMap<String, String> = HashMap()
@@ -48,10 +50,10 @@ internal class AppListService {
         val spanFlags = Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         builder.append(context.getString(R.string.apiDetailsPackageName), StyleSpan(Typeface.BOLD), spanFlags)
                 .append(pi.packageName ?: "").append('\n')
-        builder.append(context.getString(com.madness.collision.unit.api_viewing.R.string.apiDetailsVerName), StyleSpan(Typeface.BOLD), spanFlags)
+        builder.append(context.getString(RAv.string.apiDetailsVerName), StyleSpan(Typeface.BOLD), spanFlags)
                 .append(pi.versionName ?: "")
                 .append('\n')
-        builder.append(context.getString(com.madness.collision.unit.api_viewing.R.string.apiDetailsVerCode), StyleSpan(Typeface.BOLD), spanFlags)
+        builder.append(context.getString(RAv.string.apiDetailsVerCode), StyleSpan(Typeface.BOLD), spanFlags)
                 .append(PackageInfoCompat.getLongVersionCode(pi).toString()).append('\n')
         builder.append(context.getString(R.string.apiSdkTarget), StyleSpan(Typeface.BOLD), spanFlags)
                 .append(context.getString(R.string.textColon), StyleSpan(Typeface.BOLD), spanFlags)
@@ -66,11 +68,11 @@ internal class AppListService {
         if (appInfo.isNotArchive) {
             val cal = Calendar.getInstance()
             cal.timeInMillis = pi.firstInstallTime
-            builder.append(context.getString(com.madness.collision.unit.api_viewing.R.string.apiDetailsFirstInstall), StyleSpan(Typeface.BOLD), spanFlags)
+            builder.append(context.getString(RAv.string.apiDetailsFirstInstall), StyleSpan(Typeface.BOLD), spanFlags)
                     .append(format.format(cal.time))
                     .append('\n')
             cal.timeInMillis = pi.lastUpdateTime
-            builder.append(context.getString(com.madness.collision.unit.api_viewing.R.string.apiDetailsLastUpdate), StyleSpan(Typeface.BOLD), spanFlags)
+            builder.append(context.getString(RAv.string.apiDetailsLastUpdate), StyleSpan(Typeface.BOLD), spanFlags)
                     .append(format.format(cal.time))
                     .append('\n')
             val installer: String? = if (X.aboveOn(X.R)) {
@@ -96,7 +98,7 @@ internal class AppListService {
             } else {
                 getInstallerLegacy(context, appInfo)
             }
-            builder.append(context.getString(com.madness.collision.unit.api_viewing.R.string.apiDetailsInsatllFrom), StyleSpan(Typeface.BOLD), spanFlags)
+            builder.append(context.getString(RAv.string.apiDetailsInsatllFrom), StyleSpan(Typeface.BOLD), spanFlags)
             if (installer != null) {
                 val installerName = MiscApp.getApplicationInfo(context, packageName = installer)
                         ?.loadLabel(context.packageManager)?.toString() ?: ""
@@ -107,17 +109,17 @@ internal class AppListService {
                     val installerGPlay = ApiViewingApp.packagePlayStore
                     when (installer) {
                         installerGPlay ->
-                            builder.append(context.getString(com.madness.collision.unit.api_viewing.R.string.apiDetailsInstallGP))
+                            builder.append(context.getString(RAv.string.apiDetailsInstallGP))
                         installerAndroid ->
-                            builder.append(context.getString(com.madness.collision.unit.api_viewing.R.string.apiDetailsInstallPI))
+                            builder.append(context.getString(RAv.string.apiDetailsInstallPI))
                         "null" ->
-                            builder.append(context.getString(com.madness.collision.unit.api_viewing.R.string.apiDetailsInstallUnknown))
+                            builder.append(context.getString(RAv.string.apiDetailsInstallUnknown))
                         else ->
                             builder.append(installer)
                     }
                 }
             } else {
-                builder.append(context.getString(com.madness.collision.unit.api_viewing.R.string.apiDetailsInstallUnknown))
+                builder.append(context.getString(RAv.string.apiDetailsInstallUnknown))
             }
             builder.append('\n')
         }
@@ -189,27 +191,32 @@ internal class AppListService {
             Utils.principalFields(context, regexFields)
         }
         for (s in signatures) {
-            val cert: X509Certificate? = X.cert(s)
+            val cert: X509Certificate? = try {
+                X509Certificate.getInstance(s.toByteArray())
+            } catch (e: CertificateException) {
+                e.printStackTrace()
+                null
+            }
             if (cert != null) {
                 val issuerInfo = Utils.getDesc(regexFields, cert.issuerDN)
                 val subjectInfo = Utils.getDesc(regexFields, cert.subjectDN)
                 val formerPart = "\n\nX.509 " +
-                        context.getString(com.madness.collision.unit.api_viewing.R.string.apiDetailsCert) +
+                        context.getString(RAv.string.apiDetailsCert) +
                         "\nNo." + cert.serialNumber.toString(16).toUpperCase(SystemUtil.getLocaleApp()) +
                         " v" +
                         (cert.version + 1).toString() +
-                        '\n' + context.getString(com.madness.collision.unit.api_viewing.R.string.apiDetailsValiSince)
+                        '\n' + context.getString(RAv.string.apiDetailsValiSince)
                 builder.append(formerPart, StyleSpan(Typeface.BOLD), spanFlags)
                         .append(format.format(cert.notBefore)).append('\n')
-                        .append(context.getString(com.madness.collision.unit.api_viewing.R.string.apiDetailsValiUntil), StyleSpan(Typeface.BOLD), spanFlags)
+                        .append(context.getString(RAv.string.apiDetailsValiUntil), StyleSpan(Typeface.BOLD), spanFlags)
                         .append(format.format(cert.notAfter)).append('\n')
-                        .append(context.getString(com.madness.collision.unit.api_viewing.R.string.apiDetailsIssuer), StyleSpan(Typeface.BOLD), spanFlags)
+                        .append(context.getString(RAv.string.apiDetailsIssuer), StyleSpan(Typeface.BOLD), spanFlags)
                         .append(issuerInfo).append('\n')
-                        .append(context.getString(com.madness.collision.unit.api_viewing.R.string.apiDetailsSubject), StyleSpan(Typeface.BOLD), spanFlags)
+                        .append(context.getString(RAv.string.apiDetailsSubject), StyleSpan(Typeface.BOLD), spanFlags)
                         .append(subjectInfo).append('\n')
-                        .append(context.getString(com.madness.collision.unit.api_viewing.R.string.apiDetailsSigAlg), StyleSpan(Typeface.BOLD), spanFlags)
+                        .append(context.getString(RAv.string.apiDetailsSigAlg), StyleSpan(Typeface.BOLD), spanFlags)
                         .append(cert.sigAlgName).append('\n')
-                        .append(context.getString(com.madness.collision.unit.api_viewing.R.string.apiDetailsSigAlgOID), StyleSpan(Typeface.BOLD), spanFlags)
+                        .append(context.getString(RAv.string.apiDetailsSigAlgOID), StyleSpan(Typeface.BOLD), spanFlags)
                         .append(cert.sigAlgOID)
                         .append('\n')
             }
@@ -217,7 +224,7 @@ internal class AppListService {
 
         builder.append("\n\n")
                 .append(
-                        context.getString(com.madness.collision.unit.api_viewing.R.string.apiDetailsPermissions),
+                        context.getString(RAv.string.apiDetailsPermissions),
                         StyleSpan(Typeface.BOLD),
                         spanFlags
                 ).append('\n')
@@ -232,7 +239,7 @@ internal class AppListService {
 
         builder.append("\n\n")
                 .append(
-                        context.getString(com.madness.collision.unit.api_viewing.R.string.apiDetailsActivities),
+                        context.getString(RAv.string.apiDetailsActivities),
                         StyleSpan(Typeface.BOLD),
                         spanFlags
                 ).append('\n')
@@ -247,7 +254,7 @@ internal class AppListService {
 
         builder.append("\n\n")
                 .append(
-                        context.getString(com.madness.collision.unit.api_viewing.R.string.apiDetailsReceivers),
+                        context.getString(RAv.string.apiDetailsReceivers),
                         StyleSpan(Typeface.BOLD),
                         spanFlags
                 ).append('\n')
@@ -262,7 +269,7 @@ internal class AppListService {
 
         builder.append("\n\n")
                 .append(
-                        context.getString(com.madness.collision.unit.api_viewing.R.string.apiDetailsServices),
+                        context.getString(RAv.string.apiDetailsServices),
                         StyleSpan(Typeface.BOLD),
                         spanFlags
                 ).append('\n')
@@ -277,7 +284,7 @@ internal class AppListService {
 
         builder.append("\n\n")
                 .append(
-                        context.getString(com.madness.collision.unit.api_viewing.R.string.apiDetailsProviders),
+                        context.getString(RAv.string.apiDetailsProviders),
                         StyleSpan(Typeface.BOLD),
                         spanFlags
                 ).append('\n')

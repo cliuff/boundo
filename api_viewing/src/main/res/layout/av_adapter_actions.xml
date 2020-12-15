@@ -95,7 +95,7 @@
                 style="@style/VerIconActionCard">
                 <ImageView
                     style="@style/VerIconActionIcon"
-                    android:src="@drawable/ic_app_24" />
+                    android:src="@drawable/ic_android_24" />
             </com.google.android.material.card.MaterialCardView>
             <TextView
                 style="@style/VerIconActionText"
