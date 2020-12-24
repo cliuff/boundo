@@ -31,6 +31,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.forEach
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
+import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.databinding.AdapterAvTagBinding
 import com.madness.collision.unit.api_viewing.tag.ExpressibleTag
 import com.madness.collision.unit.api_viewing.tag.PackageTag
@@ -117,7 +118,7 @@ internal object AppTag {
     }
 
     private fun getTagColor(context: Context): Int {
-        return if (APIAdapter.shouldShowDesserts) {
+        return if (EasyAccess.shouldShowDesserts) {
             colorBackground ?: ThemeUtil.getColor(context, MainR.attr.colorABackground).also {
                 colorBackground = it
             }

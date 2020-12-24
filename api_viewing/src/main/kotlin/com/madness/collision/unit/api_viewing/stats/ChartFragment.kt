@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.madness.collision.unit.api_viewing
+package com.madness.collision.unit.api_viewing.stats
 
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
@@ -29,10 +29,12 @@ import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.utils.MPPointF
 import com.madness.collision.R
+import com.madness.collision.unit.api_viewing.ApiViewingViewModel
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.databinding.FragmentChartBinding
+import com.madness.collision.unit.api_viewing.seal.SealManager
 import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.ThemeUtil
 import com.madness.collision.util.X
@@ -84,12 +86,12 @@ internal class ChartFragment: TaggedFragment(){
 //            val label = apiVersion + context.getString(R.string.textParentheses, apiName) // exclude apiName when entry value is small to decrease overlapping
             chartEntries.add(PieEntry(value.toFloat(), apiVer.sdk).apply {
                 if (!EasyAccess.isSweet) return@apply
-                val seal = APIAdapter.getSealForIllustration(context, apiVer.letter, iconSize)
+                val seal = SealManager.getSealForIllustration(context, apiVer.letter, iconSize)
                 if (seal != null) {
                     icon = BitmapDrawable(context.resources, X.toMax(seal, iconSize))
                 }
             })
-            chartEntryColors.add(APIAdapter.getItemColorForIllustration(context, key))
+            chartEntryColors.add(SealManager.getItemColorForIllustration(context, key))
         }
         val chartDataSet = PieDataSet(chartEntries, null).apply {
             colors = chartEntryColors

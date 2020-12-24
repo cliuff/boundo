@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.madness.collision.unit.api_viewing
+package com.madness.collision.unit.api_viewing.stats
 
 import android.content.Context
 import android.os.Bundle
@@ -27,6 +27,7 @@ import com.madness.collision.R as MainR
 import com.madness.collision.Democratic
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.settings.SettingsFunc
+import com.madness.collision.unit.api_viewing.R
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.databinding.FragmentStatisticsBinding

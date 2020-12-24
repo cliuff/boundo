@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.madness.collision.unit.api_viewing
+package com.madness.collision.unit.api_viewing.list
 
 import android.content.Context
 import android.graphics.Color
@@ -32,10 +32,12 @@ import androidx.lifecycle.MutableLiveData
 import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.main.MainViewModel
+import com.madness.collision.unit.api_viewing.Utils
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.databinding.ApiDecentFragmentBinding
+import com.madness.collision.unit.api_viewing.seal.SealManager
 import com.madness.collision.util.SystemUtil
 import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.X
@@ -108,7 +110,7 @@ internal class ApiDecentFragment : TaggedFragment(), Democratic {
             viewModel.type = MutableLiveData(getInt(ARG_TYPE))
             val verLetter = getChar(ARG_VER_LETTER)
             val itemLength = getInt(ARG_ITEM_LENGTH)
-            viewModel.back = MutableLiveData(ApiInfoPop.disposeSealBack(context, verLetter, itemLength))
+            viewModel.back = MutableLiveData(SealManager.disposeSealBack(context, verLetter, itemLength))
         }
         viewModel.app.observe(viewLifecycleOwner) {
             it?.run {
@@ -125,9 +127,9 @@ internal class ApiDecentFragment : TaggedFragment(), Democratic {
                     if (EasyAccess.isSweet){
                         viewBinding.apiDecentChipCodeName.text = Utils.getAndroidCodenameByAPI(context, api)
                         if (viewBinding.apiDecentChipCodeName.text.isBlank()) viewBinding.apiDecentChipCodeName.visibility = View.GONE
-                        val resId = APIAdapter.getAndroidCodenameImageRes(letter)
+                        val resId = SealManager.getAndroidCodenameImageRes(letter)
                         viewBinding.apiDecentChipCodeName.chipIcon = if (resId == 0) null else ContextCompat.getDrawable(context, resId)
-                        val colorText = APIAdapter.getItemColorText(api)
+                        val colorText = SealManager.getItemColorText(api)
                         arrayOf(viewBinding.apiDecentLabel, viewBinding.apiDecentChipAPI,
                                 viewBinding.apiDecentChipVer, viewBinding.apiDecentChipCodeName,
                                 viewBinding.apiDecentAPILabel, viewBinding.apiDecentVer).forEach { view ->

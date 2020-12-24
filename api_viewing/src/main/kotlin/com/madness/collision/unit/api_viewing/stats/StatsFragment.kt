@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package com.madness.collision.unit.api_viewing
+package com.madness.collision.unit.api_viewing.stats
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import com.madness.collision.unit.api_viewing.ApiViewingViewModel
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.databinding.FragmentStatsBinding
@@ -46,7 +47,7 @@ internal class StatsFragment: TaggedFragment(){
 
     private lateinit var viewBinding: FragmentStatsBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         viewBinding = FragmentStatsBinding.inflate(inflater, container, false)
         return viewBinding.root
     }

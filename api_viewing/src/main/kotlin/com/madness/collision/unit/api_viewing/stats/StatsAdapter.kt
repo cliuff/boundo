@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.madness.collision.unit.api_viewing
+package com.madness.collision.unit.api_viewing.stats
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -29,8 +29,10 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.madness.collision.diy.SandwichAdapter
+import com.madness.collision.unit.api_viewing.R
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
+import com.madness.collision.unit.api_viewing.seal.SealManager
 import com.madness.collision.util.X
 import com.madness.collision.util.alterMargin
 import com.madness.collision.util.dartFuture
@@ -99,17 +101,17 @@ internal class StatsAdapter(context: Context) : SandwichAdapter<StatsAdapter.Hol
         holder.logoText.dartFuture(verInfo.api.toString())
         disposeAPIInfo(verInfo, holder.logoText, holder.logoBack)
 
-        APIAdapter.populate4Seal(context, verInfo.letter, itemLength)
+        SealManager.populate4Seal(context, verInfo.letter, itemLength)
         if (shouldShowDesserts){
-            holder.count.setTextColor(APIAdapter.getItemColorAccent(context, verInfo.api))
-            val seal: Bitmap? = APIAdapter.seals[verInfo.letter]
+            holder.count.setTextColor(SealManager.getItemColorAccent(context, verInfo.api))
+            val seal: Bitmap? = SealManager.seals[verInfo.letter]
             if (seal == null) {
                 holder.seal.visibility = View.GONE
             } else {
                 holder.seal.visibility = View.VISIBLE
                 holder.seal.setImageBitmap(X.toMin(seal, itemLength))
             }
-            val itemBack = APIAdapter.getItemColorBack(context, verInfo.api)
+            val itemBack = SealManager.getItemColorBack(context, verInfo.api)
             holder.card.setCardBackgroundColor(itemBack)
         }
 
@@ -124,11 +126,11 @@ internal class StatsAdapter(context: Context) : SandwichAdapter<StatsAdapter.Hol
     private fun disposeAPIInfo(ver: VerInfo, logoText: TextView, logoBack: ImageView) {
         logoText.text = ver.sdk
         if (EasyAccess.isSweet){
-            val colorText = APIAdapter.getItemColorText(ver.api)
+            val colorText = SealManager.getItemColorText(ver.api)
             logoText.setTextColor(colorText)
         }
 
-        val bitmap: Bitmap = ApiInfoPop.disposeSealBack(context, ver.letter, itemLength)
+        val bitmap: Bitmap = SealManager.disposeSealBack(context, ver.letter, itemLength)
         logoBack.setImageBitmap(X.circularBitmap(bitmap))
     }
 }

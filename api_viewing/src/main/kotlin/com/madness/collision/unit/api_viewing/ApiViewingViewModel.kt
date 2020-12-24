@@ -21,14 +21,12 @@ import android.content.Context
 import android.net.Uri
 import android.util.SparseIntArray
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.madness.collision.misc.MiscApp
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.database.AppRoom
+import com.madness.collision.unit.api_viewing.util.ApkRetriever
 import com.madness.collision.util.F
 import com.madness.collision.util.StringUtils
 import com.madness.collision.util.X
@@ -58,14 +56,6 @@ internal class ApiViewingViewModel(application: Application): AndroidViewModel(a
     private set
     // for both internal and external access
     val apps4Cache: MutableList<ApiViewingApp> = mutableListOf()
-    // for internal access
-    private val apps4DisplayInternal: MutableLiveData<List<ApiViewingApp>> = MutableLiveData(emptyList())
-    // for external access
-    val apps4Display: LiveData<List<ApiViewingApp>>
-        get() = apps4DisplayInternal
-    // shortcut for external access
-    val apps4DisplayValue: List<ApiViewingApp>
-        get() = apps4Display.value ?: emptyList()
     var appsCountUser: Int = 0
         private set
     var appsCountSystem: Int = 0
@@ -112,10 +102,6 @@ internal class ApiViewingViewModel(application: Application): AndroidViewModel(a
     override fun onCleared() {
         super.onCleared()
         parentJob.cancel()
-    }
-
-    fun updateApps4Display(list: List<ApiViewingApp> = apps4Cache){
-        scope.launch { apps4DisplayInternal.value = list.toList() }
     }
 
     private fun updateDeviceAppsCount(){
@@ -257,7 +243,8 @@ internal class ApiViewingViewModel(application: Application): AndroidViewModel(a
     private fun getFileFromUri(context: Context, uri: Uri): File?
     {
         uri.path.let { File(it ?: "").run { if (exists()) return this } }
-        val file = F.createFile(F.cachePublicPath(context), "App", "Apk", "${MyUnit.APP_CACHE_PREFIX}${System.currentTimeMillis()}.apk")
+        val fileName = "${ApkRetriever.APP_CACHE_PREFIX}${System.currentTimeMillis()}.apk"
+        val file = F.createFile(F.cachePublicPath(context), "App", "Apk", fileName)
         if (!F.prepare4(file)) return null
         try {
             val inStream: InputStream = context.contentResolver.openInputStream(uri) ?: return null
@@ -329,39 +316,6 @@ internal class ApiViewingViewModel(application: Application): AndroidViewModel(a
             }
             list
         }
-    }
-
-    fun loadAppIcons(adapter: APIAdapter, refreshLayout: SwipeRefreshLayout) {
-        try {
-            for (index in apps4DisplayValue.indices) {
-                if (index >= EasyAccess.preloadLimit) break
-                if (index >= apps4DisplayValue.size) break
-                adapter.ensureItem(index, refreshLayout)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    fun clearBottomAppIcons() {
-        try {
-            var index = apps4DisplayValue.size - 1
-            val cacheSize = EasyAccess.loadLimitHalf * 2 + 10
-            while (index >= cacheSize) {
-                val app = apps4DisplayValue[index]
-                if (!app.preload) app.clearIcons()
-                index--
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    fun updateCacheSize(unitSize: Int) {
-        val cacheSize = if (unitSize < 20) (30 + unitSize * 10) else (100 + unitSize * 7)
-        EasyAccess.loadLimitHalf = cacheSize
-        EasyAccess.loadAmount = unitSize
-        EasyAccess.preloadLimit = EasyAccess.loadLimitHalf - EasyAccess.loadAmount
     }
 
     companion object {

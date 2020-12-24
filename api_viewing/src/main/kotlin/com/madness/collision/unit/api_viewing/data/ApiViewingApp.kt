@@ -91,8 +91,6 @@ internal class ApiViewingApp(
     lateinit var appPackage: AppPackage
     @Ignore
     private var type: Int = TYPE_APP
-    @Ignore
-    private var mOnLoadedListener: (() -> Unit)? = null
 
     val isArchive: Boolean
         get() = apiUnit == ApiUnit.APK
@@ -254,21 +252,7 @@ internal class ApiViewingApp(
         isLoadingIcon = true
         loadLogo(context, retrieverLogo, retrieverRound)
         isLoadingIcon = false
-        dispatchListener()
         return this
-    }
-
-    /**
-     * Call this before any load method
-     */
-    fun setOnLoadedListener(block: () -> Unit): ApiViewingApp {
-        mOnLoadedListener = block
-        return this
-    }
-
-    private fun dispatchListener() {
-        mOnLoadedListener?.invoke()
-        mOnLoadedListener = null
     }
 
     private fun loadLogo(context: Context, retrieverLogo: () -> Drawable,  retrieverRound: () -> Drawable?) {

@@ -27,6 +27,7 @@ import com.madness.collision.R as MainR
 import com.madness.collision.unit.Bridge
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.UpdatesProvider
+import com.madness.collision.unit.api_viewing.seal.SealManager
 import com.madness.collision.unit.api_viewing.util.PrefUtil
 import com.madness.collision.util.Page
 import kotlin.reflect.KClass
@@ -43,18 +44,18 @@ object MyBridge: Bridge() {
         return MyUnit().apply { arguments = args[0] as Bundle? }
     }
 
-    override fun getUpdates(): UpdatesProvider? {
+    override fun getUpdates(): UpdatesProvider {
         return MyUpdatesProvider()
     }
 
-    override fun getSettings(): Fragment? {
+    override fun getSettings(): Fragment {
         return Page<PrefAv>(MainR.string.apiViewer)
     }
 
     @Suppress("unused")
     fun clearSeals() {
-        APIAdapter.seals.clear()
-        APIAdapter.sealBack.clear()
+        SealManager.seals.clear()
+        SealManager.sealBack.clear()
     }
 
     @Suppress("unused")

@@ -27,6 +27,8 @@ internal object EasyAccess {
     var shouldManifestedRound = false
     var shouldClip2Round = false
     var isSweet: Boolean = false
+    val shouldShowDesserts: Boolean
+        get() = isSweet
     var shouldIncludeDisabled = false
     /**
      * indicate that in viewing target api mode

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.madness.collision.unit.api_viewing
+package com.madness.collision.unit.api_viewing.list
 
 import android.content.Context
 import android.content.res.Resources

@@ -26,14 +26,17 @@ import android.widget.TextView
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.Updatable
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
+import com.madness.collision.unit.api_viewing.list.APIAdapter
+import com.madness.collision.unit.api_viewing.list.AppListFragment
 import com.madness.collision.util.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.math.min
 import kotlin.math.roundToInt
 
@@ -100,7 +103,7 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
     }
 
     override fun updateState() {
-        GlobalScope.launch {
+        lifecycleScope.launch(Dispatchers.Default) {
             if (changedPackages == null) {
                 checkUpdate(this@MyUpdatesFragment)
             }
@@ -116,16 +119,16 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
             val listLimitSize = min(mChangedPackages.size, 10 * spanCount)
             mList = if (mChangedPackages.isEmpty()) mList else {
                 mChangedPackages.subList(0, listLimitSize).mapIndexed { index, p ->
-                    ApiViewingApp(mContext, p, preloadProcess = true, archive = false).setOnLoadedListener {
-                        launch(Dispatchers.Main) {
-                            mAdapter.notifyListItemChanged(index)
-                        }
-                    }.load(mContext)
+                    val app = ApiViewingApp(mContext, p, preloadProcess = true, archive = false).load(mContext)
+                    withContext(Dispatchers.Main) {
+                        mAdapter.notifyListItemChanged(index)
+                    }
+                    app
                 }.let { ApiViewingViewModel.sortList(it, MyUnit.SORT_POSITION_API_TIME) }
             }
             changedPackages = null
 
-            launch(Dispatchers.Main) updateUI@ {
+            withContext(Dispatchers.Main) updateUI@ {
                 mAdapter.apps = mList
                 val recycler = mListFragment.getRecyclerView()
                 recycler.setHasFixedSize(true)

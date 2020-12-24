@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.madness.collision.unit.api_viewing
+package com.madness.collision.unit.api_viewing.list
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -45,12 +45,14 @@ import com.google.android.material.chip.ChipGroup
 import com.madness.collision.R
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.misc.MiscApp
-import com.madness.collision.unit.api_viewing.APIAdapter.Companion.sealBack
-import com.madness.collision.unit.api_viewing.APIAdapter.Companion.seals
+import com.madness.collision.unit.api_viewing.ApiViewingViewModel
+import com.madness.collision.unit.api_viewing.AppTag
+import com.madness.collision.unit.api_viewing.Utils
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.databinding.AvShareBinding
+import com.madness.collision.unit.api_viewing.seal.SealManager
 import com.madness.collision.util.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -81,51 +83,6 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
             arguments = Bundle().apply {
                 putParcelable(ARG_APP, app)
             }
-        }
-
-        fun disposeSealBack(context: Context, letter: Char, itemLength: Int): Bitmap{
-            if (sealBack.containsKey(letter)) return sealBack[letter]!!
-            //final int INITIAL_colorPlain = -1;//color #00000000 has the value of 0
-            val colorPlain: Int
-            val blurWidth: Int
-            var bitmap: Bitmap
-            val resImageID = APIAdapter.getAndroidCodenameImageRes(letter)
-            // draw color
-            if (resImageID == 0) {
-                val index4SealBack: Char
-                if (letter == 'k' && EasyAccess.isSweet){
-                    index4SealBack = letter
-                    colorPlain = Color.parseColor("#753500")
-                } else {
-                    index4SealBack = '?'
-                    if (sealBack.containsKey(index4SealBack)) return sealBack[index4SealBack]!!
-                    colorPlain = X.getColor(context, R.color.androidRobotGreen)
-                }
-                blurWidth = X.size(context, 60f, X.DP).toInt() * 2
-                bitmap = Bitmap.createBitmap(blurWidth, blurWidth, Bitmap.Config.ARGB_8888)
-                Canvas(bitmap).drawColor(colorPlain)
-                sealBack[index4SealBack] = bitmap
-                val path = F.createPath(F.valCachePubAvSeal(context), "back-$index4SealBack.png")
-                if (F.prepare4(path)) X.savePNG(bitmap, path)
-                return bitmap
-            }
-            // draw image res
-            APIAdapter.populate4Seal(context, letter, itemLength)
-            var seal: Bitmap = seals[letter]!!.collisionBitmap
-            val targetLength = seal.width / 18
-            val bitmapWidth = targetLength * 4
-            val sealWidth = targetLength * 7
-            bitmap = Bitmap.createBitmap(bitmapWidth, bitmapWidth, Bitmap.Config.ARGB_8888)
-            seal = Bitmap.createBitmap(seal, sealWidth, sealWidth, bitmap.width, bitmap.height)
-            val canvas2Draw = Canvas(bitmap)
-            canvas2Draw.drawColor(Color.parseColor("#fff5f5f5"))
-            canvas2Draw.drawBitmap(seal, 0f, 0f, Paint(Paint.ANTI_ALIAS_FLAG))
-            blurWidth = X.size(context, 60f, X.DP).toInt() * 2
-            bitmap = X.blurBitmap(context, bitmap, blurWidth, blurWidth)
-            sealBack[letter] = bitmap
-            val path = F.createPath(F.valCachePubAvSeal(context), "back-$letter.png")
-            if (F.prepare4(path)) X.savePNG(bitmap, path)
-            return bitmap
         }
     }
 
@@ -283,12 +240,12 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
         viewApiLevel.text = ver.api.toString()
         viewAndroidVersion.text = ver.displaySdk
         if (EasyAccess.isSweet){
-            val colorText = APIAdapter.getItemColorText(ver.api)
+            val colorText = SealManager.getItemColorText(ver.api)
             val views = arrayOf(viewAndroidVersion, viewApiLevel, viewApi)
             for (view in views) view.setTextColor(colorText)
         }
 
-        val bitmap: Bitmap = disposeSealBack(context, ver.letter, itemLength)
+        val bitmap: Bitmap = SealManager.disposeSealBack(context, ver.letter, itemLength)
         val paramsTarget = apiCard.layoutParams as ConstraintLayout.LayoutParams
         paramsTarget.width = bitmap.width
         paramsTarget.height = bitmap.height

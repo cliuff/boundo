@@ -28,7 +28,6 @@ import android.graphics.drawable.AdaptiveIconDrawable
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
-import android.os.Handler
 import android.util.TypedValue
 import android.view.Display
 import android.view.Surface
@@ -42,7 +41,6 @@ import androidx.core.util.component1
 import androidx.core.util.component2
 import androidx.palette.graphics.Palette
 import com.madness.collision.misc.MiscApp
-import com.madness.collision.unit.api_viewing.AccessAV
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -90,41 +88,6 @@ object X {
                 listFiles(newFile, mimeTypes, list)
             }
         }
-    }
-
-    fun listFiles4API( handler: Handler, folderDir:  String){
-        listFiles4API(handler, File(folderDir))
-    }
-
-    fun listFiles4API( handler: Handler,  folder: File){
-        if (!folder.exists() || !folder.canRead() || !folder.isDirectory) return
-        for (newFile in folder.listFiles() ?: emptyArray()) {
-            try {
-                if (newFile.isFile && newFile.name.endsWith(".apk")) {
-                    handler.obtainMessage(AccessAV.HANDLE_DISPLAY_APK, newFile.path).sendToTarget()
-                } else if (newFile.isDirectory) {
-                    listFiles4API(handler, newFile)
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-        /*
-        if (aboveOn(O)){
-            try {
-                Files.find(
-                        Paths.get(folder.path),
-                        Integer.MAX_VALUE,
-                        BiPredicate { path, basicFileAttributes -> basicFileAttributes.isRegularFile && path.toString().endsWith(".apk") }
-                ).forEach { path ->
-                    // it is a Path object rather than String
-                    handler.obtainMessage(ApiFragment.HANDLE_DISPLAY_APK, path.toFile().path).sendToTarget()
-                }
-            } catch ( e: IOException) {
-                e.printStackTrace()
-            }
-        }else {
-        }*/
     }
 
     fun copyFileLessTwoGB( src: File,  dst: File) {
