@@ -42,7 +42,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.IOException
-import kotlin.math.roundToInt
 import com.madness.collision.unit.api_viewing.R as RAv
 
 internal class AppListFragment : TaggedFragment(), Filterable {
@@ -91,11 +90,7 @@ internal class AppListFragment : TaggedFragment(), Filterable {
             }
         })
 
-        val unitWidth = X.size(mContext, 450f, X.DP)
-        val spanCount = (availableWidth / unitWidth).roundToInt().run {
-            if (this < 2) 1 else this
-        }
-        mAdapter.spanCount = spanCount
+        mAdapter.resolveSpanCount(this, 450f)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -116,7 +111,7 @@ internal class AppListFragment : TaggedFragment(), Filterable {
             mRecyclerView.isNestedScrollingEnabled = getBoolean(ARG_IS_NESTED_SCROLLING_ENABLED, mRecyclerView.isNestedScrollingEnabled)
         }
 
-        mManager = mAdapter.suggestLayoutManager(mContext)
+        mManager = mAdapter.suggestLayoutManager()
         mRecyclerView.layoutManager = mManager
         mRecyclerView.adapter = mAdapter
 

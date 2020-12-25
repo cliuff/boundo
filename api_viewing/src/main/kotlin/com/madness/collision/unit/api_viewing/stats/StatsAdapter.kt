@@ -76,6 +76,8 @@ internal class StatsAdapter(context: Context) : SandwichAdapter<StatsAdapter.Hol
     private val shouldShowDesserts = isSweet
 //    private val sweetElevation = if (shouldShowDesserts) X.size(context, 1f, X.DP) else 0f
     private val sweetMargin = if (shouldShowDesserts) X.size(context, 5f, X.DP).roundToInt() else 0
+    private val innerMargin: Float
+        get() = if (EasyAccess.shouldShowDesserts) 5f else 2f
     private val itemLength: Int = X.size(context, 70f, X.DP).roundToInt()
 
     private lateinit var rv: RecyclerView
@@ -94,6 +96,8 @@ internal class StatsAdapter(context: Context) : SandwichAdapter<StatsAdapter.Hol
     override fun onMakeBody(holder: Holder, index: Int) {
         val statsCount = stats.valueAt(index)
         val verInfo = VerInfo(stats.keyAt(index), true)
+
+        optimizeSideMargin(index, 15f, innerMargin, holder.card)
 
         holder.version.dartFuture(verInfo.sdk)
         holder.count.dartFuture(statsCount.toString())

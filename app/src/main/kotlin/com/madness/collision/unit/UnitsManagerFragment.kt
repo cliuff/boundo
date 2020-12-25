@@ -31,10 +31,6 @@ import com.madness.collision.main.MainViewModel
 import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.util.AppUtils.asBottomMargin
 import com.madness.collision.util.TaggedFragment
-import com.madness.collision.util.X
-import com.madness.collision.util.availableWidth
-import kotlin.Unit
-import kotlin.math.roundToInt
 
 internal class UnitsManagerFragment : TaggedFragment(), Democratic {
 
@@ -72,19 +68,15 @@ internal class UnitsManagerFragment : TaggedFragment(), Democratic {
 
         mRecyclerView = mViews.unitsManagerRecyclerView
 
-        val unitWidth = X.size(context, 400f, X.DP)
-        val spanCount = (availableWidth / unitWidth).roundToInt().run {
-            if (this < 2) 1 else this
-        }
         val mAdapter = UnitsManagerAdapter(context, object : UnitsManagerAdapter.Listener {
-            override val click: (StatefulDescription) -> Unit = {
+            override val click: (StatefulDescription) -> kotlin.Unit = {
                 it.description.descriptionPage?.run {
                     mainViewModel.displayFragment(this)
                 }
             }
         })
-        mAdapter.spanCount = spanCount
-        mRecyclerView.layoutManager = mAdapter.suggestLayoutManager(context)
+        mAdapter.resolveSpanCount(this, 400f)
+        mRecyclerView.layoutManager = mAdapter.suggestLayoutManager()
         mRecyclerView.adapter = mAdapter
 
         mainViewModel.contentWidthTop.observe(viewLifecycleOwner) {

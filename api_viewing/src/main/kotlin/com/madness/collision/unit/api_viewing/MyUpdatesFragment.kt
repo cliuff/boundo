@@ -108,14 +108,7 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
                 checkUpdate(this@MyUpdatesFragment)
             }
             val mChangedPackages = changedPackages ?: emptyList()
-            val spanCount = if (activity == null || isDetached || !isAdded) {
-                1
-            } else {
-                val unitWidth = X.size(mContext, 450f, X.DP)
-                (availableWidth / unitWidth).roundToInt().run {
-                    if (this < 2) 1 else this
-                }
-            }
+            val spanCount = if (activity == null || isDetached || !isAdded) 1 else mAdapter.spanCount
             val listLimitSize = min(mChangedPackages.size, 10 * spanCount)
             mList = if (mChangedPackages.isEmpty()) mList else {
                 mChangedPackages.subList(0, listLimitSize).mapIndexed { index, p ->

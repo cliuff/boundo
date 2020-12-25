@@ -27,19 +27,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.madness.collision.R
 import com.madness.collision.databinding.UnitDmDeviceListBinding
 import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.device_manager.manager.DeviceManager
 import com.madness.collision.util.TaggedFragment
-import com.madness.collision.util.X
-import com.madness.collision.util.availableWidth
 import com.madness.collision.util.notifyBriefly
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlin.math.roundToInt
 
 internal class DeviceListFragment: TaggedFragment(), StateObservable {
 
@@ -90,10 +85,6 @@ internal class DeviceListFragment: TaggedFragment(), StateObservable {
             loadDeviceItems()
         }
 
-        val itemWidth = X.size(context, 400f, X.DP)
-        val spanCount = (availableWidth / itemWidth).roundToInt().run {
-            if (this < 2) 1 else this
-        }
         adapter = DeviceItemAdapter(context, object : DeviceItemAdapter.Listener {
             override val click: (DeviceItem) -> Unit = {
                 val op = when (it.state) {
@@ -105,9 +96,9 @@ internal class DeviceListFragment: TaggedFragment(), StateObservable {
                 if (!re) notifyBriefly(R.string.text_error)
             }
         })
+        adapter.resolveSpanCount(this, 400f)
         viewBinding.dmDeviceListRecycler.run {
-            layoutManager = if (spanCount == 1) LinearLayoutManager(context)
-            else GridLayoutManager(context, spanCount)
+            layoutManager = this@DeviceListFragment.adapter.suggestLayoutManager()
             adapter = this@DeviceListFragment.adapter
         }
 

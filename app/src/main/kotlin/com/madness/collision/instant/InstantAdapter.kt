@@ -27,11 +27,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.madness.collision.R
 import com.madness.collision.databinding.InstantItemComplexBinding
 import com.madness.collision.databinding.InstantItemShortcutBinding
 import com.madness.collision.databinding.InstantItemSimpleBinding
+import com.madness.collision.diy.SpanAdapter
 import com.madness.collision.instant.shortcut.InstantShortcut
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.misc.MiscApplication
@@ -41,9 +43,9 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 internal class InstantAdapter<T: InstantItem>(
-        context: Context, private val mainViewModel: MainViewModel,
+        override val context: Context, private val mainViewModel: MainViewModel,
         private val dataType: Int, data: List<T> = emptyList()
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), SpanAdapter {
 
     companion object {
         private const val ITEM_TYPE_SIMPLE = R.layout.instant_item_simple
@@ -55,18 +57,21 @@ internal class InstantAdapter<T: InstantItem>(
     }
 
     class InstantSimpleHolder(binding: InstantItemSimpleBinding): RecyclerView.ViewHolder(binding.root) {
+        val card: MaterialCardView = binding.instantItemSimpleCard
         val switch: SwitchMaterial = binding.instantItemSimpleSwitch
         val title: TextView = binding.instantItemSimpleTitle
         val container: View = binding.instantItemSimpleContainer
     }
 
     class InstantComplexHolder(binding: InstantItemComplexBinding): RecyclerView.ViewHolder(binding.root) {
+        val card: MaterialCardView = binding.instantItemComplexCard
         val switch: SwitchMaterial = binding.instantItemComplexSwitch
         val title: TextView = binding.instantItemComplexTitle
         val titleLayout: View = binding.instantItemComplexTitleLayout
     }
 
     class InstantShortcutHolder(binding: InstantItemShortcutBinding): RecyclerView.ViewHolder(binding.root) {
+        val card: MaterialCardView = binding.instantItemShortcutCard
         val switch: SwitchMaterial = binding.instantItemShortcutSwitch
         val title: TextView = binding.instantItemShortcutTitle
         val titleLayout: View = binding.instantItemShortcutTitleLayout
@@ -74,6 +79,10 @@ internal class InstantAdapter<T: InstantItem>(
         val divider: View = binding.instantItemShortcutDivider
     }
 
+    override var spanCount: Int = 1
+        set(value) {
+            if (value > 0) field = value
+        }
     private val mContext: Context = context
     private val mInflater = LayoutInflater.from(context)
     private var mData: List<T> = data
@@ -127,6 +136,7 @@ internal class InstantAdapter<T: InstantItem>(
         val switch: SwitchMaterial
         when (holder) {
             is InstantSimpleHolder -> {
+                optimizeSideMargin(position, 30f, 7f, holder.card)
                 holder.title.text = name
                 holder.container.setOnClickListener {
                     holder.switch.toggle()
@@ -134,6 +144,7 @@ internal class InstantAdapter<T: InstantItem>(
                 switch = holder.switch
             }
             is InstantComplexHolder -> {
+                optimizeSideMargin(position, 30f, 7f, holder.card)
                 holder.title.text = name
                 holder.titleLayout.setOnClickListener {
                     mainViewModel.displayFragment(item.descriptionPage!!)
@@ -141,6 +152,7 @@ internal class InstantAdapter<T: InstantItem>(
                 switch = holder.switch
             }
             is InstantShortcutHolder -> {
+                optimizeSideMargin(position, 30f, 7f, holder.card)
                 holder.title.text = name
                 holder.titleLayout.setOnClickListener {
                     val shortcutItem = item as InstantShortcut

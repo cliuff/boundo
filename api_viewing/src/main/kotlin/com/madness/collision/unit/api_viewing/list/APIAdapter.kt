@@ -84,6 +84,8 @@ internal class APIAdapter(context: Context, private val listener: Listener)
     private val plainMargin by lazy { X.size(context, 2f, X.DP).roundToInt() }
     private val margin: Int
         get() = if (EasyAccess.shouldShowDesserts) sweetMargin else plainMargin
+    private val innerMargin: Float
+        get() = if (EasyAccess.shouldShowDesserts) 5f else 2f
     private val shouldShowTime: Boolean
         get() = sortMethod == MyUnit.SORT_POSITION_API_TIME
     private val itemLength: Int = X.size(context, 70f, X.DP).roundToInt()
@@ -138,6 +140,7 @@ internal class APIAdapter(context: Context, private val listener: Listener)
 //        if (shouldShowDesserts && !holder.card.cardBackgroundColor.isOpaque) {
 //            holder.card.setCardBackgroundColor(colorSurface)
 //        }
+        optimizeSideMargin(index, 15f, innerMargin, holder.card)
         holder.card.alterMargin(top = margin, bottom = margin)
         val appInfo = apps[index]
         holder.name.dartFuture(appInfo.name)

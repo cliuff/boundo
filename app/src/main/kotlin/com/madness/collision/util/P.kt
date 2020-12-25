@@ -22,7 +22,8 @@ import com.madness.collision.BuildConfig
 import java.util.*
 
 object P {
-    const val APP_MARGIN_BOTTOM_MIN = 80f
+    // "Show bottom nav" button -> 40, bottom margin -> 20, top margin -> 15
+    const val APP_MARGIN_BOTTOM_MIN = 75f
 
     const val AT_TIME_HOUR = "atTimeHour"
     const val AT_TIME_MINUTE = "atTimeMinute"

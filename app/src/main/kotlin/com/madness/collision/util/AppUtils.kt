@@ -25,12 +25,13 @@ object AppUtils {
      * Set minimum bottom margin
      */
     fun Fragment.asBottomMargin(margin: Int): Int {
-        var minMargin = mainApplication.minBottomMargin
-        if (minMargin < 0) {
+        var minBottomMargin = mainApplication.minBottomMargin
+        if (minBottomMargin < 0) {
             val context = context ?: return margin
-            minMargin = X.size(context, P.APP_MARGIN_BOTTOM_MIN, X.DP).roundToInt()
-            mainApplication.minBottomMargin = minMargin
+            minBottomMargin = X.size(context, P.APP_MARGIN_BOTTOM_MIN, X.DP).roundToInt()
+            mainApplication.minBottomMargin = minBottomMargin
         }
+        val minMargin = minBottomMargin + mainApplication.insetBottom
         return margin.boundMin(minMargin)
     }
 }

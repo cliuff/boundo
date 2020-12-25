@@ -24,10 +24,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.madness.collision.R
 import com.madness.collision.databinding.UnitDmDeviceItemBinding
+import com.madness.collision.diy.SpanAdapter
 
 internal class DeviceItemAdapter(
-        context: Context, private val listener: Listener, private var data: List<DeviceItem> = emptyList()
-) : RecyclerView.Adapter<DeviceItemAdapter.ViewHolder>() {
+        override val context: Context, private val listener: Listener, private var data: List<DeviceItem> = emptyList()
+) : RecyclerView.Adapter<DeviceItemAdapter.ViewHolder>(), SpanAdapter {
 
     class ViewHolder(binding: UnitDmDeviceItemBinding) : RecyclerView.ViewHolder(binding.root) {
         val container = binding.dmDeviceItemContainer
@@ -35,12 +36,17 @@ internal class DeviceItemAdapter(
         val name = binding.dmDeviceItemName
         val hint = binding.dmDeviceItemHint
         val indicator = binding.dmDeviceItemIndicator
+        val card = binding.dmDeviceItemCard
     }
 
     interface Listener {
         val click: (DeviceItem) -> Unit
     }
 
+    override var spanCount: Int = 1
+        set(value) {
+            if (value > 0) field = value
+        }
     private val layoutInflater = LayoutInflater.from(context)
 
     fun setData(data: List<DeviceItem>): DeviceItemAdapter {
@@ -54,6 +60,7 @@ internal class DeviceItemAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = data[position]
+        optimizeSideMargin(position, 15f, 2f, holder.card)
         holder.icon.setImageResource(item.iconRes)
         holder.name.text = item.name
         val isConnected = item.state == BluetoothProfile.STATE_CONNECTED

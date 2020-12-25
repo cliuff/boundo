@@ -24,8 +24,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.databinding.ActivityInstantManagerBinding
@@ -35,9 +33,11 @@ import com.madness.collision.instant.tile.InstantTiles
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.Unit
-import com.madness.collision.util.*
 import com.madness.collision.util.AppUtils.asBottomMargin
-import kotlin.math.roundToInt
+import com.madness.collision.util.CollisionDialog
+import com.madness.collision.util.TaggedFragment
+import com.madness.collision.util.X
+import com.madness.collision.util.alterPadding
 
 internal class InstantFragment: TaggedFragment(), Democratic {
 
@@ -87,11 +87,6 @@ internal class InstantFragment: TaggedFragment(), Democratic {
             viewBinding.instantContainer.alterPadding(bottom = asBottomMargin(it))
         }
 
-        val itemWidth = X.size(context, 400f, X.DP)
-        val spanCount = (availableWidth / itemWidth).roundToInt().run {
-            if (this < 2) 1 else this
-        }
-
         val installedUnits = Unit.getInstalledUnits(context)
         val predicate: (InstantItem) -> Boolean = {
             (!it.hasRequiredUnit || installedUnits.contains(it.requiredUnitName)) && it.isAvailable(context)
@@ -101,10 +96,11 @@ internal class InstantFragment: TaggedFragment(), Democratic {
         if (X.aboveOn(X.N) && availableTiles.isNotEmpty()) {
             val adapterTile = InstantAdapter(context,
                     mainViewModel, InstantAdapter.TYPE_TILE, availableTiles)
+            adapterTile.resolveSpanCount(this, 400f)
             viewBinding.instantRecyclerTile.run {
                 setHasFixedSize(true)
                 setItemViewCacheSize(availableTiles.size)
-                layoutManager = if (spanCount == 1) LinearLayoutManager(context) else GridLayoutManager(context, spanCount)
+                layoutManager = adapterTile.suggestLayoutManager()
                 adapter = adapterTile
             }
         } else {
@@ -116,11 +112,11 @@ internal class InstantFragment: TaggedFragment(), Democratic {
         if (availableShortcuts.isNotEmpty()) {
             val adapterShortcut = InstantAdapter(context, mainViewModel,
                     InstantAdapter.TYPE_SHORTCUT, availableShortcuts)
+            adapterShortcut.resolveSpanCount(this, 400f)
             viewBinding.instantRecyclerShortcut.run {
                 setHasFixedSize(true)
                 setItemViewCacheSize(availableShortcuts.size)
-                layoutManager = if (spanCount == 1) LinearLayoutManager(context)
-                else GridLayoutManager(context, spanCount)
+                layoutManager = adapterShortcut.suggestLayoutManager()
                 adapter = adapterShortcut
             }
         } else {
@@ -134,10 +130,11 @@ internal class InstantFragment: TaggedFragment(), Democratic {
         if (availableOther.isNotEmpty()) {
             val adapterOther = InstantAdapter(context,
                     mainViewModel, InstantAdapter.TYPE_OTHER, availableOther)
+            adapterOther.resolveSpanCount(this, 400f)
             viewBinding.instantRecyclerOther.run {
                 setHasFixedSize(true)
                 setItemViewCacheSize(availableOther.size)
-                layoutManager = if (spanCount == 1) LinearLayoutManager(context) else GridLayoutManager(context, spanCount)
+                layoutManager = adapterOther.suggestLayoutManager()
                 adapter = adapterOther
             }
         } else {

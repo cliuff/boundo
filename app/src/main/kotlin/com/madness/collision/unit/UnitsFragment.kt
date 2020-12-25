@@ -28,11 +28,8 @@ import com.madness.collision.databinding.FragmentUnitsBinding
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.util.TaggedFragment
-import com.madness.collision.util.X
-import com.madness.collision.util.availableWidth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlin.math.roundToInt
 
 internal class UnitsFragment : TaggedFragment() {
 
@@ -65,10 +62,6 @@ internal class UnitsFragment : TaggedFragment() {
 
         mRecyclerView = mViews.unitsRecyclerView
 
-        val unitWidth = X.size(context, 400f, X.DP)
-        val spanCount = (availableWidth / unitWidth).roundToInt().run {
-            if (this < 2) 1 else this
-        }
         val mAdapter = UnitsAdapter(context, object : UnitsAdapter.Listener {
             override val click: (StatefulDescription) -> kotlin.Unit = {
                 mainViewModel.displayUnit(it.unitName, shouldShowNavAfterBack = true)
@@ -83,8 +76,8 @@ internal class UnitsFragment : TaggedFragment() {
                 true
             }
         })
-        mAdapter.spanCount = spanCount
-        mRecyclerView.layoutManager = mAdapter.suggestLayoutManager(context)
+        mAdapter.resolveSpanCount(this, 400f)
+        mRecyclerView.layoutManager = mAdapter.suggestLayoutManager()
         mRecyclerView.adapter = mAdapter
 
         descViewModel.updated.observe(viewLifecycleOwner) {

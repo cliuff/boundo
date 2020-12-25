@@ -1,17 +1,32 @@
+/*
+ * Copyright 2020 Clifford Liu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.madness.collision.diy
 
 import android.content.Context
 import android.view.ViewGroup
 import android.widget.Space
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.madness.collision.R
 
 /**
  * adapter that allow easy blank space at both the top and the bottom of the list
  */
-abstract class SandwichAdapter<VH: RecyclerView.ViewHolder>(protected val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+abstract class SandwichAdapter<VH : RecyclerView.ViewHolder>(override val context: Context)
+    : RecyclerView.Adapter<RecyclerView.ViewHolder>(), SpanAdapter {
 
     companion object {
         const val TYPE_TOP_COVER = R.bool.diySandwichTopCover
@@ -19,10 +34,10 @@ abstract class SandwichAdapter<VH: RecyclerView.ViewHolder>(protected val contex
         const val TYPE_FILL_IN = R.bool.diySandwichFillIn
     }
 
-    abstract var spanCount: Int
     abstract val listCount: Int
     open var topCover: Int = 0
     open var bottomCover: Int = 0
+
     /**
      * count of items to fill the span
      */
@@ -57,12 +72,12 @@ abstract class SandwichAdapter<VH: RecyclerView.ViewHolder>(protected val contex
         return 0
     }
 
-    class SpaceHolder(itemView: Space): RecyclerView.ViewHolder(itemView) {
+    class SpaceHolder(itemView: Space) : RecyclerView.ViewHolder(itemView) {
         val space: Space = itemView
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when(viewType) {
+        return when (viewType) {
             TYPE_TOP_COVER, TYPE_BOTTOM_COVER, TYPE_FILL_IN -> SpaceHolder(Space(context))
             else -> onCreateBodyItemViewHolder(parent, viewType)
         }
@@ -70,19 +85,19 @@ abstract class SandwichAdapter<VH: RecyclerView.ViewHolder>(protected val contex
 
     abstract fun onCreateBodyItemViewHolder(parent: ViewGroup, viewType: Int): VH
 
-    private fun onMakeTopCover(holder: RecyclerView.ViewHolder){
+    private fun onMakeTopCover(holder: RecyclerView.ViewHolder) {
         if (holder !is SpaceHolder) return
         holder.space.minimumHeight = topCover
     }
 
-    protected open fun onMakeBody(holder: VH, index: Int){}
+    protected open fun onMakeBody(holder: VH, index: Int) {}
 
-    private fun onMakeFillIn(holder: RecyclerView.ViewHolder){
+    private fun onMakeFillIn(holder: RecyclerView.ViewHolder) {
         if (holder !is SpaceHolder) return
         holder.space.minimumHeight = 0
     }
 
-    private fun onMakeBottomCover(holder: RecyclerView.ViewHolder){
+    private fun onMakeBottomCover(holder: RecyclerView.ViewHolder) {
         if (holder !is SpaceHolder) return
         holder.space.minimumHeight = bottomCover
     }
@@ -101,9 +116,4 @@ abstract class SandwichAdapter<VH: RecyclerView.ViewHolder>(protected val contex
             else -> onMakeBody(holder as VH, position - frontCount)
         }
     }
-
-    fun suggestLayoutManager(context: Context): RecyclerView.LayoutManager {
-        return if (spanCount == 1) LinearLayoutManager(context) else GridLayoutManager(context, spanCount)
-    }
-
 }

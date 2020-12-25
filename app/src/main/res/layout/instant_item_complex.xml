@@ -17,7 +17,8 @@
 
 <layout>
     <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-        style="@style/InstantCard">
+        style="@style/InstantCard"
+        android:id="@+id/instantItemComplexCard">
 
         <LinearLayout
             android:orientation="horizontal"

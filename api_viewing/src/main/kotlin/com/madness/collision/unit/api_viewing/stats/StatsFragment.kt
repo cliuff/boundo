@@ -26,10 +26,8 @@ import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.databinding.FragmentStatsBinding
 import com.madness.collision.util.TaggedFragment
-import com.madness.collision.util.X
-import kotlin.math.roundToInt
 
-internal class StatsFragment: TaggedFragment(){
+internal class StatsFragment : TaggedFragment() {
 
     override val category: String = "AV"
     override val id: String = "Stats"
@@ -61,13 +59,10 @@ internal class StatsFragment: TaggedFragment(){
         val unit: Int = arguments?.getInt(ARG_TYPE) ?: ApiUnit.ALL_APPS
         val viewModel: ApiViewingViewModel by activityViewModels()
 //        val (aiCountUser, aiCountSystem) = viewModel.aiCount
-        val fWidth = viewBinding.avStatsRecycler.width
-        val unitWidth = X.size(context, 500f, X.DP)
-        val spanCount = (fWidth / unitWidth).roundToInt().run {
-            if (this < 2) 1 else this
+        adapter.resolveSpanCount(this, 500f) {
+            viewBinding.avStatsRecycler.width
         }
-        adapter.spanCount = spanCount
-        viewBinding.avStatsRecycler.layoutManager = adapter.suggestLayoutManager(context)
+        viewBinding.avStatsRecycler.layoutManager = adapter.suggestLayoutManager()
         when (unit) {
             ApiUnit.USER -> if (EasyAccess.isViewingTarget) viewModel.apiCountUser else viewModel.minApiCountUser
             ApiUnit.SYS -> if (EasyAccess.isViewingTarget) viewModel.apiCountSystem else viewModel.minApiCountSystem

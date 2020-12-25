@@ -75,6 +75,7 @@ internal class UnitsManagerAdapter(context: Context, private val listener: Liste
     override fun onMakeBody(holder: UnitViewHolder, index: Int) {
         val stateful = descriptions[index]
         val description = stateful.description
+        optimizeSideMargin(index, 30f, 7f, holder.card)
         holder.name.text = description.getName(mContext)
         holder.name.setCompoundDrawablesRelativeWithIntrinsicBounds(description.getIcon(mContext), null, null, null)
         holder.container.setOnClickListener {
