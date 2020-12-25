@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020 Clifford Liu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.madness.collision.wearable.util
 
 import android.content.Context
@@ -84,7 +100,9 @@ internal object X {
 
     fun getAndroidVersionByAPI(api: Int, exact: Boolean): String{
         return when (api){
-            Q, DEV -> "10"
+            DEV -> if (exact) "DEV" else ""
+            R -> "11"
+            Q -> "10"
             P -> "9"  // 9 Pie
             O_MR1 -> if (exact) "8.1.0" else "8"  // 8.1.0 Oreo
             O -> if (exact) "8.0.0" else "8"  // 8.0.0 Oreo
@@ -117,7 +135,8 @@ internal object X {
         }
     }
 
-    const val DEV = 10000 // developer preview
+    const val DEV = Build.VERSION_CODES.CUR_DEVELOPMENT
+    const val R = Build.VERSION_CODES.R
     const val Q = Build.VERSION_CODES.Q
     const val P = Build.VERSION_CODES.P
     const val O_MR1 = Build.VERSION_CODES.O_MR1

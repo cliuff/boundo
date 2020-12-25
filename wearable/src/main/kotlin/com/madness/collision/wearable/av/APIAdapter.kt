@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020 Clifford Liu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.madness.collision.wearable.av
 
 import android.content.Context
@@ -24,6 +40,8 @@ internal class APIAdapter(private val context: Context) : SandwichAdapter<APIAda
     companion object {
         fun getItemColorAccent(apiLevel: Int): Int {
             when (apiLevel) {
+                X.R -> "acd5c1"
+                X.Q -> "c1d5ac"
                 X.P -> "e0c8b0"
                 X.O, X.O_MR1 -> "b0b0b0"
                 X.N, X.N_MR1 -> "ffb2a8"

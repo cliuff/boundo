@@ -45,7 +45,7 @@ val signingKeyPassword: String = properties.getProperty("signingKeyPassword", ""
 //}
 
 android {
-    buildToolsVersion = "30.0.2"
+    buildToolsVersion = "30.0.3"
     sourceSets {
         getByName("main").java.srcDir("src/main/kotlin")
     }
@@ -57,15 +57,15 @@ android {
             storePassword = signingKeyStorePassword
         }
     }
-    compileSdkVersion(29)
+    compileSdkVersion(30)
     defaultConfig {
         // below: manifest placeholders
         manifestPlaceholders["buildPackage"] = buildPackage
         applicationId = "com.madness.collision"
         minSdkVersion(23)
-        targetSdkVersion(29)
-        versionCode = 20012223
-        versionName = "3.0"
+        targetSdkVersion(30)
+        versionCode = 20122524
+        versionName = "3.6.6"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testApplicationId = "${applicationId}.test"
         signingConfig = signingConfigs.getByName("Sign4Release")
