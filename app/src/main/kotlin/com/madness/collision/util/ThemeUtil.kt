@@ -25,9 +25,13 @@ import android.graphics.drawable.Drawable
 import android.os.PowerManager
 import android.util.TypedValue
 import androidx.core.content.res.use
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import com.madness.collision.R
 import com.madness.collision.misc.MiscMain
 import com.madness.collision.unit.themed_wallpaper.ThemedWallpaperEasyAccess
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.io.File
 import java.util.*
 
@@ -237,13 +241,18 @@ object ThemeUtil {
      * Update isDarkTheme and isPaleTheme
      * @return isDarkTheme value is changed
      */
-    fun updateIsDarkTheme(context: Context, isDarkTheme: Boolean): Boolean{
-        synchronized(mainApplication){
+    fun updateIsDarkTheme(context: Context, isDarkTheme: Boolean): Boolean {
+        synchronized(mainApplication) {
             mainApplication.isPaleTheme = getIsPaleTheme(context)
             val isDarkThemePrevious = mainApplication.isDarkTheme
             mainApplication.isDarkTheme = isDarkTheme
             val darkChanged = isDarkThemePrevious != isDarkTheme
-            if (darkChanged) MiscMain.updateExteriorBackgrounds(context)
+            if (darkChanged) {
+                val scope = if (context is LifecycleOwner) context.lifecycleScope else GlobalScope
+                scope.launch {
+                    MiscMain.updateExteriorBackgrounds(context)
+                }
+            }
             return darkChanged
         }
     }

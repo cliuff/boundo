@@ -43,6 +43,11 @@ internal class StatisticsFragment: TaggedFragment(), Democratic {
 
     companion object {
         const val ARG_TYPE = "type"
+
+        const val STATE_KEY_HOR = "IsHor"
+        const val STATE_KEY_CHART = "ChartFragment"
+        const val STATE_KEY_STATS = "StatsFragment"
+
         @JvmStatic
         fun newInstance(type: Int) = StatisticsFragment().apply {
             arguments = Bundle().apply {
@@ -52,6 +57,8 @@ internal class StatisticsFragment: TaggedFragment(), Democratic {
     }
 
     private lateinit var viewBinding: FragmentStatisticsBinding
+    private lateinit var chartFragment: ChartFragment
+    private lateinit var statsFragment: StatsFragment
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
         toolbar.setTitle(if (EasyAccess.isViewingTarget) MainR.string.apiSdkTarget else MainR.string.apiSdkMin)
@@ -66,10 +73,24 @@ internal class StatisticsFragment: TaggedFragment(), Democratic {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val isHor = viewBinding.avStatisticsContainer == null
         val unit: Int = arguments?.getInt(ARG_TYPE) ?: ApiUnit.ALL_APPS
-        val isHor = view.findViewById<View>(R.id.avStatisticsContainer) == null
-        ensureAdded(if (isHor) R.id.avStatisticsContainerPieChart else R.id.avStatisticsContainer, ChartFragment.newInstance(unit))
-        ensureAdded(if (isHor) R.id.avStatisticsContainerList else R.id.avStatisticsContainer, StatsFragment.newInstance(unit))
+        val fm = childFragmentManager
+        var doNew = savedInstanceState == null
+        if (savedInstanceState != null) {
+            chartFragment = fm.getFragment(savedInstanceState, STATE_KEY_CHART) as ChartFragment
+            statsFragment = fm.getFragment(savedInstanceState, STATE_KEY_STATS) as StatsFragment
+            val wasHor = savedInstanceState.getBoolean(STATE_KEY_HOR)
+            doNew = isHor != wasHor
+            if (doNew) fm.beginTransaction().remove(chartFragment).remove(statsFragment)
+                    .commitNowAllowingStateLoss()
+        }
+        if (doNew) {
+            chartFragment = ChartFragment.newInstance(unit)
+            statsFragment = StatsFragment.newInstance(unit)
+        }
+        ensureAdded(if (isHor) R.id.avStatisticsContainerPieChart else R.id.avStatisticsContainer, chartFragment)
+        ensureAdded(if (isHor) R.id.avStatisticsContainerList else R.id.avStatisticsContainer, statsFragment)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -85,6 +106,14 @@ internal class StatisticsFragment: TaggedFragment(), Democratic {
                 container.alterPadding(bottom = asBottomMargin(it))
             }
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        val isHor = viewBinding.avStatisticsContainer == null
+        outState.putBoolean(STATE_KEY_HOR, isHor)
+        childFragmentManager.putFragment(outState, STATE_KEY_CHART, chartFragment)
+        childFragmentManager.putFragment(outState, STATE_KEY_STATS, statsFragment)
+        super.onSaveInstanceState(outState)
     }
 
 }

@@ -38,7 +38,12 @@ class MyUnit : Unit() {
 
     override val id: String = "DM"
 
+    companion object {
+        const val STATE_KEY_LIST = "ListFragment"
+    }
+
     private lateinit var viewBinding: UnitDeviceManagerBinding
+    private lateinit var listFragment: DeviceListFragment
 
     // observe bluetooth on/off events
     private val receiver = object : BroadcastReceiver() {
@@ -57,6 +62,8 @@ class MyUnit : Unit() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        listFragment = if (savedInstanceState == null) DeviceListFragment()
+        else childFragmentManager.getFragment(savedInstanceState, STATE_KEY_LIST) as DeviceListFragment
         val context = context ?: return
         context.registerReceiver(receiver, IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED))
     }
@@ -68,8 +75,7 @@ class MyUnit : Unit() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val context = context ?: return
-        ensureAdded(R.id.dmListContainer, DeviceListFragment(), true)
+        ensureAdded(R.id.dmListContainer, listFragment, true)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -78,6 +84,11 @@ class MyUnit : Unit() {
         mainViewModel.contentWidthTop.observe(viewLifecycleOwner) {
             viewBinding.dmContainer.alterPadding(top = it)
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        childFragmentManager.putFragment(outState, STATE_KEY_LIST, listFragment)
+        super.onSaveInstanceState(outState)
     }
 
     override fun onDestroy() {

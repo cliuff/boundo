@@ -87,6 +87,9 @@ class TypedNavArg() : Parcelable {
  * Wrap a fragment
  */
 class Page(fragment: Fragment? = null, private var titleId: Int = 0, private val democratic: Democratic? = null) : TaggedFragment(), Democratic {
+    companion object {
+        const val STATE_KEY_FRA = "MyFragment"
+    }
 
     override val category: String = "Page"
     override val id: String = "Page"
@@ -118,14 +121,18 @@ class Page(fragment: Fragment? = null, private var titleId: Int = 0, private val
         super.onCreate(savedInstanceState)
         // nav args
         val args = arguments ?: return
-        val fragmentClass = args.getParcelable<TypedNavArg>("fragmentClass")
-        if (fragmentClass != null) {
-            mFragment = try {
-                fragmentClass.clazz?.createInstance()
-            } catch (e: Throwable) {
-                e.printStackTrace()
-                null
+        if (savedInstanceState == null) {
+            val fragmentClass = args.getParcelable<TypedNavArg>("fragmentClass")
+            if (fragmentClass != null) {
+                mFragment = try {
+                    fragmentClass.clazz?.createInstance()
+                } catch (e: Throwable) {
+                    e.printStackTrace()
+                    null
+                }
             }
+        } else {
+            mFragment = childFragmentManager.getFragment(savedInstanceState, STATE_KEY_FRA)
         }
         titleId = args.getInt("titleId")
     }
@@ -149,6 +156,13 @@ class Page(fragment: Fragment? = null, private var titleId: Int = 0, private val
         mainViewModel.contentWidthBottom.observe(viewLifecycleOwner) {
             viewBinding.pageContainer.alterPadding(bottom = asBottomMargin(it))
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        mFragment?.let {
+            childFragmentManager.putFragment(outState, STATE_KEY_FRA, it)
+        }
+        super.onSaveInstanceState(outState)
     }
 
 }

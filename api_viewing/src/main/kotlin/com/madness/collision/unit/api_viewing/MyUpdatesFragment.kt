@@ -46,6 +46,8 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
     override val id: String = "MyUpdates"
 
     companion object {
+        const val STATE_KEY_LIST = "ListFragment"
+
         private var appTimestamp: Long = 0L
         private var sessionTimestamp: Long = 0L
         var changedPackages: List<PackageInfo>? = null
@@ -85,7 +87,9 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
         mContext = context ?: return
         mList = emptyList()
         EasyAccess.init(mContext)
-        mListFragment = AppListFragment.newInstance(isScrollbarEnabled = false, isFadingEdgeEnabled = false, isNestedScrollingEnabled = false)
+        mListFragment = if (savedInstanceState == null) AppListFragment.newInstance(
+                isScrollbarEnabled = false, isFadingEdgeEnabled = false, isNestedScrollingEnabled = false)
+        else childFragmentManager.getFragment(savedInstanceState, STATE_KEY_LIST) as AppListFragment
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -100,6 +104,11 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
         mAdapter.topCover = space
         mAdapter.bottomCover = space
         updateState()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        childFragmentManager.putFragment(outState, STATE_KEY_LIST, mListFragment)
+        super.onSaveInstanceState(outState)
     }
 
     override fun updateState() {

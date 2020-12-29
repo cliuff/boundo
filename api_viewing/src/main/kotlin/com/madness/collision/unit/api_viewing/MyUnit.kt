@@ -90,6 +90,8 @@ class MyUnit: com.madness.collision.unit.Unit() {
         const val SORT_POSITION_API_HIGH: Int  = 1
         const val SORT_POSITION_API_NAME: Int  = 2
         const val SORT_POSITION_API_TIME: Int  = 3
+
+        const val STATE_KEY_LIST = "ListFragment"
     }
 
     class LaunchMethod(val mode: Int) {
@@ -325,7 +327,27 @@ class MyUnit: com.madness.collision.unit.Unit() {
 
         apkRetriever = ApkRetriever(context)
 
-        listFragment = AppListFragment.newInstance()
+        listFragment = if (savedInstanceState == null) AppListFragment.newInstance()
+        else childFragmentManager.getFragment(savedInstanceState, STATE_KEY_LIST) as AppListFragment
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        val context = context
+        if (context != null) SettingsFunc.updateLanguage(context)
+        viewBinding = FragmentApiBinding.inflate(inflater, container, false)
+        return viewBinding.root
+    }
+
+    override fun onStop() {
+        searchBackPressedCallback?.remove()
+        searchBackPressedCallback = null
+        ApiTaskManager.cancelAll()
+        super.onStop()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        childFragmentManager.putFragment(outState, STATE_KEY_LIST, listFragment)
+        super.onSaveInstanceState(outState)
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
@@ -350,20 +372,6 @@ class MyUnit: com.madness.collision.unit.Unit() {
             }
         }
         super.onHiddenChanged(hidden)
-    }
-
-    override fun onStop() {
-        searchBackPressedCallback?.remove()
-        searchBackPressedCallback = null
-        ApiTaskManager.cancelAll()
-        super.onStop()
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val context = context
-        if (context != null) SettingsFunc.updateLanguage(context)
-        viewBinding = FragmentApiBinding.inflate(inflater, container, false)
-        return viewBinding.root
     }
 
     private fun displayApk(context: Context, apkPath: String) {

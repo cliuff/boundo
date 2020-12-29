@@ -27,6 +27,9 @@ import com.madness.collision.util.mainApplication
 import com.madness.collision.util.measure
 import java.lang.ref.WeakReference
 
+/**
+ * For [MainActivity]
+ */
 class MainViewModel: ViewModel(){
     val democratic: MutableLiveData<Democratic> = MutableLiveData()
     val action: MutableLiveData<Pair<String, Any?>> = MutableLiveData("" to null)

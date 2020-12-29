@@ -33,8 +33,11 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.radiobutton.MaterialRadioButton
@@ -48,6 +51,8 @@ import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.api_viewing.AccessAV
 import com.madness.collision.util.*
+import com.madness.collision.util.notice.ToastUtils
+import com.madness.collision.util.os.OsUtils
 import kotlinx.coroutines.*
 import java.lang.ref.WeakReference
 import kotlin.math.roundToInt
@@ -72,8 +77,12 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
         const val ACTION_EXTERIOR = "mainExterior"
         const val ACTION_EXTERIOR_THEME = "mainExteriorTheme"
 
-        var themeId = P.SETTINGS_THEME_NONE
+        const val STATE_KEY_NAV_UP = "NavUp"
+        const val STATE_KEY_BACK = "Back"
 
+        // ui appearance data
+        var themeId = P.SETTINGS_THEME_NONE
+        // views
         var mainBottomNavRef: WeakReference<View>? = null
             private set
 
@@ -89,108 +98,99 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
         }
     }
 
+    // session data
+    private var launchItem: String? = null
     private var isNavUp = false
+    private var mBackStack: ArrayDeque<BackwardOperation> = ArrayDeque()
+    private val viewModel: MainViewModel by viewModels()
+    // ui appearance data
     private var primaryStatusBarConfig: SystemBarConfig? = null
     private var primaryNavBarConfig: SystemBarConfig? = null
     private var isToolbarInflated = false
     private var colorIcon = 0
     private var isLand = false
-    private val viewModel: MainViewModel by viewModels()
-    private lateinit var navController: NavController
-    private lateinit var navHostFragment: NavHostFragment
-    private var mBackStack: ArrayDeque<BackwardOperation> = ArrayDeque()
-    internal lateinit var background: View
-    private lateinit var mContext: Context
-    private lateinit var prefSettings: SharedPreferences
-    private lateinit var mWindow: Window
-    private var launchItem: String? = null
     private var bottomNavHeight: Int = 0
-    private val animator = MainAnimator()
+    // views
+    private lateinit var navHostFragment: NavHostFragment
     private lateinit var viewBinding: FragmentMainBinding
+    private var lastBackFragment: WeakReference<Fragment> = WeakReference(null)
+    // android
+    private lateinit var mContext: Context
+    private lateinit var mWindow: Window
+    private val animator = MainAnimator()
+
+    private val background: View
+        get() = if (isLand) viewBinding.mainLinear!! else viewBinding.mainFrame
+    private val navController: NavController
+        get() = navHostFragment.navController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mContext = this
-        prefSettings = getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
-        updateThemeId(mContext)
+        val context = mContext
+        val prefSettings = getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
 
-        initData(mContext)
-        mWindow = window
+        themeId = loadThemeId(context, prefSettings)
+        // this needs to be invoked before update fragments are rendered
         viewModel.updateTimestamp()
-        applyEssentials(mContext)
-        launchItem = intent?.getStringExtra(LAUNCH_ITEM)
-        applyUI()
-        applyMisc(mContext)
-    }
 
-    private fun applyEssentials(context: Context) {
-        GlobalScope.launch {
+        lifecycleScope.launch(Dispatchers.Default) {
+            initApplication(context, prefSettings)
             MiscMain.ensureUpdate(context, prefSettings)
             Unit.loadUnitClasses(context)
         }
-    }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        mBackStack.toTypedArray().let {
-            outState.putParcelableArray("mainCallback", it)
+        mWindow = window
+        launchItem = intent?.getStringExtra(LAUNCH_ITEM)
+
+        applyUi(context, prefSettings)
+
+        lifecycleScope.launch(Dispatchers.Default) {
+            checkMisc(context, prefSettings)
+            checkTarget(context)
+            // restore session
+            if (savedInstanceState?.getBoolean(STATE_KEY_NAV_UP) == false) {
+                // this needs to be invoked after applyColor, which shows nav
+                delay(500)
+                withContext(Dispatchers.Main) {
+                    hideNav()
+                }
+            }
         }
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        val callbacks = savedInstanceState.getParcelableArray("mainCallback") ?: return
-        callbacks.mapNotNull {
-            if (it is BackwardOperation) it else null
-        }.let { mBackStack = ArrayDeque(it) }
-        GlobalScope.launch {
-            // wait until fragments are in place
-            delay(300)
-            setupOnBackPressedDispatcher()
+    private fun loadThemeId(context: Context, prefSettings: SharedPreferences) : Int {
+        val app = mainApplication
+        val globalValue = app.globalValue
+        return if (globalValue is Pair<*, *> && globalValue.first as String == ACTION_EXTERIOR_THEME) {
+            app.globalValue = null
+            val themeId = globalValue.second as Int
+            if (themeId != R.style.LaunchScreen) setTheme(themeId)
+            ThemeUtil.updateIsDarkTheme(context, ThemeUtil.getIsDarkTheme(context))
+            themeId
+        } else {
+            ThemeUtil.updateTheme(this, prefSettings)
         }
     }
 
-    override fun onDestroy() {
-        mBackStack.forEach {
-            it.cachedCallback?.remove()
-            it.cachedCallback = null
-        }
-        GlobalScope.launch {
-            MiscMain.clearCache(this@MainActivity)
-        }
-        AccessAV.clearContext()
-        super.onDestroy()
+    private suspend fun initApplication(context: Context, prefSettings: SharedPreferences) {
+        val app = mainApplication
+        if (!app.dead) return
+        app.debug = prefSettings.getBoolean(P.ADVANCED, false)
+        app.statusBarHeight = X.getStatusBarHeight(context)
+        if (!app.isDarkTheme) MiscMain.updateExteriorBackgrounds(context)
+        app.dead = false
     }
 
-    private fun updateThemeId(context: Context) {
-        if (mainApplication.globalValue is Pair<*, *>) {
-            val globalValue = mainApplication.globalValue as Pair<*, *>
-            if (globalValue.first as String == ACTION_EXTERIOR_THEME) {
-                themeId = globalValue.second as Int
-                if (themeId != R.style.LaunchScreen) setTheme(themeId)
-                ThemeUtil.updateIsDarkTheme(context, ThemeUtil.getIsDarkTheme(context))
-                mainApplication.globalValue = null
-            } else themeId = ThemeUtil.updateTheme(this, prefSettings)
-        } else themeId = ThemeUtil.updateTheme(this, prefSettings)
-    }
-
-    private fun initData(context: Context) {
-        if (mainApplication.dead) {
-            mainApplication.debug = prefSettings.getBoolean(P.ADVANCED, false)
-            initApplication(context)
-        }
-    }
-
-    private fun applyUI() {
+    private fun applyUi(context: Context, prefSettings: SharedPreferences) {
         mWindow.let { SystemUtil.applyEdge2Edge(it) }
 
-        SettingsFunc.updateLanguage(mContext)
+        SettingsFunc.updateLanguage(context)
         viewBinding = FragmentMainBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
 
         viewModel.navViewRef = WeakReference(viewBinding.mainSideNav)
         navHostFragment = supportFragmentManager.findFragmentById(R.id.mainNavHost) as NavHostFragment
-        navController = navHostFragment.navController
 
         val navInflater = navController.navInflater
         val graph = navInflater.inflate(R.navigation.nav_main)
@@ -200,10 +200,10 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
         } else null
         navController.setGraph(graph, startArgs)
 
-        setupViewModel()
+        setupViewModel(context, prefSettings)
 
-        // invoke will clear stack
-        applyResources()
+        // invocation will clear stack
+        setupUi()
 
         viewModel.background.observe(this) {
             applyExterior()
@@ -211,165 +211,10 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
         }
     }
 
-    private fun setupOnBackPressedDispatcher() {
-        if (mBackStack.isEmpty()) return
-        val last = mBackStack.last()
-        mBackStack.forEach {
-            onBackPressedDispatcher.addCallback(it.makeCallback(it === last))
-        }
-    }
-
-    private fun BackwardOperation.makeCallback(isForwardTheTop: Boolean = false): OnBackPressedCallback {
-        val shouldShowNavAfterBack = operationFlags[0]
-        val shouldExitAppAfterBack = operationFlags[1]
-        val navFm = navHostFragment.childFragmentManager
-        tryToEnsure(navFm)
-        val forwardFragment = when {
-            isForwardTheTop -> navFm.fragments.find { f -> f.isVisible }
-            forwardPage.hasRef -> forwardPage.fragment
-            else -> null
-        }
-        val backwardFragment = backwardPage.fragment
-        cachedCallback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                minusBackPressedCallback(this)
-                if (shouldExitAppAfterBack) {
-                    finish()
-                    return
-                }
-                navFm.beginTransaction().animRetreat.run {
-                    if (forwardFragment != null) {
-                        remove(forwardFragment)
-                    }
-                    if (backwardFragment != null) {
-                        if (backwardFragment.isAdded) {
-                            show(backwardFragment)
-                        } else {
-                            add(navHostFragment.view?.id
-                                    ?: 0, backwardFragment, backwardFragment.uid)
-                        }
-                    }
-                    commitNow()
-                }
-                if (backwardFragment is Democratic) {
-                    backwardFragment.democratize(viewModel)
-                }
-                if (shouldShowNavAfterBack) showNav()
-                // make unit value matches reality
-                val isMoreUnit = !mBackStack.isEmpty()
-                if (backwardFragment != null) {
-                    viewModel.unit.value = if (isMoreUnit) backwardFragment to booleanArrayOf(false, false, true) else null
-                }
-            }
-        }
-        return cachedCallback!!
-    }
-
-    private fun minusBackPressedCallback(callback: OnBackPressedCallback) {
-        if (mBackStack.isEmpty()) return
-        if (mBackStack.last().cachedCallback === callback) {
-            mBackStack.removeLast().cachedCallback?.remove()
-        }
-    }
-
-    private fun clearBackPressedCallback() {
-        mBackStack.forEach {
-            it.cachedCallback?.remove()
-        }
-        mBackStack.clear()
-    }
-
-    private fun applyMisc(context: Context) {
-        GlobalScope.launch {
-            applyUpdates(context)
-
-            val activityName = intent.getStringExtra(LAUNCH_ACTIVITY) ?: ""
-            val target = if (activityName.isNotEmpty()) {
-                try {
-                    Class.forName(activityName)
-                } catch (e: ClassNotFoundException) {
-                    e.printStackTrace()
-                    null
-                }
-            } else null
-            target?.let {
-                val startIntent = Intent(this@MainActivity, it)
-                startIntent.putExtras(intent)
-                delay(100)
-                launch(Dispatchers.Main) { startActivity(startIntent) }
-            }
-        }
-    }
-
-    /**
-     * update notification availability, notification channels and check app update
-     */
-    private fun applyUpdates(context: Context) {
-        // enable notification
-        mainApplication.notificationAvailable = NotificationManagerCompat.from(context).areNotificationsEnabled()
-        if (!mainApplication.notificationAvailable && Random(System.currentTimeMillis()).nextInt(10) == 0) {
-            GlobalScope.launch(Dispatchers.Main) {
-                X.popRequestNotification(this@MainActivity)
-            }
-        }
-        MiscMain.registerNotificationChannels(context, prefSettings)
-        MiscMain.clearCache(context)
-
-//        prHandler = PermissionRequestHandler(this)
-//        SettingsFunc.check4Update(this, null, prHandler)
-    }
-
-    private fun initApplication(context: Context) {
-        val application = mainApplication
-        GlobalScope.launch {
-            application.statusBarHeight = X.getStatusBarHeight(context)
-            if (!mainApplication.isDarkTheme) MiscMain.updateExteriorBackgrounds(context)
-            application.dead = false
-        }
-    }
-
-    private fun clearDemocratic() {
-        viewBinding.mainTB.menu.clear()
-        viewBinding.mainTB.visibility = View.VISIBLE
-        viewBinding.mainTB.setOnClickListener(null)
-        // Low profile mode is used in ApiDecentFragment. Deprecated since Android 11.
-        if (X.belowOff(X.R)) disableLowProfileModeLegacy(window)
-        primaryStatusBarConfig?.let {
-            SystemUtil.applyStatusBarConfig(mContext, mWindow, it)
-        }
-        if (isNavUp) {
-            val config = primaryNavBarConfig
-            if (config != null && !config.isTransparentBar)
-                SystemUtil.applyNavBarConfig(mContext, mWindow, SystemBarConfig(config.isDarkIcon, isTransparentBar = true))
-        } else {
-            primaryNavBarConfig?.let {
-                SystemUtil.applyNavBarConfig(mContext, mWindow, it)
-            }
-        }
-    }
-
-    @Suppress("deprecation")
-    private fun disableLowProfileModeLegacy(window: Window) {
-        val decorView = window.decorView
-        decorView.systemUiVisibility = decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_LOW_PROFILE.inv()
-    }
-
-    private val FragmentTransaction.animNew: FragmentTransaction
-        get() = disallowAddToBackStack().setCustomAnimations(
-                R.anim.fragment_open_enter, R.anim.fragment_fade_exit,
-                R.anim.fragment_fade_enter, R.anim.fragment_close_exit
-        )
-
-    private val FragmentTransaction.animRetreat: FragmentTransaction
-        get() = setCustomAnimations(
-                R.anim.fragment_fade_enter, R.anim.fragment_close_exit,
-                R.anim.fragment_fade_enter, R.anim.fragment_close_exit
-        )
-
-    private fun setupViewModel() {
+    private fun setupViewModel(context: Context, prefSettings: SharedPreferences) {
         viewModel.democratic.observe(this) {
             clearDemocratic()
-            it.createOptions(mContext, viewBinding.mainTB, colorIcon)
+            it.createOptions(context, viewBinding.mainTB, colorIcon)
         }
         viewModel.unit.observe(this) {
             it ?: return@observe
@@ -412,7 +257,7 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
                 ACTION_EXTERIOR -> updateExterior()
                 ACTION_RECREATE -> recreate()
                 ACTION_EXTERIOR_THEME -> {
-                    val newThemeId = ThemeUtil.updateTheme(mContext, prefSettings, false)
+                    val newThemeId = ThemeUtil.updateTheme(context, prefSettings, false)
                     if (themeId != newThemeId) {
                         mainApplication.globalValue = ACTION_EXTERIOR_THEME to newThemeId
                         recreate()
@@ -437,7 +282,7 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
             } ?: it
             viewModel.contentWidthBottom.value = bottomNavHeight
             viewBinding.mainShowBottomNav?.let { showingBtn ->
-                val margin = it + X.size(mContext, 20f, X.DP).roundToInt()
+                val margin = it + X.size(context, 20f, X.DP).roundToInt()
                 showingBtn.alterMargin(bottom = margin)
             }
             viewBinding.mainSideNav?.alterPadding(bottom = it)
@@ -451,20 +296,8 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
         }
     }
 
-    override fun onMenuItemClick(item: MenuItem?): Boolean {
-        item ?: return false
-        return try {
-            viewModel.democratic.value?.selectOption(item) ?: false
-        } catch (e: Exception) {
-            e.printStackTrace()
-            notifyBriefly(R.string.text_error)
-            false
-        }
-    }
-
-    private fun applyResources() {
+    private fun setupUi() {
         viewBinding.mainLinear?.also { isLand = true }
-        background = if (isLand) viewBinding.mainLinear!! else viewBinding.mainFrame
 
         colorIcon = ThemeUtil.getColor(mContext, R.attr.colorIcon)
 
@@ -525,46 +358,255 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             viewModel.removeCurrentUnit()
-            destinationChanged(destination.id)
+            destinationChanged(destination)
             clearBackPressedCallback()
         }
 
         viewBinding.mainTB.setOnMenuItemClickListener(this)
 
-        val launchItemName = launchItem
-        if (!launchItemName.isNullOrEmpty()) {
-            val itemArgs = intent?.getBundleExtra(LAUNCH_ITEM_ARGS)
-            val hasArgs = itemArgs != null
-            GlobalScope.launch {
-                // wait for Unit init
-                delay(200)
-                val itemUnitDesc = Unit.getDescription(launchItemName)
-                if (itemUnitDesc != null) {
-                    launch(Dispatchers.Main) {
-                        if (hasArgs) {
-                            viewModel.displayUnit(itemUnitDesc.unitName, false, true, itemArgs)
-                        } else {
-                            viewModel.displayUnit(itemUnitDesc.unitName, shouldExitAppAfterBack = true)
-                        }
-                    }
-                }
-                launchItem = null
-            }
+        checkTargetItem()
+
+        background.setOnApplyWindowInsetsListener { _, insets ->
+            consumeInsets(WindowInsets(insets))
+            insets
         }
 
-        applyInsets()
-
-        GlobalScope.launch {
+        lifecycleScope.launch(Dispatchers.Default) {
             while (true) {
                 isToolbarInflated = viewBinding.mainTB.width > 0 && viewBinding.mainTB.height > 0
                 if (isToolbarInflated) {
-                    if (!mainApplication.dead) launch(Dispatchers.Main) {
+                    if (!mainApplication.dead) withContext(Dispatchers.Main) {
                         initExterior()
                     }
                     break
                 }
                 delay(150)
             }
+        }
+    }
+
+    private fun checkTargetItem() {
+        val launchItemName = launchItem
+        if (launchItemName.isNullOrEmpty()) return
+        val itemArgs = intent?.getBundleExtra(LAUNCH_ITEM_ARGS)
+        val hasArgs = itemArgs != null
+        lifecycleScope.launch(Dispatchers.Default) {
+            // wait for Unit init
+            delay(200)
+            launchItem = null
+            val itemUnitDesc = Unit.getDescription(launchItemName) ?: return@launch
+            withContext(Dispatchers.Main) {
+                if (hasArgs) {
+                    viewModel.displayUnit(itemUnitDesc.unitName, false, true, itemArgs)
+                } else {
+                    viewModel.displayUnit(itemUnitDesc.unitName, shouldExitAppAfterBack = true)
+                }
+            }
+        }
+    }
+
+    /**
+     * update notification availability, notification channels and check app update
+     */
+    private suspend fun checkMisc(context: Context, prefSettings: SharedPreferences) {
+        val app = mainApplication
+        // enable notification
+        app.notificationAvailable = NotificationManagerCompat.from(context).areNotificationsEnabled()
+        if (!app.notificationAvailable && Random(System.currentTimeMillis()).nextInt(10) == 0) {
+            withContext(Dispatchers.Main) {
+                ToastUtils.popRequestNotification(this@MainActivity)
+            }
+        }
+        MiscMain.registerNotificationChannels(context, prefSettings)
+        MiscMain.clearCache(context)
+
+//        prHandler = PermissionRequestHandler(this)
+//        SettingsFunc.check4Update(this, null, prHandler)
+    }
+
+    private suspend fun checkTarget(context: Context) {
+        val activityName = intent.getStringExtra(LAUNCH_ACTIVITY) ?: ""
+        if (activityName.isEmpty()) return
+        val target = try {
+            Class.forName(activityName)
+        } catch (e: ClassNotFoundException) {
+            e.printStackTrace()
+            return
+        }
+        val startIntent = Intent(context, target)
+        startIntent.putExtras(intent)
+        delay(100)
+        withContext(Dispatchers.Main) {
+            startActivity(startIntent)
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(STATE_KEY_NAV_UP, isNavUp)
+        mBackStack.toTypedArray().let {
+            outState.putParcelableArray(STATE_KEY_BACK, it)
+        }
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        val callbacks = savedInstanceState.getParcelableArray(STATE_KEY_BACK) ?: return
+        callbacks.mapNotNull {
+            if (it is BackwardOperation) it else null
+        }.let { mBackStack = ArrayDeque(it) }
+        lifecycleScope.launch(Dispatchers.Default) {
+            // wait until fragments are in place
+            delay(500)
+            setupOnBackPressedDispatcher()
+        }
+    }
+
+    override fun onDestroy() {
+        val context = mContext
+        mBackStack.forEach {
+            it.cachedCallback?.remove()
+            it.cachedCallback = null
+        }
+        lifecycleScope.launch(Dispatchers.Default) {
+            MiscMain.clearCache(context)
+        }
+        AccessAV.clearContext()
+        super.onDestroy()
+    }
+
+    private fun setupOnBackPressedDispatcher() {
+        if (mBackStack.isEmpty()) return
+        val last = mBackStack.last()
+        mBackStack.forEach {
+            val callback = it.makeCallback(it === last)
+            onBackPressedDispatcher.addCallback(callback)
+        }
+    }
+
+    private fun BackwardOperation.makeCallback(isForwardTheTop: Boolean = false): OnBackPressedCallback {
+        val shouldShowNavAfterBack = operationFlags[0]
+        val shouldExitAppAfterBack = operationFlags[1]
+        val navFm = navHostFragment.childFragmentManager
+        tryToEnsure(navFm)
+        val forwardFragment = when {
+            isForwardTheTop -> navFm.fragments.find { f -> f.isVisible }
+            forwardPage.hasRef -> forwardPage.fragment
+            else -> null
+        }
+        val backwardFragment = backwardPage.fragment
+        cachedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                minusBackPressedCallback(this)
+                if (shouldExitAppAfterBack) {
+                    finish()
+                    return
+                }
+                navFm.beginTransaction().animRetreat.run {
+                    if (forwardFragment != null) {
+                        remove(forwardFragment)
+                    }
+                    if (backwardFragment != null) {
+                        if (backwardFragment.isAdded) {
+                            show(backwardFragment)
+                        } else {
+                            add(navHostFragment.view?.id
+                                    ?: 0, backwardFragment, backwardFragment.uid)
+                        }
+                    }
+                    commitNow()
+                }
+                if (backwardFragment is Democratic) {
+                    backwardFragment.democratize(viewModel)
+                }
+                if (shouldShowNavAfterBack) showNav()
+                // make unit value matches reality
+                val isMoreUnit = !mBackStack.isEmpty()
+                if (backwardFragment != null) {
+                    viewModel.unit.value = if (isMoreUnit) backwardFragment to booleanArrayOf(false, false, true) else null
+                }
+                // fix extra fragment
+                if (!isMoreUnit) {
+                    navFm.fragments.find {
+                        it.isAdded && it !== backwardFragment
+                    }?.let {
+                        lastBackFragment = WeakReference(backwardFragment)
+                    }
+                }
+            }
+        }
+        return cachedCallback!!
+    }
+
+    private fun minusBackPressedCallback(callback: OnBackPressedCallback) {
+        if (mBackStack.isEmpty()) return
+        if (mBackStack.last().cachedCallback === callback) {
+            mBackStack.removeLast().cachedCallback?.remove()
+        }
+    }
+
+    private fun clearBackPressedCallback() {
+        // fix the last fragment not hidden by nav controller
+        lastBackFragment.get()?.let {
+            lastBackFragment = WeakReference(null)
+            if (it.isAdded && it.isVisible) {
+                val navFm = navHostFragment.childFragmentManager
+                navFm.beginTransaction().hide(it).commitNowAllowingStateLoss()
+            }
+        }
+        if (mBackStack.isEmpty()) return
+        mBackStack.forEach {
+            it.cachedCallback?.remove()
+        }
+        mBackStack.clear()
+    }
+
+    private fun clearDemocratic() {
+        viewBinding.mainTB.menu.clear()
+        viewBinding.mainTB.visibility = View.VISIBLE
+        viewBinding.mainTB.setOnClickListener(null)
+        // Low profile mode is used in ApiDecentFragment. Deprecated since Android 11.
+        if (X.belowOff(X.R)) disableLowProfileModeLegacy(window)
+        primaryStatusBarConfig?.let {
+            SystemUtil.applyStatusBarConfig(mContext, mWindow, it)
+        }
+        if (isNavUp) {
+            val config = primaryNavBarConfig
+            if (config != null && !config.isTransparentBar)
+                SystemUtil.applyNavBarConfig(mContext, mWindow, SystemBarConfig(config.isDarkIcon, isTransparentBar = true))
+        } else {
+            primaryNavBarConfig?.let {
+                SystemUtil.applyNavBarConfig(mContext, mWindow, it)
+            }
+        }
+    }
+
+    @Suppress("deprecation")
+    private fun disableLowProfileModeLegacy(window: Window) {
+        val decorView = window.decorView
+        decorView.systemUiVisibility = decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_LOW_PROFILE.inv()
+    }
+
+    private val FragmentTransaction.animNew: FragmentTransaction
+        get() = disallowAddToBackStack().setCustomAnimations(
+                R.anim.fragment_open_enter, R.anim.fragment_fade_exit,
+                R.anim.fragment_fade_enter, R.anim.fragment_close_exit
+        )
+
+    private val FragmentTransaction.animRetreat: FragmentTransaction
+        get() = setCustomAnimations(
+                R.anim.fragment_fade_enter, R.anim.fragment_close_exit,
+                R.anim.fragment_fade_enter, R.anim.fragment_close_exit
+        )
+
+    override fun onMenuItemClick(item: MenuItem?): Boolean {
+        item ?: return false
+        return try {
+            viewModel.democratic.value?.selectOption(item) ?: false
+        } catch (e: Exception) {
+            e.printStackTrace()
+            notifyBriefly(R.string.text_error)
+            false
         }
     }
 
@@ -583,7 +625,8 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
         navScrollBehavior?.slideDown(viewBinding.mainBottomNav!!)
     }
 
-    private fun destinationChanged(id: Int) {
+    private fun destinationChanged(destination: NavDestination) {
+        val id = destination.id
         viewBinding.mainBottomNav?.let { b ->
             val menu = b.menu
             val menuItem = menu.findItem(id)
@@ -595,23 +638,22 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
             }
         }
         viewBinding.mainSideNav?.let { _ ->
-            when (id) {
+            val vId = when (id) {
                 R.id.updatesFragment -> R.id.mainSideNavUpdates
                 R.id.unitsFragment -> R.id.mainSideNavUnits
                 R.id.moreFragment -> R.id.mainSideNavMore
                 else -> null
-            }.let { vId ->
-                val radioGroup = viewBinding.mainSideNavRadioGroup!!
-                val item: MaterialRadioButton? = if (vId == null) null else radioGroup.findViewById(vId)
-                if (item != null) {
-                    item.isChecked = true
-                } else {
-                    for (i in 0 until radioGroup.childCount) {
-                        val checkable = radioGroup[i] as Checkable
-                        if (!checkable.isChecked) continue
-                        checkable.isChecked = false
-                        break
-                    }
+            }
+            val radioGroup = viewBinding.mainSideNavRadioGroup!!
+            val item: MaterialRadioButton? = if (vId == null) null else radioGroup.findViewById(vId)
+            if (item != null) {
+                item.isChecked = true
+            } else {
+                for (i in 0 until radioGroup.childCount) {
+                    val checkable = radioGroup[i] as Checkable
+                    if (!checkable.isChecked) continue
+                    checkable.isChecked = false
+                    break
                 }
             }
         }
@@ -635,13 +677,6 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
         clearBackPressedCallback()
     }
 
-    private fun applyInsets() {
-        background.setOnApplyWindowInsetsListener { _, insets ->
-            consumeInsets(WindowInsets(insets))
-            insets
-        }
-    }
-
     private fun consumeInsets(insets: WindowInsets) {
         val app = mainApplication
         app.insetTop = insets.top
@@ -655,7 +690,7 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
     }
 
     private fun applyColor() {
-        GlobalScope.launch {
+        lifecycleScope.launch(Dispatchers.Default) {
             val colorFore: Int
             val colorBack: Int
             val isDarkStatus: Boolean
@@ -666,9 +701,9 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
                 colorFore = colors[0]
                 colorBack = colors[1]
                 val backColor = colorBack and X.getColor(mContext, R.color.exteriorTransparencyColor)
-                setToolbarBackColor(this, backColor)
+                setToolbarBackColor(backColor)
                 isDarkStatus = colorFore == Color.BLACK
-                launch(Dispatchers.Main) {
+                withContext(Dispatchers.Main) {
                     mWindow.let {
                         primaryStatusBarConfig = SystemBarConfig(isDarkStatus, isTransparentBar = true)
                         SystemUtil.applyStatusBarConfig(mContext, it, primaryStatusBarConfig!!)
@@ -680,11 +715,10 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
                 }
             } else {
                 colorBack = ThemeUtil.getColor(mContext, R.attr.colorTb)
-                launch(Dispatchers.Main) {
-                    setToolbarBackColor(this, colorBack)
+                setToolbarBackColor(colorBack)
+                withContext(Dispatchers.Main) {
                     mWindow.also {
-                        val configs = SystemUtil.applyDefaultSystemUiVisibility(mContext, it, viewModel.insetBottom.value
-                                ?: 0)
+                        val configs = SystemUtil.applyDefaultSystemUiVisibility(mContext, it, viewModel.insetBottom.value ?: 0)
                         primaryStatusBarConfig = configs.first
                         primaryNavBarConfig = configs.second
                         navScrollBehavior?.onSlidedUpCallback?.invoke()
@@ -694,19 +728,17 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
         }
     }
 
-    private fun setToolbarBackColor(scope: CoroutineScope, color: Int) {
-        scope.launch {
-            if (isLand) {
-                val drawable = ContextCompat.getDrawable(mContext, R.drawable.exterior_toolbar_back)
-                drawable?.setTint(color)
-                launch(Dispatchers.Main) {
-                    viewBinding.mainTB.background = drawable
-                }
-            } else {
-                launch(Dispatchers.Main) {
-                    viewBinding.mainTB.setBackgroundColor(color)
-                    viewBinding.mainBottomNav!!.setBackgroundColor(color)
-                }
+    private suspend fun setToolbarBackColor(color: Int) {
+        if (isLand) {
+            val drawable = ContextCompat.getDrawable(mContext, R.drawable.exterior_toolbar_back)
+            drawable?.setTint(color)
+            withContext(Dispatchers.Main) {
+                viewBinding.mainTB.background = drawable
+            }
+        } else {
+            withContext(Dispatchers.Main) {
+                viewBinding.mainTB.setBackgroundColor(color)
+                viewBinding.mainBottomNav!!.setBackgroundColor(color)
             }
         }
     }
@@ -718,7 +750,7 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
             background.background = null
             return
         }
-        if (X.aboveOn(X.N) && isInMultiWindowMode) {
+        if (OsUtils.satisfy(OsUtils.N) && isInMultiWindowMode) {
             X.setSplitBackground(mContext, background, X.getCurrentAppResolution(mContext))
         } else {
             X.setBackground(mContext, background)

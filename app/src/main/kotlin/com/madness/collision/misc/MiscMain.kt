@@ -26,6 +26,8 @@ import android.os.Environment
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
 import androidx.core.content.edit
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.madness.collision.BuildConfig
@@ -35,9 +37,7 @@ import com.madness.collision.unit.Unit
 import com.madness.collision.unit.api_viewing.AccessAV
 import com.madness.collision.unit.we_chat_evo.InstantWeChatActivity
 import com.madness.collision.util.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.io.File
 import java.io.IOException
 import kotlin.random.Random
@@ -140,15 +140,15 @@ internal object MiscMain {
         }
     }
 
-    fun updateExteriorBackgrounds(context: Context){
-        GlobalScope.launch {
-            loadExteriorBackgrounds(context)
-            if (context is ComponentActivity){
-                launch(Dispatchers.Main){
-                    val mainViewModel: MainViewModel by context.viewModels()
-                    mainViewModel.background.value = mainApplication.background
-                }
-            }
+    suspend fun updateExteriorBackgrounds(context: Context) {
+        loadExteriorBackgrounds(context)
+        val mainViewModel: MainViewModel by when (context) {
+            is ComponentActivity -> context.viewModels()
+            is Fragment -> context.activityViewModels()
+            else -> return
+        }
+        withContext(Dispatchers.Main) {
+            mainViewModel.background.value = mainApplication.background
         }
     }
 

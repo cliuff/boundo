@@ -94,8 +94,11 @@ internal class UpdatesFragment : TaggedFragment(), Democratic {
         return viewBinding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        loadUpdates()
+
         democratize(mainViewModel)
         val extra = X.size(mContext, 5f, X.DP).roundToInt()
         mainViewModel.contentWidthTop.observe(viewLifecycleOwner) {
@@ -104,8 +107,6 @@ internal class UpdatesFragment : TaggedFragment(), Democratic {
         mainViewModel.contentWidthBottom.observe(viewLifecycleOwner) {
             viewBinding.mainUpdatesContainer.alterPadding(bottom = asBottomMargin(it + extra))
         }
-
-        loadUpdates()
 
         val descViewModel: UnitDescViewModel by activityViewModels()
         descViewModel.updated.observe(viewLifecycleOwner) {
@@ -159,14 +160,19 @@ internal class UpdatesFragment : TaggedFragment(), Democratic {
     private fun addUpdateFragment(updateFragment: Pair<String, Fragment>, index: Int = -1) {
         val (unitName: String, fragment: Fragment) = updateFragment
         if (fragment.isAdded) return
-        val container = getUpdateFragmentContainer(unitName) ?: return
-        viewBinding.mainUpdatesUpdateContainer.run {
-            if (index < 0) addView(container) else addView(container, index)
-        }
+        val container = addUpdateFragmentContainer(unitName, index) ?: return
         childFragmentManager.beginTransaction().add(container.id, fragment).commitNowAllowingStateLoss()
     }
 
-    private fun getUpdateFragmentContainer(unitName: String): ViewGroup? {
+    private fun addUpdateFragmentContainer(unitName: String, index: Int) : ViewGroup? {
+        val container = getUpdateFragmentContainer(unitName) ?: return null
+        viewBinding.mainUpdatesUpdateContainer.run {
+            if (index < 0) addView(container) else addView(container, index)
+        }
+        return container
+    }
+
+    private fun getUpdateFragmentContainer(unitName: String) : ViewGroup? {
         val description = Unit.getDescription(unitName) ?: return null
 
         val container = LinearLayout(mContext).apply {

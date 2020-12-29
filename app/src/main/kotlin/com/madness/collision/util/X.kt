@@ -16,12 +16,10 @@
 
 package com.madness.collision.util
 
-import android.app.Activity
 import android.app.AppOpsManager
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.*
 import android.graphics.drawable.AdaptiveIconDrawable
@@ -41,7 +39,7 @@ import androidx.core.util.component1
 import androidx.core.util.component2
 import androidx.palette.graphics.Palette
 import com.madness.collision.misc.MiscApp
-import kotlinx.coroutines.Dispatchers
+import com.madness.collision.util.notice.ToastUtils
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.*
@@ -49,7 +47,6 @@ import java.nio.charset.StandardCharsets
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.max
 import kotlin.math.min
-import com.madness.collision.R as MyRes
 
 object X {
     fun deleteFolder( folder: File) = folder.deleteRecursively()
@@ -463,43 +460,14 @@ object X {
         for (view in views) if (view.visibility != View.GONE) view.visibility = View.GONE
     }
 
-    fun toast( context: Context, messageRes: Int, duration: Int){
+    fun toast(context: Context, messageRes: Int, duration: Int) {
         toast(context, context.getString(messageRes), duration)
     }
 
-    fun toast( context: Context,  message: CharSequence, duration: Int){
-        GlobalScope.launch(Dispatchers.Main){
-            if (!mainApplication.notificationAvailable) {
-                if (context is Activity) popRequestNotification(context)
-                else popNotifyNotification(context)
-            }
-            Toast.makeText(context, message, duration).show()
+    fun toast(context: Context, message: CharSequence, duration: Int) {
+        GlobalScope.launch {
+            ToastUtils.toast(context, message, duration)
         }
-    }
-
-    fun popRequestNotification(activity: Activity){
-        CollisionDialog(activity, MyRes.string.textGrantPermission).run {
-            setTitleCollision(0, 0, 0)
-            setContent(MyRes.string.textAsk4Notification)
-            show()
-            val packageName = activity.packageName
-            setListener{
-                dismiss()
-                Intent().run {
-                    action = "android.settings.APP_NOTIFICATION_SETTINGS"
-                    if (aboveOn(O)) putExtra("android.provider.extra.APP_PACKAGE", packageName)
-                    else {
-                        putExtra("app_package", packageName)
-                        putExtra("app_uid", activity.applicationInfo.uid)
-                    }
-                    activity.startActivity(this)
-                }
-            }
-        }
-    }
-
-    fun popNotifyNotification(context: Context){
-        CollisionDialog.alert(context, MyRes.string.textAsk4Notification).show()
     }
 
     fun write(content: String, path: String): Boolean{

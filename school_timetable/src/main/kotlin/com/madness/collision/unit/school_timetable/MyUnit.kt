@@ -60,6 +60,7 @@ class MyUnit: Unit(), View.OnClickListener{
     override val id: String = "ST"
 
     companion object {
+        const val STATE_KEY_Tt = "TtFragment"
 
         var ref: WeakReference<MyUnit>? = null
 
@@ -109,7 +110,8 @@ class MyUnit: Unit(), View.OnClickListener{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ref = WeakReference(this)
-        timetableFragment = TimetableFragment.newInstance()
+        timetableFragment = if (savedInstanceState == null) TimetableFragment.newInstance()
+        else childFragmentManager.getFragment(savedInstanceState, STATE_KEY_Tt) as TimetableFragment
     }
 
     override fun onDestroy() {
@@ -175,6 +177,11 @@ class MyUnit: Unit(), View.OnClickListener{
             mainViewModel.displayFragment(TTManualFragment.newInstance())
             settingsPreferences.edit { putBoolean(P.TT_MANUAL, false) }
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        childFragmentManager.putFragment(outState, STATE_KEY_Tt, timetableFragment)
+        super.onSaveInstanceState(outState)
     }
 
     private fun openIcsFile(context: Context, file: File){
