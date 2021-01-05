@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -78,7 +78,7 @@ internal class StatsAdapter(context: Context) : SandwichAdapter<StatsAdapter.Hol
     private val sweetMargin = if (shouldShowDesserts) X.size(context, 5f, X.DP).roundToInt() else 0
     private val innerMargin: Float
         get() = if (EasyAccess.shouldShowDesserts) 5f else 2f
-    private val itemLength: Int = X.size(context, 70f, X.DP).roundToInt()
+    private val itemLength: Int = X.size(context, 45f, X.DP).roundToInt()
 
     private lateinit var rv: RecyclerView
     private val inflater = LayoutInflater.from(context)

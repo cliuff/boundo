@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2020 Clifford Liu
+  ~ Copyright 2021 Clifford Liu
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -37,8 +37,9 @@
 
         <ImageView
             android:id="@+id/avAdapterSeal"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            tools:src="@drawable/seal_r_vector"
             android:alpha="0.35"
             android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="parent"

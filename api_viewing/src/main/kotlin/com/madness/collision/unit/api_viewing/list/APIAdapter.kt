@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -88,7 +88,7 @@ internal class APIAdapter(context: Context, private val listener: Listener)
         get() = if (EasyAccess.shouldShowDesserts) 5f else 2f
     private val shouldShowTime: Boolean
         get() = sortMethod == MyUnit.SORT_POSITION_API_TIME
-    private val itemLength: Int = X.size(context, 70f, X.DP).roundToInt()
+    private val itemLength: Int = X.size(context, 45f, X.DP).roundToInt()
     private val _colorSurface by lazy { ThemeUtil.getColor(context, R.attr.colorASurface) }
     private val colorSurface: Int
         get() = if (EasyAccess.shouldShowDesserts) _colorSurface else 0

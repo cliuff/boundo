@@ -1,19 +1,40 @@
+<!--
+  ~ Copyright 2021 Clifford Liu
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="200dp"
     android:height="200dp"
     android:viewportWidth="200"
     android:viewportHeight="200">
   <path
-      android:pathData="M86.671,44.096L173.274,94.096A60,20 120,0 1,160.594 156.058L160.594,156.058A60,20 120,0 1,113.274 198.019L26.671,148.019A60,20 120,0 1,39.351 86.058L39.351,86.058A60,20 120,0 1,86.671 44.096z"
+      android:pathData="M82.961,1.392L193.922,65.455A76.876,25.625 120,0 1,177.676 144.844L177.676,144.844A76.876,25.625 120,0 1,117.046 198.608L6.085,134.545A76.876,25.625 120,0 1,22.331 55.156L22.331,55.156A76.876,25.625 120,0 1,82.961 1.392z"
+      android:strokeAlpha="0.974747"
+      android:strokeLineJoin="round"
+      android:strokeWidth="0"
       android:fillColor="#ffffff"
-      android:fillType="nonZero"
-      android:fillAlpha="1"/>
+      android:strokeColor="#00000000"
+      android:fillType="nonZero"/>
   <path
-      android:pathData="M23.011,134.359a20,60 120,1 0,103.923 60a20,60 120,1 0,-103.923 -60z"
+      android:pathData="M1.395,117.042a25.625,76.876 120,1 0,133.153 76.876a25.625,76.876 120,1 0,-133.153 -76.876z"
+      android:strokeWidth="0.264583"
       android:fillColor="#ffffff"
       android:fillType="evenOdd"/>
   <path
-      android:pathData="M73.011,47.756a20,60 120,1 0,103.923 60a20,60 120,1 0,-103.923 -60z"
+      android:pathData="M65.459,6.081a25.625,76.876 120,1 0,133.153 76.876a25.625,76.876 120,1 0,-133.153 -76.876z"
+      android:strokeWidth="0.264583"
       android:fillColor="#f9f9f9"
       android:fillType="evenOdd"/>
 </vector>

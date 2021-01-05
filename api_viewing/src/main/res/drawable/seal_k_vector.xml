@@ -1,31 +1,52 @@
+<!--
+  ~ Copyright 2021 Clifford Liu
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="200dp"
     android:height="200dp"
     android:viewportWidth="200"
     android:viewportHeight="200">
   <path
-      android:pathData="M45.25,44L154.25,44A3,3 0,0 1,157.25 47L157.25,196A3,3 0,0 1,154.25 199L45.25,199A3,3 0,0 1,42.25 196L42.25,47A3,3 0,0 1,45.25 44z"
+      android:pathData="M29.863,0.2L170.228,0.2A3.863,3.863 0,0 1,174.091 4.063L174.091,195.938A3.863,3.863 0,0 1,170.228 199.801L29.863,199.801A3.863,3.863 0,0 1,26 195.938L26,4.063A3.863,3.863 0,0 1,29.863 0.2z"
+      android:strokeWidth="0.264583"
       android:fillColor="#753500"
-      android:fillType="nonZero"
-      android:fillAlpha="1"/>
-  <path
-      android:pathData="M42.25,167h115v5h-115z"
-      android:fillColor="#522000"
-      android:fillAlpha="1"
+      android:strokeColor="#00000000"
       android:fillType="nonZero"/>
   <path
-      android:pathData="M42.25,135h115v5h-115z"
+      android:pathData="M26,158.593l148.091,0l0,6.439l-148.091,0z"
+      android:strokeWidth="0.187089"
       android:fillColor="#522000"
-      android:fillAlpha="1"
+      android:strokeColor="#00000000"
       android:fillType="nonZero"/>
   <path
-      android:pathData="M42.25,103h115v5h-115z"
+      android:pathData="M26,117.385l148.091,0l0,6.439l-148.091,0z"
+      android:strokeWidth="0.187089"
       android:fillColor="#522000"
-      android:fillAlpha="1"
+      android:strokeColor="#00000000"
       android:fillType="nonZero"/>
   <path
-      android:pathData="M42.25,72h115v5h-115z"
+      android:pathData="M26,76.177l148.091,0l0,6.439l-148.091,0z"
+      android:strokeWidth="0.187089"
       android:fillColor="#522000"
-      android:fillAlpha="1"
+      android:strokeColor="#00000000"
+      android:fillType="nonZero"/>
+  <path
+      android:pathData="M26,36.257l148.091,0l0,6.439l-148.091,0z"
+      android:strokeWidth="0.187089"
+      android:fillColor="#522000"
+      android:strokeColor="#00000000"
       android:fillType="nonZero"/>
 </vector>

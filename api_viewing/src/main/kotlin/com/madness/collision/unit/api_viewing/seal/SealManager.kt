@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -77,13 +77,13 @@ object SealManager {
             'r' -> MyR.drawable.seal_r_vector
             'q' -> MyR.drawable.seal_q_vector
             'p' -> MyR.drawable.seal_p_vector  // Pie
-            'o' -> MyR.drawable.sdk_seal_o  // Oreo
-            'n' -> MyR.drawable.sdk_seal_n  // Nougat
+            'o' -> MyR.drawable.seal_o  // Oreo
+            'n' -> MyR.drawable.seal_n  // Nougat
             'm' -> MyR.drawable.seal_m_vector  // Marshmallow
             'l' -> MyR.drawable.seal_l_vector  // Lollipop
             'k' -> MyR.drawable.seal_k_vector  // KitKat
             'j' -> MyR.drawable.seal_j_vector  // Jelly Bean
-            'i' -> MyR.drawable.sdk_seal_i  // Ice Cream Sandwich
+            'i' -> MyR.drawable.seal_i  // Ice Cream Sandwich
             'h' -> MyR.drawable.seal_h_vector  // Honeycomb
             /*10, 9 ->  // Gingerbread
             8 ->  // Froyo
@@ -207,11 +207,12 @@ object SealManager {
         // draw image res
         populate4Seal(context, letter, itemLength)
         var seal: Bitmap = seals[letter]!!.collisionBitmap
-        val targetLength = seal.width / 18
-        val bitmapWidth = targetLength * 4
-        val sealWidth = targetLength * 7
+        val targetLength = seal.width / 10
+        val bitmapWidth = targetLength * 2
+        val sealOffsetX = targetLength * 4
+        val sealOffsetY = targetLength * 2
         bitmap = Bitmap.createBitmap(bitmapWidth, bitmapWidth, Bitmap.Config.ARGB_8888)
-        seal = Bitmap.createBitmap(seal, sealWidth, sealWidth, bitmap.width, bitmap.height)
+        seal = Bitmap.createBitmap(seal, sealOffsetX, sealOffsetY, bitmap.width, bitmap.height)
         val canvas2Draw = Canvas(bitmap)
         canvas2Draw.drawColor(Color.parseColor("#fff5f5f5"))
         canvas2Draw.drawBitmap(seal, 0f, 0f, Paint(Paint.ANTI_ALIAS_FLAG))

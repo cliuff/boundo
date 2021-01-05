@@ -1,69 +1,78 @@
+<!--
+  ~ Copyright 2021 Clifford Liu
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="200dp"
     android:height="200dp"
     android:viewportWidth="200"
     android:viewportHeight="200">
   <path
-      android:pathData="m68.846,169.742 l-30.897,0 -15.449,-26.758 15.449,-26.758 30.897,0 15.449,26.758z"
-      android:strokeAlpha="1"
+      android:pathData="m62.74,164.573 l-37.282,0 -18.641,-32.287 18.641,-32.287 37.282,0 18.641,32.287z"
+      android:strokeAlpha="0.974747"
       android:strokeLineJoin="round"
       android:strokeWidth="5"
       android:fillColor="#ff7028"
       android:strokeColor="#ffc800"
-      android:fillType="nonZero"
-      android:fillAlpha="1"/>
+      android:fillType="nonZero"/>
   <path
-      android:pathData="m115.191,142.985 l-30.897,-0 -15.449,-26.758 15.449,-26.758 30.897,0 15.449,26.758z"
-      android:strokeAlpha="1"
+      android:pathData="m118.663,132.285 l-37.282,-0 -18.641,-32.287 18.641,-32.287 37.282,0 18.641,32.287z"
+      android:strokeAlpha="0.974747"
       android:strokeLineJoin="round"
       android:strokeWidth="5"
       android:fillColor="#ff7028"
       android:strokeColor="#ffc800"
-      android:fillType="nonZero"
-      android:fillAlpha="1"/>
+      android:fillType="nonZero"/>
   <path
-      android:pathData="m68.846,116.227 l-30.897,0 -15.449,-26.758 15.449,-26.758 30.897,0 15.449,26.758z"
-      android:strokeAlpha="1"
+      android:pathData="m62.74,99.998 l-37.282,0 -18.641,-32.287 18.641,-32.287 37.282,0 18.641,32.287z"
+      android:strokeAlpha="0.974747"
       android:strokeLineJoin="round"
       android:strokeWidth="5"
       android:fillColor="#ff7028"
       android:strokeColor="#ffc800"
-      android:fillType="nonZero"
-      android:fillAlpha="1"/>
+      android:fillType="nonZero"/>
   <path
-      android:pathData="m161.537,116.227 l-30.897,-0 -15.449,-26.758 15.449,-26.758 30.897,0 15.449,26.758z"
-      android:strokeAlpha="1"
+      android:pathData="m174.586,99.998 l-37.282,-0 -18.641,-32.287 18.641,-32.287 37.282,0 18.641,32.287z"
+      android:strokeAlpha="0.974747"
       android:strokeLineJoin="round"
       android:strokeWidth="5"
       android:fillColor="#ff7028"
       android:strokeColor="#ffc800"
-      android:fillType="nonZero"
-      android:fillAlpha="1"/>
+      android:fillType="nonZero"/>
   <path
-      android:pathData="m161.537,169.742 l-30.897,0 -15.449,-26.758 15.449,-26.758 30.897,0 15.449,26.758z"
-      android:strokeAlpha="1"
+      android:pathData="m174.586,164.573 l-37.282,0 -18.641,-32.287 18.641,-32.287 37.282,0 18.641,32.287z"
+      android:strokeAlpha="0.974747"
       android:strokeLineJoin="round"
       android:strokeWidth="5"
       android:fillColor="#ff7028"
       android:strokeColor="#ffc800"
-      android:fillType="nonZero"
-      android:fillAlpha="1"/>
+      android:fillType="nonZero"/>
   <path
-      android:pathData="m115.191,196.5 l-30.897,0L68.846,169.742l15.449,-26.758 30.897,0L130.64,169.742Z"
-      android:strokeAlpha="1"
+      android:pathData="m118.663,196.86 l-37.282,0L62.74,164.573l18.641,-32.287 37.282,0L137.304,164.573Z"
+      android:strokeAlpha="0.974747"
       android:strokeLineJoin="round"
       android:strokeWidth="5"
       android:fillColor="#ff7028"
       android:strokeColor="#ffc800"
-      android:fillType="nonZero"
-      android:fillAlpha="1"/>
+      android:fillType="nonZero"/>
   <path
-      android:pathData="m115.191,89.469 l-30.897,-0 -15.449,-26.758 15.449,-26.758 30.897,0 15.449,26.758z"
-      android:strokeAlpha="1"
+      android:pathData="m118.663,67.711 l-37.282,-0 -18.641,-32.287 18.641,-32.287 37.282,0 18.641,32.287z"
+      android:strokeAlpha="0.974747"
       android:strokeLineJoin="round"
       android:strokeWidth="5"
       android:fillColor="#ff7028"
       android:strokeColor="#ffc800"
-      android:fillType="nonZero"
-      android:fillAlpha="1"/>
+      android:fillType="nonZero"/>
 </vector>

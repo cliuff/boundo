@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -196,7 +196,7 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
         }
         // above: configure views
 
-        itemLength = X.size(context, 70f, X.DP).roundToInt()
+        itemLength = X.size(context, 45f, X.DP).roundToInt()
         arguments?.apply {
             viewModel.app = MutableLiveData(getParcelable(ARG_APP) ?: ApiViewingApp())
         }
