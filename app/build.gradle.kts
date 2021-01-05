@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,8 +68,8 @@ android {
         applicationId = "com.madness.collision"
         minSdkVersion(22)
         targetSdkVersion(30)
-        versionCode = 20121523
-        versionName = "3.6.5"
+        versionCode = 21010113
+        versionName = "3.6.7"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testApplicationId = "${applicationId}.test"
         renderscriptSupportModeEnabled = true

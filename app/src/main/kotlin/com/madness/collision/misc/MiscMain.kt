@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -117,6 +117,9 @@ internal object MiscMain {
         if ((verOri in 0 until 20092514) && X.aboveOn(X.N_MR1)) {
             val sm = context.getSystemService(ShortcutManager::class.java)
             if (sm != null) Instant(context, sm).refreshDynamicShortcuts(P.SC_ID_AUDIO_TIMER)
+        }
+        if (verOri in 0 until 21010113) {
+            deleteDirs(F.valCachePubAvSeal(context))
         }
     }
 

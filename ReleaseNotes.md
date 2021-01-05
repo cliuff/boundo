@@ -2,6 +2,69 @@
 Tag content regex: \n((((?!(<.*>)).)*)\n)*((?!(<.*>)).)+
 
 
+- **3.6.7** 21010113
+<en-US>
+A brand new app icon and optimized the experience after screen rotation
+</en-US>
+<ar>
+رمز تطبيق جديد تمامًا وتحسين التجربة بعد تدوير الشاشة
+</ar>
+<de-DE>
+Ein brandneues App-Symbol, das das Erlebnis nach der Bildschirmrotation optimiert
+</de-DE>
+<el-GR>
+Ένα ολοκαίνουργιο εικονίδιο εφαρμογής και βελτιστοποίησε την εμπειρία μετά την περιστροφή της οθόνης
+</el-GR>
+<en-GB>
+A brand new app icon and optimised the experience after screen rotation
+</en-GB>
+<es-419>
+Un nuevo ícono de aplicación y una experiencia optimizada después de la rotación de la pantalla.
+</es-419>
+<es-ES>
+Un nuevo ícono de aplicación y una experiencia optimizada después de la rotación de la pantalla.
+</es-ES>
+<es-US>
+Un nuevo ícono de aplicación y una experiencia optimizada después de la rotación de la pantalla.
+</es-US>
+<fr-FR>
+Une toute nouvelle icône d'application et optimise l'expérience après la rotation de l'écran
+</fr-FR>
+<it-IT>
+Una nuova icona dell'app e ha ottimizzato l'esperienza dopo la rotazione dello schermo
+</it-IT>
+<ja-JP>
+画面回転後のエクスペリエンスを最適化する新しいアプリケーションアイコン
+</ja-JP>
+<ko-KR>
+화면 회전 후 경험을 최적화하는 새로운 애플리케이션 아이콘
+</ko-KR>
+<pt-PT>
+Um novo ícone de aplicativo e uma experiência otimizada após a rotação da tela
+</pt-PT>
+<ru-RU>
+Совершенно новый значок приложения и оптимизация работы после поворота экрана
+</ru-RU>
+<th>
+ไอคอนแอปใหม่เอี่ยมและปรับประสบการณ์ใช้งานให้ดีที่สุดหลังจากการหมุนหน้าจอ
+</th>
+<tr-TR>
+Yepyeni bir uygulama simgesi ve ekran rotasyonundan sonra deneyimi optimize etti
+</tr-TR>
+<vi>
+Biểu tượng ứng dụng hoàn toàn mới và tối ưu hóa trải nghiệm sau khi xoay màn hình
+</vi>
+<zh-CN>
+全新应用图标，优化屏幕旋转后的体验
+</zh-CN>
+<zh-HK>
+全新應用圖標，優化屏幕旋轉後的體驗
+</zh-HK>
+<zh-TW>
+全新應用圖標，優化屏幕旋轉後的體驗
+</zh-TW>
+
+
 - **3.6.4** 20120320
 <en-US>
 • New feature: "Device Manager", to help you quickly connect/disconnect Bluetooth devices right from the power menu of Android 11

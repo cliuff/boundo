@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ object Versions {
     const val androidxCore = "1.3.2"
     const val androidxAppcompat = "1.1.0"
     const val androidxLifecycle = "2.2.0"
-    const val androidxRoom = "2.2.5"
+    const val androidxRoom = "2.2.6"
     const val androidxNavigation = "2.3.2"
     const val androidxCoreTesting = "2.1.0"
     const val androidxFragment = "1.2.5"
