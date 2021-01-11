@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -445,8 +445,9 @@ class MyUnit: com.madness.collision.unit.Unit() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val context = context ?: return
+        val isRestore = savedInstanceState != null
 
-        refreshLayout.isRefreshing = true
+        if (!isRestore) refreshLayout.isRefreshing = true
 
         ensureAdded(MyR.id.avViewListContainer, listFragment, true)
         adapter = listFragment.getAdapter()
@@ -464,7 +465,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
         }
         if (isSpecial) {
             viewBinding.apiDisplay.visibility = View.GONE
-            lifecycleScope.launch(Dispatchers.Default) {
+            if (!isRestore) lifecycleScope.launch(Dispatchers.Default) {
                 loadSortedList(ApiUnit.NON, sortEfficiently = true, fg = true)
             }
         }
@@ -571,23 +572,23 @@ class MyUnit: com.madness.collision.unit.Unit() {
             }
             viewBinding.apiContainer.setOnDragListener(apkDisplayDragListener)
         }
-    }
 
-    override fun onStart() {
-        super.onStart()
-        // attention: these statements will be invoked after screen off and on,
-        // where data is loaded already
         if (launchMethod.mode != LaunchMethod.LAUNCH_MODE_SEARCH
                 && launchMethod.mode != LaunchMethod.LAUNCH_MODE_LINK) {
             // fix refreshing animation not shown
             lifecycleScope.launch(Dispatchers.Default) {
                 delay(1)
                 withContext(Dispatchers.Main) {
-                    selectListSrcItem(displayItem)
+                    if (!isRestore) {
+                        selectListSrcItem(displayItem)
+                    } else {
+                        loadListSrcItem(displayItem)
+                        updateStats()
+                    }
                 }
             }
         }
-        if (launchMethod.mode == LaunchMethod.LAUNCH_MODE_SEARCH) {
+        if (!isRestore && launchMethod.mode == LaunchMethod.LAUNCH_MODE_SEARCH) {
             // fix refreshing animation not shown
             // invoke only the first time
             if (loadedItems.isBusy && viewModel.apps4Cache.isEmpty()) {
@@ -635,6 +636,30 @@ class MyUnit: com.madness.collision.unit.Unit() {
 
     private fun clickListSrcItem(item: MenuItem): Boolean {
         refreshLayout.isRefreshing = true
+        loadListSrcItem(item)
+        if (needPermission(REQUEST_EXTERNAL_STORAGE)) return true
+        // clear tag filter
+        val context = context
+        if (context != null) {
+            clearTagFilter(context)
+        }
+        rDisplay.position = displayItem
+        ApiTaskManager.join(task = rDisplay)
+        return true
+    }
+
+    private fun loadListSrcItem(item: Int) {
+        popSrc?.menu?.getItem(item)?.let {
+            // avoid duplicate refresh
+            if (it.isChecked) return
+            loadListSrcItem(it)
+        }
+    }
+
+    /**
+     * Load data and views
+     */
+    private fun loadListSrcItem(item: MenuItem) {
         viewBinding.avListSrc.text = item.title
         item.isChecked = true
         var isStatsAvailable = false
@@ -669,21 +694,10 @@ class MyUnit: com.madness.collision.unit.Unit() {
             }
             else -> null
         }?.let { loadItem = it }
-        if (needPermission(REQUEST_EXTERNAL_STORAGE)) return true
-        // clear tag filter
-        val context = context
-        if (context != null) {
-            clearTagFilter(context)
-        }
-        rDisplay.position = displayItem
-        ApiTaskManager.join(task = rDisplay)
-        ApiTaskManager.now(Dispatchers.Main){
-            val listener = if (isStatsAvailable) View.OnClickListener {
-                mainViewModel.displayFragment(StatisticsFragment.newInstance(loadItem))
-            } else null
-            viewBinding.avMainStatsContainer.setOnClickListener(listener)
-        }
-        return true
+        val listener = if (isStatsAvailable) View.OnClickListener {
+            mainViewModel.displayFragment(StatisticsFragment.newInstance(loadItem))
+        } else null
+        viewBinding.avMainStatsContainer.setOnClickListener(listener)
     }
 
     private fun closeFilterTagMenu(container: ViewGroup, checkedIndexes: Set<Int>) {
@@ -789,9 +803,13 @@ class MyUnit: com.madness.collision.unit.Unit() {
     }
 
     private fun doListUpdateAftermath() = lifecycleScope.launch {
+        updateStats()
+        scrollToTop()
+    }
+
+    private fun updateStats() {
         viewBinding.apiStats.text = adapter.listCount.toString()
         viewBinding.apiStats.visibility = View.VISIBLE
-        scrollToTop()
     }
 
     /**
