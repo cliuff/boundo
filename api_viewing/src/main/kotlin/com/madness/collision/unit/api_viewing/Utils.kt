@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,7 +59,7 @@ import java.util.regex.Pattern
 
 internal object Utils {
 
-    fun getAndroidVersionByAPI(api: Int, exact: Boolean): String{
+    fun getAndroidVersionByAPI(api: Int, exact: Boolean, isCompact: Boolean = false): String{
         return when (api){
             X.DEV -> if (exact) "DEV" else ""
             X.R -> "11"
@@ -73,18 +73,18 @@ internal object Utils {
             L_MR1 -> if (exact) "5.1" else "5"  // 5.1 Lollipop
             L -> if (exact) "5.0" else "5"  // 5.0 Lollipop
             K_WATCH -> if (exact) "4.4W" else "4"  // 4.4W KitKat
-            K -> if (exact) "4.4 - 4.4.4" else "4"  // 4.4 - 4.4.4 KitKat
-            J_MR2 -> if (exact) "4.3.x" else "4"  // 4.3.x Jelly Bean
-            J_MR1 -> if (exact) "4.2.x" else "4"  // 4.2.x Jelly Bean
-            J -> if (exact) "4.1.x" else "4"  // 4.1.x Jelly Bean
-            I_MR1 -> if (exact) "4.0.3 - 4.0.4" else "4"  // 4.0.3 - 4.0.4 Ice Cream Sandwich
-            I -> if (exact) "4.0.1 - 4.0.2" else "4"  // 4.0.1 - 4.0.2 Ice Cream Sandwich
-            H_MR2 -> if (exact) "3.2.x" else "3"  // 3.2.x Honeycomb
+            K -> if (isCompact) "4.4" else if (exact) "4.4 - 4.4.4" else "4"  // 4.4 - 4.4.4 KitKat
+            J_MR2 -> if (isCompact) "4.3" else if (exact) "4.3.x" else "4"  // 4.3.x Jelly Bean
+            J_MR1 -> if (isCompact) "4.2" else if (exact) "4.2.x" else "4"  // 4.2.x Jelly Bean
+            J -> if (isCompact) "4.1" else if (exact) "4.1.x" else "4"  // 4.1.x Jelly Bean
+            I_MR1 -> if (isCompact) "4.0" else if (exact) "4.0.3 - 4.0.4" else "4"  // 4.0.3 - 4.0.4 Ice Cream Sandwich
+            I -> if (isCompact) "4.0" else if (exact) "4.0.1 - 4.0.2" else "4"  // 4.0.1 - 4.0.2 Ice Cream Sandwich
+            H_MR2 -> if (isCompact) "3.2" else if (exact) "3.2.x" else "3"  // 3.2.x Honeycomb
             H_MR1 -> if (exact) "3.1" else "3"  // 3.1 Honeycomb
             H -> if (exact) "3.0" else "3"  // 3.0 Honeycomb
-            G_MR1 -> if (exact)  "2.3.3 - 2.3.7" else "2"  // 2.3.3 - 2.3.7 Gingerbread
-            G -> if (exact) "2.3 - 2.3.2" else "2"  // 2.3 - 2.3.2 Gingerbread
-            F -> if (exact) "2.2.x" else "2"  // 2.2.x Froyo
+            G_MR1 -> if (isCompact) "2.3" else if (exact)  "2.3.3 - 2.3.7" else "2"  // 2.3.3 - 2.3.7 Gingerbread
+            G -> if (isCompact) "2.3" else if (exact) "2.3 - 2.3.2" else "2"  // 2.3 - 2.3.2 Gingerbread
+            F -> if (isCompact) "2.2" else if (exact) "2.2.x" else "2"  // 2.2.x Froyo
             E_MR1 -> if (exact) "2.1" else "2"  // 2.1 Eclair
             E_0_1 -> if (exact) "2.0.1" else "2"  // 2.0.1 Eclair
             E -> if (exact) "2.0" else "2"  // 2.0 Eclair

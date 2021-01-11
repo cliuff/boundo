@@ -108,7 +108,7 @@
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:textColor="?colorAOnBackground"
-                android:textSize="22sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/avStatsAdapterName"
@@ -118,7 +118,7 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textColor="?colorTextSub"
-                android:textSize="8sp"
+                android:textSize="10sp"
                 tools:ignore="SmallSp" />
         </LinearLayout>
 

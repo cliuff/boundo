@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ import com.madness.collision.R
 import com.madness.collision.misc.MiscApp
 import com.madness.collision.unit.api_viewing.Utils
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
+import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.util.SystemUtil
 import com.madness.collision.util.X
 import java.text.SimpleDateFormat
@@ -55,16 +56,26 @@ internal class AppListService {
                 .append('\n')
         builder.append(context.getString(RAv.string.apiDetailsVerCode), StyleSpan(Typeface.BOLD), spanFlags)
                 .append(PackageInfoCompat.getLongVersionCode(pi).toString()).append('\n')
+
+        val sdkInfo = { ver: VerInfo ->
+            val sdk = "Android ${ver.sdk}"
+            val codeName = ver.codeName(context)
+            val sdkDetails = if (codeName != ver.sdk) "$sdk, $codeName" else sdk
+            ver.api.toString() + context.getString(R.string.textParentheses, sdkDetails)
+        }
+
+        val targetVer = VerInfo(appInfo.targetAPI, true)
         builder.append(context.getString(R.string.apiSdkTarget), StyleSpan(Typeface.BOLD), spanFlags)
                 .append(context.getString(R.string.textColon), StyleSpan(Typeface.BOLD), spanFlags)
-                .append(appInfo.targetAPI.toString())
-                .append(context.getString(R.string.textParentheses, "${Utils.getAndroidVersionByAPI(appInfo.targetAPI, true)}, ${Utils.getAndroidCodenameByAPI(context, appInfo.targetAPI)}"))
+                .append(sdkInfo.invoke(targetVer))
                 .append('\n')
+
+        val minVer = VerInfo(appInfo.minAPI, true)
         builder.append(context.getString(R.string.apiSdkMin), StyleSpan(Typeface.BOLD), spanFlags)
                 .append(context.getString(R.string.textColon), StyleSpan(Typeface.BOLD), spanFlags)
-                .append(appInfo.minAPI.toString())
-                .append(context.getString(R.string.textParentheses, "${Utils.getAndroidVersionByAPI(appInfo.minAPI, true)}, ${Utils.getAndroidCodenameByAPI(context, appInfo.minAPI)}"))
+                .append(sdkInfo.invoke(minVer))
                 .append('\n')
+
         if (appInfo.isNotArchive) {
             val cal = Calendar.getInstance()
             cal.timeInMillis = pi.firstInstallTime

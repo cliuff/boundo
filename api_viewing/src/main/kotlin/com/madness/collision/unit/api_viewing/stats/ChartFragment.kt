@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -81,7 +81,7 @@ internal class ChartFragment: TaggedFragment(){
         val chartEntryColors = ArrayList<Int>(stats.size())
         val iconSize = X.size(context, 20f, X.DP).roundToInt()
         stats.forEach { key, value ->
-            val apiVer = VerInfo(key, true)
+            val apiVer = VerInfo(key, isExact = true, isCompact = true)
 //            val apiName = Utils.getAndroidCodenameByAPI(context, key)
 //            val label = apiVersion + context.getString(R.string.textParentheses, apiName) // exclude apiName when entry value is small to decrease overlapping
             chartEntries.add(PieEntry(value.toFloat(), apiVer.sdk).apply {

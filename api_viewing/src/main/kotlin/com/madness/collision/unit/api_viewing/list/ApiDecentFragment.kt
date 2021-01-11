@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -118,8 +118,8 @@ internal class ApiDecentFragment : TaggedFragment(), Democratic {
                 viewBinding.apiDecentLabel.text = name
                 viewBinding.apiDecentVer.text = verName
                 when(viewModel.type.value) {
-                     TYPE_TARGET -> VerInfo(targetAPI, Utils.getAndroidVersionByAPI(targetAPI, true), targetSDKLetter)
-                    TYPE_MINIMUM -> VerInfo(minAPI, Utils.getAndroidVersionByAPI(minAPI, true), minSDKLetter)
+                    TYPE_TARGET -> VerInfo(targetAPI, isExact = true, isCompact = true)
+                    TYPE_MINIMUM -> VerInfo(minAPI, isExact = true, isCompact = true)
                     else -> VerInfo(-1, "", ' ')
                 }.run {
                     viewBinding.apiDecentChipAPI.text = api.toString()

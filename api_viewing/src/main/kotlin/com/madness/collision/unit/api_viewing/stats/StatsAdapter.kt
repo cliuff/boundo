@@ -16,7 +16,6 @@
 
 package com.madness.collision.unit.api_viewing.stats
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.util.SparseIntArray
@@ -29,9 +28,9 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.madness.collision.diy.SandwichAdapter
-import com.madness.collision.unit.api_viewing.R
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
+import com.madness.collision.unit.api_viewing.databinding.AdapterAvStatsBinding
 import com.madness.collision.unit.api_viewing.seal.SealManager
 import com.madness.collision.util.X
 import com.madness.collision.util.alterMargin
@@ -40,22 +39,20 @@ import kotlin.math.roundToInt
 
 internal class StatsAdapter(context: Context) : SandwichAdapter<StatsAdapter.Holder>(context) {
 
-    @SuppressLint("WrongViewCast")
-    class Holder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val card: MaterialCardView = itemView.findViewById(R.id.avStatsAdapterCard)
-        val logoBack: ImageView = itemView.findViewById(R.id.avStatsAdapterLogoBack)
-        val logoText: AppCompatTextView = itemView.findViewById(R.id.avStatsAdapterLogoText) as AppCompatTextView
-        val version: AppCompatTextView = itemView.findViewById(R.id.avStatsAdapterVersion) as AppCompatTextView
-        val codeName: AppCompatTextView = itemView.findViewById(R.id.avStatsAdapterName) as AppCompatTextView
-        val count: AppCompatTextView = itemView.findViewById(R.id.avStatsAdapterCount) as AppCompatTextView
-        val seal: ImageView = itemView.findViewById(R.id.avStatsAdapterSeal)
+    class Holder(binding: AdapterAvStatsBinding) : RecyclerView.ViewHolder(binding.root) {
+        val card: MaterialCardView = binding.avStatsAdapterCard
+        val logoBack: ImageView = binding.avStatsAdapterLogoBack
+        val logoText: AppCompatTextView = binding.avStatsAdapterLogoText as AppCompatTextView
+        val version: AppCompatTextView = binding.avStatsAdapterVersion as AppCompatTextView
+        val codeName: AppCompatTextView = binding.avStatsAdapterName as AppCompatTextView
+        val count: AppCompatTextView = binding.avStatsAdapterCount as AppCompatTextView
+        val seal: ImageView = binding.avStatsAdapterSeal
 
-        constructor(itemView: View, sweetMargin: Int): this(itemView) {
+        constructor(binding: AdapterAvStatsBinding, sweetMargin: Int): this(binding) {
 //            mViews.avStatsAdapterCard.cardElevation = sweetElevation
 //            mViews.avStatsAdapterCard.stateListAnimator = AnimatorInflater.loadStateListAnimator(context, R.animator.res_lift_card_on_touch)
             card.alterMargin(top = sweetMargin, bottom = sweetMargin)
         }
-
     }
 
     var stats: SparseIntArray = SparseIntArray(0)
@@ -80,17 +77,11 @@ internal class StatsAdapter(context: Context) : SandwichAdapter<StatsAdapter.Hol
         get() = if (EasyAccess.shouldShowDesserts) 5f else 2f
     private val itemLength: Int = X.size(context, 45f, X.DP).roundToInt()
 
-    private lateinit var rv: RecyclerView
     private val inflater = LayoutInflater.from(context)
 
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        super.onAttachedToRecyclerView(recyclerView)
-        rv = recyclerView
-    }
-
     override fun onCreateBodyItemViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        val itemView = inflater.inflate(R.layout.adapter_av_stats, parent, false)
-        return if (shouldShowDesserts) Holder(itemView, sweetMargin) else Holder(itemView)
+        val binding = AdapterAvStatsBinding.inflate(inflater, parent, false)
+        return if (shouldShowDesserts) Holder(binding, sweetMargin) else Holder(binding)
     }
 
     override fun onMakeBody(holder: Holder, index: Int) {
@@ -99,7 +90,7 @@ internal class StatsAdapter(context: Context) : SandwichAdapter<StatsAdapter.Hol
 
         optimizeSideMargin(index, 15f, innerMargin, holder.card)
 
-        holder.version.dartFuture(verInfo.sdk)
+        holder.version.dartFuture("Android ${verInfo.sdk}")
         holder.count.dartFuture(statsCount.toString())
 
         holder.logoText.dartFuture(verInfo.api.toString())
@@ -119,7 +110,7 @@ internal class StatsAdapter(context: Context) : SandwichAdapter<StatsAdapter.Hol
             holder.card.setCardBackgroundColor(itemBack)
         }
 
-        if (isSweet) {
+        if (isSweet && verInfo.codeName(context) != verInfo.sdk) {
             holder.codeName.dartFuture(verInfo.codeName(context))
             holder.codeName.visibility = View.VISIBLE
         } else {

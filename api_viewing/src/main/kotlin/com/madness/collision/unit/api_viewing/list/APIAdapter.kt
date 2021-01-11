@@ -16,7 +16,6 @@
 
 package com.madness.collision.unit.api_viewing.list
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.Handler
@@ -26,7 +25,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.ChipGroup
@@ -38,12 +36,12 @@ import com.madness.collision.unit.api_viewing.MyUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
+import com.madness.collision.unit.api_viewing.databinding.AdapterAvBinding
 import com.madness.collision.unit.api_viewing.seal.SealManager
 import com.madness.collision.util.*
 import kotlinx.coroutines.*
 import kotlin.math.min
 import kotlin.math.roundToInt
-import com.madness.collision.unit.api_viewing.R as MyR
 
 internal class APIAdapter(context: Context, private val listener: Listener)
     : SandwichAdapter<APIAdapter.Holder>(context) {
@@ -53,15 +51,14 @@ internal class APIAdapter(context: Context, private val listener: Listener)
         val longClick: (ApiViewingApp) -> Boolean
     }
 
-    @SuppressLint("WrongViewCast")
-    class Holder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val logo: ImageView = itemView.findViewById(MyR.id.avAdapterInfoLogo)
-        val name: AppCompatTextView = itemView.findViewById(MyR.id.avAdapterInfoName) as AppCompatTextView
-        val updateTime: AppCompatTextView = itemView.findViewById(MyR.id.avAdapterInfoTime) as AppCompatTextView
-        val tags: ChipGroup = itemView.findViewById(MyR.id.avAdapterInfoTags)
-        val api: AppCompatTextView = itemView.findViewById(MyR.id.avAdapterInfoAPI) as AppCompatTextView
-        val seal: ImageView = itemView.findViewById(MyR.id.avAdapterSeal)
-        val card: MaterialCardView = itemView.findViewById(MyR.id.avAdapterCard)
+    class Holder(binding: AdapterAvBinding) : RecyclerView.ViewHolder(binding.root) {
+        val logo: ImageView = binding.avAdapterInfoLogo
+        val name: AppCompatTextView = binding.avAdapterInfoName as AppCompatTextView
+        val updateTime: AppCompatTextView = binding.avAdapterInfoTime as AppCompatTextView
+        val tags: ChipGroup = binding.avAdapterInfoTags
+        val api: AppCompatTextView = binding.avAdapterInfoAPI as AppCompatTextView
+        val seal: ImageView = binding.avAdapterSeal
+        val card: MaterialCardView = binding.avAdapterCard
     }
 
     var apps: List<ApiViewingApp> = emptyList()
@@ -76,8 +73,6 @@ internal class APIAdapter(context: Context, private val listener: Listener)
     override val listCount: Int
         get() = apps.size
 
-    private lateinit var mRecyclerView: RecyclerView
-    private lateinit var mLayoutManager: LinearLayoutManager
     private val inflater = LayoutInflater.from(context)
     private var sortMethod: Int = MyUnit.SORT_POSITION_API_LOW
     private val sweetMargin by lazy { X.size(context, 5f, X.DP).roundToInt() }
@@ -99,15 +94,9 @@ internal class APIAdapter(context: Context, private val listener: Listener)
         return this
     }
 
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        super.onAttachedToRecyclerView(recyclerView)
-        mRecyclerView = recyclerView
-        mLayoutManager = mRecyclerView.layoutManager as LinearLayoutManager
-    }
-
     override fun onCreateBodyItemViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        val itemView = inflater.inflate(MyR.layout.adapter_av, parent, false)
-        return Holder(itemView)
+        val binding = AdapterAvBinding.inflate(inflater, parent, false)
+        return Holder(binding)
     }
 
     fun ensureItem(index: Int, mainCallback: (() -> Unit)? = null) {
