@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ class MainApplication : SplitCompatApplication(), Thread.UncaughtExceptionHandle
     var insetBottom: Int = 0
     var insetLeft: Int = 0
     var insetRight: Int = 0
-    var minBottomMargin: Int = -1
+    var minBottomMargin: IntArray = intArrayOf(-1, -1)
     var exterior: Boolean = false
     /**
      * Having a primary color that is close to black.

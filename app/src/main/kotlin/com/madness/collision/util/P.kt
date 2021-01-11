@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import java.util.*
 object P {
     // "Show bottom nav" button -> 40, bottom margin -> 20, top margin -> 15
     const val APP_MARGIN_BOTTOM_MIN = 75f
+    const val APP_MARGIN_BOTTOM_MIN_LAND = 20f
 
     const val AT_TIME_HOUR = "atTimeHour"
     const val AT_TIME_MINUTE = "atTimeMinute"

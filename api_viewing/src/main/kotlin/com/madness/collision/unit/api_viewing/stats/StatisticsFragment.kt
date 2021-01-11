@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -103,7 +103,8 @@ internal class StatisticsFragment: TaggedFragment(), Democratic {
                 container.alterPadding(top = it)
             }
             mainViewModel.contentWidthBottom.observe(viewLifecycleOwner) {
-                container.alterPadding(bottom = asBottomMargin(it))
+                val isHor = viewBinding.avStatisticsContainer == null
+                container.alterPadding(bottom = if (isHor) it else asBottomMargin(it))
             }
         }
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,8 @@
 package com.madness.collision.util
 
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import com.madness.collision.main.MainViewModel
 import com.madness.collision.util.MathUtils.boundMin
 import kotlin.math.roundToInt
 
@@ -25,11 +27,15 @@ object AppUtils {
      * Set minimum bottom margin
      */
     fun Fragment.asBottomMargin(margin: Int): Int {
-        var minBottomMargin = mainApplication.minBottomMargin
+        val mainViewModel: MainViewModel by activityViewModels()
+        val isLand = mainViewModel.navView != null
+        val index = if (isLand) 1 else 0
+        var minBottomMargin = mainApplication.minBottomMargin[index]
         if (minBottomMargin < 0) {
             val context = context ?: return margin
-            minBottomMargin = X.size(context, P.APP_MARGIN_BOTTOM_MIN, X.DP).roundToInt()
-            mainApplication.minBottomMargin = minBottomMargin
+            val pref = if (isLand) P.APP_MARGIN_BOTTOM_MIN_LAND else P.APP_MARGIN_BOTTOM_MIN
+            minBottomMargin = X.size(context, pref, X.DP).roundToInt()
+            mainApplication.minBottomMargin[index] = minBottomMargin
         }
         val minMargin = minBottomMargin + mainApplication.insetBottom
         return margin.boundMin(minMargin)

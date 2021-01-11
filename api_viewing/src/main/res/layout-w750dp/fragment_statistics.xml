@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2020 Clifford Liu
+  ~ Copyright 2021 Clifford Liu
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -22,12 +22,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/avStatisticsContainerPieChart"
+    <ScrollView
+        android:scrollbars="none"
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content">
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/avStatisticsContainerPieChart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </ScrollView>
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/avStatisticsContainerList"
