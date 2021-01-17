@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,7 +69,7 @@ class MyControlService : ControlsProviderService(), StateObservable {
         private const val ARG_DM_DEV_DEVICE = "dm_dev_device"
     }
 
-    private lateinit var updatePublisher: ReplayProcessor<Control>
+    private var updatePublisher: ReplayProcessor<Control>? = null
     private val atMaxValue = 120f
     private val atStepValue = 5f
     private var atCurrentValue = atMaxValue
@@ -86,7 +86,8 @@ class MyControlService : ControlsProviderService(), StateObservable {
     }
 
     override fun onDeviceStateChanged(device: BluetoothDevice, state: Int) {
-        // manager not used yet, no device added and updatePublisher may not be initialized
+        val updatePublisher = updatePublisher ?: return
+        // manager not used yet and no device added
         if (dmSessionNo == 0L) return
         val context = baseContext ?: return
         prepareDmManager(context, dmSessionNo) ?: return
@@ -200,7 +201,9 @@ class MyControlService : ControlsProviderService(), StateObservable {
 
     override fun createPublisherFor(controlIds: MutableList<String>): Flow.Publisher<Control> {
         val context = baseContext
-        updatePublisher = ReplayProcessor.create()
+        val updatePublisher = ReplayProcessor.create<Control>().also {
+            updatePublisher = it
+        }
         val sessionNo = System.currentTimeMillis()
         controlIds.forEach {
             getControl(context, it, sessionNo)?.apply {
@@ -211,6 +214,7 @@ class MyControlService : ControlsProviderService(), StateObservable {
     }
 
     override fun performControlAction(controlId: String, action: ControlAction, consumer: Consumer<Int>) {
+        val updatePublisher = updatePublisher ?: return
         val context = baseContext
         // Inform SystemUI that the action has been received and is being processed
         consumer.accept(ControlAction.RESPONSE_OK)
@@ -255,9 +259,9 @@ class MyControlService : ControlsProviderService(), StateObservable {
                             }
                             atCurrentValue = newCurrentValue
                             // update control status
-                            if (!isAtUpdateBlocked && doUpdate) {
+                            if (!isAtUpdateBlocked && doUpdate) updatePublisher?.let {
                                 getControl(context, controlId, sessionNo)?.apply {
-                                    updatePublisher.onNext(this)
+                                    it.onNext(this)
                                 }
                             }
                         }
@@ -334,6 +338,7 @@ class MyControlService : ControlsProviderService(), StateObservable {
                 val doUpdate = action != null && action is BooleanAction
                 if (doUpdate && hasAccess) GlobalScope.launch {
                     delay(800)
+                    val updatePublisher = updatePublisher ?: return@launch
                     getControl(context, controlId, sessionNo)?.apply {
                         updatePublisher.onNext(this)
                     }
@@ -359,7 +364,7 @@ class MyControlService : ControlsProviderService(), StateObservable {
                         val mac = getDmMacByDeviceId(controlId)
                         val device = dmManager.getPairedDevices().find { it.address == mac }
                         if (device != null) deviceItem = DeviceItem(device)
-                        val isConnected = dmManager.getConnectedDevices().find { it.address == mac } != null
+                        val isConnected = dmManager.getConnectedDevices().any { it.address == mac }
                         deviceItem?.state = if (isConnected) BluetoothProfile.STATE_CONNECTED
                         else BluetoothProfile.STATE_DISCONNECTED
                         // perform action
@@ -376,6 +381,7 @@ class MyControlService : ControlsProviderService(), StateObservable {
                     } else GlobalScope.launch {
                         // update status in 600ms
                         delay(600)
+                        val updatePublisher = updatePublisher ?: return@launch
                         getControl(context, controlId, sessionNo)?.apply {
                             updatePublisher.onNext(this)
                         }

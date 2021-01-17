@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +22,9 @@ import android.bluetooth.BluetoothProfile
 import com.madness.collision.R
 
 internal class DeviceItem(val device: BluetoothDevice) {
-    val name: String = device.name
-    val majorDeviceClass = device.bluetoothClass.majorDeviceClass
-    val deviceClass = device.bluetoothClass.deviceClass
+    val name: String = device.name ?: ""
+    val majorDeviceClass = device.bluetoothClass?.majorDeviceClass ?: BluetoothClass.Device.Major.MISC
+    val deviceClass = device.bluetoothClass?.deviceClass ?: BluetoothClass.Device.Major.MISC
     val mac: String = device.address
     val iconRes: Int = when (majorDeviceClass) {
         BluetoothClass.Device.Major.AUDIO_VIDEO -> R.drawable.ic_devices_other_24

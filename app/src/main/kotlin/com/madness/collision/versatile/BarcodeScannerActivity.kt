@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,8 +46,8 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
+import java.io.FileNotFoundException
 import java.io.FileOutputStream
-import java.io.OutputStream
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
 import java.util.*
@@ -90,19 +90,21 @@ internal class BarcodeScannerActivity: AppCompatActivity() {
         }
         uri ?: return
 
-        val stream: OutputStream? = if (isViaMediaStore) contentResolver.openOutputStream(uri) else FileOutputStream(file!!)
-        stream?.run {
-            use { fos ->
-                val format = if (X.aboveOn(X.R)) Bitmap.CompressFormat.WEBP_LOSSY else webpLegacy
-                bitmap.compress(format, P.WEBP_COMPRESS_SPACE_FIRST, fos)
-                try {
-                    transfer(uri, file)
-                } catch (e: Exception){
-                    e.printStackTrace()
-                    notify(R.string.text_app_not_installed)
-                } finally {
-                    bitmap.recycle()
-                }
+        try {
+            if (isViaMediaStore) contentResolver.openOutputStream(uri) else FileOutputStream(file!!)
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+            null
+        }?.use { fos ->
+            val format = if (X.aboveOn(X.R)) Bitmap.CompressFormat.WEBP_LOSSY else webpLegacy
+            bitmap.compress(format, P.WEBP_COMPRESS_SPACE_FIRST, fos)
+            try {
+                transfer(uri, file)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                notify(R.string.text_app_not_installed)
+            } finally {
+                bitmap.recycle()
             }
         }
     }

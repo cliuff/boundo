@@ -150,6 +150,24 @@ internal class AppListFragment : TaggedFragment(), Filterable {
         lifecycleScope.launch(Dispatchers.Main) {
             viewModel.updateApps4Display(list)
         }
+        updateListRes(refreshLayout)
+    }
+
+    /**
+     * Update synchronously
+     */
+    suspend fun updateListSync(list: List<ApiViewingApp>, refreshLayout: SwipeRefreshLayout? = null) {
+        if (list.isEmpty() && viewModel.apps4DisplayValue.isEmpty()) return
+        withContext(Dispatchers.Main) {
+            viewModel.updateApps4Display(list)
+        }
+        updateListRes(refreshLayout)
+    }
+
+    /**
+     * Update list cache size and start loading icons
+     */
+    private fun updateListRes(refreshLayout: SwipeRefreshLayout?) {
         // use launchWhenStarted to avoid mRecyclerView not initialized bug when linking from app store
         lifecycleScope.launchWhenStarted {
             mRecyclerView.post {

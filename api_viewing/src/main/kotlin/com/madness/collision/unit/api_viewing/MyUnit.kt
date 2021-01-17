@@ -798,8 +798,10 @@ class MyUnit: com.madness.collision.unit.Unit() {
      * Update adapter list, update stats, and scroll to top
      */
     private fun updateList(list: List<ApiViewingApp> = viewModel.apps4Cache) {
-        listFragment.updateList(list, refreshLayout)
-        doListUpdateAftermath()
+        lifecycleScope.launch(Dispatchers.Default) {
+            listFragment.updateListSync(list, refreshLayout)
+            doListUpdateAftermath()
+        }
     }
 
     private fun doListUpdateAftermath() = lifecycleScope.launch {

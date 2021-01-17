@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -253,7 +253,7 @@ internal class UpdatesFragment : TaggedFragment(), Democratic {
     private fun updateItem(stateful: StatefulDescription) {
         val isAddition = stateful.isPinned
         if (isAddition) {
-            if (updatesProviders.find { it.first == stateful.unitName } != null) return
+            if (updatesProviders.any { it.first == stateful.unitName }) return
             val provider = Unit.getUpdates(stateful.unitName) ?: return
             updatesProviders.add(stateful.unitName to provider)
             if (!provider.hasUpdates(this)) return

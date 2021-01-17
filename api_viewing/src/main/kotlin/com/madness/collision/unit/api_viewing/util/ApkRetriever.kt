@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -77,22 +77,26 @@ class ApkRetriever(private val context: Context) {
                 DocumentsContract.Document.COLUMN_DOCUMENT_ID,
                 DocumentsContract.Document.COLUMN_DISPLAY_NAME
         )
-        val childCursor = contentResolver.query(childrenUri, columns, null, null, null)
-        childCursor?.use { cursor ->
-            while (cursor.moveToNext()) {
-                val mimeType = cursor.getString(0) ?: ""
-                if (mimeType == DocumentsContract.Document.MIME_TYPE_DIR) {
+        try {
+            val childCursor = contentResolver.query(childrenUri, columns, null, null, null)
+            childCursor?.use { cursor ->
+                while (cursor.moveToNext()) {
+                    val mimeType = cursor.getString(0) ?: ""
+                    if (mimeType == DocumentsContract.Document.MIME_TYPE_DIR) {
+                        val id = cursor.getString(1)
+                        fromTreeUri(treeUri, id, block)
+                        continue
+                    }
+                    if (mimeType != "application/vnd.android.package-archive") continue
                     val id = cursor.getString(1)
-                    fromTreeUri(treeUri, id, block)
-                    continue
+                    val name = cursor.getString(2)
+                    if (name.contains(APP_CACHE_PREFIX)) continue
+                    val childUri = DocumentsContract.buildDocumentUriUsingTree(treeUri, id) ?: continue
+                    block.invoke(childUri)
                 }
-                if (mimeType != "application/vnd.android.package-archive") continue
-                val id = cursor.getString(1)
-                val name = cursor.getString(2)
-                if (name.contains(APP_CACHE_PREFIX)) continue
-                val childUri = DocumentsContract.buildDocumentUriUsingTree(treeUri, id) ?: continue
-                block.invoke(childUri)
             }
+        } catch (e: SecurityException) {
+            e.printStackTrace()
         }
     }
 

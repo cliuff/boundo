@@ -183,9 +183,7 @@ internal class ImmortalActivity : AppCompatActivity(), View.OnClickListener {
             if (X.belowOff(X.N_MR1)) return@setOnLongClickListener true
             val manager = getSystemService(ShortcutManager::class.java) ?: return@setOnLongClickListener true
             Instant(this, manager).let {
-                val isExisting = it.dynamicShortcuts.find { s ->
-                    s.id == P.SC_ID_IMMORTAL
-                } != null
+                val isExisting = it.dynamicShortcuts.any { s -> s.id == P.SC_ID_IMMORTAL }
                 if (isExisting) it.removeDynamicShortcuts(P.SC_ID_IMMORTAL)
                 else it.addDynamicShortcuts(P.SC_ID_IMMORTAL)
             }

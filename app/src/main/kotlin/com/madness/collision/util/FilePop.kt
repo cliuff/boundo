@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +36,7 @@ import com.madness.collision.databinding.FileActionsBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
+import java.io.FileNotFoundException
 
 class FilePop: BottomSheetDialogFragment(){
     companion object{
@@ -284,19 +285,26 @@ class FilePop: BottomSheetDialogFragment(){
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_SAVE_FILE){
+        if (requestCode == REQUEST_SAVE_FILE) {
             if (resultCode != Activity.RESULT_OK || data?.data == null) {
                 dismiss()
                 return
             }
             val uri = data.data!!
-            mContext.contentResolver.openOutputStream(uri).use { out ->
-                out ?: return
-                mContext.contentResolver.openInputStream(fileUri).use {
-                    it?.copyTo(out)
+            val contentResolver = mContext.contentResolver
+            var isSuccess = false
+            try {
+                contentResolver.openOutputStream(uri)?.use { out ->
+                    contentResolver.openInputStream(fileUri)?.use {
+                        it.copyTo(out)
+                        isSuccess = true
+                    }
                 }
+            } catch (e: FileNotFoundException) {
+                e.printStackTrace()
             }
             dismiss()
+            if (!isSuccess) notifyBriefly(R.string.text_error)
         }
     }
 }

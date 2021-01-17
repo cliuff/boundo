@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,7 +62,7 @@ internal class PinnedUnitsAdapter(context: Context, private val listener: Listen
     fun updateItem(stateful: StatefulDescription) {
         val isAddition = stateful.isPinned
         if (isAddition) {
-            if (descriptions.find { it.unitName == stateful.unitName } != null) return
+            if (descriptions.any { it.unitName == stateful.unitName }) return
             descriptions.add(stateful)
             descriptions = descriptions.dataSorted()
             for (i in descriptions.indices) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -339,7 +339,8 @@ internal class ApiViewingApp(
     private fun roundIcon(context: Context, isDefined: Boolean, logo: Bitmap, roundIconDrawable: Drawable?): Bitmap {
         val doPackageIcon = roundIconDrawable != null
         // below: convert into round
-        val alphaLimit = 0xA8
+        // the higher the harder to be recognized as round icon
+        val alphaLimit = 0x90
         val icon2Clip by lazy {
             GraphicsUtil.removeOuterTransparentPixels(logo, noTransparency = false, alphaLimit = alphaLimit).let {
                 GraphicsUtil.properly2Square(it)
@@ -371,7 +372,7 @@ internal class ApiViewingApp(
             val transparentSize = transparentPixels.size.toFloat()
             val total = pixels.size.toFloat()
             val ratio = transparentSize / total
-            iconDetails.shouldClip = ratio < 0.1
+            iconDetails.shouldClip = ratio < 0.015
 
             if (iconDetails.shouldClip) {
                 paintExam.shader = BitmapShader(sample, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)

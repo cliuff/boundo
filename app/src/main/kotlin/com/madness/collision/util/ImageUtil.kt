@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import android.util.Size
 import androidx.annotation.RequiresApi
 import androidx.core.graphics.decodeBitmap
 import java.io.File
+import java.io.FileNotFoundException
 
 
 object ImageUtil {
@@ -34,24 +35,39 @@ object ImageUtil {
     /**
      * @return mutable bitmap
      */
-    fun getBitmap(file: File): Bitmap?{
+    fun getBitmap(file: File): Bitmap? {
         if (!file.exists()) return null
         return if (X.aboveOn(X.P)) {
-            ImageDecoder.decodeBitmap(ImageDecoder.createSource(file), QuickAccess.generalHeaderDecodedListener())
+            val source = ImageDecoder.createSource(file)
+            val listener = QuickAccess.generalHeaderDecodedListener()
+            ImageDecoder.decodeBitmap(source, listener)
         } else {
-            BitmapFactory.decodeFile(file.path, BitmapFactory.Options().apply { inMutable = true })
+            val options = BitmapFactory.Options().apply {
+                inMutable = true
+            }
+            BitmapFactory.decodeFile(file.path, options)
         }
     }
 
     /**
      * @return mutable bitmap
      */
-    fun getBitmap(context: Context, uri: Uri): Bitmap?{
+    fun getBitmap(context: Context, uri: Uri): Bitmap? {
         return if (X.aboveOn(X.P)) {
-            ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, uri), QuickAccess.generalHeaderDecodedListener(context))
+            val source = ImageDecoder.createSource(context.contentResolver, uri)
+            val listener = QuickAccess.generalHeaderDecodedListener(context)
+            ImageDecoder.decodeBitmap(source, listener)
         } else {
-            context.contentResolver.openInputStream(uri).use { inputStream ->
-                BitmapFactory.decodeStream(inputStream, null, BitmapFactory.Options().apply { inMutable = true })
+            try {
+                context.contentResolver.openInputStream(uri).use { inputStream ->
+                    val options = BitmapFactory.Options().apply {
+                        inMutable = true
+                    }
+                    BitmapFactory.decodeStream(inputStream, null, options)
+                }
+            } catch (e: FileNotFoundException) {
+                e.printStackTrace()
+                null
             }
         }
     }
@@ -81,11 +97,17 @@ object ImageUtil {
      */
     fun getSampledBitmap(context: Context, uri: Uri, reqWidth: Int, reqHeight: Int): Bitmap? {
         return if (X.aboveOn(X.P)) {
-            getSampledBitmap(reqWidth, reqHeight, ImageDecoder.createSource(context.contentResolver, uri), context)
+            val source = ImageDecoder.createSource(context.contentResolver, uri)
+            getSampledBitmap(reqWidth, reqHeight, source, context)
         } else {
             getSampledBitmap(reqWidth, reqHeight) {
-                context.contentResolver.openInputStream(uri).use { inputStream ->
-                    BitmapFactory.decodeStream(inputStream, null, it)
+                try {
+                    context.contentResolver.openInputStream(uri).use { inputStream ->
+                        BitmapFactory.decodeStream(inputStream, null, it)
+                    }
+                } catch (e: FileNotFoundException) {
+                    e.printStackTrace()
+                    null
                 }
             }
         }
