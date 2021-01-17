@@ -193,7 +193,9 @@ dependencies {
             Dependencies.kotlinStdlib,
             Dependencies.kotlinReflect,
             Dependencies.rxJava,
-            Dependencies.jbAnnotations
+            Dependencies.jbAnnotations,
+            Dependencies.glide,
+            Dependencies.androidDeviceNames
     ).forEach { implementation(it) }
 
     listOf(

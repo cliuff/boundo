@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,6 +39,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.HtmlCompat
+import com.jaredrummler.android.device.DeviceName
 import com.madness.collision.BuildConfig
 import com.madness.collision.R
 import com.madness.collision.databinding.ActivityImmortalBinding
@@ -209,7 +210,9 @@ internal class ImmortalActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun log(): File {
+        DeviceName.init(this)
         // - device info
+        val deviceName = DeviceName.getDeviceName()
         val manufacture = Build.MANUFACTURER
         val model = Build.MODEL
         val product = Build.PRODUCT
@@ -227,11 +230,11 @@ internal class ImmortalActivity : AppCompatActivity(), View.OnClickListener {
 
         val apiLevel = Build.VERSION.SDK_INT
 
-        val time = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", SystemUtil.getLocaleApp()).format(Calendar.getInstance().time)
+        val time = SimpleDateFormat("yyyyMMdd:HHmm", SystemUtil.getLocaleApp()).format(Calendar.getInstance().time)
         val logFile = F.createFile(
                 F.cachePublicPath(this),
                 P.DIR_NAME_LOG,
-                "Boundo $verName($ver) @$time $manufacture $model $apiLevel.html"
+                "Boundo $verName($ver) $time $manufacture $deviceName $apiLevel.html"
         )
 
         // - clear extra log files
@@ -241,7 +244,25 @@ internal class ImmortalActivity : AppCompatActivity(), View.OnClickListener {
             throw Exception("Error occurred while preparing file")
         }
         val writer = FileWriter(logFile)
-        writer.write(wrapInHtml("Manufacture: $manufacture\nModel: $model\nProduct: $product\nDevice: $device\nAPI: $apiLevel\nApp: $verName($ver)\nLocales: $locales\n"))
+        writer.write(wrapInHtml("$manufacture $deviceName"))
+        listOf(
+                // device info
+                "Manufacture" to manufacture,
+                "Model" to model,
+                "Product" to product,
+                "Device(Code name)" to device,
+                // other info
+                "API level" to apiLevel.toString(),
+                "App version" to "$verName($ver)",
+                "Locales" to locales
+        ).run {
+            listOf(slice(0..3), slice(4..lastIndex))
+        }.forEach {
+            it.joinToString(separator = "\n") { p -> "${p.first}: ${p.second}" }.let { s ->
+                writer.write(s.wrappedInHtml)
+            }
+        }
+        writer.write("".wrappedInHtml)
 
         if (X.aboveOn(X.R)) {
             val am = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager?
@@ -269,15 +290,18 @@ internal class ImmortalActivity : AppCompatActivity(), View.OnClickListener {
                     ApplicationExitInfo.REASON_USER_STOPPED -> "user_stopped"
                     else -> "unspecified"
                 }
-                val info = "Process name: ${exitInfo.processName}(pid ${exitInfo.pid})\nReason: $reason\nDesc: ${exitInfo.description ?: "Unspecified"}\n"
+                val info = "Process name: ${exitInfo.processName}(pid ${exitInfo.pid})\nReason: $reason\nDesc: ${exitInfo.description ?: "Unspecified"}"
                 writer.write(info.wrappedInHtml)
                 exitInfo.traceInputStream?.let { traceStream ->
                     val reader = InputStreamReader(traceStream)
                     reader.useLines { it.forEach {  line -> writer.write(wrapInHtml(line)) } }
-                    writer.write("\n")
                 }
             }
+            if (exitReasons.isNotEmpty()) {
+                writer.write("".wrappedInHtml)
+            }
         }
+
         // - write logcat
         val process = Runtime.getRuntime().exec("logcat -d -v time")
         val reader = InputStreamReader(process.inputStream)

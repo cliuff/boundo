@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -78,7 +78,8 @@ dependencies {
             Dependencies.androidxRoom,
             Dependencies.androidxRoomRuntime,
             Dependencies.mpChart,
-            Dependencies.openCsv
+            Dependencies.openCsv,
+            Dependencies.androidDeviceNames
     ).forEach { implementation(it) }
     Dependencies.dynamicFeatureBasics.forEach { implementation(it) }
 

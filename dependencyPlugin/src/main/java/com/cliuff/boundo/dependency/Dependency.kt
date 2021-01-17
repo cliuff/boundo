@@ -74,6 +74,7 @@ object Versions {
     const val rxJava = "3.0.5"
     // Jetbrains annotations
     const val jbAnnotations = "20.1.0"
+    const val androidDeviceNames = "2.0.0"
 }
 
 class Dependencies : Plugin<Project> {
@@ -144,6 +145,7 @@ class Dependencies : Plugin<Project> {
         const val openCsv = "com.opencsv:opencsv:${Versions.openCsv}"
         const val rxJava = "io.reactivex.rxjava3:rxjava:${Versions.rxJava}"
         const val jbAnnotations = "org.jetbrains:annotations:${Versions.jbAnnotations}"
+        const val androidDeviceNames = "com.jaredrummler:android-device-names:${Versions.androidDeviceNames}"
 
         // wear
         const val androidxPercentLayout = "androidx.percentlayout:percentlayout:${Versions.androidxPercentLayout}"
@@ -168,6 +170,7 @@ class Dependencies : Plugin<Project> {
                 googlePlayCoreKtx,
                 gglGuava,
                 jbAnnotations,
+                glide,
         )
     }
 }
