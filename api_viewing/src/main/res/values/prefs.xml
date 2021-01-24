@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2020 Clifford Liu
+  ~ Copyright 2021 Clifford Liu
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -48,6 +48,18 @@
         <item>@string/av_settings_tags_system</item>
         <item>@string/av_tag_has_splits</item>
         <item>@string/av_ai</item>
+        <item>@string/av_settings_tag_fcm</item>
+        <item>@string/av_settings_tag_huawei_push</item>
+        <item>@string/av_settings_tag_xiaomi_push</item>
+        <item>@string/av_settings_tag_meizu_push</item>
+        <item>@string/av_settings_tag_oppo_push</item>
+        <item>@string/av_settings_tag_vivo_push</item>
+        <item>@string/av_settings_tag_jpush</item>
+        <item>@string/av_settings_tag_upush</item>
+        <item>@string/av_settings_tag_tpns</item>
+        <item>@string/av_settings_tag_ali_push</item>
+        <item>@string/av_settings_tag_baidu_push</item>
+        <item>@string/av_settings_tag_getui</item>
     </string-array>
     <string-array name="prefAvTagsValues">
         <item>@string/prefAvTagsValuePackageInstallerGp</item>
@@ -63,6 +75,18 @@
         <item>@string/prefAvTagsValuePrivilegeSys</item>
         <item>@string/prefAvTagsValueHasSplits</item>
         <item>@string/prefAvTagsValueIconAdaptive</item>
+        <item>@string/prefAvTagsValuePushFcm</item>
+        <item>@string/prefAvTagsValuePushHuawei</item>
+        <item>@string/prefAvTagsValuePushMi</item>
+        <item>@string/prefAvTagsValuePushMeizu</item>
+        <item>@string/prefAvTagsValuePushOppo</item>
+        <item>@string/prefAvTagsValuePushVivo</item>
+        <item>@string/prefAvTagsValuePushJpush</item>
+        <item>@string/prefAvTagsValuePushUpush</item>
+        <item>@string/prefAvTagsValuePushTpns</item>
+        <item>@string/prefAvTagsValuePushAli</item>
+        <item>@string/prefAvTagsValuePushDu</item>
+        <item>@string/prefAvTagsValuePushGetui</item>
     </string-array>
     <string name="prefAvTagsValuePackageInstallerGp" translatable="false">avTagsValPiGp</string>
     <string name="prefAvTagsValuePackageInstallerPi" translatable="false">avTagsValPiPi</string>
@@ -77,5 +101,17 @@
     <string name="prefAvTagsValuePrivilegeSys" translatable="false">avTagsValPriSys</string>
     <string name="prefAvTagsValueHasSplits" translatable="false">avTagsValHasSplits</string>
     <string name="prefAvTagsValueIconAdaptive" translatable="false">avTagsValIconAda</string>
+    <string name="prefAvTagsValuePushFcm" translatable="false">avTagsValPushFcm</string>
+    <string name="prefAvTagsValuePushHuawei" translatable="false">avTagsValPushHw</string>
+    <string name="prefAvTagsValuePushMi" translatable="false">avTagsValPushMi</string>
+    <string name="prefAvTagsValuePushMeizu" translatable="false">avTagsValPushMz</string>
+    <string name="prefAvTagsValuePushOppo" translatable="false">avTagsValPushOo</string>
+    <string name="prefAvTagsValuePushVivo" translatable="false">avTagsValPushVv</string>
+    <string name="prefAvTagsValuePushJpush" translatable="false">avTagsValPushJp</string>
+    <string name="prefAvTagsValuePushUpush" translatable="false">avTagsValPushUp</string>
+    <string name="prefAvTagsValuePushTpns" translatable="false">avTagsValPushTp</string>
+    <string name="prefAvTagsValuePushAli" translatable="false">avTagsValPushAli</string>
+    <string name="prefAvTagsValuePushDu" translatable="false">avTagsValPushDu</string>
+    <string name="prefAvTagsValuePushGetui" translatable="false">avTagsValPushGt</string>
 
 </resources>

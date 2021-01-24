@@ -207,9 +207,9 @@ internal class APIAdapter(context: Context, private val listener: Listener)
         }
 
         GlobalScope.launch {
-            val installer = AppTag.ensureResources(context, appInfo)
+            val checkerApp = AppTag.ensureResources(context, appInfo)
             launch(Dispatchers.Main) {
-                AppTag.inflateTags(context, appInfo, holder.tags, installer, !shouldWaitForIcon)
+                AppTag.inflateTags(context, holder.tags, checkerApp, !shouldWaitForIcon)
                 taskIcon?.run()
             }
         }

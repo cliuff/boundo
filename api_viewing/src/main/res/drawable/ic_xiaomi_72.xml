@@ -1,0 +1,38 @@
+<!--
+  ~ Copyright 2021 Clifford Liu
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="72dp"
+    android:height="72dp"
+    android:viewportWidth="11.163168"
+    android:viewportHeight="11.163168">
+  <path
+      android:pathData="M1.521,1.521L9.6423,1.521L9.6423,9.6423L1.521,9.6423Z"
+      android:strokeLineJoin="round"
+      android:strokeWidth="0.155"
+      android:fillColor="#fe660b"
+      android:fillType="nonZero"/>
+  <path
+      android:pathData="m6.5783,7.0116l0,-2.0494c0,-0.4656 -0.3774,-0.8432 -0.843,-0.8432L3.3657,4.119c-0.0183,0 -0.0331,0.0147 -0.0331,0.0328l0,2.8597a0.0329,0.0329 135,0 0,0.0331 0.0327l0.633,0a0.0331,0.0331 45.0001,0 0,0.033 -0.0329L4.0317,4.7668a0.0332,0.0332 45,0 1,0.033 -0.033l1.3612,0c0.2556,0 0.4629,0.2072 0.4629,0.4628l0,1.8146c0,0.0181 0.0149,0.033 0.033,0.033L6.5454,7.0442c0.0181,0 0.033,-0.0147 0.033,-0.0327"
+      android:strokeLineJoin="round"
+      android:fillColor="#ffffff"
+      android:fillType="nonZero"/>
+  <path
+      android:pathData="m5.3001,7.0113l0,0.0001c0,0.018 -0.0148,0.0329 -0.0329,0.0329l-0.6329,0a0.033,0.033 135,0 1,-0.0331 -0.033l0,-1.72c0,-0.0181 0.0149,-0.033 0.033,-0.033l0.6329,0c0.0181,0 0.0329,0.0149 0.0329,0.0329l0,1.7202zM7.8306,7.0113c0,0.0182 -0.0148,0.0329 -0.0331,0.0329l-0.6327,0a0.0331,0.0331 0,0 1,-0.0332 -0.0329L7.1317,4.1521c0,-0.0183 0.0149,-0.0331 0.0332,-0.0331l0.6327,0c0.0181,0 0.033,0.0149 0.033,0.033l0,0z"
+      android:strokeLineJoin="round"
+      android:fillColor="#ffffff"
+      android:fillType="nonZero"/>
+</vector>

@@ -1,0 +1,28 @@
+<!--
+  ~ Copyright 2021 Clifford Liu
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="72dp"
+    android:height="72dp"
+    android:viewportWidth="72"
+    android:viewportHeight="72">
+  <path
+      android:pathData="m54.797,8.97v44.6465h-2.3498l-0.0012,-42.2978L19.5486,11.3186v49.3461l35.2484,0.0012v2.3498L17.2,63.0157L17.2,8.97ZM39.5232,51.2666v2.3498h-7.0494v-2.3498zM44.0857,18.1848 L49.7793,21.518 49.4958,23.6652 46.138,24.5833 47.2064,28.5992 47.2001,28.6027 47.2077,28.6041 50.4223,40.7033 48.6473,41.9906 40.5407,36.7318 26.1336,42.6442 24.862,40.7212 33.5159,32.1756 22.2306,24.8535 22.8777,22.6929 38.2367,22.7916 42.6612,18.3681zM45.52,31.406 L42.4123,35.1446 47.3681,38.3603zM42.7284,31.0888 L35.9938,33.0309 30.749,38.2087 39.9474,34.4338zM26.8777,25.0674 L35.5708,30.707 43.3217,28.4723 38.3589,25.1414zM43.6812,20.6709 L40.563,23.7903 44.1324,26.1847 43.568,24.0605 44.3933,22.6253 46.1826,22.1348z"
+      android:strokeWidth="1.17491"
+      android:fillColor="#00a4ff"
+      android:fillType="nonZero"
+      android:strokeColor="#00000000"/>
+</vector>

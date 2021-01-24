@@ -215,9 +215,9 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
                     }
                 }
                 lifecycleScope.launch(Dispatchers.Default) {
-                    val installer = AppTag.ensureResources(context, it)
+                    val checkerApp = AppTag.ensureResources(context, it)
                     launch(Dispatchers.Main) {
-                        AppTag.inflateTags(context, it, mvApp.tags, installer, true)
+                        AppTag.inflateTags(context, mvApp.tags, checkerApp, true)
                     }
                 }
 

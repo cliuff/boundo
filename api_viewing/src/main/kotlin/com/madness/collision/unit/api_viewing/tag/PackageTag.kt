@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,11 +40,25 @@ internal open class PackageTag(val id: Int, val expressing: (ExpressibleTag.(Con
         const val TAG_ID_SYS = R.string.prefAvTagsValuePrivilegeSys
         const val TAG_ID_SPL = R.string.prefAvTagsValueHasSplits
         const val TAG_ID_AI = R.string.prefAvTagsValueIconAdaptive
+        const val TAG_ID_FCM = R.string.prefAvTagsValuePushFcm
+        const val TAG_ID_HWP = R.string.prefAvTagsValuePushHuawei
+        const val TAG_ID_MIP = R.string.prefAvTagsValuePushMi
+        const val TAG_ID_MZP = R.string.prefAvTagsValuePushMeizu
+        const val TAG_ID_OOP = R.string.prefAvTagsValuePushOppo
+        const val TAG_ID_VVP = R.string.prefAvTagsValuePushVivo
+        const val TAG_ID_J_P = R.string.prefAvTagsValuePushJpush
+        const val TAG_ID_U_P = R.string.prefAvTagsValuePushUpush
+        const val TAG_ID_TCP = R.string.prefAvTagsValuePushTpns
+        const val TAG_ID_ALP = R.string.prefAvTagsValuePushAli
+        const val TAG_ID_DUP = R.string.prefAvTagsValuePushDu
+        const val TAG_ID_GTP = R.string.prefAvTagsValuePushGetui
 
         val TAG_IDS = arrayOf(
                 TAG_ID_GP, TAG_ID_PI, TAG_ID_FLU, TAG_ID_RN, TAG_ID_XAM,
                 TAG_ID_KOT, TAG_ID_64B, TAG_ID_ARM, TAG_ID_X86, TAG_ID_HID,
-                TAG_ID_SYS, TAG_ID_SPL, TAG_ID_AI
+                TAG_ID_SYS, TAG_ID_SPL, TAG_ID_AI, TAG_ID_FCM, TAG_ID_HWP,
+                TAG_ID_MIP, TAG_ID_MZP, TAG_ID_OOP, TAG_ID_VVP, TAG_ID_J_P,
+                TAG_ID_U_P, TAG_ID_TCP, TAG_ID_ALP, TAG_ID_DUP, TAG_ID_GTP
         )
     }
 

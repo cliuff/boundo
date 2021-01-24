@@ -1,0 +1,52 @@
+<!--
+  ~ Copyright 2021 Clifford Liu
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="72dp"
+    android:height="72dp"
+    android:viewportWidth="72"
+    android:viewportHeight="72">
+  <path
+      android:pathData="M55.5465,48.6711C51.5639,45.3294 39.9671,34.5566 26.7834,35.3653 13.5997,36.174 11.967,44.7037 11.2194,56.2547L10.2886,56.2547a6.9123,6.9123 0,0 1,0 -0.7935C10.258,38.768 24.4336,14.72 36.0456,14.72 47.6576,14.72 63.0996,38.768 63.0996,55.4918c0,1.2817 -1.358,-0.7172 -3.6011,-3.0518C58.2778,51.204 56.9961,49.8155 55.5465,48.6711Z">
+    <aapt:attr name="android:fillColor">
+      <gradient 
+          android:startY="24.822018"
+          android:startX="11.156731"
+          android:endY="62.357037"
+          android:endX="60.35143"
+          android:type="linear">
+        <item android:offset="0" android:color="#FF3939E5"/>
+        <item android:offset="0.28" android:color="#FF4B7CFF"/>
+        <item android:offset="1" android:color="#FF1AE2A4"/>
+      </gradient>
+    </aapt:attr>
+  </path>
+  <path
+      android:pathData="M8.9,55.2934C8.9,38.4628 24.3267,14.72 36.0456,14.72A12.2071,12.2071 97.8659,0 1,41.9355 16.4443,28.7325 28.7325,135 0,1 47.4898,20.8236C40.6538,15.7423 34.8096,16.4137 32.2309,19.4808 27.3175,25.3555 28.6908,42.7506 37.7241,48.7626 40.2113,50.3648 26.9818,54.3931 19.8254,55.919 12.6689,57.4449 8.9,58.1926 8.9,55.2934Z">
+    <aapt:attr name="android:fillColor">
+      <gradient 
+          android:startY="16.428356"
+          android:startX="33.61884"
+          android:endY="57.444923"
+          android:endX="22.601334"
+          android:type="linear">
+        <item android:offset="0" android:color="#FF28ADDD"/>
+        <item android:offset="1" android:color="#FF1AE2A4"/>
+      </gradient>
+    </aapt:attr>
+  </path>
+</vector>

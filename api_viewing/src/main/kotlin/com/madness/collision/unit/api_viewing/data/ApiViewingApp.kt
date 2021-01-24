@@ -43,7 +43,7 @@ import kotlin.math.max
 import kotlin.math.roundToInt
 
 @Entity(tableName = "apps")
-internal class ApiViewingApp(
+internal open class ApiViewingApp(
         @PrimaryKey @ColumnInfo(name = "package") var packageName: String
 ) : Parcelable, Cloneable {
 

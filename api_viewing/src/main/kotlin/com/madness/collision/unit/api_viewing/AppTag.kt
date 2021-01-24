@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package com.madness.collision.unit.api_viewing
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.Bitmap
@@ -33,28 +34,25 @@ import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.databinding.AdapterAvTagBinding
-import com.madness.collision.unit.api_viewing.tag.ExpressibleTag
-import com.madness.collision.unit.api_viewing.tag.PackageTag
-import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_GP
-import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_PI
-import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_FLU
-import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_RN
-import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_XAM
-import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_KOT
+import com.madness.collision.unit.api_viewing.tag.*
 import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_64B
-import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_ARM
-import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_X86
-import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_HID
-import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_SYS
-import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_SPL
 import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_AI
-import com.madness.collision.unit.api_viewing.tag.TagRelation
-import com.madness.collision.unit.api_viewing.tag.toExpressible
+import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_ARM
+import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_FLU
+import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_GP
+import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_HID
+import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_KOT
+import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_PI
+import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_RN
+import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_SPL
+import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_SYS
+import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_X86
+import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_XAM
 import com.madness.collision.unit.api_viewing.util.PrefUtil
 import com.madness.collision.util.ThemeUtil
 import com.madness.collision.util.X
-import com.madness.collision.R as MainR
 import kotlin.math.roundToInt
+import com.madness.collision.R as MainR
 
 internal object AppTag {
 
@@ -62,6 +60,18 @@ internal object AppTag {
     private const val TAG_KEY_REACT_NATIVE = "rn"
     private const val TAG_KEY_Xamarin = "xam"
     private const val TAG_KEY_Kotlin = "kot"
+    private const val TAG_KEY_FCM = "fcm"
+    private const val TAG_KEY_HUAWEI_PUSH = "hwp"
+    private const val TAG_KEY_XIAOMI_PUSH = "mip"
+    private const val TAG_KEY_MEIZU_PUSH = "mzp"
+    private const val TAG_KEY_OPPO_PUSH = "oop"
+    private const val TAG_KEY_VIVO_PUSH = "vvp"
+    private const val TAG_KEY_JPUSH = "j-p"
+    private const val TAG_KEY_UPUSH = "u-p"
+    private const val TAG_KEY_TPNS = "tpn"
+    private const val TAG_KEY_ALI_PUSH = "alp"
+    private const val TAG_KEY_BAIDU_PUSH = "dup"
+    private const val TAG_KEY_GETUI = "get"
 
     private val tagIcons = mutableMapOf<String, Bitmap>()
     private var colorBackground: Int? = null
@@ -80,10 +90,6 @@ internal object AppTag {
     private var shouldShowTagNativeLibX86 = false
     private val shouldShowTagNativeLib: Boolean
         get() = shouldShowTagNativeLibArm || shouldShowTagNativeLibX86
-    private var shouldShowTagHidden = false
-    private var shouldShowTagPrivilegeSystem = false
-    private var shouldShowTagHasSplits = false
-    private var shouldShowTagIconAdaptive = false
 
     fun clearCache() {
         tagIcons.clear()
@@ -186,7 +192,7 @@ internal object AppTag {
     }
 
     /**
-     * prepare res for native lib tags
+     * prepare res for package installer tags
      */
     fun ensureInstaller(context: Context, appInfo: ApiViewingApp): String? {
         if (!isChecking(context, TAG_ID_GP) && !isChecking(context, TAG_ID_PI)) return null
@@ -261,6 +267,49 @@ internal object AppTag {
             if (!appInfo.isNativeLibrariesRetrieved) {
                 appInfo.retrieveNativeLibraries()
             }
+        }
+    }
+
+    private fun ensureServices(context: Context, appInfo: ApiViewingApp) : PackageInfo? {
+        val serviceTags = listOf(
+                PackageTag.TAG_ID_FCM, PackageTag.TAG_ID_HWP, PackageTag.TAG_ID_MIP,
+                PackageTag.TAG_ID_MZP, PackageTag.TAG_ID_OOP, PackageTag.TAG_ID_VVP,
+                PackageTag.TAG_ID_J_P, PackageTag.TAG_ID_U_P, PackageTag.TAG_ID_TCP,
+                PackageTag.TAG_ID_ALP, PackageTag.TAG_ID_DUP, PackageTag.TAG_ID_GTP
+        )
+        val icons = listOf(
+                TAG_KEY_FCM to R.drawable.ic_firebase_72,
+                TAG_KEY_HUAWEI_PUSH to R.drawable.ic_huawei_72,
+                TAG_KEY_XIAOMI_PUSH to R.drawable.ic_xiaomi_72,
+                TAG_KEY_MEIZU_PUSH to R.drawable.ic_meizu_72,
+                TAG_KEY_OPPO_PUSH to R.drawable.ic_oppo_72,
+                TAG_KEY_VIVO_PUSH to R.drawable.ic_vivo_72,
+                TAG_KEY_JPUSH to R.drawable.ic_aurora_72,
+                TAG_KEY_UPUSH to R.drawable.ic_umeng_72,
+                TAG_KEY_TPNS to R.drawable.ic_tpns_72,
+                TAG_KEY_ALI_PUSH to R.drawable.ic_emas_72,
+                TAG_KEY_BAIDU_PUSH to R.drawable.ic_baidu_push_72,
+                TAG_KEY_GETUI to R.drawable.ic_getui_72,
+        )
+        var doSkip = true
+        serviceTags.forEachIndexed { index, tag ->
+            val state = displayingTags.getNonNull(context, tag)
+            if (state.isSelected) {
+                val icon = icons[index]
+                ensureTagIcon(context, icon.first, icon.second)
+            }
+            doSkip = doSkip && state.isDeselected
+        }
+        if (doSkip) return null
+
+        val pm = context.packageManager
+        val extraFlags = PackageManager.GET_SERVICES
+        return try {
+            if (appInfo.isArchive) pm.getPackageArchiveInfo(appInfo.appPackage.basePath, extraFlags)
+            else pm.getPackageInfo(appInfo.packageName, extraFlags)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
         }
     }
 
@@ -344,14 +393,54 @@ internal object AppTag {
         }
     }
 
+    private fun tagServices(context: Context, checkerApp: TagCheckerApp, container: ViewGroup) {
+        checkerApp.packageInfo ?: return
+        val iconKeys = listOf(
+                TAG_KEY_FCM,
+                TAG_KEY_HUAWEI_PUSH,
+                TAG_KEY_XIAOMI_PUSH,
+                TAG_KEY_MEIZU_PUSH,
+                TAG_KEY_OPPO_PUSH,
+                TAG_KEY_VIVO_PUSH,
+                TAG_KEY_JPUSH,
+                TAG_KEY_UPUSH,
+                TAG_KEY_TPNS,
+                TAG_KEY_ALI_PUSH,
+                TAG_KEY_BAIDU_PUSH,
+                TAG_KEY_GETUI,
+        )
+        listOf(
+                PackageTag.TAG_ID_FCM to "FCM",
+                PackageTag.TAG_ID_HWP to "Huawei push",
+                PackageTag.TAG_ID_MIP to "Xiaomi push",
+                PackageTag.TAG_ID_MZP to "Meizu push",
+                PackageTag.TAG_ID_OOP to "Oppo push",
+                PackageTag.TAG_ID_VVP to "Vivo push",
+                PackageTag.TAG_ID_J_P to "JPush",
+                PackageTag.TAG_ID_U_P to "U-Push",
+                PackageTag.TAG_ID_TCP to "TPNS",
+                PackageTag.TAG_ID_ALP to "Alibaba Cloud push",
+                PackageTag.TAG_ID_DUP to "Baidu push",
+                PackageTag.TAG_ID_GTP to "Getui push"
+        ).forEachIndexed { index, tagRes ->
+            val (it, res) = tagRes
+            val state = displayingTags.getNonNull(context, it)
+            // todo remove anti check too?
+            if (state.isSelected && !state.isAntiSelected) {
+                val doInf = TagRelation.TAGS[it]?.toExpressible()?.setRes(context, checkerApp)?.express()
+                if (doInf == true) container.inflateTag(context, res, tagIcons[iconKeys[index]])
+            }
+        }
+    }
+
     private fun tagDirect(context: Context, appInfo: ApiViewingApp, container: ViewGroup, includeTagAi: Boolean) {
-        if (shouldShowTagHidden && !appInfo.isLaunchable) {
+        if (isSelected(context, TAG_ID_HID) && !appInfo.isLaunchable) {
             container.inflateTag(context, R.string.av_adapter_tag_hidden)
         }
-        if (shouldShowTagPrivilegeSystem && appInfo.apiUnit == ApiUnit.SYS) {
+        if (isSelected(context, TAG_ID_SYS) && appInfo.apiUnit == ApiUnit.SYS) {
             container.inflateTag(context, R.string.av_adapter_tag_system)
         }
-        if (shouldShowTagHasSplits && appInfo.appPackage.hasSplits) {
+        if (isSelected(context, TAG_ID_SPL) && appInfo.appPackage.hasSplits) {
             container.inflateTag(context, R.string.av_tag_has_splits)
         }
         if (includeTagAi) {
@@ -360,21 +449,25 @@ internal object AppTag {
     }
 
     fun tagAdaptiveIcon(context: Context, appInfo: ApiViewingApp, container: ViewGroup) {
-        if (shouldShowTagIconAdaptive && appInfo.adaptiveIcon) {
+        if (isSelected(context, TAG_ID_AI) && appInfo.adaptiveIcon) {
             container.inflateTag(context, R.string.av_ai)
         }
     }
 
-    fun ensureResources(context: Context, appInfo: ApiViewingApp): String? {
+    fun ensureResources(context: Context, appInfo: ApiViewingApp): TagCheckerApp {
         ensureNativeLibs(context, appInfo)
-        return ensureInstaller(context, appInfo)
+        return TagCheckerApp(appInfo).apply {
+            packageInfo = ensureServices(context, appInfo)
+            installer = ensureInstaller(context, appInfo)
+        }
     }
 
     // first inflate native lib tags then has splits tag and last ai tag
-    fun inflateTags(context: Context, appInfo: ApiViewingApp, container: ViewGroup, installer: String?, includeTagAi: Boolean) {
-        tagPackageInstaller(context, installer, container)
-        tagNativeLibs(context, appInfo, container)
-        tagDirect(context, appInfo, container, includeTagAi)
+    fun inflateTags(context: Context, container: ViewGroup, checkerApp: TagCheckerApp, includeTagAi: Boolean) {
+        tagPackageInstaller(context, checkerApp.installer, container)
+        tagNativeLibs(context, checkerApp.app, container)
+        tagServices(context, checkerApp, container)
+        tagDirect(context, checkerApp.app, container, includeTagAi)
     }
 
     fun filterTags(context: Context, app: ApiViewingApp): Boolean {
@@ -386,16 +479,29 @@ internal object AppTag {
         // tag inflating: whether to inflate tag.
         //     any item can be included in list but without any tag inflated
         ensureNativeLibs(context, app)
+        val packageInfo = ensureServices(context, app)
+        val checkerApp = if (packageInfo != null) TagCheckerApp(app).apply {
+            this.packageInfo = packageInfo
+        } else null
+        val serviceTags = if (packageInfo != null) listOf(
+                PackageTag.TAG_ID_FCM, PackageTag.TAG_ID_HWP, PackageTag.TAG_ID_MIP,
+                PackageTag.TAG_ID_MZP, PackageTag.TAG_ID_OOP, PackageTag.TAG_ID_VVP,
+                PackageTag.TAG_ID_J_P, PackageTag.TAG_ID_U_P, PackageTag.TAG_ID_TCP,
+                PackageTag.TAG_ID_ALP, PackageTag.TAG_ID_DUP, PackageTag.TAG_ID_GTP
+        ) else emptyList()
         var re = false
         for (t in TagRelation.TAGS.values) {
-            val exTag = loadExpressibleTag(t, context, app) ?: continue
+            val getApp = { tagId: Int ->
+                if (tagId in serviceTags && checkerApp != null) checkerApp else app
+            }
+            val exTag = loadExpressibleTag(t, context, getApp.invoke(t.id)) ?: continue
             var exTagOther: ExpressibleTag? = null
             if (t.relatives.size == 1) {
                 val (tag2Id, relation) = t.relatives[0]
                 // Check relative if it is complimentary and checking, no matter anti or not
                 if (relation.isComplimentary) {
                     val tag2 = TagRelation.TAGS[tag2Id]
-                    if (tag2 != null) exTagOther = loadExpressibleTag(tag2, context, app)
+                    if (tag2 != null) exTagOther = loadExpressibleTag(tag2, context, getApp.invoke(tag2Id))
                 }
             }
             re = exTag.express()
@@ -454,10 +560,6 @@ internal object AppTag {
         shouldShowTagKotlin = isSelected(context, TAG_ID_KOT)
         shouldShowTagNativeLibArm = isSelected(context, TAG_ID_ARM)
         shouldShowTagNativeLibX86 = isSelected(context, TAG_ID_X86)
-        shouldShowTagHidden = isSelected(context, TAG_ID_HID)
-        shouldShowTagPrivilegeSystem = isSelected(context, TAG_ID_SYS)
-        shouldShowTagHasSplits = isSelected(context, TAG_ID_SPL)
-        shouldShowTagIconAdaptive = isSelected(context, TAG_ID_AI)
         return isChanged
     }
 

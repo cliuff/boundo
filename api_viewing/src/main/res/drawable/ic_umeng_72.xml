@@ -1,0 +1,26 @@
+<!--
+  ~ Copyright 2021 Clifford Liu
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="72dp"
+    android:height="72dp"
+    android:viewportWidth="368.64"
+    android:viewportHeight="368.64">
+  <path
+      android:pathData="m302.005,47.506v3.057c0,1.529 -1.529,3.057 -3.057,4.586 -12.228,16.814 -24.456,32.099 -36.685,47.384 -1.529,1.529 -1.529,3.057 -1.529,6.114 6.114,15.285 3.057,22.928 -7.643,32.099 -12.228,10.7 -27.514,16.814 -42.799,21.399 -21.399,7.643 -41.27,12.228 -64.198,10.7 1.529,0 1.529,-1.529 3.057,-1.529 19.871,-7.643 27.514,-18.342 29.042,-39.742 0,-19.871 13.757,-36.685 32.099,-41.27 9.171,-3.057 19.871,-1.529 29.042,0 1.529,0 3.057,0 6.114,-1.529l50.441,-41.27c1.529,0 1.529,-1.529 3.057,-1.529 0,1.529 1.529,1.529 3.057,1.529zM104.824,227.872c64.198,0 114.64,-24.456 154.381,-74.898 -4.586,35.156 -21.399,62.67 -53.499,79.483 -33.628,18.342 -67.255,15.285 -100.883,-4.586zM172.08,250.8c39.742,-7.643 68.784,-29.042 84.069,-65.727 -10.7,55.027 -32.099,103.94 -79.483,137.568 7.643,-25.985 10.7,-48.913 -4.586,-71.841zM144.566,215.644h-6.114c-21.399,-12.228 -45.856,-19.871 -68.784,-25.985 -1.529,0 -1.529,0 -3.057,-1.529 19.871,-1.529 39.742,-1.529 59.613,-3.057 36.685,-3.057 73.369,-7.643 106.997,-22.928l9.171,-4.586c3.057,-1.529 6.114,-3.057 9.171,-6.114 0,1.529 -1.529,1.529 -1.529,3.057 -27.514,33.628 -62.67,53.499 -105.468,61.141z"
+      android:strokeWidth="0.270179"
+      android:fillColor="#2195f2"/>
+</vector>

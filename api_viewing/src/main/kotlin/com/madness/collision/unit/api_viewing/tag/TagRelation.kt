@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,11 +43,10 @@ internal class TagRelation(val value: Int) {
                     PackageTag.TAG_ID_XAM to getCommonExpressing { it.nativeLibraries[6] },
                     PackageTag.TAG_ID_KOT to getCommonExpressing { it.nativeLibraries[7] },
                     PackageTag.TAG_ID_64B to getCommonExpressing {
-                        (!it.nativeLibraries[0] || it.nativeLibraries[1]) &&
-                                (!it.nativeLibraries[2] || it.nativeLibraries[3])
+                        it.nativeLibraries.let { n -> (!n[0] || n[1]) && (!n[2] || n[3]) }
                     },
-                    PackageTag.TAG_ID_ARM to getCommonExpressing { it.nativeLibraries[0] || it.nativeLibraries[1] },
-                    PackageTag.TAG_ID_X86 to getCommonExpressing { it.nativeLibraries[2] || it.nativeLibraries[3] },
+                    PackageTag.TAG_ID_ARM to getCommonExpressing { it.nativeLibraries.let { n -> n[0] || n[1] } },
+                    PackageTag.TAG_ID_X86 to getCommonExpressing { it.nativeLibraries.let { n -> n[2] || n[3] } },
                     PackageTag.TAG_ID_HID to getCommonExpressing { !it.isLaunchable },
                     PackageTag.TAG_ID_SYS to getCommonExpressing { it.apiUnit == ApiUnit.SYS },
                     PackageTag.TAG_ID_SPL to getCommonExpressing { it.appPackage.hasSplits },
@@ -59,6 +58,30 @@ internal class TagRelation(val value: Int) {
                         val hasIt = app.adaptiveIcon
                         (!isAnti && hasIt) || (isAnti && !hasIt)
                     },
+                    PackageTag.TAG_ID_FCM to getServiceExpressing(
+                            "com.google.firebase.messaging.FirebaseMessagingService"),
+                    PackageTag.TAG_ID_HWP to getServiceExpressing(
+                            "com.huawei.hms.support.api.push.service.HmsMsgService"),
+                    PackageTag.TAG_ID_MIP to getServiceExpressing(
+                            "com.xiaomi.mipush.sdk.MessageHandleService"),
+                    PackageTag.TAG_ID_MZP to getServiceExpressing(
+                            "com.meizu.cloud.pushsdk.NotificationService"),
+                    PackageTag.TAG_ID_OOP to getServiceExpressing(
+                            "com.heytap.mcssdk.AppPushService"),
+                    PackageTag.TAG_ID_VVP to getServiceExpressing(
+                            "com.vivo.push.sdk.service.CommandClientService"),
+                    PackageTag.TAG_ID_J_P to getServiceExpressing(
+                            "cn.jpush.android.service.PushService"),
+                    PackageTag.TAG_ID_U_P to getServiceExpressing(
+                            "com.umeng.message.UmengIntentService"),
+                    PackageTag.TAG_ID_TCP to getServiceExpressing(
+                            "com.tencent.android.tpush.service.XGVipPushService"),
+                    PackageTag.TAG_ID_ALP to getServiceExpressing(
+                            "org.android.agoo.accs.AgooService"),
+                    PackageTag.TAG_ID_DUP to getServiceExpressing(
+                            "com.baidu.android.pushservice.PushService"),
+                    PackageTag.TAG_ID_GTP to getServiceExpressing(
+                            "com.igexin.sdk.PushService"),
             )
             val mRelations: List<Pair<Pair<Int, (ExpressibleTag, Context, ApiViewingApp) -> Boolean>, List<Pair<Int, Int>>>> = listOf(
                     (PackageTag.TAG_ID_GP to { tag: ExpressibleTag, context: Context, app: ApiViewingApp ->
@@ -80,10 +103,20 @@ internal class TagRelation(val value: Int) {
             }
         }
 
-        private fun getCommonExpressing(checker: (ApiViewingApp) -> Boolean): ExpressibleTag.(Context, ApiViewingApp) -> Boolean {
+        private fun getCommonExpressing(checker: (ApiViewingApp) -> Boolean)
+                : ExpressibleTag.(Context, ApiViewingApp) -> Boolean {
             return { _, app ->
                 val hasIt = checker.invoke(app)
                 (!isAnti && hasIt) || (isAnti && !hasIt)
+            }
+        }
+
+        private fun getServiceExpressing(comp: String)
+                : ExpressibleTag.(Context, ApiViewingApp) -> Boolean {
+            return getCommonExpressing {
+                it is TagCheckerApp && it.packageInfo?.services?.any { service ->
+                    service.name == comp
+                } == true
             }
         }
 
