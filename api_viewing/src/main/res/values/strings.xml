@@ -108,4 +108,6 @@
     <string name="av_settings_tag_ali_push">Alibaba Cloud EMAS Mobile Push</string>
     <string name="av_settings_tag_baidu_push">Baidu push</string>
     <string name="av_settings_tag_getui">Getui push</string>
+    <string name="av_main_option_device_api">Device API</string>
+    <string name="av_main_device_api_api">API level</string>
 </resources>

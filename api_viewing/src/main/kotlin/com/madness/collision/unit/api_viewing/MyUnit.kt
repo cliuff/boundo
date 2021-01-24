@@ -51,6 +51,7 @@ import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.databinding.FragmentApiBinding
+import com.madness.collision.unit.api_viewing.device.DeviceApi
 import com.madness.collision.unit.api_viewing.list.APIAdapter
 import com.madness.collision.unit.api_viewing.list.ApiInfoPop
 import com.madness.collision.unit.api_viewing.list.AppListFragment
@@ -276,6 +277,11 @@ class MyUnit: com.madness.collision.unit.Unit() {
             MyR.id.avMainTbShare -> {
                 val context = context ?: return false
                 exportList(context)
+                return true
+            }
+            MyR.id.avMainTbDevice -> {
+                val context = context ?: return false
+                DeviceApi().show(context)
                 return true
             }
         }

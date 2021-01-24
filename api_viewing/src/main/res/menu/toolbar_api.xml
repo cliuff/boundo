@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2020 Clifford Liu
+  ~ Copyright 2021 Clifford Liu
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -52,5 +52,9 @@
     <item
         android:id="@+id/apiTBViewingTarget"
         android:title="@string/avTBViewingTarget"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/avMainTbDevice"
+        android:title="@string/av_main_option_device_api"
         app:showAsAction="never"/>
 </menu>
