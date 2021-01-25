@@ -2,6 +2,89 @@
 Tag content regex: \n((((?!(<.*>)).)*)\n)*((?!(<.*>)).)+
 
 
+- **3.6.8** 21012600
+<en-US>
+• You can now check device API
+• Added various app push service tags
+</en-US>
+<ar>
+• يمكنك الآن التحقق من الجهاز API
+• تمت إضافة علامات خدمة دفع التطبيق المختلفة
+</ar>
+<de-DE>
+• Sie können jetzt die Geräte-API überprüfen
+• Verschiedene App-Push-Service-Tags hinzugefügt
+</de-DE>
+<el-GR>
+• Τώρα μπορείτε να ελέγξετε το API της συσκευής
+• Προστέθηκαν διάφορες ετικέτες υπηρεσίας push εφαρμογών
+</el-GR>
+<en-GB>
+• You can now check device API
+• Added various app push service tags
+</en-GB>
+<es-419>
+• Ahora puede verificar la API del dispositivo
+• Se agregaron varias etiquetas de servicio de inserción de aplicaciones
+</es-419>
+<es-ES>
+• Ahora puede verificar la API del dispositivo
+• Se agregaron varias etiquetas de servicio de inserción de aplicaciones
+</es-ES>
+<es-US>
+• Ahora puede verificar la API del dispositivo
+• Se agregaron varias etiquetas de servicio de inserción de aplicaciones
+</es-US>
+<fr-FR>
+• Vous pouvez maintenant vérifier l'API de l'appareil
+• Ajout de diverses balises de service push d'application
+</fr-FR>
+<it-IT>
+• È ora possibile controllare l'API del dispositivo
+• Aggiunti vari tag del servizio push dell'app
+</it-IT>
+<ja-JP>
+•デバイスAPIの表示をサポートするようになりました
+•さまざまなプッシュサービスタグを追加しました
+</ja-JP>
+<ko-KR>
+• 이제 장치 API보기 지원
+• 다양한 푸시 서비스 태그 추가
+</ko-KR>
+<pt-PT>
+• Agora você pode verificar a API do dispositivo
+• Adicionadas várias tags de serviço de push de aplicativo
+</pt-PT>
+<ru-RU>
+• Теперь вы можете проверить API устройства.
+• Добавлены различные теги службы push-уведомлений приложений.
+</ru-RU>
+<th>
+•คุณสามารถตรวจสอบ API ของอุปกรณ์ได้แล้ว
+•เพิ่มแท็กบริการพุชแอพต่างๆ
+</th>
+<tr-TR>
+• Artık cihaz API'sini kontrol edebilirsiniz
+• Çeşitli uygulama push servis etiketleri eklendi
+</tr-TR>
+<vi>
+• Bây giờ bạn có thể kiểm tra API thiết bị
+• Đã thêm các thẻ dịch vụ đẩy ứng dụng khác nhau
+</vi>
+<zh-CN>
+• 现支持查看设备 API
+• 新增各种推送服务标签
+</zh-CN>
+<zh-HK>
+• 現支持查看設備 API
+• 新增各種推送服務標籤
+</zh-HK>
+<zh-TW>
+• 現支持查看設備 API
+• 新增各種推送服務標籤
+</zh-TW>
+
+
 - **3.6.7** 21010113
 <en-US>
 A brand new app icon and optimized the experience after screen rotation

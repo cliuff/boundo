@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2020 Clifford Liu
+  ~ Copyright 2021 Clifford Liu
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -89,4 +89,6 @@
     <string name="av_pref_loading_summary">Làm mới thủ công để kích hoạt thay đổi</string>
     <string name="av_pref_displaying_summary">Thay đổi được kích hoạt tự động</string>
     <string name="av_main_filter_tip">Hãy thử nhấn một thẻ</string>
+    <string name="av_main_option_device_api">API thiết bị</string>
+    <string name="av_main_device_api_api">Cấp API</string>
 </resources>

@@ -89,6 +89,17 @@
     <string name="av_adapter_tag_hidden">Hidden</string>
     <string name="av_settings_tag_hidden">App icon not shown in launcher</string>
     <string name="av_main_filter_tip">Try long-pressing a tag</string>
+    <string name="av_settings_tag_huawei_push">Huawei push</string>
+    <string name="av_settings_tag_xiaomi_push">Xiaomi push</string>
+    <string name="av_settings_tag_meizu_push">Meizu push</string>
+    <string name="av_settings_tag_oppo_push">Oppo push</string>
+    <string name="av_settings_tag_vivo_push">Vivo push</string>
+    <string name="av_settings_tag_jpush">Aurora JPush</string>
+    <string name="av_settings_tag_upush">Umeng U-Push</string>
+    <string name="av_settings_tag_tpns">Tencent Push Notification Service (TPNS)</string>
+    <string name="av_settings_tag_ali_push">Alibaba Cloud EMAS Mobile Push</string>
+    <string name="av_settings_tag_baidu_push">Baidu push</string>
+    <string name="av_settings_tag_getui">Getui push</string>
     <string name="av_main_option_device_api">Device API</string>
     <string name="av_main_device_api_api">API level</string>
 </resources>

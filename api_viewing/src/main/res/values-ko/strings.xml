@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2020 Clifford Liu
+  ~ Copyright 2021 Clifford Liu
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -89,4 +89,6 @@
     <string name="av_pref_loading_summary">변경 사항을 트리거하기위한 수동 새로 고침</string>
     <string name="av_pref_displaying_summary">자동 변경 사항 트리거</string>
     <string name="av_main_filter_tip">라벨을 길게 누르십시오</string>
+    <string name="av_main_option_device_api">장치 API</string>
+    <string name="av_main_device_api_api">API 수준</string>
 </resources>

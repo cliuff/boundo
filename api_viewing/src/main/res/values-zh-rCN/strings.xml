@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2020 Clifford Liu
+  ~ Copyright 2021 Clifford Liu
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -89,4 +89,17 @@
     <string name="av_pref_loading_summary">手动刷新以触发更改</string>
     <string name="av_pref_displaying_summary">自动触发更改</string>
     <string name="av_main_filter_tip">试试长按标签</string>
+    <string name="av_settings_tag_huawei_push">华为推送</string>
+    <string name="av_settings_tag_xiaomi_push">小米推送</string>
+    <string name="av_settings_tag_meizu_push">魅族推送</string>
+    <string name="av_settings_tag_oppo_push">Oppo 推送</string>
+    <string name="av_settings_tag_vivo_push">Vivo 推送</string>
+    <string name="av_settings_tag_jpush">极光推送</string>
+    <string name="av_settings_tag_upush">友盟推送</string>
+    <string name="av_settings_tag_tpns">腾讯移动推送（TPNS）</string>
+    <string name="av_settings_tag_ali_push">阿里云 EMAS 移动推送</string>
+    <string name="av_settings_tag_baidu_push">百度云推送</string>
+    <string name="av_settings_tag_getui">个推消息推送</string>
+    <string name="av_main_option_device_api">设备 API</string>
+    <string name="av_main_device_api_api">API 级别</string>
 </resources>
