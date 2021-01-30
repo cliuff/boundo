@@ -33,6 +33,7 @@ import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.util.SystemUtil
 import com.madness.collision.util.X
+import com.madness.collision.util.os.OsUtils
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.security.cert.CertificateException
@@ -154,11 +155,13 @@ internal class AppListService {
         var services: Array<ServiceInfo> = emptyArray()
         var providers: Array<ProviderInfo> = emptyArray()
 
+        val flagGetDisabled = if (OsUtils.satisfy(OsUtils.N)) PackageManager.MATCH_DISABLED_COMPONENTS
+        else flagGetDisabledLegacy
         val flagSignature = if (X.aboveOn(X.P)) PackageManager.GET_SIGNING_CERTIFICATES
         else getSigFlagLegacy
         val flags = PackageManager.GET_PERMISSIONS or PackageManager.GET_ACTIVITIES or
                 PackageManager.GET_RECEIVERS or PackageManager.GET_SERVICES or
-                PackageManager.GET_PROVIDERS or flagSignature
+                PackageManager.GET_PROVIDERS or flagGetDisabled or flagSignature
         val reDetails = retrieveOn(context, appInfo, flags, "details")
         if (reDetails.first) {
             pi = reDetails.second!!
@@ -171,13 +174,13 @@ internal class AppListService {
             retrieveOn(context, appInfo, PackageManager.GET_PERMISSIONS, "permissions").let {
                 if (it.first) permissions = it.second!!.requestedPermissions ?: emptyArray()
             }
-            retrieveOn(context, appInfo, PackageManager.GET_ACTIVITIES, "activities").let {
+            retrieveOn(context, appInfo, PackageManager.GET_ACTIVITIES or flagGetDisabled, "activities").let {
                 if (it.first) activities = it.second!!.activities ?: emptyArray()
             }
-            retrieveOn(context, appInfo, PackageManager.GET_RECEIVERS, "receivers").let {
+            retrieveOn(context, appInfo, PackageManager.GET_RECEIVERS or flagGetDisabled, "receivers").let {
                 if (it.first) receivers = it.second!!.receivers ?: emptyArray()
             }
-            retrieveOn(context, appInfo, PackageManager.GET_SERVICES, "services").let {
+            retrieveOn(context, appInfo, PackageManager.GET_SERVICES or flagGetDisabled, "services").let {
                 if (it.first) services = it.second!!.services ?: emptyArray()
             }
             retrieveOn(context, appInfo, flagSignature, "signing").let {
@@ -233,12 +236,7 @@ internal class AppListService {
             }
         }
 
-        builder.append("\n\n")
-                .append(
-                        context.getString(RAv.string.apiDetailsPermissions),
-                        StyleSpan(Typeface.BOLD),
-                        spanFlags
-                ).append('\n')
+        builder.appendSection(context, RAv.string.apiDetailsPermissions)
         if (permissions.isNotEmpty()) {
             Arrays.sort(permissions)
             for (permission in permissions) {
@@ -248,65 +246,35 @@ internal class AppListService {
             builder.append(context.getString(R.string.text_no_content)).append('\n')
         }
 
-        builder.append("\n\n")
-                .append(
-                        context.getString(RAv.string.apiDetailsActivities),
-                        StyleSpan(Typeface.BOLD),
-                        spanFlags
-                ).append('\n')
-        if (activities.isNotEmpty()) {
-            Arrays.sort(activities) { o1, o2 -> o1.name.compareTo(o2.name) }
-            for (a in activities) {
-                builder.append(a.name).append('\n')
-            }
-        } else {
-            builder.append(context.getString(R.string.text_no_content)).append('\n')
-        }
-
-        builder.append("\n\n")
-                .append(
-                        context.getString(RAv.string.apiDetailsReceivers),
-                        StyleSpan(Typeface.BOLD),
-                        spanFlags
-                ).append('\n')
-        if (receivers.isNotEmpty()) {
-            Arrays.sort(receivers) { o1, o2 -> o1.name.compareTo(o2.name) }
-            for (r in receivers) {
-                builder.append(r.name).append('\n')
-            }
-        } else {
-            builder.append(context.getString(R.string.text_no_content)).append('\n')
-        }
-
-        builder.append("\n\n")
-                .append(
-                        context.getString(RAv.string.apiDetailsServices),
-                        StyleSpan(Typeface.BOLD),
-                        spanFlags
-                ).append('\n')
-        if (services.isNotEmpty()) {
-            Arrays.sort(services) { o1, o2 -> o1.name.compareTo(o2.name) }
-            for (s in services) {
-                builder.append(s.name).append('\n')
-            }
-        } else {
-            builder.append(context.getString(R.string.text_no_content)).append('\n')
-        }
-
-        builder.append("\n\n")
-                .append(
-                        context.getString(RAv.string.apiDetailsProviders),
-                        StyleSpan(Typeface.BOLD),
-                        spanFlags
-                ).append('\n')
-        if (providers.isNotEmpty()) {
-            Arrays.sort(providers) { o1, o2 -> o1.name.compareTo(o2.name) }
-            for (p in providers) builder.append(p.name).append('\n')
-        } else {
-            builder.append(context.getString(R.string.text_no_content)).append('\n')
+        builder.run {
+            appendCompSection(context, RAv.string.apiDetailsActivities, activities)
+            appendCompSection(context, RAv.string.apiDetailsReceivers, receivers)
+            appendCompSection(context, RAv.string.apiDetailsServices, services)
+            appendCompSection(context, RAv.string.apiDetailsProviders, providers)
         }
 
         return SpannableString.valueOf(builder)
+    }
+
+    private fun SpannableStringBuilder.appendSection(context: Context, titleId: Int) {
+        append("\n\n")
+        append(context.getString(titleId), StyleSpan(Typeface.BOLD), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        append('\n')
+    }
+
+    private fun SpannableStringBuilder.appendComp(context: Context, components: Array<out ComponentInfo>) {
+        if (components.isNotEmpty()) {
+            Arrays.sort(components) { o1, o2 -> o1.name.compareTo(o2.name) }
+            for (p in components) append(p.name).append('\n')
+        } else {
+            append(context.getString(R.string.text_no_content)).append('\n')
+        }
+    }
+
+    private fun SpannableStringBuilder.appendCompSection(
+            context: Context, titleId: Int, components: Array<out ComponentInfo>) {
+        appendSection(context, titleId)
+        appendComp(context, components)
     }
 
     @Suppress("deprecation")
@@ -321,6 +289,9 @@ internal class AppListService {
 
     @Suppress("deprecation")
     private val getSigFlagLegacy = PackageManager.GET_SIGNATURES
+
+    @Suppress("deprecation")
+    private val flagGetDisabledLegacy = PackageManager.GET_DISABLED_COMPONENTS
 
     @Suppress("deprecation")
     private val PackageInfo.sigLegacy: Array<Signature>?

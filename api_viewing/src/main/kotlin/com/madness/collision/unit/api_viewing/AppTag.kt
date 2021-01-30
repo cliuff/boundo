@@ -51,6 +51,7 @@ import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_XA
 import com.madness.collision.unit.api_viewing.util.PrefUtil
 import com.madness.collision.util.ThemeUtil
 import com.madness.collision.util.X
+import com.madness.collision.util.os.OsUtils
 import kotlin.math.roundToInt
 import com.madness.collision.R as MainR
 
@@ -303,15 +304,22 @@ internal object AppTag {
         if (doSkip) return null
 
         val pm = context.packageManager
-        val extraFlags = PackageManager.GET_SERVICES
+        val flagGetDisabled = if (OsUtils.satisfy(OsUtils.N)) PackageManager.MATCH_DISABLED_COMPONENTS
+        else flagGetDisabledLegacy
+        val extraFlags = PackageManager.GET_SERVICES or PackageManager.GET_RECEIVERS or flagGetDisabled
         return try {
             if (appInfo.isArchive) pm.getPackageArchiveInfo(appInfo.appPackage.basePath, extraFlags)
             else pm.getPackageInfo(appInfo.packageName, extraFlags)
         } catch (e: Exception) {
             e.printStackTrace()
             null
+        }?.apply {
+            if (services == null) services = emptyArray()
         }
     }
+
+    @Suppress("deprecation")
+    private val flagGetDisabledLegacy = PackageManager.GET_DISABLED_COMPONENTS
 
     private fun inflateTag(context: Context, nameResId: Int, icon: Bitmap?, parent: ViewGroup) {
         // cache tag display name string

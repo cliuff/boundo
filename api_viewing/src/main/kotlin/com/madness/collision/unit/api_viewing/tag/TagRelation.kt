@@ -17,6 +17,8 @@
 package com.madness.collision.unit.api_viewing.tag
 
 import android.content.Context
+import android.content.pm.PackageInfo
+import android.util.Log
 import com.madness.collision.unit.api_viewing.AppTag
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
@@ -45,25 +47,58 @@ internal class TagRelation(val value: Int) {
                     PackageTag.TAG_ID_64B to getCommonExpressing {
                         it.nativeLibraries.let { n -> (!n[0] || n[1]) && (!n[2] || n[3]) }
                     },
-                    PackageTag.TAG_ID_ARM to getCommonExpressing { it.nativeLibraries.let { n -> n[0] || n[1] } },
-                    PackageTag.TAG_ID_X86 to getCommonExpressing { it.nativeLibraries.let { n -> n[2] || n[3] } },
+                    PackageTag.TAG_ID_ARM to getCommonExpressing {
+                        it.nativeLibraries.let { n -> n[0] || n[1] } },
+                    PackageTag.TAG_ID_X86 to getCommonExpressing {
+                        it.nativeLibraries.let { n -> n[2] || n[3] } },
                     PackageTag.TAG_ID_HID to getCommonExpressing { !it.isLaunchable },
                     PackageTag.TAG_ID_SYS to getCommonExpressing { it.apiUnit == ApiUnit.SYS },
                     PackageTag.TAG_ID_SPL to getCommonExpressing { it.appPackage.hasSplits },
                     PackageTag.TAG_ID_AI to { context, app ->
-                        if (!app.hasIcon) {
-                            val d = app.getOriginalIconDrawable(context)!!.mutate()
-                            app.retrieveAppIconInfo(d)
+                        if (!app.hasIcon) app.run {
+                            retrieveAppIconInfo(getOriginalIconDrawable(context)!!.mutate())
                         }
-                        val hasIt = app.adaptiveIcon
-                        (!isAnti && hasIt) || (isAnti && !hasIt)
+                        getCommonExpressing { it.adaptiveIcon }.invoke(this, context, app)
                     },
                     PackageTag.TAG_ID_FCM to getServiceExpressing(
                             "com.google.firebase.messaging.FirebaseMessagingService"),
                     PackageTag.TAG_ID_HWP to getServiceExpressing(
                             "com.huawei.hms.support.api.push.service.HmsMsgService"),
-                    PackageTag.TAG_ID_MIP to getServiceExpressing(
-                            "com.xiaomi.mipush.sdk.MessageHandleService"),
+                    PackageTag.TAG_ID_MIP to expressing@{ context, app ->
+                        if (app !is TagCheckerApp) return@expressing false
+                        // "com.xiaomi.mipush.sdk.ManifestChecker" to "checkServices"
+                        val method = "com.xiaomi.mipush.sdk.u" to "d"
+                        val args = Context.CONTEXT_INCLUDE_CODE or Context.CONTEXT_IGNORE_SECURITY
+                        val loaderContext = context.createPackageContext(context.packageName, args)
+                        val checkerMethod = try {
+                            loaderContext.classLoader.loadClass(method.first).getDeclaredMethod(
+                                    method.second, Context::class.java, PackageInfo::class.java).apply {
+                                isAccessible = true
+                            }
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                            null
+                        }
+                        if (checkerMethod != null) {
+                            getCommonExpressing {
+                                if (it !is TagCheckerApp) return@getCommonExpressing false
+                                try {
+                                    checkerMethod.invoke(null, context, it.packageInfo)
+                                    true
+                                } catch (e: Throwable) {
+                                    val message = e.cause?.message
+                                    val appName = it.app.name
+                                    val appPackage = it.app.packageName
+                                    val appVer = it.app.verName
+                                    Log.w("av.main.tag", "$message ($appPackage, $appName $appVer)")
+                                    false
+                                }
+                            }.invoke(this, context, app)
+                        } else {
+                            getServiceExpressing("com.xiaomi.mipush.sdk.MessageHandleService")
+                                    .invoke(this, context, app)
+                        }
+                    },
                     PackageTag.TAG_ID_MZP to getServiceExpressing(
                             "com.meizu.cloud.pushsdk.NotificationService"),
                     PackageTag.TAG_ID_OOP to getServiceExpressing(
@@ -83,7 +118,9 @@ internal class TagRelation(val value: Int) {
                     PackageTag.TAG_ID_GTP to getServiceExpressing(
                             "com.igexin.sdk.PushService"),
             )
-            val mRelations: List<Pair<Pair<Int, (ExpressibleTag, Context, ApiViewingApp) -> Boolean>, List<Pair<Int, Int>>>> = listOf(
+            val mRelations: List<Pair<
+                    Pair<Int, (ExpressibleTag, Context, ApiViewingApp) -> Boolean>,
+                    List<Pair<Int, Int>>>> = listOf(
                     (PackageTag.TAG_ID_GP to { tag: ExpressibleTag, context: Context, app: ApiViewingApp ->
                         val installer = AppTag.ensureInstaller(context, app)
                         val hasIt = installer == ApiViewingApp.packagePlayStore

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import android.content.Context
 import android.content.pm.ComponentInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import com.madness.collision.util.os.OsUtils
 
 object MiscApplication {
 
@@ -39,9 +40,10 @@ object MiscApplication {
     fun getComponents(context: Context): List<ComponentInfo> {
         val pkgName = context.packageName
         val pm = context.packageManager
+        val flagGetDisabled = if (OsUtils.satisfy(OsUtils.N)) PackageManager.MATCH_DISABLED_COMPONENTS
+        else flagGetDisabledLegacy
         val flags = PackageManager.GET_ACTIVITIES or PackageManager.GET_RECEIVERS or
-                PackageManager.GET_SERVICES or PackageManager.GET_PROVIDERS or
-                PackageManager.GET_DISABLED_COMPONENTS
+                PackageManager.GET_SERVICES or PackageManager.GET_PROVIDERS or flagGetDisabled
         try {
             val packageInfo: PackageInfo = pm.getPackageInfo(pkgName!!, flags)
             val components: MutableList<ComponentInfo> = mutableListOf()
@@ -54,4 +56,7 @@ object MiscApplication {
         }
         return emptyList()
     }
+
+    @Suppress("deprecation")
+    private val flagGetDisabledLegacy = PackageManager.GET_DISABLED_COMPONENTS
 }

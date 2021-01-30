@@ -53,6 +53,15 @@
 -dontwarn kotlin.reflect.jvm.internal.**
 -keep class kotlin.reflect.jvm.internal.** { *; }
 
+# Xiaomi push detection
+-keep class com.xiaomi.mipush.sdk.u {
+ void d(...);
+}
+# keep the class and specified members from being renamed only
+# classes in the sdk are obfuscated already
+# those that are not are APIs and should be kept
+-keepnames class com.xiaomi.** { *; }
+
 ##---------------Begin: proguard configuration for Gson  ----------
 # Gson uses generic type information stored in a class file when working with fields. Proguard
 # removes such information by default, so configure it to keep all of it.
