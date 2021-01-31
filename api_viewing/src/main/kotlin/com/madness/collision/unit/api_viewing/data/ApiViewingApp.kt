@@ -121,7 +121,9 @@ internal open class ApiViewingApp(
     }
 
     public override fun clone(): Any {
-        return super.clone()
+        return (super.clone() as ApiViewingApp).apply {
+            nativeLibraries = nativeLibraries.copyOf()
+        }
     }
 
     fun init(context: Context,  info: PackageInfo, preloadProcess: Boolean, archive: Boolean) {

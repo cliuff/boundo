@@ -753,7 +753,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
             AppTag.loadTagSettings(context, value, false)
             val completeList = viewModel.screen4Display(loadItem)
             val displayList = if (value.isEmpty()) completeList
-            else filterByTag(context, this, completeList)
+            else filterByTag(context, completeList)
             withContext(Dispatchers.Main) {
                 updateList(displayList)
                 refreshLayout.isRefreshing = false
@@ -761,12 +761,17 @@ class MyUnit: com.madness.collision.unit.Unit() {
         }
     }
 
-    private suspend fun filterByTag(context: Context, scope: CoroutineScope, appList: List<ApiViewingApp>): List<ApiViewingApp> {
-        return withContext(scope.coroutineContext) {
-            appList.filter {
-                AppTag.filterTags(context, it)
+    /**
+     * Filter app in parallel.
+     */
+    private suspend fun filterByTag(context: Context, appList: List<ApiViewingApp>)
+    : List<ApiViewingApp> = coroutineScope {
+        appList.map {
+            async(Dispatchers.Default) {
+                val result = AppTag.filterTags(context, it)
+                if (result) it else null
             }
-        }
+        }.mapNotNull { it.await() }
     }
 
     private fun clearTagFilter(context: Context) {

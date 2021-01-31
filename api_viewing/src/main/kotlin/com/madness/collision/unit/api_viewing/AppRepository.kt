@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,8 +23,10 @@ import androidx.annotation.WorkerThread
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.database.AppDao
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.runBlocking
 
 internal class AppRepository(private val dao: AppDao){
     @WorkerThread
@@ -48,24 +50,22 @@ internal class AppRepository(private val dao: AppDao){
     }
 
     /**
-     * multi-coroutine
+     * Get app in parallel.
      */
-    private suspend fun getAppsE(context: Context, scope: CoroutineScope, predicate: ((PackageInfo) -> Boolean)? = null): List<ApiViewingApp> {
+    private suspend fun getAppsAsync(context: Context, predicate: ((PackageInfo) -> Boolean)? = null)
+    : List<ApiViewingApp> = coroutineScope {
         val anApp = ApiViewingApp("")
         val packages = context.packageManager.getInstalledPackages(0).let {
             if (predicate == null) it else it.filter(predicate)
         }
-        val apps = packages.map {
-            anApp.clone() as ApiViewingApp
-        }
-        apps.forEachIndexed { index, app ->
-            withContext(scope.coroutineContext) {
-                val pack = packages[index]
+        packages.mapIndexed { index, pack ->
+            async(Dispatchers.Default) {
+                val app = if (index == packages.lastIndex) anApp else anApp.clone() as ApiViewingApp
                 app.packageName = pack.packageName
                 app.init(context, pack, preloadProcess = true, archive = false)
+                app
             }
-        }
-        return apps
+        }.map { it.await() }
     }
 
     private fun getApps(context: Context, predicate: ((PackageInfo) -> Boolean)? = null): List<ApiViewingApp>{
@@ -82,7 +82,7 @@ internal class AppRepository(private val dao: AppDao){
             // users without root privilege can only disable system apps
             (app.flags and ApplicationInfo.FLAG_SYSTEM) == 0 && app.enabled
         }
-        return getApps(context, predicate)
+        return runBlocking { getAppsAsync(context, predicate) }
     }
 
     private fun getAppsSys(context: Context): List<ApiViewingApp> {
@@ -92,7 +92,7 @@ internal class AppRepository(private val dao: AppDao){
             val app = packageInfo.applicationInfo
             (app.flags and ApplicationInfo.FLAG_SYSTEM) != 0 && app.enabled
         }
-        return getApps(context, predicate)
+        return runBlocking { getAppsAsync(context, predicate) }
     }
 
     private fun getAppsAll(context: Context): List<ApiViewingApp> {
@@ -100,6 +100,6 @@ internal class AppRepository(private val dao: AppDao){
         else { packageInfo ->
             packageInfo.applicationInfo.enabled
         }
-        return getApps(context, predicate)
+        return runBlocking { getAppsAsync(context, predicate) }
     }
 }
