@@ -559,8 +559,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
         }
 
         if (OsUtils.satisfy(OsUtils.N)) {
-            val apkDisplayDragListener = object : View.OnDragListener{
-                var permission: DragAndDropPermissions? = null
+            val apkDisplayDragListener = object : View.OnDragListener {
                 override fun onDrag(v: View?, event: DragEvent?): Boolean {
                     event ?: return false
                     when (event.action) {
@@ -568,10 +567,12 @@ class MyUnit: com.madness.collision.unit.Unit() {
                             notifyBriefly(R.string.apiDragDropHint)
                         }
                         DragEvent.ACTION_DROP -> {
-                            permission = activity?.requestDragAndDropPermissions(event)
-                            dragDropAction(context, event.clipData)
+                            val permission = activity?.requestDragAndDropPermissions(event)
+                            lifecycleScope.launch(Dispatchers.Default) {
+                                dragDropAction(context, event.clipData)
+                                permission?.release()
+                            }
                         }
-                        DragEvent.ACTION_DRAG_ENDED -> permission?.release()
                     }
                     return true
                 }
@@ -1035,11 +1036,11 @@ class MyUnit: com.madness.collision.unit.Unit() {
         }
     }
 
-    private fun dragDropAction(context: Context, clipData: ClipData?) = lifecycleScope.launch(Dispatchers.Default) {
+    private fun dragDropAction(context: Context, clipData: ClipData?) {
         val cd: ClipData? = clipData
         if (cd == null) {
             notifyBriefly(R.string.text_no_content)
-            return@launch
+            return
         }
         val description = cd.description
         if (!description.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {

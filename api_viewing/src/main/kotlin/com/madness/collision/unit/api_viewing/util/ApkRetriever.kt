@@ -28,12 +28,11 @@ class ApkRetriever(private val context: Context) {
         const val APP_CACHE_PREFIX = "BoundoApp4Cache"
     }
 
+    /**
+     * For both file and tree URIs
+     */
     fun fromDocumentUri(uri: Uri, block: (Uri) -> Unit) {
         val doc = DocumentFile.fromSingleUri(context, uri)!!
-        fromDocument(doc, block = block)
-    }
-
-    private fun fromDocument(doc: DocumentFile, isTreeUriKnown: Boolean = false, block: (Uri) -> Unit) {
         if (!doc.canRead()) return
         val docUri = doc.uri
         if (doc.isFile) {
@@ -43,24 +42,18 @@ class ApkRetriever(private val context: Context) {
             }
             return
         }
-
-        if (!isTreeUriKnown) {
-            val mTreeUri = if (OsUtils.satisfy(OsUtils.N) && !DocumentsContract.isTreeUri(docUri)) {
-                val docId = DocumentsContract.getDocumentId(docUri)
-                DocumentsContract.buildTreeDocumentUri(docUri.authority, docId)
-            } else {
-                docUri
-            }
-            fromDocument(DocumentFile.fromTreeUri(context, mTreeUri)!!, true, block)
-            return
+        val mTreeUri = if (OsUtils.satisfy(OsUtils.N) && !DocumentsContract.isTreeUri(docUri)) {
+            val docId = DocumentsContract.getDocumentId(docUri)
+            DocumentsContract.buildTreeDocumentUri(docUri.authority, docId)
+        } else {
+            docUri
         }
-        for (childDoc in doc.listFiles()) {
-            fromDocument(childDoc, true, block)
-        }
+        // todo created tree URI is not accessible, ContentResolver.query(...) throws SecurityException
+        fromUri(mTreeUri, block)
     }
 
     /**
-     * Get APK file URI from file/folder URI
+     * Get APK file URI from file/folder URI, for tree URIs only
      */
     fun fromUri(uri: Uri, block: (Uri) -> Unit) {
         val parentDocId = DocumentsContract.getTreeDocumentId(uri)
