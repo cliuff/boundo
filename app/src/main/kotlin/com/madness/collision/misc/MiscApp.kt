@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,55 +20,55 @@ import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.util.Log
 
 object MiscApp {
-    fun getPackageInfo(context: Context, packageName: String = "", apkPath: String = ""): PackageInfo?{
-        val isArchive = packageName.isEmpty()
-        val pm: PackageManager = context.packageManager
-        return if (isArchive) {
-            if (apkPath.isEmpty()) return null
-            getPackageArchiveInfo(context, apkPath)
-        } else {
-            if (packageName.isEmpty()) return null
-            try {
-                pm.getPackageInfo(packageName, 0)
-            } catch (e: PackageManager.NameNotFoundException){
-                e.printStackTrace()
-                null
+    fun getPackageInfo(context: Context, packageName: String = "", apkPath: String = "",
+                       errorMsg: Pair<String, String>? = null): PackageInfo? {
+        return when {
+            packageName.isNotEmpty() -> {
+                try {
+                    context.packageManager.getPackageInfo(packageName, 0)
+                } catch (e: PackageManager.NameNotFoundException) {
+                    if (errorMsg != null) Log.w(errorMsg.first, errorMsg.second)
+                    else e.printStackTrace()
+                    null
+                }
             }
+            apkPath.isNotEmpty() -> getPackageArchiveInfo(context, apkPath)
+            else -> null
         }
     }
 
-    fun getApplicationInfo(context: Context, packageName: String = "", apkPath: String = ""): ApplicationInfo?{
-        val isArchive = packageName.isEmpty()
-        val pm: PackageManager = context.packageManager
-        return if (isArchive) {
-            if (apkPath.isEmpty()) return null
-            getPackageArchiveInfo(context, apkPath)?.applicationInfo
-        } else {
-            if (packageName.isEmpty()) return null
-            try {
-                pm.getApplicationInfo(packageName, 0)
-            }catch (e: PackageManager.NameNotFoundException){
-                e.printStackTrace()
-                null
+    fun getApplicationInfo(context: Context, packageName: String = "", apkPath: String = "",
+                           errorMsg: Pair<String, String>? = null): ApplicationInfo? {
+        return when {
+            packageName.isNotEmpty() -> {
+                try {
+                    context.packageManager.getApplicationInfo(packageName, 0)
+                } catch (e: PackageManager.NameNotFoundException) {
+                    if (errorMsg != null) Log.w(errorMsg.first, errorMsg.second)
+                    else e.printStackTrace()
+                    null
+                }
             }
+            apkPath.isNotEmpty() -> getPackageArchiveInfo(context, apkPath)?.applicationInfo
+            else -> null
         }
     }
 
     fun getPackageArchiveInfo(context: Context, path: String): PackageInfo? {
-        val pm: PackageManager = context.packageManager
-        val pi = pm.getPackageArchiveInfo(path, 0) ?: return null
-        pi.applicationInfo.sourceDir = path
-        pi.applicationInfo.publicSourceDir = path
-        return pi
+        return context.packageManager.getPackageArchiveInfo(path, 0)?.apply {
+            applicationInfo.sourceDir = path
+            applicationInfo.publicSourceDir = path
+        }
     }
 
     /**
      * Check if an app is installed and enabled
      */
-    fun isAppAvailable(context: Context, packageName: String): Boolean {
-        val pi = getPackageInfo(context, packageName = packageName) ?: return false
+    fun isAppAvailable(context: Context, packageName: String, errorMsg: Pair<String, String>? = null): Boolean {
+        val pi = getPackageInfo(context, packageName = packageName, errorMsg = errorMsg) ?: return false
         return pi.applicationInfo.enabled
     }
 }

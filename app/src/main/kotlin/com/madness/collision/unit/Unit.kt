@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,13 +73,15 @@ abstract class Unit: TaggedFragment(), Democratic {
                             .setRequirement(
                                     Description.Checker(R.string.unit_desc_requirement_shortcut) { X.aboveOn(X.N_MR1) },
                                     Description.Checker(R.string.unit_desc_requirement_we) {
-                                        MiscApp.isAppAvailable(it, "com.tencent.mm")
+                                        MiscApp.isAppAvailable(it, "com.tencent.mm",
+                                                "main.unit" to "WeChat not installed")
                                     }),
                     Description(UNIT_NAME_QQ_CONTACTS, R.string.unit_qq_contacts, R.drawable.ic_qq_24).setDescResId(R.string.unit_desc_qc)
                             .setRequirement(
                                     Description.Checker(R.string.unit_desc_requirement_shortcut) { X.aboveOn(X.N_MR1) },
                                     Description.Checker(R.string.unit_desc_requirement_qc) {
-                                        MiscApp.isAppAvailable(it, "com.tencent.mobileqq")
+                                        MiscApp.isAppAvailable(it, "com.tencent.mobileqq",
+                                                "main.unit" to "QQ not installed")
                                     }),
                     StaticDescription(UNIT_NAME_DEVICE_MANAGER, R.string.unit_device_manager, R.drawable.ic_devices_other_24)
                             .setRequirement(Description.Checker(R.string.unit_desc_requirement_dm) {

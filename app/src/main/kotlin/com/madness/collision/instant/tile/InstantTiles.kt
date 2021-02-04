@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,9 +28,11 @@ internal object InstantTiles {
             instantComponent<TileServiceApiViewer>(R.string.apiViewer, Unit.UNIT_NAME_API_VIEWING),
             instantComponent<TileServiceAudioTimer>(R.string.unit_audio_timer, Unit.UNIT_NAME_AUDIO_TIMER),
             instantComponent<TileServiceBarcodeScannerMm>(R.string.instantTileScannerWechat) { WeChatScannerDesc() }
-                    .setRequirement { MiscApp.isAppAvailable(it, "com.tencent.mm") },
+                    .setRequirement { MiscApp.isAppAvailable(it, "com.tencent.mm",
+                            "instant.tile" to "WeChat not installed") },
             instantComponent<TileServiceBarcodeScanner>(R.string.instantTileScannerAlipay) { AlipayScannerDesc() }
-                    .setRequirement { MiscApp.isAppAvailable(it, "com.eg.android.AlipayGphone") },
+                    .setRequirement { MiscApp.isAppAvailable(it, "com.eg.android.AlipayGphone",
+                            "instant.tile" to "Alipay not installed") },
             instantComponent<TileServiceMonthData>(R.string.tileData) { MonthDataUsageDesc() }
     )
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ object ApiUtils {
      * Check if Google Play is available
      */
     fun isGglPlayAvailable(context: Context): Boolean {
-        return MiscApp.isAppAvailable(context, "com.android.vending")
+        return MiscApp.isAppAvailable(context, "com.android.vending",
+                "util.api" to "Google Play Store not installed")
     }
 }
