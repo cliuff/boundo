@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,8 @@ import androidx.core.app.NotificationManagerCompat
 import com.madness.collision.R
 import com.madness.collision.main.MainActivity
 import com.madness.collision.util.*
+import com.madness.collision.util.notice.ToastUtils
+import com.madness.collision.util.os.OsUtils
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -64,7 +66,9 @@ internal class AudioTimerService: Service() {
                 context.startService(intent)
             } catch (e: IllegalStateException) {
                 e.printStackTrace()
-                X.toast(context, R.string.text_error, Toast.LENGTH_SHORT)
+                GlobalScope.launch {
+                    ToastUtils.toast(context, R.string.text_error, Toast.LENGTH_SHORT)
+                }
             }
         }
 
@@ -220,22 +224,26 @@ internal class AudioTimerService: Service() {
         val am = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager? ?: return
         val result = requestAudioFocus(am)
         if (result != AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-            X.toast(context, R.string.text_error, Toast.LENGTH_SHORT)
+            notifyBriefly(R.string.text_error)
         }
     }
 
     private fun requestAudioFocus(audioManager: AudioManager): Int {
-        return if (X.aboveOn(X.O)) {
+        return if (OsUtils.satisfy(OsUtils.O)) {
             val audioAttributes = AudioAttributes.Builder()
-                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                    .build()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build()
             val audioFocusRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
-                    .setAudioAttributes(audioAttributes)
-                    .build()
+                    .setAudioAttributes(audioAttributes).build()
             audioManager.requestAudioFocus(audioFocusRequest)
         } else {
-            audioManager.requestAudioFocus(null, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN)
+            audioManager.requestAudioFocusLegacy(null, AudioManager.STREAM_MUSIC,
+                    AudioManager.AUDIOFOCUS_GAIN)
         }
     }
 
+    @Suppress("deprecation")
+    private fun AudioManager.requestAudioFocusLegacy(listener: AudioManager.OnAudioFocusChangeListener?,
+                                                     streamType: Int, durationHint: Int): Int {
+        return requestAudioFocus(listener, streamType, durationHint)
+    }
 }

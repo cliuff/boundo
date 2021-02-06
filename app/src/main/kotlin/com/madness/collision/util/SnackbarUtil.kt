@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,11 +24,13 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import com.madness.collision.R
+import com.madness.collision.util.notice.ToastUtils
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-private fun notify(textResId: Int, shouldLastLong: Boolean, shouldDelay: Boolean, view: View? = null, context: Context? = null) {
+private fun notify(textResId: Int, shouldLastLong: Boolean, shouldDelay: Boolean, view: View? = null,
+                   context: Context? = null) {
     if (view != null) {
         val dur = if (shouldLastLong) Snackbar.LENGTH_LONG else Snackbar.LENGTH_SHORT
         val snackbar = Snackbar.make(view, textResId, dur)
@@ -42,7 +44,10 @@ private fun notify(textResId: Int, shouldLastLong: Boolean, shouldDelay: Boolean
         }
     } else {
         context ?: return
-        X.toast(context, textResId, if (shouldLastLong) Toast.LENGTH_LONG else Toast.LENGTH_SHORT)
+        GlobalScope.launch {
+            val length = if (shouldLastLong) Toast.LENGTH_LONG else Toast.LENGTH_SHORT
+            ToastUtils.toast(context, textResId, length)
+        }
     }
 }
 

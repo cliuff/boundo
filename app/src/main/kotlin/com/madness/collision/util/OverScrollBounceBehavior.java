@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,15 +18,15 @@ package com.madness.collision.util;
 
 import android.content.Context;
 import android.os.Handler;
-import androidx.annotation.NonNull;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.view.ViewCompat;
-
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.view.ViewCompat;
 
 
 /**
@@ -63,8 +63,8 @@ public class OverScrollBounceBehavior extends CoordinatorLayout.Behavior<View> {
     @Override
     public void onNestedScroll(@NonNull CoordinatorLayout coordinatorLayout,
                                @NonNull View child, @NonNull View target,
-                               int dxConsumed, int dyConsumed, int dxUnconsumed,
-                               int dyUnconsumed, int type) {
+                               int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed, int type,
+                               @NonNull int[] consumed) {
         if (dyUnconsumed == 0 || isBouncingBack || isLimitReached()) return;
         mTarget = target;
         mOverScrollY = -dyUnconsumed;
@@ -83,12 +83,14 @@ public class OverScrollBounceBehavior extends CoordinatorLayout.Behavior<View> {
     }
 
     @Override
-    public void onStopNestedScroll(@NonNull CoordinatorLayout coordinatorLayout, @NonNull View child, @NonNull View target, int type) {
+    public void onStopNestedScroll(@NonNull CoordinatorLayout coordinatorLayout,
+                                   @NonNull View child, @NonNull View target, int type) {
 //        if (!isBouncingBack) bounceBack(target);
     }
 
     @Override
-    public boolean onTouchEvent(CoordinatorLayout parent, View child, MotionEvent ev) {
+    public boolean onTouchEvent(@NonNull CoordinatorLayout parent,
+                                @NonNull View child, @NonNull MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_UP){
 //            if (!isBouncingBack) bounceBack(mTarget);
             return true;
