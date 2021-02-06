@@ -30,10 +30,10 @@ buildscript {
         }
     }
     val versions = object {
-        val kotlin = "1.4.21"
+        val kotlin = "1.4.30"
 //        val dokka = "0.10.1" // dokka and dokka gradle plugin
 //        val dokkaAndroidGradlePlugin = "0.9.18" // dokka android gradle plugin
-        val androidxNavigation = "2.3.2"
+        val androidxNavigation = "2.3.3"
         val googlePlayServicesOSSLicensesPlugin = "0.10.2"
         // Associated (the same) with Android Studio version
         val androidGradlePlugin = "4.1.2"

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,15 +37,9 @@ android {
         }
         create("arm") {
             dimension = "arch"
-            ndk {
-                abiFilters.addAll(listOf("armeabi-v7a", "arm64-v8a"))
-            }
         }
         create("x86") {
             dimension = "arch"
-            ndk {
-                abiFilters.addAll(listOf("x86", "x86_64"))
-            }
         }
     }
 

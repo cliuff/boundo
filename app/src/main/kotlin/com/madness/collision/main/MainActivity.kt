@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -589,14 +589,14 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
 
     private val FragmentTransaction.animNew: FragmentTransaction
         get() = disallowAddToBackStack().setCustomAnimations(
-                R.anim.fragment_open_enter, R.anim.fragment_fade_exit,
-                R.anim.fragment_fade_enter, R.anim.fragment_close_exit
+                R.animator.nav_default_enter_anim, R.animator.nav_default_exit_anim,
+                R.animator.nav_default_pop_enter_anim, R.animator.nav_default_pop_exit_anim
         )
 
     private val FragmentTransaction.animRetreat: FragmentTransaction
         get() = setCustomAnimations(
-                R.anim.fragment_fade_enter, R.anim.fragment_close_exit,
-                R.anim.fragment_fade_enter, R.anim.fragment_close_exit
+                R.animator.nav_default_pop_enter_anim, R.animator.nav_default_pop_exit_anim,
+                R.animator.nav_default_pop_enter_anim, R.animator.nav_default_pop_exit_anim
         )
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {
@@ -668,10 +668,10 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
         NavOptions.Builder().run {
             setPopUpTo(mainDestinationId, isToMain)
             setLaunchSingleTop(true)
-            setEnterAnim(R.anim.fragment_open_enter)
-            setExitAnim(R.anim.fragment_fade_exit)
-            setPopEnterAnim(R.anim.fragment_fade_enter)
-            setPopExitAnim(R.anim.fragment_close_exit)
+            setEnterAnim(R.animator.nav_default_enter_anim)
+            setExitAnim(R.anim.nav_default_exit_anim)
+            setPopEnterAnim(R.anim.nav_default_pop_enter_anim)
+            setPopExitAnim(R.anim.nav_default_pop_exit_anim)
         }.also { navController.navigate(id, null, it.build()) }
         // clear back stack
         clearBackPressedCallback()

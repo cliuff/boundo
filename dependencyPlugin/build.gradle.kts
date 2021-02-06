@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 object Versions {
-    const val kotlin = "1.4.21"
+    const val kotlin = "1.4.30"
 }
 
 buildscript {
@@ -25,7 +25,7 @@ buildscript {
         jcenter()
     }
     val versions = object {
-        val kotlin = "1.4.21"
+        val kotlin = "1.4.30"
     }
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}")
@@ -34,7 +34,7 @@ buildscript {
 
 plugins {
     val versions = object {
-        val kotlin = "1.4.21"
+        val kotlin = "1.4.30"
     }
     kotlin("jvm") version versions.kotlin
     id("java-gradle-plugin")
