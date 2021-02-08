@@ -124,7 +124,8 @@ class MyControlService : ControlsProviderService(), StateObservable {
     }
 
     private fun getDmMacByDeviceId(deviceId: String): String {
-        return "${DEV_PREFIX_DM}_(.*)".toRegex().find(deviceId)?.destructured?.component1() ?: deviceId
+        val device = "${DEV_PREFIX_DM}_(.*)".toRegex().find(deviceId) ?: return deviceId
+        return device.destructured.component1()
     }
 
     private fun getStatefulBuilder(context: Context, controlId: String): Control.StatefulBuilder? {

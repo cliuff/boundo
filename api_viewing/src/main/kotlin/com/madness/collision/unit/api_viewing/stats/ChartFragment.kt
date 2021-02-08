@@ -117,7 +117,7 @@ internal class ChartFragment: TaggedFragment(){
             setEntryLabelTextSize(15f)
             setEntryLabelColor(ThemeUtil.getColor(context, R.attr.colorAOnSurface))
             // decrease overlapping
-            minAngleForSlices = 13f
+            minAngleForSlices = 11f
             setUsePercentValues(true)
 //            setOnChartValueSelectedListener(object : OnChartValueSelectedListener{
 //                override fun onNothingSelected() {

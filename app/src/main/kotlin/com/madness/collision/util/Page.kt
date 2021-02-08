@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -114,7 +114,8 @@ class Page(fragment: Fragment? = null, private var titleId: Int = 0, private val
     }
 
     override fun selectOption(item: MenuItem): Boolean {
-        return democratic?.selectOption(item) ?: false
+        democratic ?: return false
+        return democratic.selectOption(item)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

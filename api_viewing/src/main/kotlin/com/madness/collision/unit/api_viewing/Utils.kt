@@ -169,18 +169,20 @@ internal object Utils {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun getChangedPackageNames(context: Context): List<String>{
-        val prefSettings = context.getSharedPreferences(com.madness.collision.util.P.PREF_SETTINGS, Context.MODE_PRIVATE)
+    fun getChangedPackageNames(context: Context): List<String> {
+        val pref = com.madness.collision.util.P
+        val prefSettings = context.getSharedPreferences(pref.PREF_SETTINGS, Context.MODE_PRIVATE)
         val bootCount = Settings.Global.getInt(context.contentResolver, Settings.Global.BOOT_COUNT, 0)
-        val sequenceNum = if (bootCount == prefSettings.getInt(com.madness.collision.util.P.PACKAGE_CHANGED_BOOT_COUNT, 0))
-            prefSettings.getInt(com.madness.collision.util.P.PACKAGE_CHANGED_SEQUENCE_NO, 0)
+        val sequenceNum = if (bootCount == prefSettings.getInt(pref.PACKAGE_CHANGED_BOOT_COUNT, 0))
+            prefSettings.getInt(pref.PACKAGE_CHANGED_SEQUENCE_NO, 0)
         else 0
         val changedPackages = context.packageManager.getChangedPackages(sequenceNum)
         prefSettings.edit {
-            putInt(com.madness.collision.util.P.PACKAGE_CHANGED_BOOT_COUNT, bootCount)
-            putInt(com.madness.collision.util.P.PACKAGE_CHANGED_SEQUENCE_NO, changedPackages?.sequenceNumber ?: sequenceNum)
+            putInt(pref.PACKAGE_CHANGED_BOOT_COUNT, bootCount)
+            putInt(pref.PACKAGE_CHANGED_SEQUENCE_NO, changedPackages?.sequenceNumber ?: sequenceNum)
         }
-        return changedPackages?.packageNames ?: emptyList()
+        changedPackages ?: return emptyList()
+        return changedPackages.packageNames
     }
 
     fun getChangedPackages(context: Context, timestamp: Long = 0): List<PackageInfo> {
@@ -189,13 +191,14 @@ internal object Utils {
 //        } else {
 //        }
         val shouldOverride = timestamp != 0L
-        val prefSettings = if (shouldOverride) null else context.getSharedPreferences(com.madness.collision.util.P.PREF_SETTINGS, Context.MODE_PRIVATE)
+        val pref = com.madness.collision.util.P
+        val prefSettings = if (shouldOverride) null else context.getSharedPreferences(pref.PREF_SETTINGS, Context.MODE_PRIVATE)
         val finalTimestamp = if (shouldOverride) timestamp
-        else prefSettings!!.getLong(com.madness.collision.util.P.PACKAGE_CHANGED_TIMESTAMP, System.currentTimeMillis())
+        else prefSettings!!.getLong(pref.PACKAGE_CHANGED_TIMESTAMP, System.currentTimeMillis())
         val re = context.packageManager.getInstalledPackages(0).filter {
             it.lastUpdateTime >= finalTimestamp
         }
-        if (!shouldOverride) prefSettings!!.edit { putLong(com.madness.collision.util.P.PACKAGE_CHANGED_TIMESTAMP, System.currentTimeMillis()) }
+        if (!shouldOverride) prefSettings!!.edit { putLong(pref.PACKAGE_CHANGED_TIMESTAMP, System.currentTimeMillis()) }
         return re
     }
 

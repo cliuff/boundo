@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,8 @@ internal class ExpressibleTag(tag: PackageTag, var isAnti: Boolean = false): Pac
     override fun express(): Boolean {
         val context = context ?: return false
         val app = appPackage ?: return false
-        return expressing?.invoke(this, context, app) ?: false
+        expressing ?: return false
+        return expressing.invoke(this, context, app)
     }
 
     fun setContext(context: Context): ExpressibleTag {
