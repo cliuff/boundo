@@ -73,7 +73,8 @@ dependencies {
             Dependencies.androidxRoomRuntime,
             Dependencies.mpChart,
             Dependencies.openCsv,
-            Dependencies.androidDeviceNames
+            Dependencies.androidDeviceNames,
+            Dependencies.byteBuddy
     ).forEach { implementation(it) }
     Dependencies.dynamicFeatureBasics.forEach { implementation(it) }
 

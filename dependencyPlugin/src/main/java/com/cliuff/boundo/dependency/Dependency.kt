@@ -75,6 +75,7 @@ object Versions {
     // Jetbrains annotations
     const val jbAnnotations = "20.1.0"
     const val androidDeviceNames = "2.0.0"
+    const val byteBuddy = "1.10.20"
 }
 
 class Dependencies : Plugin<Project> {
@@ -146,6 +147,7 @@ class Dependencies : Plugin<Project> {
         const val rxJava = "io.reactivex.rxjava3:rxjava:${Versions.rxJava}"
         const val jbAnnotations = "org.jetbrains:annotations:${Versions.jbAnnotations}"
         const val androidDeviceNames = "com.jaredrummler:android-device-names:${Versions.androidDeviceNames}"
+        const val byteBuddy = "net.bytebuddy:byte-buddy-android:${Versions.byteBuddy}"
 
         // wear
         const val androidxPercentLayout = "androidx.percentlayout:percentlayout:${Versions.androidxPercentLayout}"

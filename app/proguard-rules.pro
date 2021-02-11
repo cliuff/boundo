@@ -62,6 +62,16 @@
 # those that are not are APIs and should be kept
 -keepnames class com.xiaomi.** { *; }
 
+# Byte-buddy Android
+-keep class com.android.dx.dex.cf.CfTranslator {
+ translate(...);
+}
+# Byte-buddy
+-dontwarn net.bytebuddy.**
+-keep class net.bytebuddy.** {
+  *;
+}
+
 ##---------------Begin: proguard configuration for Gson  ----------
 # Gson uses generic type information stored in a class file when working with fields. Proguard
 # removes such information by default, so configure it to keep all of it.

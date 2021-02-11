@@ -17,89 +17,35 @@
 package com.madness.collision.unit.api_viewing
 
 import android.content.Context
-import android.content.pm.ApplicationInfo
-import android.content.pm.PackageInfo
 import androidx.annotation.WorkerThread
+import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
-import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.database.AppDao
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.runBlocking
+import com.madness.collision.unit.api_viewing.origin.AppRetriever
 
-internal class AppRepository(private val dao: AppDao){
+internal class AppRepository(private val dao: AppDao) {
+
+    @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun insert(app: ApiViewingApp) {
         dao.insert(app)
     }
 
-    fun getUserApps(context: Context): List<ApiViewingApp>{
-        return getAppsUser(context)
-//        return dao.getUserApps().value ?: emptyList()
-    }
+    fun getAllApps(context: Context): List<ApiViewingApp> = getApps(context, ApiUnit.ALL_APPS)
 
-    fun getSystemApps(context: Context): List<ApiViewingApp>{
-        return getAppsSys(context)
-//        return dao.getSystemApps().value ?: emptyList()
-    }
+    fun getUserApps(context: Context): List<ApiViewingApp> = getApps(context, ApiUnit.USER)
 
-    fun getAllApps(context: Context): List<ApiViewingApp>{
-        return getAppsAll(context)
-//        return dao.getAllApps().value ?: emptyList()
-    }
+    fun getSystemApps(context: Context): List<ApiViewingApp> = getApps(context, ApiUnit.SYS)
 
-    /**
-     * Get app in parallel.
-     */
-    private suspend fun getAppsAsync(context: Context, predicate: ((PackageInfo) -> Boolean)? = null)
-    : List<ApiViewingApp> = coroutineScope {
-        val anApp = ApiViewingApp("")
-        val packages = context.packageManager.getInstalledPackages(0).let {
-            if (predicate == null) it else it.filter(predicate)
-        }
-        packages.mapIndexed { index, pack ->
-            async(Dispatchers.Default) {
-                val app = if (index == packages.lastIndex) anApp else anApp.clone() as ApiViewingApp
-                app.packageName = pack.packageName
-                app.init(context, pack, preloadProcess = true, archive = false)
-                app
+    fun getApps(context: Context, unit: Int): List<ApiViewingApp> {
+        if ((dao.selectCount() ?: 0) == 0) {
+            val apps = AppRetriever(context).all
+            dao.insert(apps)
+            return when (unit) {
+                ApiUnit.USER, ApiUnit.SYS -> apps.filter { it.apiUnit == unit }
+                else -> apps
             }
-        }.map { it.await() }
-    }
-
-    private fun getApps(context: Context, predicate: ((PackageInfo) -> Boolean)? = null): List<ApiViewingApp>{
-        return context.packageManager.getInstalledPackages(0).let {
-            if (predicate == null) it else it.filter(predicate)
-        }.map { ApiViewingApp(context, it, preloadProcess = true, archive = false) }
-    }
-
-    private fun getAppsUser(context: Context): List<ApiViewingApp> {
-        val predicate: (PackageInfo) -> Boolean = if (EasyAccess.shouldIncludeDisabled) { packageInfo ->
-            (packageInfo.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM) == 0
-        } else { packageInfo ->
-            val app = packageInfo.applicationInfo
-            // users without root privilege can only disable system apps
-            (app.flags and ApplicationInfo.FLAG_SYSTEM) == 0 && app.enabled
         }
-        return runBlocking { getAppsAsync(context, predicate) }
-    }
-
-    private fun getAppsSys(context: Context): List<ApiViewingApp> {
-        val predicate: (PackageInfo) -> Boolean = if (EasyAccess.shouldIncludeDisabled) { packageInfo ->
-            (packageInfo.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM) != 0
-        } else { packageInfo ->
-            val app = packageInfo.applicationInfo
-            (app.flags and ApplicationInfo.FLAG_SYSTEM) != 0 && app.enabled
-        }
-        return runBlocking { getAppsAsync(context, predicate) }
-    }
-
-    private fun getAppsAll(context: Context): List<ApiViewingApp> {
-        val predicate: ((PackageInfo) -> Boolean)? = if (EasyAccess.shouldIncludeDisabled) null
-        else { packageInfo ->
-            packageInfo.applicationInfo.enabled
-        }
-        return runBlocking { getAppsAsync(context, predicate) }
+        return dao.selectApps(unit)
     }
 }
