@@ -342,7 +342,7 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
                 app = ApiViewingApp(context, pi, preloadProcess = true, archive = false)
                 app.load(context, pi.applicationInfo)
             } else if (name == packageSettings) {
-                app = ApiViewingApp()
+                app = ApiViewingApp.icon()
                 app.load(context, { ContextCompat.getDrawable(context, R.mipmap.logo_settings)!! }, { null })
             }
             val icon = app?.icon

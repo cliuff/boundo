@@ -25,7 +25,6 @@ import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.style.StyleSpan
 import android.util.Log
-import androidx.core.content.pm.PackageInfoCompat
 import com.madness.collision.R
 import com.madness.collision.misc.MiscApp
 import com.madness.collision.unit.api_viewing.Utils
@@ -51,12 +50,12 @@ internal class AppListService {
         val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", SystemUtil.getLocaleApp())
         val spanFlags = Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         builder.append(context.getString(R.string.apiDetailsPackageName), StyleSpan(Typeface.BOLD), spanFlags)
-                .append(pi.packageName ?: "").append('\n')
+                .append(appInfo.packageName).append('\n')
         builder.append(context.getString(RAv.string.apiDetailsVerName), StyleSpan(Typeface.BOLD), spanFlags)
-                .append(pi.versionName ?: "")
+                .append(appInfo.verName)
                 .append('\n')
         builder.append(context.getString(RAv.string.apiDetailsVerCode), StyleSpan(Typeface.BOLD), spanFlags)
-                .append(PackageInfoCompat.getLongVersionCode(pi).toString()).append('\n')
+                .append(appInfo.verCode.toString()).append('\n')
 
         val sdkInfo = { ver: VerInfo ->
             val sdk = "Android ${ver.sdk}"

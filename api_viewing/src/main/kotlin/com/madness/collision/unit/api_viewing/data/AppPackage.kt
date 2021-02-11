@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,10 +20,14 @@ import android.content.pm.ApplicationInfo
 import android.os.Parcel
 import android.os.Parcelable
 
-internal class AppPackage private constructor(val basePath: String, val splitPaths: List<String>): Parcelable {
+class AppPackage private constructor(val basePath: String, val splitPaths: List<String>): Parcelable {
 
     val hasSplits: Boolean = splitPaths.isNotEmpty()
     val apkPaths: List<String> = makeApkPaths()
+
+    constructor(basePath: String): this(basePath, emptyList())
+
+    constructor(apkPaths: List<String>): this(apkPaths[0], apkPaths.subList(1, apkPaths.size))
 
     constructor(applicationInfo: ApplicationInfo): this(
             applicationInfo.publicSourceDir ?: "",
