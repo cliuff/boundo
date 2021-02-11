@@ -19,7 +19,6 @@ package com.madness.collision.unit.api_viewing
 import android.Manifest
 import android.app.Activity
 import android.content.*
-import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.graphics.Paint
 import android.graphics.drawable.ColorDrawable
@@ -44,12 +43,14 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.madness.collision.R
 import com.madness.collision.main.MainActivity
+import com.madness.collision.main.MainViewModel
 import com.madness.collision.main.MyHideBottomViewOnScrollBehavior
-import com.madness.collision.misc.MiscApp
 import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
+import com.madness.collision.unit.api_viewing.database.DataMaintainer
+import com.madness.collision.unit.api_viewing.database.RecordMaintainer
 import com.madness.collision.unit.api_viewing.databinding.FragmentApiBinding
 import com.madness.collision.unit.api_viewing.device.DeviceApi
 import com.madness.collision.unit.api_viewing.list.APIAdapter
@@ -63,7 +64,6 @@ import com.madness.collision.util.AppUtils.asBottomMargin
 import com.madness.collision.util.os.OsUtils
 import kotlinx.coroutines.*
 import java.io.File
-import java.lang.Runnable
 import com.madness.collision.unit.api_viewing.R as MyR
 
 class MyUnit: com.madness.collision.unit.Unit() {
@@ -175,13 +175,24 @@ class MyUnit: com.madness.collision.unit.Unit() {
         toolbar.background.mutate().constantState?.newDrawable()?.let { tbDrawable = it }
         this.iconColor = iconColor
         this.toolbar = toolbar
-        // After image operations, cache is cleared, leaving list empty.
-        // Ensures list refreshes after user comes back.
-        if (loadedItems.isVacant && viewModel.apps4Cache.isEmpty()) {
-            refreshLayout.isRefreshing = true
-            reloadList()
-        }
         return true
+    }
+
+    /**
+     * After image operations, cache is cleared, leaving list empty.
+     * Ensures list refreshes after user comes back.
+     */
+    private fun checkRefresh() {
+        val doReload = loadedItems.isVacant && viewModel.apps4Cache.isEmpty()
+        if (!doReload) return
+        lifecycleScope.launch(Dispatchers.Default) {
+            if (loadedItems.isBusy) return@launch
+            withContext(Dispatchers.Main) {
+                refreshLayout.isRefreshing = true
+            }
+            loadSortedList(loadItem, sortEfficiently = true, fg = true)
+            refreshList()
+        }
     }
 
     private val mScrollBehavior: MyHideBottomViewOnScrollBehavior<View>
@@ -376,6 +387,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
                     }
                 }
             }
+            checkRefresh()
         }
         super.onHiddenChanged(hidden)
     }
@@ -411,24 +423,13 @@ class MyUnit: com.madness.collision.unit.Unit() {
         if (text.isEmpty()) return
         // Check store links
         val appFromStore = Utils.checkStoreLink(text)
+        val dao = DataMaintainer.get(context, lifecycleScope)
         if (appFromStore != null) {
-            val pi = MiscApp.getPackageInfo(context, packageName = appFromStore)
-            if (pi != null) {
-                val app = ApiViewingApp(context, pi, preloadProcess = true, archive = false)
-                app.load(context, pi.applicationInfo)
-                viewModel.addApps(app)
-            }
+            dao.selectApp(appFromStore)?.load(context)?.let { viewModel.addApps(it) }
         } else {
-            val pm = context.packageManager
-            val installedApps: List<PackageInfo> = pm.getInstalledPackages(0)
-            val apps = mutableListOf<ApiViewingApp>()
-            for (appInfo in installedApps) {
-                val label = appInfo.applicationInfo.loadLabel(pm)
-                if (label.contains(text, true)) {
-                    apps.add(ApiViewingApp(context, appInfo, preloadProcess = true, archive = false))
-                }
+            dao.selectNameAlike(text).let {
+                viewModel.addApps(it)
             }
-            viewModel.addApps(apps)
         }
         viewModel.sortApps(sortItem)
         refreshList()
@@ -443,8 +444,12 @@ class MyUnit: com.madness.collision.unit.Unit() {
 
     private fun ceaseRefresh(unit: Int) {
         if (loadItem != unit) return
-        lifecycleScope.launch(Dispatchers.Main) {
-            refreshLayout.isRefreshing = false
+        lifecycleScope.launch(Dispatchers.Default) {
+            // delay to reduce UI update clustering
+            delay(200)
+            withContext(Dispatchers.Main) {
+                refreshLayout.isRefreshing = false
+            }
         }
     }
 
@@ -830,8 +835,14 @@ class MyUnit: com.madness.collision.unit.Unit() {
      * @param sortEfficiently sort or not
      * @param fg do foreground loading (do sorting if needed, while no sorting as background)
      */
-    private fun loadSortedList(item: Int , sortEfficiently: Boolean , fg: Boolean ) {
+    private fun loadSortedList(item: Int, sortEfficiently: Boolean, fg: Boolean ) {
         val context = context ?: return
+
+        // update records
+        val mainViewModel: MainViewModel by activityViewModels()
+        if (MyUpdatesFragment.isNewSession(mainViewModel.timestamp)) {
+            RecordMaintainer.pack(context, lifecycleScope).all
+        }
 
         if (launchMethod.mode == LaunchMethod.LAUNCH_MODE_SEARCH) {
             val textExtra = launchMethod.textExtra

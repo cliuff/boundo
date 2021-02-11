@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,9 +31,11 @@ import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.Updatable
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
+import com.madness.collision.unit.api_viewing.database.AppMaintainer
 import com.madness.collision.unit.api_viewing.list.APIAdapter
 import com.madness.collision.unit.api_viewing.list.AppListFragment
 import com.madness.collision.util.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -120,8 +122,12 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
             val spanCount = if (activity == null || isDetached || !isAdded) 1 else mAdapter.spanCount
             val listLimitSize = min(mChangedPackages.size, 10 * spanCount)
             mList = if (mChangedPackages.isEmpty()) mList else {
+                val scope = CoroutineScope(Dispatchers.Default)
+                val anApp = AppMaintainer.get(mContext, scope)
                 mChangedPackages.subList(0, listLimitSize).mapIndexed { index, p ->
-                    val app = ApiViewingApp(mContext, p, preloadProcess = true, archive = false).load(mContext)
+                    val app = if (index == mChangedPackages.lastIndex) anApp else anApp.clone() as ApiViewingApp
+                    app.init(mContext, p, preloadProcess = true, archive = false)
+                    app.load(mContext)
                     withContext(Dispatchers.Main) {
                         mAdapter.notifyListItemChanged(index)
                     }

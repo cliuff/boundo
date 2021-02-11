@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,25 +21,24 @@ import android.content.Context
 import android.net.Uri
 import android.util.SparseIntArray
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
 import com.madness.collision.misc.MiscApp
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
-import com.madness.collision.unit.api_viewing.database.AppRoom
+import com.madness.collision.unit.api_viewing.database.DataMaintainer
 import com.madness.collision.unit.api_viewing.util.ApkRetriever
 import com.madness.collision.util.F
 import com.madness.collision.util.StringUtils
 import com.madness.collision.util.X
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.util.stream.Collectors
 import kotlin.Comparator
-import kotlin.coroutines.CoroutineContext
 
 /**
  * Api Viewing View Model
@@ -89,19 +88,9 @@ internal class ApiViewingViewModel(application: Application): AndroidViewModel(a
             return countUser to countSys
         }
 
-    private val parentJob = Job()
-    private val coroutineContext: CoroutineContext
-        get() = parentJob + Dispatchers.Main
-    private val scope = CoroutineScope(coroutineContext)
-
     init {
-        val dao = AppRoom.getDatabase(application, scope).appDao()
+        val dao = DataMaintainer.get(application, viewModelScope)
         repository = AppRepository(dao)
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        parentJob.cancel()
     }
 
     private fun updateDeviceAppsCount(){
@@ -167,7 +156,7 @@ internal class ApiViewingViewModel(application: Application): AndroidViewModel(a
     }
 
     private fun doWork(block: suspend CoroutineScope.() -> Unit){
-        scope.launch(Dispatchers.IO, block = block)
+        viewModelScope.launch(Dispatchers.IO, block = block)
     }
 
     fun insert(app: ApiViewingApp){

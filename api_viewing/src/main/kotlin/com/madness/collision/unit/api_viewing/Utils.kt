@@ -22,6 +22,10 @@ import android.os.Build
 import android.provider.Settings
 import androidx.annotation.RequiresApi
 import androidx.core.content.edit
+import com.madness.collision.unit.api_viewing.data.ApiViewingApp
+import com.madness.collision.unit.api_viewing.database.DataMaintainer
+import com.madness.collision.unit.api_viewing.database.RecordMaintainer
+import com.madness.collision.unit.api_viewing.origin.PackageRetriever
 import com.madness.collision.util.X
 import com.madness.collision.util.X.A
 import com.madness.collision.util.X.B
@@ -53,6 +57,8 @@ import com.madness.collision.util.X.O_MR1
 import com.madness.collision.util.X.P
 import com.madness.collision.util.X.Q
 import com.madness.collision.util.regexOf
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import java.security.Principal
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -185,21 +191,41 @@ internal object Utils {
         return changedPackages.packageNames
     }
 
-    fun getChangedPackages(context: Context, timestamp: Long = 0): List<PackageInfo> {
+    fun getChangedPackages(context: Context, timestamp: Long = 0): Pair<List<ApiViewingApp>?, List<PackageInfo>> {
 //        return if (X.aboveOn(X.O)) {
 //            getChangedPackageNames(context).mapNotNull { getPackageInfo(context, it) }
 //        } else {
 //        }
         val shouldOverride = timestamp != 0L
         val pref = com.madness.collision.util.P
-        val prefSettings = if (shouldOverride) null else context.getSharedPreferences(pref.PREF_SETTINGS, Context.MODE_PRIVATE)
+        val prefSettings = if (shouldOverride) null
+        else context.getSharedPreferences(pref.PREF_SETTINGS, Context.MODE_PRIVATE)
         val finalTimestamp = if (shouldOverride) timestamp
         else prefSettings!!.getLong(pref.PACKAGE_CHANGED_TIMESTAMP, System.currentTimeMillis())
-        val re = context.packageManager.getInstalledPackages(0).filter {
-            it.lastUpdateTime >= finalTimestamp
+
+        val retriever = PackageRetriever(context)
+        // get latest installed packages
+        val allPackages = retriever.all
+        // get changed packages
+        val re = allPackages.filter { it.lastUpdateTime >= finalTimestamp }
+        val scope = CoroutineScope(Dispatchers.Default)
+        val dao = DataMaintainer.get(context, scope)
+        // get past records
+        val previous = when (dao.selectCount()) {
+            null -> null
+            0 -> emptyList()
+            else -> dao.selectApps(re.map { it.packageName })
         }
-        if (!shouldOverride) prefSettings!!.edit { putLong(pref.PACKAGE_CHANGED_TIMESTAMP, System.currentTimeMillis()) }
-        return re
+        // update records
+        RecordMaintainer(context, retriever, scope, dao).run {
+            update(allPackages)
+            checkRemoval(allPackages)
+        }
+
+        if (!shouldOverride) prefSettings!!.edit {
+            putLong(pref.PACKAGE_CHANGED_TIMESTAMP, System.currentTimeMillis())
+        }
+        return previous to re
     }
 
     fun getNewPackages(changedPackages: List<PackageInfo>): List<PackageInfo> {

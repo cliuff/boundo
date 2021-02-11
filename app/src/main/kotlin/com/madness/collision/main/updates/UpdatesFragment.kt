@@ -27,6 +27,7 @@ import androidx.core.view.isEmpty
 import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListUpdateCallback
 import com.madness.collision.Democratic
@@ -41,6 +42,9 @@ import com.madness.collision.util.AppUtils.asBottomMargin
 import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.X
 import com.madness.collision.util.alterPadding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
 
 internal class UpdatesFragment : TaggedFragment(), Democratic {
@@ -148,12 +152,14 @@ internal class UpdatesFragment : TaggedFragment(), Democratic {
         }
     }
 
-    private fun loadUpdates() {
+    private fun loadUpdates() = lifecycleScope.launch(Dispatchers.Default) {
         fragments = retrieveUpdateFragments()
-        viewBinding.mainUpdatesSecUpdates.visibility = if (fragments.isEmpty()) View.GONE else View.VISIBLE
-        if (fragments.isEmpty()) return
-        fragments.forEach {
-            addUpdateFragment(it)
+        withContext(Dispatchers.Main) {
+            viewBinding.mainUpdatesSecUpdates.visibility = if (fragments.isEmpty()) View.GONE else View.VISIBLE
+            if (fragments.isEmpty()) return@withContext
+            fragments.forEach {
+                addUpdateFragment(it)
+            }
         }
     }
 
@@ -203,10 +209,12 @@ internal class UpdatesFragment : TaggedFragment(), Democratic {
         viewBinding.mainUpdatesUpdateContainer.removeViewAt(index)
     }
 
-    private fun updateUpdates() {
+    private fun updateUpdates() = lifecycleScope.launch(Dispatchers.Default) {
         val newFragments = retrieveUpdateFragments()
-        if (newFragments.isNotEmpty()) viewBinding.mainUpdatesSecUpdates.visibility = View.VISIBLE
-        DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+        if (newFragments.isNotEmpty()) withContext(Dispatchers.Main) {
+            viewBinding.mainUpdatesSecUpdates.visibility = View.VISIBLE
+        }
+        val diff = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
             override fun getOldListSize(): Int {
                 return fragments.size
             }
@@ -223,28 +231,31 @@ internal class UpdatesFragment : TaggedFragment(), Democratic {
                 return fragments[oldItemPosition].first == newFragments[newItemPosition].first
             }
 
-        }, false).dispatchUpdatesTo(object : ListUpdateCallback {
-            override fun onInserted(position: Int, count: Int) {
-                for (i in position until position + count) {
-                    addUpdateFragment(newFragments[i])
+        }, false)
+        withContext(Dispatchers.Main) {
+            diff.dispatchUpdatesTo(object : ListUpdateCallback {
+
+                override fun onInserted(position: Int, count: Int) {
+                    for (i in position until position + count) {
+                        addUpdateFragment(newFragments[i])
+                    }
                 }
-            }
 
-            override fun onRemoved(position: Int, count: Int) {
-                for (i in (position until position + count).reversed()) {
-                    removeUpdateFragment(fragments[i], i)
+                override fun onRemoved(position: Int, count: Int) {
+                    for (i in (position until position + count).reversed()) {
+                        removeUpdateFragment(fragments[i], i)
+                    }
                 }
-            }
 
-            override fun onMoved(fromPosition: Int, toPosition: Int) {
-            }
+                override fun onMoved(fromPosition: Int, toPosition: Int) {
+                }
 
-            override fun onChanged(position: Int, count: Int, payload: Any?) {
-            }
-
-        })
-        fragments = newFragments
-        if (newFragments.isEmpty()) viewBinding.mainUpdatesSecUpdates.visibility = View.GONE
+                override fun onChanged(position: Int, count: Int, payload: Any?) {
+                }
+            })
+            fragments = newFragments
+            if (newFragments.isEmpty()) viewBinding.mainUpdatesSecUpdates.visibility = View.GONE
+        }
     }
 
     /**
