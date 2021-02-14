@@ -285,7 +285,7 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
             MyR.id.avAppInfoCapture -> actionShare(context)
             MyR.id.avAppInfoOptions -> {
                 val parent = parentFragment
-                if (parent !is AppListFragment) return
+                if (parent !is AppList) return
                 dismiss()
                 parent.showAppOptions(app)
             }

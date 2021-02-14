@@ -43,7 +43,7 @@ import kotlinx.coroutines.*
 import kotlin.math.min
 import kotlin.math.roundToInt
 
-internal class APIAdapter(context: Context, private val listener: Listener)
+internal open class APIAdapter(context: Context, private val listener: Listener)
     : SandwichAdapter<APIAdapter.Holder>(context) {
 
     interface Listener {
@@ -51,14 +51,24 @@ internal class APIAdapter(context: Context, private val listener: Listener)
         val longClick: (ApiViewingApp) -> Boolean
     }
 
-    class Holder(binding: AdapterAvBinding) : RecyclerView.ViewHolder(binding.root) {
-        val logo: ImageView = binding.avAdapterInfoLogo
-        val name: AppCompatTextView = binding.avAdapterInfoName as AppCompatTextView
-        val updateTime: AppCompatTextView = binding.avAdapterInfoTime as AppCompatTextView
-        val tags: ChipGroup = binding.avAdapterInfoTags
-        val api: AppCompatTextView = binding.avAdapterInfoAPI as AppCompatTextView
-        val seal: ImageView = binding.avAdapterSeal
-        val card: MaterialCardView = binding.avAdapterCard
+    open class Holder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        lateinit var logo: ImageView
+        lateinit var name: AppCompatTextView
+        lateinit var updateTime: AppCompatTextView
+        lateinit var tags: ChipGroup
+        lateinit var api: AppCompatTextView
+        lateinit var seal: ImageView
+        lateinit var card: MaterialCardView
+
+        constructor(binding: AdapterAvBinding): this(binding.root) {
+            logo = binding.avAdapterInfoLogo
+            name = binding.avAdapterInfoName as AppCompatTextView
+            updateTime = binding.avAdapterInfoTime as AppCompatTextView
+            tags = binding.avAdapterInfoTags
+            api = binding.avAdapterInfoAPI as AppCompatTextView
+            seal = binding.avAdapterSeal
+            card = binding.avAdapterCard
+        }
     }
 
     var apps: List<ApiViewingApp> = emptyList()
@@ -73,20 +83,21 @@ internal class APIAdapter(context: Context, private val listener: Listener)
     override val listCount: Int
         get() = apps.size
 
-    private val inflater = LayoutInflater.from(context)
+    protected val inflater = LayoutInflater.from(context)
     private var sortMethod: Int = MyUnit.SORT_POSITION_API_LOW
     private val sweetMargin by lazy { X.size(context, 5f, X.DP).roundToInt() }
     private val plainMargin by lazy { X.size(context, 2f, X.DP).roundToInt() }
+    protected val loadPref: EasyAccess = EasyAccess
     private val margin: Int
-        get() = if (EasyAccess.shouldShowDesserts) sweetMargin else plainMargin
+        get() = if (loadPref.shouldShowDesserts) sweetMargin else plainMargin
     private val innerMargin: Float
-        get() = if (EasyAccess.shouldShowDesserts) 5f else 2f
-    private val shouldShowTime: Boolean
+        get() = if (loadPref.shouldShowDesserts) 5f else 2f
+    protected open val shouldShowTime: Boolean
         get() = sortMethod == MyUnit.SORT_POSITION_API_TIME
-    private val itemLength: Int = X.size(context, 45f, X.DP).roundToInt()
+    protected val itemLength: Int = X.size(context, 45f, X.DP).roundToInt()
     private val _colorSurface by lazy { ThemeUtil.getColor(context, R.attr.colorASurface) }
-    private val colorSurface: Int
-        get() = if (EasyAccess.shouldShowDesserts) _colorSurface else 0
+    protected val colorSurface: Int
+        get() = if (loadPref.shouldShowDesserts) _colorSurface else 0
     private val animator = AppListAnimator()
 
     fun setSortMethod(sortMethod: Int): APIAdapter {
@@ -116,7 +127,7 @@ internal class APIAdapter(context: Context, private val listener: Listener)
     private fun preloadAppIconsForward(index: Int) {
         ApiTaskManager.join {
             try {
-                val endIndex = min(index + EasyAccess.preloadLimit, listCount)
+                val endIndex = min(index + loadPref.preloadLimit, listCount)
                 for (i in index until endIndex) ensureItem(i)
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -158,7 +169,7 @@ internal class APIAdapter(context: Context, private val listener: Listener)
             holder.logo.setImageBitmap(appInfo.icon)
         }
 
-        val loadLimitHalf = EasyAccess.loadLimitHalf
+        val loadLimitHalf = loadPref.loadLimitHalf
         val backIndex = index - loadLimitHalf - 5
         val shouldSpanFore = backIndex < 0
         val foreSpan: Int by lazy { -backIndex }
@@ -170,19 +181,21 @@ internal class APIAdapter(context: Context, private val listener: Listener)
         if (finalBackIndex >= 0 && !apps[finalBackIndex].preload) apps[finalBackIndex].clearIcons()
         if (finalForeIndex < listCount && !apps[finalForeIndex].preload) apps[finalForeIndex].clearIcons()
 
-        // EasyAccess.preloadLimit may equal to zero
-//        if (!appInfo.preload && EasyAccess.preloadLimit > 0 && EasyAccess.preloadLimit < listCount) {
-//            val preloadIndex = index + EasyAccess.loadAmount
-//            if (preloadIndex >= EasyAccess.preloadLimit && preloadIndex < listCount && preloadIndex % EasyAccess.preloadLimit == 0 && apps[preloadIndex].preload) {
+        // loadPref.preloadLimit may equal to zero
+//        if (!appInfo.preload && loadPref.preloadLimit > 0 && loadPref.preloadLimit < listCount) {
+//            val preloadIndex = index + loadPref.loadAmount
+//            if (preloadIndex >= loadPref.preloadLimit && preloadIndex < listCount &&
+//                    preloadIndex % loadPref.preloadLimit == 0 && apps[preloadIndex].preload) {
 //                preloadAppIconsForward(index)
 //            }
 //        }
 
-        val verInfo = if (EasyAccess.isViewingTarget) VerInfo.targetDisplay(appInfo) else VerInfo.minDisplay(appInfo)
+        val verInfo = if (loadPref.isViewingTarget) VerInfo.targetDisplay(appInfo)
+        else VerInfo.minDisplay(appInfo)
         holder.api.dartFuture(verInfo.displaySdk)
 
         SealManager.populate4Seal(context, verInfo.letter, itemLength)
-        if (EasyAccess.shouldShowDesserts) {
+        if (loadPref.shouldShowDesserts) {
             holder.api.setTextColor(SealManager.getItemColorAccent(context, verInfo.api))
             val seal: Bitmap? = SealManager.seals[verInfo.letter]
             if (seal == null) {
@@ -200,7 +213,9 @@ internal class APIAdapter(context: Context, private val listener: Listener)
         }
 
         if (shouldShowTime && appInfo.isNotArchive) {
-            holder.updateTime.dartFuture(DateUtils.getRelativeTimeSpanString(appInfo.updateTime, System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS))
+            val updateTime = DateUtils.getRelativeTimeSpanString(appInfo.updateTime,
+                    System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS)
+            holder.updateTime.dartFuture(updateTime)
             holder.updateTime.visibility = View.VISIBLE
         } else {
             holder.updateTime.visibility = View.GONE

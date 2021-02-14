@@ -17,20 +17,17 @@
 package com.madness.collision.unit.api_viewing.list
 
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Filterable
-import android.widget.TextView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.madness.collision.R
 import com.madness.collision.unit.api_viewing.Utils
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
@@ -40,11 +37,8 @@ import com.madness.collision.util.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File
-import java.io.IOException
-import com.madness.collision.unit.api_viewing.R as RAv
 
-internal class AppListFragment : TaggedFragment(), Filterable {
+internal class AppListFragment : TaggedFragment(), AppList, Filterable {
 
     override val category: String = "AV"
     override val id: String = "AppList"
@@ -85,7 +79,7 @@ internal class AppListFragment : TaggedFragment(), Filterable {
                 ApiInfoPop.newInstance(it).show(childFragmentManager, ApiInfoPop.TAG)
             }
             override val longClick: (ApiViewingApp) -> Boolean = {
-                showOptions(context, it)
+                service.showOptions(context, it, this@AppListFragment)
                 true
             }
         })
@@ -98,8 +92,8 @@ internal class AppListFragment : TaggedFragment(), Filterable {
         return viewBinding.root
     }
 
-    fun showAppOptions(app: ApiViewingApp) {
-        showOptions(mContext, app)
+    override fun showAppOptions(app: ApiViewingApp) {
+        service.showOptions(mContext, app, this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -124,7 +118,7 @@ internal class AppListFragment : TaggedFragment(), Filterable {
         mManager.scrollToPosition(0)
     }
 
-    fun getAdapter(): APIAdapter {
+    override fun getAdapter(): APIAdapter {
         return mAdapter
     }
 
@@ -177,31 +171,8 @@ internal class AppListFragment : TaggedFragment(), Filterable {
         }
     }
 
-    fun loadAppIcons(refreshLayout: SwipeRefreshLayout? = null) = lifecycleScope.launch(Dispatchers.Default) {
-        try {
-            for (index in viewModel.apps4DisplayValue.indices) {
-                if (index >= EasyAccess.preloadLimit) break
-                if (index >= viewModel.apps4DisplayValue.size) break
-                if (refreshLayout == null) {
-                    mAdapter.ensureItem(index)
-                    continue
-                }
-                val shouldCeaseRefresh = (index >= EasyAccess.loadAmount - 1)
-                        || (index >= mAdapter.listCount - 1)
-                val doCeaseRefresh = shouldCeaseRefresh && refreshLayout.isRefreshing
-                if (doCeaseRefresh) withContext(Dispatchers.Main) {
-                    refreshLayout.isRefreshing = false
-                }
-                val callback: (() -> Unit)? = if (doCeaseRefresh) {
-                    {
-                        refreshLayout.isRefreshing = false
-                    }
-                } else null
-                mAdapter.ensureItem(index, callback)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+    fun loadAppIcons(refreshLayout: SwipeRefreshLayout? = null) {
+        service.loadAppIcons(this, this, refreshLayout)
     }
 
     fun clearBottomAppIcons() = lifecycleScope.launch(Dispatchers.Default) {
@@ -293,109 +264,6 @@ internal class AppListFragment : TaggedFragment(), Filterable {
             override fun onCancel() {
                 viewModel.clearReserved()
             }
-        }
-    }
-
-    private fun showOptions(context: Context, app: ApiViewingApp) {
-        val popActions = CollisionDialog(context, R.string.text_cancel).apply {
-            setTitleCollision(0, 0, 0)
-            setContent(0)
-            setCustomContent(RAv.layout.av_adapter_actions)
-            setListener { dismiss() }
-            show()
-        }
-        popActions.findViewById<View>(RAv.id.avAdapterActionsDetails).setOnClickListener {
-            popActions.dismiss()
-            actionDetails(context, app)
-        }
-        val vActionOpen = popActions.findViewById<View>(RAv.id.avAdapterActionsOpen)
-        if (app.isLaunchable) {
-            val launchIntent = service.getLaunchIntent(context, app)
-            val activityName = launchIntent?.component?.className ?: ""
-            val vOpenActivity = popActions.findViewById<TextView>(RAv.id.avAdapterActionsOpenActivity)
-            vOpenActivity.text = activityName
-            vActionOpen.setOnClickListener {
-                popActions.dismiss()
-                if (launchIntent == null) {
-                    notifyBriefly(R.string.text_error)
-                } else {
-                    startActivity(launchIntent)
-                }
-            }
-            vActionOpen.setOnLongClickListener {
-                X.copyText2Clipboard(context, activityName, R.string.text_copy_content)
-                true
-            }
-        } else {
-            vActionOpen.visibility = View.GONE
-        }
-        popActions.findViewById<View>(RAv.id.avAdapterActionsIcon).setOnClickListener {
-            popActions.dismiss()
-            actionIcon(context, app)
-        }
-        popActions.findViewById<View>(RAv.id.avAdapterActionsApk).setOnClickListener {
-            popActions.dismiss()
-            actionApk(context, app)
-        }
-    }
-
-    private fun actionDetails(context: Context, appInfo: ApiViewingApp) = lifecycleScope.launch(Dispatchers.Default) {
-        val details = service.getAppDetails(context, appInfo)
-        if (details.isEmpty()) return@launch
-        val contentView = TextView(context)
-        contentView.text = details
-        contentView.textSize = 10f
-        val padding = X.size(context, 20f, X.DP).toInt()
-        contentView.setPadding(padding, padding, padding, 0)
-        withContext(Dispatchers.Main) {
-            CollisionDialog(context, R.string.text_alright).run {
-                setContent(0)
-                setTitleCollision(appInfo.name, 0, 0)
-                setCustomContent(contentView)
-                decentHeight()
-                setListener { dismiss() }
-                show()
-            }
-        }
-    }
-
-    private fun actionIcon(context: Context, app: ApiViewingApp) {
-        val path = F.createPath(F.cachePublicPath(context), "App", "Logo", "${app.name}.png")
-        val image = File(path)
-        app.getOriginalIcon(context)?.let {
-            if (F.prepare4(image)) X.savePNG(it, path)
-        }
-        val uri: Uri = image.getProviderUri(context)
-//        val previewTitle = app.name // todo set preview title
-        childFragmentManager.let {
-            FilePop.by(context, uri, "image/png", R.string.textShareImage, uri, app.name).show(it, FilePop.TAG)
-        }
-    }
-
-    // todo split APKs
-    private fun actionApk(context: Context, app: ApiViewingApp) {
-        val path = F.createPath(F.cachePublicPath(context), "App", "APK", "${app.name}-${app.verName}.apk")
-        val apk = File(path)
-        if (F.prepare4(apk)) {
-            lifecycleScope.launch(Dispatchers.Default) {
-                try {
-                    X.copyFileLessTwoGB(File(app.appPackage.basePath), apk)
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-            }
-        }
-        val uri: Uri = apk.getProviderUri(context)
-        val previewTitle = "${app.name} ${app.verName}"
-//        val flag = Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-        val previewPath = F.createPath(F.cachePublicPath(context), "App", "Logo", "${app.name}.png")
-        val image = File(previewPath)
-        val appIcon = app.icon
-        if (appIcon != null && F.prepare4(image)) X.savePNG(appIcon, previewPath)
-        val imageUri = image.getProviderUri(context)
-        childFragmentManager.let {
-            val fileType = "application/vnd.android.package-archive"
-            FilePop.by(context, uri, fileType, R.string.textShareApk, imageUri, previewTitle).show(it, FilePop.TAG)
         }
     }
 

@@ -20,19 +20,33 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.*
 import android.graphics.Typeface
+import android.net.Uri
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.style.StyleSpan
 import android.util.Log
+import android.view.View
+import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.madness.collision.R
 import com.madness.collision.misc.MiscApp
 import com.madness.collision.unit.api_viewing.Utils
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
+import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
-import com.madness.collision.util.SystemUtil
-import com.madness.collision.util.X
+import com.madness.collision.util.*
 import com.madness.collision.util.os.OsUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.security.cert.CertificateException
@@ -314,5 +328,139 @@ internal class AppListService {
 
     fun getLaunchIntent(context: Context, app: ApiViewingApp): Intent? {
         return context.packageManager.getLaunchIntentForPackage(app.packageName)
+    }
+
+    fun loadAppIcons(fragment: Fragment, appList: AppList, refreshLayout: SwipeRefreshLayout? = null)
+    = fragment.lifecycleScope.launch(Dispatchers.Default) {
+        val adapter = appList.getAdapter()
+        val viewModel: AppListViewModel by fragment.viewModels()
+        try {
+            for (index in viewModel.apps4DisplayValue.indices) {
+                if (index >= EasyAccess.preloadLimit) break
+                if (index >= viewModel.apps4DisplayValue.size) break
+                if (refreshLayout == null) {
+                    adapter.ensureItem(index)
+                    continue
+                }
+                val shouldCeaseRefresh = (index >= EasyAccess.loadAmount - 1)
+                        || (index >= adapter.listCount - 1)
+                val doCeaseRefresh = shouldCeaseRefresh && refreshLayout.isRefreshing
+                if (doCeaseRefresh) withContext(Dispatchers.Main) {
+                    refreshLayout.isRefreshing = false
+                }
+                val callback: (() -> Unit)? = if (doCeaseRefresh) {
+                    {
+                        refreshLayout.isRefreshing = false
+                    }
+                } else null
+                adapter.ensureItem(index, callback)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun showOptions(context: Context, app: ApiViewingApp, fragment: Fragment) {
+        val popActions = CollisionDialog(context, R.string.text_cancel).apply {
+            setTitleCollision(0, 0, 0)
+            setContent(0)
+            setCustomContent(RAv.layout.av_adapter_actions)
+            setListener { dismiss() }
+            show()
+        }
+        popActions.findViewById<View>(RAv.id.avAdapterActionsDetails).setOnClickListener {
+            popActions.dismiss()
+            actionDetails(context, app, fragment.lifecycleScope)
+        }
+        val vActionOpen = popActions.findViewById<View>(RAv.id.avAdapterActionsOpen)
+        if (app.isLaunchable) {
+            val launchIntent = getLaunchIntent(context, app)
+            val activityName = launchIntent?.component?.className ?: ""
+            val vOpenActivity = popActions.findViewById<TextView>(RAv.id.avAdapterActionsOpenActivity)
+            vOpenActivity.text = activityName
+            vActionOpen.setOnClickListener {
+                popActions.dismiss()
+                if (launchIntent == null) {
+                    fragment.notifyBriefly(R.string.text_error)
+                } else {
+                    fragment.startActivity(launchIntent)
+                }
+            }
+            vActionOpen.setOnLongClickListener {
+                X.copyText2Clipboard(context, activityName, R.string.text_copy_content)
+                true
+            }
+        } else {
+            vActionOpen.visibility = View.GONE
+        }
+        popActions.findViewById<View>(RAv.id.avAdapterActionsIcon).setOnClickListener {
+            popActions.dismiss()
+            actionIcon(context, app, fragment.childFragmentManager)
+        }
+        popActions.findViewById<View>(RAv.id.avAdapterActionsApk).setOnClickListener {
+            popActions.dismiss()
+            actionApk(context, app, fragment.lifecycleScope, fragment.childFragmentManager)
+        }
+    }
+
+    private fun actionDetails(context: Context, appInfo: ApiViewingApp, scope: CoroutineScope)
+    = scope.launch(Dispatchers.Default) {
+        val details = getAppDetails(context, appInfo)
+        if (details.isEmpty()) return@launch
+        val contentView = TextView(context)
+        contentView.text = details
+        contentView.textSize = 10f
+        val padding = X.size(context, 20f, X.DP).toInt()
+        contentView.setPadding(padding, padding, padding, 0)
+        withContext(Dispatchers.Main) {
+            CollisionDialog(context, R.string.text_alright).run {
+                setContent(0)
+                setTitleCollision(appInfo.name, 0, 0)
+                setCustomContent(contentView)
+                decentHeight()
+                setListener { dismiss() }
+                show()
+            }
+        }
+    }
+
+    private fun actionIcon(context: Context, app: ApiViewingApp, fragmentManager: FragmentManager) {
+        val path = F.createPath(F.cachePublicPath(context), "App", "Logo", "${app.name}.png")
+        val image = File(path)
+        app.getOriginalIcon(context)?.let {
+            if (F.prepare4(image)) X.savePNG(it, path)
+        }
+        val uri: Uri = image.getProviderUri(context)
+//        val previewTitle = app.name // todo set preview title
+        fragmentManager.let {
+            FilePop.by(context, uri, "image/png", R.string.textShareImage, uri, app.name).show(it, FilePop.TAG)
+        }
+    }
+
+    // todo split APKs
+    private fun actionApk(context: Context, app: ApiViewingApp, scope: CoroutineScope, fragmentManager: FragmentManager) {
+        val path = F.createPath(F.cachePublicPath(context), "App", "APK", "${app.name}-${app.verName}.apk")
+        val apk = File(path)
+        if (F.prepare4(apk)) {
+            scope.launch(Dispatchers.Default) {
+                try {
+                    X.copyFileLessTwoGB(File(app.appPackage.basePath), apk)
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+            }
+        }
+        val uri: Uri = apk.getProviderUri(context)
+        val previewTitle = "${app.name} ${app.verName}"
+//        val flag = Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+        val previewPath = F.createPath(F.cachePublicPath(context), "App", "Logo", "${app.name}.png")
+        val image = File(previewPath)
+        val appIcon = app.icon
+        if (appIcon != null && F.prepare4(image)) X.savePNG(appIcon, previewPath)
+        val imageUri = image.getProviderUri(context)
+        fragmentManager.let {
+            val fileType = "application/vnd.android.package-archive"
+            FilePop.by(context, uri, fileType, R.string.textShareApk, imageUri, previewTitle).show(it, FilePop.TAG)
+        }
     }
 }

@@ -110,4 +110,6 @@
     <string name="av_settings_tag_getui">Getui push</string>
     <string name="av_main_option_device_api">Device API</string>
     <string name="av_main_device_api_api">API level</string>
+    <string name="av_upd_new">Newly installed</string>
+    <string name="av_upd_upg">API upgrade</string>
 </resources>
