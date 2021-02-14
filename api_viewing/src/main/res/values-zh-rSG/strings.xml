@@ -102,4 +102,6 @@
     <string name="av_settings_tag_getui">个推消息推送</string>
     <string name="av_main_option_device_api">设备 API</string>
     <string name="av_main_device_api_api">API 级别</string>
+    <string name="av_upd_new">新安装</string>
+    <string name="av_upd_upg">API 升级</string>
 </resources>

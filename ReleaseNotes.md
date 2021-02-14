@@ -2,6 +2,89 @@
 Tag content regex: \n((((?!(<.*>)).)*)\n)*((?!(<.*>)).)+
 
 
+- **3.7.0** 21021422
+<en-US>
+• Accelerate app list loading significantly
+• Check app API upgrade in updates page
+</en-US>
+<ar>
+• تسريع تحميل قائمة التطبيقات بشكل ملحوظ
+• تحقق من ترقية API التطبيق في صفحة التحديثات
+</ar>
+<de-DE>
+• Beschleunigen Sie das Laden der App-Liste erheblich
+• Überprüfen Sie das App-API-Upgrade auf der Update-Seite
+</de-DE>
+<el-GR>
+• Επιταχύνετε σημαντικά τη φόρτωση λίστας εφαρμογών
+• Ελέγξτε την αναβάθμιση API της εφαρμογής στη σελίδα ενημερώσεων
+</el-GR>
+<en-GB>
+• Accelerate app list loading significantly
+• Check app API upgrade in updates page
+</en-GB>
+<es-419>
+• Acelere la carga de la lista de aplicaciones significativamente
+• Verifique la actualización de la API de la aplicación en la página de actualizaciones
+</es-419>
+<es-ES>
+• Acelere la carga de la lista de aplicaciones significativamente
+• Verifique la actualización de la API de la aplicación en la página de actualizaciones
+</es-ES>
+<es-US>
+• Acelere la carga de la lista de aplicaciones significativamente
+• Verifique la actualización de la API de la aplicación en la página de actualizaciones
+</es-US>
+<fr-FR>
+• Accélérez considérablement le chargement de la liste des applications
+• Vérifiez la mise à niveau de l'API de l'application dans la page des mises à jour
+</fr-FR>
+<it-IT>
+• Accelera notevolmente il caricamento dell'elenco delle app
+• Controlla l'aggiornamento dell'API dell'app nella pagina degli aggiornamenti
+</it-IT>
+<ja-JP>
+•アプリケーションリストの読み込み速度を大幅に高速化します
+•動的ページでアプリケーションAPIのアップグレードを表示できるようになりました
+</ja-JP>
+<ko-KR>
+• 응용 프로그램 목록의 로딩 속도를 대폭 향상
+• 이제 동적 페이지에서 애플리케이션 API 업그레이드를 볼 수 있습니다.
+</ko-KR>
+<pt-PT>
+• Acelera o carregamento da lista de aplicativos significativamente
+• Verifique a atualização da API do aplicativo na página de atualizações
+</pt-PT>
+<ru-RU>
+• Значительно ускорить загрузку списка приложений.
+• Проверьте обновление API приложения на странице обновлений.
+</ru-RU>
+<th>
+•เร่งการโหลดรายการแอปอย่างมีนัยสำคัญ
+•ตรวจสอบการอัปเกรด API ของแอปในหน้าอัปเดต
+</th>
+<tr-TR>
+• Uygulama listesinin yüklenmesini önemli ölçüde hızlandırın
+• Güncellemeler sayfasında uygulama API yükseltmesini kontrol edin
+</tr-TR>
+<vi>
+• Tăng tốc đáng kể tải danh sách ứng dụng
+• Kiểm tra nâng cấp API ứng dụng trong trang cập nhật
+</vi>
+<zh-CN>
+• 显著加快应用列表加载速度
+• 动态页面现可查看应用 API 升级
+</zh-CN>
+<zh-HK>
+• 顯著加快應用列表加載速度
+• 動態頁面現可查看應用 API 升級
+</zh-HK>
+<zh-TW>
+• 顯著加快應用列表加載速度
+• 動態頁面現可查看應用 API 升級
+</zh-TW>
+
+
 - **3.6.8** 21012600
 <en-US>
 • You can now check device API
