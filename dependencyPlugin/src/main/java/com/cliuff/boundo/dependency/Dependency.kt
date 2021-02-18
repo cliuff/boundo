@@ -45,6 +45,7 @@ object Versions {
     const val androidxPreference = "1.1.1"
     const val androidxWork = "2.5.0"
     const val androidxDocumentFile = "1.0.1"
+
     const val androidxPercentLayout = "1.0.0"
     const val androidxLegacyV4 = "1.0.0"
     // This dependency is for the Wear UI Library,
@@ -59,6 +60,7 @@ object Versions {
     const val googlePlayCore = "1.9.1"
     const val googlePlayCoreKtx = "1.8.1"
     const val gglGuava = "30.1-android"
+    const val gglHilt = "2.32-alpha"
     // This dependency is for the Wearable Support Library,
     // which has additional classes (including for watch faces)
     const val googleSupportWearable = "2.8.1"
@@ -148,6 +150,8 @@ class Dependencies : Plugin<Project> {
         const val jbAnnotations = "org.jetbrains:annotations:${Versions.jbAnnotations}"
         const val androidDeviceNames = "com.jaredrummler:android-device-names:${Versions.androidDeviceNames}"
         const val byteBuddy = "net.bytebuddy:byte-buddy-android:${Versions.byteBuddy}"
+        const val gglHilt = "com.google.dagger:hilt-android:${Versions.gglHilt}"
+        const val gglHiltCompiler = "com.google.dagger:hilt-compiler:${Versions.gglHilt}"
 
         // wear
         const val androidxPercentLayout = "androidx.percentlayout:percentlayout:${Versions.androidxPercentLayout}"

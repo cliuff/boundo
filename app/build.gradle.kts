@@ -22,6 +22,7 @@ plugins {
     id("com.android.application")
     kotlin("android")
     id("androidx.navigation.safeargs")
+    id("dagger.hilt.android.plugin")
     id("kotlin-kapt")
 //    id("org.jetbrains.dokka")
 //    id("org.jetbrains.dokka-android")
@@ -183,6 +184,7 @@ dependencies {
             Dependencies.androidxNavigationFragment,
             Dependencies.androidxNavigationUI,
             Dependencies.androidxDocumentFile,
+            Dependencies.gglHilt,
             Dependencies.googleMaterialComponents,
             Dependencies.googlePlayServicesOSSLicenses,
             Dependencies.googleGson,
@@ -197,6 +199,8 @@ dependencies {
             Dependencies.glide,
             Dependencies.androidDeviceNames
     ).forEach { implementation(it) }
+
+    kapt(Dependencies.gglHiltCompiler)
 
     listOf(
             Dependencies.androidxCoreTesting,

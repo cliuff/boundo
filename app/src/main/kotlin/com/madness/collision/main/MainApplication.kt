@@ -20,8 +20,10 @@ import android.content.Intent
 import android.graphics.drawable.Drawable
 import com.google.android.play.core.splitcompat.SplitCompatApplication
 import com.madness.collision.BuildConfig
+import dagger.hilt.android.HiltAndroidApp
 import kotlin.system.exitProcess
 
+@HiltAndroidApp
 class MainApplication : SplitCompatApplication(), Thread.UncaughtExceptionHandler {
     companion object {
         lateinit var INSTANCE: MainApplication

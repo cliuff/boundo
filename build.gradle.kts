@@ -34,6 +34,7 @@ buildscript {
 //        val dokka = "0.10.1" // dokka and dokka gradle plugin
 //        val dokkaAndroidGradlePlugin = "0.9.18" // dokka android gradle plugin
         val androidxNavigation = "2.3.3"
+        val gglHiltGradlePlugin = "2.32-alpha"
         val googlePlayServicesOSSLicensesPlugin = "0.10.2"
         // Associated (the same) with Android Studio version
         val androidGradlePlugin = "4.1.2"
@@ -41,6 +42,7 @@ buildscript {
     dependencies {
         classpath("com.android.tools.build:gradle:${versions.androidGradlePlugin}")
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:${versions.androidxNavigation}")
+        classpath("com.google.dagger:hilt-android-gradle-plugin:${versions.gglHiltGradlePlugin}")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}")
 //        classpath("org.jetbrains.dokka:dokka-gradle-plugin:${versions.dokka}")
 //        classpath("org.jetbrains.dokka:dokka-android-gradle-plugin:${versions.dokkaAndroidGradlePlugin}")
