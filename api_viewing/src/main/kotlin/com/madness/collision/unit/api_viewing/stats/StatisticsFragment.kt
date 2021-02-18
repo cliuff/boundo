@@ -34,6 +34,8 @@ import com.madness.collision.unit.api_viewing.databinding.FragmentStatisticsBind
 import com.madness.collision.util.AppUtils.asBottomMargin
 import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.alterPadding
+import com.madness.collision.util.controller.getSavedFragment
+import com.madness.collision.util.controller.saveFragment
 import com.madness.collision.util.ensureAdded
 
 internal class StatisticsFragment: TaggedFragment(), Democratic {
@@ -78,12 +80,20 @@ internal class StatisticsFragment: TaggedFragment(), Democratic {
         val fm = childFragmentManager
         var doNew = savedInstanceState == null
         if (savedInstanceState != null) {
-            chartFragment = fm.getFragment(savedInstanceState, STATE_KEY_CHART) as ChartFragment
-            statsFragment = fm.getFragment(savedInstanceState, STATE_KEY_STATS) as StatsFragment
-            val wasHor = savedInstanceState.getBoolean(STATE_KEY_HOR)
-            doNew = isHor != wasHor
-            if (doNew) fm.beginTransaction().remove(chartFragment).remove(statsFragment)
-                    .commitNowAllowingStateLoss()
+            val fC = fm.getSavedFragment<ChartFragment>(savedInstanceState, STATE_KEY_CHART)?.also {
+                chartFragment = it
+            }
+            val fS = fm.getSavedFragment<StatsFragment>(savedInstanceState, STATE_KEY_STATS)?.also {
+                statsFragment = it
+            }
+            if (fC != null && fS != null) {
+                val wasHor = savedInstanceState.getBoolean(STATE_KEY_HOR)
+                doNew = isHor != wasHor
+                if (doNew) fm.beginTransaction().remove(chartFragment).remove(statsFragment)
+                        .commitNowAllowingStateLoss()
+            } else {
+                doNew = true
+            }
         }
         if (doNew) {
             chartFragment = ChartFragment.newInstance(unit)
@@ -110,10 +120,13 @@ internal class StatisticsFragment: TaggedFragment(), Democratic {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        val isHor = viewBinding.avStatisticsContainer == null
-        outState.putBoolean(STATE_KEY_HOR, isHor)
-        childFragmentManager.putFragment(outState, STATE_KEY_CHART, chartFragment)
-        childFragmentManager.putFragment(outState, STATE_KEY_STATS, statsFragment)
+        // save them both or neither
+        if (chartFragment.isAdded && statsFragment.isAdded) {
+            val isHor = viewBinding.avStatisticsContainer == null
+            outState.putBoolean(STATE_KEY_HOR, isHor)
+            childFragmentManager.saveFragment(outState, STATE_KEY_CHART, chartFragment)
+            childFragmentManager.saveFragment(outState, STATE_KEY_STATS, statsFragment)
+        }
         super.onSaveInstanceState(outState)
     }
 

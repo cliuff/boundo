@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,8 @@ import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.device_manager.list.DeviceListFragment
 import com.madness.collision.util.alterPadding
+import com.madness.collision.util.controller.getSavedFragment
+import com.madness.collision.util.controller.saveFragment
 import com.madness.collision.util.ensureAdded
 
 class MyUnit : Unit() {
@@ -62,8 +64,8 @@ class MyUnit : Unit() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        listFragment = if (savedInstanceState == null) DeviceListFragment()
-        else childFragmentManager.getFragment(savedInstanceState, STATE_KEY_LIST) as DeviceListFragment
+        listFragment = childFragmentManager.getSavedFragment(savedInstanceState, STATE_KEY_LIST)
+                ?: DeviceListFragment()
         val context = context ?: return
         context.registerReceiver(receiver, IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED))
     }
@@ -87,7 +89,7 @@ class MyUnit : Unit() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        childFragmentManager.putFragment(outState, STATE_KEY_LIST, listFragment)
+        childFragmentManager.saveFragment(outState, STATE_KEY_LIST, listFragment)
         super.onSaveInstanceState(outState)
     }
 

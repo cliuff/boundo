@@ -61,6 +61,8 @@ import com.madness.collision.unit.api_viewing.util.ApkRetriever
 import com.madness.collision.unit.api_viewing.util.PrefUtil
 import com.madness.collision.util.*
 import com.madness.collision.util.AppUtils.asBottomMargin
+import com.madness.collision.util.controller.getSavedFragment
+import com.madness.collision.util.controller.saveFragment
 import com.madness.collision.util.os.OsUtils
 import kotlinx.coroutines.*
 import java.io.File
@@ -344,8 +346,8 @@ class MyUnit: com.madness.collision.unit.Unit() {
 
         apkRetriever = ApkRetriever(context)
 
-        listFragment = if (savedInstanceState == null) AppListFragment.newInstance()
-        else childFragmentManager.getFragment(savedInstanceState, STATE_KEY_LIST) as AppListFragment
+        listFragment = childFragmentManager.getSavedFragment(savedInstanceState, STATE_KEY_LIST)
+                ?: AppListFragment.newInstance()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -363,7 +365,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        childFragmentManager.putFragment(outState, STATE_KEY_LIST, listFragment)
+        childFragmentManager.saveFragment(outState, STATE_KEY_LIST, listFragment)
         super.onSaveInstanceState(outState)
     }
 

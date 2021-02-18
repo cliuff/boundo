@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,6 +42,8 @@ import com.madness.collision.unit.school_timetable.databinding.UnitSchoolTimetab
 import com.madness.collision.unit.school_timetable.parser.Parser
 import com.madness.collision.util.*
 import com.madness.collision.util.MathUtils.boundMin
+import com.madness.collision.util.controller.getSavedFragment
+import com.madness.collision.util.controller.saveFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -110,8 +112,8 @@ class MyUnit: Unit(), View.OnClickListener{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ref = WeakReference(this)
-        timetableFragment = if (savedInstanceState == null) TimetableFragment.newInstance()
-        else childFragmentManager.getFragment(savedInstanceState, STATE_KEY_Tt) as TimetableFragment
+        timetableFragment = childFragmentManager.getSavedFragment(savedInstanceState, STATE_KEY_Tt)
+                ?: TimetableFragment.newInstance()
     }
 
     override fun onDestroy() {
@@ -180,7 +182,7 @@ class MyUnit: Unit(), View.OnClickListener{
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        childFragmentManager.putFragment(outState, STATE_KEY_Tt, timetableFragment)
+        childFragmentManager.saveFragment(outState, STATE_KEY_Tt, timetableFragment)
         super.onSaveInstanceState(outState)
     }
 

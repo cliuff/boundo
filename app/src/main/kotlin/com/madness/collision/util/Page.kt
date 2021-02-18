@@ -32,6 +32,8 @@ import com.madness.collision.R
 import com.madness.collision.databinding.FragmentPageBinding
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.util.AppUtils.asBottomMargin
+import com.madness.collision.util.controller.getSavedFragment
+import com.madness.collision.util.controller.saveFragment
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
 
@@ -122,7 +124,8 @@ class Page(fragment: Fragment? = null, private var titleId: Int = 0, private val
         super.onCreate(savedInstanceState)
         // nav args
         val args = arguments ?: return
-        if (savedInstanceState == null) {
+        mFragment = childFragmentManager.getSavedFragment(savedInstanceState, STATE_KEY_FRA)
+        if (mFragment == null) {
             val fragmentClass = args.getParcelable<TypedNavArg>("fragmentClass")
             if (fragmentClass != null) {
                 mFragment = try {
@@ -132,8 +135,6 @@ class Page(fragment: Fragment? = null, private var titleId: Int = 0, private val
                     null
                 }
             }
-        } else {
-            mFragment = childFragmentManager.getFragment(savedInstanceState, STATE_KEY_FRA)
         }
         titleId = args.getInt("titleId")
     }
@@ -161,7 +162,7 @@ class Page(fragment: Fragment? = null, private var titleId: Int = 0, private val
 
     override fun onSaveInstanceState(outState: Bundle) {
         mFragment?.let {
-            childFragmentManager.putFragment(outState, STATE_KEY_FRA, it)
+            childFragmentManager.saveFragment(outState, STATE_KEY_FRA, it)
         }
         super.onSaveInstanceState(outState)
     }

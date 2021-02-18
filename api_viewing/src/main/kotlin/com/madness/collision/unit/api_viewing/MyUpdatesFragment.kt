@@ -35,11 +35,13 @@ import com.madness.collision.unit.api_viewing.database.AppMaintainer
 import com.madness.collision.unit.api_viewing.list.APIAdapter
 import com.madness.collision.unit.api_viewing.list.AppListFragment
 import com.madness.collision.unit.api_viewing.origin.AppRetriever
-import com.madness.collision.unit.api_viewing.upgrade.UpgradeAdapter
 import com.madness.collision.unit.api_viewing.upgrade.Upgrade
+import com.madness.collision.unit.api_viewing.upgrade.UpgradeAdapter
 import com.madness.collision.unit.api_viewing.upgrade.UpgradeComparator
 import com.madness.collision.unit.api_viewing.upgrade.UpgradeListFragment
 import com.madness.collision.util.*
+import com.madness.collision.util.controller.getSavedFragment
+import com.madness.collision.util.controller.saveFragment
 import kotlinx.coroutines.*
 import kotlin.math.min
 import kotlin.math.roundToInt
@@ -116,14 +118,14 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
         upgradeList = emptyList()
         mList = emptyList()
         EasyAccess.init(mContext)
-        newListFragment = if (savedInstanceState == null) AppListFragment.newInstance(
-                isScrollbarEnabled = false, isFadingEdgeEnabled = false, isNestedScrollingEnabled = false)
-        else childFragmentManager.getFragment(savedInstanceState, STATE_KEY_NEW_LIST) as AppListFragment
-        upgradeListFragment = if (savedInstanceState == null) UpgradeListFragment.newInstance()
-        else childFragmentManager.getFragment(savedInstanceState, STATE_KEY_UPG_LIST) as UpgradeListFragment
-        mListFragment = if (savedInstanceState == null) AppListFragment.newInstance(
-                isScrollbarEnabled = false, isFadingEdgeEnabled = false, isNestedScrollingEnabled = false)
-        else childFragmentManager.getFragment(savedInstanceState, STATE_KEY_LIST) as AppListFragment
+        newListFragment = childFragmentManager.getSavedFragment(savedInstanceState, STATE_KEY_NEW_LIST)
+                ?: AppListFragment.newInstance(isScrollbarEnabled = false, isFadingEdgeEnabled = false,
+                        isNestedScrollingEnabled = false)
+        upgradeListFragment = childFragmentManager.getSavedFragment(savedInstanceState, STATE_KEY_UPG_LIST)
+                ?: UpgradeListFragment.newInstance()
+        mListFragment = childFragmentManager.getSavedFragment(savedInstanceState, STATE_KEY_LIST)
+                ?: AppListFragment.newInstance(isScrollbarEnabled = false, isFadingEdgeEnabled = false,
+                        isNestedScrollingEnabled = false)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -154,9 +156,9 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        childFragmentManager.putFragment(outState, STATE_KEY_NEW_LIST, newListFragment)
-        childFragmentManager.putFragment(outState, STATE_KEY_UPG_LIST, upgradeListFragment)
-        childFragmentManager.putFragment(outState, STATE_KEY_LIST, mListFragment)
+        childFragmentManager.saveFragment(outState, STATE_KEY_NEW_LIST, newListFragment)
+        childFragmentManager.saveFragment(outState, STATE_KEY_UPG_LIST, upgradeListFragment)
+        childFragmentManager.saveFragment(outState, STATE_KEY_LIST, mListFragment)
         super.onSaveInstanceState(outState)
     }
 
