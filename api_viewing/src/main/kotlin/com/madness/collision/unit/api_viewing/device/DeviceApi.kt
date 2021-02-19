@@ -19,11 +19,13 @@ package com.madness.collision.unit.api_viewing.device
 import android.content.Context
 import android.os.Build
 import android.view.LayoutInflater
+import android.view.View
 import com.jaredrummler.android.device.DeviceName
 import com.madness.collision.R
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.databinding.AvDeviceApiBinding
 import com.madness.collision.util.CollisionDialog
+import com.madness.collision.util.os.OsUtils
 
 internal class DeviceApi {
     fun show(context: Context) {
@@ -38,13 +40,18 @@ internal class DeviceApi {
         }
         val deviceName = Build.MANUFACTURER + " " + DeviceName.getDeviceName()
         val ver = VerInfo(Build.VERSION.SDK_INT)
-        val sdk = "Android ${ver.sdk}"
-        val codeName = ver.codeName(context)
-        val sdkDetails = if (codeName != ver.sdk) "$sdk, $codeName" else sdk
         binding.run {
             avDeviceName.text = deviceName
             avDeviceApi.text = ver.api.toString()
-            avDeviceSdk.text = sdkDetails
+        }
+        val androidVer = if (ver.api == OsUtils.DEV) "Developer Preview" else ver.sdk
+        if (androidVer.isNotEmpty()) {
+            val sdk = "Android $androidVer"
+            val codeName = ver.codeName(context)
+            val sdkDetails = if (codeName != ver.sdk) "$sdk, $codeName" else sdk
+            binding.avDeviceSdk.text = sdkDetails
+        } else {
+            binding.avDeviceSdk.visibility = View.GONE
         }
         pop.show()
     }

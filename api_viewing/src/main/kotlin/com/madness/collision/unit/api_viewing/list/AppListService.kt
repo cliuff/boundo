@@ -71,8 +71,10 @@ internal class AppListService {
         builder.append(context.getString(RAv.string.apiDetailsVerCode), StyleSpan(Typeface.BOLD), spanFlags)
                 .append(appInfo.verCode.toString()).append('\n')
 
-        val sdkInfo = { ver: VerInfo ->
-            val sdk = "Android ${ver.sdk}"
+        val sdkInfo = sdkInfo@ { ver: VerInfo ->
+            val androidVer = if (ver.api == OsUtils.DEV) "Developer Preview" else ver.sdk
+            if (androidVer.isEmpty()) return@sdkInfo ver.api.toString()
+            val sdk = "Android $androidVer"
             val codeName = ver.codeName(context)
             val sdkDetails = if (codeName != ver.sdk) "$sdk, $codeName" else sdk
             ver.api.toString() + context.getString(R.string.textParentheses, sdkDetails)

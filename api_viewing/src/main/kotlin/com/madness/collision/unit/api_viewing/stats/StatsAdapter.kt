@@ -35,6 +35,7 @@ import com.madness.collision.unit.api_viewing.seal.SealManager
 import com.madness.collision.util.X
 import com.madness.collision.util.alterMargin
 import com.madness.collision.util.dartFuture
+import com.madness.collision.util.os.OsUtils
 import kotlin.math.roundToInt
 
 internal class StatsAdapter(context: Context) : SandwichAdapter<StatsAdapter.Holder>(context) {
@@ -90,7 +91,12 @@ internal class StatsAdapter(context: Context) : SandwichAdapter<StatsAdapter.Hol
 
         optimizeSideMargin(index, 15f, innerMargin, holder.card)
 
-        holder.version.dartFuture("Android ${verInfo.sdk}")
+        val ver = when {
+            verInfo.api == OsUtils.DEV -> "Developer Preview"
+            verInfo.sdk.isEmpty() -> "API ${verInfo.api}"
+            else -> verInfo.sdk
+        }
+        holder.version.dartFuture("Android $ver")
         holder.count.dartFuture(statsCount.toString())
 
         holder.logoText.dartFuture(verInfo.api.toString())

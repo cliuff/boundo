@@ -65,9 +65,8 @@ import java.util.regex.Pattern
 
 internal object Utils {
 
-    fun getAndroidVersionByAPI(api: Int, exact: Boolean, isCompact: Boolean = false): String{
-        return when (api){
-            X.DEV -> if (exact) "DEV" else ""
+    fun getAndroidVersionByAPI(api: Int, exact: Boolean, isCompact: Boolean = false): String {
+        return when (api) {
             X.R -> "11"
             Q -> "10"
             P -> "9"  // 9 Pie
@@ -113,7 +112,6 @@ internal object Utils {
     private fun androidCodenameInfo(context: Context?, apiLevel: Int, fullName: Boolean): String {
         if (fullName) context ?: return " "
         return when (apiLevel) {
-            X.DEV -> if (fullName) "DEV" else " "
             X.R -> if (fullName) "11" else "r"
             Q -> if (fullName) "10" else "q"
             P -> if (fullName) context!!.getString(R.string.res_api_code_names_p) else "p"  // Pie

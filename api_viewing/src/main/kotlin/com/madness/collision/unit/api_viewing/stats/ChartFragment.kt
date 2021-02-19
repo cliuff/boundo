@@ -38,6 +38,7 @@ import com.madness.collision.unit.api_viewing.seal.SealManager
 import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.ThemeUtil
 import com.madness.collision.util.X
+import com.madness.collision.util.os.OsUtils
 import kotlin.math.roundToInt
 
 internal class ChartFragment: TaggedFragment(){
@@ -83,8 +84,14 @@ internal class ChartFragment: TaggedFragment(){
         stats.forEach { key, value ->
             val apiVer = VerInfo(key, isExact = true, isCompact = true)
 //            val apiName = Utils.getAndroidCodenameByAPI(context, key)
-//            val label = apiVersion + context.getString(R.string.textParentheses, apiName) // exclude apiName when entry value is small to decrease overlapping
-            chartEntries.add(PieEntry(value.toFloat(), apiVer.sdk).apply {
+            // exclude apiName when entry value is small to decrease overlapping
+//            val label = apiVersion + context.getString(R.string.textParentheses, apiName)
+            val label = when {
+                apiVer.api == OsUtils.DEV -> "Dev"
+                apiVer.sdk.isEmpty() -> "API ${apiVer.api}"
+                else -> apiVer.sdk
+            }
+            chartEntries.add(PieEntry(value.toFloat(), label).apply {
                 if (!EasyAccess.isSweet) return@apply
                 val seal = SealManager.getSealForIllustration(context, apiVer.letter, iconSize)
                 if (seal != null) {

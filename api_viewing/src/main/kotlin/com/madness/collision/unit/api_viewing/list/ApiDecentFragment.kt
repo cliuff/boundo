@@ -123,7 +123,9 @@ internal class ApiDecentFragment : TaggedFragment(), Democratic {
                     else -> VerInfo(-1, "", ' ')
                 }.run {
                     viewBinding.apiDecentChipAPI.text = api.toString()
-                    viewBinding.apiDecentChipVer.text = sdk
+                    viewBinding.apiDecentChipVer.run {
+                        if (sdk.isNotEmpty()) text = sdk else visibility = View.GONE
+                    }
                     if (EasyAccess.isSweet){
                         viewBinding.apiDecentChipCodeName.text = Utils.getAndroidCodenameByAPI(context, api)
                         if (viewBinding.apiDecentChipCodeName.text.isBlank()) viewBinding.apiDecentChipCodeName.visibility = View.GONE
