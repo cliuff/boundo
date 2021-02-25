@@ -56,6 +56,7 @@ import com.madness.collision.util.X.O
 import com.madness.collision.util.X.O_MR1
 import com.madness.collision.util.X.P
 import com.madness.collision.util.X.Q
+import com.madness.collision.util.os.OsUtils
 import com.madness.collision.util.regexOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -67,6 +68,7 @@ internal object Utils {
 
     fun getAndroidVersionByAPI(api: Int, exact: Boolean, isCompact: Boolean = false): String {
         return when (api) {
+            OsUtils.S -> "12"
             X.R -> "11"
             Q -> "10"
             P -> "9"  // 9 Pie
@@ -112,6 +114,7 @@ internal object Utils {
     private fun androidCodenameInfo(context: Context?, apiLevel: Int, fullName: Boolean): String {
         if (fullName) context ?: return " "
         return when (apiLevel) {
+            OsUtils.S -> if (fullName) "12" else "s"
             X.R -> if (fullName) "11" else "r"
             Q -> if (fullName) "10" else "q"
             P -> if (fullName) context!!.getString(R.string.res_api_code_names_p) else "p"  // Pie

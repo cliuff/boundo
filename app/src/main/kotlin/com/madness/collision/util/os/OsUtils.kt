@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import android.os.Build
 
 object OsUtils {
     const val DEV = Build.VERSION_CODES.CUR_DEVELOPMENT
+    const val S = 31
     const val R = Build.VERSION_CODES.R
     const val Q = Build.VERSION_CODES.Q
     const val P = Build.VERSION_CODES.P

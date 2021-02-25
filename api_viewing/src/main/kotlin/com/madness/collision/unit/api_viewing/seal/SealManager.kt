@@ -28,6 +28,7 @@ import com.madness.collision.R
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.R as MyR
 import com.madness.collision.util.*
+import com.madness.collision.util.os.OsUtils
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.File
@@ -74,6 +75,7 @@ object SealManager {
     fun getAndroidCodenameImageRes(letter: Char): Int {
         if (!EasyAccess.isSweet) return 0
         return when (letter) {
+            's' -> MyR.drawable.seal_s
             'r' -> MyR.drawable.seal_r_vector
             'q' -> MyR.drawable.seal_q_vector
             'p' -> MyR.drawable.seal_p_vector  // Pie
@@ -119,6 +121,7 @@ object SealManager {
             return ThemeUtil.getColor(context, attrRes)
         }
         when (apiLevel) {
+            OsUtils.S -> if (isAccent) "acdcb2" else "defbde"
             X.R -> if (isAccent) "acd5c1" else "defbf0"
             X.Q -> if (isAccent) "c1d5ac" else "f0fbde"
             X.P -> if (isAccent) "e0c8b0" else "fff6d5"
