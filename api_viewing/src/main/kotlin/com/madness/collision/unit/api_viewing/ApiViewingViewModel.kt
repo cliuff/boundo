@@ -315,12 +315,10 @@ internal class ApiViewingViewModel(application: Application): AndroidViewModel(a
 
         private fun compareApi(list: List<ApiViewingApp>, isTarget: Boolean, isAsc: Boolean): List<ApiViewingApp> {
             val compareInt = if (isTarget) ApiViewingApp::targetAPI else ApiViewingApp::minAPI
-            val compareDouble = if (isTarget) ApiViewingApp::targetSDKDouble else ApiViewingApp::minSDKDouble
             return if (X.aboveOn(X.N)) {
-                val comparator = Comparator.comparingInt(compareInt)
-                        .thenComparingDouble(compareDouble).run {
-                            if (isAsc) this else reversed()
-                        }.thenComparing(this::compareName)
+                val comparator = Comparator.comparingInt(compareInt).run {
+                    if (isAsc) this else reversed()
+                }.thenComparing(this::compareName)
                 list.parallelStream().sorted(comparator).collect(Collectors.toList())
             } else {
                 list.toMutableList().apply {
@@ -329,8 +327,6 @@ internal class ApiViewingViewModel(application: Application): AndroidViewModel(a
                         val obj2 = if (isAsc) o2 else o1
                         val apiCompare = compareInt.invoke(obj1).compareTo(compareInt.invoke(obj2))
                         if (apiCompare != 0) return@Comparator apiCompare
-                        val apiLevelCompare = compareDouble.invoke(obj1).compareTo(compareDouble.invoke(obj2))
-                        if (apiLevelCompare != 0) return@Comparator apiLevelCompare
                         // name comparing is not reversed
                         compareName(o1, o2)
                     })

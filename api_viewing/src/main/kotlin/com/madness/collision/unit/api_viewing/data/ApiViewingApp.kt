@@ -170,11 +170,11 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
 
             // API ver
             targetAPI = info.applicationInfo.targetSdkVersion
-            if (OsUtils.satisfy(OsUtils.N)) {
-                minAPI = info.applicationInfo.minSdkVersion
+            minAPI = if (OsUtils.satisfy(OsUtils.N)) {
+                info.applicationInfo.minSdkVersion
             } else {
                 val minApiText = ManifestUtil.getMinSdk(appPackage.basePath)
-                if (minApiText.isNotEmpty()) minAPI = minApiText.toInt()
+                if (minApiText.isNotEmpty()) minApiText.toInt() else -1 // fix cloneable
             }
             initApiVer()
 
@@ -191,6 +191,10 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
         if (targetSDK.isNotEmpty()) {
             targetSDKDouble = targetSDK.toDouble()
             targetSDKDisplay = targetSDK
+        } else {
+            // fix cloneable
+            targetSDKDouble = -1.0
+            targetSDKDisplay = ""
         }
         targetSDKLetter = Utils.getAndroidLetterByAPI(targetAPI)
         // min API ver
@@ -198,6 +202,10 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
         if (minSDK.isNotEmpty()) {
             minSDKDouble = minSDK.toDouble()
             minSDKDisplay = minSDK
+        } else {
+            // fix cloneable
+            minSDKDouble = -1.0
+            minSDKDisplay = ""
         }
         minSDKLetter = Utils.getAndroidLetterByAPI(minAPI)
     }
