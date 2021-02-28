@@ -59,10 +59,11 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
         private const val TYPE_APP = 1
         //private static int apiCeiling = Build.VERSION_CODES.P;
 
+        @Suppress("unused")
         @JvmField
         val CREATOR: Parcelable.Creator<ApiViewingApp> = object : Parcelable.Creator<ApiViewingApp> {
             override fun createFromParcel(parIn: Parcel) = ApiViewingApp(parIn)
-            override fun newArray(size: Int) = Array<ApiViewingApp?>(size){ null }
+            override fun newArray(size: Int) = Array<ApiViewingApp?>(size) { null }
         }
 
         fun icon(): ApiViewingApp {
@@ -554,8 +555,7 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
 
     fun readParcel(parIn: Parcel) = parIn.run {
         packageName = readString() ?: ""
-        val cl = this@ApiViewingApp.javaClass.classLoader
-        icon = readParcelable(cl)
+        icon = readParcelable(Bitmap::class.java.classLoader)
         name = readString() ?: ""
         verName = readString() ?: ""
         verCode = readLong()
@@ -570,7 +570,7 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
         targetSDKLetter = readInt().toChar()
         minSDKLetter = readInt().toChar()
         apiUnit = readInt()
-        appPackage = readParcelable(cl) ?: AppPackage("")
+        appPackage = readParcelable(AppPackage::class.java.classLoader) ?: AppPackage("")
         updateTime = readLong()
         type = readInt()
         adaptiveIcon = readInt() == 1
@@ -578,7 +578,7 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
         isLoadingIcon = readInt() == 1
         isNativeLibrariesRetrieved = readInt() == 1
         isLaunchable = readInt() == 1
-        iconRetrievingDetails = readParcelable(cl)
+        iconRetrievingDetails = readParcelable(IconRetrievingDetails::class.java.classLoader)
         nativeLibraries = BooleanArray(ApkUtil.NATIVE_LIB_SUPPORT_SIZE) { false }
         for (i in nativeLibraries.indices) nativeLibraries[i] = readInt() == 1
     }

@@ -418,7 +418,6 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
             }
         }
         MiscMain.registerNotificationChannels(context, prefSettings)
-        MiscMain.clearCache(context)
 
 //        prHandler = PermissionRequestHandler(this)
 //        SettingsFunc.check4Update(this, null, prHandler)

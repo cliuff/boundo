@@ -17,15 +17,24 @@
 package com.madness.collision.unit.api_viewing.util
 
 import android.content.Context
+import android.content.pm.PackageInfo
 import android.net.Uri
 import android.provider.DocumentsContract
 import androidx.documentfile.provider.DocumentFile
+import com.madness.collision.misc.MiscApp
+import com.madness.collision.unit.api_viewing.data.ApiViewingApp
+import com.madness.collision.util.F
+import com.madness.collision.util.file.ContentProviderUtils
 import com.madness.collision.util.os.OsUtils
 import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class ApkRetriever(private val context: Context) {
     companion object {
-        const val APP_CACHE_PREFIX = "BoundoApp4Cache"
+        private const val APP_CACHE_PREFIX = "BoundoApp4Cache"
     }
 
     /**
@@ -107,6 +116,94 @@ class ApkRetriever(private val context: Context) {
             }
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+    }
+
+    fun toFile(uri: Uri): File? {
+        // identify self owned file
+        val cachePath = ContentProviderUtils.resolve(context, uri)
+        if (cachePath != null) return File(cachePath)
+        // always make copy on Android 10 and above
+        if (OsUtils.satisfy(OsUtils.Q)) return makeFileCopy(uri)
+        val uriPath = uri.path
+        return if (uriPath != null) getRawFile(uriPath) else makeFileCopy(uri)
+    }
+
+    private fun getRawFile(path: String): File? {
+        val uriPathFile = File(path)
+        return if (uriPathFile.exists()) uriPathFile else null
+    }
+
+    private fun makeFileCopy(uri: Uri): File? {
+        val fileName = "$APP_CACHE_PREFIX${System.currentTimeMillis()}.apk"
+        val file = F.createFile(F.cachePublicPath(context), "App", "Apk", fileName)
+        if (!F.prepare4(file)) return null
+        try {
+            val inStream: InputStream = context.contentResolver.openInputStream(uri) ?: return null
+            inStream.use { FileOutputStream(file).use { outStream -> it.copyTo(outStream) } }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return null
+        }
+        return file
+    }
+
+    /**
+     * Obtain app from the [info]
+     */
+    fun resolvePackage(info: PackageInfo, block: (ApiViewingApp?) -> Unit) {
+        val ai = info.applicationInfo
+        val app = ApiViewingApp(context, info, preloadProcess = true, archive = true)
+                .initArchive(context, ai).load(context, ai)
+        block.invoke(app)
+    }
+
+    /**
+     * Obtain app from the [path]
+     */
+    fun resolvePath(path: String, block: (ApiViewingApp?) -> Unit) {
+        val info = MiscApp.getPackageInfo(context, apkPath = path)
+        if (info == null) {
+            block.invoke(null)
+            return
+        }
+        resolvePackage(info, block)
+    }
+
+    suspend fun resolvePath(path: String): ApiViewingApp? {
+        return suspendCoroutine { continuation ->
+            resolvePath(path) {
+                continuation.resume(it)
+            }
+        }
+    }
+
+    /**
+     * Obtain apps from the [uri]
+     */
+    fun resolveUri(uri: Uri, block: (ApiViewingApp) -> Unit) {
+        val file = toFile(uri) ?: return
+        val nullableAppBlock = nab@ { app: ApiViewingApp? ->
+            app ?: return@nab
+            block.invoke(app)
+        }
+        if (file.isDirectory) {
+            val paths: MutableList<String> = mutableListOf()
+            scanApk(file, paths)
+            paths.forEach { resolvePath(it, nullableAppBlock) }
+        } else {
+            resolvePath(file.path, nullableAppBlock)
+        }
+    }
+
+    private fun scanApk(folder: File, list: MutableList<String>) {
+        if (!folder.exists() || !folder.canRead() || !folder.isDirectory) return
+        for (newFile in folder.listFiles() ?: emptyArray()) {
+            if (newFile.isDirectory) {
+                scanApk(newFile, list)
+            } else if (newFile.isFile && newFile.name.endsWith(".apk")) {
+                list.add(newFile.path)
+            }
         }
     }
 }

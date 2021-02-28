@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,41 +20,53 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Parcelable
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.madness.collision.R
 import com.madness.collision.main.MainActivity
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.api_viewing.AccessAV
 import com.madness.collision.util.P
 import com.madness.collision.util.ThemeUtil
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-internal class ApkSharing: AppCompatActivity(){
+internal class ApkSharing: AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ThemeUtil.updateTheme(this, getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE))
         setContentView(R.layout.fragment_loading)
-        GlobalScope.launch {
-            val extras = intent.extras
-            if (extras == null) {
+        lifecycleScope.launch(Dispatchers.Default) {
+            val context = this@ApkSharing
+            val apkFile = getFile(context) ?: return@launch
+            if (apkFile !is Parcelable) return@launch
+            val intent = getIntent(context, apkFile)
+            withContext(Dispatchers.Main) {
+                startActivity(intent)
                 finish()
-                return@launch
             }
-            val res: Uri? = extras.getParcelable(Intent.EXTRA_STREAM)
-            if (res == null) {
-                finish()
-                return@launch
-            }
-            val args = Bundle()
-            args.putInt(AccessAV.EXTRA_LAUNCH_MODE, AccessAV.LAUNCH_MODE_LINK)
-            args.putParcelable(AccessAV.EXTRA_DATA_STREAM, res)
-            Intent(this@ApkSharing, MainActivity::class.java).run {
-                putExtras(MainActivity.forItem(Unit.UNIT_NAME_API_VIEWING, args))
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(this)
-            }
-            finish()
+        }
+    }
+
+    private fun getFile(context: Context): Any? {
+        val res: Uri = intent.extras?.getParcelable(Intent.EXTRA_STREAM) ?: return null
+        // uri access permission expires once leaving this activity
+        // if make file copy of content uri, raw file uri cannot be accessed unless copied as well
+        // so get package info directly, which is parcelable and more light-weight than AV app
+        return AccessAV.resolveUri(context, res)
+    }
+
+    private fun getIntent(context: Context, file: Parcelable): Intent {
+        val args = Bundle().apply {
+            putInt(AccessAV.EXTRA_LAUNCH_MODE, AccessAV.LAUNCH_MODE_LINK)
+            putParcelable(AccessAV.EXTRA_DATA_STREAM, file)
+        }
+        return Intent(context, MainActivity::class.java).apply {
+            putExtras(MainActivity.forItem(Unit.UNIT_NAME_API_VIEWING, args))
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,17 +29,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.core.content.FileProvider
 import androidx.core.text.PrecomputedTextCompat
 import androidx.core.view.updateMarginsRelative
 import androidx.core.widget.TextViewCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.madness.collision.BuildConfig
 import com.madness.collision.R
 import com.madness.collision.main.MainApplication
 import com.madness.collision.main.MainViewModel
+import com.madness.collision.util.file.ContentProviderUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -153,13 +152,7 @@ val Fragment.availableWidth: Int
         return X.getCurrentAppResolution(context).x - occupiedWidth - (mainViewModel.insetRight.value ?: 0) - if (hasSideNav) 0 else (mainViewModel.insetLeft.value ?: 0)
     }
 
-fun File.getProviderUri(context: Context): Uri{
-    return if (X.aboveOn(X.N)) {
-        FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", this)
-    } else {
-        Uri.fromFile(this)
-    }
-}
+fun File.getProviderUri(context: Context): Uri = ContentProviderUtils.getUri(context, this)
 
 val Bitmap.collisionBitmap: Bitmap
         get() = if (!this.isMutable || (X.aboveOn(X.O) && config == Bitmap.Config.HARDWARE)) this.copy(Bitmap.Config.ARGB_8888, true) else this

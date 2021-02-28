@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,42 +50,6 @@ import kotlin.math.min
 
 object X {
     fun deleteFolder( folder: File) = folder.deleteRecursively()
-
-    fun listFiles( folder: File,  mimeType: String,  list: MutableList<String>){
-        val ms = arrayOf(mimeType)
-        listFiles(folder, ms, list)
-    }
-
-    fun listFiles( folderDir: String,  mimeType: String,  list: MutableList<String>){
-        val ms = arrayOf(mimeType)
-        listFiles(folderDir, ms, list)
-    }
-
-    fun listFiles( folderDir: String, mimeTypes: Array<String>, list: MutableList<String>){
-        listFiles(File(folderDir), mimeTypes, list)
-    }
-
-    fun listFiles( folder: File, mimeTypes: Array<String>,  list: MutableList<String>){
-        if (!folder.exists() || !folder.canRead() || !folder.isDirectory) {
-            return
-        }
-        for (newFile in folder.listFiles() ?: emptyArray()){
-            if (newFile.isFile) {
-                for (mimeType in mimeTypes){/*
-                    if (mimeType.equals(getMimeType(newFile))) {
-                        list.add(newFile.getPath())
-                        break
-                    }*/
-                    if (newFile.name.endsWith(mimeType)) {
-                        list.add(newFile.path)
-                        break
-                    }
-                }
-            }else if (newFile.isDirectory) {
-                listFiles(newFile, mimeTypes, list)
-            }
-        }
-    }
 
     fun copyFileLessTwoGB( src: File,  dst: File) {
         val inStream = FileInputStream(src)

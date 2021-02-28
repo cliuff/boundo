@@ -18,25 +18,18 @@ package com.madness.collision.unit.api_viewing
 
 import android.app.Application
 import android.content.Context
-import android.net.Uri
 import android.util.SparseIntArray
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.madness.collision.misc.MiscApp
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.database.DataMaintainer
-import com.madness.collision.unit.api_viewing.util.ApkRetriever
-import com.madness.collision.util.F
 import com.madness.collision.util.StringUtils
 import com.madness.collision.util.X
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.io.File
-import java.io.FileOutputStream
-import java.io.InputStream
 import java.util.stream.Collectors
 import kotlin.Comparator
 
@@ -205,44 +198,11 @@ internal class ApiViewingViewModel(application: Application): AndroidViewModel(a
     }
 
     /**
-     * Parse from file
-     * @return The loaded APIApp object.
-     * @param filePath The path to the file.
+     * Add an app that is parsed from APK
      */
-    fun addFile(context: Context, filePath: String ) {
-        val info = MiscApp.getPackageInfo(context, apkPath = filePath) ?: return
-        ApiViewingApp(context, info, preloadProcess = true, archive = true)
-                .initArchive(context, info.applicationInfo)
-                .load(context, info.applicationInfo)
-                .let { apps4Cache.add(it) }
+    fun addArchiveApp(app: ApiViewingApp) {
+        apps4Cache.add(app)
         timestampCache = System.currentTimeMillis()
-    }
-
-    fun addFile(context: Context, fileUri: Uri) {
-        val file = getFileFromUri(context, fileUri) ?: return
-        if (file.isDirectory){
-            val paths: MutableList<String> = ArrayList()
-            X.listFiles(file, ".apk", paths)
-            paths.forEach { addFile(context, it) }
-        } else {
-            addFile(context, file.path)
-        }
-    }
-
-    private fun getFileFromUri(context: Context, uri: Uri): File?
-    {
-        uri.path.let { File(it ?: "").run { if (exists()) return this } }
-        val fileName = "${ApkRetriever.APP_CACHE_PREFIX}${System.currentTimeMillis()}.apk"
-        val file = F.createFile(F.cachePublicPath(context), "App", "Apk", fileName)
-        if (!F.prepare4(file)) return null
-        try {
-            val inStream: InputStream = context.contentResolver.openInputStream(uri) ?: return null
-            inStream.use { FileOutputStream(file).use { outStream -> it.copyTo(outStream) } }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return null
-        }
-        return file
     }
 
     fun screen4Display(loadItem: Int): List<ApiViewingApp> {

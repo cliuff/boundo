@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,19 +18,23 @@ package com.madness.collision.unit.api_viewing
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.pm.PackageInfo
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
-import com.madness.collision.R as MainR
+import com.madness.collision.misc.MiscApp
 import com.madness.collision.unit.Bridge
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.UpdatesProvider
 import com.madness.collision.unit.api_viewing.seal.SealManager
+import com.madness.collision.unit.api_viewing.util.ApkRetriever
 import com.madness.collision.unit.api_viewing.util.PrefUtil
 import com.madness.collision.util.Page
 import kotlin.reflect.KClass
+import com.madness.collision.R as MainR
 
 object MyBridge: Bridge() {
 
@@ -92,5 +96,11 @@ object MyBridge: Bridge() {
             putStringSet(PrefUtil.AV_TAGS, tagSettings)
         }
     }
-    
+
+    @Suppress("unused")
+    fun resolveUri(context: Context, uri: Uri): PackageInfo? {
+        val retriever = ApkRetriever(context)
+        val file = retriever.toFile(uri) ?: return null
+        return MiscApp.getPackageInfo(context, apkPath = file.path)
+    }
 }

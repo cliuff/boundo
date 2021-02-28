@@ -19,6 +19,7 @@ package com.madness.collision.unit.api_viewing
 import android.Manifest
 import android.app.Activity
 import android.content.*
+import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.graphics.Paint
 import android.graphics.drawable.ColorDrawable
@@ -112,7 +113,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
 
         var textExtra: String? = null
             private set
-        var dataStreamExtra: Uri? = null
+        var dataStreamExtra: PackageInfo? = null
             private set
 
         constructor(bundle: Bundle?) : this(when {
@@ -394,28 +395,39 @@ class MyUnit: com.madness.collision.unit.Unit() {
         super.onHiddenChanged(hidden)
     }
 
-    private fun displayApk(context: Context, apkPath: String) {
-        if (loadItem == ApiUnit.APK) {
-            viewModel.addFile(context, apkPath)
+    private fun displayApk(doNow: Boolean, block: () -> Unit) {
+        if (doNow) {
+            block.invoke()
             viewModel.sortApps(sortItem)
             updateList(viewModel.screen4Display(loadItem))
         } else lifecycleScope.launch(Dispatchers.Default) {
-            viewModel.addFile(context, apkPath)
+            block.invoke()
         }
     }
 
-    private fun displayFile(context: Context, uri: Uri) {
-        val doNow = when (loadItem) {
-            ApiUnit.APK, ApiUnit.SELECTED, ApiUnit.VOLUME, ApiUnit.DISPLAY -> true
-            else -> launchMethod.mode == LaunchMethod.LAUNCH_MODE_LINK
+    private fun <T> displayApk(resolve: ApkRetriever.(T, (ApiViewingApp?) -> Unit) -> Unit,
+                               arg: T, doNow: Boolean) {
+        displayApk(doNow) {
+            apkRetriever.resolve(arg) {
+                it ?: return@resolve
+                viewModel.addArchiveApp(it)
+            }
         }
-        if (doNow) {
-            viewModel.addFile(context, uri)
-            viewModel.sortApps(sortItem)
-            updateList(viewModel.screen4Display(loadItem))
-        } else lifecycleScope.launch(Dispatchers.Default) {
-            viewModel.addFile(context, uri)
+    }
+
+    private fun <T> displayApk(context: Context, arg: T): Unit = when (arg) {
+        is Uri -> {
+            val doNow = when (loadItem) {
+                ApiUnit.APK, ApiUnit.SELECTED, ApiUnit.VOLUME, ApiUnit.DISPLAY -> true
+                else -> launchMethod.mode == LaunchMethod.LAUNCH_MODE_LINK
+            }
+            displayApk(ApkRetriever::resolveUri, arg, doNow)
         }
+        is String -> {
+            val doNow = loadItem == ApiUnit.APK
+            displayApk(ApkRetriever::resolvePath, arg, doNow)
+        }
+        else -> Unit
     }
 
     /**
@@ -862,10 +874,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
         if (launchMethod.mode == LaunchMethod.LAUNCH_MODE_LINK) {
             val dataStreamExtra = launchMethod.dataStreamExtra
             if (dataStreamExtra != null) {
-                val reIntent = Intent().apply {
-                    data = dataStreamExtra
-                }
-                onActivityResult(INTENT_GET_FILE, AppCompatActivity.RESULT_OK, reIntent)
+                onSharingApk(dataStreamExtra)
                 return
             }
         }
@@ -907,7 +916,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
                 lifecycleScope.launch(Dispatchers.Default) {
                     if (OsUtils.satisfy(OsUtils.Q)) accessiblePrimaryExternal(context) { treeUri ->
                         apkRetriever.fromUri(treeUri) {
-                            displayFile(context, it)
+                            displayApk(context, it)
                         }
                     } else {
                         try {
@@ -1072,16 +1081,26 @@ class MyUnit: com.madness.collision.unit.Unit() {
                 }
                 else -> {
                     if (!DocumentsContract.isDocumentUri(context, itemUri)) {
-                        displayFile(context, itemUri)
+                        displayApk(context, itemUri)
                         continue@items
                     }
                     apkRetriever.fromDocumentUri(itemUri) {
-                        displayFile(context, it)
+                        displayApk(context, it)
                     }
                 }
             }
         }
         ceaseRefresh(ApiUnit.DISPLAY)
+    }
+
+    private fun onSharingApk(info: PackageInfo) = lifecycleScope.launch(Dispatchers.Default) {
+        displayApk(true) {
+            apkRetriever.resolvePackage(info) {
+                it ?: return@resolvePackage
+                viewModel.addArchiveApp(it)
+            }
+        }
+        ceaseRefresh(ApiUnit.NON)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent? )  {
@@ -1099,10 +1118,10 @@ class MyUnit: com.madness.collision.unit.Unit() {
                 }
                 val pathsSize: Int = (if (uri != null) 1 else cd!!.itemCount)
                 if (uri != null) {
-                    displayFile(context, uri)
+                    displayApk(context, uri)
                 } else {
                     for (i in 0 until pathsSize) {
-                        displayFile(context, cd!!.getItemAt(i).uri)
+                        displayApk(context, cd!!.getItemAt(i).uri)
                     }
                 }
                 ceaseRefresh(if (launchMethod.mode == LaunchMethod.LAUNCH_MODE_LINK) ApiUnit.NON else ApiUnit.SELECTED)
@@ -1134,7 +1153,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
                 val uri = data?.data
                 if (uri != null) lifecycleScope.launch(Dispatchers.Default) {
                     apkRetriever.fromUri(uri) {
-                        displayFile(context, it)
+                        displayApk(context, it)
                     }
                     ceaseRefresh(ApiUnit.VOLUME)
                 }

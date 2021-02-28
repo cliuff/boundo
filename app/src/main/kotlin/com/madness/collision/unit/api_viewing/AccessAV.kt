@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package com.madness.collision.unit.api_viewing
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.net.Uri
 import androidx.activity.ComponentActivity
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.UnitAccess
@@ -51,6 +52,10 @@ object AccessAV: UnitAccess(Unit.UNIT_NAME_API_VIEWING) {
 
     fun initTagSettings(context: Context, prefSettings: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)) {
         getMethod("initTagSettings", Context::class, SharedPreferences::class).invoke(context, prefSettings)
+    }
+
+    fun resolveUri(context: Context, uri: Uri): Any? {
+        return getMethod("resolveUri", Context::class, Uri::class).invoke(context, uri)
     }
 
 }
