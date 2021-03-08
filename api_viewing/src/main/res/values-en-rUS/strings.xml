@@ -16,7 +16,7 @@
   -->
 
 <resources>
-    <string name="av_updates_recents">Recents</string>
+    <string name="av_updates_recents">Recently updated</string>
     <string name="sdkcheck_dialog_targetsdktext">Target</string>
     <string name="sdkcheck_dialog_minsdktext">Min.</string>
     <string name="sdkcheck_sortspinner_sortbyname">By name</string>

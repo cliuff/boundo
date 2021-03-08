@@ -59,10 +59,12 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
         private var appTimestamp: Long = 0L
         private var sessionTimestamp: Long = 0L
 
+        private var newAppTimestamp = 0L
         /**
          * Whether showing last week history
          */
-        var isNewApp = false
+        val isNewApp: Boolean
+            get() = newAppTimestamp > 0L
         var previousRecords: List<ApiViewingApp>? = null
         var changedPackages: List<PackageInfo>? = null
 
@@ -77,7 +79,10 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
             val mainTimestamp = mainViewModel.timestamp
             val prefSettings = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
             var lastTimestamp = prefSettings.getLong(P.PACKAGE_CHANGED_TIMESTAMP, -1)
-            isNewApp = lastTimestamp == -1L
+            // app opened the first time in lifetime, keep this new-app session untouched until reopened
+            if (lastTimestamp == -1L) newAppTimestamp = System.currentTimeMillis()
+            // app reopened, which signals new-app session ended
+            else if (mainTimestamp > newAppTimestamp) newAppTimestamp = 0L
             // display recent updates in last week if no history (by default)
             if (isNewApp) lastTimestamp = System.currentTimeMillis() - 604800000
             val isValidSession = lastTimestamp < mainTimestamp

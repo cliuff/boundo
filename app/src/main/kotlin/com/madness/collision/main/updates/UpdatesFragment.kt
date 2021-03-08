@@ -154,9 +154,10 @@ internal class UpdatesFragment : TaggedFragment(), Democratic {
 
     private fun loadUpdates() = lifecycleScope.launch(Dispatchers.Default) {
         fragments = retrieveUpdateFragments()
-        withContext(Dispatchers.Main) {
-            viewBinding.mainUpdatesSecUpdates.visibility = if (fragments.isEmpty()) View.GONE else View.VISIBLE
-            if (fragments.isEmpty()) return@withContext
+        if (fragments.isEmpty()) return@launch
+        // Use launchWhenStarted to avoid IllegalArgumentException:
+        // No view found for id 0x1 (unknown) for fragment MyUpdatesFragment
+        lifecycleScope.launchWhenStarted {
             fragments.forEach {
                 addUpdateFragment(it)
             }
@@ -211,9 +212,6 @@ internal class UpdatesFragment : TaggedFragment(), Democratic {
 
     private fun updateUpdates() = lifecycleScope.launch(Dispatchers.Default) {
         val newFragments = retrieveUpdateFragments()
-        if (newFragments.isNotEmpty()) withContext(Dispatchers.Main) {
-            viewBinding.mainUpdatesSecUpdates.visibility = View.VISIBLE
-        }
         val diff = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
             override fun getOldListSize(): Int {
                 return fragments.size
@@ -254,7 +252,6 @@ internal class UpdatesFragment : TaggedFragment(), Democratic {
                 }
             })
             fragments = newFragments
-            if (newFragments.isEmpty()) viewBinding.mainUpdatesSecUpdates.visibility = View.GONE
         }
     }
 
@@ -271,7 +268,6 @@ internal class UpdatesFragment : TaggedFragment(), Democratic {
             val fragment = provider.fragment ?: return
             val updateFragment = stateful.unitName to fragment
             fragments.add(updateFragment)
-            if (fragments.isNotEmpty()) viewBinding.mainUpdatesSecUpdates.visibility = View.VISIBLE
             addUpdateFragment(updateFragment)
         } else {
             for (i in updatesProviders.indices) {
@@ -287,7 +283,6 @@ internal class UpdatesFragment : TaggedFragment(), Democratic {
                 removeUpdateFragment(fragment, i)
                 break
             }
-            if (fragments.isEmpty()) viewBinding.mainUpdatesSecUpdates.visibility = View.GONE
         }
     }
 

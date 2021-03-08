@@ -17,7 +17,7 @@
 
 <resources>
     <string name="sdkcheck_dialog_targetsdktext">استهداف</string>
-    <string name="av_updates_recents">حديثي</string>
+    <string name="av_updates_recents">تم تحديثه مؤخرا</string>
     <string name="sdkcheck_dialog_minsdktext">دقيقة.</string>
     <string name="sdkcheck_sortspinner_sortbyname">بالاسم</string>
     <string name="sdkcheck_sortspinner_sortbyhighersdk">أعلى API</string>

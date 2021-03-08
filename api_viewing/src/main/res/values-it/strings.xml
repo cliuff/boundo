@@ -17,7 +17,7 @@
 
 <resources>
     <string name="sdkcheck_dialog_targetsdktext">Bersaglio</string>
-    <string name="av_updates_recents">Recenti</string>
+    <string name="av_updates_recents">Aggiornato di recente</string>
     <string name="sdkcheck_dialog_minsdktext">Min.</string>
     <string name="sdkcheck_sortspinner_sortbyname">Per nome</string>
     <string name="sdkcheck_sortspinner_sortbyhighersdk">API più alta</string>

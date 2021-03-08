@@ -17,7 +17,7 @@
 
 <resources>
     <string name="sdkcheck_dialog_targetsdktext">Mục tiêu</string>
-    <string name="av_updates_recents">Gần đây</string>
+    <string name="av_updates_recents">Cập nhật gần đây</string>
     <string name="sdkcheck_dialog_minsdktext">Tối thiểu</string>
     <string name="sdkcheck_sortspinner_sortbyname">Bằng tên</string>
     <string name="sdkcheck_sortspinner_sortbyhighersdk">API cao nhất</string>

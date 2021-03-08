@@ -94,9 +94,13 @@ infix fun TextView.dartHold(text: CharSequence) {
  * IllegalArgumentException: Given text can not be applied to TextView
  * Meizu 15 Plus, API 24
  * [TextViewCompat.setPrecomputedText]
+ *
+ * IllegalArgumentException: PrecomputedText's Parameters don't match the parameters of this TextView.
+ * Consider using setTextMetricsParams(precomputedText.getParams()) to override the settings of this TextView.
+ * meizu 17 Pro, API 30
  */
 infix fun AppCompatTextView.dartFuture(text: CharSequence) {
-    if (Build.MANUFACTURER == "Meizu" && X.belowOff(X.O)) {
+    if (Build.MANUFACTURER.toLowerCase(SystemUtil.getLocaleApp()) == "meizu") {
         setText(text)
         return
     }

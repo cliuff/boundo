@@ -17,7 +17,7 @@
 
 <resources>
     <string name="sdkcheck_dialog_targetsdktext">เป้า</string>
-    <string name="av_updates_recents">ล่าสุด</string>
+    <string name="av_updates_recents">อัปเดตล่าสุด</string>
     <string name="sdkcheck_dialog_minsdktext">นาที.</string>
     <string name="sdkcheck_sortspinner_sortbyname">โดยชื่อ</string>
     <string name="sdkcheck_sortspinner_sortbyhighersdk">API ที่สูงที่สุด</string>

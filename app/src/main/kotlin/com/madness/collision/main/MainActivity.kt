@@ -134,18 +134,20 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
         // this needs to be invoked before update fragments are rendered
         viewModel.updateTimestamp()
 
+        mWindow = window
+        launchItem = intent?.getStringExtra(LAUNCH_ITEM)
+
+        inflateLayout(context)
+
         lifecycleScope.launch(Dispatchers.Default) {
             initApplication(context, prefSettings)
             MiscMain.ensureUpdate(context, prefSettings)
             Unit.loadUnitClasses(context)
-        }
 
-        mWindow = window
-        launchItem = intent?.getStringExtra(LAUNCH_ITEM)
+            withContext(Dispatchers.Main) {
+                setupLayout(context, prefSettings)
+            }
 
-        applyUi(context, prefSettings)
-
-        lifecycleScope.launch(Dispatchers.Default) {
             checkMisc(context, prefSettings)
             checkTarget(context)
             // restore session
@@ -182,7 +184,7 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
         app.dead = false
     }
 
-    private fun applyUi(context: Context, prefSettings: SharedPreferences) {
+    private fun inflateLayout(context: Context) {
         mWindow.let { SystemUtil.applyEdge2Edge(it) }
 
         SettingsFunc.updateLanguage(context)
@@ -191,7 +193,20 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
 
         viewModel.navViewRef = WeakReference(viewBinding.mainSideNav)
         navHostFragment = supportFragmentManager.findFragmentById(R.id.mainNavHost) as NavHostFragment
+    }
 
+    private fun setupLayout(context: Context, prefSettings: SharedPreferences) {
+        setupNav()
+        setupViewModel(context, prefSettings)
+        // invocation will clear stack
+        setupUi()
+        viewModel.background.observe(this) {
+            applyExterior()
+            if (isToolbarInflated || !mainApplication.exterior) applyColor()
+        }
+    }
+
+    private fun setupNav() {
         val navInflater = navController.navInflater
         val graph = navInflater.inflate(R.navigation.nav_main)
         graph.startDestination = R.id.updatesFragment
@@ -199,16 +214,6 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
             putInt(UpdatesFragment.ARG_MODE, UpdatesFragment.MODE_NO_UPDATES)
         } else null
         navController.setGraph(graph, startArgs)
-
-        setupViewModel(context, prefSettings)
-
-        // invocation will clear stack
-        setupUi()
-
-        viewModel.background.observe(this) {
-            applyExterior()
-            if (isToolbarInflated || !mainApplication.exterior) applyColor()
-        }
     }
 
     private fun setupViewModel(context: Context, prefSettings: SharedPreferences) {

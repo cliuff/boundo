@@ -17,7 +17,7 @@
 
 <resources>
     <string name="sdkcheck_dialog_targetsdktext">Alvo</string>
-    <string name="av_updates_recents">Recentes</string>
+    <string name="av_updates_recents">Atualizado recentemente</string>
     <string name="sdkcheck_dialog_minsdktext">Min.</string>
     <string name="sdkcheck_sortspinner_sortbyname">Por nome</string>
     <string name="sdkcheck_sortspinner_sortbyhighersdk">API mais alta</string>

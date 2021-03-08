@@ -16,7 +16,7 @@
   -->
 
 <resources>
-    <string name="av_updates_recents">Son İşlemler</string>
+    <string name="av_updates_recents">Yakın zamanda güncellendi</string>
     <string name="sdkcheck_dialog_targetsdktext">Hedef</string>
     <string name="sdkcheck_dialog_minsdktext">Min.</string>
     <string name="sdkcheck_sortspinner_sortbyname">İsimle</string>

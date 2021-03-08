@@ -16,7 +16,7 @@
   -->
 
 <resources>
-    <string name="av_updates_recents">Πρόσφατα</string>
+    <string name="av_updates_recents">Πρόσφατα ενημερώθηκε</string>
     <string name="sdkcheck_dialog_targetsdktext">Στόχος</string>
     <string name="sdkcheck_dialog_minsdktext">Ελάχ.</string>
     <string name="sdkcheck_sortspinner_sortbyname">Από όνομα</string>

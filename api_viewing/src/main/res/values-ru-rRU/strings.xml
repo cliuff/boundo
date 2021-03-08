@@ -16,7 +16,7 @@
   -->
 
 <resources>
-    <string name="av_updates_recents">Недавние</string>
+    <string name="av_updates_recents">Недавно обновленный</string>
     <string name="sdkcheck_displayspinner_usersystem">Все приложения</string>
     <string name="apiDetailsLastUpdate">"Последнее обновление: "</string>
     <string name="apiDetailsActivities">Разрешения:</string>
