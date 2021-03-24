@@ -82,7 +82,7 @@ internal class AppListFragment : TaggedFragment(), AppList, Filterable {
                 service.showOptions(context, it, this@AppListFragment)
                 true
             }
-        })
+        }, lifecycleScope)
 
         mAdapter.resolveSpanCount(this, 450f)
     }

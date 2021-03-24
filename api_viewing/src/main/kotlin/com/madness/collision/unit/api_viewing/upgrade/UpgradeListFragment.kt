@@ -65,7 +65,7 @@ internal class UpgradeListFragment : TaggedFragment(), AppList {
                 service.showOptions(context, it, this@UpgradeListFragment)
                 true
             }
-        })
+        }, lifecycleScope)
 
         mAdapter.resolveSpanCount(this, 450f)
     }

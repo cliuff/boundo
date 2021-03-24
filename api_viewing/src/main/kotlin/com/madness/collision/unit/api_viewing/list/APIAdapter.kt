@@ -43,7 +43,8 @@ import kotlinx.coroutines.*
 import kotlin.math.min
 import kotlin.math.roundToInt
 
-internal open class APIAdapter(context: Context, private val listener: Listener)
+internal open class APIAdapter(context: Context, private val listener: Listener,
+                               private val scope: CoroutineScope)
     : SandwichAdapter<APIAdapter.Holder>(context) {
 
     interface Listener {
@@ -110,18 +111,13 @@ internal open class APIAdapter(context: Context, private val listener: Listener)
         return Holder(binding)
     }
 
-    fun ensureItem(index: Int, mainCallback: (() -> Unit)? = null) {
-        if (index >= listCount) return
+    fun ensureItem(index: Int): Boolean {
+        if (index >= listCount) return true
         val app = apps[index]
         val isIconLoaded = !app.preload && !app.isLoadingIcon && app.hasIcon
-        if (isIconLoaded) return
-        GlobalScope.launch {
-            app.load(context)
-            mainCallback ?: return@launch
-            withContext(Dispatchers.Main) {
-                mainCallback.invoke()
-            }
-        }
+        if (isIconLoaded) return true
+        app.load(context)
+        return false
     }
 
     private fun preloadAppIconsForward(index: Int) {
@@ -150,7 +146,9 @@ internal open class APIAdapter(context: Context, private val listener: Listener)
         val shouldWaitForIcon = !appInfo.hasIcon
         var taskIcon: Runnable? = null
         if (shouldWaitForIcon) {
-            ensureItem(index)
+            scope.launch(Dispatchers.Default) {
+                ensureItem(index)
+            }
             val logoView = holder.logo
             val checkerHandler = Handler()
             taskIcon = runnable {
@@ -221,7 +219,7 @@ internal open class APIAdapter(context: Context, private val listener: Listener)
             holder.updateTime.visibility = View.GONE
         }
 
-        GlobalScope.launch {
+        scope.launch(Dispatchers.Default) {
             val checkerApp = AppTag.ensureResources(context, appInfo)
             launch(Dispatchers.Main) {
                 AppTag.inflateTags(context, holder.tags, checkerApp, !shouldWaitForIcon)

@@ -29,8 +29,10 @@ import com.madness.collision.unit.api_viewing.list.APIAdapter
 import com.madness.collision.unit.api_viewing.seal.SealManager
 import com.madness.collision.util.X
 import com.madness.collision.util.dartFuture
+import kotlinx.coroutines.CoroutineScope
 
-internal class UpgradeAdapter(context: Context, listener: Listener) : APIAdapter(context, listener) {
+internal class UpgradeAdapter(context: Context, listener: Listener, scope: CoroutineScope)
+    : APIAdapter(context, listener, scope) {
     override val shouldShowTime: Boolean = true
     var upgrades: List<Upgrade> = emptyList()
         set(value) {

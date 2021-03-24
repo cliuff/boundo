@@ -350,12 +350,11 @@ internal class AppListService {
                 if (doCeaseRefresh) withContext(Dispatchers.Main) {
                     refreshLayout.isRefreshing = false
                 }
-                val callback: (() -> Unit)? = if (doCeaseRefresh) {
-                    {
-                        refreshLayout.isRefreshing = false
-                    }
-                } else null
-                adapter.ensureItem(index, callback)
+                if (adapter.ensureItem(index)) continue
+                if (!doCeaseRefresh) continue
+                withContext(Dispatchers.Main) {
+                    refreshLayout.isRefreshing = false
+                }
             }
         } catch (e: Exception) {
             e.printStackTrace()
