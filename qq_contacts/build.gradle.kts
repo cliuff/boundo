@@ -49,6 +49,8 @@ android {
     }
 
     compileOptions {
+        // Flag to enable support for the new Java 8+ APIs
+        isCoreLibraryDesugaringEnabled = true
         targetCompatibility = JavaVersion.VERSION_1_8
         sourceCompatibility = JavaVersion.VERSION_1_8
     }
@@ -57,6 +59,7 @@ android {
 }
 
 dependencies {
+    coreLibraryDesugaring(Dependencies.androidDesugaring)
     listOf(
             fileTree(Dependencies.fileTreeValue),
             project(":app")

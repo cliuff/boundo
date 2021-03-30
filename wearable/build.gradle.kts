@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -126,6 +126,8 @@ android {
         }
     }
     compileOptions {
+        // Flag to enable support for the new Java 8+ APIs
+        isCoreLibraryDesugaringEnabled = true
         targetCompatibility = JavaVersion.VERSION_1_8
         sourceCompatibility = JavaVersion.VERSION_1_8
     }
@@ -143,6 +145,7 @@ android {
 }
 
 dependencies {
+    coreLibraryDesugaring(Dependencies.androidDesugaring)
 
     listOf(
             fileTree(Dependencies.fileTreeValue),
