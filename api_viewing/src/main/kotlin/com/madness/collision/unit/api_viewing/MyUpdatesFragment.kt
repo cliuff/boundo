@@ -87,7 +87,7 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
             if (isNewApp) lastTimestamp = System.currentTimeMillis() - 604800000
             val isValidSession = lastTimestamp < mainTimestamp
             if (isNewSession(mainTimestamp) && isValidSession) {
-                Utils.getChangedPackages(context, lastTimestamp).let {
+                Utils.getChangedPackages(context, hostFragment, lastTimestamp).let {
                     previousRecords = it.first
                     changedPackages = it.second
                 }
@@ -95,7 +95,7 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
                 appTimestamp = lastTimestamp
                 sessionTimestamp = mainTimestamp
             } else {
-                Utils.getChangedPackages(context, appTimestamp).let {
+                Utils.getChangedPackages(context, hostFragment, appTimestamp).let {
                     previousRecords = it.first
                     changedPackages = it.second
                 }
@@ -184,7 +184,7 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
                 newList = emptyList()
                 upgradeList = emptyList()
             } else {
-                val anApp = AppMaintainer.get(mContext, lifecycleScope)
+                val anApp = AppMaintainer.get(mContext, this@MyUpdatesFragment)
                 val packages = mChangedPackages.subList(0, listLimitSize)
                 val appList = AppRetriever.mapToApp(packages, mContext, anApp)
                 mList = ApiViewingViewModel.sortList(appList, MyUnit.SORT_POSITION_API_TIME)

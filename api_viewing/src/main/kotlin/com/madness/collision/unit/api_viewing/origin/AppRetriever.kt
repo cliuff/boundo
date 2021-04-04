@@ -18,14 +18,19 @@ package com.madness.collision.unit.api_viewing.origin
 
 import android.content.Context
 import android.content.pm.PackageInfo
+import androidx.lifecycle.LifecycleOwner
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.database.AppMaintainer
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.runBlocking
 
 /**
  * Retrieve apps from user's device
  */
-internal class AppRetriever(private val context: Context) : OriginRetriever<ApiViewingApp> {
+internal class AppRetriever(private val context: Context, private val lifecycleOwner: LifecycleOwner)
+    : OriginRetriever<ApiViewingApp> {
 
     companion object {
         suspend fun mapToApp(list: List<PackageInfo>, context: Context, anApp: ApiViewingApp)
@@ -51,7 +56,7 @@ internal class AppRetriever(private val context: Context) : OriginRetriever<ApiV
     private suspend fun getAsync(predicate: ((PackageInfo) -> Boolean)?)
     : List<ApiViewingApp> = coroutineScope {
         val packages = PackageRetriever(context).get(predicate)
-        val anApp = AppMaintainer.get(context, CoroutineScope(Dispatchers.Default))
+        val anApp = AppMaintainer.get(context, lifecycleOwner)
         mapToApp(packages, context, anApp)
     }
 }

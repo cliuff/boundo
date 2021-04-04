@@ -18,12 +18,13 @@ package com.madness.collision.unit.api_viewing
 
 import android.content.Context
 import androidx.annotation.WorkerThread
+import androidx.lifecycle.LifecycleOwner
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.database.AppDao
 import com.madness.collision.unit.api_viewing.origin.AppRetriever
 
-internal class AppRepository(private val dao: AppDao) {
+internal class AppRepository(private val lifecycleOwner: LifecycleOwner, private val dao: AppDao) {
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
@@ -39,7 +40,7 @@ internal class AppRepository(private val dao: AppDao) {
 
     fun getApps(context: Context, unit: Int): List<ApiViewingApp> {
         if ((dao.selectCount() ?: 0) == 0) {
-            val apps = AppRetriever(context).all
+            val apps = AppRetriever(context, lifecycleOwner).all
             dao.insert(apps)
             return when (unit) {
                 ApiUnit.USER, ApiUnit.SYS -> apps.filter { it.apiUnit == unit }

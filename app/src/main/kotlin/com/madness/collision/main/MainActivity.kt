@@ -472,10 +472,10 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
             it.cachedCallback?.remove()
             it.cachedCallback = null
         }
-        lifecycleScope.launch(Dispatchers.Default) {
-            MiscMain.clearCache(context)
-        }
         AccessAV.clearContext()
+        AccessAV.clearTags()
+        AccessAV.clearSeals()
+        MiscMain.clearCache(context)
         super.onDestroy()
     }
 

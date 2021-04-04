@@ -18,12 +18,13 @@ package com.madness.collision.unit.api_viewing.database
 
 import android.content.Context
 import android.content.pm.PackageInfo
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.origin.AppRetriever
 import com.madness.collision.unit.api_viewing.origin.OriginRetriever
 import com.madness.collision.unit.api_viewing.origin.PackageRetriever
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -32,18 +33,19 @@ import kotlinx.coroutines.launch
  */
 internal class RecordMaintainer<T>(private val context: Context,
                                    private val target: OriginRetriever<T>,
-                                   private val scope: CoroutineScope,
-                                   private val dao: AppDao = DataMaintainer.get(context, scope))
+                                   private val lifecycleOwner: LifecycleOwner,
+                                   private val dao: AppDao = DataMaintainer.get(context, lifecycleOwner))
     : OriginRetriever<T> {
+    private val scope = lifecycleOwner.lifecycleScope
 
     companion object {
 
-        fun pack(context: Context, scope: CoroutineScope): RecordMaintainer<PackageInfo> {
-            return RecordMaintainer(context, PackageRetriever(context), scope)
+        fun pack(context: Context, lifecycleOwner: LifecycleOwner): RecordMaintainer<PackageInfo> {
+            return RecordMaintainer(context, PackageRetriever(context), lifecycleOwner)
         }
 
-        fun app(context: Context, scope: CoroutineScope): RecordMaintainer<ApiViewingApp> {
-            return RecordMaintainer(context, AppRetriever(context), scope)
+        fun app(context: Context, lifecycleOwner: LifecycleOwner): RecordMaintainer<ApiViewingApp> {
+            return RecordMaintainer(context, AppRetriever(context, lifecycleOwner), lifecycleOwner)
         }
     }
 

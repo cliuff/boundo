@@ -22,6 +22,7 @@ import android.os.Build
 import android.provider.Settings
 import androidx.annotation.RequiresApi
 import androidx.core.content.edit
+import androidx.lifecycle.LifecycleOwner
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.database.DataMaintainer
 import com.madness.collision.unit.api_viewing.database.RecordMaintainer
@@ -58,8 +59,6 @@ import com.madness.collision.util.X.P
 import com.madness.collision.util.X.Q
 import com.madness.collision.util.os.OsUtils
 import com.madness.collision.util.regexOf
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import java.security.Principal
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -192,7 +191,8 @@ internal object Utils {
         return changedPackages.packageNames
     }
 
-    fun getChangedPackages(context: Context, timestamp: Long = 0): Pair<List<ApiViewingApp>?, List<PackageInfo>> {
+    fun getChangedPackages(context: Context, lifecycleOwner: LifecycleOwner, timestamp: Long = 0)
+    : Pair<List<ApiViewingApp>?, List<PackageInfo>> {
 //        return if (X.aboveOn(X.O)) {
 //            getChangedPackageNames(context).mapNotNull { getPackageInfo(context, it) }
 //        } else {
@@ -209,8 +209,7 @@ internal object Utils {
         val allPackages = retriever.all
         // get changed packages
         val re = allPackages.filter { it.lastUpdateTime >= finalTimestamp }
-        val scope = CoroutineScope(Dispatchers.Default)
-        val dao = DataMaintainer.get(context, scope)
+        val dao = DataMaintainer.get(context, lifecycleOwner)
         // get past records
         val previous = when (dao.selectCount()) {
             null -> null
@@ -218,7 +217,7 @@ internal object Utils {
             else -> dao.selectApps(re.map { it.packageName })
         }
         // update records
-        RecordMaintainer(context, retriever, scope, dao).run {
+        RecordMaintainer(context, retriever, lifecycleOwner, dao).run {
             update(allPackages)
             checkRemoval(allPackages)
         }

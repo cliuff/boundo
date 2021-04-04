@@ -22,7 +22,6 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
-import kotlinx.coroutines.CoroutineScope
 
 @Database(entities = [ApiViewingApp::class], version = 1)
 @TypeConverters(Converters::class)
@@ -33,7 +32,7 @@ internal abstract class AppRoom : RoomDatabase() {
         @Volatile
         private var INSTANCE: AppRoom? = null
 
-        fun getDatabase(context: Context, scope: CoroutineScope): AppRoom {
+        fun getDatabase(context: Context): AppRoom {
             return INSTANCE ?: synchronized(this) {
                 Room.databaseBuilder(context.applicationContext, AppRoom::class.java, "app")
                         .build().also { INSTANCE = it }

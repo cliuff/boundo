@@ -17,6 +17,7 @@
 package com.madness.collision.unit.api_viewing.database
 
 import android.content.Context
+import androidx.lifecycle.*
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -30,6 +31,7 @@ import net.bytebuddy.implementation.bind.annotation.SuperCall
 import net.bytebuddy.implementation.bind.annotation.This
 import net.bytebuddy.matcher.ElementMatchers
 import java.util.concurrent.Callable
+import java.util.concurrent.atomic.AtomicReference
 
 
 /**
@@ -48,19 +50,47 @@ object AppMaintainer {
         abstract fun intercept(@This proxy: Any, @SuperCall superCall: Callable<*>): Any?
     }
 
+    fun registerCleaner(lifecycleOwner: LifecycleOwner, block: () -> Unit) {
+        lifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
+            val lifecycle = lifecycleOwner.lifecycle
+            lifecycle.addObserver(object : LifecycleObserver {
+                @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+                fun onDestroy() {
+                    lifecycle.removeObserver(this)
+                    block.invoke()
+                }
+            })
+        }
+    }
+
+    fun get(context: Context, lifecycleOwner: LifecycleOwner, appDao: AppDao? = null): ApiViewingApp {
+        val scopeWrapper = AtomicReference<CoroutineScope?>(lifecycleOwner.lifecycleScope)
+        val scopeGetter = { scopeWrapper.get() }
+        val originalDao = DataMaintainer.getDefault(context)
+        val dao = appDao ?: DataMaintainer.get(context, lifecycleOwner, originalDao)
+        val daoWrapper = AtomicReference(dao)
+        registerCleaner(lifecycleOwner) {
+            scopeWrapper.set(null)
+            daoWrapper.set(null)
+        }
+        return get(context, { daoWrapper.get() }, scopeGetter)
+    }
+
     /**
-     * Update record after [ApiViewingApp.retrieveNativeLibraries] invocation
+     * Update record after [ApiViewingApp.retrieveNativeLibraries] invocation.
+     * Somehow ByteBuddy proxy cannot be garbage collected, causing context leaks.
+     * So, use with a lifecycle owner.
      */
-    fun get(context: Context, scope: CoroutineScope, dao: AppDao = DataMaintainer.get(context, scope))
-    : ApiViewingApp {
+    private fun get(context: Context, daoGetter: () -> AppDao?, scopeGetter: () -> CoroutineScope?): ApiViewingApp {
         val interceptor = object : Interceptor() {
             @RuntimeType
             override fun intercept(@This proxy: Any, @SuperCall superCall: Callable<*>): Any? {
                 return try {
                     superCall.call().also {
                         if (proxy !is ApiViewingApp) return@also
+                        val dao = daoGetter.invoke() ?: return@also
                         // update asynchronously
-                        scope.launch(Dispatchers.Default) {
+                        scopeGetter.invoke()?.launch(Dispatchers.Default) {
                             dao.insert(proxy)
                         }
                     }

@@ -437,7 +437,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
         if (text.isEmpty()) return
         // Check store links
         val appFromStore = Utils.checkStoreLink(text)
-        val dao = DataMaintainer.get(context, lifecycleScope)
+        val dao = DataMaintainer.get(context, this)
         if (appFromStore != null) {
             dao.selectApp(appFromStore)?.load(context)?.let { viewModel.addApps(it) }
         } else {
@@ -855,7 +855,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
         // update records
         val mainViewModel: MainViewModel by activityViewModels()
         if (MyUpdatesFragment.isNewSession(mainViewModel.timestamp)) {
-            RecordMaintainer.pack(context, lifecycleScope).all
+            RecordMaintainer.pack(context, this).all
         }
 
         if (launchMethod.mode == LaunchMethod.LAUNCH_MODE_SEARCH) {

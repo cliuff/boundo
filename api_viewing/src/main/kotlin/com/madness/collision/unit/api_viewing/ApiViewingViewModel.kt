@@ -19,24 +19,21 @@ package com.madness.collision.unit.api_viewing
 import android.app.Application
 import android.content.Context
 import android.util.SparseIntArray
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.database.DataMaintainer
 import com.madness.collision.util.StringUtils
-import com.madness.collision.util.X
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.stream.Collectors
-import kotlin.Comparator
 
 /**
  * Api Viewing View Model
  */
-internal class ApiViewingViewModel(application: Application): AndroidViewModel(application) {
+internal class ApiViewingViewModel(application: Application): AndroidViewModel(application), LifecycleOwner {
 
     private val repository: AppRepository
 //    var scrollPosition: Int = 0
@@ -81,9 +78,27 @@ internal class ApiViewingViewModel(application: Application): AndroidViewModel(a
             return countUser to countSys
         }
 
+    private val lifecycleRegistry = LifecycleRegistry(this)
+
     init {
-        val dao = DataMaintainer.get(application, viewModelScope)
-        repository = AppRepository(dao)
+        viewModelScope.launch(Dispatchers.Main) {
+            lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
+        }
+        val dao = DataMaintainer.get(application, this)
+        repository = AppRepository(this, dao)
+    }
+
+    override fun getLifecycle(): Lifecycle {
+        return lifecycleRegistry
+    }
+
+    override fun onCleared() {
+        viewModelScope.launch(Dispatchers.Main) {
+            lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+        }
+        apps4Cache.forEach { it.clearIcons() }
+        clearCache()
+        super.onCleared()
     }
 
     private fun updateDeviceAppsCount(){
@@ -213,31 +228,16 @@ internal class ApiViewingViewModel(application: Application): AndroidViewModel(a
 
     private fun screen2DisplayPrivate(loadItem: Int, info: List<ApiViewingApp> ): List<ApiViewingApp> {
         if (ApiUnit.ineffective(loadItem)) return info
-        val unit = if (loadItem == ApiUnit.SELECTED || loadItem == ApiUnit.VOLUME || loadItem == ApiUnit.DISPLAY) ApiUnit.APK else loadItem
-        if (X.aboveOn(X.N)) {
-            return if (loadItem == ApiUnit.ALL_APPS){
-                info.parallelStream().filter{ item -> item.apiUnit != ApiUnit.APK }.collect(Collectors.toList())
-            }else {
-                info.parallelStream().filter{ item -> item.apiUnit == unit }.collect(Collectors.toList())
-            }
-        }else {
-            val result: MutableList<ApiViewingApp> = mutableListOf()
-            val iterator: Iterator<ApiViewingApp> = info.iterator()
-            if (loadItem == ApiUnit.ALL_APPS){
-                while (iterator.hasNext()){
-                    val item = iterator.next()
-                    if (item.apiUnit != ApiUnit.APK)
-                        result.add(item)
-                }
-            }else {
-                while (iterator.hasNext()){
-                    val item = iterator.next()
-                    if (item.apiUnit == unit)
-                        result.add(item)
-                }
-            }
-            return result
+        val unit = when (loadItem) {
+            ApiUnit.SELECTED, ApiUnit.VOLUME, ApiUnit.DISPLAY -> ApiUnit.APK
+            else -> loadItem
         }
+        val predicate: (ApiViewingApp) -> Boolean = if (loadItem == ApiUnit.ALL_APPS) {
+            { item -> item.apiUnit != ApiUnit.APK }
+        } else {
+            { item -> item.apiUnit == unit }
+        }
+        return info.parallelStream().filter(predicate).collect(Collectors.toList())
     }
 
     fun screenOut(unit: Int) {
@@ -253,18 +253,7 @@ internal class ApiViewingViewModel(application: Application): AndroidViewModel(a
     }
 
     fun findApps(searchSize: Int, predicate: (app: ApiViewingApp) -> Boolean): MutableList<ApiViewingApp> {
-        return if (X.aboveOn(X.N)) {
-            apps4Cache.parallelStream().filter(predicate).collect(Collectors.toList())
-        } else {
-            val list = ArrayList<ApiViewingApp>(searchSize)
-            for (listApp in apps4Cache) {
-                if (predicate.invoke(listApp)) {
-                    list.add(listApp)
-                }
-                if (list.size == searchSize) break
-            }
-            list
-        }
+        return apps4Cache.parallelStream().filter(predicate).collect(Collectors.toList())
     }
 
     companion object {
@@ -275,23 +264,10 @@ internal class ApiViewingViewModel(application: Application): AndroidViewModel(a
 
         private fun compareApi(list: List<ApiViewingApp>, isTarget: Boolean, isAsc: Boolean): List<ApiViewingApp> {
             val compareInt = if (isTarget) ApiViewingApp::targetAPI else ApiViewingApp::minAPI
-            return if (X.aboveOn(X.N)) {
-                val comparator = Comparator.comparingInt(compareInt).run {
-                    if (isAsc) this else reversed()
-                }.thenComparing(this::compareName)
-                list.parallelStream().sorted(comparator).collect(Collectors.toList())
-            } else {
-                list.toMutableList().apply {
-                    sortWith(Comparator { o1, o2 ->
-                        val obj1 = if (isAsc) o1 else o2
-                        val obj2 = if (isAsc) o2 else o1
-                        val apiCompare = compareInt.invoke(obj1).compareTo(compareInt.invoke(obj2))
-                        if (apiCompare != 0) return@Comparator apiCompare
-                        // name comparing is not reversed
-                        compareName(o1, o2)
-                    })
-                }
-            }
+            val comparator = Comparator.comparingInt(compareInt).run {
+                if (isAsc) this else reversed()
+            }.thenComparing(this::compareName)
+            return list.parallelStream().sorted(comparator).collect(Collectors.toList())
         }
 
         private fun compareName(list: List<ApiViewingApp>): List<ApiViewingApp> {
@@ -301,22 +277,12 @@ internal class ApiViewingViewModel(application: Application): AndroidViewModel(a
         }
 
         private fun compareTime(list: List<ApiViewingApp>): List<ApiViewingApp> {
-            return if (X.aboveOn(X.N)) {
-                val comparator: Comparator<ApiViewingApp> = Comparator.comparingLong(ApiViewingApp::updateTime)/*
+            val comparator: Comparator<ApiViewingApp> = Comparator.comparingLong(ApiViewingApp::updateTime)/*
                         .thenComparingInt(APIApp::targetAPI)
                         .thenComparingDouble(APIApp::targetSDK)*/
-                        .reversed()
-                        .thenComparing(this::compareName)
-                list.parallelStream().sorted(comparator).collect(Collectors.toList())
-            } else {
-                list.toMutableList().apply {
-                    sortWith(Comparator { o1, o2 ->
-                        val compareTime = o2.updateTime.compareTo(o1.updateTime)
-                        if (compareTime != 0) return@Comparator compareTime
-                        return@Comparator compareName(o1, o2)
-                    })
-                }
-            }
+                    .reversed()
+                    .thenComparing(this::compareName)
+            return list.parallelStream().sorted(comparator).collect(Collectors.toList())
         }
 
         fun sortList(list: List<ApiViewingApp>, sortItem: Int): List<ApiViewingApp> {
