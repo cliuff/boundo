@@ -18,18 +18,13 @@ package com.madness.collision.util
 
 import com.google.common.truth.Truth.*
 import org.junit.Test
-import java.util.*
 
-internal class StringUtilsTest {
+internal class RippleUtilTest {
 
     @Test
-    fun compareName() {
-        val locales = listOf(Locale("en"), Locale("zh"))
-        val names = listOf("重庆市民通", "墨墨背单词", "bilibili", "酷安", "Google")
-        val expected = listOf(names[2], names[4], names[3], names[1], names[0])
-        val sorted = names.sortedWith { s1, s2 ->
-            StringUtils.compareName(locales, s1, s2)
-        }
-        assertThat(sorted).isEqualTo(expected)
+    fun lightenOrDarken() {
+        val color = ColorUtil.lightenOrDarken(0xFFbc9bff.toInt(), 0.9f)
+        print(color.toString(16))
+        assertThat(color).isNull()
     }
 }

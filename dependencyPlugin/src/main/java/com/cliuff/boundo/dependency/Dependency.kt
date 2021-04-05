@@ -68,6 +68,7 @@ object Versions {
     const val googleWearable = "2.8.1"
     const val glide = "4.12.0"
     const val jsoup = "1.13.1"
+    const val junit4 = "4.13.2"
     const val junitJupiter = "5.7.1"
     const val kotlin = "1.4.32"
     const val kotlinCoroutines = "1.4.3"
@@ -79,6 +80,7 @@ object Versions {
     const val androidDeviceNames = "2.0.0"
     const val byteBuddy = "1.10.20"
     const val androidDesugaring = "1.0.9"
+    const val mockito = "3.9.0"
 }
 
 class Dependencies : Plugin<Project> {
@@ -144,6 +146,7 @@ class Dependencies : Plugin<Project> {
         const val googlePlayCore = "com.google.android.play:core:${Versions.googlePlayCore}"
         const val googlePlayCoreKtx = "com.google.android.play:core-ktx:${Versions.googlePlayCoreKtx}"
         const val gglGuava = "com.google.guava:guava:${Versions.gglGuava}"
+        const val junit4 = "junit:junit:${Versions.junit4}"
         const val junitJupiter = "org.junit.jupiter:junit-jupiter-api:${Versions.junitJupiter}"
         const val kotlinCoroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.kotlinCoroutines}"
         const val mpChart = "com.github.PhilJay:MPAndroidChart:${Versions.mpChart}"
@@ -154,6 +157,7 @@ class Dependencies : Plugin<Project> {
         const val byteBuddy = "net.bytebuddy:byte-buddy-android:${Versions.byteBuddy}"
         const val gglHilt = "com.google.dagger:hilt-android:${Versions.gglHilt}"
         const val gglHiltCompiler = "com.google.dagger:hilt-compiler:${Versions.gglHilt}"
+        const val mockito = "org.mockito:mockito-android:${Versions.mockito}"
 
         // wear
         const val androidxPercentLayout = "androidx.percentlayout:percentlayout:${Versions.androidxPercentLayout}"

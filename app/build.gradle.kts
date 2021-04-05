@@ -150,6 +150,9 @@ android {
         // but continue the build even when errors are found:
         isAbortOnError = false
     }
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+    }
     kotlinOptions.jvmTarget = JavaVersion.VERSION_1_8.toString()
     buildFeatures {
         dataBinding = true
@@ -207,22 +210,25 @@ dependencies {
     kapt(Dependencies.gglHiltCompiler)
 
     listOf(
-            Dependencies.androidxCoreTesting,
-            Dependencies.androidxRoomTesting,
+            Dependencies.mockito,
             Dependencies.googleTruth,
             Dependencies.googleTruthExtensions,
-            Dependencies.junitJupiter
+            Dependencies.junit4
     ).forEach { testImplementation(it) }
 
     listOf(
-//            Dependencies.androidxNavigationTesting,
-//            Dependencies.androidxWorkTesting,
             Dependencies.androidxTestCore,
             Dependencies.androidxTestRunner,
             Dependencies.androidxTestExtJunit,
             Dependencies.androidxTestEspresso,
+            Dependencies.androidxCoreTesting,
+            Dependencies.androidxRoomTesting,
+//            Dependencies.androidxNavigationTesting,
+//            Dependencies.androidxWorkTesting,
+            Dependencies.mockito,
             Dependencies.googleTruth,
-            Dependencies.junitJupiter
+            Dependencies.googleTruthExtensions,
+            Dependencies.junit4
     ).forEach { androidTestImplementation(it) }
 
     api(Dependencies.kotlinCoroutines)

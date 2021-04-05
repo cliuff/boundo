@@ -71,11 +71,12 @@ dependencies {
     listOf(
             Dependencies.googleTruth,
             Dependencies.googleTruthExtensions,
-            Dependencies.junitJupiter
+            Dependencies.junit4
     ).forEach { testImplementation(it) }
 
     listOf(
             Dependencies.googleTruth,
-            Dependencies.junitJupiter
+            Dependencies.googleTruthExtensions,
+            Dependencies.junit4
     ).forEach { androidTestImplementation(it) }
 }

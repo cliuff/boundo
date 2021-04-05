@@ -82,15 +82,23 @@ dependencies {
     Dependencies.dynamicFeatureBasics.forEach { implementation(it) }
 
     listOf(
-            Dependencies.androidxRoomTesting,
+            Dependencies.mockito,
             Dependencies.googleTruth,
             Dependencies.googleTruthExtensions,
-            Dependencies.junitJupiter
+            Dependencies.junit4
     ).forEach { testImplementation(it) }
 
     listOf(
+            Dependencies.androidxTestCore,
+            Dependencies.androidxTestRunner,
+            Dependencies.androidxTestExtJunit,
+            Dependencies.androidxTestEspresso,
+            Dependencies.androidxCoreTesting,
+            Dependencies.androidxRoomTesting,
+            Dependencies.mockito,
             Dependencies.googleTruth,
-            Dependencies.junitJupiter
+            Dependencies.googleTruthExtensions,
+            Dependencies.junit4
     ).forEach { androidTestImplementation(it) }
 
     kapt(Dependencies.androidxRoomCompiler)
