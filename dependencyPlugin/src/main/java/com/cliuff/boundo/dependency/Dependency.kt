@@ -25,7 +25,7 @@ object Versions {
     const val androidxTestExtJunit = "1.1.1"
     const val androidxTestEspresso = "3.2.0"
 
-    const val androidxCore = "1.3.2"
+    const val androidxCore = "1.5.0-rc01"
     const val androidxAppcompat = "1.1.0"
     const val androidxLifecycle = "2.3.1"
     const val androidxRoom = "2.3.0-rc01"

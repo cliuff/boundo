@@ -172,7 +172,9 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
             val transparentNavBar = mainApplication.insetBottom == 0
             val isDarkNav = if (transparentNavBar) false else mainApplication.isPaleTheme
             SystemUtil.applyEdge2Edge(it)
-            SystemUtil.applyStatusBarColor(context, it, false, isTransparentBar = true)
+            // keep status bar icon color untouched
+            val config = SystemBarConfig(false, isTransparentBar = true, setDarkIcon = false)
+            SystemUtil.applyStatusBarConfig(context, it, config)
             val colorSurface = ThemeUtil.getColor(context, R.attr.colorASurface)
             val color = if (isDarkNav && X.belowOff(X.O)) ColorUtil.darkenAs(colorSurface, 0.9f) else colorSurface
             SystemUtil.applyNavBarColor(context, it, isDarkNav, transparentNavBar, color = color)
