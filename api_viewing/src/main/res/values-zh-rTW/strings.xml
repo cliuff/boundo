@@ -104,4 +104,5 @@
     <string name="av_main_device_api_api">API 級別</string>
     <string name="av_upd_new">新安裝</string>
     <string name="av_upd_upg">API 升級</string>
+    <string name="av_details_real_installer">"實際安裝程序："</string>
 </resources>

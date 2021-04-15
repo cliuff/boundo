@@ -93,4 +93,5 @@
     <string name="av_main_device_api_api">API-Ebene</string>
     <string name="av_upd_new">Neu installiert</string>
     <string name="av_upd_upg">API-Upgrade</string>
+    <string name="av_details_real_installer">"Echter Installer: "</string>
 </resources>

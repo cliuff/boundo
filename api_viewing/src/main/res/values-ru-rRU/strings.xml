@@ -93,4 +93,5 @@
     <string name="av_main_device_api_api">Уровень API</string>
     <string name="av_upd_new">Недавно установлен</string>
     <string name="av_upd_upg">Обновление API</string>
+    <string name="av_details_real_installer">"Настоящий установщик: "</string>
 </resources>

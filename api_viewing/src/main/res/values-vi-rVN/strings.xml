@@ -93,4 +93,5 @@
     <string name="av_main_device_api_api">Cấp API</string>
     <string name="av_upd_new">Mới được cài đặt</string>
     <string name="av_upd_upg">Nâng cấp API</string>
+    <string name="av_details_real_installer">"Trình cài đặt thực: "</string>
 </resources>

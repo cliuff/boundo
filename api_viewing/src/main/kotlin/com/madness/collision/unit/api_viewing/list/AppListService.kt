@@ -102,7 +102,9 @@ internal class AppListService {
             builder.append(context.getString(RAv.string.apiDetailsLastUpdate), StyleSpan(Typeface.BOLD), spanFlags)
                     .append(format.format(cal.time))
                     .append('\n')
-            val installer: String? = if (X.aboveOn(X.R)) {
+            var installer: String? = null
+            var realInstaller: String? = null
+            if (OsUtils.satisfy(OsUtils.R)) {
                 val si = try {
                     context.packageManager.getInstallSourceInfo(appInfo.packageName)
                 } catch (e: PackageManager.NameNotFoundException) {
@@ -110,45 +112,28 @@ internal class AppListService {
                     null
                 }
                 if (si != null) {
-                    // todo initiatingPackageName
-//                        builder.append("InitiatingPackageName: ", StyleSpan(Typeface.BOLD), spanFlags)
+                    installer = si.installingPackageName
                     // If the package that requested the install has been uninstalled,
                     // only this app's own install information can be retrieved
-//                        builder.append(si.initiatingPackageName ?: "Unknown").append('\n')
-//                        builder.append("OriginatingPackageName: ", StyleSpan(Typeface.BOLD), spanFlags)
-                    // If not holding the INSTALL_PACKAGES permission then the result will always return null
-//                        builder.append(si.originatingPackageName ?: "Unknown").append('\n')
-                    si.installingPackageName
-                } else {
-                    null
-                }
-            } else {
-                getInstallerLegacy(context, appInfo)
-            }
-            builder.append(context.getString(RAv.string.apiDetailsInsatllFrom), StyleSpan(Typeface.BOLD), spanFlags)
-            if (installer != null) {
-                val installerName = MiscApp.getApplicationInfo(context, packageName = installer)
-                        ?.loadLabel(context.packageManager)?.toString() ?: ""
-                if (installerName.isNotEmpty()) {
-                    builder.append(installerName)
-                } else {
-                    val installerAndroid = ApiViewingApp.packagePackageInstaller
-                    val installerGPlay = ApiViewingApp.packagePlayStore
-                    when (installer) {
-                        installerGPlay ->
-                            builder.append(context.getString(RAv.string.apiDetailsInstallGP))
-                        installerAndroid ->
-                            builder.append(context.getString(RAv.string.apiDetailsInstallPI))
-                        "null" ->
-                            builder.append(context.getString(RAv.string.apiDetailsInstallUnknown))
-                        else ->
-                            builder.append(installer)
+                    realInstaller = si.initiatingPackageName
+                    // need the INSTALL_PACKAGES permission, which is granted to system apps only
+                    val originating = si.originatingPackageName
+                    if (originating != null) {
+                        builder.append("Install originator: ", StyleSpan(Typeface.BOLD), spanFlags)
+                        builder.append(originating).append('\n')
                     }
                 }
             } else {
-                builder.append(context.getString(RAv.string.apiDetailsInstallUnknown))
+                installer = getInstallerLegacy(context, appInfo)
             }
+            builder.append(context.getString(RAv.string.apiDetailsInsatllFrom), StyleSpan(Typeface.BOLD), spanFlags)
+            builder.append(getInstallerName(context, installer))
             builder.append('\n')
+            if (OsUtils.satisfy(OsUtils.R)) {
+                builder.append(context.getString(RAv.string.av_details_real_installer), StyleSpan(Typeface.BOLD), spanFlags)
+                builder.append(getInstallerName(context, realInstaller))
+                builder.append('\n')
+            }
         }
 
         if (!appInfo.isNativeLibrariesRetrieved) appInfo.retrieveNativeLibraries()
@@ -269,6 +254,27 @@ internal class AppListService {
         }
 
         return SpannableString.valueOf(builder)
+    }
+
+    private fun getInstallerName(context: Context, installer: String?): String {
+        return if (installer != null) {
+            val installerName = MiscApp.getApplicationInfo(context, packageName = installer)
+                    ?.loadLabel(context.packageManager)?.toString() ?: ""
+            if (installerName.isNotEmpty()) {
+                installerName
+            } else {
+                val installerAndroid = ApiViewingApp.packagePackageInstaller
+                val installerGPlay = ApiViewingApp.packagePlayStore
+                when (installer) {
+                    installerGPlay -> context.getString(RAv.string.apiDetailsInstallGP)
+                    installerAndroid -> context.getString(RAv.string.apiDetailsInstallPI)
+                    "null" -> context.getString(RAv.string.apiDetailsInstallUnknown)
+                    else -> installer
+                }
+            }
+        } else {
+            context.getString(RAv.string.apiDetailsInstallUnknown)
+        }
     }
 
     private fun SpannableStringBuilder.appendSection(context: Context, titleId: Int) {

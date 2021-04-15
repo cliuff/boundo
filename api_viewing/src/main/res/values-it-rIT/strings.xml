@@ -93,4 +93,5 @@
     <string name="av_main_device_api_api">Livello API</string>
     <string name="av_upd_new">Appena installato</string>
     <string name="av_upd_upg">Aggiornamento API</string>
+    <string name="av_details_real_installer">"Programma di installazione reale: "</string>
 </resources>
