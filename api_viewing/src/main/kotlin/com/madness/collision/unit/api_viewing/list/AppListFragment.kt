@@ -140,7 +140,13 @@ internal class AppListFragment : TaggedFragment(), AppList, Filterable {
     }
 
     fun updateList(list: List<ApiViewingApp>, refreshLayout: SwipeRefreshLayout? = null) {
-        if (list.isEmpty() && viewModel.apps4DisplayValue.isEmpty()) return
+        if (list.isEmpty() && viewModel.apps4DisplayValue.isEmpty()) {
+            refreshLayout ?: return
+            lifecycleScope.launch(Dispatchers.Main) {
+                refreshLayout.isRefreshing = false
+            }
+            return
+        }
         lifecycleScope.launch(Dispatchers.Main) {
             viewModel.updateApps4Display(list)
         }
@@ -151,7 +157,13 @@ internal class AppListFragment : TaggedFragment(), AppList, Filterable {
      * Update synchronously
      */
     suspend fun updateListSync(list: List<ApiViewingApp>, refreshLayout: SwipeRefreshLayout? = null) {
-        if (list.isEmpty() && viewModel.apps4DisplayValue.isEmpty()) return
+        if (list.isEmpty() && viewModel.apps4DisplayValue.isEmpty()) {
+            refreshLayout ?: return
+            withContext(Dispatchers.Main) {
+                refreshLayout.isRefreshing = false
+            }
+            return
+        }
         withContext(Dispatchers.Main) {
             viewModel.updateApps4Display(list)
         }

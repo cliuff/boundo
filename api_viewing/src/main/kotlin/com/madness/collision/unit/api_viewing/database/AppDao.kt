@@ -71,8 +71,10 @@ interface AppDao {
     @Query("SELECT COUNT(*) > 1 FROM app WHERE packageName = :packageName")
     fun selectIsExist(packageName: String): Boolean
 
-    @Query("SELECT * FROM app WHERE name LIKE ('%'||:text||'%')")
-    fun selectNameAlike(text: String): List<ApiViewingApp>
+    fun selectNameAlike(text: String): List<ApiViewingApp> = selectNameLikeSql("%$text%")
+
+    @Query("SELECT * FROM app WHERE name LIKE :sql")
+    fun selectNameLikeSql(sql: String): List<ApiViewingApp>
 
     @Query("SELECT COUNT(*) FROM app")
     fun selectCount(): Int?
