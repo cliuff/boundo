@@ -29,10 +29,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.core.view.forEach
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
-import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.databinding.AdapterAvTagBinding
 import com.madness.collision.unit.api_viewing.tag.*
 import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_64B
@@ -76,7 +76,6 @@ internal object AppTag {
 
     private val tagIcons = mutableMapOf<String, Bitmap>()
     private var colorBackground: Int? = null
-    private var colorItem: Int? = null
     private val tagIds = mutableMapOf<Int, String>()
     private val displayingTagsPrivate = mutableMapOf<String, TriStateSelectable>()
     private val displayingTags: Map<String, TriStateSelectable>
@@ -98,7 +97,6 @@ internal object AppTag {
 
     fun clearContext() {
         colorBackground = null
-        colorItem = null
     }
 
     private fun <V> Map<String, V>.get(context: Context, id: Int) = this[tagId(context, id)]
@@ -125,15 +123,9 @@ internal object AppTag {
     }
 
     private fun getTagColor(context: Context): Int {
-        return if (EasyAccess.shouldShowDesserts) {
-            colorBackground ?: ThemeUtil.getColor(context, MainR.attr.colorABackground).also {
-                colorBackground = it
-            }
-        } else {
-            colorItem ?: ThemeUtil.getColor(context, MainR.attr.colorAItem).also {
-                colorItem = it
-            }
-        }
+        return colorBackground ?: ThemeUtil.getColor(context, MainR.attr.colorAOnBackground).let {
+            ColorUtils.setAlphaComponent(it, 14)
+        }.also { colorBackground = it }
     }
 
     private fun tagId(context: Context, resId: Int): String {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2020 Clifford Liu
+  ~ Copyright 2021 Clifford Liu
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -62,7 +62,7 @@
 
                     <com.google.android.material.radiobutton.MaterialRadioButton
                         android:id="@+id/mainSideNavUnits"
-                        android:button="@drawable/ic_extension_24"
+                        android:button="@drawable/ic_twotone_extension_24"
                         android:buttonTint="@color/drawer_icon_states"
                         android:gravity="center"
                         android:layout_gravity="center"

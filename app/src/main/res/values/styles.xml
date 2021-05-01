@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2020 Clifford Liu
+  ~ Copyright 2021 Clifford Liu
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -571,7 +571,14 @@
     </style>
 
     <style name="AvTagText" parent="Widget.MaterialComponents.TextView">
-        <item name="android:textSize">10sp</item>
+        <item name="android:textSize">8sp</item>
+    </style>
+
+    <style name="AvTags" parent="Widget.MaterialComponents.ChipGroup">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="singleLine">true</item>
+        <item name="chipSpacingHorizontal">3dp</item>
     </style>
 
 </resources>

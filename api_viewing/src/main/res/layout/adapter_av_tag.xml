@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2020 Clifford Liu
+  ~ Copyright 2021 Clifford Liu
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -21,23 +21,24 @@
     android:background="@drawable/av_item_tag_back"
     android:backgroundTint="?colorABackground"
     android:alpha="@fraction/surfaceAlpha"
-    android:paddingStart="3dp"
-    android:paddingEnd="3dp"
+    android:paddingStart="1dp"
+    android:paddingEnd="1dp"
     android:clickable="false"
+    android:layout_gravity="center_vertical"
     android:gravity="center"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_height="14dp"
     tools:ignore="UseCompoundDrawables">
 
     <ImageView
         android:id="@+id/avAdapterInfoTagIcon"
         tools:src="@mipmap/ic_launcher"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
+        android:paddingTop="1dp"
+        android:paddingBottom="1dp"
         android:paddingStart="2dp"
         android:paddingEnd="2dp"
         android:layout_width="wrap_content"
-        android:layout_height="16dp"
+        android:layout_height="14dp"
         android:adjustViewBounds="true"
         android:contentDescription="@null" />
 
@@ -47,8 +48,8 @@
         android:layout_height="wrap_content"
         android:paddingStart="2dp"
         android:paddingEnd="2dp"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
+        android:paddingTop="1dp"
+        android:paddingBottom="1dp"
         android:textAppearance="@style/AvTagText"
         android:textColor="?colorAOnBackground"
         tools:ignore="SmallSp"
