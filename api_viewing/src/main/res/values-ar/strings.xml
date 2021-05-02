@@ -80,7 +80,7 @@
     <string name="av_settings_tags_system">تطبيق النظام</string>
     <string name="av_adapter_tag_system">النظام</string>
     <string name="av_ai">أيقونة التكيف</string>
-    <string name="av_tag_has_splits">&#1564;Split APK</string>
+    <string name="av_tag_has_splits">&#1564;Android App Bundle</string>
     <string name="av_apks_select_folder">حدد مجلدًا للمسح الضوئي</string>
     <string name="av_pref_loading">تحميل القائمة</string>
     <string name="av_pref_displaying">عرض القائمة</string>

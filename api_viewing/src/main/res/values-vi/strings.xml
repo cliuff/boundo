@@ -80,7 +80,7 @@
     <string name="av_settings_tags_system">Ứng dụng hệ thống</string>
     <string name="av_adapter_tag_system">Hệ thống</string>
     <string name="av_ai">Biểu tượng thích ứng</string>
-    <string name="av_tag_has_splits">Split APK</string>
+    <string name="av_tag_has_splits">Android App Bundle</string>
     <string name="av_apks_select_folder">Chọn một thư mục để quét</string>
     <string name="av_pref_loading">Đang tải danh sách</string>
     <string name="av_pref_displaying">Danh sách hiển thị</string>

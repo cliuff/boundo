@@ -80,7 +80,7 @@
     <string name="av_settings_tags_system">システムアプリケーション</string>
     <string name="av_adapter_tag_system">システム</string>
     <string name="av_ai">アダプティブアイコン</string>
-    <string name="av_tag_has_splits">Split APK</string>
+    <string name="av_tag_has_splits">Android App Bundle</string>
     <string name="av_apks_select_folder">スキャンするフォルダを選択</string>
     <string name="av_pref_loading">リストの読み込み</string>
     <string name="av_pref_displaying">リスト表示</string>

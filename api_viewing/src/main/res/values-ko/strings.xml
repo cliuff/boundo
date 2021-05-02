@@ -80,7 +80,7 @@
     <string name="av_settings_tags_system">시스템 응용</string>
     <string name="av_adapter_tag_system">체계</string>
     <string name="av_ai">적응 형 아이콘</string>
-    <string name="av_tag_has_splits">Split APK</string>
+    <string name="av_tag_has_splits">Android App Bundle</string>
     <string name="av_apks_select_folder">스캔 할 폴더를 선택하십시오</string>
     <string name="av_pref_loading">리스트 로딩</string>
     <string name="av_pref_displaying">리스트 표시</string>

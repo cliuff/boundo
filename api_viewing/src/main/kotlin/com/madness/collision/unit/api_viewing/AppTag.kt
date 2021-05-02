@@ -61,6 +61,11 @@ internal object AppTag {
     private const val TAG_KEY_REACT_NATIVE = "rn"
     private const val TAG_KEY_Xamarin = "xam"
     private const val TAG_KEY_Kotlin = "kot"
+    private const val TAG_KEY_64B = "64b"
+    private const val TAG_KEY_SYS = "sys"
+    private const val TAG_KEY_HID = "hid"
+    private const val TAG_KEY_AAB = "aab"
+    private const val TAG_KEY_AI = "ai"
     private const val TAG_KEY_FCM = "fcm"
     private const val TAG_KEY_HUAWEI_PUSH = "hwp"
     private const val TAG_KEY_XIAOMI_PUSH = "mip"
@@ -232,10 +237,7 @@ internal object AppTag {
         }
     }
 
-    /**
-     * prepare res for native lib tags
-     */
-    private fun ensureNativeLibs(context: Context, appInfo: ApiViewingApp) {
+    private fun ensureTagIcons(context: Context) {
         val isAntiedFlu = isAntied(context, TAG_ID_FLU)
         val isAntiedRn = isAntied(context, TAG_ID_RN)
         val isAntiedXam = isAntied(context, TAG_ID_XAM)
@@ -252,18 +254,11 @@ internal object AppTag {
         if (shouldShowTagKotlin || !isAntiedKot) {
             ensureTagIcon(context, TAG_KEY_Kotlin, R.drawable.ic_kotlin_72)
         }
-        val state64B = displayingTags.getNonNull(context, TAG_ID_64B)
-        // anti any one requires further look-up to confirm
-        val isAnyAntied = isAntiedFlu || isAntiedRn || isAntiedXam || isAntiedKot ||
-                state64B.isAntiSelected || isAntied(context, TAG_ID_ARM) || isAntied(context, TAG_ID_X86)
-        if (shouldShowTagCrossPlatform || shouldShowTagKotlin || state64B.isSelected || shouldShowTagNativeLib || isAnyAntied) {
-            if (!appInfo.isNativeLibrariesRetrieved) {
-                appInfo.retrieveNativeLibraries()
-            }
-        }
-    }
 
-    private fun ensureServices(context: Context, appInfo: ApiViewingApp) : PackageInfo? {
+        if (isSelected(context, TAG_ID_64B)) {
+            ensureTagIcon(context, TAG_KEY_64B, R.drawable.ic_64b_72)
+        }
+
         val serviceTags = listOf(
                 PackageTag.TAG_ID_FCM, PackageTag.TAG_ID_HWP, PackageTag.TAG_ID_MIP,
                 PackageTag.TAG_ID_MZP, PackageTag.TAG_ID_OOP, PackageTag.TAG_ID_VVP,
@@ -284,13 +279,57 @@ internal object AppTag {
                 TAG_KEY_BAIDU_PUSH to R.drawable.ic_baidu_push_72,
                 TAG_KEY_GETUI to R.drawable.ic_getui_72,
         )
-        var doSkip = true
         serviceTags.forEachIndexed { index, tag ->
             val state = displayingTags.getNonNull(context, tag)
             if (state.isSelected) {
                 val icon = icons[index]
                 ensureTagIcon(context, icon.first, icon.second)
             }
+        }
+
+        if (isSelected(context, TAG_ID_SYS)) {
+            ensureTagIcon(context, TAG_KEY_SYS, R.drawable.ic_system_72)
+        }
+        if (isSelected(context, TAG_ID_HID)) {
+            ensureTagIcon(context, TAG_KEY_HID, R.drawable.ic_hidden_72)
+        }
+        if (isSelected(context, TAG_ID_SPL)) {
+            ensureTagIcon(context, TAG_KEY_AAB, R.drawable.ic_aab_72)
+        }
+        if (isSelected(context, TAG_ID_AI)) {
+            ensureTagIcon(context, TAG_KEY_AI, R.drawable.ic_ai_72)
+        }
+    }
+
+    /**
+     * prepare res for native lib tags
+     */
+    private fun ensureNativeLibs(context: Context, appInfo: ApiViewingApp) {
+        val isAntiedFlu = isAntied(context, TAG_ID_FLU)
+        val isAntiedRn = isAntied(context, TAG_ID_RN)
+        val isAntiedXam = isAntied(context, TAG_ID_XAM)
+        val isAntiedKot = isAntied(context, TAG_ID_KOT)
+        val state64B = displayingTags.getNonNull(context, TAG_ID_64B)
+        // anti any one requires further look-up to confirm
+        val isAnyAntied = isAntiedFlu || isAntiedRn || isAntiedXam || isAntiedKot ||
+                state64B.isAntiSelected || isAntied(context, TAG_ID_ARM) || isAntied(context, TAG_ID_X86)
+        if (shouldShowTagCrossPlatform || shouldShowTagKotlin || state64B.isSelected || shouldShowTagNativeLib || isAnyAntied) {
+            if (!appInfo.isNativeLibrariesRetrieved) {
+                appInfo.retrieveNativeLibraries()
+            }
+        }
+    }
+
+    private fun ensureServices(context: Context, appInfo: ApiViewingApp) : PackageInfo? {
+        val serviceTags = listOf(
+                PackageTag.TAG_ID_FCM, PackageTag.TAG_ID_HWP, PackageTag.TAG_ID_MIP,
+                PackageTag.TAG_ID_MZP, PackageTag.TAG_ID_OOP, PackageTag.TAG_ID_VVP,
+                PackageTag.TAG_ID_J_P, PackageTag.TAG_ID_U_P, PackageTag.TAG_ID_TCP,
+                PackageTag.TAG_ID_ALP, PackageTag.TAG_ID_DUP, PackageTag.TAG_ID_GTP
+        )
+        var doSkip = true
+        serviceTags.forEach { tag ->
+            val state = displayingTags.getNonNull(context, tag)
             doSkip = doSkip && state.isDeselected
         }
         if (doSkip) return null
@@ -381,7 +420,7 @@ internal object AppTag {
         // todo remove anti check
         if (state64B.isSelected && !state64B.isAntiSelected) {
             val doInf = TagRelation.TAGS[TAG_ID_64B]?.toExpressible()?.setRes(context, appInfo)?.express()
-            if (doInf == true) container.inflateTag(context, R.string.av_settings_tag_64b)
+            if (doInf == true) container.inflateTag(context, R.string.av_settings_tag_64b, tagIcons[TAG_KEY_64B])
         }
         if (shouldShowTagNativeLibArm && !isAntied(context, TAG_ID_ARM)) {
             if (nls[0]) container.inflateTag(context, "ARM")
@@ -434,14 +473,14 @@ internal object AppTag {
     }
 
     private fun tagDirect(context: Context, appInfo: ApiViewingApp, container: ViewGroup, includeTagAi: Boolean) {
-        if (isSelected(context, TAG_ID_HID) && !appInfo.isLaunchable) {
-            container.inflateTag(context, R.string.av_adapter_tag_hidden)
-        }
         if (isSelected(context, TAG_ID_SYS) && appInfo.apiUnit == ApiUnit.SYS) {
-            container.inflateTag(context, R.string.av_adapter_tag_system)
+            container.inflateTag(context, R.string.av_adapter_tag_system, tagIcons[TAG_KEY_SYS])
+        }
+        if (isSelected(context, TAG_ID_HID) && !appInfo.isLaunchable) {
+            container.inflateTag(context, R.string.av_adapter_tag_hidden, tagIcons[TAG_KEY_HID])
         }
         if (isSelected(context, TAG_ID_SPL) && appInfo.appPackage.hasSplits) {
-            container.inflateTag(context, R.string.av_tag_has_splits)
+            container.inflateTag(context, R.string.av_tag_has_splits, tagIcons[TAG_KEY_AAB])
         }
         if (includeTagAi) {
             tagAdaptiveIcon(context, appInfo, container)
@@ -450,11 +489,12 @@ internal object AppTag {
 
     fun tagAdaptiveIcon(context: Context, appInfo: ApiViewingApp, container: ViewGroup) {
         if (isSelected(context, TAG_ID_AI) && appInfo.adaptiveIcon) {
-            container.inflateTag(context, R.string.av_ai)
+            container.inflateTag(context, R.string.av_ai, tagIcons[TAG_KEY_AI])
         }
     }
 
     fun ensureResources(context: Context, appInfo: ApiViewingApp): TagCheckerApp {
+        ensureTagIcons(context)
         ensureNativeLibs(context, appInfo)
         return TagCheckerApp(appInfo).apply {
             packageInfo = ensureServices(context, appInfo)

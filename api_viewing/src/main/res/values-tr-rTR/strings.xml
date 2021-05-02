@@ -80,7 +80,7 @@
     <string name="av_settings_tags_system">Sistem uygulaması</string>
     <string name="av_adapter_tag_system">sistem</string>
     <string name="av_ai">Uyarlanabilir simge</string>
-    <string name="av_tag_has_splits">Split APK</string>
+    <string name="av_tag_has_splits">Android App Bundle</string>
     <string name="av_apks_select_folder">Taranacak klasörü seçin</string>
     <string name="av_pref_loading">Liste yükleniyor</string>
     <string name="av_pref_displaying">Liste gösteriliyor</string>

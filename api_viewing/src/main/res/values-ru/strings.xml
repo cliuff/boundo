@@ -80,7 +80,7 @@
     <string name="av_settings_tags_system">Системное приложение</string>
     <string name="av_adapter_tag_system">система</string>
     <string name="av_ai">Адаптивный значок</string>
-    <string name="av_tag_has_splits">Split APK</string>
+    <string name="av_tag_has_splits">Android App Bundle</string>
     <string name="av_apks_select_folder">Выберите папку для сканирования</string>
     <string name="av_pref_loading">Загрузка списка</string>
     <string name="av_pref_displaying">Отображение списка</string>

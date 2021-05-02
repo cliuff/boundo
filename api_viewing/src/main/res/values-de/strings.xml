@@ -63,7 +63,7 @@
     <string name="av_settings_tags_system">System App</string>
     <string name="av_adapter_tag_system">System</string>
     <string name="av_ai">Adaptives Symbol</string>
-    <string name="av_tag_has_splits">Split APK</string>
+    <string name="av_tag_has_splits">Android App Bundle</string>
     <string name="avManual">Eine Anwendungsprogrammierschnittstelle (API) besteht im Allgemeinen aus einer Reihe klar definierter Kommunikationsmethoden zwischen verschiedenen Komponenten.\n\nEin Software Development Kit (SDK) besteht normalerweise aus einer Reihe von Softwareentwicklungstools, mit denen Anwendungen für eine bestimmte Entwicklungsplattform erstellt werden können.\n\nFolglich enthält das SDK einer Plattform die entsprechende API dieser Plattform.\n\nDie Version der API einer Android-Version wird als API-Ebene bezeichnet.\n\nMit jeder neuen Android-Version werden zahlreiche API-Änderungen vorgenommen, die den Zugriff auf neue Funktionen, Einschränkungen beim Zugriff auf den Datenschutz, Sicherheitsverbesserungen und Leistungsverbesserungen mit sich bringen und gleichzeitig unsichere und ineffiziente APIs ablehnen.\n\nManchmal enthält eine Android-Version nur Fehlerkorrekturen usw., aber keine API-Änderungen, sodass die API-Ebene gleich bleibt.\n\nDie Ziel-SDK-Version definiert die Ziel-API-Ebene, für die eine App entwickelt wurde.\n\nDie minimale SDK-Version definiert die minimale API-Ebene, die eine App benötigt.\n\nEinige Einschränkungen und Verbesserungen neuer Android-Versionen gelten nur für Apps, wenn ihre Ziel-API-Ebene mit der des Android-Systems des Geräts übereinstimmt oder diese übertrifft.</string>
     <string name="apiDetailsPermissions">Berechtigungen:</string>
     <string name="apiDetailsActivities">Aktivitäten:</string>

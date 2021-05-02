@@ -80,7 +80,7 @@
     <string name="av_settings_tags_system">系统应用</string>
     <string name="av_adapter_tag_system">系统</string>
     <string name="av_ai">自适应图标</string>
-    <string name="av_tag_has_splits">Split APK</string>
+    <string name="av_tag_has_splits">Android App Bundle</string>
     <string name="av_apks_select_folder">选择要扫描的文件夹</string>
     <string name="av_pref_loading">列表加载</string>
     <string name="av_pref_displaying">列表显示</string>
