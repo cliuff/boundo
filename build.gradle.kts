@@ -23,8 +23,8 @@ plugins {
 
 buildscript {
     repositories {
+        mavenCentral()
         google()
-        jcenter()
         maven {
             url = uri("https://plugins.gradle.org/m2/")
         }
@@ -37,7 +37,7 @@ buildscript {
         val gglHiltGradlePlugin = "2.32-alpha"
         val googlePlayServicesOSSLicensesPlugin = "0.10.2"
         // Associated (the same) with Android Studio version
-        val androidGradlePlugin = "4.1.3"
+        val androidGradlePlugin = "4.2.0"
     }
     dependencies {
         classpath("com.android.tools.build:gradle:${versions.androidGradlePlugin}")
@@ -52,8 +52,8 @@ buildscript {
 
 allprojects{
     repositories {
+        mavenCentral()
         google()
-        jcenter()
     }
 }
 

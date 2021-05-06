@@ -23,8 +23,17 @@
         dist:instant="false"
         dist:title="@string/title_api_viewing">
         <dist:delivery>
-            <dist:install-time />
+            <dist:install-time>
+                <!-- When unset or set to false, bundletool will fuse install-time modules... -->
+                <!-- ...into the base module when generating split APKs from the bundle. -->
+                <!-- This makes the module un-removable afterwards. -->
+                <dist:removable dist:value="true" />
+            </dist:install-time>
         </dist:delivery>
+        <!-- Specifies whether to include the module in multi-APKs... -->
+        <!-- ...that target devices running Android 4.4 (API level 20) and lower. -->
+        <!-- Additionally, when you use bundletool to generate APKs from an app bundle, -->
+        <!-- only feature modules that set this property to true are included in the universal APK. -->
         <dist:fusing dist:include="true" />
     </dist:module>
 

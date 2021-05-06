@@ -22,7 +22,7 @@ object Versions {
 
 buildscript {
     repositories {
-        jcenter()
+        mavenCentral()
     }
     val versions = object {
         val kotlin = "1.4.32"
@@ -41,7 +41,7 @@ plugins {
 }
 
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {
