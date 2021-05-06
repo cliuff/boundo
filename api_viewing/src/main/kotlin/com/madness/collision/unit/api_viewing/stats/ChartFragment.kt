@@ -78,9 +78,11 @@ internal class ChartFragment: TaggedFragment(){
             ApiUnit.ALL_APPS -> if (EasyAccess.isViewingTarget) viewModel.apiCountAll else viewModel.minApiCountAll
             else -> return
         }
+        val screenWidth = X.getCurrentAppResolution(context).x
+        val isSmallScreen = screenWidth < X.size(context, 360f, X.DP)
         val chartEntries = ArrayList<PieEntry>(stats.size())
         val chartEntryColors = ArrayList<Int>(stats.size())
-        val iconSize = X.size(context, 20f, X.DP).roundToInt()
+        val iconSize = X.size(context, if (isSmallScreen) 16f else 20f, X.DP).roundToInt()
         stats.forEach { key, value ->
             val apiVer = VerInfo(key, isExact = true, isCompact = true)
 //            val apiName = Utils.getAndroidCodenameByAPI(context, key)
@@ -103,10 +105,10 @@ internal class ChartFragment: TaggedFragment(){
         val chartDataSet = PieDataSet(chartEntries, null).apply {
             colors = chartEntryColors
             // value text: the proportion value of an entry
-            valueTextSize = 9f
+            valueTextSize = if (isSmallScreen) 7f else 9f
             valueTextColor = ThemeUtil.getColor(context, R.attr.colorTextSub)
-            this.sliceSpace = 2.5f
-            iconsOffset = MPPointF.getInstance(0f, 28f)
+            this.sliceSpace = if (isSmallScreen) 1.5f else 2.5f
+            iconsOffset = MPPointF.getInstance(0f, if (isSmallScreen) 20f else 28f)
             valueFormatter = object : ValueFormatter() {
                 override fun getPieLabel(value: Float, pieEntry: PieEntry?): String {
                     return String.format("%.1f", value) + " %"
@@ -121,10 +123,10 @@ internal class ChartFragment: TaggedFragment(){
             setHoleColor(ThemeUtil.getColor(context, R.attr.colorABackground))
             centerText = getString(if (EasyAccess.isViewingTarget) R.string.apiSdkTarget else R.string.apiSdkMin)
             setCenterTextColor(colorOnBack)
-            setEntryLabelTextSize(15f)
+            setEntryLabelTextSize(if (isSmallScreen) 9f else 15f)
             setEntryLabelColor(ThemeUtil.getColor(context, R.attr.colorAOnSurface))
             // decrease overlapping
-            minAngleForSlices = 11f
+            minAngleForSlices = if (isSmallScreen) 8f else 11f
             setUsePercentValues(true)
 //            setOnChartValueSelectedListener(object : OnChartValueSelectedListener{
 //                override fun onNothingSelected() {
@@ -135,7 +137,7 @@ internal class ChartFragment: TaggedFragment(){
 //            })
             description = null
             legend.textColor = colorOnBack
-            legend.textSize = 12f
+            legend.textSize = if (isSmallScreen) 7f else 12f
             data = chartData
         }
 

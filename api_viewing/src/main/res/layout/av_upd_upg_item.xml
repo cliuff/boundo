@@ -83,7 +83,7 @@
                         <ImageView
                             android:id="@+id/avUpdUpgItemNewIcon"
                             android:layout_width="0dp"
-                            android:layout_height="54dp"
+                            android:layout_height="@dimen/avListAdapterLogoHeight"
                             android:layout_gravity="center"
                             android:layout_weight="3"
                             android:padding="2dp"
@@ -106,7 +106,7 @@
                                 android:maxLines="2"
                                 tools:text="Boundo"
                                 android:textColor="?colorAOnBackground"
-                                android:textSize="18sp" />
+                                android:textSize="@dimen/avListAdapterNameSize" />
 
                             <HorizontalScrollView
                                 android:scrollbars="none"
@@ -167,7 +167,7 @@
                         android:gravity="center"
                         tools:text="30"
                         android:textColor="?colorAOnBackground"
-                        android:textSize="25sp" />
+                        android:textSize="@dimen/avListAdapterApiSize" />
                 </LinearLayout>
 
             </LinearLayout>

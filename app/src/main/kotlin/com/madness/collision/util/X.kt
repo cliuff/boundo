@@ -258,13 +258,15 @@ object X {
 
     const val DP = TypedValue.COMPLEX_UNIT_DIP
     const val SP = TypedValue.COMPLEX_UNIT_SP
-    fun size( context: Context, value: Float, type: Int): Float = TypedValue.applyDimension(type, value, context.resources.displayMetrics)
+    fun size(context: Context, value: Float, type: Int): Float {
+        return TypedValue.applyDimension(type, value, context.resources.displayMetrics)
+    }
 
-    fun colorAgainstBackground( fore: View,  back: View, offsetX: Int = 0, offsetY: Int = 0): Int{
+    fun colorAgainstBackground(fore: View, back: View, offsetX: Int = 0, offsetY: Int = 0): Int {
         return extractBackColor(fore, back, offsetX, offsetY)[0]
     }
 
-    fun extractBackColor( fore: View,  back: View, offsetX: Int = 0, offsetY: Int = 0): IntArray{
+    fun extractBackColor(fore: View, back: View, offsetX: Int = 0, offsetY: Int = 0): IntArray {
         val colors = IntArray(2)
         if (back.background == null){
             colors[0] = Color.BLACK

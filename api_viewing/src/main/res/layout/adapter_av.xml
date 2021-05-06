@@ -61,7 +61,7 @@
         <ImageView
             android:id="@+id/avAdapterInfoLogo"
             android:layout_width="0dp"
-            android:layout_height="54dp"
+            android:layout_height="@dimen/avListAdapterLogoHeight"
             android:layout_gravity="center"
             android:layout_weight="3"
             android:padding="2dp" />
@@ -82,7 +82,7 @@
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:textColor="?colorAOnBackground"
-                android:textSize="18sp" />
+                android:textSize="@dimen/avListAdapterNameSize" />
 
             <TextView
                 android:id="@+id/avAdapterInfoTime"
@@ -123,7 +123,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:textColor="?colorAOnBackground"
-                android:textSize="25sp" />
+                android:textSize="@dimen/avListAdapterApiSize" />
         </LinearLayout>
 
     </LinearLayout>

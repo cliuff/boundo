@@ -39,7 +39,10 @@ import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.databinding.AdapterAvBinding
 import com.madness.collision.unit.api_viewing.seal.SealManager
 import com.madness.collision.util.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Runnable
+import kotlinx.coroutines.launch
 import kotlin.math.min
 import kotlin.math.roundToInt
 
@@ -84,7 +87,7 @@ internal open class APIAdapter(context: Context, private val listener: Listener,
     override val listCount: Int
         get() = apps.size
 
-    protected val inflater = LayoutInflater.from(context)
+    protected val inflater: LayoutInflater = LayoutInflater.from(context)
     private var sortMethod: Int = MyUnit.SORT_POSITION_API_LOW
     private val sweetMargin by lazy { X.size(context, 5f, X.DP).roundToInt() }
     private val plainMargin by lazy { X.size(context, 2f, X.DP).roundToInt() }

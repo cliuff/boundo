@@ -67,7 +67,7 @@
             <ImageView
                 android:id="@+id/avStatsAdapterLogoBack"
                 android:layout_width="wrap_content"
-                android:layout_height="54dp"
+                android:layout_height="@dimen/avListAdapterLogoHeight"
                 android:padding="2dp"
                 android:adjustViewBounds="true"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -84,7 +84,7 @@
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
                 android:textColor="@android:color/white"
-                android:textSize="25sp"
+                android:textSize="@dimen/avStatsAdapterLogoTextSize"
                 android:textStyle="bold"
                 android:maxLines="1"
                 android:ellipsize="end"
@@ -111,7 +111,7 @@
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:textColor="?colorAOnBackground"
-                android:textSize="18sp" />
+                android:textSize="@dimen/avListAdapterNameSize" />
 
             <TextView
                 android:id="@+id/avStatsAdapterName"
@@ -139,7 +139,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:textColor="?colorAOnBackground"
-                android:textSize="25sp" />
+                android:textSize="@dimen/avListAdapterApiSize" />
         </LinearLayout>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>
