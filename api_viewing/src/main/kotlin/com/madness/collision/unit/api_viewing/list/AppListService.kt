@@ -58,9 +58,7 @@ internal class AppListService {
 
     fun getAppDetails(context: Context, appInfo: ApiViewingApp): CharSequence {
         val builder = SpannableStringBuilder()
-        val reOne = retrieveOn(context, appInfo, 0, "")
-        if (!reOne.first) return ""
-        var pi = reOne.second!!
+        var pi = retrieveOn(context, appInfo, 0, "") ?: return ""
         val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", SystemUtil.getLocaleApp())
         val spanFlags = Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         builder.append(context.getString(R.string.apiDetailsPackageName), StyleSpan(Typeface.BOLD), spanFlags)
@@ -163,28 +161,28 @@ internal class AppListService {
                 PackageManager.GET_RECEIVERS or PackageManager.GET_SERVICES or
                 PackageManager.GET_PROVIDERS or flagGetDisabled or flagSignature
         val reDetails = retrieveOn(context, appInfo, flags, "details")
-        if (reDetails.first) {
-            pi = reDetails.second!!
+        if (reDetails != null) {
+            pi = reDetails
             permissions = pi.requestedPermissions ?: emptyArray()
             activities = pi.activities ?: emptyArray()
             receivers = pi.receivers ?: emptyArray()
             services = pi.services ?: emptyArray()
             providers = pi.providers ?: emptyArray()
         } else {
-            retrieveOn(context, appInfo, PackageManager.GET_PERMISSIONS, "permissions").let {
-                if (it.first) permissions = it.second!!.requestedPermissions ?: emptyArray()
+            retrieveOn(context, appInfo, PackageManager.GET_PERMISSIONS, "permissions")?.let {
+                permissions = it.requestedPermissions ?: emptyArray()
             }
-            retrieveOn(context, appInfo, PackageManager.GET_ACTIVITIES or flagGetDisabled, "activities").let {
-                if (it.first) activities = it.second!!.activities ?: emptyArray()
+            retrieveOn(context, appInfo, PackageManager.GET_ACTIVITIES or flagGetDisabled, "activities")?.let {
+                activities = it.activities ?: emptyArray()
             }
-            retrieveOn(context, appInfo, PackageManager.GET_RECEIVERS or flagGetDisabled, "receivers").let {
-                if (it.first) receivers = it.second!!.receivers ?: emptyArray()
+            retrieveOn(context, appInfo, PackageManager.GET_RECEIVERS or flagGetDisabled, "receivers")?.let {
+                receivers = it.receivers ?: emptyArray()
             }
-            retrieveOn(context, appInfo, PackageManager.GET_SERVICES or flagGetDisabled, "services").let {
-                if (it.first) services = it.second!!.services ?: emptyArray()
+            retrieveOn(context, appInfo, PackageManager.GET_SERVICES or flagGetDisabled, "services")?.let {
+                services = it.services ?: emptyArray()
             }
-            retrieveOn(context, appInfo, flagSignature, "signing").let {
-                if (it.first) pi = it.second!!
+            retrieveOn(context, appInfo, flagSignature, "signing")?.let {
+                pi = it
             }
         }
 
@@ -318,19 +316,15 @@ internal class AppListService {
     private val PackageInfo.sigLegacy: Array<Signature>?
         get() = signatures
 
-    private fun retrieveOn(context: Context, appInfo: ApiViewingApp, extraFlags: Int, subject: String): Pair<Boolean, PackageInfo?> {
-        var pi: PackageInfo? = null
+    private fun retrieveOn(context: Context, appInfo: ApiViewingApp, extraFlags: Int, subject: String): PackageInfo? {
         return try {
-            pi = if (appInfo.isArchive) {
-                context.packageManager.getPackageArchiveInfo(appInfo.appPackage.basePath, extraFlags)
-            } else {
-                context.packageManager.getPackageInfo(appInfo.packageName, extraFlags)
-            }
-            true to pi
+            val pm = context.packageManager
+            if (appInfo.isArchive) pm.getPackageArchiveInfo(appInfo.appPackage.basePath, extraFlags)
+            else pm.getPackageInfo(appInfo.packageName, extraFlags)
         } catch (e: Exception) {
             e.printStackTrace()
             Log.e("APIAdapter", String.format("failed to retrieve %s of %s", subject, appInfo.packageName))
-            false to pi
+            null
         }
     }
 

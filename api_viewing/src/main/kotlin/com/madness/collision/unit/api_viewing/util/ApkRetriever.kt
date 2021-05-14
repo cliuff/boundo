@@ -123,10 +123,11 @@ class ApkRetriever(private val context: Context) {
         // identify self owned file
         val cachePath = ContentProviderUtils.resolve(context, uri)
         if (cachePath != null) return File(cachePath)
-        // always make copy on Android 10 and above
-        if (OsUtils.satisfy(OsUtils.Q)) return makeFileCopy(uri)
-        val uriPath = uri.path
-        return if (uriPath != null) getRawFile(uriPath) else makeFileCopy(uri)
+        // always make copy on Android 10 and above (due to scoped storage policy?)
+        if (OsUtils.dissatisfy(OsUtils.Q) && uri.scheme == "file") {
+            uri.path?.let { return getRawFile(it) }
+        }
+        return makeFileCopy(uri)
     }
 
     private fun getRawFile(path: String): File? {

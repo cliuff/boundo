@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,6 +38,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.madness.collision.Democratic
 import com.madness.collision.R
@@ -48,7 +49,6 @@ import com.madness.collision.unit.themed_wallpaper.AccessTw
 import com.madness.collision.unit.themed_wallpaper.ThemedWallpaperEasyAccess
 import com.madness.collision.util.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.*
 import kotlin.math.min
@@ -161,7 +161,7 @@ class ExteriorFragment: TaggedFragment(), Democratic, View.OnClickListener{
         })
         viewBinding.exteriorImage.setOnClickListener(this)
 
-        GlobalScope.launch {
+        lifecycleScope.launch(Dispatchers.Default) {
             val args = arguments
             val isByNav = args?.getString(ARG_LAUNCH_MODE) != LAUNCH_MODE_NON_NAV
             val navArgs: ExteriorFragmentArgs by navArgs()
@@ -199,7 +199,7 @@ class ExteriorFragment: TaggedFragment(), Democratic, View.OnClickListener{
         val context = context ?: return
         if (requestCode == REQUEST_GET_IMAGE && resultCode == AppCompatActivity.RESULT_OK && data != null){
             val dataUri = data.data ?: return
-            GlobalScope.launch {
+            lifecycleScope.launch(Dispatchers.Default) {
                 clearRef()
                 clearViewRes()
                 val (imagePreview, backPreview) = loadSamples(context, dataUri)
@@ -241,7 +241,7 @@ class ExteriorFragment: TaggedFragment(), Democratic, View.OnClickListener{
     }
 
     private fun clearViewRes() {
-        GlobalScope.launch(Dispatchers.Main) {
+        lifecycleScope.launch(Dispatchers.Main) {
             viewBinding.exteriorBack.background = null
             viewBinding.exteriorImage.setImageDrawable(null)
         }
@@ -251,7 +251,7 @@ class ExteriorFragment: TaggedFragment(), Democratic, View.OnClickListener{
      * Update UI and blurred image
      */
     private fun setImage(context: Context, image: Bitmap?, previewSize: Int = X.size(context, 200f, X.DP).roundToInt()){
-        GlobalScope.launch {
+        lifecycleScope.launch(Dispatchers.Default) {
             // set default image
             if (image == null){
                 clearRef()
@@ -288,7 +288,7 @@ class ExteriorFragment: TaggedFragment(), Democratic, View.OnClickListener{
 
     private fun updateBlur(progress: Int) {
         if (backPreview == null) return
-        GlobalScope.launch {
+        lifecycleScope.launch(Dispatchers.Default) {
             val size = Point(viewBinding.exteriorBack.width, viewBinding.exteriorBack.height)
             val blurDegree = progress / 4f
             val shouldBlur = blurDegree != 0f
@@ -329,7 +329,7 @@ class ExteriorFragment: TaggedFragment(), Democratic, View.OnClickListener{
         val progressBar = ProgressBar(context)
         val dialog = CollisionDialog.loading(context, progressBar)
         dialog.show()
-        GlobalScope.launch {
+        lifecycleScope.launch(Dispatchers.Default) {
             try {
                 processImage(context)
             } catch (e: OutOfMemoryError) {

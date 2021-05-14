@@ -194,6 +194,7 @@ internal object AppTag {
      */
     fun ensureInstaller(context: Context, appInfo: ApiViewingApp): String? {
         if (!isChecking(context, TAG_ID_GP) && !isChecking(context, TAG_ID_PI)) return null
+        if (appInfo.isArchive) return null
         // must enable package installer to know unknown installer, which in turn invalidate package installer
         val installer = if (X.aboveOn(X.R)) {
             try {

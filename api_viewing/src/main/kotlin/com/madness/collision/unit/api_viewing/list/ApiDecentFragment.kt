@@ -106,11 +106,17 @@ internal class ApiDecentFragment : TaggedFragment(), Democratic {
         democratize(mainViewModel)
 
         arguments?.apply {
-            viewModel.app = MutableLiveData(getParcelable(ARG_APP) ?: ApiViewingApp())
-            viewModel.type = MutableLiveData(getInt(ARG_TYPE))
-            val verLetter = getChar(ARG_VER_LETTER)
-            val itemLength = getInt(ARG_ITEM_LENGTH)
-            viewModel.back = MutableLiveData(SealManager.disposeSealBack(context, verLetter, itemLength))
+            // catch android.os.BadParcelableException: ClassNotFoundException when unmarshalling:
+            // com.madness.collision.unit.api_viewing.data.ApiViewingApp$ByteBuddy$... on an Oppo device
+            try {
+                viewModel.app = MutableLiveData(getParcelable(ARG_APP) ?: ApiViewingApp())
+                viewModel.type = MutableLiveData(getInt(ARG_TYPE))
+                val verLetter = getChar(ARG_VER_LETTER)
+                val itemLength = getInt(ARG_ITEM_LENGTH)
+                viewModel.back = MutableLiveData(SealManager.disposeSealBack(context, verLetter, itemLength))
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
         viewModel.app.observe(viewLifecycleOwner) {
             it?.run {

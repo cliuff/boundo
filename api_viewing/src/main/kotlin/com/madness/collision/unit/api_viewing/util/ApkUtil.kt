@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -114,6 +114,7 @@ object ApkUtil {
     }
 
     fun iterateFile(file: File, operation: (JarEntry) -> Boolean): Throwable? {
+        if (file.exists().not()) return RuntimeException("File ${file.path} does not exist")
         try {
             JarFile(file).use { jar ->
                 val iterator = jar.entries().iterator()

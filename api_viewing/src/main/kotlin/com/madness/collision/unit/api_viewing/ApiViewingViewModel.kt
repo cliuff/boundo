@@ -96,7 +96,13 @@ internal class ApiViewingViewModel(application: Application): AndroidViewModel(a
         viewModelScope.launch(Dispatchers.Main) {
             lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
         }
-        apps4Cache.forEach { it.clearIcons() }
+        val appCache = apps4Cache
+        synchronized(appCache) {
+            val iterator = appCache.iterator()
+            while (iterator.hasNext()) {
+                iterator.next().clearIcons()
+            }
+        }
         clearCache()
         super.onCleared()
     }

@@ -171,19 +171,24 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
 
             // API ver
             targetAPI = info.applicationInfo.targetSdkVersion
-            minAPI = if (OsUtils.satisfy(OsUtils.N)) {
-                info.applicationInfo.minSdkVersion
-            } else {
-                val minApiText = ManifestUtil.getMinSdk(appPackage.basePath)
-                if (minApiText.isNotEmpty()) minApiText.toInt() else -1 // fix cloneable
-            }
-            initApiVer()
+            if (OsUtils.satisfy(OsUtils.N)) {
+                minAPI = info.applicationInfo.minSdkVersion
+                initApiVer()
+            } else if (archive.not()) {
+                minAPI = getMinApiLevelFromArchive()
+                initApiVer()
+            } // else (when API<N and is archive), init minAPI in initArchive()
 
             val pm = context.packageManager
             isLaunchable = pm.getLaunchIntentForPackage(packageName) != null
         } else {
             load(context, info.applicationInfo)
         }
+    }
+
+    private fun getMinApiLevelFromArchive(): Int {
+        val minApiText = ManifestUtil.getMinSdk(appPackage.basePath)
+        return if (minApiText.isNotEmpty()) minApiText.toInt() else -1 // fix cloneable
     }
 
     private fun initApiVer() {
@@ -213,6 +218,13 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
 
     fun initArchive(context: Context, applicationInfo: ApplicationInfo): ApiViewingApp {
         appPackage = AppPackage(applicationInfo)
+
+        // API<N and is archive
+        if (OsUtils.dissatisfy(OsUtils.N)) {
+            minAPI = getMinApiLevelFromArchive()
+            initApiVer()
+        }
+
         loadName(context, applicationInfo)
         //name = manager.getApplicationLabel(pi.applicationInfo).toString();
         return this
