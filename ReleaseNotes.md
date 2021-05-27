@@ -2,6 +2,131 @@
 Tag content regex: \n((((?!(<.*>)).)*)\n)*((?!(<.*>)).)+
 
 
+- **3.7.4** 21050217
+<en-US>
+Tweak a few UI elements and fix bugs.
+</en-US>
+<ar>
+قم بتعديل بعض عناصر واجهة المستخدم وإصلاح الأخطاء.
+</ar>
+<de-DE>
+Optimieren Sie einige UI-Elemente und beheben Sie Fehler.
+</de-DE>
+<el-GR>
+Ρυθμίστε μερικά στοιχεία διεπαφής χρήστη και διορθώστε σφάλματα.
+</el-GR>
+<en-GB>
+Tweak a few UI elements and fix bugs.
+</en-GB>
+<es-419>
+Modifica algunos elementos de la interfaz de usuario y corrige errores.
+</es-419>
+<es-ES>
+Modifica algunos elementos de la interfaz de usuario y corrige errores.
+</es-ES>
+<es-US>
+Modifica algunos elementos de la interfaz de usuario y corrige errores.
+</es-US>
+<fr-FR>
+Modifiez quelques éléments de l'interface utilisateur et corrigez les bogues.
+</fr-FR>
+<it-IT>
+Modifica alcuni elementi dell'interfaccia utente e correggi i bug.
+</it-IT>
+<ja-JP>
+一部のインターフェイス要素を最適化し、エラーを修正します。
+</ja-JP>
+<ko-KR>
+일부 인터페이스 요소를 최적화하고 오류를 수정합니다.
+</ko-KR>
+<pt-PT>
+Ajuste alguns elementos da IU e corrija bugs.
+</pt-PT>
+<ru-RU>
+Настройте несколько элементов пользовательского интерфейса и исправьте ошибки.
+</ru-RU>
+<th>
+ปรับแต่งองค์ประกอบ UI เล็กน้อยและแก้ไขข้อบกพร่อง
+</th>
+<tr-TR>
+Birkaç kullanıcı arayüzü öğesinde ince ayar yapın ve hataları düzeltin.
+</tr-TR>
+<vi>
+Chỉnh sửa một số yếu tố giao diện người dùng và sửa lỗi.
+</vi>
+<zh-CN>
+优化一些界面元素并修复错误。
+</zh-CN>
+<zh-HK>
+優化一些界面元素並修復錯誤。
+</zh-HK>
+<zh-TW>
+優化一些界面元素並修復錯誤。
+</zh-TW>
+
+
+- **3.7.1** 21022814
+<en-US>
+Add API level of Android 12
+</en-US>
+<ar>
+أضف مستوى API لنظام Android 12
+</ar>
+<de-DE>
+API-Level von Android 12 hinzufügen
+</de-DE>
+<el-GR>
+Προσθέστε επίπεδο API του Android 12
+</el-GR>
+<en-GB>
+Add API level of Android 12
+</en-GB>
+<es-419>
+Agregar nivel de API de Android 12
+</es-419>
+<es-ES>
+Agregar nivel de API de Android 12
+</es-ES>
+<es-US>
+Agregar nivel de API de Android 12
+</es-US>
+<fr-FR>
+Ajouter le niveau d'API d'Android 12
+</fr-FR>
+<it-IT>
+Aggiungi il livello API di Android 12
+</it-IT>
+<ja-JP>
+Android 12APIレベルを追加する
+</ja-JP>
+<ko-KR>
+Android 12 API 레벨 추가
+</ko-KR>
+<pt-PT>
+Adicionar nível de API do Android 12
+</pt-PT>
+<ru-RU>
+Добавить уровень API Android 12
+</ru-RU>
+<th>
+เพิ่มระดับ API ของ Android 12
+</th>
+<tr-TR>
+Android 12'nin API seviyesini ekleyin
+</tr-TR>
+<vi>
+Thêm cấp độ API của Android 12
+</vi>
+<zh-CN>
+添加安卓12的API级别
+</zh-CN>
+<zh-HK>
+添加安卓12的API級別
+</zh-HK>
+<zh-TW>
+添加安卓12的API級別
+</zh-TW>
+
 - **3.7.0** 21021422
 <en-US>
 • Accelerate app list loading significantly

@@ -47,6 +47,22 @@ android {
     defaultConfig {
         minSdkVersion(22)
         targetSdkVersion(30)
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        getByName("debug") {
+            applicationIdSuffix = ".mortal"
+            isDebuggable = true
+            isJniDebuggable = false
+            isRenderscriptDebuggable = false
+            renderscriptOptimLevel = 3
+        }
+        getByName("release") {
+            isDebuggable = false
+            isJniDebuggable = false
+            isRenderscriptDebuggable = false
+            renderscriptOptimLevel = 3
+        }
     }
 
     compileOptions {
