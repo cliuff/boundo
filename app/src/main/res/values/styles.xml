@@ -414,6 +414,8 @@
         <item name="android:alpha">@fraction/surfaceAlpha</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
+        <!-- focusable on lower API TV -->
+        <item name="android:focusable">true</item>
     </style>
 
     <style name="InstantSwitchText" parent="Widget.MaterialComponents.TextView">
@@ -454,6 +456,8 @@
         <item name="android:alpha">@fraction/surfaceAlpha</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
+        <!-- focusable on lower API TV -->
+        <item name="android:focusable">true</item>
     </style>
 
     <style name="MainCardLand" parent="MainCard">

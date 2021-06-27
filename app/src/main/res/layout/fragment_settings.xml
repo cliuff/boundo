@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2020 Clifford Liu
+  ~ Copyright 2021 Clifford Liu
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
   -->
 
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:requiresFadingEdge="vertical"
@@ -27,37 +28,49 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
+        <FrameLayout
             android:id="@+id/settingsItemStyle"
-            android:drawableStart="@drawable/ic_palette_24"
-            android:text="@string/settings_exterior"
-            android:textColor="?colorAOnBackground"
-            android:textSize="18sp"
-            android:drawablePadding="20dp"
-            android:drawableTint="?colorAOnBackground"
-            android:foreground="?android:attr/selectableItemBackground"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:focusable="true">
 
-        <TextView
+            <TextView
+                app:drawableStartCompat="@drawable/ic_palette_24"
+                app:drawableTint="?colorAOnBackground"
+                android:text="@string/settings_exterior"
+                android:textColor="?colorAOnBackground"
+                android:textSize="18sp"
+                android:drawablePadding="20dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </FrameLayout>
+
+        <FrameLayout
             android:id="@+id/settingsItemAbout"
-            android:drawableStart="@drawable/ic_info_24"
-            android:text="@string/Main_TextView_Advice_Text"
-            android:textColor="?colorAOnBackground"
-            android:textSize="18sp"
-            android:drawablePadding="20dp"
-            android:drawableTint="?colorAOnBackground"
-            android:foreground="?android:attr/selectableItemBackground"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:focusable="true">
+
+            <TextView
+                app:drawableStartCompat="@drawable/ic_info_24"
+                app:drawableTint="?colorAOnBackground"
+                android:text="@string/Main_TextView_Advice_Text"
+                android:textColor="?colorAOnBackground"
+                android:textSize="18sp"
+                android:drawablePadding="20dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </FrameLayout>
 
         <ViewStub
             android:id="@+id/settingsItemLanguagesStub"

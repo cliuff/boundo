@@ -195,7 +195,7 @@ internal class UpdatesFragment : TaggedFragment(), Democratic {
         val icon = description.getIcon(mContext)
         header.mainUpdatesHeader.setCompoundDrawablesRelativeWithIntrinsicBounds(icon, null, null, null)
         header.mainUpdatesHeader.text = description.getName(mContext)
-        header.mainUpdatesHeader.setOnClickListener {
+        header.mainUpdatesHeaderContainer.setOnClickListener {
             mainViewModel.displayUnit(unitName, shouldShowNavAfterBack = true)
         }
 
