@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import android.graphics.drawable.Drawable
 import androidx.core.content.res.ResourcesCompat
 import com.madness.collision.util.Xml
 import java.io.File
-import java.util.jar.JarFile
+import java.util.zip.ZipFile
 
 object ManifestUtil {
     /**
@@ -38,12 +38,11 @@ object ManifestUtil {
 
     fun getManifestAttr(file: File, attr: Array<String> = emptyArray()): String {
         return try {
-            JarFile(file).use { jar ->
-                jar.getEntry("AndroidManifest.xml")?.let {
-                    jar.getInputStream(it)
-                }?.use {
+            ZipFile(file).use { zip ->
+                val entry = zip.getEntry("AndroidManifest.xml") ?: return@use ""
+                zip.getInputStream(entry).use {
                     Xml(it.readBytes(), Xml.MODE_FIND, attr).attrAsset
-                } ?: ""
+                }
             }
         } catch (ex: Exception) {
             ex.printStackTrace()
