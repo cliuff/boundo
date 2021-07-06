@@ -17,6 +17,7 @@
 package com.madness.collision.util
 
 import android.app.Activity
+import android.app.UiModeManager
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Color
@@ -24,6 +25,7 @@ import android.os.LocaleList
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import com.madness.collision.R
 import com.madness.collision.settings.SettingsFunc
@@ -353,6 +355,18 @@ object SystemUtil {
     fun showSystemBars(window: Window) {
         val controller = window.insetsCtrl ?: return
         controller.show(WindowInsets.Type.systemBars())
+    }
+
+    fun getResUiModeType(context: Context): Int {
+        return context.resources.configuration.uiMode and Configuration.UI_MODE_TYPE_MASK
+    }
+
+    fun getResUiModeNight(context: Context): Int {
+        return context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+    }
+
+    fun getSystemUiModeType(context: Context): Int {
+        return (context.getSystemService(AppCompatActivity.UI_MODE_SERVICE) as UiModeManager).currentModeType
     }
 
 }

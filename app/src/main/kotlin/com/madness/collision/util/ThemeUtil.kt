@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,12 +65,10 @@ object ThemeUtil {
         else ColorUtil.lightenAs(color, fraction)
     }
 
-    fun getIsNight(context: Context): Boolean{
-        return when (context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
-            Configuration.UI_MODE_NIGHT_NO -> false // Night mode is not active, we're using the light theme
-            Configuration.UI_MODE_NIGHT_YES -> true // Night mode is active, we're using dark theme
-            else -> false
-        }
+    fun getIsNight(context: Context): Boolean = when (SystemUtil.getResUiModeNight(context)) {
+        Configuration.UI_MODE_NIGHT_YES -> true // Night mode is active, we're using dark theme
+        Configuration.UI_MODE_NIGHT_NO -> false // Night mode is not active, we're using the light theme
+        else -> false
     }
 
     fun shouldChangeTheme4ThemedWallpaper(context: Context, prefSettings: SharedPreferences): Boolean{
