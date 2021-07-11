@@ -16,10 +16,8 @@
 
 package com.madness.collision.misc
 
-import android.content.ComponentName
 import android.content.Context
 import android.content.SharedPreferences
-import android.content.pm.PackageManager
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Drawable
 import android.os.Environment
@@ -35,9 +33,9 @@ import com.madness.collision.instant.Instant
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.api_viewing.AccessAV
-import com.madness.collision.unit.we_chat_evo.InstantWeChatActivity
 import com.madness.collision.util.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.IOException
 import kotlin.random.Random
@@ -80,14 +78,6 @@ internal object MiscMain {
             pref.edit { remove(P.UNIT_FREQUENCIES) }
             val originalData = data.associate { it.split(":").run { this[0] to this[1] } }
             PrefsUtil.putCompoundItem(pref, P.UNIT_FREQUENCIES, originalData)
-            // disable WeChat launcher icon
-            if (Unit.getDescription(Unit.UNIT_NAME_WE_CHAT_EVO)?.isAvailable(context) == false) {
-                val componentName = ComponentName(context.packageName, InstantWeChatActivity::class.qualifiedName ?: "")
-                val isEnabled = context.packageManager.getComponentEnabledSetting(componentName) == PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-                if (isEnabled) {
-                    context.packageManager.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP)
-                }
-            }
             // init pinned units
             initPinnedUnits(prefSettings)
             // init tags

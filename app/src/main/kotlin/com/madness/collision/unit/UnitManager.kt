@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,6 @@ import com.madness.collision.R
 import com.madness.collision.qs.TileServiceApiViewer
 import com.madness.collision.qs.TileServiceAudioTimer
 import com.madness.collision.unit.themed_wallpaper.ThemedWallpaperService
-import com.madness.collision.unit.we_chat_evo.InstantWeChatActivity
 import com.madness.collision.util.X
 import com.madness.collision.util.notify
 import com.madness.collision.util.notifyBriefly
@@ -99,7 +98,6 @@ internal class UnitManager(private val context: Context, private val splitInstal
             Unit.UNIT_NAME_AUDIO_TIMER -> this::aftermathAudioTimer
             Unit.UNIT_NAME_COOL_APP -> this::aftermathCoolApp
             Unit.UNIT_NAME_THEMED_WALLPAPER -> this::aftermathThemedWallpaper
-            Unit.UNIT_NAME_WE_CHAT_EVO -> this::aftermathWeChatEvo
             else -> return
         }.invoke(context, isUninstall)
     }
@@ -159,14 +157,6 @@ internal class UnitManager(private val context: Context, private val splitInstal
     private fun aftermathAudioTimer(context: Context, isUninstall: Boolean) {
         context.packageManager.setComponentEnabledSetting(
                 componentName<TileServiceAudioTimer>(context),
-                isUninstall.stateDisabled(),
-                PackageManager.DONT_KILL_APP
-        )
-    }
-
-    private fun aftermathWeChatEvo(context: Context, isUninstall: Boolean) {
-        context.packageManager.setComponentEnabledSetting(
-                componentName<InstantWeChatActivity>(context),
                 isUninstall.stateDisabled(),
                 PackageManager.DONT_KILL_APP
         )

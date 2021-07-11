@@ -67,7 +67,7 @@
     <queries>
         <!-- check if QQ is installed -->
         <package android:name="com.tencent.mobileqq" />
-        <!-- check if WeChat is installed -->
+        <!-- check if WeChat is installed for WeChat barcode scanner -->
         <package android:name="com.tencent.mm" />
         <!-- check if Alipay is installed -->
         <package android:name="com.eg.android.AlipayGphone" />
@@ -184,25 +184,7 @@
                 <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />
             </intent-filter>
         </activity>
-<!--        enabled by default to resolve desktop icon changed to app icon after restart issue-->
-        <activity
-            android:name=".unit.we_chat_evo.InstantWeChatActivity"
-            android:enabled="false"
-            android:excludeFromRecents="true"
-            android:launchMode="singleInstance"
-            android:icon="@mipmap/ic_tencent_mm"
-            android:label="@string/Launcher_WeChat"
-            android:roundIcon="@mipmap/ic_tencent_mm_round">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.shortcuts"
-                android:resource="@xml/wechat_shortcuts" />
-        </activity> <!-- Tile Services -->
+        <!-- Tile Services -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:enabled="true"

@@ -47,7 +47,6 @@ abstract class Unit: TaggedFragment(), Democratic {
         const val UNIT_NAME_NO_MEDIA = "no_media"
         const val UNIT_NAME_THEMED_WALLPAPER = "themed_wallpaper"
         const val UNIT_NAME_AUDIO_TIMER = "audio_timer"
-        const val UNIT_NAME_WE_CHAT_EVO = "we_chat_evo"
         const val UNIT_NAME_QQ_CONTACTS = "qq_contacts"
         const val UNIT_NAME_DEVICE_MANAGER = "device_manager"
         private val UNIT_CLASSES: MutableMap<String, Class<Unit>> = hashMapOf()
@@ -69,13 +68,6 @@ abstract class Unit: TaggedFragment(), Democratic {
                                 it.packageManager.hasSystemFeature(PackageManager.FEATURE_LIVE_WALLPAPER)
                             }),
                     StaticDescription(UNIT_NAME_AUDIO_TIMER, R.string.unit_audio_timer, R.drawable.ic_timer_24).setDescResId(R.string.unit_desc_at),
-                    StaticDescription(UNIT_NAME_WE_CHAT_EVO, R.string.unit_we_chat_evo, R.drawable.ic_we_chat_24).setDescResId(R.string.unit_desc_we)
-                            .setRequirement(
-                                    Description.Checker(R.string.unit_desc_requirement_shortcut) { X.aboveOn(X.N_MR1) },
-                                    Description.Checker(R.string.unit_desc_requirement_we) {
-                                        MiscApp.isAppAvailable(it, "com.tencent.mm",
-                                                "main.unit" to "WeChat not installed")
-                                    }),
                     Description(UNIT_NAME_QQ_CONTACTS, R.string.unit_qq_contacts, R.drawable.ic_qq_24).setDescResId(R.string.unit_desc_qc)
                             .setRequirement(
                                     Description.Checker(R.string.unit_desc_requirement_shortcut) { X.aboveOn(X.N_MR1) },
