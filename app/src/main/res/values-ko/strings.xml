@@ -264,7 +264,7 @@
     <string name="versatile_device_controls_dm_title_unknown">알려지지 않은 장치</string>
     <string name="dm_main_paired_devices">페어링 된 장치</string>
     <string name="dm_list_item_state_connecting">연결 중…</string>
-    <string name="dm_list_item_state_disconnecting">연결 해제 중 ...</string>
+    <string name="dm_list_item_state_disconnecting">연결 해제 중…</string>
     <string name="dm_list_item_state_connected">연결됨</string>
     <string name="dm_list_item_state_disconnected">연결되지 않은</string>
     <string name="dm_list_item_hint_connected">연결되었습니다. 연결을 끊으려면 클릭하세요.</string>

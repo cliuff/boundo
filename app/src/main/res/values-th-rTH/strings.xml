@@ -263,8 +263,8 @@
     <string name="versatile_device_controls_dm_ctrl_desc_on">ยกเลิกการเชื่อมต่ออุปกรณ์</string>
     <string name="versatile_device_controls_dm_title_unknown">อุปกรณ์ที่ไม่รู้จัก</string>
     <string name="dm_main_paired_devices">อุปกรณ์ที่จับคู่</string>
-    <string name="dm_list_item_state_connecting">กำลังเชื่อมต่อ ...</string>
-    <string name="dm_list_item_state_disconnecting">กำลังยกเลิกการเชื่อมต่อ ...</string>
+    <string name="dm_list_item_state_connecting">กำลังเชื่อมต่อ…</string>
+    <string name="dm_list_item_state_disconnecting">กำลังยกเลิกการเชื่อมต่อ…</string>
     <string name="dm_list_item_state_connected">เชื่อมต่อแล้ว</string>
     <string name="dm_list_item_state_disconnected">ยกเลิกการเชื่อมต่อ</string>
     <string name="dm_list_item_hint_connected">เชื่อมต่อแล้วแตะเพื่อยกเลิกการเชื่อมต่อ</string>

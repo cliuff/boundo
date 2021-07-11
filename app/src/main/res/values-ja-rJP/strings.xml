@@ -264,7 +264,7 @@
     <string name="versatile_device_controls_dm_title_unknown">未知のディバイス</string>
     <string name="dm_main_paired_devices">ペアリングされたデバイス</string>
     <string name="dm_list_item_state_connecting">接続中…</string>
-    <string name="dm_list_item_state_disconnecting">切断しています...</string>
+    <string name="dm_list_item_state_disconnecting">切断しています…</string>
     <string name="dm_list_item_state_connected">接続済み</string>
     <string name="dm_list_item_state_disconnected">接続されていません</string>
     <string name="dm_list_item_hint_connected">接続済み、クリックして切断</string>

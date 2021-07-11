@@ -263,8 +263,8 @@
     <string name="versatile_device_controls_dm_ctrl_desc_on">Disconnetti il dispositivo</string>
     <string name="versatile_device_controls_dm_title_unknown">Dispositivo sconosciuto</string>
     <string name="dm_main_paired_devices">Dispositivi accoppiati</string>
-    <string name="dm_list_item_state_connecting">Collegamento ...</string>
-    <string name="dm_list_item_state_disconnecting">Disconnessione ...</string>
+    <string name="dm_list_item_state_connecting">Collegamento…</string>
+    <string name="dm_list_item_state_disconnecting">Disconnessione…</string>
     <string name="dm_list_item_state_connected">Collegato</string>
     <string name="dm_list_item_state_disconnected">Disconnesso</string>
     <string name="dm_list_item_hint_connected">Connesso, tocca per disconnetterti</string>

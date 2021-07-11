@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2020 Clifford Liu
+  ~ Copyright 2021 Clifford Liu
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -18,52 +18,19 @@
     xmlns:aapt="http://schemas.android.com/aapt"
     android:width="72dp"
     android:height="72dp"
-    android:viewportWidth="3.6"
-    android:viewportHeight="3.6">
+    android:viewportWidth="72"
+    android:viewportHeight="72">
   <path
-      android:pathData="M1.80548,0.465 L0.465,1.87469L0.465,3.1349L1.80356,1.79399 3.1349,0.465Z">
+      android:pathData="M63.06,63.06l-54.12,0l0,-54.12l54.12,0l-27.6176,26.6664z">
     <aapt:attr name="android:fillColor">
       <gradient 
-          android:startY="2.9197085"
-          android:startX="0.015495216"
-          android:endY="0.43520388"
-          android:endX="2.4999783"
-          android:type="linear">
-        <item android:offset="0.108" android:color="#FFC757BC"/>
-        <item android:offset="0.173" android:color="#FFCD5CA9"/>
-        <item android:offset="0.492" android:color="#FFE8744F"/>
-        <item android:offset="0.716" android:color="#FFF88316"/>
-        <item android:offset="0.823" android:color="#FFFF8900"/>
-      </gradient>
-    </aapt:attr>
-  </path>
-  <path
-      android:pathData="M0.465,3.1349 L1.80356,1.79401 3.1349,3.1349Z">
-    <aapt:attr name="android:fillColor">
-      <gradient 
-          android:startY="3.6165957"
-          android:startX="1.3170834"
-          android:endY="2.4056134"
-          android:endX="2.5280657"
-          android:type="linear">
-        <item android:offset="0.296" android:color="#FF00AFFF"/>
-        <item android:offset="0.694" android:color="#FF5282FF"/>
-        <item android:offset="1" android:color="#FF945DFF"/>
-      </gradient>
-    </aapt:attr>
-  </path>
-  <path
-      android:pathData="M0.465,0.465L1.80548,0.465L0.465,1.87469Z">
-    <aapt:attr name="android:fillColor">
-      <gradient 
-          android:startY="49.100716"
-          android:startX="-1.5470605"
-          android:endY="-6.9682956"
-          android:endX="51.76785"
-          android:type="linear">
-        <item android:offset="0.296" android:color="#FF00AFFF"/>
-        <item android:offset="0.694" android:color="#FF5282FF"/>
-        <item android:offset="1" android:color="#FF945DFF"/>
+          android:gradientRadius="61.996002"
+          android:centerX="61.2614"
+          android:centerY="11.158018"
+          android:type="radial">
+        <item android:offset="0.003435144" android:color="#FFE44857"/>
+        <item android:offset="0.4689" android:color="#FFC711E1"/>
+        <item android:offset="1" android:color="#FF7F52FF"/>
       </gradient>
     </aapt:attr>
   </path>
