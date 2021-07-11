@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2020 Clifford Liu
+  ~ Copyright 2021 Clifford Liu
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -27,11 +27,6 @@
     <string name="Settings_Language_Dialog_Title">Le lingue</string>
     <string name="Settings_Button_Derive">Deriva il testo normale</string>
     <string name="ttExportICalFile">file iCalendar</string>
-    <string name="Launcher_WeChat">wechat</string>
-    <string name="Shortcuts_WeChatScanner_ShortLabel">Scansione</string>
-    <string name="Shortcuts_WeChatScanner_LongLabel">Scansione</string>
-    <string name="Shortcuts_WeChatScanner_DisabledMessage">Disabilitato</string>
-    <string name="WeChatLauncher_Launch_Fail">WeChat non installato</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">Nuova versione trovata</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">Nuova versione</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart2">I cambiamenti</string>
@@ -88,7 +83,6 @@
     <string name="tools_nm">Nascondere foto private</string>
     <string name="nm_adapter_img_content_1">Immagine cartella immagine</string>
     <string name="text_copy_link">Link copiato</string>
-    <string name="unit_we_chat_evo">Collegamento WeChat</string>
     <string name="unit_qq_contacts">Collegamento di contatto QQ</string>
     <string name="unit_audio_timer">Timer audio</string>
     <string name="main_more">Di Più</string>
@@ -135,7 +129,6 @@
     <string name="settingsApiApkPreload">Cerca in anticipo gli APK in background</string>
     <string name="tileColorful">Resta colorato</string>
     <string name="apiViewerShort">API dell\'app</string>
-    <string name="instantMmLogoDesc">Logo WeChat</string>
     <string name="menuApiSortApiTime">Aggiornato di recente</string>
     <string name="avStoreLink">Link all\'app store</string>
     <string name="apiSdkTarget">SDK di destinazione</string>
@@ -221,7 +214,6 @@
     <string name="unit_desc_nm">• Nascondi immagini runtime prodotte dalle app (.nomedia)</string>
     <string name="unit_desc_tw">• Rendi il tuo sfondo conforme al tema scuro di Android 10 applicando automaticamente uno sfondo di colore scuro</string>
     <string name="unit_desc_at">• Interrompere la riproduzione dell\'audio</string>
-    <string name="unit_desc_we">• Collegamento dello scanner WeChat</string>
     <string name="unit_desc_qc">• Collegamento ai contatti QQ</string>
     <string name="unit_desc_requirement_shortcut">La versione di Android è almeno 7.1</string>
     <string name="unit_desc_requirement_nm">La versione Android è al massimo 9</string>
@@ -231,7 +223,6 @@
     <string name="unit_desc_unavailable">non disponibile</string>
     <string name="unit_desc_install">Installare</string>
     <string name="unit_desc_uninstall">Disinstallare</string>
-    <string name="unit_desc_requirement_we">WeChat installato</string>
     <string name="unit_desc_requirement_qc">QQ installato</string>
     <string name="unit_manager_uninstall_success">La disinstallazione avverrà quando è inattivo</string>
     <string name="unit_manager_error_network">Errore di rete</string>
@@ -259,9 +250,6 @@
     <string name="twWallpaperLight">Carta da parati luminosa</string>
     <string name="twWallpaperDark">Carta da parati scura</string>
     <string name="twDesc">Questa funzione ti viene presentata come sfondo animato.\nPassa allo sfondo scuro quando\n1. il sistema Tema scuro è attivato\n2. Il piano temi scuro nelle impostazioni dell\'app è impostato su Pianifica e il momento è giusto</string>
-    <string name="Main_WeChatLauncher_Toast_State_ShiftEnabled">Ora abilitato, un paio di secondi necessari per l\'implementazione del launcher</string>
-    <string name="Main_WeChatLauncher_Toast_State_ShiftDisabled">Ora disabilitato, un paio di secondi necessari per l\'implementazione del launcher</string>
-    <string name="we_note">Non provare questa funzione se stai usando un lanciatore di app che non ha il cassetto delle app (la maggior parte dei telefoni cinesi)\n\nSe trovi accidentalmente l\'icona di avvio di Boundo mancante, disinstalla prima quindi reinstalla l\'app\n\nSe abiliti questa unità, tieni presente che l\'icona di Boundo WeChat (quando inviata al desktop) cambia in icona Boundo dopo il riavvio del dispositivo e l\'icona di collegamento WeChat (quando fissata sul desktop) mancherà</string>
     <string name="at_title">Imposta il timer</string>
     <string name="at_hour_hint">Ora</string>
     <string name="at_minute_hint">Minuto</string>

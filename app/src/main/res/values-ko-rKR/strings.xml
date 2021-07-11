@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2020 Clifford Liu
+  ~ Copyright 2021 Clifford Liu
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -27,11 +27,6 @@
     <string name="Settings_Language_Dialog_Title">언어</string>
     <string name="Settings_Button_Derive">일반 텍스트 추출</string>
     <string name="ttExportICalFile">iCalendar 파일</string>
-    <string name="Launcher_WeChat">위챗</string>
-    <string name="Shortcuts_WeChatScanner_ShortLabel">스캔</string>
-    <string name="Shortcuts_WeChatScanner_LongLabel">스캔</string>
-    <string name="Shortcuts_WeChatScanner_DisabledMessage">비활성화</string>
-    <string name="WeChatLauncher_Launch_Fail">WeChat이 설치되지 않았습니다</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">새로운 버전 감지</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">새로운 에디션</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart2">종류</string>
@@ -115,7 +110,6 @@
     <string name="main_updates">동적</string>
     <string name="main_more">더</string>
     <string name="unit_audio_timer">음악, 그만</string>
-    <string name="unit_we_chat_evo">위챗 바로 가기</string>
     <string name="unit_qq_contacts">QQ 친구 지름길</string>
     <string name="unit_desc_installed">설치되었습니다</string>
     <string name="unit_desc_not_installed">미설치</string>
@@ -148,7 +142,6 @@
     <string name="settingsApiApkPreload">배경 사전 스캔 APK</string>
     <string name="textBugLog">오류 기록</string>
     <string name="tileColorful">모 블랙 스크린</string>
-    <string name="instantMmLogoDesc">위챗 아이콘</string>
     <string name="avStoreLink">앱 스토어 페이지 링크</string>
     <string name="settingsApiRetrieveRoundIcon">앱이 둥근 아이콘 리소스를 제공 할 때 아이콘로드</string>
     <string name="res_invalid_input">잘못된 입력</string>
@@ -215,12 +208,10 @@
     <string name="twLiveWallpaperDesc">어두운 모드가 켜져있을 때 어두운 배경 화면을 자동으로 변경</string>
     <string name="unit_desc_requirement_nm">최대 9 개의 Android 버전</string>
     <string name="unit_desc_requirement_shortcut">안드로이드 버전은 7.1 이상입니다</string>
-    <string name="unit_desc_requirement_we">위챗 설치</string>
     <string name="unit_desc_requirement_qc">QQ 설치</string>
     <string name="unit_desc_nm">• 응용 프로그램이 실행 중일 때 리소스 사진 (.nomedia)을 숨 깁니다.</string>
     <string name="unit_desc_tw">• 밝고 어두운 톤 배경 화면을 설정하면 배경 화면이 Android 10의 어두운 모드로 변경됩니다.</string>
     <string name="unit_desc_at">• 오디오 재생 중지</string>
-    <string name="unit_desc_we">• WeChat 바로 가기 스캔</string>
     <string name="unit_desc_qc">• QQ 친구 바로 가기</string>
     <string name="unit_manager_install_success">Play 스토어 처리</string>
     <string name="unit_manager_uninstall_success">기기가 유휴 상태 일 때 제거됩니다</string>
@@ -259,9 +250,6 @@
     <string name="twWallpaperLight">밝은 톤 벽지</string>
     <string name="twWallpaperDark">어두운 톤 벽지</string>
     <string name="twDesc">이것은 라이브 벽지입니다.\n다음과 같은 상황에서 어두운 배경 화면을 사용하십시오.\n1. 시스템이 어두운 모드로 켜졌습니다\n2.이 응용 프로그램은 시간에 어두운 테마를 시작하고 현재 시간은 열려 있어야합니다</string>
-    <string name="Main_WeChatLauncher_Toast_State_ShiftEnabled">이제 활성화되었습니다. 몇 초 동안 기다립니다.</string>
-    <string name="Main_WeChatLauncher_Toast_State_ShiftDisabled">이제 비활성화되었습니다. 몇 초 동안 기다립니다.</string>
-    <string name="we_note">전화기 데스크탑에 응용 프로그램 서랍이없는 경우 (대부분의 중국 제조업체의 전화기)이 기능을 사용하지 마십시오\n\nBoundo 아이콘이 예기치 않게 사라지면 Boundo를 제거했다가 다시 설치하십시오\n\n이 기능을 활성화하면 장치가 다시 시작된 후 Boundo WeChat 아이콘 (데스크탑에 놓인 경우)이 Boundo 아이콘이되고 WeChat 바로 가기 아이콘 (데스크톱에 고정 된 경우)이 사라집니다.</string>
     <string name="at_title">카운트 다운</string>
     <string name="at_hour_hint">시</string>
     <string name="at_minute_hint">분</string>

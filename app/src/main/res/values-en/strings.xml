@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2020 Clifford Liu
+  ~ Copyright 2021 Clifford Liu
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -26,11 +26,6 @@
     <string name="Settings_Language_Dialog_Title">Languages</string>
     <string name="Settings_Button_Derive">Derive plain text</string>
     <string name="ttExportICalFile">iCalendar file</string>
-    <string name="Launcher_WeChat">WeChat</string>
-    <string name="Shortcuts_WeChatScanner_ShortLabel">Scan</string>
-    <string name="Shortcuts_WeChatScanner_LongLabel">Scan</string>
-    <string name="Shortcuts_WeChatScanner_DisabledMessage">Disabled</string>
-    <string name="WeChatLauncher_Launch_Fail">WeChat not installed</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">New version found</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">New version</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart2">Changes</string>
@@ -114,7 +109,6 @@
     <string name="textBugLog">Bug caught in log</string>
     <string name="tileColorful">Stay Colourful</string>
     <string name="apiViewerShort">App API</string>
-    <string name="instantMmLogoDesc">WeChat logo</string>
     <string name="menuApiSortApiTime">Recently updated</string>
     <string name="avStoreLink">Link to app store</string>
     <string name="apiSdkTarget">Target SDK</string>
@@ -213,7 +207,6 @@
     <string name="main_more">More</string>
     <string name="unit_audio_timer">Audio Timer</string>
     <string name="unit_qq_contacts">QQ Contact Shortcut</string>
-    <string name="unit_we_chat_evo">WeChat Shortcut</string>
     <string name="unit_desc_installed">Installed</string>
     <string name="unit_desc_not_installed">Not installed</string>
     <string name="unit_desc_available">Available</string>
@@ -222,7 +215,6 @@
     <string name="unit_desc_uninstall">Uninstall</string>
     <string name="unit_desc_requirement_nm">Android version is at most 9</string>
     <string name="unit_desc_requirement_shortcut">Android version is at least 7.1</string>
-    <string name="unit_desc_requirement_we">WeChat installed</string>
     <string name="unit_desc_requirement_qc">QQ installed</string>
     <string name="unit_desc_av">• Check Android API level of all apps and apks on device\n• Check Adaptive Icon support of all apps\n• App API stats\n• APK and icon extraction\n• Package details and signature details</string>
     <string name="unit_desc_st">! For Chinese users\n• Add course manually\n• Parse school timetable from school\'s education system website (some of the ZFSoft education system only)\n• Generate iCalendar file (.ics)\n• Export to Google Calendar etc.</string>
@@ -231,7 +223,6 @@
     <string name="unit_desc_nm">• Hide runtime images produced by apps (.nomedia)</string>
     <string name="unit_desc_tw">• Make your wallpaper comply to Android 10 dark theme by applying a dark-color wallpaper automatically</string>
     <string name="unit_desc_at">• Stop audio from playing</string>
-    <string name="unit_desc_we">• WeChat scanner shortcut</string>
     <string name="unit_desc_qc">• QQ contacts shortcut</string>
     <string name="unit_manager_install_success">Play Store is processing the install</string>
     <string name="unit_manager_uninstall_success">Uninstall will happen when idle</string>
@@ -277,9 +268,6 @@
     <string name="twWallpaperLight">Bright wallpaper</string>
     <string name="twWallpaperDark">Dark wallpaper</string>
     <string name="twDesc">This feature is presented to you as live wallpaper.\nSwitch to dark wallpaper when\n1. system Dark Theme is turned on\n2. dark theme plan in app settings is set to Schedule and the time is right</string>
-    <string name="Main_WeChatLauncher_Toast_State_ShiftEnabled">Now enabled, a couple of seconds needed for launcher to implement</string>
-    <string name="Main_WeChatLauncher_Toast_State_ShiftDisabled">Now disabled, a couple of seconds needed for launcher to implement</string>
-    <string name="we_note">Do not try this feature if you are using an app launcher that has no app drawer(most of the Chinese phones)\n\nIf you accidentally find Boundo\'s launcher icon missing, please first uninstall then reinstall the app\n\nIf you enable this unit, please note that the Boundo WeChat icon(when sent to desktop) changes to Boundo icon after device restart, and the WeChat shortcut icon(when pinned on desktop) will be missing</string>
     <string name="at_title">Set timer</string>
     <string name="at_hour_hint">Hour</string>
     <string name="at_minute_hint">Minute</string>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2020 Clifford Liu
+  ~ Copyright 2021 Clifford Liu
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -27,11 +27,6 @@
     <string name="Settings_Language_Dialog_Title">Sprachen</string>
     <string name="Settings_Button_Derive">Leiten Sie einfachen Text ab</string>
     <string name="ttExportICalFile">iCalendar-Datei</string>
-    <string name="Launcher_WeChat">WeChat</string>
-    <string name="Shortcuts_WeChatScanner_ShortLabel">Scan</string>
-    <string name="Shortcuts_WeChatScanner_LongLabel">Scan</string>
-    <string name="Shortcuts_WeChatScanner_DisabledMessage">Behindert</string>
-    <string name="WeChatLauncher_Launch_Fail">WeChat nicht installiert</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">Neue Version gefunden</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">Neue Version</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart2">Änderungen</string>
@@ -113,7 +108,6 @@
     <string name="textBugLog">Fehler im Protokoll gefangen</string>
     <string name="tileColorful">Bleib bunt</string>
     <string name="apiViewerShort">App API</string>
-    <string name="instantMmLogoDesc">WeChat-Logo</string>
     <string name="menuApiSortApiTime">Kürzlich aktualisiert</string>
     <string name="avStoreLink">Link zum App Store</string>
     <string name="apiSdkTarget">Ziel-SDK</string>
@@ -202,7 +196,6 @@
     <string name="main_updates">Aktualisierung</string>
     <string name="main_more">Mehr</string>
     <string name="unit_audio_timer">Audio-Timer</string>
-    <string name="unit_we_chat_evo">WeChat-Verknüpfung</string>
     <string name="unit_qq_contacts">QQ Kontaktverknüpfung</string>
     <string name="unit_desc_installed">Eingerichtet</string>
     <string name="unit_desc_not_installed">Nicht installiert</string>
@@ -212,7 +205,6 @@
     <string name="unit_desc_uninstall">Deinstallieren</string>
     <string name="unit_desc_requirement_nm">Android-Version ist höchstens 10</string>
     <string name="unit_desc_requirement_shortcut">Android-Version ist mindestens 7.1</string>
-    <string name="unit_desc_requirement_we">WeChat installiert</string>
     <string name="unit_desc_requirement_qc">QQ installiert</string>
     <string name="unit_manager_install_success">Play Store verarbeitet die Installation</string>
     <string name="unit_manager_uninstall_success">Die Deinstallation erfolgt im Leerlauf</string>
@@ -238,7 +230,6 @@
     <string name="unit_desc_nm">• Ausblenden von Laufzeitbildern, die von Apps (.nomedia) erstellt wurden</string>
     <string name="unit_desc_tw">• Stellen Sie sicher, dass Ihr Hintergrundbild dem dunklen Thema von Android 10 entspricht, indem Sie automatisch ein dunkles Hintergrundbild anwenden</string>
     <string name="unit_desc_at">• Stoppen Sie die Audiowiedergabe</string>
-    <string name="unit_desc_we">• WeChat-Scannerverknüpfung</string>
     <string name="unit_desc_qc">• Verknüpfung zu QQ-Kontakten</string>
     <string name="unit_desc_av">• Überprüfen Sie die Android-API-Ebene aller Apps und Apks auf dem Gerät.\n• Überprüfen Sie die Unterstützung für adaptive Symbole aller Apps.\n• App-API-Statistiken.\n• Extraktion von APKs und Symbolen.\n• Paketdetails und Signaturdetails</string>
     <string name="unit_desc_st">! Für chinesische Benutzer\n• Kurs manuell hinzufügen\n• Schulstundenplan von der Website des Schulbildungssystems analysieren (nur einige der ZFSoft-Bildungssysteme)\n• iCalendar-Datei (.ics) erstellen\n• In Google Kalender exportieren usw.</string>
@@ -259,9 +250,6 @@
     <string name="twWallpaperLight">Helle Tapete</string>
     <string name="twWallpaperDark">Dunkle Tapete</string>
     <string name="twDesc">Diese Funktion wird Ihnen als Live-Hintergrund angezeigt.\nWechseln Sie zu einem dunklen Hintergrundbild, wenn\n1. System Dark Theme ist aktiviert\n2. Der dunkle Themenplan in den App-Einstellungen ist auf Zeitplan eingestellt und die Zeit ist richtig</string>
-    <string name="Main_WeChatLauncher_Toast_State_ShiftEnabled">Jetzt aktiviert, benötigt der Launcher einige Sekunden, um implementiert zu werden</string>
-    <string name="Main_WeChatLauncher_Toast_State_ShiftDisabled">Jetzt deaktiviert, benötigt Launcher einige Sekunden, um implementiert zu werden</string>
-    <string name="we_note">Probieren Sie diese Funktion nicht aus, wenn Sie einen App-Launcher ohne App-Schublade verwenden (die meisten chinesischen Telefone)\n\nWenn Sie versehentlich feststellen, dass das Startsymbol von Boundo fehlt, deinstallieren Sie zuerst die App und installieren Sie sie erneut\n\nWenn Sie dieses Gerät aktivieren, beachten Sie bitte, dass das Boundo WeChat-Symbol (wenn es an den Desktop gesendet wird) nach dem Neustart des Geräts in das Boundo-Symbol geändert wird und das WeChat-Verknüpfungssymbol (wenn es auf dem Desktop angeheftet ist) fehlt</string>
     <string name="at_title">Timer einstellen</string>
     <string name="at_hour_hint">Stunde</string>
     <string name="at_minute_hint">Minute</string>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2020 Clifford Liu
+  ~ Copyright 2021 Clifford Liu
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -27,11 +27,6 @@
     <string name="Settings_Language_Dialog_Title">ภาษา</string>
     <string name="Settings_Button_Derive">สืบทอดข้อความธรรมดา</string>
     <string name="ttExportICalFile">ไฟล์ iCalendar</string>
-    <string name="Launcher_WeChat">WeChat</string>
-    <string name="Shortcuts_WeChatScanner_ShortLabel">การสแกน</string>
-    <string name="Shortcuts_WeChatScanner_LongLabel">การสแกน</string>
-    <string name="Shortcuts_WeChatScanner_DisabledMessage">พิการ</string>
-    <string name="WeChatLauncher_Launch_Fail">ไม่ได้ติดตั้ง WeChat</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">พบเวอร์ชันใหม่</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">เวอร์ชั่นใหม่</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart2">การเปลี่ยนแปลง</string>
@@ -88,7 +83,6 @@
     <string name="tools_nm">การซ่อนภาพส่วนตัว</string>
     <string name="nm_adapter_img_content_1">รูปภาพโฟลเดอร์รูปภาพ</string>
     <string name="text_copy_link">คัดลอกลิงก์แล้ว</string>
-    <string name="unit_we_chat_evo">ทางลัด WeChat</string>
     <string name="unit_qq_contacts">ทางลัด QQ Contact</string>
     <string name="unit_audio_timer">ตัวจับเวลาเสียง</string>
     <string name="main_more">มากกว่า</string>
@@ -135,7 +129,6 @@
     <string name="settingsApiApkPreload">สแกนหา APK ล่วงหน้าในพื้นหลัง</string>
     <string name="tileColorful">สีสันสดใส</string>
     <string name="apiViewerShort">แอป API</string>
-    <string name="instantMmLogoDesc">โลโก้ WeChat</string>
     <string name="menuApiSortApiTime">อัพเดทล่าสุด</string>
     <string name="avStoreLink">ลิงก์ไปยัง app store</string>
     <string name="apiSdkTarget">SDK เป้าหมาย</string>
@@ -221,10 +214,8 @@
     <string name="unit_desc_nm">•ซ่อนรูปภาพรันไทม์ที่ผลิตโดยแอพ (.nomedia)</string>
     <string name="unit_desc_tw">•ทำให้วอลล์เปเปอร์ของคุณสอดคล้องกับ Android 10 ธีมมืดโดยการใช้วอลล์เปเปอร์สีเข้มโดยอัตโนมัติ</string>
     <string name="unit_desc_at">•หยุดเสียงจากการเล่น</string>
-    <string name="unit_desc_we">•ทางลัดสแกนเนอร์ WeChat</string>
     <string name="unit_desc_qc">•ทางลัดที่ติดต่อของ QQ</string>
     <string name="unit_desc_requirement_qc">ติดตั้ง QQ แล้ว</string>
-    <string name="unit_desc_requirement_we">ติดตั้ง WeChat แล้ว</string>
     <string name="unit_desc_requirement_shortcut">เวอร์ชัน Android อย่างน้อย 7.1</string>
     <string name="unit_desc_requirement_nm">Android เวอร์ชันไม่เกิน 9</string>
     <string name="unit_desc_uninstall">ถอนการติดตั้ง</string>
@@ -259,9 +250,6 @@
     <string name="twWallpaperLight">วอลล์เปเปอร์ที่สดใส</string>
     <string name="twWallpaperDark">วอลล์เปเปอร์เข้ม</string>
     <string name="twDesc">คุณสมบัตินี้นำเสนอให้คุณเป็นวอลล์เปเปอร์สด\nเปลี่ยนเป็นวอลล์เปเปอร์สีเข้มเมื่อ\n1. ระบบเปิดใช้ธีมมืด\n2. แผนธีมมืดในการตั้งค่าแอพถูกตั้งเป็นกำหนดเวลาและเวลาเหมาะสม</string>
-    <string name="Main_WeChatLauncher_Toast_State_ShiftEnabled">เปิดใช้งานแล้วสองสามวินาทีที่จำเป็นสำหรับตัวเรียกใช้งาน</string>
-    <string name="Main_WeChatLauncher_Toast_State_ShiftDisabled">ตอนนี้ถูกปิดใช้งานสองสามวินาทีที่จำเป็นสำหรับตัวเรียกใช้งาน</string>
-    <string name="we_note">อย่าลองใช้คุณสมบัตินี้หากคุณใช้ตัวเรียกใช้งานแอปที่ไม่มีลิ้นชักเก็บแอพ (โทรศัพท์จีนส่วนใหญ่)\n\nหากคุณพบไอคอนตัวเปิดใช้งาน Boundo หายไปโปรดถอนการติดตั้งก่อนจากนั้นติดตั้งแอปใหม่\n\nหากคุณเปิดใช้งานเครื่องนี้โปรดทราบว่าไอคอน Boundo WeChat (เมื่อส่งไปยังเดสก์ท็อป) จะเปลี่ยนเป็นไอคอน Boundo หลังจากรีสตาร์ทอุปกรณ์และไอคอนทางลัด WeChat (เมื่อตรึงบนเดสก์ท็อป) จะหายไป</string>
     <string name="at_title">ตั้งเวลา</string>
     <string name="at_hour_hint">ชั่วโมง</string>
     <string name="at_minute_hint">นาที</string>

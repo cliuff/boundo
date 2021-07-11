@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2020 Clifford Liu
+  ~ Copyright 2021 Clifford Liu
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -27,11 +27,6 @@
     <string name="Settings_Language_Dialog_Title">言語</string>
     <string name="Settings_Button_Derive">プレーンテキストを抽出する</string>
     <string name="ttExportICalFile">iCalendarファイル</string>
-    <string name="Launcher_WeChat">WeChat</string>
-    <string name="Shortcuts_WeChatScanner_ShortLabel">スキャンして</string>
-    <string name="Shortcuts_WeChatScanner_LongLabel">スキャンして</string>
-    <string name="Shortcuts_WeChatScanner_DisabledMessage">無効</string>
-    <string name="WeChatLauncher_Launch_Fail">WeChatがインストールされていません</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">新しいバージョンが検出されました</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">新版</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart2">バラエティ</string>
@@ -115,7 +110,6 @@
     <string name="main_updates">動的</string>
     <string name="main_more">もっと</string>
     <string name="unit_audio_timer">音楽、ストップ</string>
-    <string name="unit_we_chat_evo">WeChatショートカット</string>
     <string name="unit_qq_contacts">QQフレンズショートカット</string>
     <string name="unit_desc_installed">インストールされています</string>
     <string name="unit_desc_not_installed">インストールされていない</string>
@@ -148,7 +142,6 @@
     <string name="settingsApiApkPreload">バックグラウンドプレスキャンAPK</string>
     <string name="textBugLog">ログに記録されたエラー</string>
     <string name="tileColorful">Mo黒画面</string>
-    <string name="instantMmLogoDesc">WeChatアイコン</string>
     <string name="avStoreLink">アプリストアページへのリンク</string>
     <string name="settingsApiRetrieveRoundIcon">アプリが丸いアイコンリソースを提供するときにアイコンを読み込みます</string>
     <string name="res_invalid_input">無効入力</string>
@@ -215,12 +208,10 @@
     <string name="twLiveWallpaperDesc">ダークモードがオンのときに暗い壁紙を自動的に変更する</string>
     <string name="unit_desc_requirement_nm">Androidバージョン最大9</string>
     <string name="unit_desc_requirement_shortcut">Androidバージョンは7.1以上</string>
-    <string name="unit_desc_requirement_we">インストールされているWeChat</string>
     <string name="unit_desc_requirement_qc">QQインストール済み</string>
     <string name="unit_desc_nm">•アプリケーションの実行中にリソース画像（.nomedia）を非表示にする</string>
     <string name="unit_desc_tw">•明るいトーンと暗いトーンの壁紙を設定します。壁紙はAndroid 10のダークモードで変化します</string>
     <string name="unit_desc_at">•オーディオ再生を停止する</string>
-    <string name="unit_desc_we">•WeChatショートカットのスキャン</string>
     <string name="unit_desc_qc">•QQフレンドショートカット</string>
     <string name="unit_manager_install_success">Playストアの処理</string>
     <string name="unit_manager_uninstall_success">デバイスがアイドル状態のときにアンインストールされます</string>
@@ -259,9 +250,6 @@
     <string name="twWallpaperLight">明るいトーンの壁紙</string>
     <string name="twWallpaperDark">ダークトーン壁紙</string>
     <string name="twDesc">ライブ壁紙です。\n次の状況では、暗い壁紙を使用します。\n1.システムがダークモードをオンにしました\n2.このアプリケーションは時間どおりにダークテーマを開始し、現在の時間が開いているはずです</string>
-    <string name="Main_WeChatLauncher_Toast_State_ShiftEnabled">有効になりました。有効になるまで数秒待ちます</string>
-    <string name="Main_WeChatLauncher_Toast_State_ShiftDisabled">無効になりました。有効になるまで数秒待ちます</string>
-    <string name="we_note">電話のデスクトップにアプリケーションドロワーがない場合（ほとんどの中国メーカーの電話）、この機能を使用しないでください\n\nBoundoアイコンが予期せず消えた場合は、Boundoをアンインストールして再インストールします\n\nこの機能を有効にすると、Boundo WeChatアイコン（デスクトップに配置された場合）がデバイスの再起動後にBoundoアイコンになり、WeChatショートカットアイコン（デスクトップに固定された場合）が消えることに注意してください</string>
     <string name="at_title">秒読み</string>
     <string name="at_hour_hint">時間</string>
     <string name="at_minute_hint">分</string>

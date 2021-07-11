@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2020 Clifford Liu
+  ~ Copyright 2021 Clifford Liu
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -27,11 +27,6 @@
     <string name="Settings_Language_Dialog_Title">Γλώσσες</string>
     <string name="Settings_Button_Derive">Παράγει απλό κείμενο</string>
     <string name="ttExportICalFile">Αρχείο iCalendar</string>
-    <string name="Launcher_WeChat">Wechat</string>
-    <string name="Shortcuts_WeChatScanner_ShortLabel">Σάρωση</string>
-    <string name="Shortcuts_WeChatScanner_LongLabel">Σάρωση</string>
-    <string name="Shortcuts_WeChatScanner_DisabledMessage">άτομα με ειδικές ανάγκες</string>
-    <string name="WeChatLauncher_Launch_Fail">Το WeChat δεν έχει εγκατασταθεί</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">Βρέθηκε νέα έκδοση</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">Νέα έκδοση</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart2">Αλλαγές</string>
@@ -109,7 +104,6 @@
     <string name="main_updates">Ενημερώσεις</string>
     <string name="main_more">Περισσότερο</string>
     <string name="unit_audio_timer">Χρονόμετρο ήχου</string>
-    <string name="unit_we_chat_evo">Συντόμευση WeChat</string>
     <string name="unit_qq_contacts">Συντόμευση επικοινωνίας QQ</string>
     <string name="unit_desc_installed">Εγκατεστημένο</string>
     <string name="unit_desc_not_installed">Μη εγκατεστημενο</string>
@@ -149,7 +143,6 @@
     <string name="settingsApiApkPreload">Σάρωση για APK εκ των προτέρων στο παρασκήνιο</string>
     <string name="textBugLog">Το σφάλμα εντοπίστηκε στο αρχείο καταγραφής</string>
     <string name="tileColorful">Μείνετε πολύχρωμοι</string>
-    <string name="instantMmLogoDesc">Λογότυπο WeChat</string>
     <string name="avStoreLink">Σύνδεσμος στο κατάστημα εφαρμογών</string>
     <string name="settingsApiRetrieveRoundIcon">Ανάκτηση στρογγυλού εικονιδίου από τον πόρο όταν παρέχεται</string>
     <string name="activityTextProcessingApp">Προβολή εφαρμογών Bnd</string>
@@ -215,13 +208,11 @@
     <string name="twLiveWallpaperDesc">Μετάβαση σε σκοτεινή ταπετσαρία αυτόματα όταν είναι ενεργοποιημένο το σκοτεινό θέμα</string>
     <string name="unit_desc_requirement_nm">Η έκδοση Android είναι το πολύ 10</string>
     <string name="unit_desc_requirement_shortcut">Η έκδοση Android είναι τουλάχιστον 7.1</string>
-    <string name="unit_desc_requirement_we">Εγκατεστημένο το WeChat</string>
     <string name="unit_desc_requirement_qc">Εγκατεστημένο QQ</string>
     <string name="unit_desc_ca">• Ανάκτηση πληροφοριών για τις εφαρμογές στο CoolApk</string>
     <string name="unit_desc_nm">• Απόκρυψη εικόνων χρόνου εκτέλεσης που παράγονται από εφαρμογές (.nomedia)</string>
     <string name="unit_desc_tw">• Κάντε την ταπετσαρία σας να συμμορφώνεται με το σκοτεινό θέμα Android 10 εφαρμόζοντας αυτόματα μια ταπετσαρία σκούρου χρώματος</string>
     <string name="unit_desc_at">• Διακοπή αναπαραγωγής ήχου</string>
-    <string name="unit_desc_we">• Συντόμευση σαρωτή WeChat</string>
     <string name="unit_desc_qc">• Συντόμευση επαφών QQ</string>
     <string name="unit_manager_install_success">Το Play Store επεξεργάζεται την εγκατάσταση</string>
     <string name="unit_manager_uninstall_success">Η απεγκατάσταση θα πραγματοποιηθεί όταν είναι αδρανής</string>
@@ -259,9 +250,6 @@
     <string name="twWallpaperLight">Φωτεινή ταπετσαρία</string>
     <string name="twWallpaperDark">Σκούρο ταπετσαρία</string>
     <string name="twDesc">Αυτή η δυνατότητα σας παρουσιάζεται ως ζωντανή ταπετσαρία.\nΜετάβαση σε σκοτεινή ταπετσαρία όταν\n1. Το σύστημα Dark Theme είναι ενεργοποιημένο\n2. Το σχέδιο σκοτεινού θέματος στις ρυθμίσεις της εφαρμογής έχει ρυθμιστεί σε Προγραμματισμός και ο χρόνος είναι σωστός</string>
-    <string name="Main_WeChatLauncher_Toast_State_ShiftEnabled">Τώρα ενεργοποιήθηκε, χρειάζονται μερικά δευτερόλεπτα για την εφαρμογή του εκκινητή</string>
-    <string name="Main_WeChatLauncher_Toast_State_ShiftDisabled">Τώρα απενεργοποιημένο, χρειάζονται μερικά δευτερόλεπτα για την εφαρμογή του εκκινητή</string>
-    <string name="we_note">Μην δοκιμάσετε αυτήν τη λειτουργία εάν χρησιμοποιείτε μια εφαρμογή εκκίνησης που δεν έχει συρτάρι εφαρμογών (τα περισσότερα από τα κινέζικα τηλέφωνα)\n\nΕάν εντοπίσετε κατά λάθος το εικονίδιο εκκίνησης του Boundo, απεγκαταστήστε πρώτα και, στη συνέχεια, εγκαταστήστε ξανά την εφαρμογή\n\nΕάν ενεργοποιήσετε αυτήν τη μονάδα, λάβετε υπόψη ότι το εικονίδιο Boundo WeChat (όταν αποστέλλεται σε επιτραπέζιο υπολογιστή) αλλάζει σε εικονίδιο Boundo μετά την επανεκκίνηση της συσκευής και το εικονίδιο συντόμευσης WeChat (όταν καρφιτσώνεται στην επιφάνεια εργασίας) θα λείπει</string>
     <string name="at_title">Ρύθμιση χρονοδιακόπτη</string>
     <string name="at_hour_hint">Ωρα</string>
     <string name="at_minute_hint">Λεπτό</string>

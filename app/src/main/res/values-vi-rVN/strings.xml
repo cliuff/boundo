@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2020 Clifford Liu
+  ~ Copyright 2021 Clifford Liu
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -27,11 +27,6 @@
     <string name="Settings_Language_Dialog_Title">Ngôn ngữ</string>
     <string name="Settings_Button_Derive">Văn bản gốc</string>
     <string name="ttExportICalFile">tập tin iCalWiki</string>
-    <string name="Launcher_WeChat">WeChat</string>
-    <string name="Shortcuts_WeChatScanner_ShortLabel">Quét</string>
-    <string name="Shortcuts_WeChatScanner_LongLabel">Quét</string>
-    <string name="Shortcuts_WeChatScanner_DisabledMessage">Tàn tật</string>
-    <string name="WeChatLauncher_Launch_Fail">WeChat chưa được cài đặt</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">Đã tìm thấy phiên bản mới</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">Phiên bản mới</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart2">Thay đổi</string>
@@ -88,7 +83,6 @@
     <string name="tools_nm">Ẩn bức ảnh riêng tư</string>
     <string name="nm_adapter_img_content_1">Hình ảnh thư mục hình ảnh</string>
     <string name="text_copy_link">Liên kết được sao chép</string>
-    <string name="unit_we_chat_evo">Phím tắt WeChat</string>
     <string name="unit_qq_contacts">Phím tắt liên hệ QQ</string>
     <string name="unit_audio_timer">Hẹn giờ âm thanh</string>
     <string name="main_more">Hơn</string>
@@ -135,7 +129,6 @@
     <string name="settingsApiApkPreload">Quét APK trước trong nền</string>
     <string name="tileColorful">Vẫn đầy màu sắc</string>
     <string name="apiViewerShort">API ứng dụng</string>
-    <string name="instantMmLogoDesc">Logo WeChat</string>
     <string name="menuApiSortApiTime">Cập nhật gần đây</string>
     <string name="avStoreLink">Liên kết với cửa hàng ứng dụng</string>
     <string name="apiSdkTarget">SDK mục tiêu</string>
@@ -221,10 +214,8 @@
     <string name="unit_desc_nm">• Ẩn hình ảnh thời gian chạy được tạo bởi các ứng dụng (.nomedia)</string>
     <string name="unit_desc_tw">• Làm cho hình nền của bạn tuân thủ chủ đề tối của Android 10 bằng cách tự động áp dụng hình nền tối màu</string>
     <string name="unit_desc_at">• Dừng âm thanh phát</string>
-    <string name="unit_desc_we">• Phím tắt máy quét WeChat</string>
     <string name="unit_desc_qc">• Phím tắt liên lạc QQ</string>
     <string name="unit_desc_requirement_qc">QQ đã cài đặt</string>
-    <string name="unit_desc_requirement_we">Đã cài đặt WeChat</string>
     <string name="unit_desc_requirement_shortcut">Phiên bản Android ít nhất là 7.1</string>
     <string name="unit_desc_requirement_nm">Phiên bản Android nhiều nhất là 9</string>
     <string name="unit_desc_uninstall">Gỡ cài đặt</string>
@@ -259,9 +250,6 @@
     <string name="twWallpaperLight">Hình nền tươi sáng</string>
     <string name="twWallpaperDark">Hình nền tối</string>
     <string name="twDesc">Tính năng này được trình bày cho bạn dưới dạng hình nền sống.\nChuyển sang hình nền tối khi\n1. hệ thống Dark Theme được bật\n2. gói chủ đề tối trong cài đặt ứng dụng được đặt thành Lịch biểu và thời gian phù hợp</string>
-    <string name="Main_WeChatLauncher_Toast_State_ShiftEnabled">Bây giờ đã được bật, cần vài giây để launcher thực hiện</string>
-    <string name="Main_WeChatLauncher_Toast_State_ShiftDisabled">Bây giờ đã bị vô hiệu hóa, cần vài giây để launcher thực hiện</string>
-    <string name="we_note">Không thử tính năng này nếu bạn đang sử dụng trình khởi chạy ứng dụng không có ngăn kéo ứng dụng (hầu hết các điện thoại Trung Quốc)\n\nNếu bạn vô tình tìm thấy biểu tượng trình khởi chạy của Boundo bị mất, trước tiên hãy gỡ cài đặt sau đó cài đặt lại ứng dụng\n\nNếu bạn bật thiết bị này, xin lưu ý rằng biểu tượng Boundo WeChat (khi được gửi tới máy tính để bàn) thay đổi thành biểu tượng Boundo sau khi khởi động lại thiết bị và biểu tượng phím tắt WeChat (khi được ghim trên máy tính để bàn) sẽ bị thiếu</string>
     <string name="at_title">Đặt hẹn giờ</string>
     <string name="at_hour_hint">Giờ</string>
     <string name="at_minute_hint">Phút</string>

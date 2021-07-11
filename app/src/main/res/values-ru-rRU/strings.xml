@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2020 Clifford Liu
+  ~ Copyright 2021 Clifford Liu
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -56,7 +56,6 @@
     <string name="Advice_Switch_Debug_Text">Режим потребления</string>
     <string name="Launcher_QQContacts_Toast_Avatar_PermissionDenied">Пожалуйста, дайте разрешение, чтобы мы могли прочитать изображение</string>
     <string name="Advice_QQ_Toast_Text">Добавьте как контакт до начала разговора, иначе сообщение не будет отправлено мне</string>
-    <string name="Launcher_WeChat">WeChat</string>
     <string name="Main_TextView_Launcher">Мгновенное</string>
     <string name="SettingsSync_UpdateFalse_AlertDialog_Title">Без обновления</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">Новая версия</string>
@@ -69,10 +68,6 @@
     <string name="Settings_ImageView_Language">Языки</string>
     <string name="Settings_ImageView_Update">Обновление приложения</string>
     <string name="Settings_LanguagePicker_Auto">Следуйте системе</string>
-    <string name="Shortcuts_WeChatScanner_DisabledMessage">Отключено</string>
-    <string name="Shortcuts_WeChatScanner_LongLabel">сканирование</string>
-    <string name="Shortcuts_WeChatScanner_ShortLabel">сканирование</string>
-    <string name="WeChatLauncher_Launch_Fail">WeChat не установлен</string>
     <string name="activityApkSharing">Проверьте API</string>
     <string name="activityTextProcessingApp">Посмотреть Bnd приложения</string>
     <string name="activity_av_search">API приложения</string>
@@ -110,7 +105,6 @@
     <string name="immortalSend">доставить</string>
     <string name="immortalShare">Поделиться</string>
     <string name="instantManual">Нажмите и удерживайте значок приложения в панели запуска, чтобы отобразить ярлыки приложений.\nПотяните вниз оттенок уведомления, переключатели настроек над областью уведомлений - это плитки быстрых настроек, которые вы ищете.</string>
-    <string name="instantMmLogoDesc">WeChat икона</string>
     <string name="instantTileIntro">Плитка быстрых настроек</string>
     <string name="instantTileMDUManual">Нажмите на плитку, чтобы обновить данные. Вам будет предложено предоставить разрешение на использование при добавлении плитки.</string>
     <string name="instantTileScannerAlipay">Alipay сканер штрих-кода</string>
@@ -213,7 +207,6 @@
     <string name="updateDownload">Скачать</string>
     <string name="unit_audio_timer">Аудио Таймер</string>
     <string name="unit_qq_contacts">QQ Контакт Ярлык</string>
-    <string name="unit_we_chat_evo">WeChat Ярлык</string>
     <string name="unit_desc_av">• Проверьте уровень Android API всех приложений и приложений на устройстве\n• Проверьте поддержку Adaptive Icon всех приложений\n• Статистика API приложения\n• APK и значок извлечения\n• Детали пакета и подпись</string>
     <string name="unit_desc_st">для китайских пользователей\n• Добавить курс вручную\n• Парсинг школьного расписания с веб-сайта школьной системы образования (только некоторые из образовательной системы ZFSoft)\n• Создать файл iCalendar (.ics)\n• Экспорт в Календарь Google и т. Д.</string>
     <string name="unit_desc_im">• Изменить разрешение\n• Изменить формат: png jpg webp heif\n• Размытие изображения</string>
@@ -221,7 +214,6 @@
     <string name="unit_desc_nm">• Скрыть изображения во время выполнения, созданные приложениями (.nomedia)</string>
     <string name="unit_desc_tw">• Заставьте свои обои соответствовать темной теме Android 10, автоматически применяя темные обои</string>
     <string name="unit_desc_at">• остановить воспроизведение звука</string>
-    <string name="unit_desc_we">• WeChat Сканер ярлык</string>
     <string name="unit_desc_qc">• QQ контакты ярлык</string>
     <string name="unit_desc_requirement_shortcut">Версия Android не ниже 7.1</string>
     <string name="unit_desc_requirement_nm">Версия Android максимум 9</string>
@@ -231,7 +223,6 @@
     <string name="unit_desc_unavailable">Недоступен</string>
     <string name="unit_desc_install">устанавливать</string>
     <string name="unit_desc_uninstall">Удалить</string>
-    <string name="unit_desc_requirement_we">WeChat установлен</string>
     <string name="unit_desc_requirement_qc">QQ установлен</string>
     <string name="unit_manager_install_success">Play Store обрабатывает установку</string>
     <string name="unit_desc_install_notice">Пытаюсь установить</string>
@@ -259,9 +250,6 @@
     <string name="twWallpaperLight">Яркие обои</string>
     <string name="twWallpaperDark">Темные обои</string>
     <string name="twDesc">Эта функция представлена вам как живые обои.\nПереключаться на темные обои, когда\n1. Система Dark Theme включена\n2. Темный план темы в настройках приложения установлен на Расписание, и время подходит</string>
-    <string name="Main_WeChatLauncher_Toast_State_ShiftDisabled">Теперь отключено, для запуска нужно несколько секунд</string>
-    <string name="Main_WeChatLauncher_Toast_State_ShiftEnabled">Теперь включен, для запуска запуска требуется несколько секунд</string>
-    <string name="we_note">Не пытайтесь использовать эту функцию, если вы используете панель запуска приложений, которая не имеет панели приложений (большинство китайских телефонов)\n\nЕсли вы случайно обнаружили, что значок запуска Boundo отсутствует, сначала удалите, а затем переустановите приложение.\n\nЕсли вы включите это устройство, обратите внимание, что значок Boundo WeChat (при отправке на рабочий стол) меняется на значок Boundo после перезагрузки устройства, а значок ярлыка WeChat (при закреплении на рабочем столе) будет отсутствовать</string>
     <string name="at_title">Установить таймер</string>
     <string name="at_hour_hint">Час</string>
     <string name="at_minute_hint">минут</string>

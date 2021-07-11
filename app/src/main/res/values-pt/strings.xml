@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2020 Clifford Liu
+  ~ Copyright 2021 Clifford Liu
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -27,11 +27,6 @@
     <string name="Settings_Language_Dialog_Title">línguas</string>
     <string name="Settings_Button_Derive">Derivar texto sem formatação</string>
     <string name="ttExportICalFile">arquivo iCalendar</string>
-    <string name="Launcher_WeChat">WeChat</string>
-    <string name="Shortcuts_WeChatScanner_ShortLabel">Varredura</string>
-    <string name="Shortcuts_WeChatScanner_LongLabel">Varredura</string>
-    <string name="Shortcuts_WeChatScanner_DisabledMessage">Desativado</string>
-    <string name="WeChatLauncher_Launch_Fail">WeChat não instalado</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">Nova versão encontrada</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">Nova versão</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart2">Alterar</string>
@@ -88,7 +83,6 @@
     <string name="tools_nm">Private Pics Hiding</string>
     <string name="nm_adapter_img_content_1">Imagem da pasta de imagem</string>
     <string name="text_copy_link">Link copiado</string>
-    <string name="unit_we_chat_evo">Atalho WeChat</string>
     <string name="unit_qq_contacts">Atalho de contato QQ</string>
     <string name="unit_audio_timer">Temporizador de áudio</string>
     <string name="main_more">Mais</string>
@@ -135,7 +129,6 @@
     <string name="settingsApiApkPreload">Pesquise APKs com antecedência em segundo plano</string>
     <string name="tileColorful">Fique colorido</string>
     <string name="apiViewerShort">API do aplicativo</string>
-    <string name="instantMmLogoDesc">Logotipo WeChat</string>
     <string name="menuApiSortApiTime">Atualizado recentemente</string>
     <string name="avStoreLink">Link para a loja de aplicativos</string>
     <string name="apiSdkTarget">SDK de destino</string>
@@ -221,7 +214,6 @@
     <string name="unit_desc_nm">• Ocultar imagens de tempo de execução produzidas por aplicativos (.nomedia)</string>
     <string name="unit_desc_tw">• Faça seu papel de parede estar em conformidade com o tema escuro do Android 10 aplicando um papel de parede de cor escura automaticamente</string>
     <string name="unit_desc_at">• Interrompa a reprodução do áudio</string>
-    <string name="unit_desc_we">• Atalho do scanner WeChat</string>
     <string name="unit_desc_qc">• Atalho para contatos QQ</string>
     <string name="unit_desc_requirement_shortcut">A versão do Android é pelo menos 7.1</string>
     <string name="unit_desc_requirement_nm">A versão do Android é no máximo 9</string>
@@ -231,7 +223,6 @@
     <string name="unit_desc_unavailable">Indisponível</string>
     <string name="unit_desc_install">Instalar</string>
     <string name="unit_desc_uninstall">Desinstalar</string>
-    <string name="unit_desc_requirement_we">WeChat instalado</string>
     <string name="unit_desc_requirement_qc">QQ instalado</string>
     <string name="unit_manager_error_api_unavailable">API indisponível</string>
     <string name="unit_manager_install_success">A Play Store está processando a instalação</string>
@@ -259,9 +250,6 @@
     <string name="twWallpaperLight">Papel de parede brilhante</string>
     <string name="twWallpaperDark">Papel de parede escuro</string>
     <string name="twDesc">Este recurso é apresentado a você como papel de parede ao vivo.\nAlterne para o papel de parede escuro quando\n1. o sistema Tema escuro estiver ativado\n2. o plano de tema escuro nas configurações do aplicativo estiver definido como Agendar e a hora for certa</string>
-    <string name="Main_WeChatLauncher_Toast_State_ShiftEnabled">Agora ativado, são necessários alguns segundos para o lançador implementar</string>
-    <string name="Main_WeChatLauncher_Toast_State_ShiftDisabled">Agora desativado, são necessários alguns segundos para o lançador implementar</string>
-    <string name="we_note">Não tente esse recurso se você estiver usando um iniciador de aplicativos que não possui gaveta de aplicativos (a maioria dos telefones chineses)\n\nSe você encontrar o ícone do iniciador do Boundo acidentalmente, primeiro desinstale e reinstale o aplicativo\n\nSe você ativar esta unidade, observe que o ícone Boundo WeChat (quando enviado para a área de trabalho) muda para o ícone Boundo após a reinicialização do dispositivo, e o ícone de atalho WeChat (quando fixado na área de trabalho) estará ausente</string>
     <string name="at_title">Definir temporizador</string>
     <string name="at_hour_hint">Hora</string>
     <string name="at_minute_hint">Minuto</string>

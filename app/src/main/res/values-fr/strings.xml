@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2020 Clifford Liu
+  ~ Copyright 2021 Clifford Liu
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -26,11 +26,6 @@
     <string name="Settings_Language_Dialog_Title">Langue</string>
     <string name="Settings_Button_Derive">Derive plain text</string>
     <string name="ttExportICalFile">Fichier iCalendar</string>
-    <string name="Launcher_WeChat">WeChat</string>
-    <string name="Shortcuts_WeChatScanner_ShortLabel">Scan</string>
-    <string name="Shortcuts_WeChatScanner_LongLabel">Scan</string>
-    <string name="Shortcuts_WeChatScanner_DisabledMessage">désactivé</string>
-    <string name="WeChatLauncher_Launch_Fail">WeChat n\'est pas installé</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">Nouvelle version disponible</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">Nouvelle version</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart2">Modifications</string>
@@ -115,7 +110,6 @@
     <string name="textBugLog">Bug détecté dans le journal</string>
     <string name="tileColorful">Restez coloré</string>
     <string name="apiViewerShort">API d\'app</string>
-    <string name="instantMmLogoDesc">Logo WeChat</string>
     <string name="menuApiSortApiTime">Récemment mis à jour</string>
     <string name="avStoreLink">Lien vers l\'app store</string>
     <string name="apiSdkTarget">SDK cible</string>
@@ -211,7 +205,6 @@
     <string name="main_updates">mises à jour</string>
     <string name="main_more">Plus</string>
     <string name="unit_audio_timer">Minuterie audio</string>
-    <string name="unit_we_chat_evo">Raccourci WeChat</string>
     <string name="unit_qq_contacts">Raccourci Contact QQ</string>
     <string name="unit_desc_installed">Installé</string>
     <string name="unit_desc_not_installed">Non installé</string>
@@ -221,7 +214,6 @@
     <string name="unit_desc_uninstall">Désinstallation</string>
     <string name="unit_desc_requirement_nm">La version Android est au plus 9</string>
     <string name="unit_desc_requirement_shortcut">La version Android est au moins 7.1</string>
-    <string name="unit_desc_requirement_we">WeChat installé</string>
     <string name="unit_desc_requirement_qc">QQ installé</string>
     <string name="unit_desc_av">• Vérifier le niveau de l\'API Android de toutes les applications et apks sur l\'appareil\n• Vérifier le support des icônes adaptatives de toutes les applications\n• Statistiques de l\'API de l\'application\n• Extraction d\'apk et d\'icônes\n• Détails du paquet et détails de la signature de chaque application</string>
     <string name="unit_desc_st">Pour les utilisateurs chinois\n• Ajouter un cours manuellement\n• Analysez l\'emploi du temps scolaire à partir du site web du système éducatif de l\'école (uniquement pour une partie du système éducatif ZFSoft)\n• Générer un fichier iCalendar (.ics)\n• Exportation vers Google Agenda, etc.</string>
@@ -230,7 +222,6 @@
     <string name="unit_desc_nm">• Cacher les images d\'exécution produites par les applications (.nomedia)</string>
     <string name="unit_desc_tw">• Faites en sorte que votre papier peint soit conforme au thème sombre d\'Android 10 en appliquant automatiquement un papier peint de couleur sombre</string>
     <string name="unit_desc_at">• Arrêter la lecture audio</string>
-    <string name="unit_desc_we">• Raccourci du scanner WeChat</string>
     <string name="unit_desc_qc">• Raccourci pour les contacts QQ</string>
     <string name="unit_manager_install_success">Le Play Store procède à l\'installation</string>
     <string name="unit_manager_uninstall_success">La désinstallation se produira en cas d\'inactivité</string>
@@ -258,9 +249,6 @@
     <string name="twWallpaperLight">Papier peint clair</string>
     <string name="twWallpaperDark">Papier peint sombre</string>
     <string name="twDesc">Cette fonctionnalité vous est présentée comme fond d\'écran en direct. \nPassez au fond d\'écran sombre lorsque\n1. les paramètres système sont défini sur le Thème sombre\n2. L\'option d\'arrière plan sombre présente dans les paramètres de l\'application est défini sur Planifier, et le moment est venu</string>
-    <string name="Main_WeChatLauncher_Toast_State_ShiftEnabled">Maintenant activé, il faut quelques secondes au lanceur pour sa mise en œuvre</string>
-    <string name="Main_WeChatLauncher_Toast_State_ShiftDisabled">Désormais désactivé, il faut quelques secondes au lanceur pour cette mise en œuvre</string>
-    <string name="we_note">N\'essayez pas cette fonctionnalité si vous utilisez un lanceur d\'application qui n\'a pas de tiroir d\'application (la plupart des téléphones chinois)\n\nSi vous trouvez accidentellement l\'icône du lanceur de Boundo manquante, veuillez d\'abord désinstaller puis réinstaller l\'application\n\nSi vous activez ceci, veuillez noter que l\'icône WeChat de Boundo (lorsqu\'elle est envoyée au bureau) devient l\'icône Boundo après le redémarrage de l\'appareil et que l\'icône de raccourci WeChat (lorsqu\'elle est épinglée sur le bureau) sera manquante</string>
     <string name="at_title">Régler le minuteur</string>
     <string name="at_hour_hint">Heure</string>
     <string name="at_minute_hint">Minute</string>

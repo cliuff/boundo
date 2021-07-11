@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2020 Clifford Liu
+  ~ Copyright 2021 Clifford Liu
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -27,11 +27,6 @@
     <string name="Settings_Language_Dialog_Title">Diller</string>
     <string name="Settings_Button_Derive">Düz metin türetme</string>
     <string name="ttExportICalFile">iCalendar dosyası</string>
-    <string name="Launcher_WeChat">wechat</string>
-    <string name="Shortcuts_WeChatScanner_ShortLabel">taramak</string>
-    <string name="Shortcuts_WeChatScanner_LongLabel">taramak</string>
-    <string name="Shortcuts_WeChatScanner_DisabledMessage">engelli</string>
-    <string name="WeChatLauncher_Launch_Fail">Yüklü WeChat</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">Yeni sürüm bulundu</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">Yeni sürüm</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart2">değişiklikler</string>
@@ -109,7 +104,6 @@
     <string name="main_updates">Güncellemeler</string>
     <string name="main_more">Daha</string>
     <string name="unit_audio_timer">Ses Zamanlayıcısı</string>
-    <string name="unit_we_chat_evo">WeChat Kısayolu</string>
     <string name="unit_qq_contacts">QQ İletişim Kısayolu</string>
     <string name="unit_desc_installed">Kurulmuş</string>
     <string name="unit_desc_not_installed">Yüklü değil</string>
@@ -149,7 +143,6 @@
     <string name="settingsApiApkPreload">APK\'ları önceden arka planda tarayın</string>
     <string name="textBugLog">Günlükte yakalanan hata</string>
     <string name="tileColorful">Renkli Kalın</string>
-    <string name="instantMmLogoDesc">WeChat logosu</string>
     <string name="avStoreLink">Uygulama mağazasına bağlantı</string>
     <string name="settingsApiRetrieveRoundIcon">Sağlandığında yuvarlak simgeyi kaynaktan al</string>
     <string name="activityTextProcessingApp">Bnd uygulamalarını görüntüleme</string>
@@ -215,13 +208,11 @@
     <string name="twLiveWallpaperDesc">Karanlık tema etkinleştirildiğinde otomatik olarak karanlık duvar kağıdına geç</string>
     <string name="unit_desc_requirement_nm">Android sürümü en fazla 10</string>
     <string name="unit_desc_requirement_shortcut">Android sürümü en az 7.1</string>
-    <string name="unit_desc_requirement_we">Yüklü WeChat</string>
     <string name="unit_desc_requirement_qc">QQ yüklendi</string>
     <string name="unit_desc_ca">• CoolApk üzerindeki uygulamaların bilgilerini alma</string>
     <string name="unit_desc_nm">• Uygulamalar (.nomedia) tarafından üretilen çalışma zamanı görüntülerini gizle</string>
     <string name="unit_desc_tw">• Otomatik olarak koyu renkli bir duvar kağıdı uygulayarak duvar kağıdınızın Android 10 karanlık temasına uymasını sağlayın</string>
     <string name="unit_desc_at">• Sesin çalmasını durdurun</string>
-    <string name="unit_desc_we">• WeChat tarayıcı kısayolu</string>
     <string name="unit_desc_qc">• QQ kişileri kısayolu</string>
     <string name="unit_manager_install_success">Play Store yüklemeyi işliyor</string>
     <string name="unit_manager_uninstall_success">Boşta kaldığında kaldırma işlemi gerçekleşecek</string>
@@ -259,9 +250,6 @@
     <string name="twWallpaperLight">Parlak duvar kağıdı</string>
     <string name="twWallpaperDark">Karanlık duvar kağıdı</string>
     <string name="twDesc">Bu özellik size canlı duvar kağıdı olarak sunulmaktadır.\nAşağıdaki durumlarda karanlık duvar kağıdına geç\n1. sistem Dark Theme açık\n2. Uygulama ayarlarındaki koyu tema planı Zamanlama olarak ayarlandı ve saat doğru</string>
-    <string name="Main_WeChatLauncher_Toast_State_ShiftEnabled">Şimdi etkinleştirildi, başlatıcıyı uygulamak için birkaç saniye gerekiyor</string>
-    <string name="Main_WeChatLauncher_Toast_State_ShiftDisabled">Artık devre dışı bırakıldı, başlatıcıyı uygulamak için birkaç saniye gerekiyor</string>
-    <string name="we_note">Uygulama çekmecesi olmayan bir uygulama başlatıcısı kullanıyorsanız (Çince telefonların çoğu) bu özelliği denemeyin\n\nBoundo\'nun başlatıcı simgesini yanlışlıkla bulursanız, lütfen önce uygulamayı kaldırıp yeniden yükleyin\n\nBu birimi etkinleştirirseniz, cihaz yeniden başlatıldıktan sonra Boundo WeChat simgesinin (masaüstüne gönderildiğinde) Boundo simgesine dönüştüğünü ve WeChat kısayol simgesinin (masaüstüne sabitlendiğinde) eksik olacağını lütfen unutmayın</string>
     <string name="at_title">Zamanlayıcıyı Kur</string>
     <string name="at_hour_hint">Saat</string>
     <string name="at_minute_hint">Dakika</string>

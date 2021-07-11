@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2020 Clifford Liu
+  ~ Copyright 2021 Clifford Liu
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -27,11 +27,6 @@
     <string name="Settings_Language_Dialog_Title">اللغات</string>
     <string name="Settings_Button_Derive">اشتق النص العادي</string>
     <string name="ttExportICalFile">ملف iCalendar</string>
-    <string name="Launcher_WeChat">&#1564;WeChat</string>
-    <string name="Shortcuts_WeChatScanner_ShortLabel">تفحص</string>
-    <string name="Shortcuts_WeChatScanner_LongLabel">تفحص</string>
-    <string name="Shortcuts_WeChatScanner_DisabledMessage">معاق</string>
-    <string name="WeChatLauncher_Launch_Fail">&#1564;WeChat غير مثبت</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">تم العثور على نسخة جديدة</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">نسخة جديدة</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart2">التغييرات</string>
@@ -88,7 +83,6 @@
     <string name="tools_nm">صور خاصة يختبئون</string>
     <string name="nm_adapter_img_content_1">صورة مجلد الصورة</string>
     <string name="text_copy_link">تم نسخ الرابط</string>
-    <string name="unit_we_chat_evo">WeChat اختصار</string>
     <string name="unit_qq_contacts">ف ف الاتصال الاختصار</string>
     <string name="unit_audio_timer">توقيت الصوت</string>
     <string name="main_more">أكثر</string>
@@ -135,7 +129,6 @@
     <string name="settingsApiApkPreload">البحث عن ملفات APK مسبقًا في الخلفية</string>
     <string name="tileColorful">البقاء الملونة</string>
     <string name="apiViewerShort">API التطبيق</string>
-    <string name="instantMmLogoDesc">شعار WeChat</string>
     <string name="menuApiSortApiTime">تم تحديثه مؤخرا</string>
     <string name="avStoreLink">رابط إلى متجر التطبيقات</string>
     <string name="apiSdkTarget">الهدف SDK</string>
@@ -221,7 +214,6 @@
     <string name="unit_desc_nm">• إخفاء الصور وقت التشغيل التي تنتجها التطبيقات (.nomedia)</string>
     <string name="unit_desc_tw">• اجعل ورق الحائط الخاص بك يتوافق مع السمة المظلم لنظام Android 10 من خلال تطبيق ورق الحائط الداكن تلقائيًا</string>
     <string name="unit_desc_at">• إيقاف الصوت من اللعب</string>
-    <string name="unit_desc_we">• &#1564;WeChat اختصار الماسح الضوئي</string>
     <string name="unit_desc_qc">• اختصار اتصالات QQ</string>
     <string name="unit_desc_requirement_shortcut">إصدار Android هو 7.1 على الأقل</string>
     <string name="unit_desc_requirement_nm">إصدار Android هو 9 على الأكثر</string>
@@ -231,7 +223,6 @@
     <string name="unit_desc_unavailable">غير متوفره</string>
     <string name="unit_desc_install">تثبيت</string>
     <string name="unit_desc_uninstall">الغاء التثبيت</string>
-    <string name="unit_desc_requirement_we">&#1564;WeChat مثبتة</string>
     <string name="unit_desc_requirement_qc">ف ف تثبيت</string>
     <string name="unit_manager_install_success">متجر Play يقوم بمعالجة التثبيت</string>
     <string name="unit_manager_uninstall_success">سوف يحدث إلغاء التثبيت عند الخمول</string>
@@ -259,9 +250,6 @@
     <string name="twWallpaperLight">خلفية مشرق</string>
     <string name="twWallpaperDark">خلفية الظلام</string>
     <string name="twDesc">يتم تقديم هذه الميزة لك كخلفية حية.\nقم بالتبديل إلى الخلفية المظلمة عندما\1n. نظام Dark Theme قيد التشغيل\2n. تم تعيين خطة سمة مظلمة في إعدادات التطبيق على الجدول الزمني والوقت المناسب</string>
-    <string name="Main_WeChatLauncher_Toast_State_ShiftEnabled">مُمكّن الآن ، بضع ثوانٍ اللازمة لتشغيل المشغّل</string>
-    <string name="Main_WeChatLauncher_Toast_State_ShiftDisabled">الآن معطلة ، بضع ثوان اللازمة لقاذفة لتنفيذ</string>
-    <string name="we_note">لا تجرب هذه الميزة إذا كنت تستخدم مشغل تطبيقات لا يحتوي على درج تطبيقات (معظم الهواتف الصينية)\n\nإذا وجدت عن طريق الخطأ رمز مشغل Boundo مفقودًا ، فالرجاء إلغاء التثبيت أولاً ثم إعادة تثبيت التطبيق\n\nإذا قمت بتمكين هذه الوحدة ، يرجى ملاحظة أن رمز Boundo WeChat (عند إرسالها إلى سطح المكتب) يتغير إلى رمز Boundo بعد إعادة تشغيل الجهاز ، وسوف يكون رمز اختصار WeChat (عند تثبيته على سطح المكتب) مفقودًا</string>
     <string name="at_title">توقيت مجموعة</string>
     <string name="at_hour_hint">ساعة</string>
     <string name="at_minute_hint">دقيقة</string>

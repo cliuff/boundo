@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2020 Clifford Liu
+  ~ Copyright 2021 Clifford Liu
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -26,11 +26,6 @@
     <string name="Settings_Language_Dialog_Title">语言</string>
     <string name="Settings_Button_Derive">提取纯文本</string>
     <string name="ttExportICalFile">iCalendar 文件</string>
-    <string name="Launcher_WeChat">微信</string>
-    <string name="Shortcuts_WeChatScanner_DisabledMessage">已禁用</string>
-    <string name="Shortcuts_WeChatScanner_LongLabel">扫一扫</string>
-    <string name="Shortcuts_WeChatScanner_ShortLabel">扫一扫</string>
-    <string name="WeChatLauncher_Launch_Fail">未安装微信</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">发现新版本</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">新版</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart2">变化</string>
@@ -114,7 +109,6 @@
     <string name="tileColorful">莫黑屏</string>
     <string name="settings_exterior">风格</string>
     <string name="apiViewerShort">应用 API</string>
-    <string name="instantMmLogoDesc">微信图标</string>
     <string name="menuApiSortApiTime">最近更新</string>
     <string name="avStoreLink">应用商店页面链接</string>
     <string name="apiSdkTarget">目标 SDK</string>
@@ -213,7 +207,6 @@
     <string name="main_updates">动态</string>
     <string name="unit_audio_timer">音乐，停</string>
     <string name="unit_qq_contacts">QQ 好友 Shortcut</string>
-    <string name="unit_we_chat_evo">微信 Shortcut</string>
     <string name="unit_desc_av">• 查看设备上所有应用及安装包的目标 SDK 版本和最低 SDK 版本\n• 查看应用是否支持自适应图标\n• 应用 API 统计\n• 安装包提取、图标提取\n• 包详细信息查看、签名信息查看</string>
     <string name="unit_desc_st">！中国用户使用\n• 手动输入课程\n• 自动解析教务系统课表（只支持部分正方教务系统）\n• 生成 iCalendar 文件 (.ics)\n• 导入至谷歌日历等</string>
     <string name="unit_desc_im">• 修改分辨率\n• 修改格式 png jpg webp heif\n• 模糊图片</string>
@@ -221,14 +214,12 @@
     <string name="unit_desc_nm">• 隐藏应用运行时的资源图片（.nomedia）</string>
     <string name="unit_desc_tw">• 设置亮色调和暗色调壁纸，壁纸随安卓10的黑暗模式而变化</string>
     <string name="unit_desc_at">• 停止音频播放</string>
-    <string name="unit_desc_we">• 微信扫一扫 shortcut</string>
     <string name="unit_desc_qc">• QQ 好友 shortcut</string>
     <string name="unit_desc_installed">已安装</string>
     <string name="unit_desc_not_installed">未安装</string>
     <string name="unit_desc_available">可用</string>
     <string name="unit_desc_unavailable">不可用</string>
     <string name="unit_desc_requirement_qc">已安装 QQ</string>
-    <string name="unit_desc_requirement_we">已安装微信</string>
     <string name="unit_desc_requirement_nm">安卓版本至多 9</string>
     <string name="unit_desc_uninstall">卸载</string>
     <string name="unit_desc_install">安装</string>
@@ -259,9 +250,6 @@
     <string name="twWallpaperLight">亮色调壁纸</string>
     <string name="twWallpaperDark">暗色调壁纸</string>
     <string name="twDesc">这是动态壁纸。\n在下列情况下使用暗色调壁纸：\n1. 系统开启了黑暗模式\n2. 本应用按时开启暗色主题且当前时间应当开启</string>
-    <string name="Main_WeChatLauncher_Toast_State_ShiftEnabled">现已启用，等待桌面反应过来</string>
-    <string name="Main_WeChatLauncher_Toast_State_ShiftDisabled">现已禁用，等待桌面反应过来</string>
-    <string name="we_note">如果你的手机桌面没有应用抽屉（大多数国产手机），不要使用这个功能\n\n如果斑朵的图标意外地消失了，请卸载重装斑朵\n\n如果你启用这个功能，请注意，斑朵微信图标（放置在桌面上时）在设备重启后会变成斑朵图标，而微信 shortcut 图标（固定在桌面上时）则会消失</string>
     <string name="at_title">倒计时</string>
     <string name="at_hour_hint">小时</string>
     <string name="at_minute_hint">分钟</string>
