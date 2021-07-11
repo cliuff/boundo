@@ -369,4 +369,13 @@ object SystemUtil {
         return (context.getSystemService(AppCompatActivity.UI_MODE_SERVICE) as UiModeManager).currentModeType
     }
 
+    fun isSystemTvUi(context: Context): Boolean = getSystemUiModeType(context) == Configuration.UI_MODE_TYPE_TELEVISION
+
+    fun unifyTvNavKeyCode(keyCode: Int): Int = when(keyCode) {
+        KeyEvent.KEYCODE_BUTTON_B, KeyEvent.KEYCODE_BACK -> KeyEvent.KEYCODE_BACK
+        KeyEvent.KEYCODE_BUTTON_SELECT, KeyEvent.KEYCODE_BUTTON_A, KeyEvent.KEYCODE_ENTER,
+        KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_NUMPAD_ENTER -> KeyEvent.KEYCODE_ENTER
+        else -> keyCode
+    }
+
 }

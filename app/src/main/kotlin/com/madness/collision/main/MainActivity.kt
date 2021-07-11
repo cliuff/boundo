@@ -21,6 +21,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
 import android.view.Window
@@ -612,6 +613,22 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
             notifyBriefly(R.string.text_error)
             false
         }
+    }
+
+    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
+        if (SystemUtil.isSystemTvUi(this).not()) return super.onKeyUp(keyCode, event)
+        val navKeyCode = SystemUtil.unifyTvNavKeyCode(keyCode)
+        when(navKeyCode) {
+            KeyEvent.KEYCODE_DPAD_UP -> kotlin.Unit
+            KeyEvent.KEYCODE_DPAD_DOWN -> kotlin.Unit
+            KeyEvent.KEYCODE_DPAD_LEFT -> kotlin.Unit
+            KeyEvent.KEYCODE_DPAD_RIGHT -> kotlin.Unit
+            KeyEvent.KEYCODE_ENTER -> kotlin.Unit
+            KeyEvent.KEYCODE_BACK -> kotlin.Unit
+            KeyEvent.KEYCODE_HOME -> kotlin.Unit
+            KeyEvent.KEYCODE_MENU -> kotlin.Unit
+        }
+        return super.onKeyUp(navKeyCode, event)
     }
 
     private val navScrollBehavior: MyHideBottomViewOnScrollBehavior<View>?

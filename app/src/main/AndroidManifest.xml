@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2020 Clifford Liu
+  ~ Copyright 2021 Clifford Liu
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -24,6 +24,14 @@
         android:required="false" />
     <uses-feature
         android:name="android.hardware.bluetooth"
+        android:required="false" />
+    <!-- TV launcher -->
+    <uses-feature
+        android:name="android.software.leanback"
+        android:required="false" />
+    <!-- optional requirement of touchscreen on TV -->
+    <uses-feature
+        android:name="android.hardware.touchscreen"
         android:required="false" />
 <!--
     <uses-feature
@@ -65,11 +73,16 @@
         <package android:name="com.eg.android.AlipayGphone" />
     </queries>
 
+    <!-- Use the android:banner attribute with the <application> tag to supply a default banner -->
+    <!-- for all application activities, or with the <activity> tag to supply a banner for a specific activity. -->
+    <!-- The banner should be an xhdpi resource with a size of 320 x 180 px. Text must be included in the image. -->
+    <!-- Provide separate versions of the banner with text for multiple languages. -->
     <application
         android:name=".main.MainApplication"
         android:allowBackup="true"
         android:description="@string/appDesc"
         android:icon="@mipmap/ic_launcher"
+        android:banner="@drawable/app_icon_banner"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -88,6 +101,8 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.DEFAULT" />
+                <!-- TV launcher activity -->
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
