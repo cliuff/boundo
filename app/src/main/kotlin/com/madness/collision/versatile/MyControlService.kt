@@ -44,9 +44,11 @@ import com.madness.collision.unit.audio_timer.AtCallback
 import com.madness.collision.unit.device_manager.list.DeviceItem
 import com.madness.collision.unit.device_manager.list.StateObservable
 import com.madness.collision.unit.device_manager.manager.DeviceManager
+import com.madness.collision.util.PermissionUtils
 import com.madness.collision.util.SysServiceUtils
 import com.madness.collision.util.SystemUtil
-import com.madness.collision.util.X
+import com.madness.collision.util.notice.ToastUtils
+import com.madness.collision.util.os.OsUtils
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.processors.ReplayProcessor
 import kotlinx.coroutines.GlobalScope
@@ -58,7 +60,7 @@ import java.util.function.Consumer
 import kotlin.math.min
 import kotlin.math.roundToLong
 
-@TargetApi(X.R)
+@TargetApi(OsUtils.R)
 class MyControlService : ControlsProviderService(), StateObservable {
     companion object {
         private const val DEV_ID_AT = "dev_at_timer"
@@ -335,7 +337,7 @@ class MyControlService : ControlsProviderService(), StateObservable {
                 }
             }
             DEV_ID_MDU -> {
-                val hasAccess = ensurePermission(context)
+                val hasAccess = PermissionUtils.isUsageAccessPermitted(context)
                 val doUpdate = action != null && action is BooleanAction
                 if (doUpdate && hasAccess) GlobalScope.launch {
                     delay(800)
@@ -421,12 +423,6 @@ class MyControlService : ControlsProviderService(), StateObservable {
         }?.build()
     }
 
-    private fun ensurePermission(context: Context): Boolean {
-        val re = X.canAccessUsageStats(context)
-        if (!re) getPermission()
-        return re
-    }
-
     private fun getPermission() {
         val intent = Intent().apply {
             action = Settings.ACTION_USAGE_ACCESS_SETTINGS
@@ -435,7 +431,7 @@ class MyControlService : ControlsProviderService(), StateObservable {
         startActivity(intent)
         GlobalScope.launch {
             delay(1000)
-            X.toast(applicationContext, R.string.access_sys_usage, Toast.LENGTH_LONG)
+            ToastUtils.toast(applicationContext, R.string.access_sys_usage, Toast.LENGTH_LONG)
         }
     }
 

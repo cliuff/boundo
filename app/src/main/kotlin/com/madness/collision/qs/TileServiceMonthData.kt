@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import android.text.format.Formatter
 import android.widget.Toast
 import com.madness.collision.BuildConfig
 import com.madness.collision.R
+import com.madness.collision.util.PermissionUtils
 import com.madness.collision.util.SysServiceUtils
 import com.madness.collision.util.X
 import kotlinx.coroutines.GlobalScope
@@ -64,7 +65,7 @@ internal class TileServiceMonthData : TileService() {
     }
 
     private fun ensurePermission(){
-        if (!X.canAccessUsageStats(this)) getPermission()
+        if (!PermissionUtils.isUsageAccessPermitted(this)) getPermission()
     }
 
     private fun getPermission(){

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import android.view.SurfaceHolder
 import com.madness.collision.R
 import com.madness.collision.util.P
 import com.madness.collision.util.ThemeUtil
+import com.madness.collision.util.os.OsUtils
 
 class ThemedWallpaperService : WallpaperService(){
 
@@ -52,11 +53,12 @@ class ThemedWallpaperService : WallpaperService(){
     }
 
     override fun onCreateEngine(): Engine {
-        val shouldChange = ThemeUtil.shouldChangeTheme4ThemedWallpaper(applicationContext, prefSettings)
+        val context = baseContext
+        val shouldChange = ThemeUtil.shouldChangeTheme4ThemedWallpaper(context, prefSettings)
         // so as to trigger change in order to get initial state
         if (!shouldChange) {
             ThemedWallpaperEasyAccess.isDark = !ThemedWallpaperEasyAccess.isDark
-            ThemeUtil.shouldChangeTheme4ThemedWallpaper(applicationContext, prefSettings)
+            ThemeUtil.shouldChangeTheme4ThemedWallpaper(context, prefSettings)
         }
         return ThemedEngine()
     }
@@ -148,7 +150,8 @@ class ThemedWallpaperService : WallpaperService(){
 //            wallpaperDrawable = ThemedWallpaperEasyAccess.background?.constantState?.newDrawable()
 //                    ?: ColorDrawable(if (ThemedWallpaperEasyAccess.isDark) Color.BLACK else Color.WHITE)
 //        }
-            return ThemeUtil.shouldChangeTheme4ThemedWallpaper(applicationContext, prefSettings)
+            val context = (if (OsUtils.satisfy(OsUtils.Q)) displayContext else applicationContext) ?: return false
+            return ThemeUtil.shouldChangeTheme4ThemedWallpaper(context, prefSettings)
         }
     }
 }

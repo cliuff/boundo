@@ -19,6 +19,7 @@ package com.madness.collision.util
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
+import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
@@ -79,19 +80,7 @@ object ThemeUtil {
         val keyApplyDarkPlan = resources.getString(R.string.prefExteriorKeyDarkPlan)
         val planValue = prefSettings.getString(keyApplyDarkPlan, resources.getString(R.string.prefExteriorDefaultDarkPlan)) ?: ""
         if(planValue == resources.getString(R.string.prefExteriorDarkPlanValueSchedule)) {
-            val keyScheduleStart = resources.getString(R.string.prefExteriorKeyDarkPlanScheduleStart)
-            val keyScheduleEnd = resources.getString(R.string.prefExteriorKeyDarkPlanScheduleEnd)
-            val scheduleStart = prefSettings.getString(keyScheduleStart, resources.getString(R.string.prefExteriorDefaultDarkPlanScheduleStart)) ?: ""
-            val scheduleEnd = prefSettings.getString(keyScheduleEnd, resources.getString(R.string.prefExteriorDefaultDarkPlanScheduleEnd)) ?: ""
-            val regex = "(\\d{2})(\\d{2})".toRegex()
-            val (hStart, mStart) = regex.find(scheduleStart)!!.destructured
-            val timeStart = Calendar.getInstance()
-            timeStart.set(Calendar.HOUR_OF_DAY, hStart.toInt())
-            timeStart.set(Calendar.MINUTE, mStart.toInt())
-            val (hEnd, mEnd) = regex.find(scheduleEnd)!!.destructured
-            val timeEnd = Calendar.getInstance()
-            timeEnd.set(Calendar.HOUR_OF_DAY, hEnd.toInt())
-            timeEnd.set(Calendar.MINUTE, mEnd.toInt())
+            val (timeStart, timeEnd) = getScheduleTime(resources, prefSettings)
             val cal = Calendar.getInstance()
             if (timeStart.before(timeEnd)){
                 if (cal.after(timeStart) && cal.before(timeEnd)) return updateIsDark4TW(context, true)
@@ -192,19 +181,7 @@ object ThemeUtil {
                 }
             }
             resources.getString(R.string.prefExteriorDarkPlanValueSchedule) -> {
-                val keyScheduleStart = resources.getString(R.string.prefExteriorKeyDarkPlanScheduleStart)
-                val keyScheduleEnd = resources.getString(R.string.prefExteriorKeyDarkPlanScheduleEnd)
-                val scheduleStart = prefSettings.getString(keyScheduleStart, resources.getString(R.string.prefExteriorDefaultDarkPlanScheduleStart)) ?: ""
-                val scheduleEnd = prefSettings.getString(keyScheduleEnd, resources.getString(R.string.prefExteriorDefaultDarkPlanScheduleEnd)) ?: ""
-                val regex = "(\\d{2})(\\d{2})".toRegex()
-                val (hStart, mStart) = regex.find(scheduleStart)!!.destructured
-                val timeStart = Calendar.getInstance()
-                timeStart.set(Calendar.HOUR_OF_DAY, hStart.toInt())
-                timeStart.set(Calendar.MINUTE, mStart.toInt())
-                val (hEnd, mEnd) = regex.find(scheduleEnd)!!.destructured
-                val timeEnd = Calendar.getInstance()
-                timeEnd.set(Calendar.HOUR_OF_DAY, hEnd.toInt())
-                timeEnd.set(Calendar.MINUTE, mEnd.toInt())
+                val (timeStart, timeEnd) = getScheduleTime(resources, prefSettings)
                 val cal = Calendar.getInstance()
                 if (timeStart.before(timeEnd)){
                     if (cal.after(timeStart) && cal.before(timeEnd)){
@@ -233,6 +210,29 @@ object ThemeUtil {
         }
         updateIsDarkTheme(context, false)
         return themeId
+    }
+
+    private fun getScheduleTime(resources: Resources, pref: SharedPreferences): Pair<Calendar, Calendar> {
+        val keyScheduleStart = resources.getString(R.string.prefExteriorKeyDarkPlanScheduleStart)
+        val keyScheduleEnd = resources.getString(R.string.prefExteriorKeyDarkPlanScheduleEnd)
+        val scheduleStart = pref.getString(keyScheduleStart, null)
+            ?: resources.getString(R.string.prefExteriorDefaultDarkPlanScheduleStart)
+        val scheduleEnd = pref.getString(keyScheduleEnd, null)
+            ?: resources.getString(R.string.prefExteriorDefaultDarkPlanScheduleEnd)
+
+        val regex = "(\\d{2})(\\d{2})".toRegex()
+
+        val (hStart, mStart) = regex.find(scheduleStart)!!.destructured
+        val timeStart = Calendar.getInstance()
+        timeStart.set(Calendar.HOUR_OF_DAY, hStart.toInt())
+        timeStart.set(Calendar.MINUTE, mStart.toInt())
+
+        val (hEnd, mEnd) = regex.find(scheduleEnd)!!.destructured
+        val timeEnd = Calendar.getInstance()
+        timeEnd.set(Calendar.HOUR_OF_DAY, hEnd.toInt())
+        timeEnd.set(Calendar.MINUTE, mEnd.toInt())
+
+        return timeStart to timeEnd
     }
 
     /**

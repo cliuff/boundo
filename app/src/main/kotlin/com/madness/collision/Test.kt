@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,14 +25,14 @@ import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.graphics.BitmapRegionDecoder
 import android.graphics.Rect
-import com.madness.collision.util.X
+import com.madness.collision.util.PermissionUtils
 import java.io.InputStream
 import java.util.*
 
 object Test {
 
     fun go(context: Context) {
-        if (X.canAccessUsageStats(context)) getForegroundApp(context)
+        if (PermissionUtils.isUsageAccessPermitted(context)) getForegroundApp(context)
     }
 
     fun getForegroundApp(context: Context): String {

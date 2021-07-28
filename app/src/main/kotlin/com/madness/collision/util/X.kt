@@ -16,7 +16,6 @@
 
 package com.madness.collision.util
 
-import android.app.AppOpsManager
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -38,7 +37,6 @@ import androidx.core.graphics.ColorUtils
 import androidx.core.util.component1
 import androidx.core.util.component2
 import androidx.palette.graphics.Palette
-import com.madness.collision.misc.MiscApp
 import com.madness.collision.util.notice.ToastUtils
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -446,13 +444,5 @@ object X {
             e.printStackTrace()
         }
         return true
-    }
-
-    fun canAccessUsageStats(context: Context): Boolean {
-        val applicationInfo = MiscApp.getApplicationInfo(context, packageName = context.packageName) ?: return false
-        val appOpsManager = context.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
-        val re = if (aboveOn(Q)) appOpsManager.unsafeCheckOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, applicationInfo.uid, applicationInfo.packageName)
-        else appOpsManager.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, applicationInfo.uid, applicationInfo.packageName)
-        return re == AppOpsManager.MODE_ALLOWED
     }
 }
