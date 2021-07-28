@@ -42,6 +42,8 @@ import com.madness.collision.unit.Unit
 import com.madness.collision.unit.audio_timer.AccessAT
 import com.madness.collision.unit.audio_timer.AtCallback
 import com.madness.collision.unit.device_manager.list.DeviceItem
+import com.madness.collision.unit.device_manager.list.StateUpdateRegulation
+import com.madness.collision.unit.device_manager.list.StateUpdateRegulator
 import com.madness.collision.unit.device_manager.list.StateObservable
 import com.madness.collision.unit.device_manager.manager.DeviceManager
 import com.madness.collision.util.PermissionUtils
@@ -51,9 +53,7 @@ import com.madness.collision.util.notice.ToastUtils
 import com.madness.collision.util.os.OsUtils
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.processors.ReplayProcessor
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.reactivestreams.FlowAdapters
 import java.util.concurrent.Flow
 import java.util.function.Consumer
@@ -82,6 +82,8 @@ class MyControlService : ControlsProviderService(), StateObservable {
     private var isAtUpdateBlocked = false
     private var dmManager: DeviceManager? = null
     private var dmSessionNo: Long = 0
+    private val dmRegulator: StateUpdateRegulator by lazy { StateUpdateRegulator() }
+
     override val stateReceiver: BroadcastReceiver = stateReceiverImp
 
     override fun onBluetoothStateChanged(state: Int) {
@@ -95,9 +97,15 @@ class MyControlService : ControlsProviderService(), StateObservable {
         prepareDmManager(context, dmSessionNo) ?: return
         val id = getDmDeviceIds().find { getDmMacByDeviceId(it) == device.address } ?: return
         val deviceItem = DeviceItem(device).apply { this.state = state }
-        val args = mapOf(ARG_DM_DEV_DEVICE to deviceItem)
-        getControl(context, id, dmSessionNo, args = args)?.apply {
-            updatePublisher.onNext(this)
+        val regulation = StateUpdateRegulation(600, deviceItem) {
+            withContext(Dispatchers.Default) {
+                val args = mapOf(ARG_DM_DEV_DEVICE to deviceItem)
+                val control = getControl(context, id, dmSessionNo, args = args) ?: return@withContext
+                updatePublisher.onNext(control)
+            }
+        }
+        GlobalScope.launch(Dispatchers.Default) {
+            dmRegulator.regulate(regulation)
         }
     }
 
@@ -339,6 +347,9 @@ class MyControlService : ControlsProviderService(), StateObservable {
             DEV_ID_MDU -> {
                 val hasAccess = PermissionUtils.isUsageAccessPermitted(context)
                 val doUpdate = action != null && action is BooleanAction
+                // ask permission only when performing user-requested update action
+                // to avoid permission request when adding controls, which is too early and unnecessary
+                if (doUpdate && !hasAccess) getPermission()
                 if (doUpdate && hasAccess) GlobalScope.launch {
                     delay(800)
                     val updatePublisher = updatePublisher ?: return@launch
@@ -349,7 +360,7 @@ class MyControlService : ControlsProviderService(), StateObservable {
                 val status = if (!hasAccess) {
                     localeContext.getString(R.string.text_access_denied)
                 } else if (doUpdate) {
-                    "..."
+                    "…"
                 } else {
                     val (totalDay, totalMonth) = SysServiceUtils.getDataUsage(context)
                     val usageDay = Formatter.formatFileSize(context, totalDay)

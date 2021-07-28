@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.WorkerThread
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
@@ -35,6 +36,7 @@ import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.notifyBriefly
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 internal class DeviceListFragment: TaggedFragment(), StateObservable {
 
@@ -50,14 +52,20 @@ internal class DeviceListFragment: TaggedFragment(), StateObservable {
     private val service = DeviceListService(manager)
     private lateinit var adapter: DeviceItemAdapter
     private lateinit var viewBinding: UnitDmDeviceListBinding
+    private val updateRegulator: StateUpdateRegulator by lazy { StateUpdateRegulator() }
+
     override val stateReceiver: BroadcastReceiver = stateReceiverImp
 
     override fun onBluetoothStateChanged(state: Int) {
-        loadDeviceItems()
+        lifecycleScope.launch(Dispatchers.Default) {
+            loadDeviceItems()
+        }
     }
 
     override fun onDeviceStateChanged(device: BluetoothDevice, state: Int) {
-        updateDeviceItem(device.address, state)
+        lifecycleScope.launch(Dispatchers.Default) {
+            updateDeviceItem(device.address, state)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -112,24 +120,29 @@ internal class DeviceListFragment: TaggedFragment(), StateObservable {
     /**
      * Get device items from service and load them
      */
-    private fun loadDeviceItems() {
-        lifecycleScope.launch(Dispatchers.Default) {
-            val items = service.getDeviceItems()
-            launch(Dispatchers.Main) {
-                viewModel.data.value = items to {
-                    adapter.notifyDataSetChanged()
-                }
+    @WorkerThread
+    private suspend fun loadDeviceItems() {
+        val items = service.getDeviceItems()
+        withContext(Dispatchers.Main) {
+            viewModel.data.value = items to {
+                adapter.notifyDataSetChanged()
             }
         }
     }
 
-    private fun updateDeviceItem(mac: String, state: Int) {
+    @WorkerThread
+    private suspend fun updateDeviceItem(mac: String, state: Int) {
         val (items, _) = viewModel.data.value ?: return
         for (index in items.indices) {
             val item = items[index]
             if (item.mac != mac) continue
-            item.state = state
-            adapter.notifyItemChanged(index)
+            // a copy of the device item with new state must be stored for later state check
+            val updateItem = item.copy(state = state)
+            val regulation = StateUpdateRegulation(600, updateItem) {
+                item.state = updateItem.state
+                adapter.notifyItemChanged(index)
+            }
+            updateRegulator.regulate(regulation)
             break
         }
     }

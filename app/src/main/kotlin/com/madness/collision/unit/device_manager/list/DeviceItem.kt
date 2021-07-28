@@ -21,11 +21,12 @@ import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothProfile
 import com.madness.collision.R
 
-internal class DeviceItem(val device: BluetoothDevice) {
-    val name: String = device.name ?: ""
-    val majorDeviceClass = device.bluetoothClass?.majorDeviceClass ?: BluetoothClass.Device.Major.MISC
-    val deviceClass = device.bluetoothClass?.deviceClass ?: BluetoothClass.Device.Major.MISC
-    val mac: String = device.address
+internal data class DeviceItem(
+    val device: BluetoothDevice,
+    val name: String = device.name ?: "",
+    val majorDeviceClass: Int = device.bluetoothClass?.majorDeviceClass ?: BluetoothClass.Device.Major.MISC,
+    val deviceClass: Int = device.bluetoothClass?.deviceClass ?: BluetoothClass.Device.Major.MISC,
+    val mac: String = device.address,
     val iconRes: Int = when (majorDeviceClass) {
         BluetoothClass.Device.Major.AUDIO_VIDEO -> R.drawable.ic_devices_other_24
         BluetoothClass.Device.Major.PHONE,
@@ -34,6 +35,6 @@ internal class DeviceItem(val device: BluetoothDevice) {
         BluetoothClass.Device.Major.HEALTH -> R.drawable.ic_heart_24
         BluetoothClass.Device.Major.PERIPHERAL -> R.drawable.ic_devices_other_24
         else -> R.drawable.ic_devices_other_24
-    }
-    var state: Int = BluetoothProfile.STATE_DISCONNECTED
-}
+    },
+    var state: Int = BluetoothProfile.STATE_DISCONNECTED,
+)
