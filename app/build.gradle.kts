@@ -204,6 +204,7 @@ dependencies {
             Dependencies.rxJava,
             Dependencies.jbAnnotations,
             Dependencies.glide,
+            Dependencies.coil,
             Dependencies.androidDeviceNames
     ).forEach { implementation(it) }
 

@@ -67,6 +67,7 @@ object Versions {
     // This dependency is set to compile only
     const val googleWearable = "2.8.1"
     const val glide = "4.12.0"
+    const val coil = "1.3.0"
     const val jsoup = "1.13.1"
     const val junit4 = "4.13.2"
     const val junitJupiter = "5.7.1"
@@ -135,6 +136,7 @@ class Dependencies : Plugin<Project> {
         const val googlePlayServicesOSSLicenses = "com.google.android.gms:play-services-oss-licenses:${Versions.googlePlayServicesOSSLicenses}"
         const val googlePlayServicesBasement = "com.google.android.gms:play-services-basement:${Versions.googlePlayServicesBasement}"
         const val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
+        const val coil = "io.coil-kt:coil:${Versions.coil}"
         const val jsoup = "org.jsoup:jsoup:${Versions.jsoup}"
         const val kotlinStdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Versions.kotlin}"
         const val kotlinReflect = "org.jetbrains.kotlin:kotlin-reflect:${Versions.kotlin}"

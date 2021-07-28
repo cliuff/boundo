@@ -540,7 +540,19 @@ class MyUnit: com.madness.collision.unit.Unit() {
             }
             rDisplay = RunnableDisplay(displayItem)
             val filterTags = context.resources.obtainTypedArray(MyR.array.prefAvTagsEntries)
-            val popTags = PopupUtil.selectMulti(context, MyR.string.av_main_filter_tip, filterTags, emptySet()) {
+            val tagIcons = listOf(
+                null, null,
+                MyR.drawable.ic_flutter_72, MyR.drawable.ic_react_72, MyR.drawable.ic_xamarin_72,
+                MyR.drawable.ic_kotlin_72, MyR.drawable.ic_64b_72,
+                null, null,
+                MyR.drawable.ic_hidden_72, MyR.drawable.ic_system_72, MyR.drawable.ic_aab_72,
+                MyR.drawable.ic_ai_72,
+                MyR.drawable.ic_firebase_72, MyR.drawable.ic_huawei_72, MyR.drawable.ic_xiaomi_72,
+                MyR.drawable.ic_meizu_72, MyR.drawable.ic_oppo_72, MyR.drawable.ic_vivo_72,
+                MyR.drawable.ic_aurora_72, MyR.drawable.ic_umeng_72, MyR.drawable.ic_tpns_72,
+                MyR.drawable.ic_emas_72, MyR.drawable.ic_baidu_push_72, MyR.drawable.ic_getui_72,
+            )
+            val popTags = PopupUtil.selectMulti(context, MyR.string.av_main_filter_tip, filterTags, tagIcons, emptySet()) {
                 pop, container, indexes ->
                 pop.dismiss()
                 closeFilterTagMenu(container, indexes)
