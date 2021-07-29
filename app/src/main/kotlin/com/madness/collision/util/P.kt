@@ -58,8 +58,6 @@ object P {
     const val APPLICATION_INITIATE = "initiateApp" // boolean
     const val APPLICATION_V = "v" // int
 
-    const val APP_INFO_PACKAGE = "toolsAppPackageName"
-    const val APP_INFO_PACKAGE_DEFAULT = BuildConfig.BUILD_PACKAGE
     const val ADVANCED = "debug"
     const val SETTINGS_DARK_STATUS_ICON = "DarkStatusBarIcon"
     const val SETTINGS_DARK_NAV_ICON = "DarkNavigationBarIcon"

@@ -43,7 +43,6 @@ abstract class Unit: TaggedFragment(), Democratic {
         const val UNIT_NAME_API_VIEWING = "api_viewing"
         const val UNIT_NAME_SCHOOL_TIMETABLE = "school_timetable"
         const val UNIT_NAME_IMAGE_MODIFYING = "image_modifying"
-        const val UNIT_NAME_COOL_APP = "cool_app"
         const val UNIT_NAME_THEMED_WALLPAPER = "themed_wallpaper"
         const val UNIT_NAME_AUDIO_TIMER = "audio_timer"
         const val UNIT_NAME_QQ_CONTACTS = "qq_contacts"
@@ -59,7 +58,6 @@ abstract class Unit: TaggedFragment(), Democratic {
                     Description(UNIT_NAME_API_VIEWING, R.string.apiViewer, R.drawable.ic_android_24).setDescResId(R.string.unit_desc_av),
                     Description(UNIT_NAME_SCHOOL_TIMETABLE, R.string.unit_school_timetable, R.drawable.ic_tt_24).setDescResId(R.string.unit_desc_st),
                     Description(UNIT_NAME_IMAGE_MODIFYING, R.string.developertools_cropimage, R.drawable.ic_landscape_24).setDescResId(R.string.unit_desc_im),
-                    Description(UNIT_NAME_COOL_APP, R.string.developertools_appinfowidget, R.drawable.ic_widgets_24).setDescResId(R.string.unit_desc_ca),
                     StaticDescription(UNIT_NAME_THEMED_WALLPAPER, R.string.twService, R.drawable.ic_image_24).setDescResId(R.string.unit_desc_tw)
                             .setRequirement(Description.Checker(R.string.unit_desc_requirement_tw) {
                                 it.packageManager.hasSystemFeature(PackageManager.FEATURE_LIVE_WALLPAPER)

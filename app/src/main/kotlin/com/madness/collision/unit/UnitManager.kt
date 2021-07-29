@@ -34,7 +34,6 @@ import com.madness.collision.util.notify
 import com.madness.collision.util.notifyBriefly
 import com.madness.collision.versatile.ApiViewingSearchActivity
 import com.madness.collision.versatile.ApkSharing
-import com.madness.collision.versatile.AppInfoWidget
 import com.madness.collision.versatile.TextProcessingActivity
 import java.lang.ref.WeakReference
 import kotlin.reflect.KClass
@@ -96,7 +95,6 @@ internal class UnitManager(private val context: Context, private val splitInstal
         when (description.unitName) {
             Unit.UNIT_NAME_API_VIEWING -> this::aftermathApiViewing
             Unit.UNIT_NAME_AUDIO_TIMER -> this::aftermathAudioTimer
-            Unit.UNIT_NAME_COOL_APP -> this::aftermathCoolApp
             Unit.UNIT_NAME_THEMED_WALLPAPER -> this::aftermathThemedWallpaper
             else -> return
         }.invoke(context, isUninstall)
@@ -128,14 +126,6 @@ internal class UnitManager(private val context: Context, private val splitInstal
 
     private inline fun <reified T> componentName(context: Context): ComponentName {
         return T::class.toComponentName(context)
-    }
-
-    private fun aftermathCoolApp(context: Context, isUninstall: Boolean) {
-        context.packageManager.setComponentEnabledSetting(
-                componentName<AppInfoWidget>(context),
-                isUninstall.stateDisabled(),
-                PackageManager.DONT_KILL_APP
-        )
     }
 
     private fun aftermathApiViewing(context: Context, isUninstall: Boolean) {

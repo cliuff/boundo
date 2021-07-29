@@ -118,7 +118,6 @@ internal object MiscMain {
         listOf(
                 Unit.UNIT_NAME_API_VIEWING,
                 Unit.UNIT_NAME_AUDIO_TIMER,
-                Unit.UNIT_NAME_COOL_APP,
                 Unit.UNIT_NAME_SCHOOL_TIMETABLE
         ).forEach {
             pinnedUnits.add(it)

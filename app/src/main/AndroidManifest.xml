@@ -195,19 +195,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-        <receiver
-            android:name=".versatile.AppInfoWidget"
-            android:enabled="true"
-            android:label="@string/developertools_appinfowidget">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="${buildPackage}.AppInfoWidget.ACTION_CLICK_PARENT" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/app_info_widget_info" />
-        </receiver>
         <service
             android:name=".unit.themed_wallpaper.ThemedWallpaperService"
             android:enabled="true"
