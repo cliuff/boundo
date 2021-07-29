@@ -47,7 +47,6 @@
     <string name="Settings_ImageView_Language">ภาษา</string>
     <string name="Launcher_QQContacts_Toast_Avatar_PermissionDenied">โปรดให้อนุญาตเพื่อให้เราสามารถอ่านภาพได้</string>
     <string name="text_add_new">เพิ่มใหม่</string>
-    <string name="developertools_appinfowidget">ข้อมูลแอพ CoolApk</string>
     <string name="developertools_cropimage">การแก้ไขรูปภาพ</string>
     <string name="toast_permission_storage_denied">กรุณาให้อนุญาตเพื่อให้เราสามารถอ่าน / เขียนข้อมูล</string>
     <string name="apiViewer">แอป API</string>
@@ -209,7 +208,6 @@
     <string name="unit_desc_av">•ตรวจสอบระดับ Android API ของแอพและ apks ทั้งหมดในอุปกรณ์\n•ตรวจสอบการสนับสนุนไอคอน Adaptive ของแอพทั้งหมด\n•สถิติแอป API\n•การแยก APK และไอคอน\n•รายละเอียดแพ็คเกจและรายละเอียดลายเซ็นต์</string>
     <string name="unit_desc_st">สำหรับผู้ใช้ภาษาจีน\n•เพิ่มหลักสูตรด้วยตนเอง\n•ตารางเวลาของโรงเรียนแยกวิเคราะห์จากเว็บไซต์ระบบการศึกษาของโรงเรียน (บางระบบ ZFSoft เท่านั้น)\n•สร้างไฟล์ iCalendar (.ics)\n•ส่งออกไปยัง Google Calendar เป็นต้น</string>
     <string name="unit_desc_im">•แก้ไขความละเอียด\n•ปรับเปลี่ยนรูปแบบ: png jpg webp heif\n•ภาพเบลอ</string>
-    <string name="unit_desc_ca">•รับข้อมูลแอพใน CoolApk</string>
     <string name="unit_desc_tw">•ทำให้วอลล์เปเปอร์ของคุณสอดคล้องกับ Android 10 ธีมมืดโดยการใช้วอลล์เปเปอร์สีเข้มโดยอัตโนมัติ</string>
     <string name="unit_desc_at">•หยุดเสียงจากการเล่น</string>
     <string name="unit_desc_qc">•ทางลัดที่ติดต่อของ QQ</string>

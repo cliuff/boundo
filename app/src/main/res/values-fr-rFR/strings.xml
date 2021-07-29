@@ -46,7 +46,6 @@
     <string name="Settings_ImageView_Language">Langue</string>
     <string name="Launcher_QQContacts_Toast_Avatar_PermissionDenied">Veuillez accorder l\'autorisation pour que nous puissions lire l\'image</string>
     <string name="text_add_new">Ajout d\'un nouveau</string>
-    <string name="developertools_appinfowidget">CoolApk App Info</string>
     <string name="developertools_cropimage">Modification d\'image</string>
     <string name="toast_permission_storage_denied">Veuillez accorder l\'autorisation afin que nous puissions lire/écrire les données</string>
     <string name="apiViewer">API d\'application</string>
@@ -216,7 +215,6 @@
     <string name="unit_desc_av">• Vérifier le niveau de l\'API Android de toutes les applications et apks sur l\'appareil\n• Vérifier le support des icônes adaptatives de toutes les applications\n• Statistiques de l\'API de l\'application\n• Extraction d\'apk et d\'icônes\n• Détails du paquet et détails de la signature de chaque application</string>
     <string name="unit_desc_st">Pour les utilisateurs chinois\n• Ajouter un cours manuellement\n• Analysez l\'emploi du temps scolaire à partir du site web du système éducatif de l\'école (uniquement pour une partie du système éducatif ZFSoft)\n• Générer un fichier iCalendar (.ics)\n• Exportation vers Google Agenda, etc.</string>
     <string name="unit_desc_im">• Modifier la résolution\n• Modifier le format : png, jpg, webp, heif\n• Image floue</string>
-    <string name="unit_desc_ca">• Récupérer les informations des applications dans CoolApk</string>
     <string name="unit_desc_tw">• Faites en sorte que votre papier peint soit conforme au thème sombre d\'Android 10 en appliquant automatiquement un papier peint de couleur sombre</string>
     <string name="unit_desc_at">• Arrêter la lecture audio</string>
     <string name="unit_desc_qc">• Raccourci pour les contacts QQ</string>

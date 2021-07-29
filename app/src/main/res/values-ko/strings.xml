@@ -47,7 +47,6 @@
     <string name="Settings_ImageView_Language">언어</string>
     <string name="Launcher_QQContacts_Toast_Avatar_PermissionDenied">그림을 읽을 수 있도록 승인하십시오</string>
     <string name="text_add_new">추가</string>
-    <string name="developertools_appinfowidget">멋진 소프트웨어 정보</string>
     <string name="developertools_cropimage">사진 조정</string>
     <string name="toast_permission_storage_denied">데이터를 읽고 쓸 수있는 스토리지 액세스 권한을 부여하십시오</string>
     <string name="apiViewer">응용 프로그램 API</string>
@@ -222,7 +221,6 @@
     <string name="advice_license_details">Boundo의 탄생은 오픈 소스 소프트웨어의 지원에 의존합니다</string>
     <string name="activityTextProcessingApp">Bnd 앱보기</string>
     <string name="textWeekNum">%d 주차</string>
-    <string name="unit_desc_ca">• CoolApk에서 소프트웨어에 대한 정보를 얻습니다.</string>
     <string name="unit_desc_im">• 해상도 수정\n• png jpg webp heif 형식 수정\n• 사진 흐림</string>
     <string name="settings_fun_update_via_browser">다운로드하려면 브라우저를 호출하십시오\n(복사 링크를 길게 누르십시오)</string>
     <string name="immortalMessage">오!\n약간의 문제가있었습니다.\n그러나 범인은 잡혔다!\n추가 분석을 위해 로그를 보내주십시오!</string>

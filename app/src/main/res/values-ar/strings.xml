@@ -47,7 +47,6 @@
     <string name="Settings_ImageView_Language">اللغات</string>
     <string name="Launcher_QQContacts_Toast_Avatar_PermissionDenied">يرجى منح الإذن حتى نتمكن من قراءة الصورة</string>
     <string name="text_add_new">اضف جديد</string>
-    <string name="developertools_appinfowidget">CoolApk معلومات التطبيق</string>
     <string name="developertools_cropimage">تعديل الصورة</string>
     <string name="toast_permission_storage_denied">يرجى منح الإذن حتى نتمكن من قراءة / كتابة البيانات</string>
     <string name="apiViewer">&#1564;API التطبيق</string>
@@ -209,7 +208,6 @@
     <string name="unit_desc_av">• التحقق من مستوى Android API لجميع التطبيقات والتطبيقات على الجهاز\n• التحقق من دعم أيقونة التكيف من جميع التطبيقات\n• احصائيات API التطبيق\n• &#1564;APK واستخراج الرمز\n• تفاصيل الحزمة وتفاصيل التوقيع</string>
     <string name="unit_desc_st">للمستخدمين الصينيين\n• إضافة بالطبع يدويا\n• تحليل الجدول الزمني للمدرسة من موقع النظام التعليمي للمدرسة (بعض من نظام التعليم ZFSoft فقط)\n • إنشاء ملف iCalendar (.ics)\n• تصدير إلى تقويم Google إلخ.</string>
     <string name="unit_desc_im">• تعديل القرار• تعديل الشكل: png jpg webp heif• طمس الصورة</string>
-    <string name="unit_desc_ca">• استرجع معلومات التطبيقات على CoolApk</string>
     <string name="unit_desc_tw">• اجعل ورق الحائط الخاص بك يتوافق مع السمة المظلم لنظام Android 10 من خلال تطبيق ورق الحائط الداكن تلقائيًا</string>
     <string name="unit_desc_at">• إيقاف الصوت من اللعب</string>
     <string name="unit_desc_qc">• اختصار اتصالات QQ</string>

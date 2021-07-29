@@ -47,7 +47,6 @@
     <string name="Settings_ImageView_Language">Diller</string>
     <string name="Launcher_QQContacts_Toast_Avatar_PermissionDenied">Resmi okuyabilmek için lütfen izin verin</string>
     <string name="text_add_new">Yeni ekle</string>
-    <string name="developertools_appinfowidget">CoolApk Uygulama Bilgisi</string>
     <string name="developertools_cropimage">Görüntü Değiştirme</string>
     <string name="toast_permission_storage_denied">Verileri okuyabilmemiz / yazabilmemiz için lütfen izin verin</string>
     <string name="apiViewer">Uygulama API\'sı</string>
@@ -207,7 +206,6 @@
     <string name="twLiveWallpaperDesc">Karanlık tema etkinleştirildiğinde otomatik olarak karanlık duvar kağıdına geç</string>
     <string name="unit_desc_requirement_shortcut">Android sürümü en az 7.1</string>
     <string name="unit_desc_requirement_qc">QQ yüklendi</string>
-    <string name="unit_desc_ca">• CoolApk üzerindeki uygulamaların bilgilerini alma</string>
     <string name="unit_desc_tw">• Otomatik olarak koyu renkli bir duvar kağıdı uygulayarak duvar kağıdınızın Android 10 karanlık temasına uymasını sağlayın</string>
     <string name="unit_desc_at">• Sesin çalmasını durdurun</string>
     <string name="unit_desc_qc">• QQ kişileri kısayolu</string>

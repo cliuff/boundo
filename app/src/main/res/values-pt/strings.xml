@@ -47,7 +47,6 @@
     <string name="Settings_ImageView_Language">línguas</string>
     <string name="Launcher_QQContacts_Toast_Avatar_PermissionDenied">Conceda a permissão para que possamos ler a imagem</string>
     <string name="text_add_new">Adicionar novo</string>
-    <string name="developertools_appinfowidget">Informações sobre o aplicativo CoolApk</string>
     <string name="developertools_cropimage">Modificação de imagem</string>
     <string name="toast_permission_storage_denied">Conceda a permissão para que possamos ler / gravar dados</string>
     <string name="apiViewer">API do aplicativo</string>
@@ -209,7 +208,6 @@
     <string name="unit_desc_av">• Verifique o nível da API do Android de todos os aplicativos e aplicativos no dispositivo\n• Verifique o suporte ao ícone adaptável de todos os aplicativos\n• estatísticas da API do aplicativo\n• Extração de APK e ícone\n• Detalhes do pacote e detalhes da assinatura</string>
     <string name="unit_desc_st">Para usuários chineses\n• Adicionar curso manualmente\n• Analise o horário da escola no site do sistema educacional da escola (apenas alguns dos sistemas educacionais da ZFSoft)\n• Gerar arquivo iCalendar (.ics)\n• Exportar para o Google Agenda etc.</string>
     <string name="unit_desc_im">• Modificar resolução\n• Modificar formato: png jpg webp heif\n• Desfocar imagem</string>
-    <string name="unit_desc_ca">• Recupere informações dos aplicativos no CoolApk</string>
     <string name="unit_desc_tw">• Faça seu papel de parede estar em conformidade com o tema escuro do Android 10 aplicando um papel de parede de cor escura automaticamente</string>
     <string name="unit_desc_at">• Interrompa a reprodução do áudio</string>
     <string name="unit_desc_qc">• Atalho para contatos QQ</string>

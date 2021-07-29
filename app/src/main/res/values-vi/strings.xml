@@ -47,7 +47,6 @@
     <string name="Settings_ImageView_Language">Ngôn ngữ</string>
     <string name="Launcher_QQContacts_Toast_Avatar_PermissionDenied">Vui lòng cấp phép để chúng tôi có thể đọc hình ảnh</string>
     <string name="text_add_new">Thêm mới</string>
-    <string name="developertools_appinfowidget">Thông tin ứng dụng CoolApk</string>
     <string name="developertools_cropimage">Sửa đổi hình ảnh</string>
     <string name="toast_permission_storage_denied">Vui lòng cấp quyền để chúng tôi có thể đọc / ghi dữ liệu</string>
     <string name="apiViewer">API ứng dụng</string>
@@ -209,7 +208,6 @@
     <string name="unit_desc_av">• Kiểm tra cấp độ API Android của tất cả các ứng dụng và ứng dụng trên thiết bị\n• Kiểm tra hỗ trợ Biểu tượng thích ứng của tất cả các ứng dụng\n• Thống kê API ứng dụng\n• Trích xuất APK và biểu tượng\n• Chi tiết gói và chi tiết chữ ký</string>
     <string name="unit_desc_st">Dối với người dùng Trung Quốc\n• Thêm khóa học thủ công\n• Phân tích thời khóa biểu của trường từ trang web của hệ thống giáo dục của trường (chỉ một số hệ thống giáo dục của ZFSoft)\n• Tạo tệp iCalWiki (.ics)\n• Xuất sang Lịch Google, v.v.</string>
     <string name="unit_desc_im">• Sửa đổi độ phân giải\n• Sửa đổi định dạng: png jpg webp heif\n• Làm mờ hình ảnh</string>
-    <string name="unit_desc_ca">• Truy xuất thông tin của các ứng dụng trên CoolApk</string>
     <string name="unit_desc_tw">• Làm cho hình nền của bạn tuân thủ chủ đề tối của Android 10 bằng cách tự động áp dụng hình nền tối màu</string>
     <string name="unit_desc_at">• Dừng âm thanh phát</string>
     <string name="unit_desc_qc">• Phím tắt liên lạc QQ</string>

@@ -47,7 +47,6 @@
     <string name="Settings_ImageView_Language">語言</string>
     <string name="Launcher_QQContacts_Toast_Avatar_PermissionDenied">請授權以讀取圖片</string>
     <string name="text_add_new">添加</string>
-    <string name="developertools_appinfowidget">酷安軟件詳情</string>
     <string name="developertools_cropimage">圖片調整</string>
     <string name="toast_permission_storage_denied">請授予存儲訪問權限以讀寫數據</string>
     <string name="apiViewer">應用 API</string>
@@ -210,7 +209,6 @@
     <string name="twLiveWallpaperDesc">開啟黑暗模式時自動更換暗色調壁紙</string>
     <string name="unit_desc_requirement_shortcut">安卓版本至少 7.1</string>
     <string name="unit_desc_requirement_qc">已安裝 QQ</string>
-    <string name="unit_desc_ca">• 獲取酷安上的軟件的信息</string>
     <string name="unit_desc_tw">• 設置亮色調和暗色調壁紙，壁紙隨安卓10的黑暗模式而變化</string>
     <string name="unit_desc_at">• 停止音頻播放</string>
     <string name="unit_desc_qc">• QQ 好友 shortcut</string>

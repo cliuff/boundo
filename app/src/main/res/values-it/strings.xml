@@ -47,7 +47,6 @@
     <string name="Settings_ImageView_Language">Le lingue</string>
     <string name="Launcher_QQContacts_Toast_Avatar_PermissionDenied">Concedi l\'autorizzazione per consentirci di leggere l\'immagine</string>
     <string name="text_add_new">Aggiungere nuova</string>
-    <string name="developertools_appinfowidget">Informazioni sull\'app CoolApk</string>
     <string name="developertools_cropimage">Modifica dell\'immagine</string>
     <string name="toast_permission_storage_denied">Concedi l\'autorizzazione per consentirci di leggere / scrivere i dati</string>
     <string name="apiViewer">API dell\'app</string>
@@ -209,7 +208,6 @@
     <string name="unit_desc_av">• Controlla il livello API Android di tutte le app e gli apk sul dispositivo\n• Controlla il supporto dell\'icona adattiva di tutte le app\n• Statistiche API app\n• Estrazione di APK e icone\n• Dettagli del pacchetto e dettagli della firma</string>
     <string name="unit_desc_st">Per utenti cinesi\n• Aggiungi corso manualmente\n• Orario scolastico scarso dal sito web del sistema educativo della scuola (solo alcuni dei sistemi educativi ZFSoft)\n• Genera file iCalendar (.ics)\n• Esporta in Google Calendar ecc.</string>
     <string name="unit_desc_im">• Modifica risoluzione\n• Modifica formato: png jpg webp heif\n• Sfocatura immagine</string>
-    <string name="unit_desc_ca">• Recupera le informazioni delle app su CoolApk</string>
     <string name="unit_desc_tw">• Rendi il tuo sfondo conforme al tema scuro di Android 10 applicando automaticamente uno sfondo di colore scuro</string>
     <string name="unit_desc_at">• Interrompere la riproduzione dell\'audio</string>
     <string name="unit_desc_qc">• Collegamento ai contatti QQ</string>

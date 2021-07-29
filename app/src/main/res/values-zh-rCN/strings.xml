@@ -46,7 +46,6 @@
     <string name="Settings_ImageView_Language">语言</string>
     <string name="Launcher_QQContacts_Toast_Avatar_PermissionDenied">请授权以读取图片</string>
     <string name="text_add_new">添加</string>
-    <string name="developertools_appinfowidget">酷安软件详情</string>
     <string name="developertools_cropimage">图片调整</string>
     <string name="toast_permission_storage_denied">请授予存储访问权限以读写数据</string>
     <string name="apiViewer">应用 API</string>
@@ -209,7 +208,6 @@
     <string name="unit_desc_av">• 查看设备上所有应用及安装包的目标 SDK 版本和最低 SDK 版本\n• 查看应用是否支持自适应图标\n• 应用 API 统计\n• 安装包提取、图标提取\n• 包详细信息查看、签名信息查看</string>
     <string name="unit_desc_st">！中国用户使用\n• 手动输入课程\n• 自动解析教务系统课表（只支持部分正方教务系统）\n• 生成 iCalendar 文件 (.ics)\n• 导入至谷歌日历等</string>
     <string name="unit_desc_im">• 修改分辨率\n• 修改格式 png jpg webp heif\n• 模糊图片</string>
-    <string name="unit_desc_ca">• 获取酷安上的软件的信息</string>
     <string name="unit_desc_tw">• 设置亮色调和暗色调壁纸，壁纸随安卓10的黑暗模式而变化</string>
     <string name="unit_desc_at">• 停止音频播放</string>
     <string name="unit_desc_qc">• QQ 好友 shortcut</string>

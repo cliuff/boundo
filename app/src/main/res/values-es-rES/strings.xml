@@ -63,7 +63,6 @@
     <string name="avAdapterActionsDetails">Detalles</string>
     <string name="avAdapterActionsIcon">Compartir icono</string>
     <string name="avStoreLink">Enlace a la tienda de aplicaciones</string>
-    <string name="developertools_appinfowidget">Información de la aplicación CoolApk</string>
     <string name="developertools_cropimage">Modificación de imagen</string>
     <string name="exterior_blur_degree">Grado de desenfoque</string>
     <string name="exterior_dark_navigation">Icono de barra de navegación oscura</string>
@@ -209,7 +208,6 @@
     <string name="unit_desc_av">• Verifique el nivel de API de Android de todas las aplicaciones y aplicaciones en el dispositivo\n• Verifique el soporte de Adaptive Icon de todas las aplicaciones\n• Estadísticas de la API de la aplicación\n• APK y extracción de iconos\n•Detalles del paquete y detalles de la firma</string>
     <string name="unit_desc_st">! Para usuarios chinos\n• Agregar curso manualmente\n• Analizar el horario escolar del sitio web del sistema educativo de la escuela (solo algunos del sistema educativo ZFSoft)\n• Generar archivo iCalendar (.ics)\n• Exportar a Google Calendar, etc.</string>
     <string name="unit_desc_im">• Modificar resolución\n• Modificar formato: png jpg webp heif\n• Imagen borrosa</string>
-    <string name="unit_desc_ca">• Recuperar información de las aplicaciones en CoolApk</string>
     <string name="unit_desc_tw">• Haga que su fondo de pantalla cumpla con el tema oscuro de Android 10 aplicando un fondo de pantalla de color oscuro automáticamente</string>
     <string name="unit_desc_at">• Detener la reproducción de audio</string>
     <string name="unit_desc_qc">• Acceso directo a contactos QQ</string>

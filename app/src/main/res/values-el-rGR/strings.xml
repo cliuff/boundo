@@ -47,7 +47,6 @@
     <string name="Settings_ImageView_Language">Γλώσσες</string>
     <string name="Launcher_QQContacts_Toast_Avatar_PermissionDenied">Εκχωρήστε την άδεια για να μπορέσουμε να διαβάσουμε την εικόνα</string>
     <string name="text_add_new">Προσθεσε νεο</string>
-    <string name="developertools_appinfowidget">Πληροφορίες εφαρμογής CoolApk</string>
     <string name="developertools_cropimage">Τροποποίηση εικόνας</string>
     <string name="toast_permission_storage_denied">Παραχωρήστε την άδεια για να μπορούμε να διαβάζουμε / γράφουμε δεδομένα</string>
     <string name="apiViewer">API εφαρμογής</string>
@@ -207,7 +206,6 @@
     <string name="twLiveWallpaperDesc">Μετάβαση σε σκοτεινή ταπετσαρία αυτόματα όταν είναι ενεργοποιημένο το σκοτεινό θέμα</string>
     <string name="unit_desc_requirement_shortcut">Η έκδοση Android είναι τουλάχιστον 7.1</string>
     <string name="unit_desc_requirement_qc">Εγκατεστημένο QQ</string>
-    <string name="unit_desc_ca">• Ανάκτηση πληροφοριών για τις εφαρμογές στο CoolApk</string>
     <string name="unit_desc_tw">• Κάντε την ταπετσαρία σας να συμμορφώνεται με το σκοτεινό θέμα Android 10 εφαρμόζοντας αυτόματα μια ταπετσαρία σκούρου χρώματος</string>
     <string name="unit_desc_at">• Διακοπή αναπαραγωγής ήχου</string>
     <string name="unit_desc_qc">• Συντόμευση επαφών QQ</string>
