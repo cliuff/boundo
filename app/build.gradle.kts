@@ -159,8 +159,7 @@ android {
         viewBinding = true
     }
     dynamicFeatures = mutableSetOf(
-            ":cool_app", ":image_modifying", ":school_timetable",
-            ":no_media", ":api_viewing", ":qq_contacts"
+        ":cool_app", ":image_modifying", ":school_timetable", ":api_viewing", ":qq_contacts"
     )
 }
 

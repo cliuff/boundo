@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,11 @@
 
 
 includeBuild("dependencyPlugin")
-include(":app",
-        ":cool_app", ":image_modifying", ":school_timetable",
-        ":no_media", ":api_viewing", ":qq_contacts",
-        ":wearable")
+include(
+    ":app",
+    ":cool_app", ":image_modifying", ":school_timetable", ":api_viewing", ":qq_contacts",
+    ":wearable"
+)
 /*
 
 pluginManagement {
