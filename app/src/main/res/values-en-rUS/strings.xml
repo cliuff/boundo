@@ -79,7 +79,6 @@
     <string name="instant_manager_intro">App Shortcuts</string>
     <string name="text_new">New</string>
     <string name="settings_sdk">Display round app icons</string>
-    <string name="tools_nm">Private Pics Hiding</string>
     <string name="nm_adapter_img_content_1">Image folder image</string>
     <string name="text_copy_link">Link copied</string>
     <string name="text_feature_feathering">Feature feathering, time devoting</string>
@@ -213,14 +212,12 @@
     <string name="unit_desc_unavailable">Unavailable</string>
     <string name="unit_desc_install">Install</string>
     <string name="unit_desc_uninstall">Uninstall</string>
-    <string name="unit_desc_requirement_nm">Android version is at most 9</string>
     <string name="unit_desc_requirement_shortcut">Android version is at least 7.1</string>
     <string name="unit_desc_requirement_qc">QQ installed</string>
     <string name="unit_desc_av">• Check Android API level of all apps and apks on device\n• Check Adaptive Icon support of all apps\n• App API stats\n• APK and icon extraction\n• Package details and signature details</string>
     <string name="unit_desc_st">! For Chinese users\n• Add course manually\n• Parse school timetable from school\'s education system website (some of the ZFSoft education system only)\n• Generate iCalendar file (.ics)\n• Export to Google Calendar etc.</string>
     <string name="unit_desc_im">• Modify resolution\n• Modify format: png jpg webp heif\n• Blur image</string>
     <string name="unit_desc_ca">• Retrieve info of the apps on CoolApk</string>
-    <string name="unit_desc_nm">• Hide runtime images produced by apps (.nomedia)</string>
     <string name="unit_desc_tw">• Make your wallpaper comply to Android 10 dark theme by applying a dark-color wallpaper automatically</string>
     <string name="unit_desc_at">• Stop audio from playing</string>
     <string name="unit_desc_qc">• QQ contacts shortcut</string>

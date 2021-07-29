@@ -80,7 +80,6 @@
     <string name="instant_manager_intro">Scorciatoie per app</string>
     <string name="text_new">Nuovo</string>
     <string name="settings_sdk">Mostra le icone delle app rotonde</string>
-    <string name="tools_nm">Nascondere foto private</string>
     <string name="nm_adapter_img_content_1">Immagine cartella immagine</string>
     <string name="text_copy_link">Link copiato</string>
     <string name="unit_qq_contacts">Collegamento di contatto QQ</string>
@@ -211,12 +210,10 @@
     <string name="unit_desc_st">Per utenti cinesi\n• Aggiungi corso manualmente\n• Orario scolastico scarso dal sito web del sistema educativo della scuola (solo alcuni dei sistemi educativi ZFSoft)\n• Genera file iCalendar (.ics)\n• Esporta in Google Calendar ecc.</string>
     <string name="unit_desc_im">• Modifica risoluzione\n• Modifica formato: png jpg webp heif\n• Sfocatura immagine</string>
     <string name="unit_desc_ca">• Recupera le informazioni delle app su CoolApk</string>
-    <string name="unit_desc_nm">• Nascondi immagini runtime prodotte dalle app (.nomedia)</string>
     <string name="unit_desc_tw">• Rendi il tuo sfondo conforme al tema scuro di Android 10 applicando automaticamente uno sfondo di colore scuro</string>
     <string name="unit_desc_at">• Interrompere la riproduzione dell\'audio</string>
     <string name="unit_desc_qc">• Collegamento ai contatti QQ</string>
     <string name="unit_desc_requirement_shortcut">La versione di Android è almeno 7.1</string>
-    <string name="unit_desc_requirement_nm">La versione Android è al massimo 9</string>
     <string name="unit_desc_installed">installato</string>
     <string name="unit_desc_not_installed">Non installato</string>
     <string name="unit_desc_available">A disposizione</string>

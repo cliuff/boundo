@@ -187,7 +187,6 @@
     <string name="tileData">Uso de datos del mes</string>
     <string name="tileDataUsageAccess">Permítanos acceder al uso</string>
     <string name="toast_permission_storage_denied">Por favor otorgue el permiso para que podamos leer / escribir datos</string>
-    <string name="tools_nm">Ocultar fotos privadas</string>
     <string name="ttExportCal">Al calendario</string>
     <string name="ttExportICalFile">archivo iCalendar</string>
     <string name="ttTimeTextClassDuration">Duración de la clase</string>
@@ -211,12 +210,10 @@
     <string name="unit_desc_st">! Para usuarios chinos\n• Agregar curso manualmente\n• Analizar el horario escolar del sitio web del sistema educativo de la escuela (solo algunos del sistema educativo ZFSoft)\n• Generar archivo iCalendar (.ics)\n• Exportar a Google Calendar, etc.</string>
     <string name="unit_desc_im">• Modificar resolución\n• Modificar formato: png jpg webp heif\n• Imagen borrosa</string>
     <string name="unit_desc_ca">• Recuperar información de las aplicaciones en CoolApk</string>
-    <string name="unit_desc_nm">• Ocultar imágenes de tiempo de ejecución producidas por aplicaciones (.nomedia)</string>
     <string name="unit_desc_tw">• Haga que su fondo de pantalla cumpla con el tema oscuro de Android 10 aplicando un fondo de pantalla de color oscuro automáticamente</string>
     <string name="unit_desc_at">• Detener la reproducción de audio</string>
     <string name="unit_desc_qc">• Acceso directo a contactos QQ</string>
     <string name="unit_desc_requirement_shortcut">La versión de Android es al menos 7.1</string>
-    <string name="unit_desc_requirement_nm">La versión de Android es como máximo 9</string>
     <string name="unit_desc_installed">Instalado</string>
     <string name="unit_desc_not_installed">No instalado</string>
     <string name="unit_desc_available">Disponible</string>

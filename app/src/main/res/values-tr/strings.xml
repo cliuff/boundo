@@ -65,7 +65,6 @@
     <string name="sdk_dialog_details">ayrıntılar</string>
     <string name="instant_manager_intro">Uygulama Kısayolları</string>
     <string name="text_new">Yeni</string>
-    <string name="tools_nm">Özel Resimler Gizleme</string>
     <string name="advice_license">Açık kaynak lisansları</string>
     <string name="text_copy">kopya</string>
     <string name="apiInfoAiSubBack">Arka fon</string>
@@ -206,11 +205,9 @@
     <string name="prefSettingsSweet">Tatlıları göster</string>
     <string name="prefSettingsAvIncludeDisabled">Devre dışı bırakılan uygulamaları dahil et</string>
     <string name="twLiveWallpaperDesc">Karanlık tema etkinleştirildiğinde otomatik olarak karanlık duvar kağıdına geç</string>
-    <string name="unit_desc_requirement_nm">Android sürümü en fazla 10</string>
     <string name="unit_desc_requirement_shortcut">Android sürümü en az 7.1</string>
     <string name="unit_desc_requirement_qc">QQ yüklendi</string>
     <string name="unit_desc_ca">• CoolApk üzerindeki uygulamaların bilgilerini alma</string>
-    <string name="unit_desc_nm">• Uygulamalar (.nomedia) tarafından üretilen çalışma zamanı görüntülerini gizle</string>
     <string name="unit_desc_tw">• Otomatik olarak koyu renkli bir duvar kağıdı uygulayarak duvar kağıdınızın Android 10 karanlık temasına uymasını sağlayın</string>
     <string name="unit_desc_at">• Sesin çalmasını durdurun</string>
     <string name="unit_desc_qc">• QQ kişileri kısayolu</string>

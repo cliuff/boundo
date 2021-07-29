@@ -65,7 +65,6 @@
     <string name="sdk_dialog_details">詳情</string>
     <string name="instant_manager_intro">應用 Shortcuts</string>
     <string name="text_new">新建</string>
-    <string name="tools_nm">私圖隱藏</string>
     <string name="advice_license">開源許可</string>
     <string name="text_copy">複製</string>
     <string name="apiInfoAiSubBack">背景</string>
@@ -209,11 +208,9 @@
     <string name="prefSettingsAvIncludeDisabled">包含已禁用的應用</string>
     <string name="av_details_native_libs">原生庫：</string>
     <string name="twLiveWallpaperDesc">開啟黑暗模式時自動更換暗色調壁紙</string>
-    <string name="unit_desc_requirement_nm">安卓版本至多 9</string>
     <string name="unit_desc_requirement_shortcut">安卓版本至少 7.1</string>
     <string name="unit_desc_requirement_qc">已安裝 QQ</string>
     <string name="unit_desc_ca">• 獲取酷安上的軟件的信息</string>
-    <string name="unit_desc_nm">• 隱藏應用運行時的資源圖片（.nomedia）</string>
     <string name="unit_desc_tw">• 設置亮色調和暗色調壁紙，壁紙隨安卓10的黑暗模式而變化</string>
     <string name="unit_desc_at">• 停止音頻播放</string>
     <string name="unit_desc_qc">• QQ 好友 shortcut</string>

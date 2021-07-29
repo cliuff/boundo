@@ -65,7 +65,6 @@
     <string name="sdk_dialog_details">세부</string>
     <string name="instant_manager_intro">바로 가기 적용</string>
     <string name="text_new">새로운</string>
-    <string name="tools_nm">개인 이미지 숨기기</string>
     <string name="advice_license">오픈 소스 라이센스</string>
     <string name="text_copy">부</string>
     <string name="apiInfoAiSubBack">배경</string>
@@ -206,10 +205,8 @@
     <string name="prefSettingsAvIncludeDisabled">비활성화 된 앱 포함</string>
     <string name="av_details_native_libs">"기본 라이브러리 : "</string>
     <string name="twLiveWallpaperDesc">어두운 모드가 켜져있을 때 어두운 배경 화면을 자동으로 변경</string>
-    <string name="unit_desc_requirement_nm">최대 9 개의 Android 버전</string>
     <string name="unit_desc_requirement_shortcut">안드로이드 버전은 7.1 이상입니다</string>
     <string name="unit_desc_requirement_qc">QQ 설치</string>
-    <string name="unit_desc_nm">• 응용 프로그램이 실행 중일 때 리소스 사진 (.nomedia)을 숨 깁니다.</string>
     <string name="unit_desc_tw">• 밝고 어두운 톤 배경 화면을 설정하면 배경 화면이 Android 10의 어두운 모드로 변경됩니다.</string>
     <string name="unit_desc_at">• 오디오 재생 중지</string>
     <string name="unit_desc_qc">• QQ 친구 바로 가기</string>

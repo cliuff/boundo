@@ -79,7 +79,6 @@
     <string name="instant_manager_intro">Raccourcis pour les applications</string>
     <string name="text_new">Nouveau</string>
     <string name="settings_sdk">Afficher les icônes rondes des applications</string>
-    <string name="tools_nm">Masquer les photos privées</string>
     <string name="nm_adapter_img_content_1">Dossier d\'image</string>
     <string name="settings_fun_update_via_browser">Télécharger via le navigateur\n(touche &#38; maintenir pour copier le lien)</string>
     <string name="text_copy_link">Le lien est copié</string>
@@ -212,14 +211,12 @@
     <string name="unit_desc_unavailable">Indisponible</string>
     <string name="unit_desc_install">Installation</string>
     <string name="unit_desc_uninstall">Désinstallation</string>
-    <string name="unit_desc_requirement_nm">La version Android est au plus 9</string>
     <string name="unit_desc_requirement_shortcut">La version Android est au moins 7.1</string>
     <string name="unit_desc_requirement_qc">QQ installé</string>
     <string name="unit_desc_av">• Vérifier le niveau de l\'API Android de toutes les applications et apks sur l\'appareil\n• Vérifier le support des icônes adaptatives de toutes les applications\n• Statistiques de l\'API de l\'application\n• Extraction d\'apk et d\'icônes\n• Détails du paquet et détails de la signature de chaque application</string>
     <string name="unit_desc_st">Pour les utilisateurs chinois\n• Ajouter un cours manuellement\n• Analysez l\'emploi du temps scolaire à partir du site web du système éducatif de l\'école (uniquement pour une partie du système éducatif ZFSoft)\n• Générer un fichier iCalendar (.ics)\n• Exportation vers Google Agenda, etc.</string>
     <string name="unit_desc_im">• Modifier la résolution\n• Modifier le format : png, jpg, webp, heif\n• Image floue</string>
     <string name="unit_desc_ca">• Récupérer les informations des applications dans CoolApk</string>
-    <string name="unit_desc_nm">• Cacher les images d\'exécution produites par les applications (.nomedia)</string>
     <string name="unit_desc_tw">• Faites en sorte que votre papier peint soit conforme au thème sombre d\'Android 10 en appliquant automatiquement un papier peint de couleur sombre</string>
     <string name="unit_desc_at">• Arrêter la lecture audio</string>
     <string name="unit_desc_qc">• Raccourci pour les contacts QQ</string>

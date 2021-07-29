@@ -79,7 +79,6 @@
     <string name="instant_manager_intro">应用 Shortcuts</string>
     <string name="text_new">新建</string>
     <string name="settings_sdk">显示圆形应用图标</string>
-    <string name="tools_nm">私图隐藏</string>
     <string name="nm_adapter_img_content_1">图片目录</string>
     <string name="settings_fun_update_via_browser">调用浏览器下载（长按复制链接）</string>
     <string name="text_copy_link">链接已复制</string>
@@ -211,7 +210,6 @@
     <string name="unit_desc_st">！中国用户使用\n• 手动输入课程\n• 自动解析教务系统课表（只支持部分正方教务系统）\n• 生成 iCalendar 文件 (.ics)\n• 导入至谷歌日历等</string>
     <string name="unit_desc_im">• 修改分辨率\n• 修改格式 png jpg webp heif\n• 模糊图片</string>
     <string name="unit_desc_ca">• 获取酷安上的软件的信息</string>
-    <string name="unit_desc_nm">• 隐藏应用运行时的资源图片（.nomedia）</string>
     <string name="unit_desc_tw">• 设置亮色调和暗色调壁纸，壁纸随安卓10的黑暗模式而变化</string>
     <string name="unit_desc_at">• 停止音频播放</string>
     <string name="unit_desc_qc">• QQ 好友 shortcut</string>
@@ -221,7 +219,6 @@
     <string name="unit_desc_unavailable">不可用</string>
     <string name="unit_desc_install">安装</string>
     <string name="unit_desc_uninstall">卸载</string>
-    <string name="unit_desc_requirement_nm">安卓版本至多 9</string>
     <string name="unit_desc_requirement_qc">已安装 QQ</string>
     <string name="unit_desc_requirement_shortcut">安卓版本至少 7.1</string>
     <string name="unit_manager_install_success">Play 商店处理中</string>

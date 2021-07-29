@@ -79,7 +79,6 @@
     <string name="instant_manager_intro">App-Verknüpfungen</string>
     <string name="text_new">Neu</string>
     <string name="settings_sdk">Zeigen Sie runde App-Symbole an</string>
-    <string name="tools_nm">Private Bilder verstecken sich</string>
     <string name="nm_adapter_img_content_1">Bild Ordner Bild</string>
     <string name="text_copy_link">Link kopiert</string>
     <string name="text_feature_feathering">Feature Federn, Zeit widmen</string>
@@ -203,7 +202,6 @@
     <string name="unit_desc_unavailable">Nicht verfügbar</string>
     <string name="unit_desc_install">Installieren</string>
     <string name="unit_desc_uninstall">Deinstallieren</string>
-    <string name="unit_desc_requirement_nm">Android-Version ist höchstens 10</string>
     <string name="unit_desc_requirement_shortcut">Android-Version ist mindestens 7.1</string>
     <string name="unit_desc_requirement_qc">QQ installiert</string>
     <string name="unit_manager_install_success">Play Store verarbeitet die Installation</string>
@@ -227,7 +225,6 @@
     <string name="instantManual">Drücken Sie lange auf das App-Symbol im Launcher, um App-Verknüpfungen anzuzeigen.\nZiehen Sie den Benachrichtigungsschatten nach unten. Die Einstellungen, die über dem Benachrichtigungsbereich angezeigt werden, sind die Kacheln für die Schnelleinstellungen, nach denen Sie suchen.</string>
     <string name="prefExteriorForceDarkDescDetail">Force Dark ist eine Funktion, mit der Entwickler schnell ein dunkles Thema implementieren können. Wenn Sie forceDarkAllowed auf true setzen, erhält eine App automatisch ein dunkles Thema. Und der Entwickler wird bestimmte Teile der Schnittstelle, die nicht ideal sind, weiter modifizieren und forceDarkAllowed für diese Teile auf false setzen. Durch Aktivieren von Override Force-dark wird das System den Wert forceDarkAllowed ignorieren, wodurch ein gut implementiertes dunkles Thema nicht mehr funktioniert.</string>
     <string name="unit_desc_ca">• Rufen Sie Informationen zu den Apps auf CoolApk ab</string>
-    <string name="unit_desc_nm">• Ausblenden von Laufzeitbildern, die von Apps (.nomedia) erstellt wurden</string>
     <string name="unit_desc_tw">• Stellen Sie sicher, dass Ihr Hintergrundbild dem dunklen Thema von Android 10 entspricht, indem Sie automatisch ein dunkles Hintergrundbild anwenden</string>
     <string name="unit_desc_at">• Stoppen Sie die Audiowiedergabe</string>
     <string name="unit_desc_qc">• Verknüpfung zu QQ-Kontakten</string>

@@ -194,7 +194,6 @@
     <string name="tileData">Использование данных за месяц</string>
     <string name="tileDataUsageAccess">Allow us to access usage</string>
     <string name="toast_permission_storage_denied">Пожалуйста, дайте разрешение, чтобы мы могли читать / писать данные</string>
-    <string name="tools_nm">Частные фото скрываются</string>
     <string name="ttTimeTextClassDuration">Продолжительность занятия</string>
     <string name="ttWeekIndicator">Индикатор недели</string>
     <string name="ttWeekIndicatorHint">Введите конец недели</string>
@@ -211,12 +210,10 @@
     <string name="unit_desc_st">для китайских пользователей\n• Добавить курс вручную\n• Парсинг школьного расписания с веб-сайта школьной системы образования (только некоторые из образовательной системы ZFSoft)\n• Создать файл iCalendar (.ics)\n• Экспорт в Календарь Google и т. Д.</string>
     <string name="unit_desc_im">• Изменить разрешение\n• Изменить формат: png jpg webp heif\n• Размытие изображения</string>
     <string name="unit_desc_ca">• Получить информацию о приложениях на CoolApk</string>
-    <string name="unit_desc_nm">• Скрыть изображения во время выполнения, созданные приложениями (.nomedia)</string>
     <string name="unit_desc_tw">• Заставьте свои обои соответствовать темной теме Android 10, автоматически применяя темные обои</string>
     <string name="unit_desc_at">• остановить воспроизведение звука</string>
     <string name="unit_desc_qc">• QQ контакты ярлык</string>
     <string name="unit_desc_requirement_shortcut">Версия Android не ниже 7.1</string>
-    <string name="unit_desc_requirement_nm">Версия Android максимум 9</string>
     <string name="unit_desc_installed">Установлены</string>
     <string name="unit_desc_not_installed">Не установлено</string>
     <string name="unit_desc_available">Доступный</string>

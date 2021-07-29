@@ -65,7 +65,6 @@
     <string name="sdk_dialog_details">細部</string>
     <string name="instant_manager_intro">ショートカットを適用</string>
     <string name="text_new">新着</string>
-    <string name="tools_nm">プライベート画像の非表示</string>
     <string name="advice_license">オープンソースライセンス</string>
     <string name="text_copy">写す</string>
     <string name="apiInfoAiSubBack">バックグラウンド</string>
@@ -206,10 +205,8 @@
     <string name="prefSettingsAvIncludeDisabled">無効になっているアプリが含まれています</string>
     <string name="av_details_native_libs">ネイティブライブラリ：</string>
     <string name="twLiveWallpaperDesc">ダークモードがオンのときに暗い壁紙を自動的に変更する</string>
-    <string name="unit_desc_requirement_nm">Androidバージョン最大9</string>
     <string name="unit_desc_requirement_shortcut">Androidバージョンは7.1以上</string>
     <string name="unit_desc_requirement_qc">QQインストール済み</string>
-    <string name="unit_desc_nm">•アプリケーションの実行中にリソース画像（.nomedia）を非表示にする</string>
     <string name="unit_desc_tw">•明るいトーンと暗いトーンの壁紙を設定します。壁紙はAndroid 10のダークモードで変化します</string>
     <string name="unit_desc_at">•オーディオ再生を停止する</string>
     <string name="unit_desc_qc">•QQフレンドショートカット</string>

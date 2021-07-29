@@ -80,7 +80,6 @@
     <string name="instant_manager_intro">اختصارات التطبيق</string>
     <string name="text_new">جديد</string>
     <string name="settings_sdk">عرض الرموز التطبيق جولة</string>
-    <string name="tools_nm">صور خاصة يختبئون</string>
     <string name="nm_adapter_img_content_1">صورة مجلد الصورة</string>
     <string name="text_copy_link">تم نسخ الرابط</string>
     <string name="unit_qq_contacts">ف ف الاتصال الاختصار</string>
@@ -211,12 +210,10 @@
     <string name="unit_desc_st">للمستخدمين الصينيين\n• إضافة بالطبع يدويا\n• تحليل الجدول الزمني للمدرسة من موقع النظام التعليمي للمدرسة (بعض من نظام التعليم ZFSoft فقط)\n • إنشاء ملف iCalendar (.ics)\n• تصدير إلى تقويم Google إلخ.</string>
     <string name="unit_desc_im">• تعديل القرار• تعديل الشكل: png jpg webp heif• طمس الصورة</string>
     <string name="unit_desc_ca">• استرجع معلومات التطبيقات على CoolApk</string>
-    <string name="unit_desc_nm">• إخفاء الصور وقت التشغيل التي تنتجها التطبيقات (.nomedia)</string>
     <string name="unit_desc_tw">• اجعل ورق الحائط الخاص بك يتوافق مع السمة المظلم لنظام Android 10 من خلال تطبيق ورق الحائط الداكن تلقائيًا</string>
     <string name="unit_desc_at">• إيقاف الصوت من اللعب</string>
     <string name="unit_desc_qc">• اختصار اتصالات QQ</string>
     <string name="unit_desc_requirement_shortcut">إصدار Android هو 7.1 على الأقل</string>
-    <string name="unit_desc_requirement_nm">إصدار Android هو 9 على الأكثر</string>
     <string name="unit_desc_installed">المثبتة</string>
     <string name="unit_desc_not_installed">غير مثبت</string>
     <string name="unit_desc_available">متاح</string>

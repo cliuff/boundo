@@ -80,7 +80,6 @@
     <string name="instant_manager_intro">Atalhos de aplicativos</string>
     <string name="text_new">Novo</string>
     <string name="settings_sdk">Exibir ícones de aplicativos redondos</string>
-    <string name="tools_nm">Private Pics Hiding</string>
     <string name="nm_adapter_img_content_1">Imagem da pasta de imagem</string>
     <string name="text_copy_link">Link copiado</string>
     <string name="unit_qq_contacts">Atalho de contato QQ</string>
@@ -211,12 +210,10 @@
     <string name="unit_desc_st">Para usuários chineses\n• Adicionar curso manualmente\n• Analise o horário da escola no site do sistema educacional da escola (apenas alguns dos sistemas educacionais da ZFSoft)\n• Gerar arquivo iCalendar (.ics)\n• Exportar para o Google Agenda etc.</string>
     <string name="unit_desc_im">• Modificar resolução\n• Modificar formato: png jpg webp heif\n• Desfocar imagem</string>
     <string name="unit_desc_ca">• Recupere informações dos aplicativos no CoolApk</string>
-    <string name="unit_desc_nm">• Ocultar imagens de tempo de execução produzidas por aplicativos (.nomedia)</string>
     <string name="unit_desc_tw">• Faça seu papel de parede estar em conformidade com o tema escuro do Android 10 aplicando um papel de parede de cor escura automaticamente</string>
     <string name="unit_desc_at">• Interrompa a reprodução do áudio</string>
     <string name="unit_desc_qc">• Atalho para contatos QQ</string>
     <string name="unit_desc_requirement_shortcut">A versão do Android é pelo menos 7.1</string>
-    <string name="unit_desc_requirement_nm">A versão do Android é no máximo 9</string>
     <string name="unit_desc_installed">Instalado</string>
     <string name="unit_desc_not_installed">Não instalado</string>
     <string name="unit_desc_available">acessível</string>

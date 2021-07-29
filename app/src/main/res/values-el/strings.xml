@@ -65,7 +65,6 @@
     <string name="sdk_dialog_details">Λεπτομέριες</string>
     <string name="instant_manager_intro">Συντομεύσεις εφαρμογών</string>
     <string name="text_new">Νέος</string>
-    <string name="tools_nm">Απόκρυψη ιδιωτικών φωτογραφιών</string>
     <string name="advice_license">Άδειες ανοιχτού κώδικα</string>
     <string name="text_copy">αντίγραφο</string>
     <string name="apiInfoAiSubBack">Ιστορικό</string>
@@ -206,11 +205,9 @@
     <string name="prefSettingsSweet">Δείξτε επιδόρπια</string>
     <string name="prefSettingsAvIncludeDisabled">Συμπεριλάβετε απενεργοποιημένες εφαρμογές</string>
     <string name="twLiveWallpaperDesc">Μετάβαση σε σκοτεινή ταπετσαρία αυτόματα όταν είναι ενεργοποιημένο το σκοτεινό θέμα</string>
-    <string name="unit_desc_requirement_nm">Η έκδοση Android είναι το πολύ 10</string>
     <string name="unit_desc_requirement_shortcut">Η έκδοση Android είναι τουλάχιστον 7.1</string>
     <string name="unit_desc_requirement_qc">Εγκατεστημένο QQ</string>
     <string name="unit_desc_ca">• Ανάκτηση πληροφοριών για τις εφαρμογές στο CoolApk</string>
-    <string name="unit_desc_nm">• Απόκρυψη εικόνων χρόνου εκτέλεσης που παράγονται από εφαρμογές (.nomedia)</string>
     <string name="unit_desc_tw">• Κάντε την ταπετσαρία σας να συμμορφώνεται με το σκοτεινό θέμα Android 10 εφαρμόζοντας αυτόματα μια ταπετσαρία σκούρου χρώματος</string>
     <string name="unit_desc_at">• Διακοπή αναπαραγωγής ήχου</string>
     <string name="unit_desc_qc">• Συντόμευση επαφών QQ</string>
