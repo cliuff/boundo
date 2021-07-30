@@ -54,7 +54,7 @@ object Test {
     }
 
     fun processLargeImage(stream: InputStream) {
-        val decoder: BitmapRegionDecoder = BitmapRegionDecoder.newInstance(stream, false)
-        val region = decoder.decodeRegion(Rect(10, 10, 50, 50), null)
+        val decoder: BitmapRegionDecoder? = BitmapRegionDecoder.newInstance(stream, false)
+        val region = decoder?.decodeRegion(Rect(10, 10, 50, 50), null)
     }
 }

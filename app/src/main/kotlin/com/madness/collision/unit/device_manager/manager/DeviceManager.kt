@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,12 +19,12 @@ package com.madness.collision.unit.device_manager.manager
 import android.bluetooth.*
 import android.content.Context
 import android.util.SparseArray
-import androidx.core.util.set
 import androidx.core.util.size
+import com.madness.collision.util.os.OsUtils
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
-import java.lang.Exception
 import java.lang.reflect.Method
+import kotlin.collections.set
 
 /**
  * No need to invoke [close] if [useProxy] is false
@@ -96,12 +96,14 @@ class DeviceManager(useProxy: Boolean = true): AutoCloseable {
                     null
                 }
             }
-            methods[profile] = profileMethods
+            if (OsUtils.satisfy(OsUtils.S)) methods[profile] = profileMethods
+            else methods.put(profile, profileMethods)
         }
 
         val profileListener = object : BluetoothProfile.ServiceListener {
             override fun onServiceConnected(profile: Int, proxy: BluetoothProfile) {
-                proxies[profile] = proxy
+                if (OsUtils.satisfy(OsUtils.S)) proxies[profile] = proxy
+                else proxies.put(profile, proxy)
             }
 
             override fun onServiceDisconnected(profile: Int) {

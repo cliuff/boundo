@@ -62,7 +62,7 @@ android {
             storePassword = signingKeyStorePassword
         }
     }
-    compileSdkVersion(30)
+    compileSdkVersion(31)
     defaultConfig {
         // below: manifest placeholders
         manifestPlaceholders["buildPackage"] = buildPackage
