@@ -108,7 +108,6 @@
     <string name="main_updates">動的</string>
     <string name="main_more">もっと</string>
     <string name="unit_audio_timer">音楽、ストップ</string>
-    <string name="unit_qq_contacts">QQフレンズショートカット</string>
     <string name="unit_desc_installed">インストールされています</string>
     <string name="unit_desc_not_installed">インストールされていない</string>
     <string name="unit_desc_available">利用可能</string>
@@ -204,11 +203,8 @@
     <string name="prefSettingsAvIncludeDisabled">無効になっているアプリが含まれています</string>
     <string name="av_details_native_libs">ネイティブライブラリ：</string>
     <string name="twLiveWallpaperDesc">ダークモードがオンのときに暗い壁紙を自動的に変更する</string>
-    <string name="unit_desc_requirement_shortcut">Androidバージョンは7.1以上</string>
-    <string name="unit_desc_requirement_qc">QQインストール済み</string>
     <string name="unit_desc_tw">•明るいトーンと暗いトーンの壁紙を設定します。壁紙はAndroid 10のダークモードで変化します</string>
     <string name="unit_desc_at">•オーディオ再生を停止する</string>
-    <string name="unit_desc_qc">•QQフレンドショートカット</string>
     <string name="unit_manager_install_success">Playストアの処理</string>
     <string name="unit_manager_uninstall_success">デバイスがアイドル状態のときにアンインストールされます</string>
     <string name="unit_manager_error_network">ネットワーク障害</string>

@@ -108,7 +108,6 @@
     <string name="main_updates">동적</string>
     <string name="main_more">더</string>
     <string name="unit_audio_timer">음악, 그만</string>
-    <string name="unit_qq_contacts">QQ 친구 지름길</string>
     <string name="unit_desc_installed">설치되었습니다</string>
     <string name="unit_desc_not_installed">미설치</string>
     <string name="unit_desc_available">유효한</string>
@@ -204,11 +203,8 @@
     <string name="prefSettingsAvIncludeDisabled">비활성화 된 앱 포함</string>
     <string name="av_details_native_libs">"기본 라이브러리 : "</string>
     <string name="twLiveWallpaperDesc">어두운 모드가 켜져있을 때 어두운 배경 화면을 자동으로 변경</string>
-    <string name="unit_desc_requirement_shortcut">안드로이드 버전은 7.1 이상입니다</string>
-    <string name="unit_desc_requirement_qc">QQ 설치</string>
     <string name="unit_desc_tw">• 밝고 어두운 톤 배경 화면을 설정하면 배경 화면이 Android 10의 어두운 모드로 변경됩니다.</string>
     <string name="unit_desc_at">• 오디오 재생 중지</string>
-    <string name="unit_desc_qc">• QQ 친구 바로 가기</string>
     <string name="unit_manager_install_success">Play 스토어 처리</string>
     <string name="unit_manager_uninstall_success">기기가 유휴 상태 일 때 제거됩니다</string>
     <string name="unit_manager_error_network">네트워크 장애</string>

@@ -81,7 +81,6 @@
     <string name="settings_sdk">عرض الرموز التطبيق جولة</string>
     <string name="nm_adapter_img_content_1">صورة مجلد الصورة</string>
     <string name="text_copy_link">تم نسخ الرابط</string>
-    <string name="unit_qq_contacts">ف ف الاتصال الاختصار</string>
     <string name="unit_audio_timer">توقيت الصوت</string>
     <string name="main_more">أكثر</string>
     <string name="main_updates">التحديثات</string>
@@ -210,15 +209,12 @@
     <string name="unit_desc_im">• تعديل القرار• تعديل الشكل: png jpg webp heif• طمس الصورة</string>
     <string name="unit_desc_tw">• اجعل ورق الحائط الخاص بك يتوافق مع السمة المظلم لنظام Android 10 من خلال تطبيق ورق الحائط الداكن تلقائيًا</string>
     <string name="unit_desc_at">• إيقاف الصوت من اللعب</string>
-    <string name="unit_desc_qc">• اختصار اتصالات QQ</string>
-    <string name="unit_desc_requirement_shortcut">إصدار Android هو 7.1 على الأقل</string>
     <string name="unit_desc_installed">المثبتة</string>
     <string name="unit_desc_not_installed">غير مثبت</string>
     <string name="unit_desc_available">متاح</string>
     <string name="unit_desc_unavailable">غير متوفره</string>
     <string name="unit_desc_install">تثبيت</string>
     <string name="unit_desc_uninstall">الغاء التثبيت</string>
-    <string name="unit_desc_requirement_qc">ف ف تثبيت</string>
     <string name="unit_manager_install_success">متجر Play يقوم بمعالجة التثبيت</string>
     <string name="unit_manager_uninstall_success">سوف يحدث إلغاء التثبيت عند الخمول</string>
     <string name="unit_manager_error_network">خطأ في الشبكة</string>

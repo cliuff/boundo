@@ -194,15 +194,12 @@
     <string name="main_updates">Aktualisierung</string>
     <string name="main_more">Mehr</string>
     <string name="unit_audio_timer">Audio-Timer</string>
-    <string name="unit_qq_contacts">QQ Kontaktverknüpfung</string>
     <string name="unit_desc_installed">Eingerichtet</string>
     <string name="unit_desc_not_installed">Nicht installiert</string>
     <string name="unit_desc_available">Verfügbar</string>
     <string name="unit_desc_unavailable">Nicht verfügbar</string>
     <string name="unit_desc_install">Installieren</string>
     <string name="unit_desc_uninstall">Deinstallieren</string>
-    <string name="unit_desc_requirement_shortcut">Android-Version ist mindestens 7.1</string>
-    <string name="unit_desc_requirement_qc">QQ installiert</string>
     <string name="unit_manager_install_success">Play Store verarbeitet die Installation</string>
     <string name="unit_manager_uninstall_success">Die Deinstallation erfolgt im Leerlauf</string>
     <string name="unit_manager_error_network">Netzwerkfehler</string>
@@ -225,7 +222,6 @@
     <string name="prefExteriorForceDarkDescDetail">Force Dark ist eine Funktion, mit der Entwickler schnell ein dunkles Thema implementieren können. Wenn Sie forceDarkAllowed auf true setzen, erhält eine App automatisch ein dunkles Thema. Und der Entwickler wird bestimmte Teile der Schnittstelle, die nicht ideal sind, weiter modifizieren und forceDarkAllowed für diese Teile auf false setzen. Durch Aktivieren von Override Force-dark wird das System den Wert forceDarkAllowed ignorieren, wodurch ein gut implementiertes dunkles Thema nicht mehr funktioniert.</string>
     <string name="unit_desc_tw">• Stellen Sie sicher, dass Ihr Hintergrundbild dem dunklen Thema von Android 10 entspricht, indem Sie automatisch ein dunkles Hintergrundbild anwenden</string>
     <string name="unit_desc_at">• Stoppen Sie die Audiowiedergabe</string>
-    <string name="unit_desc_qc">• Verknüpfung zu QQ-Kontakten</string>
     <string name="unit_desc_av">• Überprüfen Sie die Android-API-Ebene aller Apps und Apks auf dem Gerät.\n• Überprüfen Sie die Unterstützung für adaptive Symbole aller Apps.\n• App-API-Statistiken.\n• Extraktion von APKs und Symbolen.\n• Paketdetails und Signaturdetails</string>
     <string name="unit_desc_st">! Für chinesische Benutzer\n• Kurs manuell hinzufügen\n• Schulstundenplan von der Website des Schulbildungssystems analysieren (nur einige der ZFSoft-Bildungssysteme)\n• iCalendar-Datei (.ics) erstellen\n• In Google Kalender exportieren usw.</string>
     <string name="unit_desc_im">• Ändern Sie die Auflösung.\n• Ändern Sie das Format: png jpg webp heif.\n• Bild verwischen</string>

@@ -81,7 +81,6 @@
     <string name="settings_sdk">Hiển thị biểu tượng ứng dụng tròn</string>
     <string name="nm_adapter_img_content_1">Hình ảnh thư mục hình ảnh</string>
     <string name="text_copy_link">Liên kết được sao chép</string>
-    <string name="unit_qq_contacts">Phím tắt liên hệ QQ</string>
     <string name="unit_audio_timer">Hẹn giờ âm thanh</string>
     <string name="main_more">Hơn</string>
     <string name="main_updates">Cập nhật</string>
@@ -210,9 +209,6 @@
     <string name="unit_desc_im">• Sửa đổi độ phân giải\n• Sửa đổi định dạng: png jpg webp heif\n• Làm mờ hình ảnh</string>
     <string name="unit_desc_tw">• Làm cho hình nền của bạn tuân thủ chủ đề tối của Android 10 bằng cách tự động áp dụng hình nền tối màu</string>
     <string name="unit_desc_at">• Dừng âm thanh phát</string>
-    <string name="unit_desc_qc">• Phím tắt liên lạc QQ</string>
-    <string name="unit_desc_requirement_qc">QQ đã cài đặt</string>
-    <string name="unit_desc_requirement_shortcut">Phiên bản Android ít nhất là 7.1</string>
     <string name="unit_desc_uninstall">Gỡ cài đặt</string>
     <string name="unit_desc_install">Tải về</string>
     <string name="unit_desc_unavailable">Không có sẵn</string>

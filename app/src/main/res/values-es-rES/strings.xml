@@ -195,7 +195,6 @@
     <string name="twLiveWallpaperDesc">Cambie al fondo de pantalla oscuro automáticamente cuando el tema oscuro esté habilitado</string>
     <string name="twService">Fondos Animados Temáticos</string>
     <string name="unit_audio_timer">Temporizador de audio</string>
-    <string name="unit_qq_contacts">QQ Atajo de contacto</string>
     <string name="unit_school_timetable">Horario escolar</string>
     <string name="units">Unidades</string>
     <string name="unitsManager">Gerente de la unidad</string>
@@ -210,15 +209,12 @@
     <string name="unit_desc_im">• Modificar resolución\n• Modificar formato: png jpg webp heif\n• Imagen borrosa</string>
     <string name="unit_desc_tw">• Haga que su fondo de pantalla cumpla con el tema oscuro de Android 10 aplicando un fondo de pantalla de color oscuro automáticamente</string>
     <string name="unit_desc_at">• Detener la reproducción de audio</string>
-    <string name="unit_desc_qc">• Acceso directo a contactos QQ</string>
-    <string name="unit_desc_requirement_shortcut">La versión de Android es al menos 7.1</string>
     <string name="unit_desc_installed">Instalado</string>
     <string name="unit_desc_not_installed">No instalado</string>
     <string name="unit_desc_available">Disponible</string>
     <string name="unit_desc_unavailable">Indisponible</string>
     <string name="unit_desc_install">Instalar en pc</string>
     <string name="unit_desc_uninstall">Desinstalar</string>
-    <string name="unit_desc_requirement_qc">QQ instalado</string>
     <string name="unit_manager_install_success">Play Store está procesando la instalación</string>
     <string name="unit_desc_install_notice">Intentando instalar</string>
     <string name="unit_manager_error_network">Error de red</string>

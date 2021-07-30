@@ -81,7 +81,6 @@
     <string name="settings_sdk">Mostra le icone delle app rotonde</string>
     <string name="nm_adapter_img_content_1">Immagine cartella immagine</string>
     <string name="text_copy_link">Link copiato</string>
-    <string name="unit_qq_contacts">Collegamento di contatto QQ</string>
     <string name="unit_audio_timer">Timer audio</string>
     <string name="main_more">Di Più</string>
     <string name="main_updates">aggiornamenti</string>
@@ -210,15 +209,12 @@
     <string name="unit_desc_im">• Modifica risoluzione\n• Modifica formato: png jpg webp heif\n• Sfocatura immagine</string>
     <string name="unit_desc_tw">• Rendi il tuo sfondo conforme al tema scuro di Android 10 applicando automaticamente uno sfondo di colore scuro</string>
     <string name="unit_desc_at">• Interrompere la riproduzione dell\'audio</string>
-    <string name="unit_desc_qc">• Collegamento ai contatti QQ</string>
-    <string name="unit_desc_requirement_shortcut">La versione di Android è almeno 7.1</string>
     <string name="unit_desc_installed">installato</string>
     <string name="unit_desc_not_installed">Non installato</string>
     <string name="unit_desc_available">A disposizione</string>
     <string name="unit_desc_unavailable">non disponibile</string>
     <string name="unit_desc_install">Installare</string>
     <string name="unit_desc_uninstall">Disinstallare</string>
-    <string name="unit_desc_requirement_qc">QQ installato</string>
     <string name="unit_manager_uninstall_success">La disinstallazione avverrà quando è inattivo</string>
     <string name="unit_manager_error_network">Errore di rete</string>
     <string name="unit_manager_error_module_unavailable">Unità non disponibile</string>

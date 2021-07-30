@@ -81,7 +81,6 @@
     <string name="settings_sdk">แสดงไอคอนแอพ</string>
     <string name="nm_adapter_img_content_1">รูปภาพโฟลเดอร์รูปภาพ</string>
     <string name="text_copy_link">คัดลอกลิงก์แล้ว</string>
-    <string name="unit_qq_contacts">ทางลัด QQ Contact</string>
     <string name="unit_audio_timer">ตัวจับเวลาเสียง</string>
     <string name="main_more">มากกว่า</string>
     <string name="main_updates">อัพเดท</string>
@@ -210,9 +209,6 @@
     <string name="unit_desc_im">•แก้ไขความละเอียด\n•ปรับเปลี่ยนรูปแบบ: png jpg webp heif\n•ภาพเบลอ</string>
     <string name="unit_desc_tw">•ทำให้วอลล์เปเปอร์ของคุณสอดคล้องกับ Android 10 ธีมมืดโดยการใช้วอลล์เปเปอร์สีเข้มโดยอัตโนมัติ</string>
     <string name="unit_desc_at">•หยุดเสียงจากการเล่น</string>
-    <string name="unit_desc_qc">•ทางลัดที่ติดต่อของ QQ</string>
-    <string name="unit_desc_requirement_qc">ติดตั้ง QQ แล้ว</string>
-    <string name="unit_desc_requirement_shortcut">เวอร์ชัน Android อย่างน้อย 7.1</string>
     <string name="unit_desc_uninstall">ถอนการติดตั้ง</string>
     <string name="unit_desc_install">ติดตั้ง</string>
     <string name="unit_desc_unavailable">ไม่มี</string>

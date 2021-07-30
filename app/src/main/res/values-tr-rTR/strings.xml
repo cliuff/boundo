@@ -102,7 +102,6 @@
     <string name="main_updates">Güncellemeler</string>
     <string name="main_more">Daha</string>
     <string name="unit_audio_timer">Ses Zamanlayıcısı</string>
-    <string name="unit_qq_contacts">QQ İletişim Kısayolu</string>
     <string name="unit_desc_installed">Kurulmuş</string>
     <string name="unit_desc_not_installed">Yüklü değil</string>
     <string name="unit_desc_available">Mevcut</string>
@@ -204,11 +203,8 @@
     <string name="prefSettingsSweet">Tatlıları göster</string>
     <string name="prefSettingsAvIncludeDisabled">Devre dışı bırakılan uygulamaları dahil et</string>
     <string name="twLiveWallpaperDesc">Karanlık tema etkinleştirildiğinde otomatik olarak karanlık duvar kağıdına geç</string>
-    <string name="unit_desc_requirement_shortcut">Android sürümü en az 7.1</string>
-    <string name="unit_desc_requirement_qc">QQ yüklendi</string>
     <string name="unit_desc_tw">• Otomatik olarak koyu renkli bir duvar kağıdı uygulayarak duvar kağıdınızın Android 10 karanlık temasına uymasını sağlayın</string>
     <string name="unit_desc_at">• Sesin çalmasını durdurun</string>
-    <string name="unit_desc_qc">• QQ kişileri kısayolu</string>
     <string name="unit_manager_install_success">Play Store yüklemeyi işliyor</string>
     <string name="unit_manager_uninstall_success">Boşta kaldığında kaldırma işlemi gerçekleşecek</string>
     <string name="unit_manager_error_network">Ağ hatası</string>

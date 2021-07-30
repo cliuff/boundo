@@ -108,7 +108,6 @@
     <string name="main_updates">動態</string>
     <string name="main_more">更多</string>
     <string name="unit_audio_timer">音樂，停</string>
-    <string name="unit_qq_contacts">QQ 好友 Shortcut</string>
     <string name="unit_desc_installed">已安裝</string>
     <string name="unit_desc_not_installed">未安裝</string>
     <string name="unit_desc_available">可用</string>
@@ -207,11 +206,8 @@
     <string name="prefSettingsAvIncludeDisabled">包含已禁用的應用</string>
     <string name="av_details_native_libs">原生庫：</string>
     <string name="twLiveWallpaperDesc">開啟黑暗模式時自動更換暗色調壁紙</string>
-    <string name="unit_desc_requirement_shortcut">安卓版本至少 7.1</string>
-    <string name="unit_desc_requirement_qc">已安裝 QQ</string>
     <string name="unit_desc_tw">• 設置亮色調和暗色調壁紙，壁紙隨安卓10的黑暗模式而變化</string>
     <string name="unit_desc_at">• 停止音頻播放</string>
-    <string name="unit_desc_qc">• QQ 好友 shortcut</string>
     <string name="unit_manager_install_success">Play 商店處理中</string>
     <string name="unit_manager_uninstall_success">將在設備空閒時卸載</string>
     <string name="unit_manager_error_network">網絡故障</string>

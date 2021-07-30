@@ -102,7 +102,6 @@
     <string name="main_updates">Ενημερώσεις</string>
     <string name="main_more">Περισσότερο</string>
     <string name="unit_audio_timer">Χρονόμετρο ήχου</string>
-    <string name="unit_qq_contacts">Συντόμευση επικοινωνίας QQ</string>
     <string name="unit_desc_installed">Εγκατεστημένο</string>
     <string name="unit_desc_not_installed">Μη εγκατεστημενο</string>
     <string name="unit_desc_available">Διαθέσιμος</string>
@@ -204,11 +203,8 @@
     <string name="prefSettingsSweet">Δείξτε επιδόρπια</string>
     <string name="prefSettingsAvIncludeDisabled">Συμπεριλάβετε απενεργοποιημένες εφαρμογές</string>
     <string name="twLiveWallpaperDesc">Μετάβαση σε σκοτεινή ταπετσαρία αυτόματα όταν είναι ενεργοποιημένο το σκοτεινό θέμα</string>
-    <string name="unit_desc_requirement_shortcut">Η έκδοση Android είναι τουλάχιστον 7.1</string>
-    <string name="unit_desc_requirement_qc">Εγκατεστημένο QQ</string>
     <string name="unit_desc_tw">• Κάντε την ταπετσαρία σας να συμμορφώνεται με το σκοτεινό θέμα Android 10 εφαρμόζοντας αυτόματα μια ταπετσαρία σκούρου χρώματος</string>
     <string name="unit_desc_at">• Διακοπή αναπαραγωγής ήχου</string>
-    <string name="unit_desc_qc">• Συντόμευση επαφών QQ</string>
     <string name="unit_manager_install_success">Το Play Store επεξεργάζεται την εγκατάσταση</string>
     <string name="unit_manager_uninstall_success">Η απεγκατάσταση θα πραγματοποιηθεί όταν είναι αδρανής</string>
     <string name="unit_manager_error_network">Σφάλμα δικτύου</string>
