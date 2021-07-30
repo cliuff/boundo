@@ -28,7 +28,6 @@ import com.google.gson.reflect.TypeToken
 import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.main.MainViewModel
-import com.madness.collision.misc.MiscApp
 import com.madness.collision.util.*
 
 /**
@@ -45,7 +44,6 @@ abstract class Unit: TaggedFragment(), Democratic {
         const val UNIT_NAME_IMAGE_MODIFYING = "image_modifying"
         const val UNIT_NAME_THEMED_WALLPAPER = "themed_wallpaper"
         const val UNIT_NAME_AUDIO_TIMER = "audio_timer"
-        const val UNIT_NAME_QQ_CONTACTS = "qq_contacts"
         const val UNIT_NAME_DEVICE_MANAGER = "device_manager"
         private val UNIT_CLASSES: MutableMap<String, Class<Unit>> = hashMapOf()
         private val UNIT_BRIDGE_CLASSES: MutableMap<String, Class<Bridge>> = hashMapOf()
@@ -63,13 +61,6 @@ abstract class Unit: TaggedFragment(), Democratic {
                                 it.packageManager.hasSystemFeature(PackageManager.FEATURE_LIVE_WALLPAPER)
                             }),
                     StaticDescription(UNIT_NAME_AUDIO_TIMER, R.string.unit_audio_timer, R.drawable.ic_timer_24).setDescResId(R.string.unit_desc_at),
-                    Description(UNIT_NAME_QQ_CONTACTS, R.string.unit_qq_contacts, R.drawable.ic_qq_24).setDescResId(R.string.unit_desc_qc)
-                            .setRequirement(
-                                    Description.Checker(R.string.unit_desc_requirement_shortcut) { X.aboveOn(X.N_MR1) },
-                                    Description.Checker(R.string.unit_desc_requirement_qc) {
-                                        MiscApp.isAppAvailable(it, "com.tencent.mobileqq",
-                                                "main.unit" to "QQ not installed")
-                                    }),
                     StaticDescription(UNIT_NAME_DEVICE_MANAGER, R.string.unit_device_manager, R.drawable.ic_devices_other_24)
                             .setRequirement(Description.Checker(R.string.unit_desc_requirement_dm) {
                                 it.packageManager.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH)
