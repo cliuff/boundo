@@ -263,4 +263,8 @@
     <string name="unit_desc_enable">ممكن</string>
     <string name="unit_desc_disable">تعطيل</string>
     <string name="unit_desc_requirement_dm">دعم البلوتوث</string>
+    <string name="im_edit_width">عرض</string>
+    <string name="im_edit_height">ارتفاع</string>
+    <string name="im_image_select">اختر صورة</string>
+    <string name="im_toast_finish">تم الحفظ في المعرض</string>
 </resources>

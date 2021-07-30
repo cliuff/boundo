@@ -263,4 +263,8 @@
     <string name="unit_desc_enable">Aktivieren</string>
     <string name="unit_desc_disable">Deaktivieren</string>
     <string name="unit_desc_requirement_dm">Bluetooth-Unterstützung</string>
+    <string name="im_edit_width">Breite</string>
+    <string name="im_edit_height">Höhe</string>
+    <string name="im_image_select">Bild auswählen</string>
+    <string name="im_toast_finish">In der Galerie gespeichert</string>
 </resources>

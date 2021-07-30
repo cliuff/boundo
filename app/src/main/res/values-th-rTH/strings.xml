@@ -263,4 +263,8 @@
     <string name="unit_desc_enable">เปิดใช้งาน</string>
     <string name="unit_desc_disable">ปิดการใช้งาน</string>
     <string name="unit_desc_requirement_dm">รองรับบลูทู ธ</string>
+    <string name="im_edit_width">ความกว้าง</string>
+    <string name="im_edit_height">ความสูง</string>
+    <string name="im_image_select">เลือกภาพ</string>
+    <string name="im_toast_finish">บันทึกไว้ในแกลเลอรี่</string>
 </resources>

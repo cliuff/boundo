@@ -263,4 +263,8 @@
     <string name="unit_desc_enable">etkinleştirme</string>
     <string name="unit_desc_disable">Devre dışı bırak</string>
     <string name="unit_desc_requirement_dm">Bluetooth desteği</string>
+    <string name="im_edit_width">Genişlik</string>
+    <string name="im_edit_height">Yükseklik</string>
+    <string name="im_image_select">Fotoğraf seç</string>
+    <string name="im_toast_finish">Galeriye kaydedildi</string>
 </resources>

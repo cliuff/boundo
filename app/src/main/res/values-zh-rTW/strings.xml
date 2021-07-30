@@ -263,4 +263,8 @@
     <string name="unit_desc_enable">啟用</string>
     <string name="unit_desc_disable">禁用</string>
     <string name="unit_desc_requirement_dm">藍牙支持</string>
+    <string name="im_edit_width">寬</string>
+    <string name="im_edit_height">高</string>
+    <string name="im_image_select">選擇圖片</string>
+    <string name="im_toast_finish">圖片已保存至相冊</string>
 </resources>

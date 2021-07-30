@@ -19,6 +19,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.madness.collision">
 
+    <!-- HEIF support for Image Modifying, requires Android 9 -->
+    <uses-sdk tools:overrideLibrary="androidx.heifwriter"/>
+
     <uses-feature
         android:name="android.software.live_wallpaper"
         android:required="false" />

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,16 +42,15 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.heifwriter.HeifWriter
 import com.madness.collision.R
+import com.madness.collision.databinding.UnitImBinding
 import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.Unit
-import com.madness.collision.unit.image_modifying.databinding.UnitImBinding
 import com.madness.collision.util.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.*
 import kotlin.math.roundToInt
-import com.madness.collision.unit.image_modifying.R as MyR
 
 class MyUnit: Unit(){
 
@@ -69,14 +68,14 @@ class MyUnit: Unit(){
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
         toolbar.setTitle(R.string.developertools_cropimage)
-        toolbar.inflateMenu(MyR.menu.toolbar_im)
-        toolbar.menu.findItem(MyR.id.imToolbarDone).icon.setTint(ThemeUtil.getColor(context, R.attr.colorActionPass))
+        toolbar.inflateMenu(R.menu.toolbar_im)
+        toolbar.menu.findItem(R.id.imToolbarDone).icon.setTint(ThemeUtil.getColor(context, R.attr.colorActionPass))
         return true
     }
 
     override fun selectOption(item: MenuItem): Boolean {
         when (item.itemId){
-            MyR.id.imToolbarDone -> {
+            R.id.imToolbarDone -> {
                 val context = context ?: return false
                 actionDone(context)
                 return true
@@ -117,8 +116,8 @@ class MyUnit: Unit(){
         val onSeek = object : SeekBar.OnSeekBarChangeListener{
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
                 val v = when(p0?.id){
-                    MyR.id.imageBlur -> viewBinding.imageBlurValue
-                    MyR.id.imageCompress -> viewBinding.imageCompressValue
+                    R.id.imageBlur -> viewBinding.imageBlurValue
+                    R.id.imageCompress -> viewBinding.imageCompressValue
                     else -> null
                 } as AppCompatTextView? ?: return
                 v.dartFuture(String.format("%d/100", p1))
@@ -267,7 +266,7 @@ class MyUnit: Unit(){
                 false
             }
             if (isSuccessful) {
-                notify(MyR.string.im_toast_finish)
+                notify(R.string.im_toast_finish)
             } else {
                 notifyBriefly(R.string.text_error)
             }

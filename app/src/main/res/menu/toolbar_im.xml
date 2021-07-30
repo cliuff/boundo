@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2020 Clifford Liu
+  ~ Copyright 2021 Clifford Liu
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -15,9 +15,12 @@
   ~ limitations under the License.
   -->
 
-<resources>
-    <string name="im_edit_width">宽</string>
-    <string name="im_edit_height">高</string>
-    <string name="im_image_select">选择图片</string>
-    <string name="im_toast_finish">图片已保存至相册</string>
-</resources>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/imToolbarDone"
+        android:icon="@drawable/ic_done_24"
+        app:showAsAction="always"
+        android:title="@string/text_done"/>
+</menu>

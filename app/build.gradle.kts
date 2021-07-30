@@ -158,9 +158,7 @@ android {
         dataBinding = true
         viewBinding = true
     }
-    dynamicFeatures = mutableSetOf(
-        ":image_modifying", ":school_timetable", ":api_viewing"
-    )
+    dynamicFeatures = mutableSetOf(":school_timetable", ":api_viewing")
 }
 
 dependencies {
@@ -190,6 +188,7 @@ dependencies {
             Dependencies.androidxNavigationFragment,
             Dependencies.androidxNavigationUI,
             Dependencies.androidxDocumentFile,
+            Dependencies.androidxHeifWriter,
             Dependencies.gglHilt,
             Dependencies.googleMaterialComponents,
             Dependencies.googlePlayServicesOSSLicenses,

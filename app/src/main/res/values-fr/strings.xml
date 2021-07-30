@@ -262,4 +262,8 @@
     <string name="unit_desc_enable">Activer</string>
     <string name="unit_desc_disable">Désactiver</string>
     <string name="unit_desc_requirement_dm">Prise en charge Bluetooth</string>
+    <string name="im_edit_width">Largeur</string>
+    <string name="im_edit_height">Hauteur</string>
+    <string name="im_image_select">Sélectionnez une image</string>
+    <string name="im_toast_finish">Enregistré dans la galerie</string>
 </resources>

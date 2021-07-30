@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="im_edit_width">Larghezza</string>
-    <string name="im_edit_height">Altezza</string>
-    <string name="im_image_select">Seleziona immagine</string>
-    <string name="im_toast_finish">Salvato in galleria</string>
-</resources>

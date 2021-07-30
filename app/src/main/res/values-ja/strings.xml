@@ -263,4 +263,8 @@
     <string name="unit_desc_enable">有効にする</string>
     <string name="unit_desc_disable">無効にする</string>
     <string name="unit_desc_requirement_dm">Bluetoothのサポート</string>
+    <string name="im_edit_width">幅</string>
+    <string name="im_edit_height">高い</string>
+    <string name="im_image_select">画像を選択</string>
+    <string name="im_toast_finish">写真をアルバムに保存しました</string>
 </resources>

@@ -263,4 +263,8 @@
     <string name="unit_desc_enable">Habilitar</string>
     <string name="unit_desc_disable">Desabilitar</string>
     <string name="unit_desc_requirement_dm">Suporte Bluetooth</string>
+    <string name="im_edit_width">Largura</string>
+    <string name="im_edit_height">Altura</string>
+    <string name="im_image_select">Selecione a imagem</string>
+    <string name="im_toast_finish">Guardado na galeria</string>
 </resources>

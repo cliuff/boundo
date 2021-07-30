@@ -263,4 +263,8 @@
     <string name="unit_desc_enable">활성화</string>
     <string name="unit_desc_disable">비활성화</string>
     <string name="unit_desc_requirement_dm">블루투스 지원</string>
+    <string name="im_edit_width">폭</string>
+    <string name="im_edit_height">높은</string>
+    <string name="im_image_select">이미지 선택</string>
+    <string name="im_toast_finish">앨범에 저장된 사진</string>
 </resources>

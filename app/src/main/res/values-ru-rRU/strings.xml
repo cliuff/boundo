@@ -263,4 +263,8 @@
     <string name="unit_desc_enable">включить</string>
     <string name="unit_desc_disable">Отключить</string>
     <string name="unit_desc_requirement_dm">Поддержка Bluetooth</string>
+    <string name="im_edit_width">ширина</string>
+    <string name="im_edit_height">Высота</string>
+    <string name="im_image_select">Выберите изображение</string>
+    <string name="im_toast_finish">Сохранено в галерее</string>
 </resources>

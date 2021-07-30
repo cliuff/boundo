@@ -263,4 +263,8 @@
     <string name="at_hour_hint">Hour</string>
     <string name="at_minute_hint">Minute</string>
     <string name="unit_desc_requirement_dm">Bluetooth support</string>
+    <string name="im_edit_width">Width</string>
+    <string name="im_edit_height">Height</string>
+    <string name="im_image_select">Select image</string>
+    <string name="im_toast_finish">Saved in gallery</string>
 </resources>

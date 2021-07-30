@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="im_edit_width">ширина</string>
-    <string name="im_edit_height">Высота</string>
-    <string name="im_image_select">Выберите изображение</string>
-    <string name="im_toast_finish">Сохранено в галерее</string>
-</resources>

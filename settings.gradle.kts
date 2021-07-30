@@ -16,11 +16,7 @@
 
 
 includeBuild("dependencyPlugin")
-include(
-    ":app",
-    ":image_modifying", ":school_timetable", ":api_viewing",
-    ":wearable"
-)
+include(":app", ":school_timetable", ":api_viewing", ":wearable")
 /*
 
 pluginManagement {

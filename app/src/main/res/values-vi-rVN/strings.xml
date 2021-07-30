@@ -263,4 +263,8 @@
     <string name="unit_desc_enable">Kích hoạt</string>
     <string name="unit_desc_disable">Vô hiệu hóa</string>
     <string name="unit_desc_requirement_dm">Hỗ trợ Bluetooth</string>
+    <string name="im_edit_width">Chiều rộng</string>
+    <string name="im_edit_height">Chiều cao</string>
+    <string name="im_image_select">Chọn ảnh</string>
+    <string name="im_toast_finish">Lưu trong bộ sưu tập</string>
 </resources>

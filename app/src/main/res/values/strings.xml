@@ -196,7 +196,6 @@
     <string name="unitsManager">Unit Manager</string>
     <string name="units">Units</string>
     <string name="av_details_native_libs">"Native libraries: "</string>
-    <string name="title_image_modifying" translatable="false">Image Modifying</string>
     <string name="twService">Themed Live Wallpaper</string>
     <string name="twLiveWallpaperDesc">Switch to dark wallpaper automatically when dark theme is enabled</string>
     <string name="title_school_timetable" translatable="false">School Timetable</string>
@@ -265,4 +264,8 @@
     <string name="unit_desc_enable">Enable</string>
     <string name="unit_desc_disable">Disable</string>
     <string name="unit_desc_requirement_dm">Bluetooth support</string>
+    <string name="im_edit_width">Width</string>
+    <string name="im_edit_height">Height</string>
+    <string name="im_image_select">Select image</string>
+    <string name="im_toast_finish">Saved in gallery</string>
 </resources>

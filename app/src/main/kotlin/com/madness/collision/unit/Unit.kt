@@ -55,7 +55,7 @@ abstract class Unit: TaggedFragment(), Democratic {
             val mUnitDescriptions: List<Description> = listOf(
                     Description(UNIT_NAME_API_VIEWING, R.string.apiViewer, R.drawable.ic_android_24).setDescResId(R.string.unit_desc_av),
                     Description(UNIT_NAME_SCHOOL_TIMETABLE, R.string.unit_school_timetable, R.drawable.ic_tt_24).setDescResId(R.string.unit_desc_st),
-                    Description(UNIT_NAME_IMAGE_MODIFYING, R.string.developertools_cropimage, R.drawable.ic_landscape_24).setDescResId(R.string.unit_desc_im),
+                    StaticDescription(UNIT_NAME_IMAGE_MODIFYING, R.string.developertools_cropimage, R.drawable.ic_landscape_24).setDescResId(R.string.unit_desc_im),
                     StaticDescription(UNIT_NAME_THEMED_WALLPAPER, R.string.twService, R.drawable.ic_image_24).setDescResId(R.string.unit_desc_tw)
                             .setRequirement(Description.Checker(R.string.unit_desc_requirement_tw) {
                                 it.packageManager.hasSystemFeature(PackageManager.FEATURE_LIVE_WALLPAPER)
