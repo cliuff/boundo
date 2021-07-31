@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2020 Clifford Liu
+  ~ Copyright 2021 Clifford Liu
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -17,8 +17,9 @@
 
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/unitsManagerAdapterCard"
-    style="@style/InstantCard">
+    style="@style/UnitManCard">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/unitManagerContainer"
@@ -26,9 +27,51 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <FrameLayout
-            android:id="@+id/unitsManagerAdapterInfo"
+        <TextView
+            android:id="@+id/unitManDynamic"
+            android:text="@string/unit_man_dynamic_feature"
+            android:textSize="9sp"
+            android:textColor="#ff7030"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="@id/unitManIcon"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="2dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="SmallSp" />
+
+        <TextView
+            android:id="@+id/unitManDynamicState"
+            tools:text="Installed"
+            android:textSize="9sp"
+            app:layout_constraintTop_toTopOf="@id/unitManDynamic"
+            app:layout_constraintBottom_toBottomOf="@id/unitManDynamic"
+            app:layout_constraintStart_toEndOf="@id/unitManDynamic"
+            android:layout_marginStart="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="SmallSp" />
+
+        <ImageView
+            android:id="@+id/unitManIcon"
+            android:src="@drawable/ic_image_24"
+            app:tint="?android:textColor"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:padding="18dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:id="@+id/unitsManagerAdapterInfo"
+            android:orientation="vertical"
+            app:layout_constraintStart_toEndOf="@id/unitManIcon"
             app:layout_constraintEnd_toStartOf="@id/unitManagerAdapterStatus"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -38,21 +81,32 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/unitsManagerAdapterName"
-                style="@style/InstantSwitchText"
-                android:maxWidth="295dp"
-                android:drawablePadding="18dp"
-                android:drawableTint="?android:textColor" />
-        </FrameLayout>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="App API"
+                android:textSize="16sp"
+                android:textColor="?colorAOnItem"
+                android:maxWidth="223dp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/unitManDisabled"
+                android:text="@string/unit_man_disabled"
+                android:textSize="12sp"
+                android:textColor="?colorActionAlert"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/unitManagerAdapterStatus"
-            android:src="@drawable/res_circle"
+            tools:src="@drawable/ic_star_24"
             app:layout_constraintStart_toEndOf="@id/unitsManagerAdapterInfo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginEnd="30dp"
-            android:layout_width="wrap_content"
+            android:adjustViewBounds="true"
+            android:layout_width="24dp"
             android:layout_height="wrap_content"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

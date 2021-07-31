@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2020 Clifford Liu
+  ~ Copyright 2021 Clifford Liu
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -32,4 +32,7 @@
     <color name="exteriorTransparencyColor">#F4FFFFFF</color>
     <fraction name="floatingAlpha">0.9</fraction>
     <fraction name="surfaceAlpha">0.87</fraction>
+    <!-- color alpha component (0..255) for surfaceAlpha (0..1), -->
+    <!-- having trouble retrieving surfaceAlpha fraction from code -->
+    <integer name="surfaceAlphaComp">222</integer>
 </resources>
