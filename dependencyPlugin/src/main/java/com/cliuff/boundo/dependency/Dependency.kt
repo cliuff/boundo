@@ -53,7 +53,7 @@ object Versions {
     const val androidxWear = "1.1.0"
 
     const val googleTruth = "1.1.2"
-    const val googleMaterialComponents = "1.3.0"
+    const val googleMaterialComponents = "1.4.0"
     const val googlePlayServicesOSSLicenses = "17.0.0"
     const val googlePlayServicesBasement = "17.6.0"
     const val googleGson = "2.8.6"

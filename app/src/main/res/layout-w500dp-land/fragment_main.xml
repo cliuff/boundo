@@ -14,8 +14,7 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/mainFrame"
     android:layout_width="match_parent"
@@ -28,67 +27,16 @@
         android:id="@+id/mainLinear"
         android:baselineAligned="false">
 
-        <FrameLayout
+        <com.google.android.material.navigationrail.NavigationRailView
             android:id="@+id/mainSideNav"
+            app:menu="@menu/drawer"
+            app:elevation="0dp"
+            app:backgroundTint="?colorABackground"
+            app:itemIconTint="@color/drawer_icon_states"
+            app:itemTextColor="@color/drawer_text_states"
+            style="@style/NavRail"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-
-            <ScrollView
-                android:overScrollMode="never"
-                android:scrollbars="none"
-                android:layout_gravity="center_vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:ignore="UselessParent">
-
-                <RadioGroup
-                    android:id="@+id/mainSideNavRadioGroup"
-                    android:orientation="vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <com.google.android.material.radiobutton.MaterialRadioButton
-                        android:id="@+id/mainSideNavUpdates"
-                        android:button="@drawable/ic_update_24"
-                        android:buttonTint="@color/drawer_icon_states"
-                        android:gravity="center"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginEnd="7dp"
-                        android:paddingTop="20dp"
-                        android:paddingBottom="20dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                    <com.google.android.material.radiobutton.MaterialRadioButton
-                        android:id="@+id/mainSideNavUnits"
-                        android:button="@drawable/ic_twotone_extension_24"
-                        android:buttonTint="@color/drawer_icon_states"
-                        android:gravity="center"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginEnd="7dp"
-                        android:paddingTop="20dp"
-                        android:paddingBottom="20dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                    <com.google.android.material.radiobutton.MaterialRadioButton
-                        android:id="@+id/mainSideNavMore"
-                        android:button="@drawable/ic_more_horiz_24"
-                        android:buttonTint="@color/drawer_icon_states"
-                        android:gravity="center"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginEnd="7dp"
-                        android:paddingTop="20dp"
-                        android:paddingBottom="20dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-                </RadioGroup>
-
-            </ScrollView>
-        </FrameLayout>
+            android:layout_height="match_parent"/>
 
         <FrameLayout
             android:layout_weight="1"

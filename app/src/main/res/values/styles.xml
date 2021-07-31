@@ -585,4 +585,6 @@
         <item name="chipSpacingHorizontal">3dp</item>
     </style>
 
+    <style name="NavRail" parent="Widget.MaterialComponents.NavigationRailView.Compact" />
+
 </resources>

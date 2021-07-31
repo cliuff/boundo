@@ -25,7 +25,6 @@ import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
 import android.view.Window
-import android.widget.Checkable
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -33,15 +32,15 @@ import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
-import com.google.android.material.radiobutton.MaterialRadioButton
+import com.google.android.material.navigation.NavigationBarView
 import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.databinding.FragmentMainBinding
@@ -312,10 +311,13 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
 //        mainTB.setupWithNavController(navController, appBarConfiguration)
 //        mainBottomNav?.setupWithNavController(navController)
 
-        viewBinding.mainBottomNav?.setOnNavigationItemSelectedListener {
+        val navBarListener = NavigationBarView.OnItemSelectedListener {
             mainNav(it.itemId)
             true
         }
+        viewBinding.mainBottomNav?.setOnItemSelectedListener(navBarListener)
+        viewBinding.mainSideNav?.setOnItemSelectedListener(navBarListener)
+
         mainBottomNavRef = WeakReference(viewBinding.mainBottomNav)
         navScrollBehavior?.run {
             onSlidedUpCallback = up@{
@@ -351,16 +353,6 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
         }
         // show bottom navigation bar once clicking the button
         viewBinding.mainShowBottomNav?.setOnClickListener { showNav() }
-
-        viewBinding.mainSideNav?.also {
-            listOf(
-                    viewBinding.mainSideNavUpdates!! to R.id.updatesFragment,
-                    viewBinding.mainSideNavUnits!! to R.id.unitsFragment,
-                    viewBinding.mainSideNavMore!! to R.id.moreFragment
-            ).forEach {
-                it.first.setOnClickListener { _ -> mainNav(it.second) }
-            }
-        }
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             viewModel.removeCurrentUnit()
@@ -647,36 +639,18 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
     }
 
     private fun destinationChanged(destination: NavDestination) {
-        val id = destination.id
-        viewBinding.mainBottomNav?.let { b ->
-            val menu = b.menu
-            val menuItem = menu.findItem(id)
-            if (menuItem != null) {
-                menuItem.isChecked = true
-                showNav()
-            } else {
-                hideNav()
-            }
+        val destId = destination.id
+        viewBinding.mainBottomNav?.let { bottomNav ->
+            val menuItem: MenuItem? = bottomNav.menu.findItem(destId)
+            // change item state
+            menuItem?.isChecked = true
+            // show bottom nav bar when destination is one of the nav menu items, and hide otherwise
+            if (menuItem != null) showNav() else hideNav()
         }
-        viewBinding.mainSideNav?.let { _ ->
-            val vId = when (id) {
-                R.id.updatesFragment -> R.id.mainSideNavUpdates
-                R.id.unitsFragment -> R.id.mainSideNavUnits
-                R.id.moreFragment -> R.id.mainSideNavMore
-                else -> null
-            }
-            val radioGroup = viewBinding.mainSideNavRadioGroup!!
-            val item: MaterialRadioButton? = if (vId == null) null else radioGroup.findViewById(vId)
-            if (item != null) {
-                item.isChecked = true
-            } else {
-                for (i in 0 until radioGroup.childCount) {
-                    val checkable = radioGroup[i] as Checkable
-                    if (!checkable.isChecked) continue
-                    checkable.isChecked = false
-                    break
-                }
-            }
+        viewBinding.mainSideNav?.let { sideNav ->
+            val menuItem: MenuItem? = sideNav.menu.findItem(destId)
+            // change item state
+            menuItem?.isChecked = true
         }
     }
 
