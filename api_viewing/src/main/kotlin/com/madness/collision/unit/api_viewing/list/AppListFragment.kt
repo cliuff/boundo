@@ -122,7 +122,7 @@ internal class AppListFragment : TaggedFragment(), AppList, Filterable {
         return mAdapter
     }
 
-    fun getRecyclerView(): RecyclerView {
+    override fun getRecyclerView(): RecyclerView {
         return mRecyclerView
     }
 

@@ -113,4 +113,6 @@
     <string name="av_upd_new">Newly installed</string>
     <string name="av_upd_upg">API upgrade</string>
     <string name="av_details_real_installer">"Real installer: "</string>
+    <string name="av_upd_ver_upd">Version updated</string>
+    <string name="av_upd_pck_upd">Package updated</string>
 </resources>

@@ -75,6 +75,12 @@ internal open class APIAdapter(context: Context, private val listener: Listener,
         }
     }
 
+    @Suppress("unchecked_cast")
+    open var appList: List<*>
+        get() = apps
+        set(value) {
+            apps = if (value.isNotEmpty() && value[0] is ApiViewingApp) value as List<ApiViewingApp> else emptyList()
+        }
     var apps: List<ApiViewingApp> = emptyList()
         set(value) {
             field = value

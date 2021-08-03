@@ -33,10 +33,10 @@ import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.database.AppMaintainer
 import com.madness.collision.unit.api_viewing.list.APIAdapter
+import com.madness.collision.unit.api_viewing.list.AppList
 import com.madness.collision.unit.api_viewing.list.AppListFragment
 import com.madness.collision.unit.api_viewing.origin.AppRetriever
 import com.madness.collision.unit.api_viewing.upgrade.Upgrade
-import com.madness.collision.unit.api_viewing.upgrade.UpgradeAdapter
 import com.madness.collision.unit.api_viewing.upgrade.UpgradeComparator
 import com.madness.collision.unit.api_viewing.upgrade.UpgradeListFragment
 import com.madness.collision.util.*
@@ -55,6 +55,12 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
         const val STATE_KEY_LIST = "ListFragment"
         const val STATE_KEY_NEW_LIST = "NewListFragment"
         const val STATE_KEY_UPG_LIST = "UpgListFragment"
+        const val STATE_KEY_VER_LIST = "VerUpdListFragment"
+
+        private const val I_NEW = 0
+        private const val I_UPG = 1
+        private const val I_VER = 2
+        private const val I_UPD = 3
 
         private var appTimestamp: Long = 0L
         private var sessionTimestamp: Long = 0L
@@ -67,6 +73,7 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
             get() = newAppTimestamp > 0L
         var previousRecords: List<ApiViewingApp>? = null
         var changedPackages: List<PackageInfo>? = null
+        var isBrandNewSession = false
 
         fun isNewSession(mainTimestamp: Long): Boolean {
             return sessionTimestamp == 0L || sessionTimestamp != mainTimestamp
@@ -86,7 +93,8 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
             // display recent updates in last week if no history (by default)
             if (isNewApp) lastTimestamp = System.currentTimeMillis() - 604800000
             val isValidSession = lastTimestamp < mainTimestamp
-            if (isNewSession(mainTimestamp) && isValidSession) {
+            isBrandNewSession = isNewSession(mainTimestamp) && isValidSession
+            if (isBrandNewSession) {
                 Utils.getChangedPackages(context, hostFragment, lastTimestamp).let {
                     previousRecords = it.first
                     changedPackages = it.second
@@ -105,32 +113,38 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
     }
 
     private lateinit var mContext: Context
-    private lateinit var newList: List<ApiViewingApp>
-    private lateinit var newListFragment: AppListFragment
-    private lateinit var newAdapter: APIAdapter
-    private lateinit var upgradeList: List<Upgrade>
-    private lateinit var upgradeListFragment: UpgradeListFragment
-    private lateinit var upgradeAdapter: UpgradeAdapter
-    private lateinit var mList: List<ApiViewingApp>
-    private lateinit var mListFragment: AppListFragment
-    private lateinit var mAdapter: APIAdapter
+    private lateinit var sections: List<AppSection>
+
+    private class AppSection (val stateKey: String, val containerId: Int, fragmentGetter: (AppSection) -> Fragment) {
+        val fragment: Fragment = fragmentGetter(this)
+        lateinit var adapter: APIAdapter
+        var list: List<*> = emptyList<Any>()
+    }
 
     @Suppress("UNCHECKED_CAST")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mContext = context ?: return
-        newList = emptyList()
-        upgradeList = emptyList()
-        mList = emptyList()
         EasyAccess.init(mContext)
-        newListFragment = childFragmentManager.getSavedFragment(savedInstanceState, STATE_KEY_NEW_LIST)
-                ?: AppListFragment.newInstance(isScrollbarEnabled = false, isFadingEdgeEnabled = false,
-                        isNestedScrollingEnabled = false)
-        upgradeListFragment = childFragmentManager.getSavedFragment(savedInstanceState, STATE_KEY_UPG_LIST)
-                ?: UpgradeListFragment.newInstance()
-        mListFragment = childFragmentManager.getSavedFragment(savedInstanceState, STATE_KEY_LIST)
-                ?: AppListFragment.newInstance(isScrollbarEnabled = false, isFadingEdgeEnabled = false,
-                        isNestedScrollingEnabled = false)
+        val fm = childFragmentManager
+        val state = savedInstanceState
+        sections = listOf(
+            AppSection(STATE_KEY_NEW_LIST, R.id.avUpdNewListContainer) {
+                fm.getSavedFragment(state, it.stateKey) ?: AppListFragment.newInstance(
+                    isScrollbarEnabled = false, isFadingEdgeEnabled = false, isNestedScrollingEnabled = false)
+            },
+            AppSection(STATE_KEY_UPG_LIST, R.id.avUpdUpgListContainer) {
+                fm.getSavedFragment(state, it.stateKey) ?: UpgradeListFragment.newInstance()
+            },
+            AppSection(STATE_KEY_VER_LIST, R.id.avUpdVerListContainer) {
+                fm.getSavedFragment(state, it.stateKey) ?: AppListFragment.newInstance(
+                    isScrollbarEnabled = false, isFadingEdgeEnabled = false, isNestedScrollingEnabled = false)
+            },
+            AppSection(STATE_KEY_LIST, R.id.avUpdatesRecentsListContainer) {
+                fm.getSavedFragment(state, it.stateKey) ?: AppListFragment.newInstance(
+                    isScrollbarEnabled = false, isFadingEdgeEnabled = false, isNestedScrollingEnabled = false)
+            },
+        )
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -138,32 +152,22 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        ensureAdded(R.id.avUpdNewListContainer, newListFragment, true)
-        ensureAdded(R.id.avUpdUpgListContainer, upgradeListFragment, true)
-        ensureAdded(R.id.avUpdatesRecentsListContainer, mListFragment, true)
         val space = X.size(mContext, 5f, X.DP).roundToInt()
-        newAdapter = newListFragment.getAdapter().apply {
-            setSortMethod(MyUnit.SORT_POSITION_API_TIME)
-            topCover = space
-            bottomCover = space
-        }
-        upgradeAdapter = upgradeListFragment.getAdapter().apply {
-            setSortMethod(MyUnit.SORT_POSITION_API_TIME)
-            topCover = space
-            bottomCover = space
-        } as UpgradeAdapter
-        mAdapter = mListFragment.getAdapter().apply {
-            setSortMethod(MyUnit.SORT_POSITION_API_TIME)
-            topCover = space
-            bottomCover = space
+        sections.forEach {
+            ensureAdded(it.containerId, it.fragment, true)
+            it.adapter = (it.fragment as AppList).getAdapter().apply {
+                setSortMethod(MyUnit.SORT_POSITION_API_TIME)
+                topCover = space
+                bottomCover = space
+            }
         }
         updateState()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        childFragmentManager.saveFragment(outState, STATE_KEY_NEW_LIST, newListFragment)
-        childFragmentManager.saveFragment(outState, STATE_KEY_UPG_LIST, upgradeListFragment)
-        childFragmentManager.saveFragment(outState, STATE_KEY_LIST, mListFragment)
+        sections.forEach {
+            childFragmentManager.saveFragment(outState, it.stateKey, it.fragment)
+        }
         super.onSaveInstanceState(outState)
     }
 
@@ -177,30 +181,39 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
             val mPreviousRecords = previousRecords?.associateBy { it.packageName } ?: emptyMap()
             changedPackages = null
             previousRecords = null
-            val spanCount = if (activity == null || isDetached || !isAdded) 1 else mAdapter.spanCount
-            val listLimitSize = min(mChangedPackages.size, 10 * spanCount)
+            val spanCount = if (activity == null || isDetached || !isAdded) 1 else sections[I_UPD].adapter.spanCount
+            val listLimitSize = min(mChangedPackages.size, 15 * spanCount)
             if (mChangedPackages.isEmpty()) {
-                mList = emptyList()
-                newList = emptyList()
-                upgradeList = emptyList()
+                sections.forEach { it.list = emptyList<Any>() }
             } else {
                 val anApp = AppMaintainer.get(mContext, this@MyUpdatesFragment)
                 val packages = mChangedPackages.subList(0, listLimitSize)
                 val appList = AppRetriever.mapToApp(packages, mContext, anApp)
-                mList = ApiViewingViewModel.sortList(appList, MyUnit.SORT_POSITION_API_TIME)
-                newList = if (isNewApp || noRecords) emptyList() else {
-                    val newPackages = mChangedPackages.filter { p ->
-                        mPreviousRecords[p.packageName] == null
-                    }
-                    val newA = AppRetriever.mapToApp(newPackages, mContext, anApp.clone() as ApiViewingApp)
-                    ApiViewingViewModel.sortList(newA, MyUnit.SORT_POSITION_API_TIME)
+
+                // separate new ones from list
+                val (newAppList, familiarAppList) = if (isNewApp || noRecords) {
+                    emptyList<ApiViewingApp>() to appList
+                } else appList.partition {
+                    mPreviousRecords[it.packageName] == null
                 }
-                val upgradesA = ArrayList<Upgrade>(appList.size)
-                val getSize = mChangedPackages.size - appList.size
+                sections[I_NEW].list = ApiViewingViewModel.sortList(newAppList, MyUnit.SORT_POSITION_API_TIME)
+
+                val (verUpdList, pckUpdList) = familiarAppList.partition {
+                    val prev = mPreviousRecords[it.packageName] ?: return@partition false
+                    it.verCode != prev.verCode
+                }
+                sections[I_VER].list = ApiViewingViewModel.sortList(verUpdList, MyUnit.SORT_POSITION_API_TIME)
+                sections[I_UPD].list = ApiViewingViewModel.sortList(pckUpdList, MyUnit.SORT_POSITION_API_TIME)
+
+                // upgrades that can be found in appList
+                val upgradesA = ArrayList<Upgrade>(familiarAppList.size)
+                // size of upgrades that are missing, i.e. excluded from appList
+                val getSize = mChangedPackages.size - listLimitSize
                 val getPackages = ArrayList<PackageInfo>(getSize)
                 val getPrevious = ArrayList<ApiViewingApp>(getSize)
                 for (p in mChangedPackages) {
                     val previous = mPreviousRecords[p.packageName] ?: continue
+                    // get updated app
                     val new = appList.find { it.packageName == p.packageName }
                     if (new == null) {
                         getPackages.add(p)
@@ -209,44 +222,51 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
                         Upgrade.get(previous, new)?.let { upgradesA.add(it) }
                     }
                 }
+                // get missing apps
                 val getApps = AppRetriever.mapToApp(getPackages, mContext, anApp.clone() as ApiViewingApp)
+                // get missing upgrades
                 val upgradesB = getPrevious.mapIndexedNotNull { index, previous ->
                     Upgrade.get(previous, getApps[index])
                 }
-                upgradeList = UpgradeComparator.compareTime(upgradesA + upgradesB)
+                sections[I_UPG].list = UpgradeComparator.compareTime(upgradesA + upgradesB)
             }
 
             withContext(Dispatchers.Main) updateUI@ {
-                newAdapter.apps = newList
-                newListFragment.getRecyclerView().run {
-                    setHasFixedSize(true)
-                    setItemViewCacheSize(newAdapter.itemCount)
-                }
-                val newVisibility = if (newList.isEmpty()) View.GONE else View.VISIBLE
-                upgradeAdapter.upgrades = upgradeList
-                upgradeListFragment.getRecyclerView().run {
-                    setHasFixedSize(true)
-                    setItemViewCacheSize(upgradeAdapter.itemCount)
-                }
-                val upgVisibility = if (upgradeList.isEmpty()) View.GONE else View.VISIBLE
-                mAdapter.apps = mList
-                mListFragment.getRecyclerView().run {
-                    setHasFixedSize(true)
-                    setItemViewCacheSize(mAdapter.itemCount)
-                }
-                val visibility = if (mList.isEmpty()) View.GONE else View.VISIBLE
-                val view = view ?: return@updateUI
-                view.findViewById<TextView>(R.id.avUpdNewTitle)?.visibility = newVisibility
-                view.findViewById<TextView>(R.id.avUpdUpgTitle)?.visibility = upgVisibility
-                view.findViewById<TextView>(R.id.avUpdatesRecentsTitle)?.visibility = visibility
-                view.findViewById<TextView>(R.id.avUpdatesRecentsMore)?.run {
-                    this.visibility = visibility
-                    setOnClickListener {
-                        if (activity == null || isDetached || !isAdded) return@setOnClickListener
-                        val mainViewModel: MainViewModel by activityViewModels()
-                        mainViewModel.displayUnit(MyBridge.unitName, shouldShowNavAfterBack = true)
-                    }
-                }
+                updateView(isBrandNewSession)
+            }
+        }
+    }
+
+    private fun updateView(isNewSession: Boolean) {
+        sections.forEach {
+            it.adapter.appList = it.list
+            (it.fragment as AppList).getRecyclerView().run {
+                setHasFixedSize(true)
+                setItemViewCacheSize(it.adapter.itemCount)
+            }
+        }
+
+        val view = view ?: return
+        listOf(
+            R.id.avUpdNewTitle to I_NEW,
+            R.id.avUpdUpgTitle to I_UPG,
+            R.id.avUpdVerTitle to I_VER,
+            R.id.avUpdatesRecentsTitle to I_UPD
+        ).forEach {
+            val visibility = if (sections[it.second].list.isEmpty()) View.GONE else View.VISIBLE
+            view.findViewById<TextView>(it.first)?.run {
+                this.visibility = visibility
+                if (it.second != I_UPD) return@run
+                setText(if (isNewSession) R.string.av_upd_pck_upd else R.string.av_updates_recents)
+            }
+        }
+        view.findViewById<TextView>(R.id.avUpdatesRecentsMore)?.run {
+            val hasNoUpdates = sections[I_VER].list.isEmpty() && sections[I_UPD].list.isEmpty()
+            this.visibility = if (hasNoUpdates) View.GONE else View.VISIBLE
+            setOnClickListener {
+                if (activity == null || isDetached || !isAdded) return@setOnClickListener
+                val mainViewModel: MainViewModel by activityViewModels()
+                mainViewModel.displayUnit(MyBridge.unitName, shouldShowNavAfterBack = true)
             }
         }
     }

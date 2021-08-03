@@ -27,15 +27,7 @@
         android:text="@string/av_upd_new"
         app:drawableEndCompat="@drawable/res_circle"
         android:drawableTint="@color/androidRobotGreen"
-        android:drawablePadding="10dp"
-        android:layout_marginTop="5dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:textSize="14sp"
-        android:textColor="?android:textColor"
-        android:gravity="center_vertical"
+        style="@style/AvUpdSecTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
@@ -50,15 +42,7 @@
         android:text="@string/av_upd_upg"
         app:drawableEndCompat="@drawable/res_circle"
         android:drawableTint="@color/androidRobotGreen"
-        android:drawablePadding="10dp"
-        android:layout_marginTop="5dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:textSize="14sp"
-        android:textColor="?android:textColor"
-        android:gravity="center_vertical"
+        style="@style/AvUpdSecTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
@@ -68,20 +52,27 @@
         android:layout_height="wrap_content"/>
 
     <TextView
-        android:id="@+id/avUpdatesRecentsTitle"
+        android:id="@+id/avUpdVerTitle"
         android:visibility="gone"
-        android:text="@string/av_updates_recents"
+        android:text="@string/av_upd_ver_upd"
         app:drawableEndCompat="@drawable/res_circle"
         android:drawableTint="@color/androidRobotGreen"
-        android:drawablePadding="10dp"
-        android:layout_marginTop="5dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:textSize="14sp"
-        android:textColor="?android:textColor"
-        android:gravity="center_vertical"
+        style="@style/AvUpdSecTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/avUpdVerListContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/avUpdatesRecentsTitle"
+        android:visibility="gone"
+        android:text="@string/av_upd_pck_upd"
+        app:drawableEndCompat="@drawable/res_circle"
+        android:drawableTint="@color/androidRobotGreen"
+        style="@style/AvUpdSecTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 

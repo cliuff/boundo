@@ -99,7 +99,7 @@ internal class UpgradeListFragment : TaggedFragment(), AppList {
         return mAdapter
     }
 
-    fun getRecyclerView(): RecyclerView {
+    override fun getRecyclerView(): RecyclerView {
         return mRecyclerView
     }
 

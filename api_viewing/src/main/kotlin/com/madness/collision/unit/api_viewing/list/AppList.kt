@@ -16,9 +16,11 @@
 
 package com.madness.collision.unit.api_viewing.list
 
+import androidx.recyclerview.widget.RecyclerView
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 
 internal interface AppList {
     fun showAppOptions(app: ApiViewingApp)
     fun getAdapter(): APIAdapter
+    fun getRecyclerView(): RecyclerView
 }

@@ -39,6 +39,12 @@ internal class UpgradeAdapter(context: Context, listener: Listener, scope: Corou
             field = value
             apps = upgrades.map { it.new }
         }
+    @Suppress("unchecked_cast")
+    override var appList: List<*>
+        get() = upgrades
+        set(value) {
+            upgrades = if (value.isNotEmpty() && value[0] is Upgrade) value as List<Upgrade> else emptyList()
+        }
 
     class Holder(binding: AvUpdUpgItemBinding) : APIAdapter.Holder(binding.root) {
         val preVer: AppCompatTextView = binding.avUpdUpgItemPreVer as AppCompatTextView
