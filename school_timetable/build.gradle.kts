@@ -30,7 +30,7 @@ android {
     }
     compileSdkVersion(30)
 
-    flavorDimensions("arch")
+    flavorDimensions.add("arch")
     productFlavors {
         create("full") {
             dimension = "arch"
@@ -44,17 +44,16 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion(22)
-        targetSdkVersion(30)
+        minSdk = 22
     }
 
     compileOptions {
         // Flag to enable support for the new Java 8+ APIs
         isCoreLibraryDesugaringEnabled = true
-        targetCompatibility = JavaVersion.VERSION_1_8
-        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_11
     }
-    kotlinOptions.jvmTarget = JavaVersion.VERSION_1_8.toString()
+    kotlinOptions.jvmTarget = JavaVersion.VERSION_11.toString()
     buildFeatures.viewBinding = true
 }
 

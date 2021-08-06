@@ -17,7 +17,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 object Versions {
-    const val kotlin = "1.4.32"
+    const val kotlin = "1.5.21"
 }
 
 buildscript {
@@ -25,7 +25,7 @@ buildscript {
         mavenCentral()
     }
     val versions = object {
-        val kotlin = "1.4.32"
+        val kotlin = "1.5.21"
     }
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}")
@@ -34,7 +34,7 @@ buildscript {
 
 plugins {
     val versions = object {
-        val kotlin = "1.4.32"
+        val kotlin = "1.5.21"
     }
     kotlin("jvm") version versions.kotlin
     id("java-gradle-plugin")
@@ -56,7 +56,7 @@ dependencies {
 //kotlinOptions.jvmTarget = JavaVersion.VERSION_1_8.toString()
 //}
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = JavaVersion.VERSION_1_8.toString()
+    kotlinOptions.jvmTarget = JavaVersion.VERSION_11.toString()
 }
 
 gradlePlugin {

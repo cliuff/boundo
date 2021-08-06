@@ -60,7 +60,7 @@ object Versions {
     const val googlePlayCore = "1.9.1"
     const val googlePlayCoreKtx = "1.8.1"
     const val gglGuava = "30.1-android"
-    const val gglHilt = "2.32-alpha"
+    const val gglHilt = "2.38.1"
     // This dependency is for the Wearable Support Library,
     // which has additional classes (including for watch faces)
     const val googleSupportWearable = "2.8.1"
@@ -71,7 +71,7 @@ object Versions {
     const val jsoup = "1.13.1"
     const val junit4 = "4.13.2"
     const val junitJupiter = "5.7.1"
-    const val kotlin = "1.4.32"
+    const val kotlin = "1.5.21"
     const val kotlinCoroutines = "1.4.3"
     const val mpChart = "v3.1.0"
     const val openCsv = "5.3"

@@ -57,13 +57,13 @@ android {
             storePassword = signingKeyStorePassword
         }
     }
-    compileSdkVersion(30)
+    compileSdk = 30
     defaultConfig {
         // below: manifest placeholders
         manifestPlaceholders["buildPackage"] = buildPackage
         applicationId = "com.madness.collision"
-        minSdkVersion(23)
-        targetSdkVersion(30)
+        minSdk = 23
+        targetSdk = 30
         versionCode = 20122524
         versionName = "3.6.6"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -74,17 +74,18 @@ android {
         buildConfigField("String", "BUILD_PACKAGE", "\"$buildPackage\"")
         resValue("string", "buildPackage", buildPackage)
         // below: fix multi-locale support
-        resConfigs("en", "en-rGB", "en-rUS",
-                "zh", "zh-rCN", "zh-rHK", "zh-rMO", "zh-rTW", "zh-rSG",
-                "ru", "ru-rRU", "es", "es-rES", "es-rUS",
-                "ar", "it", "it-rIT", "pt", "pt-rPT",
-                "th", "th-rTH", "vi", "vi-rVN",
-                "fr", "fr-rFR", "el", "el-rGR",
-                "ja", "ja-rJP", "ko", "ko-rKR",
-                "tr", "tr-rTR", "de", "de-rDE"
-        )
+        resourceConfigurations.addAll(arrayOf(
+            "en", "en-rGB", "en-rUS",
+            "zh", "zh-rCN", "zh-rHK", "zh-rMO", "zh-rTW", "zh-rSG",
+            "ru", "ru-rRU", "es", "es-rES", "es-rUS",
+            "ar", "it", "it-rIT", "pt", "pt-rPT",
+            "th", "th-rTH", "vi", "vi-rVN",
+            "fr", "fr-rFR", "el", "el-rGR",
+            "ja", "ja-rJP", "ko", "ko-rKR",
+            "tr", "tr-rTR", "de", "de-rDE"
+        ))
     }
-    flavorDimensions("arch")
+    flavorDimensions.add("arch")
     productFlavors {
         create("full") {
             dimension = "arch"
@@ -128,16 +129,16 @@ android {
     compileOptions {
         // Flag to enable support for the new Java 8+ APIs
         isCoreLibraryDesugaringEnabled = true
-        targetCompatibility = JavaVersion.VERSION_1_8
-        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_11
     }
-    lintOptions {
+    lint {
         isCheckReleaseBuilds = false
         // Or, if you prefer, you can continue to check for errors in release builds,
         // but continue the build even when errors are found:
         isAbortOnError = false
     }
-    kotlinOptions.jvmTarget = JavaVersion.VERSION_1_8.toString()
+    kotlinOptions.jvmTarget = JavaVersion.VERSION_11.toString()
     buildFeatures {
         dataBinding = true
         viewBinding = true
