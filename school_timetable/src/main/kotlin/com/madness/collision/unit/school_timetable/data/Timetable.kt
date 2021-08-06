@@ -1,3 +1,19 @@
+/*
+ * Copyright 2021 Clifford Liu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.madness.collision.unit.school_timetable.data
 
 import android.content.Context
@@ -109,7 +125,19 @@ class Timetable(courses: List<CourseSingleton>) {
             ICal.loadTime(context)
             val print = ICal.getWeekIndicatorComplete(context, endWeek)
             val path = F.valFilePubTtIndicator(context)
-            return X.write(print, path)
+            return write(print, path)
+        }
+
+        private fun write(content: String, path: String): Boolean{
+            val ushContent = content.toByteArray(StandardCharsets.UTF_8)
+            val file = File(path)
+            if (!F.prepare4(file)) return false
+            try {
+                FileOutputStream(file).use { it.write(ushContent) }
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+            return true
         }
     }
 
@@ -194,7 +222,7 @@ class Timetable(courses: List<CourseSingleton>) {
         ICal.loadTime(context)
         val print = ICal.get(courses)
         val path = F.valFilePubTtCurrent(context)
-        return X.write(print, path)
+        return write(print, path)
     }
 
     fun persist( context: Context, clearPersistence: Boolean = true){

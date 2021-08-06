@@ -21,6 +21,7 @@ import android.app.UiModeManager
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Color
+import android.graphics.Point
 import android.os.LocaleList
 import android.view.*
 import android.view.inputmethod.InputMethodManager
@@ -220,8 +221,11 @@ object SystemUtil {
         if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) superior.invoke() else normal.invoke()
     }
 
+    /**
+     * Not suitable for getting screen size, use [WindowMetrics] instead.
+     */
     fun getDisplay(context: Context): Display? {
-        return if (X.aboveOn(X.R)) {
+        return if (OsUtils.satisfy(OsUtils.R)) {
             try {
                 context.display
             } catch (e: UnsupportedOperationException) {
@@ -237,6 +241,44 @@ object SystemUtil {
     @Suppress("deprecation")
     private val WindowManager.defaultDisplayLegacy: Display
         get() = defaultDisplay
+
+    /**
+     * A foldable phone folding inward has two physical displays.
+     * A foldable phone folding outward has only one physical display but divided into two partitions,
+     * only one of them is activated when the phone is folded.
+     * Both window and display API can only get the size of the activated partition.
+     * Runtime means that this API does not describe the real device.
+     */
+    fun getRuntimeMaximumSize(context: Context): Point {
+        if (OsUtils.satisfy(OsUtils.R)) {
+            (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager?)?.let {
+                val bounds = it.maximumWindowMetrics.bounds
+                return Point(bounds.width(), bounds.height())
+            }
+        }
+        val size = Point()
+        getDisplay(context)?.getRealSizeLegacy(size)
+        return size
+    }
+
+    @Suppress("deprecation")
+    private fun Display.getRealSizeLegacy(size: Point) = getRealSize(size)
+
+    fun getRuntimeWindowSize(context: Context): Point {
+        if (OsUtils.satisfy(OsUtils.R)) {
+            (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager?)?.let {
+                val bounds = it.currentWindowMetrics.bounds
+                return Point(bounds.width(), bounds.height())
+            }
+        }
+        val size = Point()
+        // get display with activity context to get window size
+        getDisplay(context)?.getSizeLegacy(size)
+        return size
+    }
+
+    @Suppress("deprecation")
+    private fun Display.getSizeLegacy(size: Point) = getSize(size)
 
     /**
      * Language settings in system

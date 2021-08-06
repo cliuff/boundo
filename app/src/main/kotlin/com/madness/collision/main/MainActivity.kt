@@ -20,11 +20,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
-import android.view.KeyEvent
-import android.view.MenuItem
-import android.view.View
-import android.view.Window
+import android.view.*
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -34,7 +32,6 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
@@ -52,9 +49,9 @@ import com.madness.collision.unit.Unit
 import com.madness.collision.unit.api_viewing.AccessAV
 import com.madness.collision.util.*
 import com.madness.collision.util.notice.ToastUtils
-import com.madness.collision.util.os.OsUtils
 import kotlinx.coroutines.*
 import java.lang.ref.WeakReference
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
@@ -179,9 +176,17 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
         val app = mainApplication
         if (!app.dead) return
         app.debug = prefSettings.getBoolean(P.ADVANCED, false)
-        app.statusBarHeight = X.getStatusBarHeight(context)
+        app.statusBarHeight = getStatusBarHeight(context)
         if (!app.isDarkTheme) MiscMain.updateExteriorBackgrounds(context)
         app.dead = false
+    }
+
+    private fun getStatusBarHeight(context: Context): Int {
+        val result = AtomicInteger()
+        val resourceId = context.resources.getIdentifier("status_bar_height", "dimen", "android")
+        if (resourceId > 0) result.set(context.resources.getDimensionPixelSize(resourceId))
+        if (result.get() == 0) result.set(X.size(context, 30f, X.DP).toInt())
+        return result.get()
     }
 
     private fun inflateLayout(context: Context) {
@@ -692,7 +697,7 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
             if (mainApplication.exterior) {
                 var offsetX = viewModel.insetLeft.value ?: 0
                 if (isLand) offsetX += viewBinding.mainSideNav?.width ?: 0
-                val colors = X.extractBackColor(viewBinding.mainTB, background, offsetX) // extremely heavy
+                val colors = GraphicsUtil.matchBackgroundColor(viewBinding.mainTB, background, offsetX) // extremely heavy
                 colorFore = colors[0]
                 colorBack = colors[1]
                 val backColor = colorBack and X.getColor(mContext, R.color.exteriorTransparencyColor)
@@ -745,11 +750,10 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
             background.background = null
             return
         }
-        if (OsUtils.satisfy(OsUtils.N) && isInMultiWindowMode) {
-            X.setSplitBackground(mContext, background, X.getCurrentAppResolution(mContext))
-        } else {
-            X.setBackground(mContext, background)
-        }
+        val back = mainApplication.background ?: return
+        val size = SystemUtil.getRuntimeWindowSize(mContext)
+        val bitmap = BackgroundUtil.getBackground(back, size.x, size.y)
+        background.background = BitmapDrawable(mContext.resources, bitmap)
     }
 
     private fun initExterior() {

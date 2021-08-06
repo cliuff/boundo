@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ import android.content.Intent
 import android.content.pm.ServiceInfo
 import android.graphics.Bitmap
 import android.graphics.PixelFormat
-import android.graphics.Point
 import android.hardware.display.DisplayManager
 import android.hardware.display.VirtualDisplay
 import android.media.ImageReader
@@ -79,18 +78,17 @@ internal class ScreenCapturingService: Service() {
             val image = reader.acquireLatestImage() ?: return
             stopProjection()
 
-            val planes = image.planes
-            val buffer = planes[0].buffer
-            val pixelStride = planes[0].pixelStride
-            val rowStride = planes[0].rowStride
-            val rowPadding = rowStride - pixelStride * mWidth
-            val width = mWidth + rowPadding / pixelStride
+            val plane = image.planes[0]
+            val rowPadding = plane.rowStride - plane.pixelStride * mWidth
+            // margin on the right
+            val imageMargin = rowPadding / plane.pixelStride
+            val width = mWidth + imageMargin
 
-            // todo width is bigger than actual width but is the only right one for this bitmap,
-            // using mWidth instead will not produce desired image
-            val bitmap = Bitmap.createBitmap(width, mHeight, Bitmap.Config.ARGB_8888)
-            bitmap.copyPixelsFromBuffer(buffer)
-            capture = bitmap
+            // result bitmap has a bigger width than the actual image
+            val bitmap = Bitmap.createBitmap(width, image.height, Bitmap.Config.ARGB_8888)
+            bitmap.copyPixelsFromBuffer(plane.buffer)
+            // crop out the margin on the right of the result bitmap
+            capture = Bitmap.createBitmap(bitmap, 0, 0, mWidth, mHeight)
 
             if (X.aboveOn(X.P)) reader.discardFreeBuffers()
             reader.close()
@@ -181,8 +179,7 @@ internal class ScreenCapturingService: Service() {
     }
 
     private fun createVirtualDisplay() {
-        val size = Point()
-        mDisplay?.getRealSize(size)
+        val size = SystemUtil.getRuntimeMaximumSize(context)
         mWidth = size.x
         mHeight = size.y
         mImageReader = ImageReader.newInstance(mWidth, mHeight, PixelFormat.RGBA_8888, 1)

@@ -19,31 +19,23 @@ package com.madness.collision.util
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.content.res.Configuration
 import android.graphics.*
-import android.graphics.drawable.AdaptiveIconDrawable
-import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.util.TypedValue
-import android.view.Display
-import android.view.Surface
 import android.view.View
-import android.view.WindowManager
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.ColorUtils
 import androidx.core.util.component1
 import androidx.core.util.component2
-import androidx.palette.graphics.Palette
 import com.madness.collision.util.notice.ToastUtils
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.io.*
-import java.nio.charset.StandardCharsets
-import java.util.concurrent.atomic.AtomicInteger
-import kotlin.math.max
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
 import kotlin.math.min
 
 object X {
@@ -61,85 +53,7 @@ object X {
         outStream.close()
     }
 
-    fun getStatusBarHeight(context: Context): Int {
-        val result = AtomicInteger()
-        val resourceId = context.resources.getIdentifier("status_bar_height", "dimen", "android")
-        if (resourceId > 0) result.set(context.resources.getDimensionPixelSize(resourceId))
-        if (result.get() == 0) result.set(size(context, 30f, DP).toInt())
-        return result.get()
-    }
-
-    fun setBackground(context: Context,  background: View){
-        val point = getPortraitRealResolution(context)
-        val isLandscape = context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-        val width = if (isLandscape) point.y else point.x
-        val height = if (isLandscape) point.x else point.y
-        /*
-                ObjectAnimator.ofObject(background, "background", (fraction, startValue, endValue) -> {
-                    Rect rect = new Rect(0, 0, background.getWidth(), background.getHeight())
-                    Drawable drawable
-                    if (startValue == null){
-                        drawable = (Drawable) endValue
-                        drawable = drawable.mutate()
-                        drawable.setAlpha((int)(255 * fraction))
-                        drawable.setBounds(rect)
-                        return drawable
-                    }else {
-                        if (fraction < 0.5){
-                            drawable = (Drawable) startValue
-                            drawable = drawable.mutate()
-                            drawable.setAlpha((int)(255 * (0.5 - fraction)))
-                            drawable.setBounds(rect)
-                            return drawable
-                        }else {
-                            drawable = (Drawable) endValue
-                            drawable = drawable.mutate()
-                            drawable.setAlpha((int)(255 * (fraction - 0.5)))
-                            drawable.setBounds(rect)
-                            return drawable
-                        }
-                    }
-                },MainApplication.getInstance().background, MainApplication.getInstance().background);*/
-        setSplitBackground(context, background, width, height)
-    }
-
-    fun setSplitBackground( context: Context,  background: View, width: Int, height: Int){
-        if (mainApplication.background != null) {
-            background.background = BitmapDrawable(context.resources, BackgroundUtil.getBackground(mainApplication.background!!, width, height))
-        }
-    }
-
-    fun setSplitBackground( context: Context,  background: View,  size: Point){
-        setSplitBackground(context, background, size.x, size.y)
-    }
-
-    fun iconDrawable2Bitmap( context: Context,  drawable: Drawable): Bitmap{
-        if (aboveOn(O) && drawable is AdaptiveIconDrawable) return GraphicsUtil.drawAIRound(context, drawable)
-        return drawableToBitmap(drawable)
-    }
-
-    /**
-     * normal drawable that are not AdaptiveIconDrawable
-     * @param drawable drawable res
-     * @return bitmap
-     */
-    fun drawableToBitmap ( drawable: Drawable): Bitmap {
-        if (drawable is BitmapDrawable && drawable.bitmap != null) return drawable.bitmap.collisionBitmap
-
-        val intrinsicWidth = drawable.intrinsicWidth
-        val intrinsicHeight = drawable.intrinsicHeight
-        val bitmap: Bitmap = if (intrinsicWidth <= 0 || intrinsicHeight <= 0)
-        // Single color bitmap will be created of 1x1 pixel, update: it might as well be gradient drawable apart from single color drawable
-            Bitmap.createBitmap(500, 500, Bitmap.Config.ARGB_8888)
-        else
-            Bitmap.createBitmap(intrinsicWidth, intrinsicHeight, Bitmap.Config.ARGB_8888)
-
-        val canvas = Canvas(bitmap)
-        drawable.setBounds(0, 0, canvas.width, canvas.height)
-        drawable.draw(canvas)
-        return bitmap
-    }
-
+    fun drawableToBitmap(drawable: Drawable): Bitmap = GraphicsUtil.convertDrawableToBitmap(drawable)
 
     /**
      * clip the image to target
@@ -204,33 +118,7 @@ object X {
         return Integer.toHexString(getColor(context, colorRes) and 0x00ffffff)
     }
 
-    fun getPortraitRealResolution(context: Context): Point {
-        val display = SystemUtil.getDisplay(context) ?: return Point()
-        val size = Point()
-        // subject to device rotation regardless of ORIENTATION value
-        display.getRealSize(size)
-        val rotation = display.rotation
-        return if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) Point(size.y, size.x) else size
-    }
-
-    fun getCurrentAppResolution(context: Context): Point {
-        return if (aboveOn(R)) {
-            val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager? ?: return Point()
-            val metrics = windowManager.currentWindowMetrics
-            val bounds = metrics.bounds
-            Point(bounds.width(), bounds.height())
-        } else {
-            val display = SystemUtil.getDisplay(context) ?: return Point()
-            val size = Point()
-            display.getSizeLegacy(size)
-            size
-        }
-    }
-
-    @Suppress("deprecation")
-    private fun Display.getSizeLegacy(size: Point) {
-        getSize(size)
-    }
+    fun getCurrentAppResolution(context: Context): Point = SystemUtil.getRuntimeWindowSize(context)
 
     /**
      * get circular bitmap
@@ -258,82 +146,6 @@ object X {
     const val SP = TypedValue.COMPLEX_UNIT_SP
     fun size(context: Context, value: Float, type: Int): Float {
         return TypedValue.applyDimension(type, value, context.resources.displayMetrics)
-    }
-
-    fun colorAgainstBackground(fore: View, back: View, offsetX: Int = 0, offsetY: Int = 0): Int {
-        return extractBackColor(fore, back, offsetX, offsetY)[0]
-    }
-
-    fun extractBackColor(fore: View, back: View, offsetX: Int = 0, offsetY: Int = 0): IntArray {
-        val colors = IntArray(2)
-        if (back.background == null){
-            colors[0] = Color.BLACK
-            return colors
-        }
-        val prefWidth: Int
-        val prefHeight: Int
-        val isForeInflated = fore.width > 0
-        if (!isForeInflated){
-            fore.measure()
-            prefWidth = fore.measuredWidth
-            prefHeight = fore.measuredHeight
-        }else {
-            prefWidth = fore.width
-            prefHeight = fore.height
-        }
-        val drawable = back.background
-        if (drawable == null){
-            colors[0] = Color.BLACK
-            return colors
-        }
-        val foreBitmap: Bitmap
-        if (drawable is BitmapDrawable && drawable.bitmap != null) // Single color bitmap will be created of 1x1 pixel
-        {
-            foreBitmap = drawable.bitmap.collisionBitmap
-        } else{
-            val intrinsicWidth = drawable.intrinsicWidth
-            val intrinsicHeight = drawable.intrinsicHeight
-            foreBitmap = if (intrinsicWidth <= 0 || intrinsicHeight <= 0) {
-                Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888) // Single color bitmap will be created of 1x1 pixel
-            } else {
-                Bitmap.createBitmap(intrinsicWidth, intrinsicHeight, Bitmap.Config.ARGB_8888)
-            }
-            val canvas = Canvas(foreBitmap)
-            drawable.draw(canvas)
-        }
-        var bitmap: Bitmap
-        if (foreBitmap.width == 1 && foreBitmap.height == 1){
-            bitmap = foreBitmap
-        } else {
-            bitmap = Bitmap.createBitmap(prefWidth, prefHeight, Bitmap.Config.ARGB_8888)
-            val canvas = Canvas(bitmap)
-            canvas.drawBitmap(foreBitmap, Rect(offsetX, offsetY, prefWidth, prefHeight), Rect(0, 0, prefWidth, prefHeight), null)
-        }
-
-        val n = (max(bitmap.width, bitmap.height) / 800) + 1
-        bitmap = GraphicsUtil.clipDown2(bitmap, n)
-        var backColor: Int
-        if (bitmap.width == 1 && bitmap.height == 1){
-            backColor = bitmap.getPixel(0, 0)
-        }else {
-            val paint = Paint(Color.WHITE)
-            paint.colorFilter = LightingColorFilter(0xFAFAFA, 0x050505)
-            Canvas(bitmap).drawBitmap(bitmap, 0f, 0f, paint)
-            val palette = try {
-                Palette.from(bitmap).generate()
-            } catch (e: Exception) {
-                e.printStackTrace()
-                null
-            }
-            // below: likely to get white for blurred images
-            backColor = palette?.getDominantColor(Color.WHITE) ?: Color.WHITE
-            backColor = ColorUtils.blendARGB(Color.BLACK, backColor, 0.98f)
-        }
-        val contrast1 = ColorUtils.calculateContrast(Color.WHITE, backColor)
-        val contrast2 = ColorUtils.calculateContrast(Color.BLACK, backColor)
-        colors[0] = if (contrast1 > contrast2) Color.WHITE else Color.BLACK
-        colors[1] = backColor
-        return colors
     }
 
     fun saveImage( image: Bitmap,  path: String): Boolean{
@@ -412,8 +224,6 @@ object X {
     const val B = Build.VERSION_CODES.BASE_1_1
     const val A = Build.VERSION_CODES.BASE
 
-    fun aboveOff(apiLevel: Int): Boolean = Build.VERSION.SDK_INT > apiLevel
-
     fun aboveOn(apiLevel: Int): Boolean = Build.VERSION.SDK_INT >= apiLevel
 
     fun belowOff(apiLevel: Int): Boolean = Build.VERSION.SDK_INT < apiLevel
@@ -432,17 +242,5 @@ object X {
         GlobalScope.launch {
             ToastUtils.toast(context, message, duration)
         }
-    }
-
-    fun write(content: String, path: String): Boolean{
-        val ushContent = content.toByteArray(StandardCharsets.UTF_8)
-        val file = File(path)
-        if (!com.madness.collision.util.F.prepare4(file)) return false
-        try {
-            FileOutputStream(file).use { it.write(ushContent) }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-        return true
     }
 }

@@ -462,7 +462,7 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
 
         // below: process round icon from package
         if (doPackageIcon) {
-            var logo2Draw = X.iconDrawable2Bitmap(context, roundIconDrawable!!)
+            var logo2Draw = iconDrawable2Bitmap(context, roundIconDrawable!!)
             // below: ensure it is round
             logo2Draw = X.toTarget(logo2Draw, displayDiameter, displayDiameter)
             paint.shader = BitmapShader(logo2Draw, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
@@ -496,6 +496,11 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
         paintStroke.style = Paint.Style.STROKE
         canvas.drawCircle(targetRadiusFloat, targetRadiusFloat, displayRadiusFloat, paintStroke)
         return logoCircular
+    }
+
+    private fun iconDrawable2Bitmap(context: Context, drawable: Drawable): Bitmap {
+        if (X.aboveOn(X.O) && drawable is AdaptiveIconDrawable) return GraphicsUtil.drawAIRound(context, drawable)
+        return X.drawableToBitmap(drawable)
     }
 
     private fun ApkUtil.getNativeLibSupport(appPackage: AppPackage): BooleanArray {

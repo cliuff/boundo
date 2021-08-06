@@ -27,10 +27,7 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.FrameLayout
 import android.widget.ProgressBar
 import android.widget.SeekBar
@@ -375,7 +372,7 @@ class ExteriorFragment: TaggedFragment(), Democratic, View.OnClickListener{
             return
         }
 
-        val size: Point = X.getPortraitRealResolution(context)
+        val size: Point = getPortraitRealResolution(context)
         val blurDegree = sb.progress / 4f
         val shouldBlur = blurDegree != 0f
         var blurred1 = if (shouldBlur) rs.blur(forBlurry!!, blurDegree) else null
@@ -423,6 +420,15 @@ class ExteriorFragment: TaggedFragment(), Democratic, View.OnClickListener{
             }
         }
 
+    }
+
+    private fun getPortraitRealResolution(context: Context): Point {
+        val display = SystemUtil.getDisplay(context) ?: return Point()
+        val size = Point()
+        // subject to device rotation regardless of ORIENTATION value
+        display.getRealSize(size)
+        val rotation = display.rotation
+        return if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) Point(size.y, size.x) else size
     }
 
     @Suppress("deprecation")

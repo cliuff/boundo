@@ -23,9 +23,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.card.MaterialCardView
 import com.madness.collision.Democratic
 import com.madness.collision.R
@@ -34,6 +36,10 @@ import com.madness.collision.main.MainViewModel
 import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.util.*
 import com.madness.collision.util.AppUtils.asBottomMargin
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlin.math.roundToInt
 
 class MoreFragment : TaggedFragment(), Democratic, View.OnClickListener, NavNode {
 
@@ -61,7 +67,7 @@ class MoreFragment : TaggedFragment(), Democratic, View.OnClickListener, NavNode
         if (context != null) {
             SettingsFunc.updateLanguage(context)
             val dp480 = X.size(context, 500f, X.DP)
-            val dimension = X.getCurrentAppResolution(context)
+            val dimension = SystemUtil.getRuntimeWindowSize(context)
             if (context.spanJustMore){
                 val occupiedWidth = viewModel.sideNavWidth
                 if (dimension.x - occupiedWidth >= dp480) res = R.layout.fragment_more_lm
@@ -104,6 +110,32 @@ class MoreFragment : TaggedFragment(), Democratic, View.OnClickListener, NavNode
             }
             true
         }
+        cardUnitManager.setOnLongClickListener {
+            val context = context ?: return@setOnLongClickListener true
+            lifecycleScope.launch(Dispatchers.Default) {
+                val displayInfo = DisplayInfo.getDisplaysAndInfo(context)
+                withContext(Dispatchers.Main) {
+                    showInfoDialog(context, displayInfo)
+                }
+            }
+            true
+        }
+    }
+
+    private fun showInfoDialog(context: Context, content: CharSequence) {
+        val view = TextView(context).apply {
+            text = content
+            textSize = 8f
+            val padding = X.size(context, 6f, X.DP).roundToInt()
+            alterPadding(start = padding, top = padding * 3, end = padding)
+        }
+        CollisionDialog(context, R.string.text_OK).apply {
+            setContent(0)
+            setTitleCollision(0, 0, 0)
+            setCustomContent(view)
+            decentHeight()
+            setListener { dismiss() }
+        }.show()
     }
 
     private fun prepareCards(vararg cards: CardView?){
