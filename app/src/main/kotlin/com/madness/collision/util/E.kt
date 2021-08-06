@@ -167,9 +167,12 @@ inline fun runnable(crossinline task: Runnable.() -> Unit) = object : Runnable {
 
 fun BottomSheetBehavior<*>.configure(context: Context) {
     val preservedHeight = X.size(context, 120f, X.DP).roundToInt()
-    val totalHeight = X.getCurrentAppResolution(context).y
+    val windowSize = SystemUtil.getRuntimeWindowSize(context)
+    val totalHeight = windowSize.y
     val heightLeft = totalHeight / 5
     peekHeight = totalHeight - (if (heightLeft >= preservedHeight) heightLeft else preservedHeight)
+    // set width to the largest
+    maxWidth = windowSize.x
 }
 
 fun Fragment.ensureAdded(containerId: Int, fragment: Fragment, isCommitNow: Boolean = false) {

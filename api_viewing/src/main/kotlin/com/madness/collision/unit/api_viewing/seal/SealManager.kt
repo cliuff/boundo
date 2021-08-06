@@ -137,7 +137,11 @@ object SealManager {
         }.run {
             val color = Color.parseColor("#$this")
             if (isAccent && !isForIllustration) return color
-            return if (mainApplication.isDarkTheme) ColorUtil.darkenAs(color, if (isForIllustration) 0.7f else 0.15f) else color
+            return when {
+                mainApplication.isPaleTheme -> color
+                mainApplication.isDarkTheme -> ColorUtil.darkenAs(color, if (isForIllustration) 0.7f else 0.15f)
+                else -> ColorUtil.darkenAs(color, if (isForIllustration) 0.9f else 0.55f)
+            }
         }
     }
 

@@ -99,7 +99,9 @@ internal class StatsAdapter(context: Context) : SandwichAdapter<StatsAdapter.Hol
         holder.version.dartFuture("Android $ver")
         holder.count.dartFuture(statsCount.toString())
 
-        holder.logoText.dartFuture(verInfo.api.toString())
+        // display a dot when API bigger than 99 (longer than 2 digits)
+        val logoText = if (verInfo.api > 99) "•" else verInfo.api.toString()
+        holder.logoText.dartFuture(logoText)
         disposeAPIInfo(verInfo, holder.logoText, holder.logoBack)
 
         SealManager.populate4Seal(context, verInfo.letter, itemLength)

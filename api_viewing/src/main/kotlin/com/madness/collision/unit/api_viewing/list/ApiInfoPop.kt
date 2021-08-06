@@ -156,7 +156,9 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
         super.onStart()
         val context = context ?: return
         val rootView = view ?: return
-        BottomSheetBehavior.from(rootView.parent as View).configure(context)
+        BottomSheetBehavior.from(rootView.parent as View).run {
+            configure(context)
+        }
     }
 
     override fun dismiss() {
