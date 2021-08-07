@@ -17,6 +17,9 @@
 package com.madness.collision.unit.api_viewing.util
 
 import android.content.res.Resources
+import android.util.Log
+import net.dongliu.apk.parser.ApkFile
+import net.dongliu.apk.parser.traverse.ApkTraverse
 import java.io.File
 import java.util.zip.ZipEntry
 import java.util.zip.ZipFile
@@ -89,6 +92,7 @@ object ApkUtil {
         val targetEntry = resources.getResourceEntryName(resId)
         val dirPrefix = "res/$type"
         val dirPattern = "${dirPrefix}(-[a-z\\d]+)*/"
+        val namePattern = "$dirPattern$targetEntry\\.((?!\\.).)+".toRegex()
         val resultList = mutableListOf<String>()
         readFile(file) { zip ->
             val iterator = zip.entries().iterator()
@@ -96,7 +100,6 @@ object ApkUtil {
                 val entry = iterator.next()
                 val name = entry.name
                 if (!name.startsWith(dirPrefix)) continue
-                val namePattern = "$dirPattern$targetEntry\\.((?!\\.).)+".toRegex()
                 if (!name.matches(namePattern)) continue
                 resultList.add(name)
             }
@@ -132,4 +135,79 @@ object ApkUtil {
             if (!operation.invoke(e)) break
         }
     }
+
+    fun getThirdPartyPkg(path: String, ownPkg: String): List<CharSequence> {
+        return getThirdPartyPkg(File(path), ownPkg)
+    }
+
+    fun getThirdPartyPkg(file: File, ownPkg: String, removeInternals: Boolean = true): List<CharSequence> {
+        return try {
+            ApkFile(file).use { apk ->
+                apk.dexClasses.asSequence().filter { it.isPublic }.map { it.packageName }
+                    .thirdPartyPkg(ownPkg, removeInternals).toList()
+            }
+        } catch (e: Throwable) { // may produce OutOfMemoryError
+            val eMsg = e::class.simpleName + ": " + e.message
+            val cause = e.cause?.message?.let { " BY $it" } ?: ""
+            val fileName = file.path.decentApkFileName
+            Log.w("av.util.ApkUtils", "$eMsg$cause ($ownPkg, $fileName)")
+            emptyList()
+        }
+    }
+
+    fun Sequence<CharSequence>.thirdPartyPkg(ownPkg: String, removeInternals: Boolean): Sequence<CharSequence> {
+        // more than one section: end with one character or plus a digit
+        val regexObfuscated = """.*\.\w\d?""".toRegex()
+        // only one section: no more than two characters, or one character plus a digit
+        val regexObfuscated1 = """\w[\w\d]?""".toRegex()
+        val regexR8Rewrite = """(j\$)((?:\..+)*)""".toRegex()
+        return filterNot { it.startsWith(ownPkg) } // packages of its own
+            .filterNot { it.matches(regexObfuscated) } // the obfuscated
+            .filterNot { it.matches(regexObfuscated1) } // the obfuscated
+            .run {
+                if (removeInternals) {
+                    val pKReflect = "kotlin.reflect.jvm.internal"
+                    map { if (it.startsWith(pKReflect)) pKReflect else it }
+                } else this
+            }
+            .distinct() // stateful
+            .map r8c@{
+                // return self if starts with j
+                if (it.firstOrNull() != 'j') return@r8c it
+                // convert R8 prefix rewrite of Java 8 APIs
+                it.replace(regexR8Rewrite) { s -> "java" + s.groupValues[2] }
+            }
+    }
+
+    fun checkPkg(path: String, packageName: String): Boolean {
+        return checkPkg(File(path), packageName)
+    }
+
+    fun checkPkg(file: File, packageName: String): Boolean {
+        return try {
+            ApkFile(file).use { apk ->
+                var isFound = false
+                ApkTraverse.traverseDexFiles(apk) { _, data ->
+                    isFound = data.packageName.startsWith(packageName)
+                    isFound.not()
+                }
+                isFound
+            }
+        } catch (e: Throwable) { // may produce OutOfMemoryError
+            val eMsg = e::class.simpleName + ": " + e.message
+            val cause = e.cause?.message?.let { " BY $it" } ?: ""
+            val fileName = file.path.decentApkFileName
+            Log.w("av.util.ApkUtils", "$eMsg$cause (check $packageName in $fileName)")
+            false
+        }
+    }
+
+    private val String.decentApkFileName: String
+        get() {
+            // index of last separator
+            val iM1 = lastIndexOf(File.separatorChar)
+            // index of second last separator
+            val iM2 = lastIndexOf(File.separatorChar, startIndex = kotlin.math.max(iM1, 1) - 1)
+            return substring(iM2 + 1)
+        }
 }

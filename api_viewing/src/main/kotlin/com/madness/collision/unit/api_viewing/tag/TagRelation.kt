@@ -44,6 +44,7 @@ internal class TagRelation(val value: Int) {
                     PackageTag.TAG_ID_RN to getCommonExpressing { it.nativeLibraries[5] },
                     PackageTag.TAG_ID_XAM to getCommonExpressing { it.nativeLibraries[6] },
                     PackageTag.TAG_ID_KOT to getCommonExpressing { it.nativeLibraries[7] },
+                    PackageTag.TAG_ID_X_CMP to getCommonExpressing { it.isJetpackComposed },
                     PackageTag.TAG_ID_64B to getCommonExpressing {
                         it.nativeLibraries.let { n -> (!n[0] || n[1]) && (!n[2] || n[3]) }
                     },

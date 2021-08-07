@@ -543,7 +543,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
             val tagIcons = listOf(
                 null, null,
                 MyR.drawable.ic_flutter_72, MyR.drawable.ic_react_72, MyR.drawable.ic_xamarin_72,
-                MyR.drawable.ic_kotlin_72, MyR.drawable.ic_64b_72,
+                MyR.drawable.ic_kotlin_72, MyR.drawable.ic_cmp_72, MyR.drawable.ic_64b_72,
                 null, null,
                 MyR.drawable.ic_hidden_72, MyR.drawable.ic_system_72, MyR.drawable.ic_aab_72,
                 MyR.drawable.ic_ai_72,

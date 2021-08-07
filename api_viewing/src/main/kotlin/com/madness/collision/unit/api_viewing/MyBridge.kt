@@ -19,16 +19,23 @@ package com.madness.collision.unit.api_viewing
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageInfo
+import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
 import androidx.core.content.edit
+import androidx.core.database.getFloatOrNull
+import androidx.core.database.getIntOrNull
+import androidx.core.database.getStringOrNull
 import androidx.fragment.app.Fragment
+import androidx.sqlite.db.SupportSQLiteQueryBuilder
 import com.madness.collision.misc.MiscApp
 import com.madness.collision.unit.Bridge
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.UpdatesProvider
+import com.madness.collision.unit.api_viewing.data.ApiViewingApp
+import com.madness.collision.unit.api_viewing.database.AppRoom
 import com.madness.collision.unit.api_viewing.seal.SealManager
 import com.madness.collision.unit.api_viewing.util.ApkRetriever
 import com.madness.collision.unit.api_viewing.util.PrefUtil
@@ -102,5 +109,55 @@ object MyBridge: Bridge() {
         val retriever = ApkRetriever(context)
         val file = retriever.toFile(uri) ?: return null
         return MiscApp.getPackageInfo(context, apkPath = file.path)
+    }
+
+    @Suppress("unused")
+    fun clearRoom(context: Context) {
+        AppRoom.getDatabase(context).clearAllTables()
+    }
+
+    @Suppress("unused")
+    fun getRoomInfo(context: Context): String {
+        val helper = AppRoom.getDatabase(context).openHelper
+        val iName = helper.databaseName ?: "Unknown Database"
+        helper.readableDatabase.run {
+            val peakQuery = SupportSQLiteQueryBuilder.builder(iName)
+                .orderBy(ApiViewingApp::updateTime.name + " DESC").limit("5").create()
+            val query = query(peakQuery)
+            val columns = query.columnNames.joinToString()
+            val records = query.readAll().joinToString(separator = "\n\n")
+            val iIntegrity = if (isDatabaseIntegrityOk) "OK" else "not OK"
+            val title = "$iName v$version (integrity $iIntegrity)"
+            val iDbs = attachedDbs.joinToString { "${it.first}(${it.second})" }
+            return "$title\nPath: $path\nDatabases: $iDbs\nColumns: $columns\n\n$records"
+        }
+    }
+
+    private fun Cursor.readAll(): List<String> = readDatabase(this)
+
+    private fun readDatabase(cursor: Cursor): List<String> {
+        val dataRows: MutableList<String> = ArrayList(cursor.count)
+        val columns = cursor.columnNames
+        val colIndexes = columns.map { cursor.getColumnIndex(it) }
+        while (cursor.moveToNext()) {
+            columns.mapIndexed { i, col ->
+                val index = colIndexes[i]
+                when (cursor.getType(index)) {
+                    Cursor.FIELD_TYPE_STRING -> cursor.getStringOrNull(index)
+                    Cursor.FIELD_TYPE_INTEGER -> cursor.getIntOrNull(index).toString()
+                    Cursor.FIELD_TYPE_FLOAT -> cursor.getFloatOrNull(index).toString()
+                    else -> "?"
+                }.let { "$col: $it" }
+            }.joinToString().let { dataRows.add(it) }
+        }
+        return dataRows
+    }
+
+    @Suppress("unused")
+    fun nukeAppRoom(context: Context): Boolean {
+        val room = AppRoom.getDatabase(context)
+        val name = room.openHelper.databaseName ?: return false
+        room.close()
+        return context.deleteDatabase(name)
     }
 }

@@ -48,6 +48,7 @@ import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_SP
 import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_SYS
 import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_X86
 import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_XAM
+import com.madness.collision.unit.api_viewing.tag.PackageTag.Companion.TAG_ID_X_CMP
 import com.madness.collision.unit.api_viewing.util.PrefUtil
 import com.madness.collision.util.ThemeUtil
 import com.madness.collision.util.X
@@ -61,6 +62,7 @@ internal object AppTag {
     private const val TAG_KEY_REACT_NATIVE = "rn"
     private const val TAG_KEY_Xamarin = "xam"
     private const val TAG_KEY_Kotlin = "kot"
+    private const val TAG_KEY_X_CMP = "xcm"
     private const val TAG_KEY_64B = "64b"
     private const val TAG_KEY_SYS = "sys"
     private const val TAG_KEY_HID = "hid"
@@ -89,12 +91,8 @@ internal object AppTag {
     private var shouldShowTagCrossPlatformReactNative = false
     private var shouldShowTagCrossPlatformXamarin = false
     private var shouldShowTagKotlin = false
-    private val shouldShowTagCrossPlatform: Boolean
-        get() = shouldShowTagCrossPlatformFlutter || shouldShowTagCrossPlatformReactNative || shouldShowTagCrossPlatformXamarin
     private var shouldShowTagNativeLibArm = false
     private var shouldShowTagNativeLibX86 = false
-    private val shouldShowTagNativeLib: Boolean
-        get() = shouldShowTagNativeLibArm || shouldShowTagNativeLibX86
 
     fun clearCache() {
         tagIcons.clear()
@@ -255,6 +253,9 @@ internal object AppTag {
         if (shouldShowTagKotlin || !isAntiedKot) {
             ensureTagIcon(context, TAG_KEY_Kotlin, R.drawable.ic_kotlin_72)
         }
+        if (isSelected(context, TAG_ID_X_CMP)) {
+            ensureTagIcon(context, TAG_KEY_X_CMP, R.drawable.ic_cmp_72)
+        }
 
         if (isSelected(context, TAG_ID_64B)) {
             ensureTagIcon(context, TAG_KEY_64B, R.drawable.ic_64b_72)
@@ -306,18 +307,13 @@ internal object AppTag {
      * prepare res for native lib tags
      */
     private fun ensureNativeLibs(context: Context, appInfo: ApiViewingApp) {
-        val isAntiedFlu = isAntied(context, TAG_ID_FLU)
-        val isAntiedRn = isAntied(context, TAG_ID_RN)
-        val isAntiedXam = isAntied(context, TAG_ID_XAM)
-        val isAntiedKot = isAntied(context, TAG_ID_KOT)
-        val state64B = displayingTags.getNonNull(context, TAG_ID_64B)
+        if (appInfo.isNativeLibrariesRetrieved) return
+        val nativeLibTags = listOf(
+            TAG_ID_FLU, TAG_ID_RN, TAG_ID_XAM, TAG_ID_KOT, TAG_ID_64B, TAG_ID_ARM, TAG_ID_X86,)
         // anti any one requires further look-up to confirm
-        val isAnyAntied = isAntiedFlu || isAntiedRn || isAntiedXam || isAntiedKot ||
-                state64B.isAntiSelected || isAntied(context, TAG_ID_ARM) || isAntied(context, TAG_ID_X86)
-        if (shouldShowTagCrossPlatform || shouldShowTagKotlin || state64B.isSelected || shouldShowTagNativeLib || isAnyAntied) {
-            if (!appInfo.isNativeLibrariesRetrieved) {
-                appInfo.retrieveNativeLibraries()
-            }
+        val re = nativeLibTags.any { displayingTags.getNonNull(context, it).isDeselected.not() }
+        if (re && !appInfo.isNativeLibrariesRetrieved) {
+            appInfo.retrieveNativeLibraries()
         }
     }
 
@@ -414,20 +410,26 @@ internal object AppTag {
         if ((shouldShowTagCrossPlatformXamarin || (!isAntiedXam && (isAntiedRn || isAntiedFlu))) && nls[6]) {
             container.inflateTag(context, "Xamarin", tagIcons[TAG_KEY_Xamarin])
         }
-        if (shouldShowTagKotlin && !isAntied(context, TAG_ID_KOT) && nls[7]) {
+
+        val funExpress: (tagId: Int) -> Boolean = ex@{
+            val tag = TagRelation.TAGS[it] ?: return@ex false
+            tag.toExpressible().setRes(context, appInfo).express()
+        }
+        if (shouldShowTagKotlin && funExpress(TAG_ID_KOT)) {
             container.inflateTag(context, "Kotlin", tagIcons[TAG_KEY_Kotlin])
         }
-        val state64B = displayingTags.getNonNull(context, TAG_ID_64B)
-        // todo remove anti check
-        if (state64B.isSelected && !state64B.isAntiSelected) {
-            val doInf = TagRelation.TAGS[TAG_ID_64B]?.toExpressible()?.setRes(context, appInfo)?.express()
-            if (doInf == true) container.inflateTag(context, R.string.av_settings_tag_64b, tagIcons[TAG_KEY_64B])
+        if (displayingTags.getNonNull(context, TAG_ID_X_CMP).isSelected && funExpress(TAG_ID_X_CMP)) {
+            container.inflateTag(context, R.string.av_settings_tag_x_cmp, tagIcons[TAG_KEY_X_CMP])
         }
-        if (shouldShowTagNativeLibArm && !isAntied(context, TAG_ID_ARM)) {
+        if (displayingTags.getNonNull(context, TAG_ID_64B).isSelected && funExpress(TAG_ID_64B)) {
+            container.inflateTag(context, R.string.av_settings_tag_64b, tagIcons[TAG_KEY_64B])
+        }
+
+        if (shouldShowTagNativeLibArm) {
             if (nls[0]) container.inflateTag(context, "ARM")
             if (nls[1]) container.inflateTag(context, "ARM 64")
         }
-        if (shouldShowTagNativeLibX86 && !isAntied(context, TAG_ID_X86)) {
+        if (shouldShowTagNativeLibX86) {
             if (nls[2]) container.inflateTag(context, "x86")
             if (nls[3]) container.inflateTag(context, "x64")
         }
@@ -494,9 +496,17 @@ internal object AppTag {
         }
     }
 
+    private fun ensureThirdPartyPackages(context: Context, app: ApiViewingApp) {
+        if (app.isThirdPartyPackagesRetrieved) return
+        if (displayingTags.getNonNull(context, TAG_ID_X_CMP).isDeselected.not()) {
+            app.retrieveThirdPartyPackages()
+        }
+    }
+
     fun ensureResources(context: Context, appInfo: ApiViewingApp): TagCheckerApp {
         ensureTagIcons(context)
         ensureNativeLibs(context, appInfo)
+        ensureThirdPartyPackages(context, appInfo)
         return TagCheckerApp(appInfo).apply {
             packageInfo = ensureServices(context, appInfo)
             installer = ensureInstaller(context, appInfo)
@@ -520,6 +530,7 @@ internal object AppTag {
         // tag inflating: whether to inflate tag.
         //     any item can be included in list but without any tag inflated
         ensureNativeLibs(context, app)
+        ensureThirdPartyPackages(context, app)
         val packageInfo = ensureServices(context, app)
         val checkerApp = if (packageInfo != null) TagCheckerApp(app).apply {
             this.packageInfo = packageInfo

@@ -58,4 +58,16 @@ object AccessAV: UnitAccess(Unit.UNIT_NAME_API_VIEWING) {
         return getMethod("resolveUri", Context::class, Uri::class).invoke(context, uri)
     }
 
+    fun clearRoom(context: Context) {
+        getMethod("clearRoom", Context::class).invoke(context)
+    }
+
+    fun getRoomInfo(context: Context): String {
+        return getMethod("getRoomInfo", Context::class).invoke(context) as String
+    }
+
+    fun nukeAppRoom(context: Context): Boolean {
+        return getMethod("nukeAppRoom", Context::class).invoke(context) as Boolean
+    }
+
 }

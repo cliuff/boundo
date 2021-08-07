@@ -28,7 +28,7 @@ object Versions {
     const val androidxCore = "1.5.0-rc01"
     const val androidxAppcompat = "1.1.0"
     const val androidxLifecycle = "2.3.1"
-    const val androidxRoom = "2.3.0-rc01"
+    const val androidxRoom = "2.4.0-alpha04"
     const val androidxNavigation = "2.3.5"
     const val androidxCoreTesting = "2.1.0"
     const val androidxFragment = "1.3.2"
@@ -79,9 +79,11 @@ object Versions {
     // Jetbrains annotations
     const val jbAnnotations = "20.1.0"
     const val androidDeviceNames = "2.0.0"
-    const val byteBuddy = "1.10.20"
+    const val byteBuddy = "1.11.12"
     const val androidDesugaring = "1.0.9"
     const val mockito = "3.9.0"
+    // for checking apk dex, archived since 2019.11
+    const val apkParser = "2.6.10"
 }
 
 class Dependencies : Plugin<Project> {
@@ -160,6 +162,7 @@ class Dependencies : Plugin<Project> {
         const val gglHilt = "com.google.dagger:hilt-android:${Versions.gglHilt}"
         const val gglHiltCompiler = "com.google.dagger:hilt-compiler:${Versions.gglHilt}"
         const val mockito = "org.mockito:mockito-android:${Versions.mockito}"
+        const val apkParser = "net.dongliu:apk-parser:${Versions.apkParser}"
 
         // wear
         const val androidxPercentLayout = "androidx.percentlayout:percentlayout:${Versions.androidxPercentLayout}"

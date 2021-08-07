@@ -31,7 +31,10 @@ import android.os.Parcelable
 import android.provider.Settings
 import androidx.core.content.ContextCompat
 import androidx.core.content.pm.PackageInfoCompat
-import androidx.room.*
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
 import com.madness.collision.R
 import com.madness.collision.misc.MiscApp
 import com.madness.collision.settings.SettingsFunc
@@ -82,6 +85,8 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
     var nativeLibraries: BooleanArray = BooleanArray(ApkUtil.NATIVE_LIB_SUPPORT_SIZE) { false }
     var isLaunchable = false
     lateinit var appPackage: AppPackage
+    @ColumnInfo(defaultValue = "-1")
+    var jetpackComposed: Int = -1
 
     @Ignore
     var icon: Bitmap? = null
@@ -113,6 +118,10 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
     @Ignore
     var iconRetrievingDetails: IconRetrievingDetails? = null
 
+    val isJetpackComposed: Boolean
+        get() = jetpackComposed == 1
+    val isThirdPartyPackagesRetrieved: Boolean
+        get() = jetpackComposed == 1 || jetpackComposed == 0
     val isArchive: Boolean
         get() = apiUnit == ApiUnit.APK
     val isNotArchive: Boolean
@@ -519,9 +528,38 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
         }
     }
 
-    open fun retrieveNativeLibraries() {
-        ApkUtil.getNativeLibSupport(appPackage).copyInto(nativeLibraries)
-        isNativeLibrariesRetrieved = true
+    fun retrieveThirdPartyPackages() {
+        if (isThirdPartyPackagesRetrieved) return
+        retrieveConsuming(1)
+    }
+
+    fun retrieveNativeLibraries() {
+        if (isNativeLibrariesRetrieved) return
+        retrieveConsuming(0)
+    }
+
+    open fun retrieveConsuming(target: Int) {
+        when (target) {
+            0 -> {
+                synchronized(nativeLibraries) {
+                    if (isNativeLibrariesRetrieved) return
+                    ApkUtil.getNativeLibSupport(appPackage).copyInto(nativeLibraries)
+                    isNativeLibrariesRetrieved = true
+                }
+            }
+            1 -> {
+                // ensure thread safety, otherwise encounter exceptions during app list loading
+                synchronized(jetpackComposed) {
+                    if (isThirdPartyPackagesRetrieved) return
+                    val checkResult = if (appPackage.hasSplits) {
+                        appPackage.apkPaths.any { ApkUtil.checkPkg(it, "androidx.compose") }
+                    } else {
+                        ApkUtil.checkPkg(appPackage.basePath, "androidx.compose")
+                    }
+                    jetpackComposed = if (checkResult) 1 else 0
+                }
+            }
+        }
     }
 
     fun storePage(name: String, direct: Boolean = true): Intent = when (name) {
@@ -598,6 +636,7 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
         iconRetrievingDetails = readParcelable(IconRetrievingDetails::class.java.classLoader)
         nativeLibraries = BooleanArray(ApkUtil.NATIVE_LIB_SUPPORT_SIZE) { false }
         for (i in nativeLibraries.indices) nativeLibraries[i] = readInt() == 1
+        jetpackComposed = readInt()
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) = dest.run {
@@ -614,8 +653,8 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
         writeString(minSDKDisplay)
         writeDouble(targetSDKDouble)
         writeDouble(minSDKDouble)
-        writeInt(targetSDKLetter.toInt())
-        writeInt(minSDKLetter.toInt())
+        writeInt(targetSDKLetter.code)
+        writeInt(minSDKLetter.code)
         writeInt(apiUnit)
         writeParcelable(appPackage, flags)
         writeLong(updateTime)
@@ -627,6 +666,7 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
         writeInt(if (isLaunchable) 1 else 0)
         writeParcelable(iconRetrievingDetails, flags)
         nativeLibraries.forEach { writeInt(if (it) 1 else 0) }
+        writeInt(jetpackComposed)
     }
 
     override fun describeContents(): Int {

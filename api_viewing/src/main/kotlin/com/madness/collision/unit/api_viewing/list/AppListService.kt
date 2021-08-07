@@ -39,6 +39,8 @@ import com.madness.collision.unit.api_viewing.Utils
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
+import com.madness.collision.unit.api_viewing.database.AppRoom
+import com.madness.collision.unit.api_viewing.util.ApkUtil
 import com.madness.collision.util.*
 import com.madness.collision.util.os.OsUtils
 import kotlinx.coroutines.CoroutineScope
@@ -51,6 +53,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.security.cert.CertificateException
 import javax.security.cert.X509Certificate
+import kotlin.math.roundToInt
 import com.madness.collision.unit.api_viewing.R as RAv
 
 internal class AppListService {
@@ -369,9 +372,21 @@ internal class AppListService {
             setListener { dismiss() }
             show()
         }
-        popActions.findViewById<View>(RAv.id.avAdapterActionsDetails).setOnClickListener {
+        val vDetails = popActions.findViewById<View>(RAv.id.avAdapterActionsDetails)
+        vDetails.setOnClickListener {
             popActions.dismiss()
             actionDetails(context, app, fragment.lifecycleScope)
+        }
+        // for debug use
+        vDetails.setOnLongClickListener {
+            popActions.dismiss()
+            fragment.lifecycleScope.launch(Dispatchers.Default) {
+                val content = actionThirdPartyPkg(app)
+                withContext(Dispatchers.Main) {
+                    dialogThirdPartyPkg(context, content)
+                }
+            }
+            true
         }
         val vActionOpen = popActions.findViewById<View>(RAv.id.avAdapterActionsOpen)
         if (app.isLaunchable) {
@@ -394,14 +409,64 @@ internal class AppListService {
         } else {
             vActionOpen.visibility = View.GONE
         }
-        popActions.findViewById<View>(RAv.id.avAdapterActionsIcon).setOnClickListener {
+        val vActionIcon = popActions.findViewById<View>(RAv.id.avAdapterActionsIcon)
+        vActionIcon.setOnClickListener {
             popActions.dismiss()
             actionIcon(context, app, fragment.childFragmentManager)
+        }
+        // for debug use
+        vActionIcon.setOnLongClickListener {
+            popActions.dismiss()
+            fragment.lifecycleScope.launch(Dispatchers.Default) {
+                val re = actionCheckPkg(app, "androidx.compose")
+                withContext(Dispatchers.Main) {
+                    dialogThirdPartyPkg(context, (if (!re) "Not " else "") + "Jetpack Composed")
+                }
+                // update record
+                app.jetpackComposed = if (re) 1 else 0
+                AppRoom.getDatabase(context).appDao().insert(app)
+            }
+            true
         }
         popActions.findViewById<View>(RAv.id.avAdapterActionsApk).setOnClickListener {
             popActions.dismiss()
             actionApk(context, app, fragment.lifecycleScope, fragment.childFragmentManager)
         }
+    }
+
+    private fun actionThirdPartyPkg(app: ApiViewingApp): CharSequence {
+        val appPackage = app.appPackage
+        val pkgList = if (appPackage.hasSplits) {
+            appPackage.apkPaths.flatMap { ApkUtil.getThirdPartyPkg(it, app.packageName) }
+        } else {
+            ApkUtil.getThirdPartyPkg(appPackage.basePath, app.packageName)
+        }
+        return pkgList.joinToString(separator = "\n")
+    }
+
+    private fun actionCheckPkg(app: ApiViewingApp, pkg: String): Boolean {
+        val appPackage = app.appPackage
+        return if (appPackage.hasSplits) {
+            appPackage.apkPaths.any { ApkUtil.checkPkg(it, pkg) }
+        } else {
+            ApkUtil.checkPkg(appPackage.basePath, pkg)
+        }
+    }
+
+    private fun dialogThirdPartyPkg(context: Context, content: CharSequence) {
+        val view = TextView(context).apply {
+            text = content
+            textSize = 8f
+            val padding = X.size(context, 6f, X.DP).roundToInt()
+            alterPadding(start = padding, top = padding * 3, end = padding)
+        }
+        CollisionDialog(context, R.string.text_OK).apply {
+            setContent(0)
+            setTitleCollision(0, 0, 0)
+            setCustomContent(view)
+            decentHeight()
+            setListener { dismiss() }
+        }.show()
     }
 
     private fun actionDetails(context: Context, appInfo: ApiViewingApp, scope: CoroutineScope)

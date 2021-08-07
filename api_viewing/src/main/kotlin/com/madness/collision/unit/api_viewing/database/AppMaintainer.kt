@@ -77,7 +77,7 @@ object AppMaintainer {
     }
 
     /**
-     * Update record after [ApiViewingApp.retrieveNativeLibraries] invocation.
+     * Update record after [ApiViewingApp.retrieveConsuming] invocation.
      * Somehow ByteBuddy proxy cannot be garbage collected, causing context leaks.
      * So, use with a lifecycle owner.
      */
@@ -104,7 +104,7 @@ object AppMaintainer {
                 context.getDir("generated", Context.MODE_PRIVATE))
         val dynamicType = ByteBuddy().with(TypeValidation.DISABLED)
                 .subclass(ApiViewingApp::class.java)
-                .method(ElementMatchers.named(ApiViewingApp::retrieveNativeLibraries.name))
+                .method(ElementMatchers.named(ApiViewingApp::retrieveConsuming.name))
                 .intercept(MethodDelegation.to(interceptor))
                 .make()
                 .load(javaClass.classLoader, strategy)

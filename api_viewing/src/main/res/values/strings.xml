@@ -115,4 +115,5 @@
     <string name="av_details_real_installer">"Real installer: "</string>
     <string name="av_upd_ver_upd">Version updated</string>
     <string name="av_upd_pck_upd">Package updated</string>
+    <string name="av_settings_tag_x_cmp" translatable="false">Jetpack Compose</string>
 </resources>

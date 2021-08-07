@@ -33,6 +33,7 @@ internal open class PackageTag(val id: Int, val expressing: (ExpressibleTag.(Con
         const val TAG_ID_RN = R.string.prefAvTagsValueCrossPlatformRn
         const val TAG_ID_XAM = R.string.prefAvTagsValueCrossPlatformXam
         const val TAG_ID_KOT = R.string.prefAvTagsValueKotlin
+        const val TAG_ID_X_CMP = R.string.prefAvTagsValueJetpackCompose
         const val TAG_ID_64B = R.string.prefAvTagsValue64Bit
         const val TAG_ID_ARM = R.string.prefAvTagsValueNativeLibArm
         const val TAG_ID_X86 = R.string.prefAvTagsValueNativeLibX86
@@ -54,11 +55,12 @@ internal open class PackageTag(val id: Int, val expressing: (ExpressibleTag.(Con
         const val TAG_ID_GTP = R.string.prefAvTagsValuePushGetui
 
         val TAG_IDS = arrayOf(
-                TAG_ID_GP, TAG_ID_PI, TAG_ID_FLU, TAG_ID_RN, TAG_ID_XAM,
-                TAG_ID_KOT, TAG_ID_64B, TAG_ID_ARM, TAG_ID_X86, TAG_ID_HID,
-                TAG_ID_SYS, TAG_ID_SPL, TAG_ID_AI, TAG_ID_FCM, TAG_ID_HWP,
-                TAG_ID_MIP, TAG_ID_MZP, TAG_ID_OOP, TAG_ID_VVP, TAG_ID_J_P,
-                TAG_ID_U_P, TAG_ID_TCP, TAG_ID_ALP, TAG_ID_DUP, TAG_ID_GTP
+            TAG_ID_GP, TAG_ID_PI, TAG_ID_FLU, TAG_ID_RN, TAG_ID_XAM,
+            TAG_ID_KOT, TAG_ID_X_CMP, TAG_ID_64B, TAG_ID_ARM, TAG_ID_X86,
+            TAG_ID_HID, TAG_ID_SYS, TAG_ID_SPL, TAG_ID_AI, TAG_ID_FCM,
+            TAG_ID_HWP, TAG_ID_MIP, TAG_ID_MZP, TAG_ID_OOP, TAG_ID_VVP,
+            TAG_ID_J_P, TAG_ID_U_P, TAG_ID_TCP, TAG_ID_ALP, TAG_ID_DUP,
+            TAG_ID_GTP,
         )
     }
 

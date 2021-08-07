@@ -18,6 +18,7 @@ package com.madness.collision.main.more
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -28,12 +29,14 @@ import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
 import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.main.ImmortalActivity
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.settings.SettingsFunc
+import com.madness.collision.unit.api_viewing.AccessAV
 import com.madness.collision.util.*
 import com.madness.collision.util.AppUtils.asBottomMargin
 import kotlinx.coroutines.Dispatchers
@@ -104,22 +107,84 @@ class MoreFragment : TaggedFragment(), Democratic, View.OnClickListener, NavNode
         val cardUnitManager = mViews.findViewById<MaterialCardView>(R.id.moreUnitsManager)
         prepareCards(cardInstant, cardSettings, cardUnitManager)
         cardSettings.setOnLongClickListener {
-            Intent(context, ImmortalActivity::class.java).run {
-                putExtra(P.IMMORTAL_EXTRA_LAUNCH_MODE, P.IMMORTAL_EXTRA_LAUNCH_MODE_MORTAL)
-                startActivity(this)
-            }
+            val context = context ?: return@setOnLongClickListener true
+            showDevOptions(context)
             true
         }
-        cardUnitManager.setOnLongClickListener {
-            val context = context ?: return@setOnLongClickListener true
+    }
+
+    private val devOptions: List<Pair<String, (Context) -> Unit>> = listOf(
+        "Immortal" to { context ->
+            val intent = Intent(context, ImmortalActivity::class.java).apply {
+                putExtra(P.IMMORTAL_EXTRA_LAUNCH_MODE, P.IMMORTAL_EXTRA_LAUNCH_MODE_MORTAL)
+            }
+            startActivity(intent)
+        },
+        "Display info" to { context ->
             lifecycleScope.launch(Dispatchers.Default) {
                 val displayInfo = DisplayInfo.getDisplaysAndInfo(context)
                 withContext(Dispatchers.Main) {
                     showInfoDialog(context, displayInfo)
                 }
             }
-            true
+        },
+        "App Room info" to { context ->
+            lifecycleScope.launch(Dispatchers.Default) {
+                val roomInfo = AccessAV.getRoomInfo(context)
+                withContext(Dispatchers.Main) {
+                    showInfoDialog(context, roomInfo)
+                }
+            }
+        },
+        "Clean App Room" to { context ->
+            lifecycleScope.launch(Dispatchers.Default) {
+                AccessAV.clearRoom(context)
+                withContext(Dispatchers.Main) {
+                    notifyBriefly(R.string.text_done)
+                }
+            }
+        },
+        "Nuke App Room" to { context ->
+            lifecycleScope.launch(Dispatchers.Default) {
+                val re = AccessAV.nukeAppRoom(context)
+                withContext(Dispatchers.Main) {
+                    notifyBriefly(if (re) R.string.text_done else R.string.text_error)
+                }
+            }
+        },
+    )
+
+    private fun showDevOptions(context: Context) {
+        val customContent = LinearLayout(context).apply {
+            orientation = LinearLayout.VERTICAL
         }
+        val pop = CollisionDialog(context, R.string.text_OK).apply {
+            setContent(0)
+            setTitleCollision(0, 0, 0)
+            setCustomContentMere(customContent)
+            setListener { dismiss() }
+        }
+        val marginHor = X.size(context, 20f, X.DP).roundToInt()
+        val marginVer = X.size(context, 4f, X.DP).roundToInt()
+        val btnTint = ThemeUtil.getColor(context, R.attr.colorAItem).let { ColorStateList.valueOf(it) }
+        val btnTextColor = ThemeUtil.getColor(context, R.attr.colorAOnItem).let { ColorStateList.valueOf(it) }
+        devOptions.forEach { (title, click) ->
+            val btn = MaterialButton(context).apply {
+                text = title
+                setTextColor(btnTextColor)
+                backgroundTintList = btnTint
+                isAllCaps = false
+                setOnClickListener {
+                    pop.dismiss()
+                    click(context)
+                }
+            }
+            customContent.addView(btn)
+            btn.alterMargin(start = marginHor, top = marginVer, end = marginHor, bottom = marginVer)
+        }
+        customContent.alterPadding(top = marginHor)
+        pop.decentHeight()
+        pop.show()
     }
 
     private fun showInfoDialog(context: Context, content: CharSequence) {
