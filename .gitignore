@@ -95,3 +95,4 @@ lint/tmp/
 /custom.properties
 .idea/shelf
 !**/resources/**/*.apk
+subproject

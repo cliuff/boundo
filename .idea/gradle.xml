@@ -15,11 +15,10 @@
             </builds>
           </compositeBuild>
         </compositeConfiguration>
-        <option name="delegatedBuild" value="false" />
         <option name="testRunner" value="GRADLE" />
-        <option name="disableWrapperSourceDistributionNotification" value="true" />
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleJvm" value="11" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
@@ -27,6 +26,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/dependencyPlugin" />
             <option value="$PROJECT_DIR$/school_timetable" />
+            <option value="$PROJECT_DIR$/subproject/apk-parser" />
             <option value="$PROJECT_DIR$/wearable" />
           </set>
         </option>

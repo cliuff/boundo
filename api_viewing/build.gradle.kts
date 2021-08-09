@@ -94,7 +94,8 @@ dependencies {
             Dependencies.mpChart,
             Dependencies.openCsv,
             Dependencies.androidDeviceNames,
-            Dependencies.byteBuddy
+            Dependencies.byteBuddy,
+            project(":apk-parser"),
     ).forEach { implementation(it) }
     Dependencies.dynamicFeatureBasics.forEach { implementation(it) }
 
