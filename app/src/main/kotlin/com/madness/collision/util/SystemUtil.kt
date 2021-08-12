@@ -257,12 +257,10 @@ object SystemUtil {
             }
         }
         val size = Point()
-        getDisplay(context)?.getRealSizeLegacy(size)
+        @Suppress("DEPRECATION")
+        getDisplay(context)?.getRealSize(size)
         return size
     }
-
-    @Suppress("deprecation")
-    private fun Display.getRealSizeLegacy(size: Point) = getRealSize(size)
 
     fun getRuntimeWindowSize(context: Context): Point {
         if (OsUtils.satisfy(OsUtils.R)) {
@@ -273,12 +271,10 @@ object SystemUtil {
         }
         val size = Point()
         // get display with activity context to get window size
-        getDisplay(context)?.getSizeLegacy(size)
+        @Suppress("DEPRECATION")
+        getDisplay(context)?.getSize(size)
         return size
     }
-
-    @Suppress("deprecation")
-    private fun Display.getSizeLegacy(size: Point) = getSize(size)
 
     /**
      * Language settings in system

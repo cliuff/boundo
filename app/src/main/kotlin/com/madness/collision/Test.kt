@@ -35,6 +35,7 @@ object Test {
         if (PermissionUtils.isUsageAccessPermitted(context)) getForegroundApp(context)
     }
 
+    // need PACKAGE_USAGE_STATS permission
     fun getForegroundApp(context: Context): String {
         val time = System.currentTimeMillis()
         val manager: UsageStatsManager = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager

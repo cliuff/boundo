@@ -42,14 +42,16 @@
         android:required="false" />
 -->
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- check update from CoolApk -->
+<!--    <uses-permission android:name="android.permission.INTERNET" />-->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
-    <uses-permission
-        android:name="android.permission.PACKAGE_USAGE_STATS"
-        tools:ignore="ProtectedPermissions" />
+    <!-- get foreground app -->
+<!--    <uses-permission-->
+<!--        android:name="android.permission.PACKAGE_USAGE_STATS"-->
+<!--        tools:ignore="ProtectedPermissions" />-->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <!-- <uses-permission android:name="android.permission.READ_CALENDAR" /> -->
     <!-- <uses-permission android:name="android.permission.WRITE_CALENDAR" /> -->
@@ -66,6 +68,10 @@
     <!-- to perform a scan of nearby companion devices on behalf of your app -->
     <!-- without requiring the location permission -->
     <!--<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />-->
+    <!-- workaround to remove READ_PHONE_STATE permission, which is added by some unknown dependency -->
+    <uses-permission
+        android:name="android.permission.READ_PHONE_STATE"
+        tools:node="remove" />
 
     <queries>
         <!-- check if WeChat is installed for WeChat barcode scanner -->

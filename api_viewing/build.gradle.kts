@@ -81,43 +81,40 @@ repositories {
 }
 
 dependencies {
-    coreLibraryDesugaring(Dependencies.androidDesugaring)
-    listOf(
-            fileTree(Dependencies.fileTreeValue),
+    Dependencies.run {
+        coreLibraryDesugaring(androidDesugaring)
+        listOf(
+            fileTree(fileTreeValue),
             project(":app"),
-            Dependencies.androidxDocumentFile,
-            Dependencies.androidxSwipeRefreshLayout,
-            Dependencies.androidxRecyclerView,
-            Dependencies.androidxPreference,
-            Dependencies.androidxRoom,
-            Dependencies.androidxRoomRuntime,
-            Dependencies.mpChart,
-            Dependencies.openCsv,
-            Dependencies.androidDeviceNames,
-            Dependencies.byteBuddy,
+            androidxDocumentFile,
+            androidxSwipeRefreshLayout,
+            androidxRecyclerView,
+            androidxPreference,
+            androidxRoom,
+            androidxRoomRuntime,
+            mpChart,
+            openCsv,
+            androidDeviceNames,
+            byteBuddy,
             project(":apk-parser"),
-    ).forEach { implementation(it) }
-    Dependencies.dynamicFeatureBasics.forEach { implementation(it) }
+        ).forEach { implementation(it) }
+        dynamicFeatureBasics.forEach { implementation(it) }
 
-    listOf(
-            Dependencies.mockito,
-            Dependencies.googleTruth,
-            Dependencies.googleTruthExtensions,
-            Dependencies.junit4
-    ).forEach { testImplementation(it) }
+        listOf(mockito, googleTruth, googleTruthExtensions, junit4).forEach { testImplementation(it) }
 
-    listOf(
-            Dependencies.androidxTestCore,
-            Dependencies.androidxTestRunner,
-            Dependencies.androidxTestExtJunit,
-            Dependencies.androidxTestEspresso,
-            Dependencies.androidxCoreTesting,
-            Dependencies.androidxRoomTesting,
-            Dependencies.mockito,
-            Dependencies.googleTruth,
-            Dependencies.googleTruthExtensions,
-            Dependencies.junit4
-    ).forEach { androidTestImplementation(it) }
+        listOf(
+            androidxTestCore,
+            androidxTestRunner,
+            androidxTestExtJunit,
+            androidxTestEspresso,
+            androidxCoreTesting,
+            androidxRoomTesting,
+            mockito,
+            googleTruth,
+            googleTruthExtensions,
+            junit4
+        ).forEach { androidTestImplementation(it) }
 
-    kapt(Dependencies.androidxRoomCompiler)
+        kapt(androidxRoomCompiler)
+    }
 }

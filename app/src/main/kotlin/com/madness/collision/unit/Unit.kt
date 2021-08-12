@@ -107,9 +107,10 @@ abstract class Unit: TaggedFragment(), Democratic {
                 installedUnits: List<String> = getInstalledUnits(context!!),
                 frequencies: Map<String, Int> = getFrequencies(context!!)
         ): List<String> {
-            return frequencies.toList().filter { installedUnits.contains(it.first) }
-                    .plus(installedUnits.filter { !frequencies.containsKey(it) }.map { it to 0 })
-                    .sortedByDescending { it.second }.map { it.first }
+            return installedUnits // small
+                .map { it to (frequencies[it] ?: 0) }
+                .sortedByDescending { it.second } // stateful
+                .map { it.first } // few
         }
 
         fun getFrequencies(context: Context,

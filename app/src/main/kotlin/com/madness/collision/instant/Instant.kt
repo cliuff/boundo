@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,9 @@ import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
 import androidx.annotation.RequiresApi
-import com.madness.collision.util.X
+import com.madness.collision.util.os.OsUtils
 
-@RequiresApi(X.N_MR1)
+@RequiresApi(OsUtils.N_MR1)
 class Instant(private val context: Context, private val manager: ShortcutManager? = null) {
 
     val dynamicShortcuts: List<ShortcutInfo>
@@ -46,14 +46,13 @@ class Instant(private val context: Context, private val manager: ShortcutManager
     fun addDynamicShortcuts(vararg ids: String){
         if (ids.isEmpty()) return
         manager ?: return
-        val shortcuts: MutableList<ShortcutInfo> = mutableListOf()
-        ids.forEach { shortcuts.add(buildShortcut(it)) }
+        val shortcuts = ids.map { buildShortcut(it) } // small, few
         manager.addDynamicShortcuts(shortcuts)
     }
 
     fun pinShortcut(id: String) {
         if (id.isEmpty()) return
-        if (X.aboveOn(X.O) && manager != null && manager.isRequestPinShortcutSupported) {
+        if (OsUtils.satisfy(OsUtils.O) && manager != null && manager.isRequestPinShortcutSupported) {
             manager.requestPinShortcut(buildShortcut(id), null)
         } else {
             InstantCompat.pinShortcutLegacy(context, id)
@@ -69,10 +68,10 @@ class Instant(private val context: Context, private val manager: ShortcutManager
     /**
      * Rebuild all the dynamic shortcuts and update.
      */
-    fun refreshAllDynamicShortcuts() = mutableListOf<ShortcutInfo>().run {
-        manager ?: return@run
-        dynamicShortcuts.forEach { add(buildShortcut(it.id)) }
-        manager.updateShortcuts(this)
+    fun refreshAllDynamicShortcuts() {
+        manager ?: return
+        val shortcuts = dynamicShortcuts.map { buildShortcut(it.id) } // small, few
+        manager.updateShortcuts(shortcuts)
     }
 
     /**
@@ -82,11 +81,11 @@ class Instant(private val context: Context, private val manager: ShortcutManager
      */
     fun refreshDynamicShortcuts(vararg ids: String) {
         manager ?: return
-        val shortcuts = mutableListOf<ShortcutInfo>()
         // below: get all ids that can be found in the present dynamic shortcuts then rebuild them
-        ids.toList().let { idList ->
-            dynamicShortcuts.filter { idList.contains(it.id) }.map { it.id }
-        }.forEach { shortcuts.add(buildShortcut(it)) }
+        val shortcuts = dynamicShortcuts // small
+            .map { it.id }
+            .intersect(ids.toList()) // stateful, small
+            .map { buildShortcut(it) } // few
         manager.updateShortcuts(shortcuts)
     }
 }

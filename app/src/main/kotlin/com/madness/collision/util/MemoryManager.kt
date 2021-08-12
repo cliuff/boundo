@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 
 package com.madness.collision.util
 
+import android.app.ActivityManager
+import android.content.Context
 import androidx.activity.ComponentActivity
 import com.madness.collision.unit.api_viewing.AccessAV
 
@@ -30,4 +32,19 @@ object MemoryManager {
         if (activity == null) return
         AccessAV.clearApps(activity)
     }
+
+    fun requireMemoryIntensive(context: Context, block: () -> Unit) {
+        if (context.availableMemory.lowMemory.not()) block()
+    }
+
+    // Get a MemoryInfo object for the device's current memory status.
+    fun getAvailableMemory(context: Context): ActivityManager.MemoryInfo {
+        val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        return ActivityManager.MemoryInfo().also {
+            activityManager.getMemoryInfo(it)
+        }
+    }
 }
+
+val Context.availableMemory: ActivityManager.MemoryInfo
+    get() = MemoryManager.getAvailableMemory(this)

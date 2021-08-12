@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -157,6 +157,7 @@ internal class SettingsFragment : TaggedFragment(), Democratic, NavNode {
         }
     }
 
+    // check update from CoolApk, not used now, need INTERNET permission
     private fun checkUpdate(context: Context){
         val activity = activity ?: return
         val bar = ProgressBar(context)
