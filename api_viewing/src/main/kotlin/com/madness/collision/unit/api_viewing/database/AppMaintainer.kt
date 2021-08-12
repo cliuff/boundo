@@ -22,15 +22,6 @@ import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import net.bytebuddy.ByteBuddy
-import net.bytebuddy.android.AndroidClassLoadingStrategy
-import net.bytebuddy.dynamic.scaffold.TypeValidation
-import net.bytebuddy.implementation.MethodDelegation
-import net.bytebuddy.implementation.bind.annotation.RuntimeType
-import net.bytebuddy.implementation.bind.annotation.SuperCall
-import net.bytebuddy.implementation.bind.annotation.This
-import net.bytebuddy.matcher.ElementMatchers
-import java.util.concurrent.Callable
 import java.util.concurrent.atomic.AtomicReference
 
 
@@ -38,17 +29,6 @@ import java.util.concurrent.atomic.AtomicReference
  * [ApiViewingApp] proxy to update database record
  */
 object AppMaintainer {
-
-    open class BaseInterceptor : Cloneable {
-        public override fun clone(): Any {
-            return super.clone()
-        }
-    }
-
-    abstract class Interceptor : BaseInterceptor() {
-        @RuntimeType
-        abstract fun intercept(@This proxy: Any, @SuperCall superCall: Callable<*>): Any?
-    }
 
     fun registerCleaner(lifecycleOwner: LifecycleOwner, block: () -> Unit) {
         lifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
@@ -82,33 +62,6 @@ object AppMaintainer {
      * So, use with a lifecycle owner.
      */
     private fun get(context: Context, daoGetter: () -> AppDao?, scopeGetter: () -> CoroutineScope?): ApiViewingApp {
-        val interceptor = object : Interceptor() {
-            @RuntimeType
-            override fun intercept(@This proxy: Any, @SuperCall superCall: Callable<*>): Any? {
-                return try {
-                    superCall.call().also {
-                        if (proxy !is ApiViewingApp) return@also
-                        val dao = daoGetter.invoke() ?: return@also
-                        // update asynchronously
-                        scopeGetter.invoke()?.launch(Dispatchers.Default) {
-                            dao.insert(proxy)
-                        }
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    null
-                }
-            }
-        }
-        val strategy = AndroidClassLoadingStrategy.Wrapping(
-                context.getDir("generated", Context.MODE_PRIVATE))
-        val dynamicType = ByteBuddy().with(TypeValidation.DISABLED)
-                .subclass(ApiViewingApp::class.java)
-                .method(ElementMatchers.named(ApiViewingApp::retrieveConsuming.name))
-                .intercept(MethodDelegation.to(interceptor))
-                .make()
-                .load(javaClass.classLoader, strategy)
-                .loaded
-        return dynamicType.newInstance() as ApiViewingApp
+        return MaintainedApp(daoGetter, scopeGetter)
     }
 }
