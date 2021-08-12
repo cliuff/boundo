@@ -94,4 +94,6 @@
     <string name="av_upd_new">Недавно установлен</string>
     <string name="av_upd_upg">Обновление API</string>
     <string name="av_details_real_installer">"Настоящий установщик: "</string>
+    <string name="av_upd_ver_upd">Версия обновлена</string>
+    <string name="av_upd_pck_upd">Пакет обновлен</string>
 </resources>

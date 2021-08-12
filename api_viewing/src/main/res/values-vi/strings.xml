@@ -94,4 +94,6 @@
     <string name="av_upd_new">Mới được cài đặt</string>
     <string name="av_upd_upg">Nâng cấp API</string>
     <string name="av_details_real_installer">"Trình cài đặt thực: "</string>
+    <string name="av_upd_ver_upd">Đã cập nhật phiên bản</string>
+    <string name="av_upd_pck_upd">Đã cập nhật gói</string>
 </resources>

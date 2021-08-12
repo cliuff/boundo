@@ -267,4 +267,6 @@
     <string name="im_edit_height">Υψος</string>
     <string name="im_image_select">Επιλέξτε εικόνα</string>
     <string name="im_toast_finish">Αποθηκεύτηκε στη συλλογή</string>
+    <string name="unit_man_disabled">άτομα με ειδικές ανάγκες</string>
+    <string name="unit_man_dynamic_feature">Δυναμική λειτουργία</string>
 </resources>

@@ -1,10 +1,13 @@
 # Boundo
 
 **Requirements**
-- Android Studio 4.1
-- Gradle 6.7.1
+- Android Studio Arctic Fox
+- Gradle 7.1.1
+- Java 11
 
 **After Git check-out**
+- Clone project `Apk Parser` from (https://github.com/cliuff/apk-parser.git) into `subproject`, 
+  resulting in `ROOT_DIR/subproject/apk-parser`
 - Copy the file named `custom.properties.template` in project root directory and rename it to `custom.properties`
 - Make necessary changes to `custom.properties`
 
@@ -19,3 +22,8 @@
     - Open **Build Variants** tool window
     - Change the **Active Build Variant** of module **boundo.app** to **fullDebug**
     - Change the **Active Build Variant** of module **boundo.wearable** to **fullDebug**
+
+**Attention**
+- As a standalone project, `apk-parser` may need to be built independently after code changes in that module,  
+  by clicking window menu item "Build" -> "Make module boundo.apk-parser",
+  otherwise changes may not take effect immediately.

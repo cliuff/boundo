@@ -94,4 +94,6 @@
     <string name="av_upd_new">Nouvellement installé</string>
     <string name="av_upd_upg">Mise à niveau de l\'API</string>
     <string name="av_details_real_installer">"Vrai installateur: "</string>
+    <string name="av_upd_ver_upd">Version mise à jour</string>
+    <string name="av_upd_pck_upd">Paquet mis à jour</string>
 </resources>

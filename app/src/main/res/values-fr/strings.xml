@@ -266,4 +266,6 @@
     <string name="im_edit_height">Hauteur</string>
     <string name="im_image_select">Sélectionnez une image</string>
     <string name="im_toast_finish">Enregistré dans la galerie</string>
+    <string name="unit_man_disabled">Désactivée</string>
+    <string name="unit_man_dynamic_feature">Fonction dynamique</string>
 </resources>

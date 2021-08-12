@@ -2,6 +2,209 @@
 Tag content regex: \n((((?!(<.*>)).)*)\n)*((?!(<.*>)).)+
 
 
+- **3.7.6** 21081315
+<en-US>
+App API:
+• New tag: Jetpack Compose.
+• Added tag icons in "tag filter" dialog.
+• New "version update" and "package update" sections in "updates" page.
+App:
+• Enable app to run on TVs.
+• Redesigned "Unit Manager".
+• Removed features: "WeChat Shortcut", "Private Pics", "CoolApk App Info" and "QQ Contact Shortcut".
+• Removed Android 10 requirement to follow system dark theme.
+</en-US>
+<ar>
+واجهة برمجة تطبيقات التطبيق:
+• علامة جديدة: Jetpack Compose.
+• تمت إضافة رموز العلامات في مربع حوار "مرشح العلامات".
+• قسمي "تحديث الإصدار" الجديد و "تحديث الحزمة" في صفحة "التحديثات".
+برنامج:
+• تمكين التطبيق للتشغيل على أجهزة التلفزيون.
+• إعادة تصميم "مدير الوحدة".
+• الميزات التي تمت إزالتها: "WeChat Shortcut" و "Private Pics" و "CoolApk App Info" و "QQ Contact Shortcut".
+• تمت إزالة متطلبات Android 10 لمتابعة المظهر الداكن للنظام.
+</ar>
+<de-DE>
+App-API:
+• Neues Tag: Jetpack Compose.
+• Tag-Symbole im Dialog "Tag-Filter" hinzugefügt.
+• Neue Abschnitte "Versions-Update" und "Paket-Update" auf der Seite "Updates".
+App:
+• Aktivieren Sie die Ausführung der App auf Fernsehern.
+• Neu gestalteter „Einheitenmanager“.
+• Entfernte Funktionen: „WeChat Shortcut“, „Private Pics“, „CoolApk App Info“ und „QQ Contact Shortcut“.
+• Android 10-Anforderung entfernt, um dem dunklen Thema des Systems zu folgen.
+</de-DE>
+<el-GR>
+• Νέα ετικέτα στο API εφαρμογής: Jetpack Compose.
+• Ενεργοποιήστε την εφαρμογή για εκτέλεση σε τηλεοράσεις.
+• Επανασχεδιασμός "Unit Manager".
+• Αφαιρέθηκαν χαρακτηριστικά: "Συντομεύσεις WeChat", "Ιδιωτικές φωτογραφίες", "Πληροφορίες εφαρμογής CoolApk" και "Συντόμευση επαφής QQ".
+• Καταργήθηκε η απαίτηση Android 10 για παρακολούθηση του σκοτεινού θέματος του συστήματος.
+</el-GR>
+<en-GB>
+App API:
+• New tag: Jetpack Compose.
+• Added tag icons in "tag filter" dialog.
+• New "version update" and "package update" sections in "updates" page.
+App:
+• Enable app to run on TVs.
+• Redesigned "Unit Manager".
+• Removed features: "WeChat Shortcut", "Private Pics", "CoolApk App Info" and "QQ Contact Shortcut".
+• Removed Android 10 requirement to follow system dark theme.
+</en-GB>
+<es-419>
+• Nueva etiqueta en la API de la aplicación: Jetpack Compose.
+• Habilite la aplicación para que se ejecute en televisores.
+• Rediseñado "Unit Manager".
+• Funciones eliminadas: "Acceso directo de WeChat", "Fotos privadas", "Información de la aplicación CoolApk" y "Acceso directo de contacto de QQ".
+• Se eliminó el requisito de Android 10 para seguir el tema oscuro del sistema.
+</es-419>
+<es-ES>
+• Nueva etiqueta en la API de la aplicación: Jetpack Compose.
+• Habilite la aplicación para que se ejecute en televisores.
+• Rediseñado "Unit Manager".
+• Funciones eliminadas: "Acceso directo de WeChat", "Fotos privadas", "Información de la aplicación CoolApk" y "Acceso directo de contacto de QQ".
+• Se eliminó el requisito de Android 10 para seguir el tema oscuro del sistema.
+</es-ES>
+<es-US>
+• Nueva etiqueta en la API de la aplicación: Jetpack Compose.
+• Habilite la aplicación para que se ejecute en televisores.
+• Rediseñado "Unit Manager".
+• Funciones eliminadas: "Acceso directo de WeChat", "Fotos privadas", "Información de la aplicación CoolApk" y "Acceso directo de contacto de QQ".
+• Se eliminó el requisito de Android 10 para seguir el tema oscuro del sistema.
+</es-US>
+<fr-FR>
+• Nouvelle balise dans App API : Jetpack Compose.
+• Autoriser l'application à s'exécuter sur les téléviseurs.
+• "Gestionnaire d'unités" repensé.
+• Fonctionnalités supprimées : « Raccourci WeChat », « Photos privées », « Infos sur l'application CoolApk » et « Raccourci de contact QQ ».
+• Suppression de l'exigence Android 10 pour suivre le thème sombre du système.
+</fr-FR>
+<it-IT>
+API dell'app:
+• Nuovo tag: Jetpack Compose.
+• Aggiunte icone di tag nella finestra di dialogo "filtro tag".
+• Nuove sezioni "aggiornamento versione" e "aggiornamento pacchetto" nella pagina "aggiornamenti".
+Applicazione:
+• Abilita l'esecuzione dell'app sui televisori.
+• "Responsabile unità" riprogettato.
+• Funzionalità rimosse: "WeChat Shortcut", "Private Pics", "CoolApk App Info" e "QQ Contact Shortcut".
+• Rimosso il requisito di Android 10 per seguire il tema scuro del sistema.
+</it-IT>
+<ja-JP>
+アプリケーションAPI：
+•新しいラベル：Jetpack Compose
+•[タグフィルター]ダイアログにアイコンを表示する
+•「アップデート」ページに「バージョンアップデート」と「パッケージアップデート」を追加しました
+アプリ：
+•AndroidTVでの実行をサポート
+•再設計された「モジュール管理」
+•削除機能：「WeChatショートカット」、「プライベート画像の非表示」、「Kuanソフトウェアの詳細」、「QQフレンズショートカット」
+•システムのダークモードに従うと、Android10は不要になります
+</ja-JP>
+<ko-KR>
+애플리케이션 API:
+• 새 레이블: Jetpack Compose
+• "태그 필터" 대화창에 아이콘 표시
+• "업데이트" 페이지에 "버전 업데이트" 및 "패키지 업데이트" 추가
+앱:
+• Android TV에서 실행 지원
+• 재설계된 "모듈 관리"
+• 제거 기능: "WeChat 바로가기", "비공개 사진 숨기기", "관 소프트웨어 세부 정보" 및 "QQ 친구 바로 가기"
+• 더 이상 Android 10이 필요하지 않은 시스템 다크 모드 따르기
+</ko-KR>
+<pt-PT>
+API do aplicativo:
+• Nova tag: Jetpack Compose.
+• Adicionados ícones de marca na caixa de diálogo "filtro de marca".
+• Novas seções de "atualização de versão" e "atualização de pacote" na página "atualizações".
+Aplicativo:
+• Habilite o aplicativo para rodar em TVs.
+• Redesenhado "Gerente de Unidade".
+• Recursos removidos: "Atalho WeChat", "Fotos privadas", "Informações do aplicativo CoolApk" e "Atalho de contato QQ".
+• Remoção do requisito do Android 10 para seguir o tema escuro do sistema.
+</pt-PT>
+<ru-RU>
+API приложения:
+• Новый тег: Jetpack Compose.
+• Добавлены значки тегов в диалоге «Фильтр тегов».
+• Новые разделы «обновление версии» и «обновление пакета» на странице «обновления».
+Приложение:
+• Разрешить запуск приложения на телевизорах.
+• Переделан «Менеджер подразделения».
+• Удалены функции: «Ярлык WeChat», «Частные фотографии», «Информация о приложении CoolApk» и «Ярлык контактов QQ».
+• Удалено требование Android 10 следовать системной темной теме.
+</ru-RU>
+<th>
+แอพ API:
+• แท็กใหม่: Jetpack Compose
+• เพิ่มไอคอนแท็กในกล่องโต้ตอบ "ตัวกรองแท็ก"
+• ส่วน "อัปเดตเวอร์ชัน" และ "อัปเดตแพ็กเกจ" ใหม่ในหน้า "อัปเดต"
+แอป:
+• เปิดใช้งานแอปเพื่อทำงานบนทีวี
+• ออกแบบ "Unit Manager" ใหม่
+• ฟีเจอร์ที่ถูกลบ: "WeChat Shortcut", "Private Pics", "CoolApk App Info" และ "QQ Contact Shortcut"
+• นำข้อกำหนด Android 10 ออกเพื่อให้เป็นไปตามธีมมืดของระบบ
+</th>
+<tr-TR>
+Uygulama API'sı:
+• Yeni etiket: Jetpack Oluştur.
+• "Etiket filtresi" iletişim kutusuna etiket simgeleri eklendi.
+• "Güncellemeler" sayfasında yeni "sürüm güncelleme" ve "paket güncelleme" bölümleri.
+Uygulama:
+• Uygulamayı TV'lerde çalıştırmak için etkinleştirin.
+• Yeniden tasarlanan "Birim Yöneticisi".
+• Kaldırılan özellikler: "WeChat Kısayolu", "Özel Resimler", "CoolApk Uygulama Bilgisi" ve "QQ İletişim Kısayolu".
+• Sistem karanlık temasını takip etmek için Android 10 gereksinimi kaldırıldı.
+</tr-TR>
+<vi>
+API ứng dụng:
+• Thẻ mới: Jetpack Compose.
+• Đã thêm các biểu tượng thẻ trong hộp thoại "bộ lọc thẻ".
+• Phần "cập nhật phiên bản" và "cập nhật gói" mới trong trang "cập nhật".
+Ứng dụng:
+• Cho phép ứng dụng chạy trên TV.
+• Thiết kế lại "Unit Manager".
+• Các tính năng bị xóa: "Phím tắt WeChat", "Ảnh riêng tư", "Thông tin ứng dụng CoolApk" và "Phím tắt liên hệ QQ".
+• Đã xóa yêu cầu Android 10 để tuân theo chủ đề tối của hệ thống.
+</vi>
+<zh-CN>
+应用 API：
+• 新标签：Jetpack Compose
+• 在“标签过滤”对话框中显示图标
+• “更新”页面新增“版本更新”和“包更新”
+App：
+• 支持在 Android TV 上运行
+• 重新设计了“模块管理”
+• 移除功能：“微信 Shortcut”、“私图隐藏”、“酷安软件详情”和“QQ 好友 Shortcut”
+• 跟随系统暗色模式不再要求 Android 10
+</zh-CN>
+<zh-HK>
+應用 API：
+• 新標籤：Jetpack Compose
+• 在“標籤過濾”對話框中顯示圖標
+• “更新”頁面新增“版本更新”和“包更新”
+App：
+• 支持在 Android TV 上運行
+• 重新設計了“模塊管理”
+• 移除功能：“微信 Shortcut”、“私圖隱藏”、“酷安軟件詳情”和“QQ 好友 Shortcut”
+• 跟隨系統暗色模式不再要求 Android 10
+</zh-HK>
+<zh-TW>
+應用 API：
+• 新標籤：Jetpack Compose
+• 在“標籤過濾”對話框中顯示圖標
+• “更新”頁面新增“版本更新”和“包更新”
+App：
+• 支持在 Android TV 上運行
+• 重新設計了“模塊管理”
+• 移除功能：“微信 Shortcut”、“私圖隱藏”、“酷安軟件詳情”和“QQ 好友 Shortcut”
+• 跟隨系統暗色模式不再要求 Android 10
+</zh-TW>
+
+
 - **3.7.4** 21050217
 <en-US>
 Tweak a few UI elements and fix bugs.
@@ -1483,6 +1686,9 @@ Khác
   [zh-CN]
 
   一些增强体验的实用工具
+
+  [P.S.]
+  Removed TextSharing: download APK from shared link
 
 - **2.4** 19090622
 

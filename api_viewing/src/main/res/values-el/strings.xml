@@ -94,4 +94,6 @@
     <string name="av_upd_new">Πρόσφατα εγκατεστημένο</string>
     <string name="av_upd_upg">Αναβάθμιση API</string>
     <string name="av_details_real_installer">"Πραγματικός εγκαταστάτης: "</string>
+    <string name="av_upd_ver_upd">Η έκδοση ενημερώθηκε</string>
+    <string name="av_upd_pck_upd">Το πακέτο ενημερώθηκε</string>
 </resources>

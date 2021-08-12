@@ -94,4 +94,6 @@
     <string name="av_upd_new">새로운 설치</string>
     <string name="av_upd_upg">API 업그레이드</string>
     <string name="av_details_real_installer">"실제 설치 절차 : "</string>
+    <string name="av_upd_ver_upd">새 버전 업데이트</string>
+    <string name="av_upd_pck_upd">패키지 업데이트</string>
 </resources>

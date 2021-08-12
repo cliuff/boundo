@@ -94,4 +94,6 @@
     <string name="av_upd_new">Appena installato</string>
     <string name="av_upd_upg">Aggiornamento API</string>
     <string name="av_details_real_installer">"Programma di installazione reale: "</string>
+    <string name="av_upd_ver_upd">Versione aggiornata</string>
+    <string name="av_upd_pck_upd">Pacchetto aggiornato</string>
 </resources>

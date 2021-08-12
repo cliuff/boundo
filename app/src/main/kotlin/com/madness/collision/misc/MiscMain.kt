@@ -34,6 +34,7 @@ import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.api_viewing.AccessAV
 import com.madness.collision.util.*
+import com.madness.collision.util.os.OsUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -110,6 +111,32 @@ internal object MiscMain {
         }
         if (verOri in 0 until 21010113) {
             deleteDirs(F.valCachePubAvSeal(context))
+        }
+        if (verOri in 0 until 21081315) {
+            // remove preference of Cool App unit
+            prefSettings.edit {
+                remove("toolsAppPackageName")
+            }
+            // remove unit config of removed units
+            listOf("cool_app", "no_media", "we_chat_evo", "qq_contacts").forEach {
+                Unit.unpinUnit(context, it, prefSettings)
+                Unit.enableUnit(context, it, prefSettings)
+                Unit.removeFrequency(context, it, prefSettings)
+            }
+            // clear qq contacts data
+            if (OsUtils.satisfy(OsUtils.N_MR1)) {
+                context.getSystemService(ShortcutManager::class.java)?.let { sm ->
+                    val instant = Instant(context, sm)
+                    val dataDir = F.createPath(F.cachePublicPath(context),
+                        Environment.DIRECTORY_PICTURES, "qqInstantManager")
+                    instant.dynamicShortcuts.filter {
+                        it.id.startsWith("qq")
+                    }.map { it.id }.let {
+                        instant.removeDynamicShortcuts(*it.toTypedArray())
+                    }
+                    X.deleteFolder(File(dataDir))
+                }
+            }
         }
     }
 

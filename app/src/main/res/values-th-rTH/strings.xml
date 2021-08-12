@@ -267,4 +267,6 @@
     <string name="im_edit_height">ความสูง</string>
     <string name="im_image_select">เลือกภาพ</string>
     <string name="im_toast_finish">บันทึกไว้ในแกลเลอรี่</string>
+    <string name="unit_man_disabled">พิการ</string>
+    <string name="unit_man_dynamic_feature">คุณสมบัติไดนามิก</string>
 </resources>

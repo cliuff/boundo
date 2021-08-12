@@ -105,4 +105,6 @@
     <string name="av_upd_new">新安裝</string>
     <string name="av_upd_upg">API 升級</string>
     <string name="av_details_real_installer">"實際安裝程序："</string>
+    <string name="av_upd_ver_upd">版本更新</string>
+    <string name="av_upd_pck_upd">包更新</string>
 </resources>

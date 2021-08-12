@@ -29,6 +29,7 @@ import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.util.*
+import com.madness.collision.util.os.OsUtils
 
 /**
  * Dynamic feature
@@ -125,9 +126,17 @@ abstract class Unit: TaggedFragment(), Democratic {
                               pref: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
         ) {
             val frequencies = getFrequencies(context, pref).toMutableMap()
-            val f = if (X.aboveOn(X.N)) frequencies.getOrDefault(unitName, 0)
+            val f = if (OsUtils.satisfy(OsUtils.N)) frequencies.getOrDefault(unitName, 0)
             else frequencies[unitName] ?: 0
             frequencies[unitName] = f + 1
+            PrefsUtil.putCompoundItem(pref, P.UNIT_FREQUENCIES, frequencies.mapValues { it.value.toString() })
+        }
+
+        fun removeFrequency(context: Context, unitName: String,
+                              pref: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
+        ) {
+            val frequencies = getFrequencies(context, pref).toMutableMap()
+            frequencies.remove(unitName)
             PrefsUtil.putCompoundItem(pref, P.UNIT_FREQUENCIES, frequencies.mapValues { it.value.toString() })
         }
 

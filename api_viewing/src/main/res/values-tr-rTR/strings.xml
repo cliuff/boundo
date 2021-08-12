@@ -94,4 +94,6 @@
     <string name="av_upd_new">Yeni kurulmuş</string>
     <string name="av_upd_upg">API yükseltmesi</string>
     <string name="av_details_real_installer">"Gerçek yükleyici: "</string>
+    <string name="av_upd_ver_upd">Sürüm güncellendi</string>
+    <string name="av_upd_pck_upd">Paket güncellendi</string>
 </resources>

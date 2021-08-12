@@ -267,4 +267,6 @@
     <string name="im_edit_height">높은</string>
     <string name="im_image_select">이미지 선택</string>
     <string name="im_toast_finish">앨범에 저장된 사진</string>
+    <string name="unit_man_disabled">장애가있는</string>
+    <string name="unit_man_dynamic_feature">동적 기능</string>
 </resources>

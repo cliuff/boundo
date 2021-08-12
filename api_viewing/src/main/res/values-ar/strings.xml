@@ -94,4 +94,6 @@
     <string name="av_upd_new">مثبتة حديثا</string>
     <string name="av_upd_upg">ترقية API</string>
     <string name="av_details_real_installer">"المثبت الحقيقي: "</string>
+    <string name="av_upd_ver_upd">تم تحديث الإصدار</string>
+    <string name="av_upd_pck_upd">تم تحديث الحزمة</string>
 </resources>

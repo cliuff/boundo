@@ -267,4 +267,6 @@
     <string name="im_edit_height">Altura</string>
     <string name="im_edit_width">Anchura</string>
     <string name="im_image_select">Seleccionar imagen</string>
+    <string name="unit_man_disabled">Desactivado</string>
+    <string name="unit_man_dynamic_feature">Característica dinámica</string>
 </resources>

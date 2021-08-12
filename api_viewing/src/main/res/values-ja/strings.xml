@@ -94,4 +94,6 @@
     <string name="av_upd_new">新規インストール</string>
     <string name="av_upd_upg">APIアップグレード</string>
     <string name="av_details_real_installer">"実際のインストール手順："</string>
+    <string name="av_upd_ver_upd">新しいバージョンの更新</string>
+    <string name="av_upd_pck_upd">パッケージの更新</string>
 </resources>

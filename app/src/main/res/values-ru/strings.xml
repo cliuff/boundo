@@ -267,4 +267,6 @@
     <string name="im_edit_height">Высота</string>
     <string name="im_image_select">Выберите изображение</string>
     <string name="im_toast_finish">Сохранено в галерее</string>
+    <string name="unit_man_disabled">инвалид</string>
+    <string name="unit_man_dynamic_feature">Динамическая функция</string>
 </resources>
