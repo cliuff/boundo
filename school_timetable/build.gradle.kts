@@ -28,7 +28,7 @@ android {
     sourceSets {
         getByName("main").java.srcDir("src/main/kotlin")
     }
-    compileSdkVersion(30)
+    compileSdk = 31
 
     flavorDimensions.add("arch")
     productFlavors {
@@ -58,24 +58,22 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring(Dependencies.androidDesugaring)
-    listOf(
-            fileTree(Dependencies.fileTreeValue),
+    Dependencies.run {
+        coreLibraryDesugaring(androidDesugaring)
+        listOf(
+            fileTree(fileTreeValue),
             project(":app"),
-            Dependencies.googlePlayServicesBasement,
-            Dependencies.jsoup
-    ).forEach { implementation(it) }
-    Dependencies.dynamicFeatureBasics.forEach { implementation(it) }
+            googlePlayServicesBasement,
+            jsoup
+        ).forEach { implementation(it) }
+        dynamicFeatureBasics.forEach { implementation(it) }
 
-    listOf(
-            Dependencies.googleTruth,
-            Dependencies.googleTruthExtensions,
-            Dependencies.junit4
-    ).forEach { testImplementation(it) }
+        listOf(googleTruth, googleTruthExtensions, junit4).forEach { testImplementation(it) }
 
-    listOf(
-            Dependencies.googleTruth,
-            Dependencies.googleTruthExtensions,
-            Dependencies.junit4
-    ).forEach { androidTestImplementation(it) }
+        listOf(
+            googleTruth,
+            googleTruthExtensions,
+            junit4
+        ).forEach { androidTestImplementation(it) }
+    }
 }

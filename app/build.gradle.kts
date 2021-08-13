@@ -50,7 +50,7 @@ val signingKeyPassword: String = properties.getProperty("signingKeyPassword", ""
 //}
 
 android {
-    buildToolsVersion = "30.0.3"
+    buildToolsVersion = "31.0.0"
     sourceSets {
         getByName("main").java.srcDir("src/main/kotlin")
     }
@@ -164,73 +164,70 @@ android {
 
 dependencies {
 
-    coreLibraryDesugaring(Dependencies.androidDesugaring)
+    Dependencies.run {
+        coreLibraryDesugaring(androidDesugaring)
 
-    listOf(
-            fileTree(Dependencies.fileTreeValue),
-//            Dependencies.androidxWorkRuntime,
-//            Dependencies.androidxWorkFirebase,
-            Dependencies.androidxCore,
-            Dependencies.androidxCoreKtx,
-            Dependencies.androidxAppcompat,
-            Dependencies.androidxFragment,
-            Dependencies.androidxDrawerLayout,
-            Dependencies.androidxSwipeRefreshLayout,
-            Dependencies.androidxConstraintLayout,
-            Dependencies.androidxPalette,
-            Dependencies.androidxCardView,
-            Dependencies.androidxRecyclerView,
-            Dependencies.androidxViewPager,
-            Dependencies.androidxLifecycleCommon,
-            Dependencies.androidxLifecycleViewModel,
-            Dependencies.androidxLifecycleLiveData,
-            Dependencies.androidxPaging,
-            Dependencies.androidxPreference,
-            Dependencies.androidxNavigationFragment,
-            Dependencies.androidxNavigationUI,
-            Dependencies.androidxDocumentFile,
-            Dependencies.androidxHeifWriter,
-            Dependencies.gglHilt,
-            Dependencies.googleMaterialComponents,
-            Dependencies.googlePlayServicesOSSLicenses,
-            Dependencies.googleGson,
-            Dependencies.googlePlayCore,
-            Dependencies.googlePlayCoreKtx,
-            Dependencies.gglGuava,
-            Dependencies.jsoup,
-            Dependencies.kotlinStdlib,
-            Dependencies.kotlinReflect,
-            Dependencies.rxJava,
-            Dependencies.jbAnnotations,
-            Dependencies.glide,
-            Dependencies.coil,
-            Dependencies.androidDeviceNames
-    ).forEach { implementation(it) }
+        listOf(
+            fileTree(fileTreeValue),
+//            androidxWorkRuntime,
+//            androidxWorkFirebase,
+            androidxCore,
+            androidxCoreKtx,
+            androidxActivity,
+            androidxAppcompat,
+            androidxFragment,
+            androidxDrawerLayout,
+            androidxSwipeRefreshLayout,
+            androidxConstraintLayout,
+            androidxPalette,
+            androidxCardView,
+            androidxRecyclerView,
+            androidxViewPager,
+            androidxLifecycleCommon,
+            androidxLifecycleViewModel,
+            androidxLifecycleLiveData,
+            androidxPaging,
+            androidxPreference,
+            androidxNavigationFragment,
+            androidxNavigationUI,
+            androidxDocumentFile,
+            androidxHeifWriter,
+            gglHilt,
+            googleMaterialComponents,
+            googlePlayServicesOSSLicenses,
+            googleGson,
+            googlePlayCore,
+            googlePlayCoreKtx,
+            gglGuava,
+            jsoup,
+            kotlinStdlib,
+            kotlinReflect,
+            rxJava,
+            jbAnnotations,
+            coil,
+            androidDeviceNames
+        ).forEach { implementation(it) }
 
-    kapt(Dependencies.gglHiltCompiler)
+        kapt(gglHiltCompiler)
 
-    listOf(
-            Dependencies.mockito,
-            Dependencies.googleTruth,
-            Dependencies.googleTruthExtensions,
-            Dependencies.junit4
-    ).forEach { testImplementation(it) }
+        listOf(mockito, googleTruth, googleTruthExtensions, junit4).forEach { testImplementation(it) }
 
-    listOf(
-            Dependencies.androidxTestCore,
-            Dependencies.androidxTestRunner,
-            Dependencies.androidxTestExtJunit,
-            Dependencies.androidxTestEspresso,
-            Dependencies.androidxCoreTesting,
-            Dependencies.androidxRoomTesting,
-//            Dependencies.androidxNavigationTesting,
-//            Dependencies.androidxWorkTesting,
-            Dependencies.mockito,
-            Dependencies.googleTruth,
-            Dependencies.googleTruthExtensions,
-            Dependencies.junit4
-    ).forEach { androidTestImplementation(it) }
+        listOf(
+            androidxTestCore,
+            androidxTestRunner,
+            androidxTestExtJunit,
+            androidxTestEspresso,
+            androidxCoreTesting,
+            androidxRoomTesting,
+//            androidxNavigationTesting,
+//            androidxWorkTesting,
+            mockito,
+            googleTruth,
+            googleTruthExtensions,
+            junit4
+        ).forEach { androidTestImplementation(it) }
 
-    api(Dependencies.kotlinCoroutines)
+        api(kotlinCoroutines)
+    }
 
 }

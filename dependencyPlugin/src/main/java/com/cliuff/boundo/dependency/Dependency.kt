@@ -20,28 +20,29 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 
 object Versions {
-    const val androidxTestCore = "1.2.0"
-    const val androidxTestRunner = "1.2.0"
+    const val androidxTestCore = "1.4.0"
+    const val androidxTestRunner = "1.4.0"
     const val androidxTestExtJunit = "1.1.1"
     const val androidxTestEspresso = "3.2.0"
 
-    const val androidxCore = "1.5.0-rc01"
-    const val androidxAppcompat = "1.1.0"
+    const val androidxCore = "1.6.0"
+    const val androidxActivity = "1.3.1"
+    const val androidxAppcompat = "1.3.1"
     const val androidxLifecycle = "2.3.1"
     const val androidxRoom = "2.4.0-alpha04"
     const val androidxNavigation = "2.3.5"
     const val androidxCoreTesting = "2.1.0"
-    const val androidxFragment = "1.3.2"
+    const val androidxFragment = "1.3.6"
     const val androidxDrawerLayout = "1.1.1"
     const val androidxSwipeRefreshLayout = "1.1.0"
     const val androidxConstraintLayout = "2.0.4"
     const val androidxPalette = "1.0.0"
     const val androidxCardView = "1.0.0"
-    const val androidxRecyclerView = "1.2.0"
+    const val androidxRecyclerView = "1.2.1"
     const val androidxHeifWriter = "1.0.0"
     const val androidxDataBinding = "3.5.2"
     const val androidxViewPager = "1.0.0"
-    const val androidxPaging = "2.1.2"
+    const val androidxPaging = "3.0.1"
     const val androidxPreference = "1.1.1"
     const val androidxWork = "2.5.0"
     const val androidxDocumentFile = "1.0.1"
@@ -52,36 +53,35 @@ object Versions {
     // which has classes that exemplify best practices
     const val androidxWear = "1.1.0"
 
-    const val googleTruth = "1.1.2"
+    const val googleTruth = "1.1.3"
     const val googleMaterialComponents = "1.4.0"
     const val googlePlayServicesOSSLicenses = "17.0.0"
     const val googlePlayServicesBasement = "17.6.0"
-    const val googleGson = "2.8.6"
-    const val googlePlayCore = "1.9.1"
+    const val googleGson = "2.8.7"
+    const val googlePlayCore = "1.10.0"
     const val googlePlayCoreKtx = "1.8.1"
-    const val gglGuava = "30.1-android"
+    const val gglGuava = "30.1.1-android"
     const val gglHilt = "2.38.1"
     // This dependency is for the Wearable Support Library,
     // which has additional classes (including for watch faces)
     const val googleSupportWearable = "2.8.1"
     // This dependency is set to compile only
     const val googleWearable = "2.8.1"
-    const val glide = "4.12.0"
-    const val coil = "1.3.0"
-    const val jsoup = "1.13.1"
+    const val coil = "1.3.2"
+    const val jsoup = "1.14.1"
     const val junit4 = "4.13.2"
-    const val junitJupiter = "5.7.1"
+    const val junitJupiter = "5.7.2"
     const val kotlin = "1.5.21"
-    const val kotlinCoroutines = "1.4.3"
+    const val kotlinCoroutines = "1.5.1"
     const val mpChart = "v3.1.0"
-    const val openCsv = "5.3"
-    const val rxJava = "3.0.10"
+    const val openCsv = "5.5.1"
+    const val rxJava = "3.1.0"
     // Jetbrains annotations
-    const val jbAnnotations = "20.1.0"
+    const val jbAnnotations = "22.0.0"
     const val androidDeviceNames = "2.0.0"
     const val byteBuddy = "1.11.12"
-    const val androidDesugaring = "1.0.9"
-    const val mockito = "3.9.0"
+    const val androidDesugaring = "1.1.5"
+    const val mockito = "3.11.2"
     // for checking apk dex, archived since 2019.11
     const val apkParser = "2.6.10"
 }
@@ -102,6 +102,7 @@ class Dependencies : Plugin<Project> {
 
         const val androidxCore = "androidx.core:core:${Versions.androidxCore}"
         const val androidxCoreKtx = "androidx.core:core-ktx:${Versions.androidxCore}"
+        const val androidxActivity = "androidx.activity:activity-ktx:${Versions.androidxActivity}"
         const val androidxAppcompat = "androidx.appcompat:appcompat:${Versions.androidxAppcompat}"
         const val androidxFragment = "androidx.fragment:fragment-ktx:${Versions.androidxFragment}"
         const val androidxDrawerLayout = "androidx.drawerlayout:drawerlayout:${Versions.androidxDrawerLayout}"
@@ -137,7 +138,6 @@ class Dependencies : Plugin<Project> {
         const val googleMaterialComponents = "com.google.android.material:material:${Versions.googleMaterialComponents}"
         const val googlePlayServicesOSSLicenses = "com.google.android.gms:play-services-oss-licenses:${Versions.googlePlayServicesOSSLicenses}"
         const val googlePlayServicesBasement = "com.google.android.gms:play-services-basement:${Versions.googlePlayServicesBasement}"
-        const val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
         const val coil = "io.coil-kt:coil:${Versions.coil}"
         const val jsoup = "org.jsoup:jsoup:${Versions.jsoup}"
         const val kotlinStdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Versions.kotlin}"
@@ -176,6 +176,7 @@ class Dependencies : Plugin<Project> {
         val dynamicFeatureBasics = listOf(
                 androidxCore,
                 androidxCoreKtx,
+                androidxActivity,
                 androidxAppcompat,
                 androidxFragment,
                 androidxConstraintLayout,
@@ -187,7 +188,7 @@ class Dependencies : Plugin<Project> {
                 googlePlayCoreKtx,
                 gglGuava,
                 jbAnnotations,
-                glide,
+                coil,
         )
     }
 }

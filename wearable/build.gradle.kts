@@ -45,7 +45,7 @@ val signingKeyPassword: String = properties.getProperty("signingKeyPassword", ""
 //}
 
 android {
-    buildToolsVersion = "30.0.3"
+    buildToolsVersion = "31.0.0"
     sourceSets {
         getByName("main").java.srcDir("src/main/kotlin")
     }
@@ -146,31 +146,33 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring(Dependencies.androidDesugaring)
+    Dependencies.run {
+        coreLibraryDesugaring(androidDesugaring)
 
-    listOf(
-            fileTree(Dependencies.fileTreeValue),
-            Dependencies.androidxCore,
-            Dependencies.androidxCoreKtx,
-            Dependencies.androidxAppcompat,
-            Dependencies.androidxFragment,
-            Dependencies.androidxPalette,
-            Dependencies.androidxRecyclerView,
-            Dependencies.androidxViewPager,
-            Dependencies.androidxLifecycleCommon,
-            Dependencies.androidxLifecycleViewModel,
-            Dependencies.androidxLifecycleLiveData,
-            Dependencies.androidxPreference,
-            Dependencies.googleMaterialComponents,
-            Dependencies.kotlinStdlib,
-            Dependencies.androidxPercentLayout,
-            Dependencies.androidxLegacyV4,
-            Dependencies.androidxWear,
-            Dependencies.googleSupportWearable
-    ).forEach { implementation(it) }
+        listOf(
+            fileTree(fileTreeValue),
+            androidxCore,
+            androidxCoreKtx,
+            androidxActivity,
+            androidxAppcompat,
+            androidxFragment,
+            androidxPalette,
+            androidxRecyclerView,
+            androidxViewPager,
+            androidxLifecycleCommon,
+            androidxLifecycleViewModel,
+            androidxLifecycleLiveData,
+            androidxPreference,
+            googleMaterialComponents,
+            kotlinStdlib,
+            androidxPercentLayout,
+            androidxLegacyV4,
+            androidxWear,
+            googleSupportWearable
+        ).forEach { implementation(it) }
 
-    compileOnly(Dependencies.googleWearable)
+        compileOnly(googleWearable)
 
-    api(Dependencies.kotlinCoroutines)
-
+        api(kotlinCoroutines)
+    }
 }

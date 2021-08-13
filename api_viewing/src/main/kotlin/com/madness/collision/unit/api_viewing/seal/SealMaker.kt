@@ -1,0 +1,169 @@
+/*
+ * Copyright 2021 Clifford Liu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.madness.collision.unit.api_viewing.seal
+
+import android.content.Context
+import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.drawable.Drawable
+import androidx.core.content.ContextCompat
+import com.madness.collision.R
+import com.madness.collision.unit.api_viewing.data.EasyAccess
+import com.madness.collision.util.*
+import com.madness.collision.util.os.OsUtils
+import java.io.File
+import com.madness.collision.unit.api_viewing.R as MyR
+
+object SealMaker {
+    var sealBack = HashMap<Char, Bitmap>().toMutableMap()
+
+    fun getAndroidCodenameImageRes(letter: Char): Int {
+        if (!EasyAccess.isSweet) return 0
+        return when (letter) {
+            's' -> MyR.drawable.seal_s
+            'r' -> MyR.drawable.seal_r_vector
+            'q' -> MyR.drawable.seal_q_vector
+            'p' -> MyR.drawable.seal_p_vector
+            'o' -> MyR.drawable.seal_o
+            'n' -> MyR.drawable.seal_n
+            'm' -> MyR.drawable.seal_m_vector
+            'l' -> MyR.drawable.seal_l_vector
+            'k' -> MyR.drawable.seal_k_vector
+            'j' -> MyR.drawable.seal_j_vector
+            'i' -> MyR.drawable.seal_i
+            'h' -> MyR.drawable.seal_h_vector
+            else -> 0
+        }
+    }
+
+    fun getItemColorBack(context: Context, apiLevel: Int): Int {
+        return itemColorInfo(context, apiLevel, false)
+    }
+
+    fun getItemColorAccent(context: Context, apiLevel: Int): Int {
+        return itemColorInfo(context, apiLevel, true)
+    }
+
+    fun getItemColorForIllustration(context: Context, apiLevel: Int): Int {
+        return itemColorInfo(context, apiLevel, isAccent = true, isForIllustration = true)
+    }
+
+    fun getItemColorText(apiLevel: Int) = when (apiLevel) {
+        X.M -> Color.BLACK
+        else -> Color.WHITE
+    }
+
+    private fun itemColorInfo(context: Context, apiLevel: Int, isAccent: Boolean, isForIllustration: Boolean = false): Int {
+        if (!EasyAccess.shouldShowDesserts && !isForIllustration) {
+            val attrRes = if (isAccent) android.R.attr.textColor else R.attr.colorASurface
+            return ThemeUtil.getColor(context, attrRes)
+        }
+        when (apiLevel) {
+            OsUtils.S -> if (isAccent) "acdcb2" else "defbde"
+            X.R -> if (isAccent) "acd5c1" else "defbf0"
+            X.Q -> if (isAccent) "c1d5ac" else "f0fbde"
+            X.P -> if (isAccent) "e0c8b0" else "fff6d5"
+            X.O, X.O_MR1 -> if (isAccent) "b0b0b0" else "eeeeee"
+            X.N, X.N_MR1 -> if (isAccent) "ffb2a8" else "ffecf6"
+            X.M -> if (isAccent) "b0c9c5" else "e0f3f0"
+            X.L, X.L_MR1 -> if (isAccent) "ffb0b0" else "ffeeee"
+            X.K, X.K_WATCH -> if (isAccent) "d0c7ba" else "fff3e0"
+            X.J, X.J_MR1, X.J_MR2 -> if (isAccent) "baf5ba" else "eeffee"
+            X.I, X.I_MR1 -> if (isAccent) "d8d0c0" else "f0f0f0"
+            X.H, X.H_MR1, X.H_MR2 -> if (isAccent) "f0c8b4" else "fff5f0"
+            else -> if (isAccent) "c5e8b0" else X.getColorHex(context, R.color.androidRobotGreenBack)
+        }.run {
+            val color = Color.parseColor("#$this")
+            if (isAccent && !isForIllustration) return color
+            return when {
+                mainApplication.isPaleTheme -> color
+                mainApplication.isDarkTheme -> ColorUtil.darkenAs(color, if (isForIllustration) 0.7f else 0.15f)
+                else -> ColorUtil.darkenAs(color, if (isForIllustration) 0.9f else 0.55f)
+            }
+        }
+    }
+
+    /**
+     * Make seal and cache to storage
+     */
+    fun getSeal(context: Context, index: Char, itemLength: Int): Pair<String, Bitmap?>? {
+        val path = F.createPath(F.valCachePubAvSeal(context), "seal-$index.png")
+        if (File(path).exists()) return path to null
+        val res = getAndroidCodenameImageRes(index)
+        if (res == 0) return null
+        val drawable: Drawable
+        try {
+            drawable = ContextCompat.getDrawable(context, res) ?: return null
+        } catch (e: Resources.NotFoundException) {
+            e.printStackTrace()
+            return null
+        }
+        val bitmap = Bitmap.createBitmap(itemLength, itemLength, Bitmap.Config.ARGB_8888)
+        drawable.setBounds(0, 0, itemLength, itemLength)
+        drawable.draw(Canvas(bitmap))
+        if (F.prepare4(path)) X.savePNG(bitmap, path)
+        return path to bitmap
+    }
+
+    fun getSealBack(context: Context, letter: Char, itemLength: Int): Bitmap? {
+        if (sealBack.containsKey(letter)) return sealBack[letter]!!
+        //final int INITIAL_colorPlain = -1;//color #00000000 has the value of 0
+        val colorPlain: Int
+        val blurWidth: Int
+        var bitmap: Bitmap
+        val resImageID = getAndroidCodenameImageRes(letter)
+        // draw color
+        if (resImageID == 0) {
+            val index4SealBack: Char
+            if (letter == 'k' && EasyAccess.isSweet) {
+                index4SealBack = letter
+                colorPlain = Color.parseColor("#753500")
+            } else {
+                index4SealBack = '?'
+                if (sealBack.containsKey(index4SealBack)) return sealBack[index4SealBack]!!
+                colorPlain = X.getColor(context, R.color.androidRobotGreen)
+            }
+            blurWidth = X.size(context, 60f, X.DP).toInt() * 2
+            bitmap = Bitmap.createBitmap(blurWidth, blurWidth, Bitmap.Config.ARGB_8888)
+            Canvas(bitmap).drawColor(colorPlain)
+            sealBack[index4SealBack] = bitmap
+            val path = F.createPath(F.valCachePubAvSeal(context), "back-$index4SealBack.png")
+            if (F.prepare4(path)) X.savePNG(bitmap, path)
+            return bitmap
+        }
+        // draw image res
+        var seal: Bitmap = getSeal(context, letter, itemLength)?.second?.collisionBitmap ?: return null
+        val targetLength = seal.width / 10
+        val bitmapWidth = targetLength * 2
+        val sealOffsetX = targetLength * 4
+        val sealOffsetY = targetLength * 2
+        bitmap = Bitmap.createBitmap(bitmapWidth, bitmapWidth, Bitmap.Config.ARGB_8888)
+        seal = Bitmap.createBitmap(seal, sealOffsetX, sealOffsetY, bitmap.width, bitmap.height)
+        val canvas2Draw = Canvas(bitmap)
+        canvas2Draw.drawColor(Color.parseColor("#fff5f5f5"))
+        canvas2Draw.drawBitmap(seal, 0f, 0f, Paint(Paint.ANTI_ALIAS_FLAG))
+        blurWidth = X.size(context, 60f, X.DP).toInt() * 2
+        bitmap = X.blurBitmap(context, bitmap, blurWidth, blurWidth)
+        sealBack[letter] = bitmap
+        val path = F.createPath(F.valCachePubAvSeal(context), "back-$letter.png")
+        if (F.prepare4(path)) X.savePNG(bitmap, path)
+        return bitmap
+    }
+}
