@@ -138,8 +138,9 @@ internal class DeviceListFragment: TaggedFragment(), StateObservable {
             if (item.mac != mac) continue
             // a copy of the device item with new state must be stored for later state check
             val updateItem = item.copy(state = state)
+            val updateItemState = updateItem.state
             val regulation = StateUpdateRegulation(600, updateItem) {
-                item.state = updateItem.state
+                item.state = updateItemState
                 adapter.notifyItemChanged(index)
             }
             updateRegulator.regulate(regulation)

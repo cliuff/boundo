@@ -68,8 +68,14 @@ internal class UpdatesFragment : TaggedFragment(), Democratic {
 
     private lateinit var mContext: Context
     private val mainViewModel: MainViewModel by activityViewModels()
-    private var updatesProviders: MutableList<Pair<String, UpdatesProvider>> = mutableListOf()
-    private var fragments: MutableList<Pair<String, Fragment>> = mutableListOf()
+    // used for assignment and thread-safe modification
+    private var _updatesProviders: MutableList<Pair<String, UpdatesProvider>> = mutableListOf()
+    private val updatesProviders: List<Pair<String, UpdatesProvider>>
+        get() = _updatesProviders
+    // used for assignment and thread-safe modification
+    private var _fragments: MutableList<Pair<String, Fragment>> = mutableListOf()
+    private val fragments: List<Pair<String, Fragment>>
+        get() = _fragments
     private var mode = MODE_NORMAL
     private val isNoUpdatesMode: Boolean
         get() = mode == MODE_NO_UPDATES
@@ -87,7 +93,7 @@ internal class UpdatesFragment : TaggedFragment(), Democratic {
         inflater = LayoutInflater.from(mContext)
         mode = arguments?.getInt(ARG_MODE) ?: MODE_NORMAL
         if (isNoUpdatesMode) return
-        updatesProviders = DescRetriever(mContext).includePinState().doFilter()
+        _updatesProviders = DescRetriever(mContext).includePinState().doFilter()
                 .retrieveInstalled().mapNotNull {
                     Unit.getUpdates(it.unitName)?.run { it.unitName to this }
                 }.toMutableList()
@@ -134,10 +140,8 @@ internal class UpdatesFragment : TaggedFragment(), Democratic {
     }
 
     private fun retrieveUpdateFragments(): MutableList<Pair<String, Fragment>> {
-        return updatesProviders.mapNotNull {
-            if (it.second.hasUpdates(this)) it.second.fragment?.run {
-                it.first to this
-            } else null
+        return updatesProviders.mapNotNull { (unitName, provider) ->
+            if (provider.hasUpdates(this)) provider.fragment?.let { unitName to it } else null
         }.toMutableList()
     }
 
@@ -153,7 +157,7 @@ internal class UpdatesFragment : TaggedFragment(), Democratic {
     }
 
     private fun loadUpdates() = lifecycleScope.launch(Dispatchers.Default) {
-        fragments = retrieveUpdateFragments()
+        _fragments = retrieveUpdateFragments()
         if (fragments.isEmpty()) return@launch
         // Use launchWhenStarted to avoid IllegalArgumentException:
         // No view found for id 0x1 (unknown) for fragment MyUpdatesFragment
@@ -251,7 +255,7 @@ internal class UpdatesFragment : TaggedFragment(), Democratic {
                 override fun onChanged(position: Int, count: Int, payload: Any?) {
                 }
             })
-            fragments = newFragments
+            _fragments = newFragments
         }
     }
 
@@ -263,23 +267,31 @@ internal class UpdatesFragment : TaggedFragment(), Democratic {
         if (isAddition) {
             if (updatesProviders.any { it.first == stateful.unitName }) return
             val provider = Unit.getUpdates(stateful.unitName) ?: return
-            updatesProviders.add(stateful.unitName to provider)
+            synchronized(_updatesProviders) {
+                _updatesProviders.add(stateful.unitName to provider)
+            }
             if (!provider.hasUpdates(this)) return
             val fragment = provider.fragment ?: return
             val updateFragment = stateful.unitName to fragment
-            fragments.add(updateFragment)
+            synchronized(_fragments) {
+                _fragments.add(updateFragment)
+            }
             addUpdateFragment(updateFragment)
         } else {
             for (i in updatesProviders.indices) {
                 val provider = updatesProviders[i]
                 if (provider.first != stateful.unitName) continue
-                updatesProviders.removeAt(i)
+                synchronized(_updatesProviders) {
+                    _updatesProviders.removeAt(i)
+                }
                 break
             }
             for (i in fragments.indices) {
                 val fragment = fragments[i]
                 if (fragment.first != stateful.unitName) continue
-                fragments.removeAt(i)
+                synchronized(_fragments) {
+                    _fragments.removeAt(i)
+                }
                 removeUpdateFragment(fragment, i)
                 break
             }

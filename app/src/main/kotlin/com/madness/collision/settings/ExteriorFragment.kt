@@ -17,8 +17,6 @@
 package com.madness.collision.settings
 
 import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Point
@@ -31,7 +29,7 @@ import android.view.*
 import android.widget.FrameLayout
 import android.widget.ProgressBar
 import android.widget.SeekBar
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
@@ -45,20 +43,19 @@ import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.themed_wallpaper.AccessTw
 import com.madness.collision.unit.themed_wallpaper.ThemedWallpaperEasyAccess
 import com.madness.collision.util.*
+import com.madness.collision.util.os.OsUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.*
 import kotlin.math.min
 import kotlin.math.roundToInt
 
-class ExteriorFragment: TaggedFragment(), Democratic, View.OnClickListener{
+class ExteriorFragment: TaggedFragment(), Democratic {
 
     override val category: String = "Exterior"
     override val id: String = "Exterior"
 
     companion object {
-        private const val REQUEST_GET_IMAGE = 100
-        private const val PERMISSION_EXTERNAL_STORAGE = 200
         private const val ARG_MODE = "exteriorMode"
         private const val ARG_LAUNCH_MODE = "exteriorLaunchMode"
         /**
@@ -138,6 +135,9 @@ class ExteriorFragment: TaggedFragment(), Democratic, View.OnClickListener{
         return viewBinding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val context = context ?: return
@@ -156,7 +156,9 @@ class ExteriorFragment: TaggedFragment(), Democratic, View.OnClickListener{
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         })
-        viewBinding.exteriorImage.setOnClickListener(this)
+        viewBinding.exteriorImage.setOnClickListener {
+            getImageLauncher.launch("image/*")
+        }
 
         lifecycleScope.launch(Dispatchers.Default) {
             val args = arguments
@@ -191,19 +193,18 @@ class ExteriorFragment: TaggedFragment(), Democratic, View.OnClickListener{
         rs.destroy()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        val context = context ?: return
-        if (requestCode == REQUEST_GET_IMAGE && resultCode == AppCompatActivity.RESULT_OK && data != null){
-            val dataUri = data.data ?: return
-            lifecycleScope.launch(Dispatchers.Default) {
-                clearRef()
-                clearViewRes()
-                val (imagePreview, backPreview) = loadSamples(context, dataUri)
-                this@ExteriorFragment.backPreview = backPreview
-                imageUri = dataUri
-                setImage(context, imagePreview)
-            }
+    // This must be called unconditionally, as part of initialization path,
+    // typically as a field initializer of an Activity or Fragment.
+    private val getImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) {
+        val context = context ?: return@registerForActivityResult
+        val dataUri = it ?: return@registerForActivityResult
+        lifecycleScope.launch(Dispatchers.Default) {
+            clearRef()
+            clearViewRes()
+            val (imagePreview, backPreview) = loadSamples(context, dataUri)
+            this@ExteriorFragment.backPreview = backPreview
+            imageUri = dataUri
+            setImage(context, imagePreview)
         }
     }
 
@@ -298,31 +299,7 @@ class ExteriorFragment: TaggedFragment(), Democratic, View.OnClickListener{
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        val context = context ?: return
-        when (requestCode) {
-            PERMISSION_EXTERNAL_STORAGE -> {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    actionDone(context)
-                } else {
-                    notifyBriefly(R.string.toast_permission_storage_denied)
-                }
-            }
-        }
-    }
-
-    private fun actionDone(context: Context){
-        /*
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            if (X.aboveOn(X.M))
-                requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), PERMISSION_EXTERNAL_STORAGE)
-            else
-                Toast.makeText(context, R.string.toast_permission_storage_denied, Toast.LENGTH_SHORT).show()
-            return
-        }
-*/
+    private fun actionDone(context: Context) {
         val progressBar = ProgressBar(context)
         val dialog = CollisionDialog.loading(context, progressBar)
         dialog.show()
@@ -411,7 +388,12 @@ class ExteriorFragment: TaggedFragment(), Democratic, View.OnClickListener{
         }
 
         if (F.prepareDir(exteriorPath)) {
-            val format = if (X.aboveOn(X.R)) Bitmap.CompressFormat.WEBP_LOSSY else webpLegacy
+            val format = if (OsUtils.satisfy(OsUtils.R)) {
+                Bitmap.CompressFormat.WEBP_LOSSY
+            } else {
+                @Suppress("DEPRECATION")
+                Bitmap.CompressFormat.WEBP
+            }
             try {
                 val stream = FileOutputStream(File(backPath))
                 blurred.compress(format, P.WEBP_COMPRESS_SPACE_FIRST, stream)
@@ -429,17 +411,5 @@ class ExteriorFragment: TaggedFragment(), Democratic, View.OnClickListener{
         display.getRealSize(size)
         val rotation = display.rotation
         return if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) Point(size.y, size.x) else size
-    }
-
-    @Suppress("deprecation")
-    private val webpLegacy = Bitmap.CompressFormat.WEBP
-
-    override fun onClick(v: View?) {
-        v ?: return
-        if (v.id == R.id.exteriorImage){
-            val getImage = Intent(Intent.ACTION_GET_CONTENT)
-            getImage.type = "image/*"
-            startActivityForResult(getImage, REQUEST_GET_IMAGE)
-        }
     }
 }

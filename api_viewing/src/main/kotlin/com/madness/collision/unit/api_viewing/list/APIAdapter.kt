@@ -18,7 +18,6 @@ package com.madness.collision.unit.api_viewing.list
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.os.Handler
 import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -39,10 +38,7 @@ import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.databinding.AdapterAvBinding
 import com.madness.collision.unit.api_viewing.seal.SealManager
 import com.madness.collision.util.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Runnable
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlin.math.min
 import kotlin.math.roundToInt
 
@@ -153,22 +149,27 @@ internal open class APIAdapter(context: Context, private val listener: Listener,
 
         holder.tags.removeAllViews()
         val shouldWaitForIcon = !appInfo.hasIcon
-        var taskIcon: Runnable? = null
+        var taskIcon: (suspend CoroutineScope.() -> Unit)? = null
         if (shouldWaitForIcon) {
             scope.launch(Dispatchers.Default) {
                 ensureItem(index)
             }
             val logoView = holder.logo
-            val checkerHandler = Handler()
-            taskIcon = runnable {
-                val iconApp = logoView.getTag(R.bool.tagKeyAvAdapterItemIconId) as ApiViewingApp?
-                if (appInfo !== iconApp && appInfo.hasIcon) {
-                    AppTag.tagAdaptiveIcon(context, appInfo, holder.tags)
-                    holder.logo.setTag(R.bool.tagKeyAvAdapterItemIconId, appInfo)
-                    animator.animateLogo(logoView)
-                    checkerHandler.removeCallbacks(this)
-                } else {
-                    checkerHandler.postDelayed(this, 400)
+            taskIcon = {
+                val elapsingTime = ElapsingTime()
+                while (true) {
+                    val iconApp = logoView.getTag(R.bool.tagKeyAvAdapterItemIconId) as ApiViewingApp?
+                    if (appInfo !== iconApp && appInfo.hasIcon) {
+                        withContext(Dispatchers.Main) {
+                            AppTag.tagAdaptiveIcon(context, appInfo, holder.tags)
+                            holder.logo.setTag(R.bool.tagKeyAvAdapterItemIconId, appInfo)
+                            animator.animateLogo(logoView)
+                        }
+                        break
+                    } else {
+                        if (elapsingTime.elapsed() >= 8000) break
+                        delay(400)
+                    }
                 }
             }
         } else {
@@ -230,9 +231,9 @@ internal open class APIAdapter(context: Context, private val listener: Listener,
 
         scope.launch(Dispatchers.Default) {
             val checkerApp = AppTag.ensureResources(context, appInfo)
-            launch(Dispatchers.Main) {
+            withContext(Dispatchers.Main) {
                 AppTag.inflateTags(context, holder.tags, checkerApp, !shouldWaitForIcon)
-                taskIcon?.run()
+                taskIcon?.let { t -> withContext(Dispatchers.Default) { t() } }
             }
         }
 

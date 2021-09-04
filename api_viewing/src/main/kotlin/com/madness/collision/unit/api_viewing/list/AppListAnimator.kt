@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,9 +40,8 @@ internal class AppListAnimator {
             duration = 100
         }
 
-        AnimatorSet().run {
+        AnimatorSet().apply {
             play(animFade).before(animShow)
-            start()
-        }
+        }.start()
     }
 }

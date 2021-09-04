@@ -27,13 +27,16 @@ import kotlinx.coroutines.withContext
  * [block] will be run on main.
  */
 internal class StateUpdateRegulation(
-    val delay: Long, private val item: DeviceItem, @UiThread block: suspend () -> Unit
+    val delay: Long, item: DeviceItem, @UiThread block: suspend () -> Unit
 ) {
+    private val itemMac = item.mac
+    private val itemState = item.state
+
     val block: suspend (regulator: StateUpdateRegulator) -> Unit = reg@{ regulator ->
         // filter out regulations of the same device
-        val deviceRegs = regulator.regulations.filter { it.item.mac == item.mac }
+        val deviceRegs = regulator.regulations.filter { it.itemMac == itemMac }
         // skip update if there comes a different state update in specified delay time
-        if (deviceRegs.size > 1 && deviceRegs.last().item.state != item.state) return@reg
+        if (deviceRegs.size > 1 && deviceRegs.last().itemState != item.state) return@reg
         withContext(Dispatchers.Main) {
             block()
         }
