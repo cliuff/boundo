@@ -66,7 +66,7 @@ object PopupUtil {
         })
     }
 
-    fun selectMulti(context: Context, titleId: Int, entries: TypedArray, icons: List<Any?>, indexes: Set<Int>,
+    fun selectMulti(context: Context, titleId: Int, entries: List<String>, icons: List<Any?>, indexes: Set<Int>,
                      onConfirmedListener: (pop: CollisionDialog, container: ViewGroup, checkedIndexes: Set<Int>) -> Unit)
             = CollisionDialog(context, R.string.text_cancel, R.string.text_OK, false).apply {
         setCustomContent(R.layout.popup_select_multi)
@@ -82,31 +82,29 @@ object PopupUtil {
         // inflate list
         val iconBound = if (icons.isNotEmpty()) X.size(context, 20f, X.DP).roundToInt() else 0
         val iconPadding = if (icons.isNotEmpty()) X.size(context, 6f, X.DP).roundToInt() else 0
-        entries.use {
-            for (i in 0 until it.length()) {
-                layoutInflater.inflate(R.layout.popup_select_multi_item, radioGroup)
-                val item = radioGroup[i] as MaterialCheckBox
-                if (i == 0) item.alterMargin(top = 0)
-                item.id = R.id.popupSelectMultiContainer + i + 1
-                item.text = it.getString(i)
-                if (icons.isNotEmpty() && icons[i] != null) {
-                    item.compoundDrawablePadding = iconPadding
-                    val req = ImageRequest.Builder(context).target(object : ViewTarget<MaterialCheckBox> {
-                        override val view: MaterialCheckBox = item
-                        override fun onStart(placeholder: Drawable?) = setDrawable(placeholder)
-                        override fun onSuccess(result: Drawable) = setDrawable(result)
-                        override fun onError(error: Drawable?) = setDrawable(error)
-                        private fun setDrawable(drawable: Drawable?) {
-                            drawable?.setBounds(0, 0, iconBound, iconBound)
-                            item.setCompoundDrawablesRelative(drawable, null, null, null)
-                        }
-                    }).data(icons[i]).build()
-                    context.imageLoader.enqueue(req)
-                }
-                item.tag = i
-                item.isChecked = i in indexes
-                item.setOnCheckedChangeListener(checkedChangeListener)
+        for (i in entries.indices) {
+            layoutInflater.inflate(R.layout.popup_select_multi_item, radioGroup)
+            val item = radioGroup[i] as MaterialCheckBox
+            if (i == 0) item.alterMargin(top = 0)
+            item.id = R.id.popupSelectMultiContainer + i + 1
+            item.text = entries[i]
+            if (icons.isNotEmpty() && icons[i] != null) {
+                item.compoundDrawablePadding = iconPadding
+                val req = ImageRequest.Builder(context).target(object : ViewTarget<MaterialCheckBox> {
+                    override val view: MaterialCheckBox = item
+                    override fun onStart(placeholder: Drawable?) = setDrawable(placeholder)
+                    override fun onSuccess(result: Drawable) = setDrawable(result)
+                    override fun onError(error: Drawable?) = setDrawable(error)
+                    private fun setDrawable(drawable: Drawable?) {
+                        drawable?.setBounds(0, 0, iconBound, iconBound)
+                        item.setCompoundDrawablesRelative(drawable, null, null, null)
+                    }
+                }).data(icons[i]).build()
+                context.imageLoader.enqueue(req)
             }
+            item.tag = i
+            item.isChecked = i in indexes
+            item.setOnCheckedChangeListener(checkedChangeListener)
         }
         setListener({ dismiss() }, {
             onConfirmedListener.invoke(this, radioGroup, checkedIndexes)

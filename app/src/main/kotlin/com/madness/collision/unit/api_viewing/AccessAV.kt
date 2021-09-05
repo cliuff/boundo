@@ -50,8 +50,18 @@ object AccessAV: UnitAccess(Unit.UNIT_NAME_API_VIEWING) {
         invokeWithoutArg("clearContext")
     }
 
-    fun initTagSettings(context: Context, prefSettings: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)) {
-        getMethod("initTagSettings", Context::class, SharedPreferences::class).invoke(context, prefSettings)
+    fun initTagSettings(
+        context: Context,
+        prefSettings: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
+    ) {
+        getMethod("initTagSettings", SharedPreferences::class).invoke(prefSettings)
+    }
+
+    fun updateTagSettings(
+        context: Context,
+        prefSettings: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
+    ) {
+        getMethod("updateTagSettings", SharedPreferences::class).invoke(prefSettings)
     }
 
     fun resolveUri(context: Context, uri: Uri): Any? {

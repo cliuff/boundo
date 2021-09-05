@@ -35,13 +35,10 @@ import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.edit
-import androidx.core.content.res.use
 import androidx.core.view.forEach
-import androidx.core.view.get
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.google.android.material.checkbox.MaterialCheckBox
 import com.madness.collision.R
 import com.madness.collision.main.MainActivity
 import com.madness.collision.main.MainViewModel
@@ -58,6 +55,9 @@ import com.madness.collision.unit.api_viewing.list.APIAdapter
 import com.madness.collision.unit.api_viewing.list.ApiInfoPop
 import com.madness.collision.unit.api_viewing.list.AppListFragment
 import com.madness.collision.unit.api_viewing.stats.StatisticsFragment
+import com.madness.collision.unit.api_viewing.tag.app.AppTagInfo
+import com.madness.collision.unit.api_viewing.tag.app.AppTagManager
+import com.madness.collision.unit.api_viewing.tag.app.getFullLabel
 import com.madness.collision.unit.api_viewing.util.ApkRetriever
 import com.madness.collision.unit.api_viewing.util.PrefUtil
 import com.madness.collision.util.*
@@ -539,23 +539,13 @@ class MyUnit: com.madness.collision.unit.Unit() {
                 popSrc?.show()
             }
             rDisplay = RunnableDisplay(displayItem)
-            val filterTags = context.resources.obtainTypedArray(MyR.array.prefAvTagsEntries)
-            val tagIcons = listOf(
-                null, null,
-                MyR.drawable.ic_flutter_72, MyR.drawable.ic_react_72, MyR.drawable.ic_xamarin_72,
-                MyR.drawable.ic_kotlin_72, MyR.drawable.ic_cmp_72, MyR.drawable.ic_64b_72,
-                null, null,
-                MyR.drawable.ic_hidden_72, MyR.drawable.ic_system_72, MyR.drawable.ic_aab_72,
-                MyR.drawable.ic_ai_72,
-                MyR.drawable.ic_firebase_72, MyR.drawable.ic_huawei_72, MyR.drawable.ic_xiaomi_72,
-                MyR.drawable.ic_meizu_72, MyR.drawable.ic_oppo_72, MyR.drawable.ic_vivo_72,
-                MyR.drawable.ic_aurora_72, MyR.drawable.ic_umeng_72, MyR.drawable.ic_tpns_72,
-                MyR.drawable.ic_emas_72, MyR.drawable.ic_baidu_push_72, MyR.drawable.ic_getui_72,
-            )
-            val popTags = PopupUtil.selectMulti(context, MyR.string.av_main_filter_tip, filterTags, tagIcons, emptySet()) {
-                pop, container, indexes ->
+            val rankedTags = AppTagManager.tags.values.sortedBy { it.rank }
+            val filterTags = rankedTags.map { it.getFullLabel(context)?.toString() ?: "" }
+            val tagIcons = rankedTags.map { it.icon.drawableResId }
+            val popTags = PopupUtil.selectMulti(
+                context, MyR.string.av_main_filter_tip, filterTags, tagIcons, emptySet()) { pop, _, indexes ->
                 pop.dismiss()
-                closeFilterTagMenu(container, indexes)
+                closeFilterTagMenu(indexes, rankedTags)
             }
             val container: ViewGroup = popTags.findViewById(R.id.popupSelectMultiContainer)
             val longClickListener = View.OnLongClickListener {
@@ -738,22 +728,25 @@ class MyUnit: com.madness.collision.unit.Unit() {
         viewBinding.avMainStatsContainer.setOnClickListener(listener)
     }
 
-    private fun closeFilterTagMenu(container: ViewGroup, checkedIndexes: Set<Int>) {
+    private fun closeFilterTagMenu(checkedIndexes: Set<Int>, tags: List<AppTagInfo>) {
         val context = context ?: return
         refreshLayout.isRefreshing = true
         lifecycleScope.launch(Dispatchers.Default) {
             var singleTitle: CharSequence? = null
-            val value = context.resources.obtainTypedArray(MyR.array.prefAvTagsValues).use {
-                values ->
-                checkedIndexes.associate {
-                    val name = values.getString(it) ?: ""
-                    val isAntied = it in antiSelectedIndexes
-                    name to TriStateSelectable(name, !isAntied)
-                }
+            val value = checkedIndexes.associate {
+                val name = tags[it].id
+                val isAntied = it in antiSelectedIndexes
+                name to TriStateSelectable(name, !isAntied)
             }
             if (checkedIndexes.size == 1) {
-                val checkedItem = container[checkedIndexes.first()] as MaterialCheckBox
-                singleTitle = checkedItem.text
+                val it = tags[checkedIndexes.first()]
+                val label = it.label.normal ?: it.label.full
+                singleTitle = when {
+                    label == null -> ""
+                    label.stringResId != null -> context.getString(label.stringResId)
+                    label.string != null -> label.string.toString()
+                    else -> ""
+                }
             }
             withContext(Dispatchers.Main) {
                 if (value.isEmpty()) {

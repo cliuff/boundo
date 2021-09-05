@@ -147,28 +147,15 @@ internal open class APIAdapter(context: Context, private val listener: Listener,
         holder.name.dartFuture(appInfo.name)
         holder.logo.setTag(R.bool.tagKeyAvAdapterItemId, appInfo)
 
-        holder.tags.removeAllViews()
-        val shouldWaitForIcon = !appInfo.hasIcon
-        var taskIcon: (suspend CoroutineScope.() -> Unit)? = null
-        if (shouldWaitForIcon) {
+        if (!appInfo.hasIcon) {
+            val logoView = holder.logo
             scope.launch(Dispatchers.Default) {
                 ensureItem(index)
-            }
-            val logoView = holder.logo
-            taskIcon = {
-                val elapsingTime = ElapsingTime()
-                while (true) {
-                    val iconApp = logoView.getTag(R.bool.tagKeyAvAdapterItemIconId) as ApiViewingApp?
-                    if (appInfo !== iconApp && appInfo.hasIcon) {
-                        withContext(Dispatchers.Main) {
-                            AppTag.tagAdaptiveIcon(context, appInfo, holder.tags)
-                            holder.logo.setTag(R.bool.tagKeyAvAdapterItemIconId, appInfo)
-                            animator.animateLogo(logoView)
-                        }
-                        break
-                    } else {
-                        if (elapsingTime.elapsed() >= 8000) break
-                        delay(400)
+                val iconApp = logoView.getTag(R.bool.tagKeyAvAdapterItemIconId) as ApiViewingApp?
+                if (appInfo !== iconApp && appInfo.hasIcon) {
+                    withContext(Dispatchers.Main) {
+                        holder.logo.setTag(R.bool.tagKeyAvAdapterItemIconId, appInfo)
+                        animator.animateLogo(logoView)
                     }
                 }
             }
@@ -229,12 +216,9 @@ internal open class APIAdapter(context: Context, private val listener: Listener,
             holder.updateTime.visibility = View.GONE
         }
 
+        holder.tags.removeAllViews()
         scope.launch(Dispatchers.Default) {
-            val checkerApp = AppTag.ensureResources(context, appInfo)
-            withContext(Dispatchers.Main) {
-                AppTag.inflateTags(context, holder.tags, checkerApp, !shouldWaitForIcon)
-                taskIcon?.let { t -> withContext(Dispatchers.Default) { t() } }
-            }
+            AppTag.inflateAllTagsAsync(context, holder.tags, appInfo)
         }
 
         holder.card.setOnClickListener {

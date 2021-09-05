@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,17 @@
 
 package com.madness.collision.unit.api_viewing
 
+import android.content.SharedPreferences
 import android.os.Bundle
+import androidx.core.content.edit
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
 import com.madness.collision.settings.SettingsFunc
+import com.madness.collision.unit.api_viewing.tag.app.AppTagManager
+import com.madness.collision.unit.api_viewing.tag.app.getFullLabel
 import com.madness.collision.unit.api_viewing.util.PrefUtil
-import com.madness.collision.util.F
-import com.madness.collision.util.P
-import com.madness.collision.util.X
-import com.madness.collision.util.findPref
+import com.madness.collision.util.*
 
 internal class PrefAv: PreferenceFragmentCompat() {
     companion object {
@@ -75,6 +76,30 @@ internal class PrefAv: PreferenceFragmentCompat() {
             AccessAV.clearSeals()
             X.deleteFolder(F.createFile(F.valCachePubAvSeal(context)))
         }
+    }
+
+    override fun onPreferenceTreeClick(preference: Preference?): Boolean {
+        if (preference == null) return super.onPreferenceTreeClick(preference)
+        val context = context ?: return super.onPreferenceTreeClick(preference)
+        val prefKeyTags = context.getString(R.string.avTags)
+        if (preference.key == prefKeyTags) {
+            val pref: SharedPreferences = preferenceManager.sharedPreferences
+            val prefValue = pref.getStringSet(prefKeyTags, null) ?: emptySet()
+            val tags = AppTagManager.tags
+            val rankedTags = tags.values.sortedBy { it.rank }
+            val checkedIndexes = prefValue.mapNotNullTo(mutableSetOf()) { id ->
+                rankedTags.indexOfFirst { it.id == id }
+            }
+            val filterTags = rankedTags.map { it.getFullLabel(context)?.toString() ?: "" }
+            val tagIcons = rankedTags.map { it.icon.drawableResId }
+            PopupUtil.selectMulti(context, R.string.av_settings_tags, filterTags, tagIcons, checkedIndexes) { pop, _, indexes ->
+                pop.dismiss()
+                val resultSet = indexes.mapTo(mutableSetOf()) { rankedTags[it].id }
+                pref.edit { putStringSet(prefKeyTags, resultSet) }
+            }.show()
+            return true
+        }
+        return super.onPreferenceTreeClick(preference)
     }
 
 }

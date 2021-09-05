@@ -107,4 +107,8 @@
     <string name="av_details_real_installer">"實際安裝程序："</string>
     <string name="av_upd_ver_upd">版本更新</string>
     <string name="av_upd_pck_upd">包更新</string>
+    <string name="av_tag_jpush_normal">極光推送</string>
+    <string name="av_tag_upush_normal">友盟推送</string>
+    <string name="av_tag_tpns_normal">騰訊移動推送</string>
+    <string name="av_tag_ali_push_normal">阿里雲移動推送</string>
 </resources>

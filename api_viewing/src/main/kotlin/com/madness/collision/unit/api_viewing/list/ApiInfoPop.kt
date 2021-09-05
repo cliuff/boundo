@@ -219,10 +219,7 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
                     }
                 }
                 lifecycleScope.launch(Dispatchers.Default) {
-                    val checkerApp = AppTag.ensureResources(context, it)
-                    launch(Dispatchers.Main) {
-                        AppTag.inflateTags(context, mvApp.tags, checkerApp, true)
-                    }
+                    AppTag.inflateAllTagsAsync(context, mvApp.tags, it)
                 }
 
                 disposeAPIInfo(VerInfo.targetDisplay(this), mvTarget)

@@ -37,6 +37,7 @@ import com.madness.collision.unit.UpdatesProvider
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.database.AppRoom
 import com.madness.collision.unit.api_viewing.seal.SealManager
+import com.madness.collision.unit.api_viewing.tag.app.AppTagInfo
 import com.madness.collision.unit.api_viewing.util.ApkRetriever
 import com.madness.collision.unit.api_viewing.util.PrefUtil
 import com.madness.collision.util.Page
@@ -86,21 +87,37 @@ object MyBridge: Bridge() {
     }
 
     /**
-     * Add only the selected ones
-     * Adding all the tags will harm performance
+     * Add only the selected ones because adding all the tags will harm performance
      * Users will have a glimpse of available features in Filter by Tag
-     * This feature alone does not serve that purpose any more
+     * Consequently tag settings alone does not serve that purpose any more
      */
     @Suppress("unused")
-    fun initTagSettings(context: Context, prefSettings: SharedPreferences) {
-        val tagSettings = mutableSetOf<String>()
-        tagSettings.add(context.getString(R.string.prefAvTagsValuePackageInstallerGp))
-        tagSettings.add(context.getString(R.string.prefAvTagsValuePackageInstallerPi))
-        tagSettings.add(context.getString(R.string.prefAvTagsValueCrossPlatformFlu))
-        tagSettings.add(context.getString(R.string.prefAvTagsValueCrossPlatformRn))
-        tagSettings.add(context.getString(R.string.prefAvTagsValueCrossPlatformXam))
+    fun initTagSettings(prefSettings: SharedPreferences) {
+        val tagSettings = setOf(
+            AppTagInfo.ID_APP_INSTALLER_PLAY,
+            AppTagInfo.ID_APP_INSTALLER,
+            AppTagInfo.ID_TECH_FLUTTER,
+            AppTagInfo.ID_TECH_REACT_NATIVE,
+            AppTagInfo.ID_TECH_XAMARIN,
+        )
         prefSettings.edit {
             putStringSet(PrefUtil.AV_TAGS, tagSettings)
+        }
+    }
+
+    @Suppress("unused")
+    fun updateTagSettings(prefSettings: SharedPreferences) {
+        val tags = prefSettings.getStringSet(PrefUtil.AV_TAGS, null)?.let { HashSet(it) } ?: return
+        mapOf(
+            "avTagsValNlArm" to listOf(AppTagInfo.ID_PKG_ARM32, AppTagInfo.ID_PKG_ARM64),
+            "avTagsValNlX86" to listOf(AppTagInfo.ID_PKG_X86, AppTagInfo.ID_PKG_X64)
+        ).forEach { (oldID, newIds) ->
+            if (tags.contains(oldID).not()) return@forEach // continue
+            tags.addAll(newIds)
+            tags.remove(oldID)
+        }
+        prefSettings.edit {
+            putStringSet(PrefUtil.AV_TAGS, tags)
         }
     }
 
