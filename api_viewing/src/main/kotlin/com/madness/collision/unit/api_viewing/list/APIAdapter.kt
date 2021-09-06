@@ -136,6 +136,35 @@ internal open class APIAdapter(context: Context, private val listener: Listener,
         }
     }
 
+    private suspend fun ensureAppIcon(index: Int, logoView: ImageView) {
+        ensureItem(index)
+        val iconApp = logoView.getTag(R.bool.tagKeyAvAdapterItemIconId) as ApiViewingApp?
+        val appInfo = apps[index]
+        // logo was set with the same app icon
+        if (appInfo === iconApp) return
+        val finalBlock: suspend () -> Unit = {
+            withContext(Dispatchers.Main) {
+                logoView.setTag(R.bool.tagKeyAvAdapterItemIconId, appInfo)
+                animator.animateLogo(logoView)
+            }
+        }
+        if (appInfo.hasIcon) {
+            finalBlock()
+            return
+        }
+        // wait for icon otherwise (for unknown reason) there will be blank icons
+        // once jumping from the bottom of the list directly to the top
+        val elapsingTime = ElapsingTime()
+        while (true) {
+            if (appInfo.hasIcon) {
+                finalBlock()
+                break
+            }
+            if (elapsingTime.elapsed() >= 6000) break
+            delay(200)
+        }
+    }
+
     override fun onMakeBody(holder: Holder, index: Int) {
         // set surface color before setting the background color to avoid seen-through shadow of cards
 //        if (shouldShowDesserts && !holder.card.cardBackgroundColor.isOpaque) {
@@ -148,16 +177,8 @@ internal open class APIAdapter(context: Context, private val listener: Listener,
         holder.logo.setTag(R.bool.tagKeyAvAdapterItemId, appInfo)
 
         if (!appInfo.hasIcon) {
-            val logoView = holder.logo
             scope.launch(Dispatchers.Default) {
-                ensureItem(index)
-                val iconApp = logoView.getTag(R.bool.tagKeyAvAdapterItemIconId) as ApiViewingApp?
-                if (appInfo !== iconApp && appInfo.hasIcon) {
-                    withContext(Dispatchers.Main) {
-                        holder.logo.setTag(R.bool.tagKeyAvAdapterItemIconId, appInfo)
-                        animator.animateLogo(logoView)
-                    }
-                }
+                ensureAppIcon(index, holder.logo)
             }
         } else {
             holder.logo.setTag(R.bool.tagKeyAvAdapterItemIconId, appInfo)

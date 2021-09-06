@@ -435,22 +435,13 @@ internal class AppListService {
     }
 
     private fun actionThirdPartyPkg(app: ApiViewingApp): CharSequence {
-        val appPackage = app.appPackage
-        val pkgList = if (appPackage.hasSplits) {
-            appPackage.apkPaths.flatMap { ApkUtil.getThirdPartyPkg(it, app.packageName) }
-        } else {
-            ApkUtil.getThirdPartyPkg(appPackage.basePath, app.packageName)
-        }
-        return pkgList.joinToString(separator = "\n")
+        return app.appPackage.apkPaths.flatMap {
+            ApkUtil.getThirdPartyPkg(it, app.packageName)
+        }.joinToString(separator = "\n")
     }
 
     private fun actionCheckPkg(app: ApiViewingApp, pkg: String): Boolean {
-        val appPackage = app.appPackage
-        return if (appPackage.hasSplits) {
-            appPackage.apkPaths.any { ApkUtil.checkPkg(it, pkg) }
-        } else {
-            ApkUtil.checkPkg(appPackage.basePath, pkg)
-        }
+        return app.appPackage.apkPaths.any { ApkUtil.checkPkg(it, pkg) }
     }
 
     private fun dialogThirdPartyPkg(context: Context, content: CharSequence) {

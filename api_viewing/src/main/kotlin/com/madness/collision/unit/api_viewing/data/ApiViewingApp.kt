@@ -551,10 +551,8 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
                 // ensure thread safety, otherwise encounter exceptions during app list loading
                 synchronized(jetpackComposed) {
                     if (isThirdPartyPackagesRetrieved) return
-                    val checkResult = if (appPackage.hasSplits) {
-                        appPackage.apkPaths.any { ApkUtil.checkPkg(it, "androidx.compose") }
-                    } else {
-                        ApkUtil.checkPkg(appPackage.basePath, "androidx.compose")
+                    val checkResult = appPackage.apkPaths.any {
+                        ApkUtil.checkPkg(it, "androidx.compose")
                     }
                     jetpackComposed = if (checkResult) 1 else 0
                 }

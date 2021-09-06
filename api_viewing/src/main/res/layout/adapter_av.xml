@@ -85,21 +85,11 @@
                 android:textColor="?colorAOnBackground"
                 android:textSize="@dimen/avListAdapterNameSize" />
 
-            <TextView
-                android:id="@+id/avAdapterInfoTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:textColor="?colorTextSub"
-                android:textSize="8sp"
-                tools:ignore="SmallSp" />
-
             <HorizontalScrollView
                 android:scrollbars="none"
                 android:requiresFadingEdge="horizontal"
                 android:overScrollMode="never"
-                android:layout_marginTop="3dp"
+                android:layout_marginTop="4dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
@@ -108,6 +98,17 @@
                     style="@style/AvTags"/>
 
             </HorizontalScrollView>
+
+            <TextView
+                android:id="@+id/avAdapterInfoTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="?colorTextSub"
+                android:textSize="8sp"
+                tools:ignore="SmallSp" />
         </LinearLayout>
 
         <LinearLayout

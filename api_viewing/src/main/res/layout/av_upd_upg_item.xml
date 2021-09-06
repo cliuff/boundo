@@ -134,6 +134,7 @@
                             android:layout_height="wrap_content"
                             android:ellipsize="end"
                             android:maxLines="1"
+                            android:maxWidth="230dp"
                             tools:text="3.7.0"
                             android:textColor="?colorTextSub"
                             android:textSize="12sp" />
@@ -216,6 +217,7 @@
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
                         android:maxLines="1"
+                        android:maxWidth="230dp"
                         tools:text="3.6.9"
                         android:textColor="?colorTextSub"
                         android:textSize="12sp" />

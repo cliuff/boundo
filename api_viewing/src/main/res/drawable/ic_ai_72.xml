@@ -16,5 +16,5 @@
   -->
 
 <inset xmlns:android="http://schemas.android.com/apk/res/android"
-    android:drawable="@drawable/ic_ai"
-    android:inset="12.5%" />
+    android:drawable="@drawable/ic_ai_path_72"
+    android:inset="8%" />

@@ -23,6 +23,7 @@ import android.os.Parcelable
 class AppPackage private constructor(val basePath: String, val splitPaths: List<String>): Parcelable {
 
     val hasSplits: Boolean = splitPaths.isNotEmpty()
+    // base + split apks
     val apkPaths: List<String> = makeApkPaths()
 
     constructor(basePath: String): this(basePath, emptyList())
