@@ -17,11 +17,8 @@
 package com.madness.collision.unit.api_viewing
 
 import android.Manifest
-import android.app.Activity
 import android.content.*
 import android.content.pm.PackageInfo
-import android.content.pm.PackageManager
-import android.graphics.Paint
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -29,19 +26,16 @@ import android.os.*
 import android.provider.DocumentsContract
 import android.view.*
 import android.widget.*
-import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.edit
-import androidx.core.view.forEach
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.madness.collision.R
 import com.madness.collision.main.MainActivity
-import com.madness.collision.main.MainViewModel
 import com.madness.collision.main.MyHideBottomViewOnScrollBehavior
 import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.api_viewing.data.ApiUnit
@@ -50,14 +44,13 @@ import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.database.DataMaintainer
 import com.madness.collision.unit.api_viewing.database.RecordMaintainer
 import com.madness.collision.unit.api_viewing.databinding.FragmentApiBinding
-import com.madness.collision.unit.api_viewing.device.DeviceApi
 import com.madness.collision.unit.api_viewing.list.APIAdapter
 import com.madness.collision.unit.api_viewing.list.ApiInfoPop
 import com.madness.collision.unit.api_viewing.list.AppListFragment
-import com.madness.collision.unit.api_viewing.stats.StatisticsFragment
-import com.madness.collision.unit.api_viewing.tag.app.AppTagInfo
-import com.madness.collision.unit.api_viewing.tag.app.AppTagManager
-import com.madness.collision.unit.api_viewing.tag.app.getFullLabel
+import com.madness.collision.unit.api_viewing.main.MainDataConfig
+import com.madness.collision.unit.api_viewing.main.MainListLoader
+import com.madness.collision.unit.api_viewing.main.MainStatus
+import com.madness.collision.unit.api_viewing.main.MainToolbar
 import com.madness.collision.unit.api_viewing.util.ApkRetriever
 import com.madness.collision.unit.api_viewing.util.PrefUtil
 import com.madness.collision.util.*
@@ -66,7 +59,6 @@ import com.madness.collision.util.controller.getSavedFragment
 import com.madness.collision.util.controller.saveFragment
 import com.madness.collision.util.os.OsUtils
 import kotlinx.coroutines.*
-import java.io.File
 import com.madness.collision.unit.api_viewing.R as MyR
 
 class MyUnit: com.madness.collision.unit.Unit() {
@@ -75,20 +67,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
 
     companion object {
 //        const val ARG_INTENT = "intent"
-
-        const val DISPLAY_APPS_USER: Int = 0
-        const val DISPLAY_APPS_SYSTEM: Int = 1
-        const val DISPLAY_APPS_ALL: Int = 2
-        const val DISPLAY_APPS_APK: Int = 3
-        const val DISPLAY_APPS_SELECT: Int = 4
-        const val DISPLAY_APPS_VOLUME: Int = 5
-
 //        private val TAG = ApiFragment::class.java.simpleName
-        private const val REQUEST_OPEN_DIRECTORY = 2
-        private const val REQUEST_OPEN_VOLUME = 3
-        private const val REQUEST_EXTERNAL_STORAGE: Int  = 0
-        private const val REQUEST_EXTERNAL_STORAGE_RE: Int  = 1
-        private const val INTENT_GET_FILE: Int  = 6
 
         const val SORT_POSITION_API_LOW: Int  = 0
         const val SORT_POSITION_API_HIGH: Int  = 1
@@ -134,41 +113,34 @@ class MyUnit: com.madness.collision.unit.Unit() {
 
     // data
     private lateinit var launchMethod: LaunchMethod
-    private var sortItem: Int = SORT_POSITION_API_TIME
-    private var displayItem: Int = DISPLAY_APPS_USER
+    private val dataConfig = MainDataConfig()
+    private var loadItem: Int by dataConfig::loadItem
+    private var sortItem: Int by dataConfig::sortItem
+    private var displayItem: Int by dataConfig::displayItem
     private val loadedItems: ApiUnit
         get() = viewModel.loadedItems
-    private var loadItem: Int = ApiUnit.NON
     private var floatTop: Int = 0
     private var tbDrawable: Drawable? = null
-    private var iconColor = 0
-    private lateinit var rSort: RunnableSort
-    private lateinit var rDisplay: RunnableDisplay
-    private val service = AppMainService()
     private lateinit var apkRetriever: ApkRetriever
+    private lateinit var settingsPreferences: SharedPreferences
+
+    // managers
+    private lateinit var toolbarMan: MainToolbar
+    private lateinit var statusMan: MainStatus
+    private lateinit var listLoadingMan: MainListLoader
 
     // views
     private val refreshLayout: SwipeRefreshLayout
         get() = viewBinding.apiSwipeRefresh
     private lateinit var adapter: APIAdapter
-    // set as null when hidden, so as to fix anchor problem with toolbar
-    private var popSort: PopupMenu? = null
-    private var popSrc: PopupMenu? = null
 //    private var popFilterTag: PopupWindow? = null
-    private val antiSelectedIndexes = mutableSetOf<Int>()
 
     // context related
-    private lateinit var settingsPreferences: SharedPreferences
-    private lateinit var toolbar: Toolbar
     private lateinit var listFragment: AppListFragment
     private lateinit var viewBinding: FragmentApiBinding
 
-    private var searchBackPressedCallback: OnBackPressedCallback? = null
-
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
-        val textRes = if (EasyAccess.isViewingTarget) MyR.string.sdkcheck_dialog_targetsdktext else MyR.string.sdkcheck_dialog_minsdktext
-        val titleAffix = getString(textRes)
-        toolbar.title = getString(R.string.apiViewer) + " • $titleAffix"
+        toolbarMan.createOptions(context, toolbar)
         inflateAndTint(MyR.menu.toolbar_api, toolbar, iconColor)
         toolbar.setOnClickListener {
             scrollToTop()
@@ -176,8 +148,6 @@ class MyUnit: com.madness.collision.unit.Unit() {
             listFragment.clearBottomAppIcons()
         }
         toolbar.background.mutate().constantState?.newDrawable()?.let { tbDrawable = it }
-        this.iconColor = iconColor
-        this.toolbar = toolbar
         return true
     }
 
@@ -212,128 +182,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
     }
 
     override fun selectOption(item: MenuItem): Boolean {
-        when(item.itemId){
-            MyR.id.apiTBRefresh -> {
-                refreshLayout.isRefreshing = true
-                if (needPermission(REQUEST_EXTERNAL_STORAGE_RE)) return true
-                reloadList()
-                return true
-            }
-            MyR.id.apiTBSearch -> {
-                val searchView = item.actionView as SearchView
-                searchView.queryHint = getText(R.string.sdk_search_hint)
-                val filter = listFragment.filter
-                searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                    private var sOri: String = ""
-
-                    override fun onQueryTextSubmit(query: String?): Boolean {
-                        val context = context ?: return true
-                        val window = activity?.window ?: return true
-                        SystemUtil.hideImeCompat(context, searchView, window)
-                        searchView.clearFocus()
-                        return true
-                    }
-
-                    override fun onQueryTextChange(newText: String?): Boolean {
-                        val sAft: String = newText?.replace(" ", "") ?: ""
-                        if (sOri.compareTo(sAft, true) == 0) return true
-                        refreshLayout.isRefreshing = true
-                        if (sAft.isEmpty()) lifecycleScope.launch(Dispatchers.Default) {
-                            refreshList()
-                            filter.onCancel()
-                        } else {
-                            filter.isAddition = sOri.isEmpty() || sAft.startsWith(sOri)
-                            filter.filterBy(sAft)
-                        }
-                        sOri = sAft
-                        return true
-                    }
-                })
-                ensureSearchActionCollapse(item)
-                return true
-            }
-            MyR.id.apiTBSort -> {
-                if (popSort == null) {
-                    // when in overflow menu, menu item has no icon button
-                    // thus anchor would be null
-                    val anchor = toolbar.findViewById<View>(MyR.id.apiTBSort) ?: return false
-                    popSort = PopupMenu(context, anchor).apply {
-                        if (OsUtils.satisfy(OsUtils.Q)) setForceShowIcon(true)
-                        inflate(MyR.menu.api_sort)
-                        setOnMenuItemClickListener {
-                            clickSortItem(it)
-                        }
-                        menu.getItem(sortItem).isChecked = true
-                    }
-                }
-                popSort!!.show()
-                return true
-            }
-            MyR.id.apiTBSettings -> {
-                val settings = MyBridge.getSettings()
-                mainViewModel.displayFragment(settings)
-                return true
-            }
-            MyR.id.apiTBManual -> {
-                val context = context ?: return false
-                CollisionDialog.alert(context, MyR.string.avManual).show()
-                return true
-            }
-            MyR.id.apiTBViewingTarget -> {
-                EasyAccess.isViewingTarget = !EasyAccess.isViewingTarget
-                settingsPreferences.edit { putBoolean(PrefUtil.AV_VIEWING_TARGET, EasyAccess.isViewingTarget) }
-                val textRes = if (EasyAccess.isViewingTarget) MyR.string.sdkcheck_dialog_targetsdktext else MyR.string.sdkcheck_dialog_minsdktext
-                val titleAffix = getString(textRes)
-                toolbar.title = getString(R.string.apiViewer) + " • $titleAffix"
-                adapter.notifyDataSetChanged()
-                return true
-            }
-            MyR.id.avMainTbShare -> {
-                val context = context ?: return false
-                exportList(context)
-                return true
-            }
-            MyR.id.avMainTbDevice -> {
-                val context = context ?: return false
-                DeviceApi().show(context)
-                return true
-            }
-        }
-        return false
-    }
-
-    private fun exportList(context: Context) = lifecycleScope.launch(Dispatchers.Default) {
-        val file = service.exportList(context, adapter.apps) ?: return@launch
-        val label = "App List"
-        withContext(Dispatchers.Main) {
-            FilePop.by(context, file, "text/csv", R.string.fileActionsShare, imageLabel = label)
-                    .show(childFragmentManager, FilePop.TAG)
-        }
-    }
-
-    private fun ensureSearchActionCollapse(menuItem: MenuItem) {
-        val activity = activity ?: return
-        // action view is not expanded for the time being, make it in a listener
-        menuItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
-            override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
-                item ?: return true
-                searchBackPressedCallback?.remove()
-                searchBackPressedCallback = object : OnBackPressedCallback(true) {
-                    override fun handleOnBackPressed() {
-                        if (item.isActionViewExpanded) {
-                            item.collapseActionView()
-                        }
-                    }
-                }.also { activity.onBackPressedDispatcher.addCallback(it) }
-                return true
-            }
-            override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
-                item ?: return true
-                searchBackPressedCallback?.remove()
-                searchBackPressedCallback = null
-                return true
-            }
-        })
+        return toolbarMan.selectOption(item)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -345,10 +194,28 @@ class MyUnit: com.madness.collision.unit.Unit() {
         settingsPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
         EasyAccess.init(context, settingsPreferences)
 
+        loadedItems.apkPreload = settingsPreferences.getBoolean(
+            PrefUtil.API_APK_PRELOAD, PrefUtil.API_APK_PRELOAD_DEFAULT)
         apkRetriever = ApkRetriever(context)
 
         listFragment = childFragmentManager.getSavedFragment(savedInstanceState, STATE_KEY_LIST)
                 ?: AppListFragment.newInstance()
+
+        toolbarMan = MainToolbar(this, dataConfig, settingsPreferences).apply {
+            this.context = context
+            this.viewModel = this@MyUnit.viewModel
+            this.listFragment = this@MyUnit.listFragment
+        }
+        statusMan = MainStatus(this, dataConfig, settingsPreferences).apply {
+            this.context = context
+            this.viewModel = this@MyUnit.viewModel
+        }
+        listLoadingMan = MainListLoader(this, dataConfig).apply {
+            this.context = context
+            this.viewModel = this@MyUnit.viewModel
+            this.listFragment = this@MyUnit.listFragment
+            this.apkRetriever = this@MyUnit.apkRetriever
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -359,8 +226,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
     }
 
     override fun onStop() {
-        searchBackPressedCallback?.remove()
-        searchBackPressedCallback = null
+        toolbarMan.removeSearchBackCallback()
         ApiTaskManager.cancelAll()
         super.onStop()
     }
@@ -372,10 +238,10 @@ class MyUnit: com.madness.collision.unit.Unit() {
 
     override fun onHiddenChanged(hidden: Boolean) {
         if (hidden) {
-            popSort = null
+            // set as null to fix anchor problem with toolbar
+                toolbarMan.removeSortPopup()
             // remove this callback otherwise app cannot go back
-            searchBackPressedCallback?.remove()
-            searchBackPressedCallback = null
+            toolbarMan.removeSearchBackCallback()
         } else {
             val context = context ?: return
             // check settings
@@ -467,6 +333,12 @@ class MyUnit: com.madness.collision.unit.Unit() {
         }
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        toolbarMan.viewBinding = this@MyUnit.viewBinding
+        statusMan.viewBinding = this@MyUnit.viewBinding
+        listLoadingMan.viewBinding = this@MyUnit.viewBinding
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val context = context ?: return
@@ -480,7 +352,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
         // myAdapter.setStateRestorationStrategy(StateRestorationStrategy.WHEN_NOT_EMPTY);
 
         sortItem = settingsPreferences.getInt(PrefUtil.AV_SORT_ITEM, PrefUtil.AV_SORT_ITEM_DEFAULT)
-        rSort = RunnableSort(sortItem)
+        toolbarMan.setupSortRunnable()
         adapter.setSortMethod(sortItem)
 
         launchMethod = LaunchMethod(arguments)
@@ -528,43 +400,10 @@ class MyUnit: com.madness.collision.unit.Unit() {
 
         if (!isSpecial) {
             displayItem = settingsPreferences.getInt(PrefUtil.AV_LIST_SRC_ITEM, PrefUtil.AV_LIST_SRC_ITEM_DEFAULT)
-            popSrc = PopupMenu(context, viewBinding.apiSpinnerDisplayBack).apply {
-                if (OsUtils.satisfy(OsUtils.Q)) setForceShowIcon(true)
-                inflate(MyR.menu.av_list_src)
-                setOnMenuItemClickListener {
-                    clickListSrcItem(it)
-                }
-            }
-            viewBinding.avListSrc.setOnClickListener {
-                popSrc?.show()
-            }
-            rDisplay = RunnableDisplay(displayItem)
-            val rankedTags = AppTagManager.tags.values.sortedBy { it.rank }
-            val filterTags = rankedTags.map { it.getFullLabel(context)?.toString() ?: "" }
-            val tagIcons = rankedTags.map { it.icon.drawableResId }
-            val popTags = PopupUtil.selectMulti(
-                context, MyR.string.av_main_filter_tip, filterTags, tagIcons, emptySet()) { pop, _, indexes ->
-                pop.dismiss()
-                closeFilterTagMenu(indexes, rankedTags)
-            }
-            val container: ViewGroup = popTags.findViewById(R.id.popupSelectMultiContainer)
-            val longClickListener = View.OnLongClickListener {
-                val checkedIndex = it.tag as Int
-                if (it is CompoundButton) {
-                    it.isChecked = true
-                    if (checkedIndex in antiSelectedIndexes) {
-                        it.paintFlags = it.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
-                        antiSelectedIndexes.remove(checkedIndex)
-                    } else {
-                        it.paintFlags = it.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-                        antiSelectedIndexes.add(checkedIndex)
-                    }
-                }
-                true
-            }
-            container.forEach {
-                it.setOnLongClickListener(longClickListener)
-            }
+            statusMan.createListSrcPopup(context, viewBinding.apiSpinnerDisplayBack)
+            viewBinding.avListSrc.setOnClickListener { statusMan.showListSrcPopup() }
+            statusMan.setupDisplayRunnable()
+            statusMan.setupTagFilterPopup(context)
 //            val width = ViewGroup.LayoutParams.WRAP_CONTENT
 //            popFilterTag = PopupWindow(filterTagDelegate, width, width).apply {
 //                setOnDismissListener {
@@ -572,34 +411,14 @@ class MyUnit: com.madness.collision.unit.Unit() {
 //            }
             viewBinding.avMainFilterContainer.setOnClickListener {
 //                popTags?.showAsDropDown(avMainFilterCard)
-                popTags.show()
+                statusMan.showTagsPopup()
             }
             X.curvedCard(viewBinding.apiStatsBack)
             X.curvedCard(viewBinding.avMainFilterCard)
             X.curvedCard(viewBinding.apiSpinnerDisplayBack)
         }
 
-        if (OsUtils.satisfy(OsUtils.N)) {
-            val apkDisplayDragListener = object : View.OnDragListener {
-                override fun onDrag(v: View?, event: DragEvent?): Boolean {
-                    event ?: return false
-                    when (event.action) {
-                        DragEvent.ACTION_DRAG_ENTERED -> {
-                            notifyBriefly(R.string.apiDragDropHint)
-                        }
-                        DragEvent.ACTION_DROP -> {
-                            val permission = activity?.requestDragAndDropPermissions(event)
-                            lifecycleScope.launch(Dispatchers.Default) {
-                                dragDropAction(context, event.clipData)
-                                permission?.release()
-                            }
-                        }
-                    }
-                    return true
-                }
-            }
-            viewBinding.apiContainer.setOnDragListener(apkDisplayDragListener)
-        }
+        if (OsUtils.satisfy(OsUtils.N)) setupDragAndDrop(context)
 
         if (launchMethod.mode != LaunchMethod.LAUNCH_MODE_SEARCH
                 && launchMethod.mode != LaunchMethod.LAUNCH_MODE_LINK) {
@@ -608,9 +427,9 @@ class MyUnit: com.madness.collision.unit.Unit() {
                 delay(1)
                 withContext(Dispatchers.Main) {
                     if (!isRestore) {
-                        selectListSrcItem(displayItem)
+                        statusMan.selectListSrcItem(displayItem)
                     } else {
-                        loadListSrcItem(displayItem)
+                        statusMan.loadListSrcItem(displayItem)
                         updateStats()
                     }
                 }
@@ -630,176 +449,25 @@ class MyUnit: com.madness.collision.unit.Unit() {
         }
     }
 
-    private fun clickSortItem(item: MenuItem): Boolean  {
-        refreshLayout.isRefreshing = true
-        sortItem = when (item.itemId) {
-            MyR.id.menuApiSortAPIL -> SORT_POSITION_API_LOW
-            MyR.id.menuApiSortAPIH -> SORT_POSITION_API_HIGH
-            MyR.id.menuApiSortAPIName -> SORT_POSITION_API_NAME
-            MyR.id.menuApiSortAPITime -> SORT_POSITION_API_TIME
-            else -> sortItem
-        }
-        item.isChecked = true
-        // clear tag filter
-        val context = context
-        if (context != null) {
-            clearTagFilter(context)
-        }
-        rSort.position = sortItem
-        ApiTaskManager.join(task = rSort)
-        return true
-    }
-
-    /**
-     * Select an item
-     * Update menu item selection and invoke the corresponding callback
-     */
-    private fun selectListSrcItem(item: Int) {
-        popSrc?.menu?.getItem(item)?.let {
-            // avoid duplicate refresh
-            if (it.isChecked) return
-            clickListSrcItem(it)
-        }
-    }
-
-    private fun clickListSrcItem(item: MenuItem): Boolean {
-        refreshLayout.isRefreshing = true
-        loadListSrcItem(item)
-        if (needPermission(REQUEST_EXTERNAL_STORAGE)) return true
-        // clear tag filter
-        val context = context
-        if (context != null) {
-            clearTagFilter(context)
-        }
-        rDisplay.position = displayItem
-        ApiTaskManager.join(task = rDisplay)
-        return true
-    }
-
-    private fun loadListSrcItem(item: Int) {
-        popSrc?.menu?.getItem(item)?.let {
-            // avoid duplicate refresh
-            if (it.isChecked) return
-            loadListSrcItem(it)
-        }
-    }
-
-    /**
-     * Load data and views
-     */
-    private fun loadListSrcItem(item: MenuItem) {
-        viewBinding.avListSrc.text = item.title
-        item.isChecked = true
-        var isStatsAvailable = false
-        when (item.itemId){
-            MyR.id.avListSrcUsr -> {
-                displayItem = DISPLAY_APPS_USER
-                isStatsAvailable = true
-                ApiUnit.USER
-            }
-            MyR.id.avListSrcSys -> {
-                displayItem = DISPLAY_APPS_SYSTEM
-                isStatsAvailable = true
-                ApiUnit.SYS
-            }
-            MyR.id.avListSrcAll -> {
-                displayItem = DISPLAY_APPS_ALL
-                isStatsAvailable = true
-                ApiUnit.ALL_APPS
-            }
-            MyR.id.avListSrcDeviceApk -> {
-                displayItem = DISPLAY_APPS_APK
-                ApiUnit.APK
-            }
-            MyR.id.avListSrcCustom -> {
-                displayItem = DISPLAY_APPS_SELECT
-                if (loadItem == ApiUnit.DISPLAY) ApiUnit.DISPLAY
-                else ApiUnit.SELECTED
-            }
-            MyR.id.avListSrcVolume -> {
-                displayItem = DISPLAY_APPS_VOLUME
-                ApiUnit.VOLUME
-            }
-            else -> null
-        }?.let { loadItem = it }
-        val listener = if (isStatsAvailable) View.OnClickListener {
-            mainViewModel.displayFragment(StatisticsFragment.newInstance(loadItem))
-        } else null
-        viewBinding.avMainStatsContainer.setOnClickListener(listener)
-    }
-
-    private fun closeFilterTagMenu(checkedIndexes: Set<Int>, tags: List<AppTagInfo>) {
-        val context = context ?: return
-        refreshLayout.isRefreshing = true
-        lifecycleScope.launch(Dispatchers.Default) {
-            var singleTitle: CharSequence? = null
-            val value = checkedIndexes.associate {
-                val name = tags[it].id
-                val isAntied = it in antiSelectedIndexes
-                name to TriStateSelectable(name, !isAntied)
-            }
-            if (checkedIndexes.size == 1) {
-                val it = tags[checkedIndexes.first()]
-                val label = it.label.normal ?: it.label.full
-                singleTitle = when {
-                    label == null -> ""
-                    label.stringResId != null -> context.getString(label.stringResId)
-                    label.string != null -> label.string.toString()
-                    else -> ""
-                }
-            }
-            withContext(Dispatchers.Main) {
-                if (value.isEmpty()) {
-                    viewBinding.avMainFilterText.text = null
-                    viewBinding.avMainFilterText.visibility = View.GONE
-                    viewBinding.avMainFilterContainer.setOnLongClickListener(null)
-                } else {
-                    if (value.size == 1) {
-                        viewBinding.avMainFilterText.text = singleTitle?.toString()
-                        viewBinding.avMainFilterText.visibility = View.VISIBLE
-                        if (checkedIndexes.first() in antiSelectedIndexes) {
-                            viewBinding.avMainFilterText.paintFlags = viewBinding.avMainFilterText.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-                        } else {
-                            viewBinding.avMainFilterText.paintFlags = viewBinding.avMainFilterText.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
-                        }
-                    } else {
-                        viewBinding.avMainFilterText.text = null
-                        viewBinding.avMainFilterText.visibility = View.GONE
-                    }
-                    viewBinding.avMainFilterContainer.setOnLongClickListener {
-                        clearTagFilter(context)
-                        updateList(viewModel.screen4Display(loadItem))
-                        true
+    @RequiresApi(OsUtils.N)
+    private fun setupDragAndDrop(context: Context) {
+        viewBinding.apiContainer.setOnDragListener { _, event: DragEvent? ->
+            event ?: return@setOnDragListener false
+            when (event.action) {
+                DragEvent.ACTION_DRAG_ENTERED -> notifyBriefly(R.string.apiDragDropHint)
+                DragEvent.ACTION_DROP -> {
+                    val permission = activity?.requestDragAndDropPermissions(event)
+                    lifecycleScope.launch(Dispatchers.Default) {
+                        dragDropAction(context, event.clipData)
+                        permission?.release()
                     }
                 }
             }
-            // cannot detect whether changed, previous state cannot be determined
-            // because filter state share data with normal state
-            AppTag.loadTagSettings(context, value, false)
-            val completeList = viewModel.screen4Display(loadItem)
-            val displayList = if (value.isEmpty()) completeList
-            else filterByTag(context, completeList)
-            withContext(Dispatchers.Main) {
-                updateList(displayList)
-                refreshLayout.isRefreshing = false
-            }
+            true
         }
     }
 
-    /**
-     * Filter app in parallel.
-     */
-    private suspend fun filterByTag(context: Context, appList: List<ApiViewingApp>)
-    : List<ApiViewingApp> = coroutineScope {
-        appList.map {
-            async(Dispatchers.Default) {
-                val result = AppTag.filterTags(context, it)
-                if (result) it else null
-            }
-        }.mapNotNull { it.await() }
-    }
-
-    private fun clearTagFilter(context: Context) {
+    fun clearTagFilter(context: Context) {
         viewBinding.avMainFilterText.text = null
         viewBinding.avMainFilterText.visibility = View.GONE
         AppTag.loadTagSettings(context, settingsPreferences, false)
@@ -814,7 +482,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
     /**
      * Reload app list completely
      */
-    private fun reloadList() = lifecycleScope.launch(Dispatchers.Default) {
+    fun reloadList() = lifecycleScope.launch(Dispatchers.Default) {
         ApiInfoPop.clearStores()
         viewModel.screenOut(loadItem)
 //        viewModel.updateApps4Display()
@@ -826,21 +494,21 @@ class MyUnit: com.madness.collision.unit.Unit() {
     /**
      * Refresh app list, serves as a shortcut to [updateList]
      */
-    private fun refreshList() {
+    fun refreshList() {
         updateList(viewModel.screen4Display(loadItem))
     }
 
     /**
      * Update adapter list, update stats, and scroll to top
      */
-    private fun updateList(list: List<ApiViewingApp> = viewModel.apps4Cache) {
+    fun updateList(list: List<ApiViewingApp> = viewModel.apps4Cache) {
         lifecycleScope.launch(Dispatchers.Default) {
             listFragment.updateListSync(list, refreshLayout)
             doListUpdateAftermath()
         }
     }
 
-    private fun doListUpdateAftermath() = lifecycleScope.launch {
+    fun doListUpdateAftermath() = lifecycleScope.launch {
         updateStats()
         scrollToTop()
     }
@@ -854,11 +522,10 @@ class MyUnit: com.madness.collision.unit.Unit() {
      * @param sortEfficiently sort or not
      * @param fg do foreground loading (do sorting if needed, while no sorting as background)
      */
-    private fun loadSortedList(item: Int, sortEfficiently: Boolean, fg: Boolean ) {
+    fun loadSortedList(item: Int, sortEfficiently: Boolean, fg: Boolean ) {
         val context = context ?: return
 
         // update records
-        val mainViewModel: MainViewModel by activityViewModels()
         if (MyUpdatesFragment.isNewSession(mainViewModel.timestamp)) {
             RecordMaintainer.pack(context, this).all
         }
@@ -872,195 +539,103 @@ class MyUnit: com.madness.collision.unit.Unit() {
                 loadedItems.loading(ApiUnit.ALL_APPS)
                 displaySearch(context, textExtra)
                 loadedItems.finish(ApiUnit.ALL_APPS)
-                return
             }
-        }
-
-        if (launchMethod.mode == LaunchMethod.LAUNCH_MODE_LINK) {
+            return
+        } else if (launchMethod.mode == LaunchMethod.LAUNCH_MODE_LINK) {
             val dataStreamExtra = launchMethod.dataStreamExtra
             if (dataStreamExtra != null) {
-                onSharingApk(dataStreamExtra)
-                return
-            }
-        }
-
-        if (!loadedItems.shouldLoad(item)) {
-            if (!sortEfficiently && fg) {
-                viewModel.sortApps(sortItem)
-                listFragment.updateList(viewModel.apps4Cache, refreshLayout)
+                lifecycleScope.launch(Dispatchers.Default) {
+                    displayPkgInfo(dataStreamExtra)
+                    ceaseRefresh(ApiUnit.NON)
+                }
             }
             return
         }
 
-        when (item){
-            ApiUnit.USER -> {
-                loadedItems.loading(item)
-                viewModel.addUserApps(context)
-                loadedItems.finish(item)
-            }
-            ApiUnit.SYS -> {
-                loadedItems.loading(item)
-                viewModel.addSystemApps(context)
-                loadedItems.finish(item)
-            }
-            ApiUnit.ALL_APPS -> {
-                val bUser = loadedItems.shouldLoad(ApiUnit.USER)
-                val bSys = loadedItems.shouldLoad(ApiUnit.SYS)
-                loadedItems.loading(item)
-                if (bUser && bSys){
-                    viewModel.addAllApps(context)
-                } else if (bUser){
-                    viewModel.addUserApps(context)
-                } else if (bSys){
-                    viewModel.addSystemApps(context)
+        var loadingItem: Int = item
+        var isForegroundLoading = fg
+        var isEfficientSort = sortEfficiently
+        while (true) {
+            loadingItem = listLoadingMan.loadSortedStandardList(loadingItem, isEfficientSort, isForegroundLoading) {
+                when (loadingItem) {
+                    ApiUnit.USER, ApiUnit.SYS, ApiUnit.ALL_APPS -> listLoadingMan.loadAppItemList(context, loadingItem)
+                    ApiUnit.APK, ApiUnit.SELECTED, ApiUnit.VOLUME -> loadApkItemList(context, loadingItem)
                 }
-                loadedItems.finish(item)
+            } ?: break
+            isForegroundLoading = false  // next item will be loaded in background
+            isEfficientSort = true  // next item will sort efficiently
+            if (loadingItem != ApiUnit.APK) continue
+            // check APK item to load in background for permission
+            if (OsUtils.satisfy(OsUtils.Q)) {
+//                if (!accessiblePrimaryExternal(context, null)) break
+                break // prohibit background loading due to storage consumption issue
+            } else {
+                val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+                if (PermissionUtil.check(context, permissions).isNotEmpty()) break
             }
+        }
+    }
+
+    private fun loadApkItemList(context: Context, item: Int) {
+        loadedItems.loading(item)
+        when (item){
             ApiUnit.APK -> {
-                loadedItems.loading(item)
                 lifecycleScope.launch(Dispatchers.Default) {
-                    if (OsUtils.satisfy(OsUtils.Q)) accessiblePrimaryExternal(context) { treeUri ->
-                        apkRetriever.fromUri(treeUri) {
-                            displayApk(context, it)
-                        }
-                    } else {
-                        try {
-                            val external: File = getExternalStorageDirectory()
-                            apkRetriever.fromFileFolder(external) {
-                                displayApk(context, it.path)
-                            }
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                        }
-                    }
+                    listLoadingMan.loadDeviceApks(context) { displayApk(context, it) }
                     ceaseRefresh(ApiUnit.APK)
                     loadedItems.finish(item)
                 }
             }
             ApiUnit.SELECTED -> {
-                loadedItems.loading(item)
-                val intent = Intent(Intent.ACTION_GET_CONTENT)
-                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-                intent.type = "application/vnd.android.package-archive"
-                startActivityForResult(intent, INTENT_GET_FILE)
+                getContentLauncher.launch("application/vnd.android.package-archive")
             }
             ApiUnit.VOLUME -> {
-                loadedItems.loading(item)
-                startActivityForResult(
-                        Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
-                            // make it possible to access children
-                            addFlags(Intent.FLAG_GRANT_PREFIX_URI_PERMISSION)
-                            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                        },
-                        REQUEST_OPEN_VOLUME
-                )
-            }
-            ApiUnit.NON -> return
-        }
-
-        val item2Load = loadedItems.item2Load(settingsPreferences)
-        val accomplished = item2Load == ApiUnit.NON
-        if (accomplished || fg) {
-            if (fg) viewModel.sortApps(sortItem)
-            if (accomplished) return
-        }
-        if (item2Load == ApiUnit.APK) {
-            if (OsUtils.satisfy(OsUtils.Q)) {
-//                if (!accessiblePrimaryExternal(context, null)) return
-                return // prohibit background loading due to storage consumption issue
-            } else {
-                val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
-                if (PermissionUtil.check(context, permissions).isNotEmpty()) return
+                openVolumeLauncher.launch(null)
             }
         }
-        ApiTaskManager.now { loadSortedList(item2Load, sortEfficiently = true, fg = false) }
     }
 
-    @Suppress("deprecation")
-    private fun getExternalStorageDirectory(): File {
-        return Environment.getExternalStorageDirectory()
+    private fun displayPkgInfo(info: PackageInfo) {
+        displayApk(true) {
+            apkRetriever.resolvePackage(info) {
+                it ?: return@resolvePackage
+                viewModel.addArchiveApp(it)
+            }
+        }
     }
 
-    private fun accessiblePrimaryExternal(context: Context, task: ((uri: Uri) -> Unit)?): Boolean{
+    fun accessiblePrimaryExternal(context: Context, task: ((uri: Uri) -> Unit)?): Boolean{
         val uriExternalPrimary = settingsPreferences.getString(P.URI_SCANNING_FOLDER, "") ?: ""
         for (uriPermission in context.contentResolver.persistedUriPermissions) {
-            val uriString = uriPermission.uri.toString()
-            if (uriString != uriExternalPrimary) continue
             val uri = uriPermission.uri
+            if (uri.toString() != uriExternalPrimary) continue
             task?.invoke(uri)
             return true
         }
         return false
     }
 
-    private fun needPermission(requestCode: Int ): Boolean {
+    fun needPermission(request: (permission: String) -> Unit): Boolean {
         val context = context ?: return false
-        return if (displayItem == DISPLAY_APPS_APK){
-            if (OsUtils.satisfy(OsUtils.Q)) {
-                var flagGranted = false
-                accessiblePrimaryExternal(context){ flagGranted = true }
-                if (flagGranted) return false
-                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
-                    // make it possible to persist
-                    addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
-                    // make it possible to access children
-                    addFlags(Intent.FLAG_GRANT_PREFIX_URI_PERMISSION)
-                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                }
-                startActivityForResult(intent, REQUEST_OPEN_DIRECTORY)
-                X.toast(context, MyR.string.av_apks_select_folder, Toast.LENGTH_LONG)
-            } else {
-                val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
-                if (PermissionUtil.check(context, permissions).isNotEmpty()) {
-                    if (OsUtils.satisfy(OsUtils.M)) {
-                        requestPermissions(permissions, requestCode)
-                    } else {
-                        refreshLayout.isRefreshing = false
-                        notify(R.string.toast_permission_storage_denied)
-                    }
+        if (displayItem != MainStatus.DISPLAY_APPS_APK) return false
+        if (OsUtils.satisfy(OsUtils.Q)) {
+            var flagGranted = false
+            accessiblePrimaryExternal(context){ flagGranted = true }
+            if (flagGranted) return false
+            openDirectoryLauncher.launch(null)
+            X.toast(context, MyR.string.av_apks_select_folder, Toast.LENGTH_LONG)
+        } else {
+            val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+            if (PermissionUtil.check(context, permissions).isNotEmpty()) {
+                if (OsUtils.satisfy(OsUtils.M)) {
+                    request(permissions[0])
+                } else {
+                    refreshLayout.isRefreshing = false
+                    notify(R.string.toast_permission_storage_denied)
                 }
             }
-            true
-        }else false
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray)  {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-            refreshLayout.isRefreshing = false
-            notify(R.string.toast_permission_storage_denied)
-            return
         }
-        if (requestCode == REQUEST_EXTERNAL_STORAGE){
-            rDisplay.position = displayItem
-            ApiTaskManager.join(task = rDisplay)
-        } else if (requestCode == REQUEST_EXTERNAL_STORAGE_RE){
-            reloadList()
-        }
-    }
-
-    private interface RunnableAPI{
-        var position: Int
-    }
-
-    private inner class RunnableSort(override var position: Int) : Runnable, RunnableAPI {
-        override fun run()  {
-            adapter.setSortMethod(position)
-            settingsPreferences.edit { putInt(PrefUtil.AV_SORT_ITEM, position) }
-            viewModel.sortApps(sortItem)
-            refreshList()
-        }
-    }
-
-    private inner class RunnableDisplay(override var position: Int) : Runnable, RunnableAPI {
-        override fun run()  {
-            if (position != DISPLAY_APPS_SELECT && position != DISPLAY_APPS_VOLUME) {
-                settingsPreferences.edit { putInt(PrefUtil.AV_LIST_SRC_ITEM, position) }
-            }
-            loadSortedList(loadItem, sortEfficiently = true, fg = true)
-            viewModel.sortApps(sortItem)
-            refreshList()
-        }
+        return true
     }
 
     private fun dragDropAction(context: Context, clipData: ClipData?) {
@@ -1073,7 +648,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
         if (!description.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
             loadItem = ApiUnit.DISPLAY
             ApiTaskManager.now(Dispatchers.Main) {
-                selectListSrcItem(DISPLAY_APPS_SELECT)
+                statusMan.selectListSrcItem(MainStatus.DISPLAY_APPS_SELECT)
             }
         }
         val mimeType = description.getMimeType(0)
@@ -1098,71 +673,70 @@ class MyUnit: com.madness.collision.unit.Unit() {
         ceaseRefresh(ApiUnit.DISPLAY)
     }
 
-    private fun onSharingApk(info: PackageInfo) = lifecycleScope.launch(Dispatchers.Default) {
-        displayApk(true) {
-            apkRetriever.resolvePackage(info) {
-                it ?: return@resolvePackage
-                viewModel.addArchiveApp(it)
-            }
+    private val getContentLauncher = registerForActivityResult(
+        ActivityResultContracts.GetMultipleContents()
+    ) { uriList ->
+        if (uriList.isEmpty()) {
+            notify(R.string.text_no_content)
+            return@registerForActivityResult
         }
-        ceaseRefresh(ApiUnit.NON)
+        val context = context ?: return@registerForActivityResult
+        lifecycleScope.launch(Dispatchers.Default) {
+            uriList.forEach { displayApk(context, it) }
+            ceaseRefresh(if (launchMethod.mode == LaunchMethod.LAUNCH_MODE_LINK) ApiUnit.NON else ApiUnit.SELECTED)
+        }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent? )  {
-        super.onActivityResult(requestCode, resultCode, data)
-        val context = context ?: return
-        when (requestCode) {
-            INTENT_GET_FILE -> lifecycleScope.launch(Dispatchers.Default) {
-                // Obtain file's uri from data.getData().
-                // If there are multiple files, achieve it by calling data.getClipData() instead.
-                val uri: Uri? = data?.data
-                val cd: ClipData? = data?.clipData
-                if (resultCode != AppCompatActivity.RESULT_OK || (uri == null && cd == null)) {
-                    notify(R.string.text_no_content)
-                    return@launch
-                }
-                val pathsSize: Int = (if (uri != null) 1 else cd!!.itemCount)
-                if (uri != null) {
-                    displayApk(context, uri)
-                } else {
-                    for (i in 0 until pathsSize) {
-                        displayApk(context, cd!!.getItemAt(i).uri)
-                    }
-                }
-                ceaseRefresh(if (launchMethod.mode == LaunchMethod.LAUNCH_MODE_LINK) ApiUnit.NON else ApiUnit.SELECTED)
-            }
-            REQUEST_OPEN_DIRECTORY -> {
-                if (resultCode != Activity.RESULT_OK) {
-                    notifyBriefly(R.string.text_no_content)
-                    ceaseRefresh(ApiUnit.APK)
-                    return
-                }
-                val uri = data?.data
-                if (uri != null) lifecycleScope.launch(Dispatchers.Default) {
-                    val takeFlags: Int = Intent.FLAG_GRANT_READ_URI_PERMISSION
-                    context.contentResolver.takePersistableUriPermission(uri, takeFlags)
-                    settingsPreferences.edit {
-                        putString(P.URI_SCANNING_FOLDER, uri.toString())
-                    }
-                    rDisplay.position = displayItem
-                    ApiTaskManager.join(task = rDisplay)
+    private val openDirectoryLauncher = registerForActivityResult(
+        object : ActivityResultContracts.OpenDocumentTree() {
+            override fun createIntent(context: Context, input: Uri?): Intent {
+                return super.createIntent(context, input).apply {
+                    // make it possible to persist
+                    addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
+                    // make it possible to access children
+                    addFlags(Intent.FLAG_GRANT_PREFIX_URI_PERMISSION)
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 }
             }
-            REQUEST_OPEN_VOLUME -> {
-                if (resultCode != Activity.RESULT_OK) {
-                    notifyBriefly(R.string.text_no_content)
-                    ceaseRefresh(ApiUnit.VOLUME)
-                    return
-                }
-                // todo
-                val uri = data?.data
-                if (uri != null) lifecycleScope.launch(Dispatchers.Default) {
-                    apkRetriever.fromUri(uri) {
-                        displayApk(context, it)
-                    }
-                    ceaseRefresh(ApiUnit.VOLUME)
+        }
+    ) { uri: Uri? ->
+        if (uri == null) {
+            notifyBriefly(R.string.text_no_content)
+            ceaseRefresh(ApiUnit.APK)
+            return@registerForActivityResult
+        }
+        val context = context ?: return@registerForActivityResult
+        lifecycleScope.launch(Dispatchers.Default) {
+            val takeFlags: Int = Intent.FLAG_GRANT_READ_URI_PERMISSION
+            context.contentResolver.takePersistableUriPermission(uri, takeFlags)
+            settingsPreferences.edit {
+                putString(P.URI_SCANNING_FOLDER, uri.toString())
+            }
+            statusMan.joinDisplay()
+        }
+    }
+
+    private val openVolumeLauncher = registerForActivityResult(
+        object : ActivityResultContracts.OpenDocumentTree() {
+            override fun createIntent(context: Context, input: Uri?): Intent {
+                return super.createIntent(context, input).apply {
+                    // make it possible to access children
+                    addFlags(Intent.FLAG_GRANT_PREFIX_URI_PERMISSION)
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 }
             }
+        }
+    ) { uri ->
+        if (uri == null) {
+            notifyBriefly(R.string.text_no_content)
+            ceaseRefresh(ApiUnit.VOLUME)
+            return@registerForActivityResult
+        }
+        val context = context ?: return@registerForActivityResult
+        // todo
+        lifecycleScope.launch(Dispatchers.Default) {
+            apkRetriever.fromUri(uri) { displayApk(context, it) }
+            ceaseRefresh(ApiUnit.VOLUME)
         }
     }
 }

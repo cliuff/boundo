@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,26 +16,18 @@
 
 package com.madness.collision.unit.api_viewing.tag
 
-interface Operator {
+fun interface Operator {
     fun operate(expression1: Expression, expression2: Expression): Boolean
 
     companion object {
-        val AND = object : Operator {
-            override fun operate(expression1: Expression, expression2: Expression): Boolean {
-                if (expression1 is Statement || expression2 is Statement) {
-                    return (expression1 * expression2).express()
-                }
-                return expression1.express() && expression2.express()
-            }
+        val AND = Operator { exp1: Expression, exp2: Expression ->
+            if (exp1 is Statement || exp2 is Statement) return@Operator (exp1 * exp2).express()
+            exp1.express() && exp2.express()
         }
 
-        val OR = object : Operator {
-            override fun operate(expression1: Expression, expression2: Expression): Boolean {
-                if (expression1 is Statement || expression2 is Statement) {
-                    return (expression1 + expression2).express()
-                }
-                return expression1.express() || expression2.express()
-            }
+        val OR = Operator { exp1: Expression, exp2: Expression ->
+            if (exp1 is Statement || exp2 is Statement) return@Operator (exp1 + exp2).express()
+            exp1.express() || exp2.express()
         }
     }
 }

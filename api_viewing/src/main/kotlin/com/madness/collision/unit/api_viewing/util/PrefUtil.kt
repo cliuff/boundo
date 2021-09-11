@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package com.madness.collision.unit.api_viewing.util
 
 import com.madness.collision.unit.api_viewing.MyUnit
+import com.madness.collision.unit.api_viewing.main.MainStatus
 
 internal object PrefUtil {
     const val AV_TAGS = "AvTags"
@@ -38,5 +39,5 @@ internal object PrefUtil {
     const val AV_SORT_ITEM = "SDKCheckSortSpinnerSelection"
     const val AV_SORT_ITEM_DEFAULT = MyUnit.SORT_POSITION_API_TIME
     const val AV_LIST_SRC_ITEM = "SDKCheckDisplaySpinnerSelection"
-    const val AV_LIST_SRC_ITEM_DEFAULT = MyUnit.DISPLAY_APPS_USER
+    const val AV_LIST_SRC_ITEM_DEFAULT = MainStatus.DISPLAY_APPS_USER
 }

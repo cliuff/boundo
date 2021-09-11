@@ -182,15 +182,20 @@ internal class AppTagInfo(
     }
 }
 
-internal fun AppTagInfo.getFullLabel(context: Context): CharSequence? {
-    val label = label.full ?: label.normal
-    return when {
-        label == null -> null
-        label.stringResId != null -> context.getString(label.stringResId)
-        label.string != null -> label.string.toString()
-        else -> null
-    }
+internal fun AppTagInfo.Label?.get(context: Context): CharSequence? = when {
+    this == null -> null
+    stringResId != null -> context.getString(stringResId)
+    string != null -> string.toString()
+    else -> null
 }
+
+internal fun AppTagInfo.Labels.getFullLabel(context: Context) = (full ?: normal).get(context)
+
+internal fun AppTagInfo.Labels.getNormalLabel(context: Context) = (normal ?: full).get(context)
+
+internal fun AppTagInfo.getFullLabel(context: Context) = label.getFullLabel(context)
+
+internal fun AppTagInfo.getNormalLabel(context: Context) = label.getNormalLabel(context)
 
 internal class ExpressibleTag(private val tagInfo: AppTagInfo, var isAnti: Boolean = false) : Expression {
     var res: AppTagInfo.Resources? = null
