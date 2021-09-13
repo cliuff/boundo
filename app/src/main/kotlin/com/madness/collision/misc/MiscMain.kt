@@ -138,6 +138,9 @@ internal object MiscMain {
                 }
             }
         }
+        if (verOri in 0 until 21090720) {
+            AccessAV.updateTagSettings(context)
+        }
     }
 
     private fun initPinnedUnits(pref: SharedPreferences) {

@@ -22,7 +22,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -32,6 +31,7 @@ import com.madness.collision.unit.Updatable
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.database.AppMaintainer
+import com.madness.collision.unit.api_viewing.databinding.AvUpdatesBinding
 import com.madness.collision.unit.api_viewing.list.APIAdapter
 import com.madness.collision.unit.api_viewing.list.AppList
 import com.madness.collision.unit.api_viewing.list.AppListFragment
@@ -85,6 +85,7 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
             val mainViewModel: MainViewModel by hostFragment.activityViewModels()
             val mainTimestamp = mainViewModel.timestamp
             val prefSettings = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
+
             var lastTimestamp = prefSettings.getLong(P.PACKAGE_CHANGED_TIMESTAMP, -1)
             // app opened the first time in lifetime, keep this new-app session untouched until reopened
             if (lastTimestamp == -1L) newAppTimestamp = System.currentTimeMillis()
@@ -113,9 +114,12 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
     }
 
     private lateinit var mContext: Context
+    private var _viewBinding: AvUpdatesBinding? = null
+    private val viewBinding: AvUpdatesBinding
+        get() = _viewBinding!!
     private lateinit var sections: List<AppSection>
 
-    private class AppSection (val stateKey: String, val containerId: Int, fragmentGetter: (AppSection) -> Fragment) {
+    private class AppSection(val stateKey: String, val containerId: Int, fragmentGetter: (AppSection) -> Fragment) {
         val fragment: Fragment = fragmentGetter(this)
         lateinit var adapter: APIAdapter
         var list: List<*> = emptyList<Any>()
@@ -147,8 +151,14 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
         )
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.av_updates, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _viewBinding = AvUpdatesBinding.inflate(inflater, container, false)
+        return viewBinding.root
+    }
+
+    override fun onDestroyView() {
+        _viewBinding = null
+        super.onDestroyView()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -171,6 +181,56 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
         super.onSaveInstanceState(outState)
     }
 
+    private suspend fun getUpdateLists(
+        context: Context, changedPkgList: List<PackageInfo>, detectNew: Boolean,
+        previousRecords: Map<String, ApiViewingApp>, listLimitSize: Int
+    ) {
+        val anApp = AppMaintainer.get(context, this@MyUpdatesFragment)
+        val packages = changedPkgList.subList(0, listLimitSize)
+        val appList = AppRetriever.mapToApp(packages, context, anApp.clone() as ApiViewingApp)
+
+        // separate new ones from list
+        val (newAppList, familiarAppList) = if (detectNew) {
+            emptyList<ApiViewingApp>() to appList
+        } else appList.partition {
+            // not present in previous records
+            previousRecords[it.packageName] == null
+        }
+        sections[I_NEW].list = ApiViewingViewModel.sortList(newAppList, MyUnit.SORT_POSITION_API_TIME)
+
+        val (verUpdList, pckUpdList) = familiarAppList.partition {
+            val prev = previousRecords[it.packageName] ?: return@partition false
+            it.verCode != prev.verCode
+        }
+        sections[I_VER].list = ApiViewingViewModel.sortList(verUpdList, MyUnit.SORT_POSITION_API_TIME)
+        sections[I_UPD].list = ApiViewingViewModel.sortList(pckUpdList, MyUnit.SORT_POSITION_API_TIME)
+
+        // upgrades that can be found in appList
+        val upgradesA = ArrayList<Upgrade>(familiarAppList.size)
+        // size of upgrades that are missing, i.e. excluded from appList
+        val getSize = changedPkgList.size - listLimitSize
+        val getPackages = ArrayList<PackageInfo>(getSize)
+        val getPrevious = ArrayList<ApiViewingApp>(getSize)
+        for (p in changedPkgList) {
+            val previous = previousRecords[p.packageName] ?: continue
+            // get updated app
+            val new = appList.find { it.packageName == p.packageName }
+            if (new == null) {
+                getPackages.add(p)
+                getPrevious.add(previous)
+            } else {
+                Upgrade.get(previous, new)?.let { upgradesA.add(it) }
+            }
+        }
+        // get missing apps
+        val getApps = AppRetriever.mapToApp(getPackages, context, anApp)
+        // get missing upgrades
+        val upgradesB = getPrevious.mapIndexedNotNull { index, previous ->
+            Upgrade.get(previous, getApps[index])
+        }
+        sections[I_UPG].list = UpgradeComparator.compareTime(upgradesA + upgradesB)
+    }
+
     override fun updateState() {
         lifecycleScope.launch(Dispatchers.Default) {
             if (changedPackages == null) {
@@ -181,54 +241,14 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
             val mPreviousRecords = previousRecords?.associateBy { it.packageName } ?: emptyMap()
             changedPackages = null
             previousRecords = null
-            val spanCount = if (activity == null || isDetached || !isAdded) 1 else sections[I_UPD].adapter.spanCount
-            val listLimitSize = min(mChangedPackages.size, 15 * spanCount)
+
             if (mChangedPackages.isEmpty()) {
                 sections.forEach { it.list = emptyList<Any>() }
             } else {
-                val anApp = AppMaintainer.get(mContext, this@MyUpdatesFragment)
-                val packages = mChangedPackages.subList(0, listLimitSize)
-                val appList = AppRetriever.mapToApp(packages, mContext, anApp)
-
-                // separate new ones from list
-                val (newAppList, familiarAppList) = if (isNewApp || noRecords) {
-                    emptyList<ApiViewingApp>() to appList
-                } else appList.partition {
-                    mPreviousRecords[it.packageName] == null
-                }
-                sections[I_NEW].list = ApiViewingViewModel.sortList(newAppList, MyUnit.SORT_POSITION_API_TIME)
-
-                val (verUpdList, pckUpdList) = familiarAppList.partition {
-                    val prev = mPreviousRecords[it.packageName] ?: return@partition false
-                    it.verCode != prev.verCode
-                }
-                sections[I_VER].list = ApiViewingViewModel.sortList(verUpdList, MyUnit.SORT_POSITION_API_TIME)
-                sections[I_UPD].list = ApiViewingViewModel.sortList(pckUpdList, MyUnit.SORT_POSITION_API_TIME)
-
-                // upgrades that can be found in appList
-                val upgradesA = ArrayList<Upgrade>(familiarAppList.size)
-                // size of upgrades that are missing, i.e. excluded from appList
-                val getSize = mChangedPackages.size - listLimitSize
-                val getPackages = ArrayList<PackageInfo>(getSize)
-                val getPrevious = ArrayList<ApiViewingApp>(getSize)
-                for (p in mChangedPackages) {
-                    val previous = mPreviousRecords[p.packageName] ?: continue
-                    // get updated app
-                    val new = appList.find { it.packageName == p.packageName }
-                    if (new == null) {
-                        getPackages.add(p)
-                        getPrevious.add(previous)
-                    } else {
-                        Upgrade.get(previous, new)?.let { upgradesA.add(it) }
-                    }
-                }
-                // get missing apps
-                val getApps = AppRetriever.mapToApp(getPackages, mContext, anApp.clone() as ApiViewingApp)
-                // get missing upgrades
-                val upgradesB = getPrevious.mapIndexedNotNull { index, previous ->
-                    Upgrade.get(previous, getApps[index])
-                }
-                sections[I_UPG].list = UpgradeComparator.compareTime(upgradesA + upgradesB)
+                val detectNew = isNewApp || noRecords
+                val spanCount = if (activity == null || isDetached || !isAdded) 1 else sections[I_UPD].adapter.spanCount
+                val listLimitSize = min(mChangedPackages.size, 15 * spanCount)
+                getUpdateLists(mContext, mChangedPackages, detectNew, mPreviousRecords, listLimitSize)
             }
 
             withContext(Dispatchers.Main) updateUI@ {
@@ -246,23 +266,19 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
             }
         }
 
-        val view = view ?: return
         listOf(
-            R.id.avUpdNewTitle to I_NEW,
-            R.id.avUpdUpgTitle to I_UPG,
-            R.id.avUpdVerTitle to I_VER,
-            R.id.avUpdatesRecentsTitle to I_UPD
-        ).forEach {
-            val visibility = if (sections[it.second].list.isEmpty()) View.GONE else View.VISIBLE
-            view.findViewById<TextView>(it.first)?.run {
-                this.visibility = visibility
-                if (it.second != I_UPD) return@run
-                setText(if (isNewSession) R.string.av_upd_pck_upd else R.string.av_updates_recents)
-            }
+            viewBinding.avUpdNewTitle to I_NEW,
+            viewBinding.avUpdUpgTitle to I_UPG,
+            viewBinding.avUpdVerTitle to I_VER,
+            viewBinding.avUpdatesRecentsTitle to I_UPD
+        ).forEach { (titleView, sectionIndex) ->
+            titleView.visibility = if (sections[sectionIndex].list.isEmpty()) View.GONE else View.VISIBLE
+            if (sectionIndex != I_UPD) return@forEach  // continue
+            titleView.setText(if (isNewSession) R.string.av_upd_pck_upd else R.string.av_updates_recents)
         }
-        view.findViewById<TextView>(R.id.avUpdatesRecentsMore)?.run {
-            val hasNoUpdates = sections[I_VER].list.isEmpty() && sections[I_UPD].list.isEmpty()
-            this.visibility = if (hasNoUpdates) View.GONE else View.VISIBLE
+        val hasNoUpdates = sections[I_VER].list.isEmpty() && sections[I_UPD].list.isEmpty()
+        viewBinding.avUpdatesRecentsMore.run {
+            visibility = if (hasNoUpdates) View.GONE else View.VISIBLE
             setOnClickListener {
                 if (activity == null || isDetached || !isAdded) return@setOnClickListener
                 val mainViewModel: MainViewModel by activityViewModels()
