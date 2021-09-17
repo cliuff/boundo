@@ -111,4 +111,9 @@
     <string name="av_tag_upush_normal">友盟推送</string>
     <string name="av_tag_tpns_normal">腾讯移动推送</string>
     <string name="av_tag_ali_push_normal">阿里云移动推送</string>
+    <string name="av_tag_full_64bit">全64位</string>
+    <string name="av_tag_full_64bit_normal">全64位</string>
+    <string name="av_tag_full_64bit_full">全64位（ARM 64位、x86 64位）</string>
+    <string name="av_tag_arm_32bit">ARM 32位</string>
+    <string name="av_tag_arm_64bit">ARM 64位</string>
 </resources>

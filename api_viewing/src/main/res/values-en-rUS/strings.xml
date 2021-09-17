@@ -111,4 +111,6 @@
     <string name="av_tag_upush_normal">U-Push</string>
     <string name="av_tag_tpns_normal">TPNS</string>
     <string name="av_tag_ali_push_normal">Alibaba Cloud push</string>
+    <string name="av_tag_full_64bit_normal">Full 64-bit</string>
+    <string name="av_tag_full_64bit_full">Full 64-bit (ARM 64-bit and x86 64-bit)</string>
 </resources>

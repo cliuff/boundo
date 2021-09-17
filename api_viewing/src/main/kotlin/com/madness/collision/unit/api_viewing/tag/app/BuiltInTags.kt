@@ -99,21 +99,21 @@ internal fun builtInTags(): Map<String, AppTagInfo> = listOf(
     ).apply { iconKey = "hid" },
 
     AppTagInfo(
-        id = AppTagInfo.ID_PKG_64BIT, category = 0.cat, icon = "64-bit".icon,
-        label = "64-bit".labels, rank = 11,
+        id = AppTagInfo.ID_PKG_64BIT, category = 0.cat, icon = R.string.av_tag_full_64bit.label.icon,
+        label = (R.string.av_tag_full_64bit_normal to R.string.av_tag_full_64bit_full).resLabels, rank = 11,
         requisites = nativeLibrariesRequisite().list,
         expressing = commonExpressing { it.nativeLibraries.let { n -> (!n[0] || n[1]) && (!n[2] || n[3]) } }
     ).apply { iconKey = "64b" },
 
     AppTagInfo(
         id = AppTagInfo.ID_PKG_ARM32, category = 0.cat, icon = "ARM 32".icon,
-        label = "ARM 32-bit".labels, rank = 12,
+        label = R.string.av_tag_arm_32bit.labels, rank = 12,
         requisites = nativeLibrariesRequisite().list,
         expressing = commonExpressing { it.nativeLibraries[0] }
     ),
     AppTagInfo(
         id = AppTagInfo.ID_PKG_ARM64, category = 0.cat, icon = "ARM 64".icon,
-        label = "ARM 64-bit".labels, rank = 13,
+        label = R.string.av_tag_arm_64bit.labels, rank = 13,
         requisites = nativeLibrariesRequisite().list,
         expressing = commonExpressing { it.nativeLibraries[1] }
     ),
@@ -211,6 +211,9 @@ private val Int.icon: AppTagInfo.Icon
     get() = AppTagInfo.Icon(this)
 
 private val CharSequence.icon: AppTagInfo.Icon
+    get() = AppTagInfo.Icon(text = this.label)
+
+private val AppTagInfo.Label.icon: AppTagInfo.Icon
     get() = AppTagInfo.Icon(text = this)
 
 private val String.appIcon: AppTagInfo.Icon

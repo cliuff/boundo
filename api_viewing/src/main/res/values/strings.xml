@@ -88,15 +88,7 @@
     <string name="av_pref_displaying">List displaying</string>
     <string name="av_adapter_tag_hidden">Hidden</string>
     <string name="av_settings_tag_hidden">App icon not shown in launcher</string>
-    <string name="av_settings_tag_flu" translatable="false">Flutter</string>
-    <string name="av_settings_tag_rn" translatable="false">React Native</string>
-    <string name="av_settings_tag_xam" translatable="false">Xamarin</string>
-    <string name="av_settings_tag_kot" translatable="false">Kotlin</string>
-    <string name="av_settings_tag_64b" translatable="false">64-bit</string>
-    <string name="av_settings_tag_arm" translatable="false">ARM</string>
-    <string name="av_settings_tag_x86" translatable="false">x86</string>
     <string name="av_main_filter_tip">Try long-pressing a tag</string>
-    <string name="av_settings_tag_fcm" translatable="false">Firebase Cloud Messaging (FCM)</string>
     <string name="av_settings_tag_huawei_push">Huawei push</string>
     <string name="av_settings_tag_xiaomi_push">Xiaomi push</string>
     <string name="av_settings_tag_meizu_push">Meizu push</string>
@@ -115,9 +107,13 @@
     <string name="av_details_real_installer">"Real installer: "</string>
     <string name="av_upd_ver_upd">Version updated</string>
     <string name="av_upd_pck_upd">Package updated</string>
-    <string name="av_settings_tag_x_cmp" translatable="false">Jetpack Compose</string>
     <string name="av_tag_jpush_normal">JPush</string>
     <string name="av_tag_upush_normal">U-Push</string>
     <string name="av_tag_tpns_normal">TPNS</string>
     <string name="av_tag_ali_push_normal">Alibaba Cloud push</string>
+    <string name="av_tag_full_64bit">64-bit</string>
+    <string name="av_tag_full_64bit_normal">64-bit</string>
+    <string name="av_tag_full_64bit_full">64-bit (ARM 64-bit, x86 64-bit)</string>
+    <string name="av_tag_arm_32bit">ARM 32-bit</string>
+    <string name="av_tag_arm_64bit">ARM 64-bit</string>
 </resources>

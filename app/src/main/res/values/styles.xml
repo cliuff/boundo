@@ -579,7 +579,7 @@
     </style>
 
     <style name="AvTagText" parent="Widget.MaterialComponents.TextView">
-        <item name="android:textSize">8sp</item>
+        <item name="android:textSize">6sp</item>
     </style>
 
     <style name="AvTags" parent="Widget.MaterialComponents.ChipGroup">

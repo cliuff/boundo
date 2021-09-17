@@ -23,6 +23,8 @@
     android:alpha="@fraction/surfaceAlpha"
     android:paddingStart="1dp"
     android:paddingEnd="1dp"
+    android:paddingTop="1dp"
+    android:paddingBottom="1dp"
     android:clickable="false"
     android:layout_gravity="center_vertical"
     android:gravity="center"
@@ -33,12 +35,10 @@
     <ImageView
         android:id="@+id/avAdapterInfoTagIcon"
         tools:src="@mipmap/ic_launcher"
-        android:paddingTop="1dp"
-        android:paddingBottom="1dp"
         android:paddingStart="2dp"
         android:paddingEnd="2dp"
         android:layout_width="wrap_content"
-        android:layout_height="14dp"
+        android:layout_height="match_parent"
         android:adjustViewBounds="true"
         android:contentDescription="@null" />
 
@@ -48,8 +48,7 @@
         android:layout_height="wrap_content"
         android:paddingStart="2dp"
         android:paddingEnd="2dp"
-        android:paddingTop="1dp"
-        android:paddingBottom="1dp"
+        android:textStyle="bold"
         android:textAppearance="@style/AvTagText"
         android:textColor="?colorAOnBackground"
         tools:ignore="SmallSp"

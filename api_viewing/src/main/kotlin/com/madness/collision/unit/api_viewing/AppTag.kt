@@ -23,6 +23,7 @@ import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.tag.*
 import com.madness.collision.unit.api_viewing.tag.app.AppTagInfo
 import com.madness.collision.unit.api_viewing.tag.app.AppTagManager
+import com.madness.collision.unit.api_viewing.tag.app.get
 import com.madness.collision.unit.api_viewing.tag.app.toExpressible
 import com.madness.collision.unit.api_viewing.tag.inflater.AppTagInflater
 import com.madness.collision.unit.api_viewing.util.PrefUtil
@@ -167,14 +168,17 @@ internal object AppTag {
             }
             val tagIcon = tagInfo.icon
             // support dynamic icon
-            val iconBitmap = when {
-                tagIcon.drawableResId != null || tagIcon.drawable != null -> tagInfo.iconKey
-                tagIcon.text != null -> null
-                tagIcon.pkgName != null -> tagIcon.pkgName
-                tagIcon.isDynamic -> res.dynamicIconKey
-                else -> null
-            }?.let { AppTagInflater.tagIcons[it] }
-            val icon = AppTagInflater.TagInfo.Icon(iconBitmap, tagIcon.text)
+            val (iconBitmap, isExternalIcon) = when {
+                tagIcon.drawableResId != null || tagIcon.drawable != null -> tagInfo.iconKey to false
+                tagIcon.text != null -> null to false
+                tagIcon.pkgName != null -> tagIcon.pkgName to true
+                tagIcon.isDynamic -> res.dynamicIconKey to true
+                else -> null to false
+            }.let { (iconKey, isExternal) ->
+                val ic = if (iconKey == null) null else AppTagInflater.tagIcons[iconKey]
+                ic to isExternal
+            }
+            val icon = AppTagInflater.TagInfo.Icon(iconBitmap, tagIcon.text.get(context), isExternalIcon)
             // terminate if no label string available
             if (label.stringResId == null && label.string == null) return
             // construct tag info object

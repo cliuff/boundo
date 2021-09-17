@@ -44,7 +44,7 @@ internal class AppTagInfo(
         // No.2
         val drawable: Drawable? = null,
         // No.3
-        val text: CharSequence? = null,
+        val text: Label? = null,
         // No.4 app package name to get runtime app icon
         val pkgName: String? = null,
         // use dynamic icon key

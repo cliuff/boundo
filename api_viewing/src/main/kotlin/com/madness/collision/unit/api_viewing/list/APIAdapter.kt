@@ -139,6 +139,7 @@ internal open class APIAdapter(context: Context, private val listener: Listener,
     private suspend fun ensureAppIcon(index: Int, logoView: ImageView) {
         ensureItem(index)
         val iconApp = logoView.getTag(R.bool.tagKeyAvAdapterItemIconId) as ApiViewingApp?
+        if (index >= listCount) return
         val appInfo = apps[index]
         // logo was set with the same app icon
         if (appInfo === iconApp) return

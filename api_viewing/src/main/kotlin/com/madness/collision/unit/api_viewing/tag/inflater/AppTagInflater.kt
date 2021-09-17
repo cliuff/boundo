@@ -21,7 +21,6 @@ import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
@@ -29,7 +28,9 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
-import androidx.core.view.*
+import androidx.core.view.get
+import androidx.core.view.size
+import androidx.core.view.updatePaddingRelative
 import com.madness.collision.R
 import com.madness.collision.unit.api_viewing.databinding.AdapterAvTagBinding
 import com.madness.collision.util.ThemeUtil
@@ -111,7 +112,11 @@ internal object AppTagInflater {
     }
 
     class TagInfo(val nameResId: Int? = null, val name: String? = null, val icon: Icon? = null, val rank: Int) {
-        class Icon(val bitmap: Bitmap? = null, val text: CharSequence? = null)
+        class Icon(
+            val bitmap: Bitmap? = null,
+            val text: CharSequence? = null,
+            val isExternal: Boolean = false,  // not built-in
+        )
     }
 
     class TagRank(val name: String?, val rank: Int)
@@ -138,15 +143,17 @@ internal object AppTagInflater {
             val icon = tagInfo.icon
             when {
                 icon?.bitmap != null -> {
+                    // Built-in icons are designed as 54/72 (content/size).
+                    // So add extra 1/8 of icon view size as padding to external icon.
+                    if (icon.isExternal) {
+                        val extraPadding = X.size(context, 12/8f, X.DP).roundToInt()
+                        avAdapterInfoTagIcon.updatePaddingRelative(top = extraPadding, bottom = extraPadding)
+                    }
                     avAdapterInfoTagIcon.setImageBitmap(icon.bitmap)
                     avAdapterInfoTagName.visibility = View.GONE
                 }
                 icon?.text != null -> {
-                    avAdapterInfoTagName.run {
-                        text = icon.text
-                        textSize = 5f
-                        setTypeface(typeface, Typeface.BOLD)
-                    }
+                    avAdapterInfoTagName.text = icon.text
                     avAdapterInfoTagIcon.visibility = View.GONE
                 }
                 else -> {
