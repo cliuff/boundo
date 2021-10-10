@@ -27,7 +27,6 @@ import android.view.*
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.WindowCompat
 import com.madness.collision.R
 import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.util.os.OsUtils
@@ -49,10 +48,6 @@ object SystemUtil {
         val isTransparentNav = insetBottom < X.size(context, 20f, X.DP)
         return applyStatusBarColor(context, window, darkBar, true) to
                 applyNavBarColor(context, window, darkBar, isTransparentNav)
-    }
-
-    fun applyEdge2Edge(window: Window) {
-        WindowCompat.setDecorFitsSystemWindows(window, false)
     }
 
     fun applyStatusBarColor(context: Context, window: Window, isDarkIcon: Boolean,

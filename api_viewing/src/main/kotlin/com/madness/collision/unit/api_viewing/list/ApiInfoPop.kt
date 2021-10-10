@@ -54,6 +54,8 @@ import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.databinding.AvShareBinding
 import com.madness.collision.unit.api_viewing.seal.SealManager
 import com.madness.collision.util.*
+import com.madness.collision.util.controller.systemUi
+import com.madness.collision.util.os.OsUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
@@ -170,16 +172,33 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
         super.onActivityCreated(savedInstanceState)
         val context = context ?: return
 
-        dialog?.window?.let {
+        systemUi {
             val transparentNavBar = mainApplication.insetBottom == 0
             val isDarkNav = if (transparentNavBar) false else mainApplication.isPaleTheme
-            SystemUtil.applyEdge2Edge(it)
-            // keep status bar icon color untouched
-            val config = SystemBarConfig(false, isTransparentBar = true, setDarkIcon = false)
-            SystemUtil.applyStatusBarConfig(context, it, config)
             val colorSurface = ThemeUtil.getColor(context, R.attr.colorASurface)
-            val color = if (isDarkNav && X.belowOff(X.O)) ColorUtil.darkenAs(colorSurface, 0.9f) else colorSurface
-            SystemUtil.applyNavBarColor(context, it, isDarkNav, transparentNavBar, color = color)
+            val navBarColor = if (isDarkNav && OsUtils.dissatisfy(OsUtils.O)) {
+                ColorUtil.darkenAs(colorSurface, 0.9f)
+            } else {
+                colorSurface
+            }
+            fullscreen()
+            // keep status bar icon color untouched
+            // Actually this works as intended only when app theme is set to follow system,
+            // not configuring this icon color makes it follow dialog's style/theme,
+            // which is defined in styles.xml and it follows system dark mode setting.
+            // To fix this, set it to the window config of the activity before this.
+            statusBar {
+                transparentBar()
+                // fix status bar icon color
+                activity?.window?.let { window ->
+                    isDarkIcon = SystemUtil.isDarkStatusIcon(window)
+                }
+            }
+            navigationBar {
+                isDarkIcon = isDarkNav
+                isTransparentBar = transparentNavBar
+                color = navBarColor
+            }
         }
 
         val minMargin = X.size(context, 10f, X.DP).roundToInt()

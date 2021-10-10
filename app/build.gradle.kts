@@ -33,12 +33,21 @@ plugins {
 // below: load the desired values from custom.properties in order to be injected into BuildConfig and Res
 // the values in custom.properties must not contain quotes otherwise the parsed values here will contain quotes
 val properties = Properties()
-properties.load(project.rootProject.file("custom.properties").inputStream())
-val buildPackage: String = properties.getProperty("packageName", "")
-val signingKeyStorePath: String = properties.getProperty("signingKeyStorePath", "")
-val signingKeyStorePassword: String = properties.getProperty("signingKeyStorePassword", "")
-val signingKeyAlias: String = properties.getProperty("signingKeyAlias", "")
-val signingKeyPassword: String = properties.getProperty("signingKeyPassword", "")
+val configSigning = try {
+    val customPropFile = project.rootProject.file("custom.properties")
+    properties.load(customPropFile.inputStream())
+    true
+} catch (ignored: Exception) {
+    false
+}
+val prop: (key: String, defValue: String) -> String = { key, defValue ->
+    if (configSigning) properties.getProperty(key, defValue) else defValue
+}
+val buildPackage: String = prop("packageName", "com.madness.collision")
+val signingKeyStorePath: String = prop("signingKeyStorePath", "")
+val signingKeyStorePassword: String = prop("signingKeyStorePassword", "")
+val signingKeyAlias: String = prop("signingKeyAlias", "")
+val signingKeyPassword: String = prop("signingKeyPassword", "")
 
 //dokkaHtml {
 //    outputDirectory = "$buildDir/dokka"
@@ -55,11 +64,13 @@ android {
         getByName("main").java.srcDir("src/main/kotlin")
     }
     signingConfigs {
-        create("Sign4Release") {
-            keyAlias = signingKeyAlias
-            keyPassword = signingKeyPassword
-            storeFile = file(signingKeyStorePath)
-            storePassword = signingKeyStorePassword
+        if (configSigning) {
+            create("Sign4Release") {
+                keyAlias = signingKeyAlias
+                keyPassword = signingKeyPassword
+                storeFile = file(signingKeyStorePath)
+                storePassword = signingKeyStorePassword
+            }
         }
     }
     compileSdk = 31
@@ -74,7 +85,9 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testApplicationId = "${applicationId}.test"
         renderscriptSupportModeEnabled = true
-        signingConfig = signingConfigs.getByName("Sign4Release")
+        if (configSigning) {
+            signingConfig = signingConfigs.getByName("Sign4Release")
+        }
         kapt {
             arguments {
                 arg("room.schemaLocation", "$projectDir/schemas")
@@ -119,10 +132,11 @@ android {
             applicationIdSuffix = ".mortal"
             isDebuggable = true
             isJniDebuggable = false
-            signingConfig = signingConfigs.getByName("Sign4Release")
+            if (configSigning) {
+                signingConfig = signingConfigs.getByName("Sign4Release")
+            }
             isRenderscriptDebuggable = false
             renderscriptOptimLevel = 3
-            isZipAlignEnabled = true
             isMinifyEnabled = false
             isShrinkResources = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
@@ -130,10 +144,11 @@ android {
         getByName("release") {
             isDebuggable = false
             isJniDebuggable = false
-            signingConfig = signingConfigs.getByName("Sign4Release")
+            if (configSigning) {
+                signingConfig = signingConfigs.getByName("Sign4Release")
+            }
             isRenderscriptDebuggable = false
             renderscriptOptimLevel = 3
-            isZipAlignEnabled = true
             isMinifyEnabled = true
             isShrinkResources = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
@@ -144,6 +159,12 @@ android {
         isCoreLibraryDesugaringEnabled = true
         targetCompatibility = JavaVersion.VERSION_11
         sourceCompatibility = JavaVersion.VERSION_11
+    }
+    packagingOptions {
+        // The kotlinx-coroutines-core artifact contains a resource file
+        // that is not required for the coroutines to operate normally
+        // and is only used by the debugger
+        resources.excludes.add("DebugProbesKt.bin")
     }
     lint {
         isCheckReleaseBuilds = false

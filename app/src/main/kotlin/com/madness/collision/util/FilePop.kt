@@ -33,6 +33,8 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.madness.collision.R
 import com.madness.collision.databinding.FileActionsBinding
+import com.madness.collision.util.controller.systemUi
+import com.madness.collision.util.os.OsUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
@@ -110,16 +112,28 @@ class FilePop: BottomSheetDialogFragment(){
 
         mContext = context ?: return
 
-        dialog?.window?.let {
+        systemUi {
             val transparentNavBar = mainApplication.insetBottom == 0
             val isDarkNav = if (transparentNavBar) false else mainApplication.isPaleTheme
-            SystemUtil.applyEdge2Edge(it)
-            // keep status bar icon color untouched
-            val config = SystemBarConfig(false, isTransparentBar = true, setDarkIcon = false)
-            SystemUtil.applyStatusBarConfig(mContext, it, config)
             val colorSurface = ThemeUtil.getColor(mContext, R.attr.colorASurface)
-            val color = if (isDarkNav && X.belowOff(X.O)) ColorUtil.darkenAs(colorSurface, 0.9f) else colorSurface
-            SystemUtil.applyNavBarColor(mContext, it, isDarkNav, transparentNavBar, color = color)
+            val navBarColor = if (isDarkNav && OsUtils.dissatisfy(OsUtils.O)) {
+                ColorUtil.darkenAs(colorSurface, 0.9f)
+            } else {
+                colorSurface
+            }
+            fullscreen()
+            // keep status bar icon color untouched from the activity before this
+            statusBar {
+                transparentBar()
+                activity?.window?.let { window ->
+                    isDarkIcon = SystemUtil.isDarkStatusIcon(window)
+                }
+            }
+            navigationBar {
+                isDarkIcon = isDarkNav
+                isTransparentBar = transparentNavBar
+                color = navBarColor
+            }
         }
 
 //        val marginBottom = X.size(mContext, 15f, X.DP).roundToInt()

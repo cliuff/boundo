@@ -48,6 +48,7 @@ import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.api_viewing.AccessAV
 import com.madness.collision.util.*
+import com.madness.collision.util.controller.systemUi
 import com.madness.collision.util.notice.ToastUtils
 import kotlinx.coroutines.*
 import java.lang.ref.WeakReference
@@ -190,7 +191,7 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
     }
 
     private fun inflateLayout(context: Context) {
-        mWindow.let { SystemUtil.applyEdge2Edge(it) }
+        systemUi { fullscreen() }
 
         SettingsFunc.updateLanguage(context)
         viewBinding = FragmentMainBinding.inflate(layoutInflater)

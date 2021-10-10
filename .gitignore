@@ -1,4 +1,10 @@
 
+/custom.properties
+.idea/shelf
+!**/resources/**/*.apk
+subproject
+
+
 # Built application files
 *.apk
 *.aar
@@ -45,6 +51,7 @@ captures/
 .idea/assetWizardSettings.xml
 .idea/dictionaries
 .idea/libraries
+.idea/jarRepositories.xml
 # Android Studio 3 in .gitignore file.
 .idea/caches
 .idea/modules.xml
@@ -87,12 +94,3 @@ lint/tmp/
 
 # Android Profiling
 *.hprof
-
-#old rules
-.DS_Store
-
-#custom
-/custom.properties
-.idea/shelf
-!**/resources/**/*.apk
-subproject

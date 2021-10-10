@@ -39,6 +39,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.HtmlCompat
+import androidx.lifecycle.lifecycleScope
 import com.jaredrummler.android.device.DeviceName
 import com.madness.collision.BuildConfig
 import com.madness.collision.R
@@ -47,8 +48,8 @@ import com.madness.collision.diy.WindowInsets
 import com.madness.collision.instant.Instant
 import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.util.*
+import com.madness.collision.util.controller.edgeToEdge
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileWriter
@@ -154,18 +155,13 @@ internal class ImmortalActivity : AppCompatActivity(), View.OnClickListener {
         // true: from settings, false: from crash
         val isMortal = intent.getStringExtra(P.IMMORTAL_EXTRA_LAUNCH_MODE) == P.IMMORTAL_EXTRA_LAUNCH_MODE_MORTAL
         ThemeUtil.updateTheme(this, getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE))
-        window?.let { SystemUtil.applyEdge2Edge(it) }
+        edgeToEdge()
         SettingsFunc.updateLanguage(this)
         viewBinding = ActivityImmortalBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
         applyInsets()
-        window?.let {
-            val darkBar = mainApplication.isPaleTheme
-            SystemUtil.applyStatusBarColor(this, it, darkBar, true)
-            SystemUtil.applyNavBarColor(this, it, darkBar, true)
-        }
         if (isMortal) viewBinding.immortalMessage.setText(R.string.textWaitASecond)
-        GlobalScope.launch {
+        lifecycleScope.launch(Dispatchers.Default) {
             try {
                 logFile = log()
                 launch(Dispatchers.Main) {
