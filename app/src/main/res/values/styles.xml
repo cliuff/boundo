@@ -320,6 +320,9 @@
         <item name="bottomSheetStyle">@style/AppTheme.BottomSheet</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
+        <!-- transparent navigation bar for gesture navigation -->
+        <!-- (fullscreen only when navigationBarColor set to transparent or translucent) -->
+        <item name="enableEdgeToEdge">true</item>
     </style>
 
     <style name="AppTheme.DatePickerDialog" parent="Theme.MaterialComponents.Light.Dialog">

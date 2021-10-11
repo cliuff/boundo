@@ -49,6 +49,7 @@ import com.madness.collision.instant.Instant
 import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.util.*
 import com.madness.collision.util.controller.edgeToEdge
+import com.madness.collision.util.controller.immersiveNavigation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
@@ -201,6 +202,7 @@ internal class ImmortalActivity : AppCompatActivity(), View.OnClickListener {
         mainApplication.insetLeft = insets.left
         mainApplication.insetRight = insets.right
         viewBinding.immortalRoot.alterPadding(start = insets.left, end = insets.right)
+        immersiveNavigation(insets.bottom)
     }
 
     private fun log(): File {

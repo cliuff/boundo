@@ -28,17 +28,20 @@ import android.text.format.Formatter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.updatePaddingRelative
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.madness.collision.R
 import com.madness.collision.databinding.FileActionsBinding
-import com.madness.collision.util.controller.systemUi
+import com.madness.collision.util.controller.edgeToEdge
 import com.madness.collision.util.os.OsUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileNotFoundException
+import kotlin.math.max
+import kotlin.math.roundToInt
 
 class FilePop: BottomSheetDialogFragment(){
     companion object{
@@ -112,32 +115,30 @@ class FilePop: BottomSheetDialogFragment(){
 
         mContext = context ?: return
 
-        systemUi {
-            val transparentNavBar = mainApplication.insetBottom == 0
-            val isDarkNav = if (transparentNavBar) false else mainApplication.isPaleTheme
-            val colorSurface = ThemeUtil.getColor(mContext, R.attr.colorASurface)
-            val navBarColor = if (isDarkNav && OsUtils.dissatisfy(OsUtils.O)) {
-                ColorUtil.darkenAs(colorSurface, 0.9f)
-            } else {
-                colorSurface
-            }
-            fullscreen()
+        edgeToEdge(mainApplication.insetBottom) {
             // keep status bar icon color untouched from the activity before this
             statusBar {
-                transparentBar()
                 activity?.window?.let { window ->
                     isDarkIcon = SystemUtil.isDarkStatusIcon(window)
                 }
             }
             navigationBar {
-                isDarkIcon = isDarkNav
-                isTransparentBar = transparentNavBar
-                color = navBarColor
+                val colorSurface = ThemeUtil.getColor(mContext, R.attr.colorASurface)
+                color = if (isDarkIcon == true && OsUtils.dissatisfy(OsUtils.O)) {
+                    ColorUtil.darkenAs(colorSurface, 0.9f)
+                } else {
+                    colorSurface
+                }
+                transparentBar()
             }
         }
 
-//        val marginBottom = X.size(mContext, 15f, X.DP).roundToInt()
-//        if (mainApplication.insetBottom < marginBottom) mViews.sdkInfoGuidelineBottom.setGuidelineEnd(marginBottom - mainApplication.insetBottom)
+        // edge-to-edge is not enabled below O
+        if (OsUtils.satisfy(OsUtils.O)) {
+            val minMargin = X.size(mContext, 12f, X.DP).roundToInt()
+            val extraMargin = max(mainApplication.insetBottom, minMargin)
+            mViews.fileActionsContainer.updatePaddingRelative(bottom = extraMargin)
+        }
 
         val intent = arguments?.getParcelable(ARG_INTENT) ?: Intent()
         when {

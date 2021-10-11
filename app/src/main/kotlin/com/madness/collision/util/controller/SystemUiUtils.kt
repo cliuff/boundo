@@ -196,3 +196,24 @@ fun Dialog.edgeToEdge(bottomInset: Int? = null, block: (SystemUiScope.() -> Unit
 fun DialogFragment.edgeToEdge(bottomInset: Int? = null, block: (SystemUiScope.() -> Unit)? = null) {
     dialog?.edgeToEdge(bottomInset, block)
 }
+
+private fun immersiveNavigation(context: Context, window: Window, bottomInset: Int) {
+    val isTransparentNav = bottomInset < X.size(context, 25f, X.DP)
+    configSystemUi(context, window) {
+        fullscreen()  // this is required for unknown reason
+        navigationBar { isTransparentBar = isTransparentNav }
+    }
+}
+
+fun Activity.immersiveNavigation(bottomInset: Int) {
+    immersiveNavigation(this, window, bottomInset)
+}
+
+fun Dialog.immersiveNavigation(bottomInset: Int) {
+    val window = window ?: return
+    immersiveNavigation(context, window, bottomInset)
+}
+
+fun DialogFragment.immersiveNavigation(bottomInset: Int) {
+    dialog?.immersiveNavigation(bottomInset)
+}

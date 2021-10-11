@@ -54,7 +54,7 @@ import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.databinding.AvShareBinding
 import com.madness.collision.unit.api_viewing.seal.SealManager
 import com.madness.collision.util.*
-import com.madness.collision.util.controller.systemUi
+import com.madness.collision.util.controller.edgeToEdge
 import com.madness.collision.util.os.OsUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -146,6 +146,9 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // BottomSheetDialog style, set enableEdgeToEdge to true
+        // (and navigationBarColor set to transparent or translucent)
+        // to disable automatic insets handling
         setStyle(STYLE_NORMAL, R.style.AppTheme_Pop)
     }
 
@@ -172,38 +175,33 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
         super.onActivityCreated(savedInstanceState)
         val context = context ?: return
 
-        systemUi {
-            val transparentNavBar = mainApplication.insetBottom == 0
-            val isDarkNav = if (transparentNavBar) false else mainApplication.isPaleTheme
-            val colorSurface = ThemeUtil.getColor(context, R.attr.colorASurface)
-            val navBarColor = if (isDarkNav && OsUtils.dissatisfy(OsUtils.O)) {
-                ColorUtil.darkenAs(colorSurface, 0.9f)
-            } else {
-                colorSurface
-            }
-            fullscreen()
+        edgeToEdge(mainApplication.insetBottom) {
             // keep status bar icon color untouched
             // Actually this works as intended only when app theme is set to follow system,
             // not configuring this icon color makes it follow dialog's style/theme,
             // which is defined in styles.xml and it follows system dark mode setting.
             // To fix this, set it to the window config of the activity before this.
             statusBar {
-                transparentBar()
                 // fix status bar icon color
                 activity?.window?.let { window ->
                     isDarkIcon = SystemUtil.isDarkStatusIcon(window)
                 }
             }
             navigationBar {
-                isDarkIcon = isDarkNav
-                isTransparentBar = transparentNavBar
-                color = navBarColor
+                val colorSurface = ThemeUtil.getColor(context, R.attr.colorASurface)
+                color = if (isDarkIcon == true && OsUtils.dissatisfy(OsUtils.O)) {
+                    ColorUtil.darkenAs(colorSurface, 0.9f)
+                } else {
+                    colorSurface
+                }
+                transparentBar()
             }
         }
 
-        val minMargin = X.size(context, 10f, X.DP).roundToInt()
-        if (mainApplication.insetBottom < minMargin) {
-            val extraMargin = minMargin - mainApplication.insetBottom
+        // edge-to-edge is not enabled below O
+        if (OsUtils.satisfy(OsUtils.O)) {
+            val minMargin = X.size(context, 10f, X.DP).roundToInt()
+            val extraMargin = max(mainApplication.insetBottom, minMargin)
             mViews.guidelineBottom.setGuidelineEnd(extraMargin)
         }
 
