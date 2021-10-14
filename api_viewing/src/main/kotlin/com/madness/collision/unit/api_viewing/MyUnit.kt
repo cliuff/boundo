@@ -514,7 +514,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
     }
 
     private fun updateStats() {
-        viewBinding.apiStats.text = adapter.listCount.toString()
+        viewBinding.apiStats.text = adapter.listCount.adapted
         viewBinding.apiStats.visibility = View.VISIBLE
     }
 

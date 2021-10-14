@@ -77,7 +77,7 @@
     <string name="av_share_stroked">Accidente cerebrovascular</string>
     <string name="av_updates_view_more">Ver más</string>
     <string name="av_settings_tags">Etiquetas</string>
-    <string name="av_settings_tags_system">Aplicación del sistema</string>
+    <string name="av_settings_tags_system">App del sistema</string>
     <string name="av_adapter_tag_system">Sistema</string>
     <string name="av_ai">Icono adaptativo</string>
     <string name="av_tag_has_splits">Android App Bundle</string>
@@ -85,7 +85,7 @@
     <string name="av_pref_loading">Carga de la lista</string>
     <string name="av_pref_displaying">Lista de visualización</string>
     <string name="av_adapter_tag_hidden">Oculto</string>
-    <string name="av_settings_tag_hidden">El ícono de la aplicación no se muestra en el iniciador</string>
+    <string name="av_settings_tag_hidden">El ícono de la app no se muestra en el iniciador</string>
     <string name="av_pref_loading_summary">Actualizar manualmente para activar cambios</string>
     <string name="av_pref_displaying_summary">Los cambios se activan automáticamente</string>
     <string name="av_main_filter_tip">Intenta mantener presionada una etiqueta</string>

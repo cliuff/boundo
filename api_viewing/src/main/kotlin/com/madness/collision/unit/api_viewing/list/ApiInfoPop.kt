@@ -255,7 +255,7 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
         val viewApiLevel: TextView = apiViewHolder.api
         val viewApi: TextView = apiViewHolder.apiTitle
         val context = context ?: return
-        viewApiLevel.text = ver.api.toString()
+        viewApiLevel.text = ver.apiText
         viewAndroidVersion.text = ver.displaySdk
         if (EasyAccess.isSweet){
             val colorText = SealManager.getItemColorText(ver.api)

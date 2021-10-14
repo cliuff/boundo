@@ -42,7 +42,7 @@ internal class DeviceApi {
         val ver = VerInfo(Build.VERSION.SDK_INT)
         binding.run {
             avDeviceName.text = deviceName
-            avDeviceApi.text = ver.api.toString()
+            avDeviceApi.text = ver.apiText
         }
         val androidVer = if (ver.api == OsUtils.DEV) "Developer Preview" else ver.sdk
         if (androidVer.isNotEmpty()) {

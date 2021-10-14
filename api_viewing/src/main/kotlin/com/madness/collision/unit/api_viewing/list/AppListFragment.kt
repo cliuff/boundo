@@ -252,7 +252,7 @@ internal class AppListFragment : TaggedFragment(), AppList, Filterable {
                     }
                     val ver = if (EasyAccess.isViewingTarget) VerInfo(info.targetAPI, info.targetSDK, info.targetSDKLetter)
                     else VerInfo(info.minAPI, info.minSDK, info.minSDKLetter)
-                    if (filterText == ver.api.toString() || ver.sdk.startsWith(filterText)) {
+                    if (filterText == ver.apiText || ver.sdk.startsWith(filterText)) {
                         filtered.add(info)
                     }
                 }

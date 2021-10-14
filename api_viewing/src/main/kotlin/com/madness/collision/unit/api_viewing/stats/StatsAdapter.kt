@@ -33,6 +33,7 @@ import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.databinding.AdapterAvStatsBinding
 import com.madness.collision.unit.api_viewing.seal.SealManager
 import com.madness.collision.util.X
+import com.madness.collision.util.adapted
 import com.madness.collision.util.alterMargin
 import com.madness.collision.util.dartFuture
 import com.madness.collision.util.os.OsUtils
@@ -97,10 +98,10 @@ internal class StatsAdapter(context: Context) : SandwichAdapter<StatsAdapter.Hol
             else -> verInfo.sdk
         }
         holder.version.dartFuture("Android $ver")
-        holder.count.dartFuture(statsCount.toString())
+        holder.count.dartFuture(statsCount.adapted)
 
         // display a dot when API bigger than 99 (longer than 2 digits)
-        val logoText = if (verInfo.api > 99) "•" else verInfo.api.toString()
+        val logoText = if (verInfo.api > 99) "•" else verInfo.apiText
         holder.logoText.dartFuture(logoText)
         disposeAPIInfo(verInfo, holder.logoText, holder.logoBack)
 

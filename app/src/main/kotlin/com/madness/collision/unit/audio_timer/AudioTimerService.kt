@@ -99,7 +99,8 @@ internal class AudioTimerService: Service() {
     private lateinit var mRunnable: Runnable
     private var targetTime: Long = 0
     private var duration: Long = 0
-    private val timeFormat = SimpleDateFormat("mm:ss", SystemUtil.getLocaleSys())
+    private val sysTimeFormat = SimpleDateFormat("mm:ss", SystemUtil.getLocaleSys())
+    private val appTimeFormat by lazy { SimpleDateFormat("mm:ss", SystemUtil.getLocaleApp()) }
     private val notificationId = NotificationsUtil.ID_AUDIO_TIMER
     private lateinit var notificationBuilder: NotificationCompat.Builder
 
@@ -177,17 +178,23 @@ internal class AudioTimerService: Service() {
         }
     }
 
+    private val Long.appAdapted: String
+        get() = String.format(SystemUtil.getLocaleApp(), "%d", this)
+
+    private val Long.sysAdapted: String
+        get() = String.format(SystemUtil.getLocaleSys(), "%d", this)
+
     private fun tick() {
         val timeLeft = targetTime - System.currentTimeMillis()
-        val re = timeFormat.format(timeLeft)
-        val hour = timeLeft / 3600000
-        val displayText = "${if (hour == 0L) "" else "$hour:"}$re"
-        updateNotification(displayText)
+        val hour = timeLeft / 3600_000
+        val sysTime = sysTimeFormat.format(timeLeft)
+        updateNotification(if (hour == 0L) sysTime else "${hour.sysAdapted}:$sysTime")
         // modification in other places during iterating causes exception
         try {
             tickCallbacks.forEach {
                 it.onTick(targetTime, duration, timeLeft)
-                it.onTick(displayText)
+                val appTime = appTimeFormat.format(timeLeft)
+                it.onTick(if (hour == 0L) appTime else "${hour.appAdapted}:$appTime")
             }
         } catch (e: ConcurrentModificationException) {
             e.printStackTrace()

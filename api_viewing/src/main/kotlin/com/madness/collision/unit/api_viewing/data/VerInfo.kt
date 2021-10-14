@@ -19,8 +19,10 @@ package com.madness.collision.unit.api_viewing.data
 import android.content.Context
 import com.madness.collision.unit.api_viewing.Utils
 import com.madness.collision.util.X
+import com.madness.collision.util.adapted
+import com.madness.collision.util.regexOf
 
-internal data class VerInfo(val api: Int, val sdk: String, val letter: Char) {
+internal class VerInfo(val api: Int, sdk: String, val letter: Char) {
 
     companion object {
         fun targetDisplay(app: ApiViewingApp) = VerInfo(app.targetAPI, app.targetSDKDisplay, app.targetSDKLetter)
@@ -29,6 +31,31 @@ internal data class VerInfo(val api: Int, val sdk: String, val letter: Char) {
     }
 
     private var codeName: String? = null
+    val sdk: String
+    init {
+        val patterns = listOf(
+            regexOf("""\d+"""),  // integer
+            regexOf("""\d+\.\d+"""),  // decimal
+            regexOf("""(\d+(?:\.\d+)+)([^\d.]+)(\d+(?:\.\d+)+)"""),  // 4.4 - 4.4.4
+            regexOf("""(\d+\.\d+)([^\d.\s]+)"""),  // 4.4W
+            regexOf("""((?:\d+\.)+)([^\d.\s]+)"""),  // 4.3.x
+        )
+        this.sdk = try {
+            when {
+                sdk.matches(patterns[0].toRegex()) -> sdk.toInt().adapted
+                sdk.matches(patterns[1].toRegex()) -> sdk.toFloat().adapted
+                sdk.matches(patterns[2].toRegex()) -> {
+                    """\d+""".toRegex().replace(sdk) { it.value.toInt().adapted }
+                }
+                sdk.matches(patterns[3].toRegex()) -> sdk
+                sdk.matches(patterns[4].toRegex()) -> sdk
+                else -> sdk
+            }
+        } catch (ignored: Exception) {
+            sdk
+        }
+    }
+    val apiText: String = api.adapted
 
     val displaySdk: String
         get() = if (api == X.DEV) "X" else sdk
@@ -36,8 +63,11 @@ internal data class VerInfo(val api: Int, val sdk: String, val letter: Char) {
     constructor(api: Int, isExact: Boolean = false, isCompact: Boolean = false)
             : this(api, Utils.getAndroidVersionByAPI(api, isExact, isCompact), Utils.getAndroidLetterByAPI(api))
 
-    fun codeName(context: Context): String{
-        if (codeName == null) codeName = Utils.getAndroidCodenameByAPI(context, api)
+    fun codeName(context: Context): String {
+        if (codeName == null) {
+            val codeName = Utils.getAndroidCodenameByAPI(context, api)
+            this.codeName = if (codeName.matches("""\d+""".toRegex())) codeName.toInt().adapted else codeName
+        }
         return codeName ?: ""
     }
 }

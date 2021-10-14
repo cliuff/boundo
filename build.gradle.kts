@@ -37,7 +37,7 @@ buildscript {
         val gglHiltGradlePlugin = "2.38.1"
         val googlePlayServicesOSSLicensesPlugin = "0.10.4"
         // Associated (the same) with Android Studio version
-        val androidGradlePlugin = "7.0.2"
+        val androidGradlePlugin = "7.0.3"
     }
     dependencies {
         classpath("com.android.tools.build:gradle:${versions.androidGradlePlugin}")

@@ -38,10 +38,7 @@ import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.databinding.ApiDecentFragmentBinding
 import com.madness.collision.unit.api_viewing.seal.SealManager
-import com.madness.collision.util.SystemUtil
-import com.madness.collision.util.TaggedFragment
-import com.madness.collision.util.X
-import com.madness.collision.util.mainApplication
+import com.madness.collision.util.*
 
 internal class ApiDecentFragment : TaggedFragment(), Democratic {
 
@@ -128,12 +125,14 @@ internal class ApiDecentFragment : TaggedFragment(), Democratic {
                     TYPE_MINIMUM -> VerInfo(minAPI, isExact = true, isCompact = true)
                     else -> VerInfo(-1, "", ' ')
                 }.run {
-                    viewBinding.apiDecentChipAPI.text = api.toString()
+                    viewBinding.apiDecentChipAPI.text = apiText
                     viewBinding.apiDecentChipVer.run {
                         if (sdk.isNotEmpty()) text = sdk else visibility = View.GONE
                     }
-                    if (EasyAccess.isSweet){
-                        viewBinding.apiDecentChipCodeName.text = Utils.getAndroidCodenameByAPI(context, api)
+                    if (EasyAccess.isSweet) {
+                        val codeName = Utils.getAndroidCodenameByAPI(context, api)
+                        val codeNameText = if (codeName.matches("""\d+""".toRegex())) codeName.toInt().adapted else codeName
+                        viewBinding.apiDecentChipCodeName.text = codeNameText
                         if (viewBinding.apiDecentChipCodeName.text.isBlank()) viewBinding.apiDecentChipCodeName.visibility = View.GONE
                         val resId = SealManager.getAndroidCodenameImageRes(letter)
                         viewBinding.apiDecentChipCodeName.chipIcon = if (resId == 0) null else ContextCompat.getDrawable(context, resId)

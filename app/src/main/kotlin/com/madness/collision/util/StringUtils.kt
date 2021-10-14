@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -72,3 +72,9 @@ object StringUtils {
 inline fun <T> Iterable<T>.sortedWithUtilsBy(crossinline selector: (T) -> String): List<T> {
     return this.sortedWith(compareBy(StringUtils.comparator, selector))
 }
+
+val Int.adapted: String
+    get() = String.format(SystemUtil.getLocaleApp(), "%d", this)
+
+val Float.adapted: String
+    get() = String.format(SystemUtil.getLocaleApp(), "%.0f", this)

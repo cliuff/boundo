@@ -74,11 +74,11 @@ internal class AppListService {
 
         val sdkInfo = sdkInfo@ { ver: VerInfo ->
             val androidVer = if (ver.api == OsUtils.DEV) "Developer Preview" else ver.sdk
-            if (androidVer.isEmpty()) return@sdkInfo ver.api.toString()
+            if (androidVer.isEmpty()) return@sdkInfo ver.apiText
             val sdk = "Android $androidVer"
             val codeName = ver.codeName(context)
             val sdkDetails = if (codeName != ver.sdk) "$sdk, $codeName" else sdk
-            ver.api.toString() + context.getString(R.string.textParentheses, sdkDetails)
+            ver.apiText + context.getString(R.string.textParentheses, sdkDetails)
         }
 
         val targetVer = VerInfo(appInfo.targetAPI, true)
@@ -217,7 +217,7 @@ internal class AppListService {
                 val subjectInfo = Utils.getDesc(regexFields, cert.subjectDN)
                 val formerPart = "\n\nX.509 " +
                         context.getString(RAv.string.apiDetailsCert) +
-                        "\nNo." + cert.serialNumber.toString(16).toUpperCase(SystemUtil.getLocaleApp()) +
+                        "\nNo." + cert.serialNumber.toString(16).uppercase(SystemUtil.getLocaleApp()) +
                         " v" +
                         (cert.version + 1).toString() +
                         '\n' + context.getString(RAv.string.apiDetailsValiSince)
@@ -464,11 +464,13 @@ internal class AppListService {
     = scope.launch(Dispatchers.Default) {
         val details = getAppDetails(context, appInfo)
         if (details.isEmpty()) return@launch
-        val contentView = TextView(context)
-        contentView.text = details
-        contentView.textSize = 10f
-        val padding = X.size(context, 20f, X.DP).toInt()
-        contentView.setPadding(padding, padding, padding, 0)
+        val contentView = TextView(context).apply {
+            text = details
+            textSize = 10f
+            textDirection = View.TEXT_DIRECTION_LOCALE
+            val padding = X.size(context, 20f, X.DP).toInt()
+            setPadding(padding, padding, padding, 0)
+        }
         withContext(Dispatchers.Main) {
             CollisionDialog(context, R.string.text_alright).run {
                 setContent(0)
