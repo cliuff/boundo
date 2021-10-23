@@ -35,4 +35,5 @@
     <!-- color alpha component (0..255) for surfaceAlpha (0..1), -->
     <!-- having trouble retrieving surfaceAlpha fraction from code -->
     <integer name="surfaceAlphaComp">222</integer>
+    <dimen name="toolbarHeight">54dp</dimen>
 </resources>

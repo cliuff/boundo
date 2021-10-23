@@ -60,6 +60,7 @@ internal class SettingsFragment : TaggedFragment(), Democratic, NavNode {
     private lateinit var prHandler: PermissionRequestHandler
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
+        mainViewModel.configNavigation(toolbar, iconColor)
         toolbar.setTitle(R.string.Main_ToolBar_title_Settings)
         return true
     }

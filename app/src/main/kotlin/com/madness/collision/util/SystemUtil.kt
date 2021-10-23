@@ -174,7 +174,7 @@ object SystemUtil {
                 config.barColor != Color.TRANSPARENT -> config.barColor
                 else -> {
                     val colorBack = ThemeUtil.getColor(context, R.attr.colorABackground)
-                    colorBack and 0xE6FFFFFF.toInt()
+                    colorBack and 0x56FFFFFF
                 }
             }
         } else window.navigationBarColor = when {
@@ -183,10 +183,10 @@ object SystemUtil {
                     config.barColor
                 } else if (!config.isDarkIcon) {
                     val colorBack = ThemeUtil.getColor(context, R.attr.colorABackground)
-                    colorBack and 0xE6FFFFFF.toInt()
+                    colorBack and 0x56FFFFFF
                 } else {
                     val colorBack = ThemeUtil.getColor(context, R.attr.colorAOnBackground)
-                    colorBack and 0x40FFFFFF
+                    colorBack and 0x19FFFFFF
                 }
             }
             else -> Color.TRANSPARENT

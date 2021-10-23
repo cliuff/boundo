@@ -106,6 +106,7 @@ class ExteriorFragment: TaggedFragment(), Democratic {
     }
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
+        mainViewModel.configNavigation(toolbar, iconColor)
         toolbar.setTitle(R.string.prefExteriorBackgrounds)
         toolbar.inflateMenu(R.menu.toolbar_exterior)
         toolbar.menu.findItem(R.id.exteriorTBClear).icon.setTint(ThemeUtil.getColor(context, R.attr.colorActionAlert))

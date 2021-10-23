@@ -61,8 +61,10 @@ internal class StatisticsFragment: TaggedFragment(), Democratic {
     private lateinit var viewBinding: FragmentStatisticsBinding
     private lateinit var chartFragment: ChartFragment
     private lateinit var statsFragment: StatsFragment
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
+        mainViewModel.configNavigation(toolbar, iconColor)
         toolbar.setTitle(if (EasyAccess.isViewingTarget) MainR.string.apiSdkTarget else MainR.string.apiSdkMin)
         return true
     }
@@ -106,7 +108,6 @@ internal class StatisticsFragment: TaggedFragment(), Democratic {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         activity?.run {
-            val mainViewModel: MainViewModel by activityViewModels()
             democratize(mainViewModel)
             val container = viewBinding.avStatisticsContainer ?: viewBinding.avStatisticsRoot
             mainViewModel.contentWidthTop.observe(viewLifecycleOwner) {

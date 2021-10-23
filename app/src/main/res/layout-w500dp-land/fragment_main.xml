@@ -27,16 +27,28 @@
         android:id="@+id/mainLinear"
         android:baselineAligned="false">
 
-        <com.google.android.material.navigationrail.NavigationRailView
-            android:id="@+id/mainSideNav"
-            app:menu="@menu/drawer"
-            app:elevation="0dp"
-            app:backgroundTint="?colorABackground"
-            app:itemIconTint="@color/drawer_icon_states"
-            app:itemTextColor="@color/drawer_text_states"
-            style="@style/NavRail"
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent">
+
+            <com.google.android.material.navigationrail.NavigationRailView
+                android:id="@+id/mainSideNav"
+                app:menu="@menu/drawer"
+                app:elevation="0dp"
+                app:backgroundTint="?colorABackground"
+                app:itemIconTint="@color/drawer_icon_states"
+                app:itemTextColor="@color/drawer_text_states"
+                style="@style/NavRail"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"/>
+
+            <View
+                android:alpha="0.3"
+                android:background="?colorStroke"
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent" />
+        </LinearLayout>
 
         <FrameLayout
             android:layout_weight="1"
@@ -51,12 +63,26 @@
                 android:layout_height="match_parent"
                 app:defaultNavHost="true" />
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/mainTB"
+            <LinearLayout
                 android:layout_gravity="top"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:title="@string/app_name" />
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.appbar.MaterialToolbar
+                    android:id="@+id/mainTB"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <include layout="@layout/main_toolbar_logo" />
+                </com.google.android.material.appbar.MaterialToolbar>
+
+                <View
+                    android:alpha="0.3"
+                    android:background="?colorStroke"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp" />
+            </LinearLayout>
         </FrameLayout>
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

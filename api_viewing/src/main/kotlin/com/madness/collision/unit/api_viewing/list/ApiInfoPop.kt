@@ -34,6 +34,8 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.Guideline
 import androidx.core.content.ContextCompat
+import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePaddingRelative
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
@@ -98,6 +100,7 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
         val content: ConstraintLayout = view.findViewById(MyR.id.api_content)
         val capture: ImageButton = view.findViewById(MyR.id.avAppInfoCapture)
         val options: ImageButton = view.findViewById(MyR.id.avAppInfoOptions)
+        val container: ViewGroup = view.findViewById(MyR.id.avAppInfoContainer)
 
         init {
             targetApi.apiTitle.setText(MyR.string.sdkcheck_dialog_targetsdktext)
@@ -175,6 +178,7 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
         super.onActivityCreated(savedInstanceState)
         val context = context ?: return
 
+        var isEdgeToEdge = true
         edgeToEdge(mainApplication.insetBottom) {
             // keep status bar icon color untouched
             // Actually this works as intended only when app theme is set to follow system,
@@ -189,20 +193,28 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
             }
             navigationBar {
                 val colorSurface = ThemeUtil.getColor(context, R.attr.colorASurface)
-                color = if (isDarkIcon == true && OsUtils.dissatisfy(OsUtils.O)) {
-                    ColorUtil.darkenAs(colorSurface, 0.9f)
-                } else {
+                isEdgeToEdge = (isDarkIcon == true && OsUtils.dissatisfy(OsUtils.O)).not()
+                color = if (isEdgeToEdge) {
                     colorSurface
+                } else {
+                    ColorUtil.darkenAs(colorSurface, 0.9f)
                 }
                 transparentBar()
             }
         }
 
-        // edge-to-edge is not enabled below O
-        if (OsUtils.satisfy(OsUtils.O)) {
+        if (isEdgeToEdge) {
             val minMargin = X.size(context, 10f, X.DP).roundToInt()
             val extraMargin = max(mainApplication.insetBottom, minMargin)
             mViews.guidelineBottom.setGuidelineEnd(extraMargin)
+
+            val margin = context.resources.getDimensionPixelOffset(MyR.dimen.avAppInfoOptionsMarginBottom)
+            mViews.options.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                bottomMargin = extraMargin + margin
+            }
+
+            mViews.container.updatePaddingRelative(
+                start = mainApplication.insetStart, end = mainApplication.insetEnd)
         }
 
         // below: configure views

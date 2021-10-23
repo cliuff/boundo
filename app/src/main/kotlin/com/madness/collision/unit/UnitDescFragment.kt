@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,6 +55,7 @@ internal class UnitDescFragment() : TaggedFragment(), Democratic {
         }
     }
 
+    private val mainViewModel: MainViewModel by activityViewModels()
     private var _viewBinding: UnitDescBinding? = null
     private val viewBinding: UnitDescBinding
         get() = _viewBinding!!
@@ -71,6 +72,7 @@ internal class UnitDescFragment() : TaggedFragment(), Democratic {
     }
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
+        mainViewModel.configNavigation(toolbar, iconColor)
         toolbar.title = description?.getName(context)
         inflateAndTint(R.menu.toolbar_unit_desc, toolbar, iconColor)
         this.toolbar = toolbar
@@ -268,7 +270,6 @@ internal class UnitDescFragment() : TaggedFragment(), Democratic {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val mainViewModel: MainViewModel by activityViewModels()
         democratize(mainViewModel)
 
         mainViewModel.contentWidthTop.observe(viewLifecycleOwner) {

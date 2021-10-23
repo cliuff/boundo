@@ -58,6 +58,7 @@ class MyUnit : Unit() {
     }
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
+        configNavigation(toolbar, iconColor)
         toolbar.setTitle(R.string.unit_device_manager)
         return true
     }

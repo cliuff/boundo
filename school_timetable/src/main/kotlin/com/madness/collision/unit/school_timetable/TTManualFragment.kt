@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,6 +45,7 @@ internal class TTManualFragment: Unit(), View.OnClickListener{
     private lateinit var viewBinding: ActivityTtPart1Binding
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
+        configNavigation(toolbar, iconColor)
         toolbar.setTitle(R.string.textManual)
         return true
     }

@@ -18,29 +18,31 @@ package com.madness.collision.diy
 
 import android.graphics.Rect
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.madness.collision.util.os.OsUtils
 
 
 internal class WindowInsets {
-    private var mLeft: Int = 0
-    val left: Int
-        get() = mLeft
-    private var mTop: Int = 0
+    private var _start: Int = 0
+    // rtl layout friendly
+    val start: Int
+        get() = _start
+    private var _top: Int = 0
     val top: Int
-        get() = mTop
-    private var mRight: Int = 0
-    val right: Int
-        get() = mRight
-    private var mBottom: Int = 0
+        get() = _top
+    private var _end: Int = 0
+    val end: Int
+        get() = _end
+    private var _bottom: Int = 0
     val bottom: Int
-        get() = mBottom
+        get() = _bottom
 
     private fun init(left: Int = 0, top: Int = 0, right: Int = 0, bottom: Int = 0) {
-        mLeft = left
-        mTop = top
-        mRight = right
-        mBottom = bottom
+        _start = left
+        _top = top
+        _end = right
+        _bottom = bottom
     }
 
     constructor(left: Int = 0, top: Int = 0, right: Int = 0, bottom: Int = 0) {
@@ -49,14 +51,14 @@ internal class WindowInsets {
 
     constructor(rect: Rect) : this(rect.left, rect.top, rect.right, rect.bottom)
 
-    constructor(insets: android.view.WindowInsets) {
+    constructor(insets: android.view.WindowInsets, isRtl: Boolean) {
         if (OsUtils.satisfy(OsUtils.R)) {
             insets.getInsets(android.view.WindowInsets.Type.systemBars()).run {
-                init(left, top, right, bottom)
+                if (isRtl) init(right, top, left, bottom) else init(left, top, right, bottom)
             }
         } else {
             getInsetsLegacy(insets).run {
-                init(left, top, right, bottom)
+                if (isRtl) init(right, top, left, bottom) else init(left, top, right, bottom)
             }
         }
     }
@@ -89,8 +91,9 @@ internal abstract class GeneralActivity : AppCompatActivity() {
      */
     private fun applyInsets() {
         val root = window.decorView.rootView
-        root!!.setOnApplyWindowInsetsListener { _, insets ->
-            mWindowInsets = WindowInsets(insets)
+        root!!.setOnApplyWindowInsetsListener { v, insets ->
+            val isRtl = if (v.isLayoutDirectionResolved) v.layoutDirection == View.LAYOUT_DIRECTION_RTL else false
+            mWindowInsets = WindowInsets(insets, isRtl)
             consumeInsets(windowInsets)
             return@setOnApplyWindowInsetsListener insets
         }

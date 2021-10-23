@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,6 +71,7 @@ internal class TimeFragment: Unit() {
     private lateinit var viewBinding: TtTimeBinding
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
+        configNavigation(toolbar, iconColor)
         val menu = toolbar.menu
         toolbar.setTitle(MyR.string.ics_Button_date_picker)
         toolbar.inflateMenu(MyR.menu.toolbar_tt_time)

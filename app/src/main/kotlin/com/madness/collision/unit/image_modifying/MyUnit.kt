@@ -67,6 +67,7 @@ class MyUnit: Unit(){
     private lateinit var viewBinding: UnitImBinding
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
+        configNavigation(toolbar, iconColor)
         toolbar.setTitle(R.string.developertools_cropimage)
         toolbar.inflateMenu(R.menu.toolbar_im)
         toolbar.menu.findItem(R.id.imToolbarDone).icon.setTint(ThemeUtil.getColor(context, R.attr.colorActionPass))

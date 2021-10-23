@@ -98,10 +98,7 @@ internal class MainToolbar(
     }
 
     fun createOptions(context: Context, toolbar: Toolbar) {
-        val textRes = if (EasyAccess.isViewingTarget) R.string.sdkcheck_dialog_targetsdktext
-        else R.string.sdkcheck_dialog_minsdktext
-        val titleAffix = context.getString(textRes)
-        toolbar.title = context.getString(MainR.string.apiViewer) + " • $titleAffix"
+        toolbar.setTitle(MainR.string.apiViewer)
         this.toolbar = toolbar
     }
 

@@ -38,7 +38,9 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
+import androidx.core.view.updatePaddingRelative
 import androidx.lifecycle.lifecycleScope
 import com.jaredrummler.android.device.DeviceName
 import com.madness.collision.BuildConfig
@@ -187,11 +189,18 @@ internal class ImmortalActivity : AppCompatActivity(), View.OnClickListener {
             notifyBriefly(R.string.text_done)
             true
         }
+        viewBinding.immortalToolbar.run {
+            navigationIcon = ContextCompat.getDrawable(context, R.drawable.ic_arrow_back_24)?.apply {
+                setTint(ThemeUtil.getColor(context, R.attr.colorIcon))
+            }
+            setNavigationOnClickListener { finish() }
+        }
     }
 
-    private fun applyInsets(){
-        viewBinding.immortalRoot.setOnApplyWindowInsetsListener { _, insets ->
-            consumeInsets(WindowInsets(insets))
+    private fun applyInsets() {
+        viewBinding.immortalRoot.setOnApplyWindowInsetsListener { v, insets ->
+            val isRtl = if (v.isLayoutDirectionResolved) v.layoutDirection == View.LAYOUT_DIRECTION_RTL else false
+            consumeInsets(WindowInsets(insets, isRtl))
             insets
         }
     }
@@ -199,9 +208,14 @@ internal class ImmortalActivity : AppCompatActivity(), View.OnClickListener {
     private fun consumeInsets(insets: WindowInsets) {
         mainApplication.insetTop = insets.top
         mainApplication.insetBottom = insets.bottom
-        mainApplication.insetLeft = insets.left
-        mainApplication.insetRight = insets.right
-        viewBinding.immortalRoot.alterPadding(start = insets.left, end = insets.right)
+        mainApplication.insetStart = insets.start
+        mainApplication.insetEnd = insets.end
+        viewBinding.immortalRoot.updatePaddingRelative(start = insets.start, end = insets.end)
+        viewBinding.immortalToolbar.run {
+            updatePaddingRelative(top = insets.top)
+            measure()
+            viewBinding.immortalContent.updatePaddingRelative(top = measuredHeight)
+        }
         immersiveNavigation(insets.bottom)
     }
 

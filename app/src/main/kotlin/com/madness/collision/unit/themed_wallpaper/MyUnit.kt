@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,6 +47,7 @@ class MyUnit: Unit() {
     private lateinit var viewBinding: UnitThemedWallpaperBinding
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
+        configNavigation(toolbar, iconColor)
         toolbar.setTitle(R.string.twService)
         inflateAndTint(R.menu.toolbar_tw, toolbar, iconColor)
         return true

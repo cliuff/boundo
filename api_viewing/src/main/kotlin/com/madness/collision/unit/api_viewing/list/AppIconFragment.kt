@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -76,6 +76,7 @@ internal class AppIconFragment : TaggedFragment(), Democratic {
     private lateinit var viewBinding: DialogApiSubAiBinding
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
+        mainViewModel.configNavigation(toolbar, iconColor)
         toolbar.title = arguments?.getString(ARG_APP_NAME) ?: ""
         inflateAndTint(MyR.menu.toolbar_av_icon, toolbar, iconColor)
         return true

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +22,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.get
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import com.madness.collision.Democratic
-import com.madness.collision.R
 import com.madness.collision.databinding.FragmentMainUnitsBinding
 import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.util.AppUtils.asBottomMargin
@@ -47,7 +48,7 @@ internal class MainUnitsFragment : TaggedFragment(), Democratic {
     private lateinit var mViews: FragmentMainUnitsBinding
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
-        toolbar.setTitle(R.string.units)
+        toolbar[0].isVisible = true
         return true
     }
 

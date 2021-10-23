@@ -23,15 +23,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.appcompat.widget.Toolbar
-import androidx.core.view.isEmpty
-import androidx.core.view.size
+import androidx.core.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListUpdateCallback
 import com.madness.collision.Democratic
-import com.madness.collision.R
 import com.madness.collision.databinding.FragmentUpdatesBinding
 import com.madness.collision.databinding.MainUpdatesHeaderBinding
 import com.madness.collision.main.MainViewModel
@@ -83,7 +81,7 @@ internal class UpdatesFragment : TaggedFragment(), Democratic {
     private lateinit var inflater: LayoutInflater
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
-        toolbar.setTitle(R.string.main_updates)
+        toolbar[0].isVisible = true
         return true
     }
 

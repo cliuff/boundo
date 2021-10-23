@@ -112,25 +112,28 @@ internal object Utils {
 
     private fun androidCodenameInfo(context: Context?, apiLevel: Int, fullName: Boolean): String {
         if (fullName) context ?: return " "
+        val getString: (id: Int) -> String = {
+            context?.getString(it) ?: " "
+        }
         return when (apiLevel) {
             OsUtils.S -> if (fullName) "12" else "s"
             X.R -> if (fullName) "11" else "r"
             Q -> if (fullName) "10" else "q"
-            P -> if (fullName) context!!.getString(R.string.res_api_code_names_p) else "p"  // Pie
-            O, O_MR1 -> if (fullName) context!!.getString(R.string.res_api_code_names_o) else "o"  // Oreo
-            N, N_MR1 -> if (fullName) context!!.getString(R.string.res_api_code_names_n) else "n"  // Nougat
-            M -> if (fullName) context!!.getString(R.string.res_api_code_names_m) else "m"  // Marshmallow
-            L, L_MR1 -> if (fullName) context!!.getString(R.string.res_api_code_names_l) else "l"  // Lollipop
-            K, K_WATCH -> if (fullName) context!!.getString(R.string.res_api_code_names_k) else "k"  // KitKat
-            J, J_MR1, J_MR2 -> if (fullName) context!!.getString(R.string.res_api_code_names_j) else "j"  // Jelly Bean
-            I, I_MR1 -> if (fullName) context!!.getString(R.string.res_api_code_names_i) else "i"  // Ice Cream Sandwich
-            H, H_MR1, H_MR2 -> if (fullName) context!!.getString(R.string.res_api_code_names_h) else "h"  // Honeycomb
-            G, G_MR1 -> if (fullName) context!!.getString(R.string.res_api_code_names_g) else "g"  // Gingerbread
-            F -> if (fullName) context!!.getString(R.string.res_api_code_names_f) else "f"  // Froyo
-            E, E_0_1, E_MR1 -> if (fullName) context!!.getString(R.string.res_api_code_names_e) else "e"  // Eclair
-            D -> if (fullName) context!!.getString(R.string.res_api_code_names_d) else "d"  // Donut
-            C -> if (fullName) context!!.getString(R.string.res_api_code_names_c) else "c"  // Cupcake
-            B -> if (fullName) context!!.getString(R.string.resApiCodeNamesB) else " "  // from wikipedia
+            P -> if (fullName) getString(R.string.res_api_code_names_p) else "p"  // Pie
+            O, O_MR1 -> if (fullName) getString(R.string.res_api_code_names_o) else "o"  // Oreo
+            N, N_MR1 -> if (fullName) getString(R.string.res_api_code_names_n) else "n"  // Nougat
+            M -> if (fullName) getString(R.string.res_api_code_names_m) else "m"  // Marshmallow
+            L, L_MR1 -> if (fullName) getString(R.string.res_api_code_names_l) else "l"  // Lollipop
+            K, K_WATCH -> if (fullName) getString(R.string.res_api_code_names_k) else "k"  // KitKat
+            J, J_MR1, J_MR2 -> if (fullName) getString(R.string.res_api_code_names_j) else "j"  // Jelly Bean
+            I, I_MR1 -> if (fullName) getString(R.string.res_api_code_names_i) else "i"  // Ice Cream Sandwich
+            H, H_MR1, H_MR2 -> if (fullName) getString(R.string.res_api_code_names_h) else "h"  // Honeycomb
+            G, G_MR1 -> if (fullName) getString(R.string.res_api_code_names_g) else "g"  // Gingerbread
+            F -> if (fullName) getString(R.string.res_api_code_names_f) else "f"  // Froyo
+            E, E_0_1, E_MR1 -> if (fullName) getString(R.string.res_api_code_names_e) else "e"  // Eclair
+            D -> if (fullName) getString(R.string.res_api_code_names_d) else "d"  // Donut
+            C -> if (fullName) getString(R.string.res_api_code_names_c) else "c"  // Cupcake
+            B -> if (fullName) getString(R.string.resApiCodeNamesB) else " "  // from wikipedia
 //            1 -> if (fullName) "Base" else " " // from Build.VERSION_CODES.BASE
             else -> if (fullName) "" else " "
         }

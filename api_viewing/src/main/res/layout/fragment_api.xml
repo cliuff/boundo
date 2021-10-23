@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2020 Clifford Liu
+  ~ Copyright 2021 Clifford Liu
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -61,7 +61,7 @@
                     app:cardElevation="0dp"
                     app:cardBackgroundColor="?colorASurface"
                     app:strokeColor="?colorStroke"
-                    app:strokeWidth="1dp"
+                    app:strokeWidth="0.5dp"
                     android:alpha="@fraction/surfaceAlpha"
                     android:id="@+id/apiSpinnerDisplayBack"
                     android:layout_width="wrap_content"
@@ -91,7 +91,7 @@
                     app:cardElevation="0dp"
                     app:cardBackgroundColor="?colorASurface"
                     app:strokeColor="?colorStroke"
-                    app:strokeWidth="1dp"
+                    app:strokeWidth="0.5dp"
                     android:alpha="@fraction/surfaceAlpha"
                     android:id="@+id/avMainFilterCard"
                     android:layout_width="wrap_content"
@@ -136,7 +136,7 @@
                     app:cardElevation="0dp"
                     app:cardBackgroundColor="?colorASurface"
                     app:strokeColor="?colorStroke"
-                    app:strokeWidth="1dp"
+                    app:strokeWidth="0.5dp"
                     android:alpha="@fraction/surfaceAlpha"
                     android:id="@+id/apiStatsBack"
                     android:layout_width="wrap_content"

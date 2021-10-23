@@ -141,6 +141,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
         toolbarMan.createOptions(context, toolbar)
+        configNavigation(toolbar, iconColor)
         inflateAndTint(MyR.menu.toolbar_api, toolbar, iconColor)
         toolbar.setOnClickListener {
             scrollToTop()

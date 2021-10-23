@@ -81,6 +81,7 @@ class MyUnit: Unit(), View.OnClickListener{
     private lateinit var viewBinding: UnitSchoolTimetableBinding
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
+        configNavigation(toolbar, iconColor)
         toolbar.setTitle(R.string.unit_school_timetable)
         inflateAndTint(MyR.menu.toolbar_tt, toolbar, iconColor)
         return true

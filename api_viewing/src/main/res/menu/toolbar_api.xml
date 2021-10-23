@@ -28,7 +28,7 @@
         android:id="@+id/apiTBSort"
         android:title="@string/text_sort"
         android:icon="@drawable/ic_sort_24"
-        app:showAsAction="always"/>
+        app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/apiTBRefresh"
         android:title="@string/text_refresh"

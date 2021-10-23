@@ -37,8 +37,8 @@ class MainApplication : SplitCompatApplication(), Thread.UncaughtExceptionHandle
     var statusBarHeight: Int = 0
     var insetTop: Int = 0
     var insetBottom: Int = 0
-    var insetLeft: Int = 0
-    var insetRight: Int = 0
+    var insetStart: Int = 0
+    var insetEnd: Int = 0
     var minBottomMargin: IntArray = intArrayOf(-1, -1)
     var exterior: Boolean = false
     /**

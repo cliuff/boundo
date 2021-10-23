@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2020 Clifford Liu
+  ~ Copyright 2021 Clifford Liu
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -30,25 +30,52 @@
         android:layout_height="match_parent"
         app:defaultNavHost="true" />
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/mainTB"
+    <LinearLayout
         android:layout_gravity="top"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:title="@string/app_name" />
+        android:layout_height="wrap_content">
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        app:menu="@menu/drawer"
-        android:id="@+id/mainBottomNav"
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/mainTB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <include layout="@layout/main_toolbar_logo" />
+        </com.google.android.material.appbar.MaterialToolbar>
+
+        <View
+            android:alpha="0.3"
+            android:background="?colorStroke"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/mainBottomNavContainer"
         app:layout_behavior="com.madness.collision.main.MyHideBottomViewOnScrollBehavior"
-        app:backgroundTint="?colorABackground"
-        app:elevation="0dp"
-        app:insetForeground="@null"
-        app:itemIconTint="@color/drawer_icon_states"
-        app:itemTextColor="@color/drawer_text_states"
         android:layout_gravity="bottom"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content">
+
+        <View
+            android:alpha="0.3"
+            android:background="?colorStroke"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            app:menu="@menu/drawer"
+            android:id="@+id/mainBottomNav"
+            app:backgroundTint="?colorABackground"
+            app:elevation="0dp"
+            app:insetForeground="@null"
+            app:itemIconTint="@color/drawer_icon_states"
+            app:itemTextColor="@color/drawer_text_states"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/mainShowBottomNav"

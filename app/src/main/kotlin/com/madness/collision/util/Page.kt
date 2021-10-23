@@ -109,6 +109,7 @@ class Page(fragment: Fragment? = null, private var titleId: Int = 0, private val
         if (democratic != null) {
             return democratic.createOptions(context, toolbar, iconColor)
         }
+        mainViewModel.configNavigation(toolbar, iconColor)
         if (titleId != 0) {
             toolbar.setTitle(titleId)
         }

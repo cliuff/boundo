@@ -394,10 +394,13 @@
     </style>
 
     <style name="AppTheme.Toolbar" parent="Widget.MaterialComponents.Toolbar">
-        <item name="titleTextColor">?colorTextSub</item>
+        <item name="titleCentered">true</item>
+        <item name="titleTextColor">?colorAOnSurface</item>
         <item name="android:textColor">?colorTextSub</item>
 <!--        <item name="android:textColorHint">?android:textColorHint</item>-->
         <item name="android:background">?colorTb</item>
+        <item name="minHeight">@dimen/toolbarHeight</item>
+        <item name="maxButtonHeight">@dimen/toolbarHeight</item>
     </style>
 
     <style name="AppTheme.Transparent" parent="AppTheme">

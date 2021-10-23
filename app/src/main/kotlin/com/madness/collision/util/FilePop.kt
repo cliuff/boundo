@@ -115,6 +115,7 @@ class FilePop: BottomSheetDialogFragment(){
 
         mContext = context ?: return
 
+        var isEdgeToEdge = true
         edgeToEdge(mainApplication.insetBottom) {
             // keep status bar icon color untouched from the activity before this
             statusBar {
@@ -124,20 +125,23 @@ class FilePop: BottomSheetDialogFragment(){
             }
             navigationBar {
                 val colorSurface = ThemeUtil.getColor(mContext, R.attr.colorASurface)
-                color = if (isDarkIcon == true && OsUtils.dissatisfy(OsUtils.O)) {
-                    ColorUtil.darkenAs(colorSurface, 0.9f)
-                } else {
+                isEdgeToEdge = (isDarkIcon == true && OsUtils.dissatisfy(OsUtils.O)).not()
+                color = if (isEdgeToEdge) {
                     colorSurface
+                } else {
+                    ColorUtil.darkenAs(colorSurface, 0.9f)
                 }
                 transparentBar()
             }
         }
 
-        // edge-to-edge is not enabled below O
-        if (OsUtils.satisfy(OsUtils.O)) {
+        if (isEdgeToEdge) {
             val minMargin = X.size(mContext, 12f, X.DP).roundToInt()
             val extraMargin = max(mainApplication.insetBottom, minMargin)
             mViews.fileActionsContainer.updatePaddingRelative(bottom = extraMargin)
+
+            mViews.fileActionsRoot.updatePaddingRelative(
+                start = mainApplication.insetStart, end = mainApplication.insetEnd)
         }
 
         val intent = arguments?.getParcelable(ARG_INTENT) ?: Intent()

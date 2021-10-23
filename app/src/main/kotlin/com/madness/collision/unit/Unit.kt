@@ -19,6 +19,7 @@ package com.madness.collision.unit
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.edit
 import androidx.fragment.app.activityViewModels
 import com.google.android.play.core.splitinstall.SplitInstallManager
@@ -281,6 +282,10 @@ abstract class Unit: TaggedFragment(), Democratic {
 
     protected fun democratize() {
         democratize(mainViewModel)
+    }
+
+    fun configNavigation(toolbar: Toolbar, iconColor: Int) {
+        mainViewModel.configNavigation(toolbar, iconColor)
     }
 
 }

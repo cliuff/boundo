@@ -27,6 +27,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
+import androidx.core.view.get
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.button.MaterialButton
@@ -60,7 +62,7 @@ class MoreFragment : TaggedFragment(), Democratic, View.OnClickListener, NavNode
     private var exteriorTransparency: Int = 0xFF
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
-        toolbar.setTitle(R.string.app_name)
+        toolbar[0].isVisible = true
         return true
     }
 

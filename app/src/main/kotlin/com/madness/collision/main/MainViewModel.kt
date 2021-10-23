@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,8 +35,8 @@ class MainViewModel: ViewModel(){
     val action: MutableLiveData<Pair<String, Any?>> = MutableLiveData("" to null)
     val insetTop: MutableLiveData<Int> = MutableLiveData(mainApplication.insetTop)
     val insetBottom: MutableLiveData<Int> = MutableLiveData(mainApplication.insetBottom)
-    val insetLeft: MutableLiveData<Int> = MutableLiveData(mainApplication.insetLeft)
-    val insetRight: MutableLiveData<Int> = MutableLiveData(mainApplication.insetRight)
+    val insetStart: MutableLiveData<Int> = MutableLiveData(mainApplication.insetStart)
+    val insetEnd: MutableLiveData<Int> = MutableLiveData(mainApplication.insetEnd)
     val contentWidthTop: MutableLiveData<Int> = MutableLiveData(insetTop.value ?: 0)
     val contentWidthBottom: MutableLiveData<Int> = MutableLiveData(insetBottom.value ?: 0)
     val background: MutableLiveData<Drawable?> = MutableLiveData(null)

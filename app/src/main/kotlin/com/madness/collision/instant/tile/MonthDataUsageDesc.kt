@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,8 +32,10 @@ internal class MonthDataUsageDesc : TaggedFragment(), Democratic {
 
     override val category: String = "MonthDataUsageDesc"
     override val id: String = "MonthDataUsageDesc"
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
+        mainViewModel.configNavigation(toolbar, iconColor)
         toolbar.setTitle(R.string.tileData)
         return true
     }
@@ -42,9 +44,7 @@ internal class MonthDataUsageDesc : TaggedFragment(), Democratic {
         return inflater.inflate(R.layout.instant_tile_month_data_usage_desc, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        val mainViewModel: MainViewModel by activityViewModels()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         democratize(mainViewModel)
     }
 }

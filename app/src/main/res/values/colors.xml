@@ -49,7 +49,7 @@
     <color name="onItemAWhite">#FF000000</color>
     <color name="apiLegacyBackAWhite">#A0FFFFFF</color>
     <color name="toolbarBackAWhite">#F4FFFFFF</color>
-    <color name="iconAWhite">#FF80868B</color>
+    <color name="iconAWhite">#353535</color>
     <color name="iconDeactivatedAWhite">#FFC0C3C9</color>
     <color name="actionAlertAWhite">#FFF03030</color>
     <color name="actionAlertVBackAWhite">#FFFFE9FA</color>
@@ -80,13 +80,13 @@
     <color name="onItemACnRed">#FFFFFFFF</color>
     <color name="apiLegacyBackACnRed">#A0FFFFFF</color>
     <color name="toolbarBackACnRed">#F4AA381E</color>
-    <color name="iconACnRed">#FFCFCFCF</color>
+    <color name="iconACnRed">#FFDFDFDF</color>
     <color name="iconDeactivatedACnRed">#FF909399</color>
     <color name="actionAlertACnRed">#FFFF9090</color>
     <color name="actionAlertVBackACnRed">#FFA01010</color>
     <color name="actionPassACnRed">#FF80D0A0</color>
     <color name="hintACnRed">#FFC0C0C0</color>
-    <color name="strokeACnRed">#FFB0502E</color>
+    <color name="strokeACnRed">#FFD0706E</color>
     <color name="textACnRed">#FFFFFFFF</color>
     <color name="textSubACnRed">#FFDFDFDF</color>
     <color name="apiPopItemBackACnRed">#FFC0806E</color>
@@ -111,7 +111,7 @@
     <color name="onItemABlack">#FFFFFFFF</color>
     <color name="apiLegacyBackABlack">#A0000000</color>
     <color name="toolbarBackABlack">#F4000000</color>
-    <color name="iconABlack">#FFC0C6CB</color>
+    <color name="iconABlack">#FFD0D6DB</color>
     <color name="iconDeactivatedABlack">#FF505965</color>
     <color name="actionAlertABlack">#FFFFB5B5</color>
     <color name="actionAlertVBackABlack">#4B0707</color>
@@ -142,7 +142,7 @@
     <color name="onItemABlackGray">#FFFFFFFF</color>
     <color name="apiLegacyBackABlackGray">#A0000000</color>
     <color name="toolbarBackABlackGray">#F4121212</color>
-    <color name="iconABlackGray">#FFA0A6AB</color>
+    <color name="iconABlackGray">#FFD0D6DB</color>
     <color name="iconDeactivatedABlackGray">#FF505965</color>
     <color name="actionAlertABlackGray">#FFFFB5B5</color>
     <color name="actionAlertVBackABlackGray">#4B0707</color>

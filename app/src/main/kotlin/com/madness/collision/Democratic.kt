@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package com.madness.collision
 import android.content.Context
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import com.madness.collision.main.MainViewModel
 
 /**
@@ -46,6 +47,19 @@ interface Democratic{
     fun inflateAndTint(menuResId: Int, toolbar: Toolbar, iconColor: Int) {
         toolbar.inflateMenu(menuResId)
         tintOptionIcons(toolbar, iconColor)
+    }
+
+    fun configNavigation(toolbar: Toolbar, iconColor: Int, mainViewModel: MainViewModel) {
+        toolbar.run {
+            navigationIcon = ContextCompat.getDrawable(context, R.drawable.ic_arrow_back_24)?.apply {
+                setTint(iconColor)
+            }
+            setNavigationOnClickListener { mainViewModel.popUpBackStack() }
+        }
+    }
+
+    fun MainViewModel.configNavigation(toolbar: Toolbar, iconColor: Int) {
+        configNavigation(toolbar, iconColor, this)
     }
 
     fun democratize(mainViewModel: MainViewModel) {
