@@ -24,10 +24,6 @@
         android:id="@+id/instantFragment"
         android:name="com.madness.collision.instant.InstantFragment"/>
     <fragment
-        android:id="@+id/featheringFragment"
-        android:name="com.madness.collision.FeatheringFragment"
-         />
-    <fragment
         android:id="@+id/adviceFragment"
         android:name="com.madness.collision.settings.AdviceFragment">
         <action

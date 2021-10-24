@@ -284,22 +284,6 @@
         <item name="chipMinHeight">40dp</item>
     </style>
 
-    <style name="AppTheme.FullScreenDialog" parent="Theme.MaterialComponents.Light.Dialog">
-        <item name="android:windowIsFloating">false</item>
-        <item name="colorAccent">@color/primaryAWhite</item>
-        <item name="colorPrimary">@color/primaryAWhite</item>
-        <item name="colorPrimaryDark">@color/primaryAWhite</item>
-        <item name="android:windowBackground">@color/backgroundAWhite</item>
-        <item name="actionMenuTextColor">@color/primaryAWhite</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-    </style>
-
-    <style name="AppTheme.Slide">
-        <item name="android:windowEnterAnimation">@anim/slide_up</item>
-        <item name="android:windowExitAnimation">@anim/slide_down</item>
-    </style>
-
     <style name="AppTheme.PopUp">
         <item name="android:windowEnterAnimation">@anim/pop_up_in</item>
         <item name="android:windowExitAnimation">@anim/pop_up_out</item>
