@@ -28,7 +28,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.madness.collision.R
-import com.madness.collision.settings.SettingsFunc
+import com.madness.collision.settings.LanguageMan
 import com.madness.collision.util.os.OsUtils
 import java.util.*
 
@@ -285,17 +285,45 @@ object SystemUtil {
         return if (X.aboveOn(X.N)) LocaleList.getAdjustedDefault()[0] else Locale.getDefault()
     }
 
+    fun toLocale(localeString: String): Locale {
+        if (localeString == LanguageMan.AUTO) return getLocaleApp()
+        return "(.+)_(.+)".toRegex().find(localeString)?.run {
+            Locale(groupValues[1], groupValues[2])
+        } ?: Locale(localeString)
+    }
+
     /**
-     * In-app usr selected language, for development use only
+     * In-app usr selected language
      */
-    fun getLocaleUsr(context: Context): Locale{
-        return if (!mainApplication.debug) getLocaleApp()
-        else SettingsFunc.getLocale(SettingsFunc.getLanguage(context))
+    fun getLocaleUsr(context: Context): Locale {
+        return toLocale(LanguageMan(context).getLanguage())
     }
 
     fun getLocaleContext(context: Context, locale: Locale): Context {
-        val newConfig = Configuration(context.resources.configuration)
-        newConfig.setLocale(locale)
+        val newConfig = Configuration(context.resources.configuration).apply {
+            if (OsUtils.satisfy(OsUtils.N)) {
+                val currentLocaleList = LocaleList.getAdjustedDefault()
+                val localeIndex = currentLocaleList.indexOf(locale)
+                val newLocaleList = if (localeIndex >= 0) {
+                    // move locale to top
+                    Array(currentLocaleList.size()) { newIndex ->
+                        when (newIndex) {
+                            0 -> locale
+                            in 1..localeIndex -> currentLocaleList[newIndex - 1]
+                            else -> currentLocaleList[newIndex]
+                        }
+                    }
+                } else {
+                    // add locale to top
+                    Array(currentLocaleList.size() + 1) { newIndex ->
+                        if (newIndex == 0) locale else currentLocaleList[newIndex - 1]
+                    }
+                }
+                setLocales(LocaleList(*newLocaleList))
+            } else {
+                setLocale(locale)
+            }
+        }
         return context.createConfigurationContext(newConfig)
     }
 

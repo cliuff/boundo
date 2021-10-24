@@ -30,7 +30,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import com.madness.collision.R
 import com.madness.collision.databinding.UnitDmDeviceListBinding
-import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.device_manager.manager.DeviceManager
 import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.notifyBriefly
@@ -75,8 +74,6 @@ internal class DeviceListFragment: TaggedFragment(), StateObservable {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val context = context
-        if (context != null) SettingsFunc.updateLanguage(context)
         viewBinding = UnitDmDeviceListBinding.inflate(inflater, container, false)
         return viewBinding.root
     }

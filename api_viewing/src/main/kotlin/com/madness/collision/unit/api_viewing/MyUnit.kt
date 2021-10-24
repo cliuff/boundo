@@ -37,7 +37,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.madness.collision.R
 import com.madness.collision.main.MainActivity
 import com.madness.collision.main.MyHideBottomViewOnScrollBehavior
-import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
@@ -220,8 +219,6 @@ class MyUnit: com.madness.collision.unit.Unit() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val context = context
-        if (context != null) SettingsFunc.updateLanguage(context)
         viewBinding = FragmentApiBinding.inflate(inflater, container, false)
         return viewBinding.root
     }

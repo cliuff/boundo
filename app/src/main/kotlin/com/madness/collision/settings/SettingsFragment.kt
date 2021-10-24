@@ -23,9 +23,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewStub
 import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.edit
 import androidx.core.content.res.use
@@ -65,7 +63,7 @@ internal class SettingsFragment : TaggedFragment(), Democratic, NavNode {
         return true
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _viewBinding = FragmentSettingsBinding.inflate(inflater, container, false)
         return viewBinding.root
     }
@@ -78,17 +76,8 @@ internal class SettingsFragment : TaggedFragment(), Democratic, NavNode {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val context = context ?: return
 
-        if (mainApplication.debug) {
-            viewBinding.settingsUnits.findViewById<ViewStub>(R.id.settingsItemLanguagesStub)?.inflate()
-            viewBinding.settingsUnits.findViewById<View>(R.id.settingsItemLanguagesContainer)?.run {
-                findViewById<TextView>(R.id.settingsUnitItem)?.run {
-                    setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_language_24, 0, 0, 0)
-                    setText(R.string.Settings_Button_SwitchLanguage)
-                }
-                setOnClickListener {
-                    showLanguages(context)
-                }
-            }
+        viewBinding.settingsItemLang.setOnClickListener {
+            showLanguages(context)
         }
 
         viewBinding.settingsItemStyle.setOnClickListener {
@@ -124,24 +113,22 @@ internal class SettingsFragment : TaggedFragment(), Democratic, NavNode {
     private fun showLanguages(context: Context) {
         val langEntries = context.resources.obtainTypedArray(R.array.prefSettingsLangEntries)
         val langValues = context.resources.obtainTypedArray(R.array.prefSettingsLangValues)
-        val lang = SettingsFunc.getLanguage(context)
+        val langMan = LanguageMan(context)
+        val lang = langMan.getLanguage()
         Log.i(TAG, "Currently set: $lang")
         val langIndex = P.getPrefIndex(lang, langValues)
         PopupUtil.selectSingle(context, R.string.Settings_Language_Dialog_Title, langEntries, langIndex) {
             pop, _, index ->
             pop.dismiss()
             val values = context.resources.obtainTypedArray(R.array.prefSettingsLangValues)
-            val newLang = values.use { it.getString(index) } ?: SettingsFunc.AUTO
+            val newLang = values.use { it.getString(index) } ?: LanguageMan.AUTO
             val systemAppLang = SystemUtil.getLocaleApp().toString()
             Log.i(TAG, "New lang: $newLang, system app lang: $systemAppLang")
             val oldLocaleString = SystemUtil.getLocaleUsr(context).toString()
-            SettingsFunc.settingsPreferencesLanguage(context, newLang)
+            langMan.setLanguage(newLang)
             val newLocaleString = SystemUtil.getLocaleUsr(context).toString()
             val shouldSwitch = oldLocaleString != newLocaleString
             if (shouldSwitch) {
-                if (newLang == SettingsFunc.AUTO && oldLocaleString != systemAppLang){
-                    SettingsFunc.switchLanguage(context, systemAppLang)
-                }
                 mainViewModel.action.value = MainActivity.ACTION_RECREATE to null
             }
         }.show()

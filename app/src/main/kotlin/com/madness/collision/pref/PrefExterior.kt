@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,6 @@ import com.madness.collision.R
 import com.madness.collision.main.MainActivity
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.settings.ExteriorFragment
-import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.util.*
 
 internal class PrefExterior: PreferenceFragmentCompat(), NavNode {
@@ -81,8 +80,6 @@ internal class PrefExterior: PreferenceFragmentCompat(), NavNode {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         preferenceManager.sharedPreferencesName = P.PREF_SETTINGS
-        val context = context
-        if (context != null) SettingsFunc.updateLanguage(context)
         setPreferencesFromResource(R.xml.pref_exterior, rootKey)
         if (X.belowOff(X.Q)) {
             findPref<Preference>(R.string.prefExteriorKeyForceDarkDesc)?.isVisible = false

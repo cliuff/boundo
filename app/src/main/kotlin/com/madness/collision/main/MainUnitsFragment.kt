@@ -27,7 +27,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import com.madness.collision.Democratic
 import com.madness.collision.databinding.FragmentMainUnitsBinding
-import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.util.AppUtils.asBottomMargin
 import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.alterPadding
@@ -52,9 +51,7 @@ internal class MainUnitsFragment : TaggedFragment(), Democratic {
         return true
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val context = context
-        if (context != null) SettingsFunc.updateLanguage(context)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         mViews = FragmentMainUnitsBinding.inflate(inflater, container, false)
         return mViews.root
     }

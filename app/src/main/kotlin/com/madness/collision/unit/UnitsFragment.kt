@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.madness.collision.databinding.FragmentUnitsBinding
 import com.madness.collision.main.MainViewModel
-import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.util.TaggedFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -48,8 +47,6 @@ internal class UnitsFragment : TaggedFragment() {
     private lateinit var mRecyclerView: RecyclerView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val context = context
-        if (context != null) SettingsFunc.updateLanguage(context)
         mViews = FragmentUnitsBinding.inflate(inflater, container, false)
         return mViews.root
     }

@@ -31,7 +31,6 @@ import com.madness.collision.instant.other.InstantOthers
 import com.madness.collision.instant.shortcut.InstantShortcuts
 import com.madness.collision.instant.tile.InstantTiles
 import com.madness.collision.main.MainViewModel
-import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.Unit
 import com.madness.collision.util.AppUtils.asBottomMargin
 import com.madness.collision.util.CollisionDialog
@@ -71,8 +70,6 @@ internal class InstantFragment: TaggedFragment(), Democratic {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val context = context
-        if (context != null) SettingsFunc.updateLanguage(context)
         viewBinding = ActivityInstantManagerBinding.inflate(inflater, container, false)
         return viewBinding.root
     }

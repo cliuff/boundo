@@ -43,7 +43,6 @@ import androidx.core.content.ContextCompat
 import androidx.heifwriter.HeifWriter
 import com.madness.collision.R
 import com.madness.collision.databinding.UnitImBinding
-import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.Unit
 import com.madness.collision.util.*
 import kotlinx.coroutines.Dispatchers
@@ -86,8 +85,6 @@ class MyUnit: Unit(){
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val context = context
-        if (context != null) SettingsFunc.updateLanguage(context)
         viewBinding = UnitImBinding.inflate(inflater, container, false)
         return viewBinding.root
     }

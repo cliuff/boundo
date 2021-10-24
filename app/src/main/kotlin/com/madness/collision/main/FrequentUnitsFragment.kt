@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.madness.collision.databinding.FragmentFrequentUnitsBinding
-import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.Description
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.UnitDescViewModel
@@ -51,8 +50,6 @@ internal class FrequentUnitsFragment : TaggedFragment() {
     private lateinit var mRecyclerView: RecyclerView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val context = context
-        if (context != null) SettingsFunc.updateLanguage(context)
         mViews = FragmentFrequentUnitsBinding.inflate(inflater, container, false)
         return mViews.root
     }

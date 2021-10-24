@@ -23,7 +23,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import com.madness.collision.R
-import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.school_timetable.databinding.ActivityTtPart1Binding
 import com.madness.collision.util.CollisionDialog
@@ -51,8 +50,6 @@ internal class TTManualFragment: Unit(), View.OnClickListener{
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val context = context
-        if (context != null) SettingsFunc.updateLanguage(context)
         viewBinding = ActivityTtPart1Binding.inflate(inflater, container, false)
         return viewBinding.root
     }

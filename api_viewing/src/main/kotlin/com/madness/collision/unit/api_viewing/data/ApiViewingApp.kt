@@ -21,7 +21,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.drawable.AdaptiveIconDrawable
 import android.graphics.drawable.Drawable
@@ -35,14 +34,13 @@ import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.madness.collision.misc.MiscApp
-import com.madness.collision.settings.SettingsFunc
+import com.madness.collision.settings.LanguageMan
 import com.madness.collision.unit.api_viewing.Utils
 import com.madness.collision.unit.api_viewing.util.ApkUtil
 import com.madness.collision.unit.api_viewing.util.ManifestUtil
 import com.madness.collision.util.GraphicsUtil
 import com.madness.collision.util.SystemUtil
 import com.madness.collision.util.X
-import com.madness.collision.util.mainApplication
 import com.madness.collision.util.os.OsUtils
 import java.io.File
 
@@ -240,7 +238,7 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
     }
 
     private fun loadName(context: Context, applicationInfo: ApplicationInfo) {
-        loadName(context, applicationInfo, mainApplication.debug)
+        loadName(context, applicationInfo, false)
     }
 
     private fun loadName(context: Context, applicationInfo: ApplicationInfo, overrideSystem: Boolean){
@@ -253,29 +251,12 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
             loadName(context, applicationInfo, false)
             return
         }
-        try {
-            val la = SettingsFunc.getLanguage(context)
-            if (SystemUtil.getLocaleUsr(context).toString() == SystemUtil.getLocaleApp().toString()){
-                loadName(context, applicationInfo, false)
-            }else {
-                val nContext = context.createPackageContext(packageName, Context.CONTEXT_RESTRICTED)
-                val localeContext = SystemUtil.getLocaleContext(nContext, SettingsFunc.getLocale(la))
-                val labelRes = localeContext.applicationInfo.labelRes
-                name = if (labelRes == 0) {
-                    ""
-                } else {
-                    try {
-                        localeContext.getString(labelRes)
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                        ""
-                    }
-                }
-            }
-        } catch ( e: PackageManager.NameNotFoundException) {
-            e.printStackTrace()
-        } finally {
-            if (name.isEmpty()) loadName(context, applicationInfo, false)
+        val langCode = LanguageMan(context).getLanguage()
+        if (langCode == LanguageMan.AUTO || langCode == SystemUtil.getLocaleApp().toString()) {
+            loadName(context, applicationInfo, false)
+        } else {
+            val label = AppInfoProcessor.loadLabel(context, packageName, langCode)
+            if (label != null) name = label else loadName(context, applicationInfo, false)
         }
     }
 

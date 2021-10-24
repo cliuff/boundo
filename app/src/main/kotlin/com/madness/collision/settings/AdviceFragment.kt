@@ -53,8 +53,6 @@ internal class AdviceFragment : TaggedFragment(), Democratic, View.OnClickListen
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val context = context
-        if (context != null) SettingsFunc.updateLanguage(context)
         return inflater.inflate(R.layout.fragment_advice, container, false)
     }
 

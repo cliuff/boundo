@@ -28,7 +28,6 @@ import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.databinding.FragmentUnitsManagerBinding
 import com.madness.collision.main.MainViewModel
-import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.util.AppUtils.asBottomMargin
 import com.madness.collision.util.TaggedFragment
 
@@ -55,8 +54,6 @@ internal class UnitsManagerFragment : TaggedFragment(), Democratic {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val context = context
-        if (context != null) SettingsFunc.updateLanguage(context)
         mViews = FragmentUnitsManagerBinding.inflate(inflater, container, false)
         return mViews.root
     }

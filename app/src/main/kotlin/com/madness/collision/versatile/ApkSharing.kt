@@ -21,9 +21,9 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.madness.collision.R
+import com.madness.collision.base.BaseActivity
 import com.madness.collision.main.MainActivity
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.api_viewing.AccessAV
@@ -33,7 +33,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-internal class ApkSharing: AppCompatActivity() {
+internal class ApkSharing: BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

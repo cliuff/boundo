@@ -1,3 +1,19 @@
+/*
+ * Copyright 2021 Clifford Liu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.madness.collision.settings
 
 import android.Manifest
@@ -10,7 +26,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Environment
-import android.util.Log
 import android.webkit.CookieManager
 import android.webkit.DownloadListener
 import android.webkit.WebView
@@ -33,61 +48,10 @@ import org.jsoup.Jsoup
 import java.net.URL
 import java.util.*
 
-/**
- * For changing languages
- * And more...
- */
-
 object SettingsFunc {
-    const val AUTO = "auto"
     const val requestWriteStorage = 0x11
     const val TAG = "SettingsFun"
-    private const val TAG_LANG = "Language"
     private const val urlUpdate = "https://www.coolapk.com/apk/com.madness.collision/"
-
-    fun updateLanguage( context: Context){
-        if (!mainApplication.debug) {
-            Log.i(TAG_LANG, "not in advanced mode")
-            return
-        }
-        if (getLanguage(context) == AUTO) {
-            Log.i(TAG_LANG, AUTO)
-            return
-        }
-        val settingsPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
-        val langPref: String = settingsPreferences.getString(P.SETTINGS_LANGUAGE, "") ?: ""
-        val langLocale = SystemUtil.getLocaleApp().toString()
-        if (langPref != langLocale) {
-            switchLanguage(context, langPref)
-            Log.i(TAG_LANG, "Current: $langLocale, switching to: " + settingsPreferences.getString(P.SETTINGS_LANGUAGE, AUTO))
-        }
-    }
-
-    fun settingsPreferencesLanguage(context: Context,  language: String) {
-        context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE).edit { putString(P.SETTINGS_LANGUAGE, language) }
-    }
-
-    fun getLanguage(context: Context): String {
-        return context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE).getString(P.SETTINGS_LANGUAGE, AUTO) ?: AUTO
-    }
-
-    fun getLocale(localeString: String): Locale{
-        if (localeString == AUTO) return SystemUtil.getLocaleApp()
-        val regex = "(.+)_(.+)".toRegex()
-        return if (localeString.matches(regex)) {
-            val (lang, country) = regex.find(localeString)!!.destructured
-            Locale(lang, country)
-        } else Locale(localeString)
-    }
-
-    fun switchLanguage( context: Context,  languageCode: String) {
-        val resources = context.resources
-        val configuration = resources.configuration
-        configuration.setLocale(getLocale(languageCode))
-        // new technique works complicated, so this feature is only used for debug
-        resources.updateConfiguration(configuration, resources.displayMetrics)
-//        context.createConfigurationContext(configuration)
-    }
 
     fun check4Update(context: Context,  checking: CollisionDialog?,  permissionRequest: PermissionRequestHandler){
         GlobalScope.launch {
@@ -143,7 +107,6 @@ object SettingsFunc {
                 notify(0, builder.build())// todo id, update action & update interface
             }
         }else{
-            updateLanguage(context)
             GlobalScope.launch(Dispatchers.Main) {
                 val dialogUpdate = CollisionDialog(context,
                         R.string.SettingsSync_Update_AlertDialog_NegativeButtonText,
@@ -214,7 +177,6 @@ object SettingsFunc {
     }
 
     private fun updateLinkPop(context: Context, permissionRequest: PermissionRequestHandler, url: String, userAgent: String?){
-        updateLanguage(context)
         GlobalScope.launch(Dispatchers.Main){
             val dialogUpdate = CollisionDialog(context, R.string.text_cancel, R.string.updateDownload, true)
             dialogUpdate.setTitleCollision(R.string.SettingsSync_Update_AlertDialog_PositiveButtonText, 0, 0)
@@ -272,7 +234,6 @@ object SettingsFunc {
 
     private fun updateNone(context: Context, prefSettings: SharedPreferences, checking: CollisionDialog?){
         if (!prefSettings.getBoolean(P.SETTINGS_UPDATE_VIA_SETTINGS, false)) return
-        updateLanguage(context)
         GlobalScope.launch(Dispatchers.Main) {
             CollisionDialog.alert(context, R.string.SettingsSync_UpdateFalse_AlertDialog_Title).show()
             checking?.dismiss()

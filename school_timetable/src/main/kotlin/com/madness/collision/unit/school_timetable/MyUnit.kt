@@ -31,7 +31,6 @@ import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.edit
 import com.madness.collision.R
-import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.school_timetable.calendar.ICal
 import com.madness.collision.unit.school_timetable.calendar.getCalendar
@@ -123,8 +122,6 @@ class MyUnit: Unit(), View.OnClickListener{
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val context = context
-        if (context != null) SettingsFunc.updateLanguage(context)
         viewBinding = UnitSchoolTimetableBinding.inflate(inflater, container, false)
         return viewBinding.root
     }

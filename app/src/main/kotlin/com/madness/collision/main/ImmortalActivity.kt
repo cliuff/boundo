@@ -37,7 +37,6 @@ import android.text.style.StyleSpan
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import androidx.core.view.updatePaddingRelative
@@ -45,10 +44,10 @@ import androidx.lifecycle.lifecycleScope
 import com.jaredrummler.android.device.DeviceName
 import com.madness.collision.BuildConfig
 import com.madness.collision.R
+import com.madness.collision.base.BaseActivity
 import com.madness.collision.databinding.ActivityImmortalBinding
 import com.madness.collision.diy.WindowInsets
 import com.madness.collision.instant.Instant
-import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.util.*
 import com.madness.collision.util.controller.edgeToEdge
 import com.madness.collision.util.controller.immersiveNavigation
@@ -60,7 +59,7 @@ import java.io.InputStreamReader
 import java.text.SimpleDateFormat
 import java.util.*
 
-internal class ImmortalActivity : AppCompatActivity(), View.OnClickListener {
+internal class ImmortalActivity : BaseActivity(), View.OnClickListener {
 
     companion object {
         private val COLOR_RED = Color.parseColor("#FFF03030")
@@ -159,7 +158,6 @@ internal class ImmortalActivity : AppCompatActivity(), View.OnClickListener {
         val isMortal = intent.getStringExtra(P.IMMORTAL_EXTRA_LAUNCH_MODE) == P.IMMORTAL_EXTRA_LAUNCH_MODE_MORTAL
         ThemeUtil.updateTheme(this, getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE))
         edgeToEdge()
-        SettingsFunc.updateLanguage(this)
         viewBinding = ActivityImmortalBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
         applyInsets()

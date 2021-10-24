@@ -26,7 +26,6 @@ import androidx.fragment.app.activityViewModels
 import com.madness.collision.R as MainR
 import com.madness.collision.Democratic
 import com.madness.collision.main.MainViewModel
-import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.api_viewing.R
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.EasyAccess
@@ -70,8 +69,6 @@ internal class StatisticsFragment: TaggedFragment(), Democratic {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val context = context
-        if (context != null) SettingsFunc.updateLanguage(context)
         viewBinding = FragmentStatisticsBinding.inflate(inflater, container, false)
         return viewBinding.root
     }

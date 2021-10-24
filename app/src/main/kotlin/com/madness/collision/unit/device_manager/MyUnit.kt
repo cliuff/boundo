@@ -28,7 +28,6 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import com.madness.collision.R
 import com.madness.collision.databinding.UnitDeviceManagerBinding
-import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.device_manager.list.DeviceListFragment
 import com.madness.collision.util.alterPadding
@@ -72,7 +71,6 @@ class MyUnit : Unit() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        activity?.let { SettingsFunc.updateLanguage(it) }
         viewBinding = UnitDeviceManagerBinding.inflate(inflater, container, false)
         return viewBinding.root
     }

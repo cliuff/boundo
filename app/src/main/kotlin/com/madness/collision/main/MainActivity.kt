@@ -25,7 +25,6 @@ import android.os.Bundle
 import android.view.*
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.NotificationManagerCompat
@@ -43,11 +42,11 @@ import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.navigation.NavigationBarView
 import com.madness.collision.Democratic
 import com.madness.collision.R
+import com.madness.collision.base.BaseActivity
 import com.madness.collision.databinding.FragmentMainBinding
 import com.madness.collision.diy.WindowInsets
 import com.madness.collision.main.updates.UpdatesFragment
 import com.madness.collision.misc.MiscMain
-import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.api_viewing.AccessAV
 import com.madness.collision.util.*
@@ -59,7 +58,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
-class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
+class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     companion object {
         /**
          * the activity to launch
@@ -197,7 +196,6 @@ class MainActivity : AppCompatActivity(), Toolbar.OnMenuItemClickListener {
     private fun inflateLayout(context: Context) {
         systemUi { fullscreen() }
 
-        SettingsFunc.updateLanguage(context)
         viewBinding = FragmentMainBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
 

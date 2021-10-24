@@ -51,6 +51,28 @@
         </FrameLayout>
 
         <FrameLayout
+            android:id="@+id/settingsItemLang"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:focusable="true">
+
+            <TextView
+                app:drawableStartCompat="@drawable/ic_language_24"
+                app:drawableTint="?colorAOnBackground"
+                android:text="@string/Settings_Button_SwitchLanguage"
+                android:textColor="?colorAOnBackground"
+                android:textSize="18sp"
+                android:drawablePadding="20dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </FrameLayout>
+
+        <FrameLayout
             android:id="@+id/settingsItemAbout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -71,13 +93,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </FrameLayout>
-
-        <ViewStub
-            android:id="@+id/settingsItemLanguagesStub"
-            android:inflatedId="@+id/settingsItemLanguagesContainer"
-            android:layout="@layout/settings_unit_item"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
 
     </LinearLayout>
 

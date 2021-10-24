@@ -32,7 +32,6 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
 import com.madness.collision.R
-import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.school_timetable.data.Timetable
 import com.madness.collision.unit.school_timetable.databinding.TtTimeBinding
@@ -96,8 +95,6 @@ internal class TimeFragment: Unit() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val context = context
-        if (context != null) SettingsFunc.updateLanguage(context)
         viewBinding = TtTimeBinding.inflate(inflater, container, false)
         return viewBinding.root
     }

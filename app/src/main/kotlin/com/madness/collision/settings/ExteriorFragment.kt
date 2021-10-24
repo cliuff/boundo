@@ -131,7 +131,6 @@ class ExteriorFragment: TaggedFragment(), Democratic {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        activity?.let { SettingsFunc.updateLanguage(it) }
         viewBinding = ActivityExteriorBinding.inflate(inflater, container, false)
         return viewBinding.root
     }

@@ -37,7 +37,6 @@ import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.main.ImmortalActivity
 import com.madness.collision.main.MainViewModel
-import com.madness.collision.settings.SettingsFunc
 import com.madness.collision.unit.api_viewing.AccessAV
 import com.madness.collision.util.*
 import com.madness.collision.util.AppUtils.asBottomMargin
@@ -70,7 +69,6 @@ class MoreFragment : TaggedFragment(), Democratic, View.OnClickListener, NavNode
         val context = context
         var res = R.layout.fragment_more
         if (context != null) {
-            SettingsFunc.updateLanguage(context)
             val dp480 = X.size(context, 500f, X.DP)
             val dimension = SystemUtil.getRuntimeWindowSize(context)
             if (context.spanJustMore){
