@@ -588,18 +588,18 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     }
 
     private fun clearDemocratic() {
+        // Low profile mode is used in ApiDecentFragment. Deprecated since Android 11.
+        if (X.belowOff(X.R)) disableLowProfileModeLegacy(window)
         viewBinding.mainTB.run {
+            visibility = View.VISIBLE
+            // hide first child (logo layout)
+            this[0].isGone = true
             menu.clear()
             navigationIcon = null
             title = null
-            // hide first child (logo layout)
-            this[0].isGone = true
             setNavigationOnClickListener(null)
-            visibility = View.VISIBLE
             setOnClickListener(null)
         }
-        // Low profile mode is used in ApiDecentFragment. Deprecated since Android 11.
-        if (X.belowOff(X.R)) disableLowProfileModeLegacy(window)
         primaryStatusBarConfig?.let {
             SystemUtil.applyStatusBarConfig(mContext, mWindow, it)
         }

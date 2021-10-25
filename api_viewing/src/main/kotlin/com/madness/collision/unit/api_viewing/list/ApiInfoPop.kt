@@ -59,6 +59,7 @@ import com.madness.collision.util.*
 import com.madness.collision.util.controller.edgeToEdge
 import com.madness.collision.util.os.OsUtils
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
 import kotlin.math.max
@@ -160,6 +161,16 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
         return mViews.view
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val context = context ?: return
+        // delay some time to fix nav bar icon not set to dark on Android O (Nexus 9)
+        // likely bottom sheet's bug
+        lifecycleScope.launch {
+            delay(10)
+            configEdgeToEdge(context)
+        }
+    }
+
     override fun onStart() {
         super.onStart()
         val context = context ?: return
@@ -174,11 +185,8 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
         super.dismiss()
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        val context = context ?: return
-
-        var isEdgeToEdge = true
+    private fun configEdgeToEdge(context: Context) {
+        var isEdgeToEdge: Boolean //= true
         edgeToEdge(mainApplication.insetBottom) {
             // keep status bar icon color untouched
             // Actually this works as intended only when app theme is set to follow system,
@@ -203,19 +211,25 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
             }
         }
 
-        if (isEdgeToEdge) {
-            val minMargin = X.size(context, 10f, X.DP).roundToInt()
-            val extraMargin = max(mainApplication.insetBottom, minMargin)
-            mViews.guidelineBottom.setGuidelineEnd(extraMargin)
+        // wrap the following code in this if not delayed
+//        if (isEdgeToEdge) {
+//        }
+        val minMargin = X.size(context, 10f, X.DP).roundToInt()
+        val extraMargin = max(mainApplication.insetBottom, minMargin)
+        mViews.guidelineBottom.setGuidelineEnd(extraMargin)
 
-            val margin = context.resources.getDimensionPixelOffset(MyR.dimen.avAppInfoOptionsMarginBottom)
-            mViews.options.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                bottomMargin = extraMargin + margin
-            }
-
-            mViews.container.updatePaddingRelative(
-                start = mainApplication.insetStart, end = mainApplication.insetEnd)
+        val margin = context.resources.getDimensionPixelOffset(MyR.dimen.avAppInfoOptionsMarginBottom)
+        mViews.options.updateLayoutParams<ConstraintLayout.LayoutParams> {
+            bottomMargin = extraMargin + margin
         }
+
+        mViews.container.updatePaddingRelative(
+            start = mainApplication.insetStart, end = mainApplication.insetEnd)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        val context = context ?: return
 
         // below: configure views
         mvApp.run {

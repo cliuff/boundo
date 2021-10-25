@@ -37,6 +37,7 @@ import com.madness.collision.databinding.FileActionsBinding
 import com.madness.collision.util.controller.edgeToEdge
 import com.madness.collision.util.os.OsUtils
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileNotFoundException
@@ -101,6 +102,16 @@ class FilePop: BottomSheetDialogFragment(){
         return mViews.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val context = context ?: return
+        // delay some time to fix nav bar icon not set to dark on Android O (Nexus 9)
+        // likely bottom sheet's bug
+        lifecycleScope.launch {
+            delay(200)
+            configEdgeToEdge(context)
+        }
+    }
+
     override fun onStart() {
         super.onStart()
         val context = context ?: return
@@ -110,12 +121,8 @@ class FilePop: BottomSheetDialogFragment(){
         }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        mContext = context ?: return
-
-        var isEdgeToEdge = true
+    private fun configEdgeToEdge(context: Context) {
+        var isEdgeToEdge: Boolean //= true
         edgeToEdge(mainApplication.insetBottom) {
             // keep status bar icon color untouched from the activity before this
             statusBar {
@@ -124,7 +131,7 @@ class FilePop: BottomSheetDialogFragment(){
                 }
             }
             navigationBar {
-                val colorSurface = ThemeUtil.getColor(mContext, R.attr.colorASurface)
+                val colorSurface = ThemeUtil.getColor(context, R.attr.colorASurface)
                 isEdgeToEdge = (isDarkIcon == true && OsUtils.dissatisfy(OsUtils.O)).not()
                 color = if (isEdgeToEdge) {
                     colorSurface
@@ -135,14 +142,20 @@ class FilePop: BottomSheetDialogFragment(){
             }
         }
 
-        if (isEdgeToEdge) {
-            val minMargin = X.size(mContext, 12f, X.DP).roundToInt()
-            val extraMargin = max(mainApplication.insetBottom, minMargin)
-            mViews.fileActionsContainer.updatePaddingRelative(bottom = extraMargin)
+        // wrap the following code in this if not delayed
+//        if (isEdgeToEdge) {
+//        }
+        val minMargin = X.size(context, 12f, X.DP).roundToInt()
+        val extraMargin = max(mainApplication.insetBottom, minMargin)
+        mViews.fileActionsContainer.updatePaddingRelative(bottom = extraMargin)
 
-            mViews.fileActionsRoot.updatePaddingRelative(
-                start = mainApplication.insetStart, end = mainApplication.insetEnd)
-        }
+        mViews.fileActionsRoot.updatePaddingRelative(
+            start = mainApplication.insetStart, end = mainApplication.insetEnd)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        mContext = context ?: return
 
         val intent = arguments?.getParcelable(ARG_INTENT) ?: Intent()
         when {

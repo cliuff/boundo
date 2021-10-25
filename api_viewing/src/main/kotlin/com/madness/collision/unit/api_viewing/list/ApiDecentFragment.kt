@@ -69,7 +69,7 @@ internal class ApiDecentFragment : TaggedFragment(), Democratic {
     private lateinit var viewBinding: ApiDecentFragmentBinding
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
-        toolbar.visibility = View.GONE
+        toolbar.visibility = View.INVISIBLE
         updateBars()
         return true
     }
