@@ -30,6 +30,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.madness.collision.R
 import com.madness.collision.settings.LanguageMan
 import com.madness.collision.util.os.OsUtils
+import com.madness.collision.util.ui.appContext
 import java.util.*
 
 /**
@@ -299,27 +300,38 @@ object SystemUtil {
         return toLocale(LanguageMan(context).getLanguage())
     }
 
+    fun getUserLocaleList(): List<Locale> {
+        return makeLocaleArray(getLocaleUsr(appContext)).toList()
+    }
+
+    private fun makeLocaleArray(locale: Locale): Array<Locale> {
+        return if (OsUtils.satisfy(OsUtils.N)) {
+            val currentLocaleList = LocaleList.getAdjustedDefault()
+            val localeIndex = currentLocaleList.indexOf(locale)
+            if (localeIndex >= 0) {
+                // move locale to top
+                Array(currentLocaleList.size()) { newIndex ->
+                    when (newIndex) {
+                        0 -> locale
+                        in 1..localeIndex -> currentLocaleList[newIndex - 1]
+                        else -> currentLocaleList[newIndex]
+                    }
+                }
+            } else {
+                // add locale to top
+                Array(currentLocaleList.size() + 1) { newIndex ->
+                    if (newIndex == 0) locale else currentLocaleList[newIndex - 1]
+                }
+            }
+        } else {
+            arrayOf(locale)
+        }
+    }
+
     fun getLocaleContext(context: Context, locale: Locale): Context {
         val newConfig = Configuration(context.resources.configuration).apply {
             if (OsUtils.satisfy(OsUtils.N)) {
-                val currentLocaleList = LocaleList.getAdjustedDefault()
-                val localeIndex = currentLocaleList.indexOf(locale)
-                val newLocaleList = if (localeIndex >= 0) {
-                    // move locale to top
-                    Array(currentLocaleList.size()) { newIndex ->
-                        when (newIndex) {
-                            0 -> locale
-                            in 1..localeIndex -> currentLocaleList[newIndex - 1]
-                            else -> currentLocaleList[newIndex]
-                        }
-                    }
-                } else {
-                    // add locale to top
-                    Array(currentLocaleList.size() + 1) { newIndex ->
-                        if (newIndex == 0) locale else currentLocaleList[newIndex - 1]
-                    }
-                }
-                setLocales(LocaleList(*newLocaleList))
+                setLocales(LocaleList(*makeLocaleArray(locale)))
             } else {
                 setLocale(locale)
             }

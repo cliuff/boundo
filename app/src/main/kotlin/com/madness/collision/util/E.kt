@@ -39,6 +39,7 @@ import com.madness.collision.R
 import com.madness.collision.main.MainApplication
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.util.file.ContentProviderUtils
+import com.madness.collision.util.ui.appLocale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -100,7 +101,7 @@ infix fun TextView.dartHold(text: CharSequence) {
  * meizu 17 Pro, API 30
  */
 infix fun AppCompatTextView.dartFuture(text: CharSequence) {
-    if (Build.MANUFACTURER.toLowerCase(SystemUtil.getLocaleApp()) == "meizu") {
+    if (Build.MANUFACTURER.lowercase(appLocale) == "meizu") {
         setText(text)
         return
     }

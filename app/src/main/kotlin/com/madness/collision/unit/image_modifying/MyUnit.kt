@@ -45,6 +45,7 @@ import com.madness.collision.R
 import com.madness.collision.databinding.UnitImBinding
 import com.madness.collision.unit.Unit
 import com.madness.collision.util.*
+import com.madness.collision.util.ui.appLocale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -111,6 +112,10 @@ class MyUnit: Unit(){
         viewBinding.toolsImageFormat.setText(formatItems[0])
         viewBinding.toolsImageFormat.dropDownBackground.setTint(ThemeUtil.getColor(context, R.attr.colorASurface))
         viewBinding.toolsImageFormat.setAdapter(ArrayAdapter(context, R.layout.pop_list_item, formatItems))
+        val appLocale = appLocale
+        val initialFraction = String.format(appLocale, "%d/%d", 0, 100)
+        (viewBinding.imageBlurValue as AppCompatTextView).dartFuture(initialFraction)
+        (viewBinding.imageCompressValue as AppCompatTextView).dartFuture(initialFraction)
         val onSeek = object : SeekBar.OnSeekBarChangeListener{
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
                 val v = when(p0?.id){
@@ -118,7 +123,7 @@ class MyUnit: Unit(){
                     R.id.imageCompress -> viewBinding.imageCompressValue
                     else -> null
                 } as AppCompatTextView? ?: return
-                v.dartFuture(String.format("%d/100", p1))
+                v.dartFuture(String.format(appLocale, "%d/%d", p1, 100))
             }
             override fun onStartTrackingTouch(p0: SeekBar?) {}
             override fun onStopTrackingTouch(p0: SeekBar?) {}

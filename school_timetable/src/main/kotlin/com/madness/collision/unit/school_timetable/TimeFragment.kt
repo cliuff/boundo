@@ -36,9 +36,9 @@ import com.madness.collision.unit.Unit
 import com.madness.collision.unit.school_timetable.data.Timetable
 import com.madness.collision.unit.school_timetable.databinding.TtTimeBinding
 import com.madness.collision.util.P
-import com.madness.collision.util.SystemUtil
 import com.madness.collision.util.ThemeUtil
 import com.madness.collision.util.alterPadding
+import com.madness.collision.util.ui.appLocale
 import java.text.SimpleDateFormat
 import java.util.*
 import com.madness.collision.unit.school_timetable.R as MyR
@@ -121,8 +121,8 @@ internal class TimeFragment: Unit() {
         timeViewModel.timeAm.observe(viewLifecycleOwner) { formatTime(TIME_AM) }
         timeViewModel.timePm.observe(viewLifecycleOwner) { formatTime(TIME_PM) }
         timeViewModel.timeEve.observe(viewLifecycleOwner) { formatTime(TIME_EVE) }
-        val dateFormat = SimpleDateFormat("yyyyMMdd", SystemUtil.getLocaleApp())
-        val dateFormat1 = SimpleDateFormat("yyyyMMdd HH", SystemUtil.getLocaleApp())
+        val dateFormat = SimpleDateFormat("yyyyMMdd", appLocale)
+        val dateFormat1 = SimpleDateFormat("yyyyMMdd HH", appLocale)
         views.findViewById<AppCompatAutoCompleteTextView>(MyR.id.ttTimePickDate).setOnFocusChangeListener { view, b ->
             if (!b) return@setOnFocusChangeListener
             // todo date
@@ -216,13 +216,15 @@ internal class TimeFragment: Unit() {
 
     private fun formatDate(){
         val (y, m, d) = getDateDestructured()
-        viewBinding.ttTimePickDate.setText(String.format("%s.%s.%s", y, m, d))
+        // todo consider numbers in Arabic
+        viewBinding.ttTimePickDate.setText(String.format(appLocale, "%s.%s.%s", y, m, d))
     }
 
     private fun formatTime(timeMode: Int){
         val time = getTimeValue(timeMode)
         val (h, m) = getTimeDestructured(time)
-        getTimeBtn(timeMode).setText(String.format("%s:%s", h, m))
+        // todo consider numbers in Arabic
+        getTimeBtn(timeMode).setText(String.format(appLocale, "%s:%s", h, m))
     }
 
     private fun getDateDestructured() = "(\\d{4})(\\d{2})(\\d{2})".toRegex().find(timeViewModel.timeDateStart.value!!)!!.destructured

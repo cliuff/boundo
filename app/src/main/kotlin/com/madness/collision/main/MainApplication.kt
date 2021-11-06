@@ -56,6 +56,13 @@ class MainApplication : SplitCompatApplication(), Thread.UncaughtExceptionHandle
     var notificationAvailable = true
     var globalValue: Any? = null
 
+    // changing application context locale will change Locale.Default and LocaleList APIs' returning value
+    // in which case will not be able to obtain the system adjusted locale for this app
+//    override fun attachBaseContext(newBase: Context) {
+//        val context = LanguageMan(newBase).getLocaleContext()
+//        super.attachBaseContext(context)
+//    }
+
     override fun onCreate() {
         super.onCreate()
         // Setup handler for uncaught exceptions

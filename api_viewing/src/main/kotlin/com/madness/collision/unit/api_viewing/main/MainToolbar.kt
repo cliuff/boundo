@@ -188,9 +188,6 @@ internal class MainToolbar(
             R.id.apiTBViewingTarget -> {
                 EasyAccess.isViewingTarget = !EasyAccess.isViewingTarget
                 settingsPreferences.edit { putBoolean(PrefUtil.AV_VIEWING_TARGET, EasyAccess.isViewingTarget) }
-                val textRes = if (EasyAccess.isViewingTarget) R.string.sdkcheck_dialog_targetsdktext else R.string.sdkcheck_dialog_minsdktext
-                val titleAffix = context.getString(textRes)
-                toolbar.title = context.getString(MainR.string.apiViewer) + " • $titleAffix"
                 adapter.notifyDataSetChanged()
                 return true
             }

@@ -21,6 +21,7 @@ import com.madness.collision.unit.api_viewing.Utils
 import com.madness.collision.util.X
 import com.madness.collision.util.adapted
 import com.madness.collision.util.regexOf
+import com.madness.collision.util.toAdapted
 
 internal class VerInfo(val api: Int, sdk: String, val letter: Char) {
 
@@ -35,7 +36,7 @@ internal class VerInfo(val api: Int, sdk: String, val letter: Char) {
     init {
         val patterns = listOf(
             regexOf("""\d+"""),  // integer
-            regexOf("""\d+\.\d+"""),  // decimal
+            regexOf("""\d+\.(\d+)"""),  // decimal
             regexOf("""(\d+(?:\.\d+)+)([^\d.]+)(\d+(?:\.\d+)+)"""),  // 4.4 - 4.4.4
             regexOf("""(\d+\.\d+)([^\d.\s]+)"""),  // 4.4W
             regexOf("""((?:\d+\.)+)([^\d.\s]+)"""),  // 4.3.x
@@ -43,7 +44,12 @@ internal class VerInfo(val api: Int, sdk: String, val letter: Char) {
         this.sdk = try {
             when {
                 sdk.matches(patterns[0].toRegex()) -> sdk.toInt().adapted
-                sdk.matches(patterns[1].toRegex()) -> sdk.toFloat().adapted
+                sdk.matches(patterns[1].toRegex()) -> {
+                    patterns[1].toRegex().find(sdk)?.let {
+                        val fixedDigits = it.groupValues[1].length
+                        sdk.toFloat().toAdapted(fixedDigits = fixedDigits)
+                    } ?: sdk.toFloat().adapted
+                }
                 sdk.matches(patterns[2].toRegex()) -> {
                     """\d+""".toRegex().replace(sdk) { it.value.toInt().adapted }
                 }

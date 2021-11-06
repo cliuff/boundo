@@ -42,6 +42,7 @@ import com.madness.collision.qs.TileCommon
 import com.madness.collision.qs.TileServiceBarcodeScanner
 import com.madness.collision.qs.TileServiceBarcodeScannerMm
 import com.madness.collision.util.*
+import com.madness.collision.util.ui.appLocale
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -68,7 +69,7 @@ internal class BarcodeScannerActivity: AppCompatActivity() {
     private fun processCapture(bitmap: Bitmap){
         // write bitmap to a file
         val captureAffix = if (mode == MODE_WECHAT) {
-            SimpleDateFormat(" yyyy-MM-dd HH:mm:ss", SystemUtil.getLocaleApp()).format(Calendar.getInstance().time)
+            SimpleDateFormat(" yyyy-MM-dd HH:mm:ss", appLocale).format(Calendar.getInstance().time)
         } else ""
         val fileName = "capture$captureAffix.webp"
         val file : File?

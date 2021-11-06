@@ -51,6 +51,7 @@ import com.madness.collision.instant.Instant
 import com.madness.collision.util.*
 import com.madness.collision.util.controller.edgeToEdge
 import com.madness.collision.util.controller.immersiveNavigation
+import com.madness.collision.util.ui.appLocale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
@@ -238,7 +239,7 @@ internal class ImmortalActivity : BaseActivity(), View.OnClickListener {
 
         val apiLevel = Build.VERSION.SDK_INT
 
-        val time = SimpleDateFormat("yyyyMMdd:HHmm", SystemUtil.getLocaleApp()).format(Calendar.getInstance().time)
+        val time = SimpleDateFormat("yyyyMMdd:HHmm", appLocale).format(Calendar.getInstance().time)
         val logFile = F.createFile(
                 F.cachePublicPath(this),
                 P.DIR_NAME_LOG,

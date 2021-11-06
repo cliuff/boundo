@@ -34,6 +34,7 @@ import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.databinding.AvListBinding
 import com.madness.collision.util.*
+import com.madness.collision.util.ui.appLocale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -240,13 +241,13 @@ internal class AppListFragment : TaggedFragment(), AppList, Filterable {
                     filterResults.count = filtered.size
                     return filterResults
                 }
-                val locale = SystemUtil.getLocaleApp()
-                val input4Comparision: String = filterText.toLowerCase(locale)
+                val locale = appLocale
+                val input4Comparision: String = filterText.lowercase(locale)
                 while (iterator.hasNext()) {
                     val info = iterator.next()
-                    val appName = info.name.replace(" ", "").toLowerCase(locale)
+                    val appName = info.name.replace(" ", "").lowercase(locale)
                     if (appName.contains(input4Comparision)
-                            || info.packageName.toLowerCase(locale).contains(input4Comparision)) {
+                            || info.packageName.lowercase(locale).contains(input4Comparision)) {
                         filtered.add(info)
                         continue
                     }

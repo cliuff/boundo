@@ -30,6 +30,7 @@ import android.widget.FrameLayout
 import android.widget.ProgressBar
 import android.widget.SeekBar
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
@@ -44,6 +45,7 @@ import com.madness.collision.unit.themed_wallpaper.AccessTw
 import com.madness.collision.unit.themed_wallpaper.ThemedWallpaperEasyAccess
 import com.madness.collision.util.*
 import com.madness.collision.util.os.OsUtils
+import com.madness.collision.util.ui.appLocale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.*
@@ -148,9 +150,12 @@ class ExteriorFragment: TaggedFragment(), Democratic {
 
         sb = viewBinding.exteriorSeekBar
         rs = GaussianBlur(context)
+        val appLocale = appLocale
+        val initialFraction = String.format(appLocale, "%d/%d", 0, 100)
+        (viewBinding.exteriorBlurValue as AppCompatTextView).dartFuture(initialFraction)
         sb.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, i : Int, b: Boolean) {
-                viewBinding.exteriorBlurValue.text = String.format("%d/100", i)
+                viewBinding.exteriorBlurValue.text = String.format(appLocale, "%d/%d", i, 100)
                 updateBlur(i)
             }
             override fun onStartTrackingTouch(seekBar: SeekBar) {}

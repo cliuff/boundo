@@ -43,6 +43,7 @@ import com.madness.collision.unit.api_viewing.database.AppRoom
 import com.madness.collision.unit.api_viewing.util.ApkUtil
 import com.madness.collision.util.*
 import com.madness.collision.util.os.OsUtils
+import com.madness.collision.util.ui.appLocale
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -62,7 +63,7 @@ internal class AppListService {
     fun getAppDetails(context: Context, appInfo: ApiViewingApp): CharSequence {
         val builder = SpannableStringBuilder()
         var pi = retrieveOn(context, appInfo, 0, "") ?: return ""
-        val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", SystemUtil.getLocaleApp())
+        val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", appLocale)
         val spanFlags = Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         builder.append(context.getString(R.string.apiDetailsPackageName), StyleSpan(Typeface.BOLD), spanFlags)
                 .append(appInfo.packageName).append('\n')
@@ -217,7 +218,7 @@ internal class AppListService {
                 val subjectInfo = Utils.getDesc(regexFields, cert.subjectDN)
                 val formerPart = "\n\nX.509 " +
                         context.getString(RAv.string.apiDetailsCert) +
-                        "\nNo." + cert.serialNumber.toString(16).uppercase(SystemUtil.getLocaleApp()) +
+                        "\nNo." + cert.serialNumber.toString(16).uppercase(appLocale) +
                         " v" +
                         (cert.version + 1).toString() +
                         '\n' + context.getString(RAv.string.apiDetailsValiSince)

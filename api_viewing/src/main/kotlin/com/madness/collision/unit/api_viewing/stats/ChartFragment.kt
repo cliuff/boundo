@@ -39,6 +39,7 @@ import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.ThemeUtil
 import com.madness.collision.util.X
 import com.madness.collision.util.os.OsUtils
+import com.madness.collision.util.toAdapted
 import kotlin.math.roundToInt
 
 internal class ChartFragment: TaggedFragment(){
@@ -111,7 +112,8 @@ internal class ChartFragment: TaggedFragment(){
             iconsOffset = MPPointF.getInstance(0f, if (isSmallScreen) 20f else 28f)
             valueFormatter = object : ValueFormatter() {
                 override fun getPieLabel(value: Float, pieEntry: PieEntry?): String {
-                    return String.format("%.1f", value) + " %"
+                    val num = value.toAdapted(maxFractionDigits = 1)
+                    return "$num%"
                 }
             }
         }

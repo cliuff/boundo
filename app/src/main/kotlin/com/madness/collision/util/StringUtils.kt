@@ -16,8 +16,10 @@
 
 package com.madness.collision.util
 
-import android.os.LocaleList
+import com.madness.collision.util.ui.appLocale
 import java.text.Collator
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 import java.util.*
 import kotlin.Comparator
 
@@ -49,17 +51,7 @@ object StringUtils {
     }
 
     fun compareName(name1: String, name2: String): Int {
-        val locales = if (X.aboveOn(X.N)) {
-            val locales = LocaleList.getAdjustedDefault()
-            if (locales.isEmpty) listOf(Locale.getDefault()) else {
-                val re = ArrayList<Locale>(locales.size())
-                for (i in 0 until locales.size()) re.add(i, locales[i])
-                re
-            }
-        } else {
-            listOf(Locale.getDefault())
-        }
-        return compareName(locales, name1, name2)
+        return compareName(SystemUtil.getUserLocaleList(), name1, name2)
     }
 
     /**
@@ -74,7 +66,21 @@ inline fun <T> Iterable<T>.sortedWithUtilsBy(crossinline selector: (T) -> String
 }
 
 val Int.adapted: String
-    get() = String.format(SystemUtil.getLocaleApp(), "%d", this)
+    get() = String.format(appLocale, "%d", this)
 
 val Float.adapted: String
-    get() = String.format(SystemUtil.getLocaleApp(), "%.0f", this)
+    get() = toAdapted()
+
+// locale friendly (numbers in Arabic, decimal in Spanish), proper format (0.0 -> 0)
+// Fractional digits are a number of digits after the decimal separator ( . )
+// Float numbers are inaccurate, 0.001f results in 0.0010000000474974513, 0.3 -> 0.30000001...
+fun Float.toAdapted(maxFractionDigits: Int = 5, fixedDigits: Int = -1): String {
+    val locale = appLocale
+    return if (fixedDigits >= 0) {  // fixed number of fractional digits
+        String.format(locale, "%.${fixedDigits}f", this)
+    } else {
+        DecimalFormat("0", DecimalFormatSymbols.getInstance(locale)).apply {
+            maximumFractionDigits = maxFractionDigits
+        }.format(this)
+    }
+}

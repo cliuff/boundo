@@ -34,6 +34,7 @@ import com.madness.collision.main.MainActivity
 import com.madness.collision.util.*
 import com.madness.collision.util.notice.ToastUtils
 import com.madness.collision.util.os.OsUtils
+import com.madness.collision.util.ui.appLocale
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -100,7 +101,7 @@ internal class AudioTimerService: Service() {
     private var targetTime: Long = 0
     private var duration: Long = 0
     private val sysTimeFormat = SimpleDateFormat("mm:ss", SystemUtil.getLocaleSys())
-    private val appTimeFormat by lazy { SimpleDateFormat("mm:ss", SystemUtil.getLocaleApp()) }
+    private val appTimeFormat by lazy { SimpleDateFormat("mm:ss", appLocale) }
     private val notificationId = NotificationsUtil.ID_AUDIO_TIMER
     private lateinit var notificationBuilder: NotificationCompat.Builder
 
@@ -179,7 +180,7 @@ internal class AudioTimerService: Service() {
     }
 
     private val Long.appAdapted: String
-        get() = String.format(SystemUtil.getLocaleApp(), "%d", this)
+        get() = String.format(appLocale, "%d", this)
 
     private val Long.sysAdapted: String
         get() = String.format(SystemUtil.getLocaleSys(), "%d", this)
