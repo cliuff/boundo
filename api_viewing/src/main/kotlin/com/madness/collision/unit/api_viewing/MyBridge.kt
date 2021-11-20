@@ -174,6 +174,7 @@ object MyBridge: Bridge() {
     fun nukeAppRoom(context: Context): Boolean {
         val room = AppRoom.getDatabase(context)
         val name = room.openHelper.databaseName ?: return false
+        AppRoom.clearInstance()
         room.close()
         return context.deleteDatabase(name)
     }

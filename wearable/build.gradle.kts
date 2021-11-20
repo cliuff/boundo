@@ -68,7 +68,7 @@ android {
             }
         }
     }
-    compileSdk = 30
+    compileSdk = 31
     defaultConfig {
         // below: manifest placeholders
         manifestPlaceholders["buildPackage"] = buildPackage

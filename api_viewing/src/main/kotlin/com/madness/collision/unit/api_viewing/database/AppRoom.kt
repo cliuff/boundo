@@ -36,9 +36,14 @@ internal abstract class AppRoom : RoomDatabase() {
 
         fun getDatabase(context: Context): AppRoom {
             return INSTANCE ?: synchronized(this) {
-                Room.databaseBuilder(context.applicationContext, AppRoom::class.java, "app")
-                        .build().also { INSTANCE = it }
+                val ctx = context.applicationContext
+                INSTANCE ?: Room.databaseBuilder(ctx, AppRoom::class.java, "app").build()
+                    .also { INSTANCE = it }
             }
+        }
+
+        fun clearInstance() {
+            INSTANCE = null
         }
     }
 }

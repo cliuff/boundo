@@ -45,6 +45,7 @@
         </com.google.android.material.appbar.MaterialToolbar>
 
         <View
+            android:id="@+id/mainToolbarDivider"
             android:alpha="0.3"
             android:background="?colorStroke"
             android:layout_width="match_parent"

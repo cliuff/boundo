@@ -227,6 +227,7 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     private fun setupViewModel(context: Context, prefSettings: SharedPreferences) {
         viewModel.democratic.observe(this) {
             clearDemocratic()
+            viewBinding.mainTB.tag = viewBinding.mainToolbarDivider
             it.createOptions(context, viewBinding.mainTB, colorIcon)
         }
         viewModel.unit.observe(this) {
@@ -600,6 +601,7 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
             setNavigationOnClickListener(null)
             setOnClickListener(null)
         }
+        viewBinding.mainToolbarDivider.isVisible = true
         primaryStatusBarConfig?.let {
             SystemUtil.applyStatusBarConfig(mContext, mWindow, it)
         }

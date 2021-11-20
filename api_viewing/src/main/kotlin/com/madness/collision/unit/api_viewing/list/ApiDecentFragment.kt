@@ -26,6 +26,7 @@ import android.view.ViewGroup
 import android.view.Window
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
@@ -70,6 +71,7 @@ internal class ApiDecentFragment : TaggedFragment(), Democratic {
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
         toolbar.visibility = View.INVISIBLE
+        (toolbar.tag as View?)?.isVisible = false  // hide toolbar divider
         updateBars()
         return true
     }

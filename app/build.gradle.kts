@@ -181,6 +181,11 @@ android {
         viewBinding = true
     }
     dynamicFeatures.addAll(arrayOf(":school_timetable", ":api_viewing"))
+    bundle {
+        // disable split apks for languages to better support in-app language switching,
+        // for language resources occupy a little space and implementing on-demand language downloads is tedious
+        language.enableSplit = false
+    }
 }
 
 dependencies {

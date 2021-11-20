@@ -2,6 +2,82 @@
 Tag content regex: \n((((?!(<.*>)).)*)\n)*((?!(<.*>)).)+
 
 
+- **3.7.9** 21110823
+<en-US>
+  دعم تغيير لغة العرض في التطبيق.
+  تحديثات طفيفة للترجمة العربية والإسبانية.
+</en-US>
+<ar>
+</ar>
+<de-DE>
+Unterstützt das Ändern der Anzeigesprache in der App.
+Kleinere Aktualisierungen der arabischen und spanischen Übersetzung.
+</de-DE>
+<el-GR>
+Υποστήριξη αλλαγής γλώσσας εμφάνισης εντός εφαρμογής.
+Μικρές ενημερώσεις στην αραβική και ισπανική μετάφραση.
+</el-GR>
+<en-GB>
+Support changing in-app display language.
+Minor updates to Arabic and Spanish translation.
+</en-GB>
+<es-419>
+Admite cambiar el idioma de la aplicación.
+Pequeñas actualizaciones de la traducción al árabe y al español.
+</es-419>
+<es-ES>
+Admite cambiar el idioma de la aplicación.
+Pequeñas actualizaciones de la traducción al árabe y al español.
+</es-ES>
+<es-US>
+Admite cambiar el idioma de la aplicación.
+Pequeñas actualizaciones de la traducción al árabe y al español.
+</es-US>
+<fr-FR>
+Prise en charge du changement de langue d'affichage dans l'application.
+Mises à jour mineures de la traduction arabe et espagnole.
+</fr-FR>
+<it-IT>
+Supporta la modifica della lingua di visualizzazione in-app.
+Aggiornamenti minori alla traduzione in arabo e spagnolo.
+</it-IT>
+<ja-JP>
+アプリの表示言語を変更し、いくつかのアラビア語とスペイン語の翻訳を更新するためのサポート。
+</ja-JP>
+<ko-KR>
+앱에서 표시 언어를 변경하고 여러 아랍어 및 스페인어 번역을 업데이트하도록 지원합니다.
+</ko-KR>
+<pt-PT>
+Suporte a alteração do idioma de exibição no aplicativo.
+Pequenas atualizações na tradução para árabe e espanhol.
+</pt-PT>
+<ru-RU>
+Поддержка изменения языка отображения в приложении.
+Незначительные обновления арабского и испанского перевода.
+</ru-RU>
+<th>
+รองรับการเปลี่ยนภาษาที่แสดงในแอป
+การอัปเดตเล็กน้อยสำหรับการแปลภาษาอาหรับและภาษาสเปน
+</th>
+<tr-TR>
+Uygulama içi görüntüleme dilini değiştirme desteği.
+Arapça ve İspanyolca çeviride küçük güncellemeler.
+</tr-TR>
+<vi>
+Hỗ trợ thay đổi ngôn ngữ hiển thị trong ứng dụng.
+Cập nhật nhỏ cho bản dịch tiếng Ả Rập và tiếng Tây Ban Nha.
+</vi>
+<zh-CN>
+支持更改应用内显示语言，更新了几处阿拉伯语和西班牙语翻译。
+</zh-CN>
+<zh-HK>
+支持更改應用內顯示語言，更新了幾處阿拉伯語和西班牙語翻譯。
+</zh-HK>
+<zh-TW>
+支持更改應用內顯示語言，更新了幾處阿拉伯語和西班牙語翻譯。
+</zh-TW>
+
+
 - **3.7.6** 21081315
 <en-US>
 App API:
