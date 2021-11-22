@@ -26,24 +26,17 @@ import android.view.*
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.widget.Toolbar
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.view.get
-import androidx.core.view.isGone
 import androidx.core.view.isVisible
-import androidx.core.view.updatePaddingRelative
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
-import androidx.navigation.NavDestination
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
-import com.google.android.material.navigation.NavigationBarView
 import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.base.BaseActivity
-import com.madness.collision.databinding.FragmentMainBinding
+import com.madness.collision.databinding.ActivityMainBinding
 import com.madness.collision.diy.WindowInsets
 import com.madness.collision.main.updates.UpdatesFragment
 import com.madness.collision.misc.MiscMain
@@ -55,7 +48,6 @@ import com.madness.collision.util.notice.ToastUtils
 import kotlinx.coroutines.*
 import java.lang.ref.WeakReference
 import java.util.concurrent.atomic.AtomicInteger
-import kotlin.math.roundToInt
 import kotlin.random.Random
 
 class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
@@ -77,18 +69,10 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         const val ACTION_EXTERIOR = "mainExterior"
         const val ACTION_EXTERIOR_THEME = "mainExteriorTheme"
 
-        const val STATE_KEY_NAV_UP = "NavUp"
-        const val STATE_KEY_BACK = "Back"
+        private const val STATE_KEY_BACK = "Back"
 
         // ui appearance data
-        var themeId = P.SETTINGS_THEME_NONE
-        // views
-        var mainBottomNavRef: WeakReference<View>? = null
-            private set
-
-        fun syncScroll(behavior: MyHideBottomViewOnScrollBehavior<*>?) {
-            mainBottomNavRef?.get()?.let { behavior?.setupSync(it) }
-        }
+        private var themeId = P.SETTINGS_THEME_NONE
 
         fun forItem(name: String, args: Bundle? = null): Bundle {
             val extras = Bundle()
@@ -100,7 +84,6 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     // session data
     private var launchItem: String? = null
-    private var isNavUp = false
     private var mBackStack: ArrayDeque<BackwardOperation> = ArrayDeque()
     private val viewModel: MainViewModel by viewModels()
     // ui appearance data
@@ -108,27 +91,22 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     private var primaryNavBarConfig: SystemBarConfig? = null
     private var isToolbarInflated = false
     private var colorIcon = 0
-    private var isLand: Boolean? = null
-    private var bottomNavHeight: Int = 0
     // views
     private lateinit var navHostFragment: NavHostFragment
-    private lateinit var viewBinding: FragmentMainBinding
+    private lateinit var viewBinding: ActivityMainBinding
     private var lastBackFragment: WeakReference<Fragment> = WeakReference(null)
     // android
     private lateinit var mContext: Context
     private lateinit var mWindow: Window
-    private val animator = MainAnimator()
 
-    // this getter returns null before isLand is initialized, to avoid inconsistent value
-    private val background: View?
-        get() = isLand?.let { if (it) viewBinding.mainLinear!! else viewBinding.mainFrame }
+    private val background: View get() = viewBinding.mainContainer
     private val navController: NavController
         get() = navHostFragment.navController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mContext = this
-        val context = mContext
+        val context = this
+        mContext = context
         val prefSettings = getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
 
         themeId = loadThemeId(context, prefSettings)
@@ -151,14 +129,6 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
             checkMisc(context, prefSettings)
             checkTarget(context)
-            // restore session
-            if (savedInstanceState?.getBoolean(STATE_KEY_NAV_UP) == false) {
-                // this needs to be invoked after applyColor, which shows nav
-                delay(500)
-                withContext(Dispatchers.Main) {
-                    hideNav()
-                }
-            }
         }
     }
 
@@ -196,10 +166,9 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     private fun inflateLayout(context: Context) {
         systemUi { fullscreen() }
 
-        viewBinding = FragmentMainBinding.inflate(layoutInflater)
+        viewBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
 
-        viewModel.navViewRef = WeakReference(viewBinding.mainSideNav)
         navHostFragment = supportFragmentManager.findFragmentById(R.id.mainNavHost) as NavHostFragment
     }
 
@@ -207,7 +176,7 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         setupNav()
         setupViewModel(context, prefSettings)
         // invocation will clear stack
-        setupUi()
+        setupUi(context)
         viewModel.background.observe(this) {
             applyExterior()
             if (isToolbarInflated || !mainApplication.exterior) applyColor()
@@ -215,9 +184,9 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     }
 
     private fun setupNav() {
-        val navInflater = navController.navInflater
-        val graph = navInflater.inflate(R.navigation.nav_main)
-        graph.startDestination = R.id.updatesFragment
+        val graph = navController.navInflater.inflate(R.navigation.nav_main).apply {
+            startDestination = R.id.mainFragment
+        }
         val startArgs = if (launchItem != null) Bundle().apply {
             putInt(UpdatesFragment.ARG_MODE, UpdatesFragment.MODE_NO_UPDATES)
         } else null
@@ -254,16 +223,14 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
                     }
                     commit()
                 }
-                noNav()
             }
         }
-        viewModel.popUpBackStackFun = { isFromNav, shouldShowNavAfterBack ->
+        viewModel.popUpBackStackFun = { isFromNav, _ ->
             when {
                 onBackPressedDispatcher.hasEnabledCallbacks() -> onBackPressedDispatcher.onBackPressed()
                 isFromNav -> navController.popBackStack()
                 else -> supportFragmentManager.popBackStack()
             }
-            if (shouldShowNavAfterBack) showNav()
         }
         viewModel.action.observe(this) {
             when (it.first) {
@@ -286,106 +253,17 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
                 measure()
                 viewModel.contentWidthTop.value = measuredHeight
             }
-            // override navigation rail's automatic insets handling, todo remove after material 1.5
-            lifecycleScope.launch(Dispatchers.Default) {
-                delay(50)
-                withContext(Dispatchers.Main) {
-                    viewBinding.mainSideNav?.updatePaddingRelative(top = it)
-                }
-            }
         }
         viewModel.insetBottom.observe(this) {
-            bottomNavHeight = viewBinding.mainBottomNav?.run {
-                alterPadding(bottom = it)
-                measure()
-                measuredHeight
-            } ?: it
-            viewModel.contentWidthBottom.value = bottomNavHeight
-            viewBinding.mainShowBottomNav?.let { showingBtn ->
-                val margin = it + X.size(context, 20f, X.DP).roundToInt()
-                showingBtn.alterMargin(bottom = margin)
-            }
-            viewBinding.mainSideNav?.alterPadding(bottom = it)
-        }
-        viewModel.insetStart.observe(this) {
-            val startView = viewBinding.mainSideNav
-            if (startView != null) {
-                // let sideNav process start inset (in landscape layout)
-                startView.updatePaddingRelative(start = it)
-            } else {
-                // let container process start inset (in portrait layout, break edge to edge)
-                background?.updatePaddingRelative(start = it)
-            }
-        }
-        viewModel.insetEnd.observe(this) {
-            // let container process end inset (break edge to edge)
-            background?.updatePaddingRelative(end = it)
-            // override navigation rail's automatic insets handling, todo remove after material 1.5
-            lifecycleScope.launch(Dispatchers.Default) {
-                delay(50)
-                withContext(Dispatchers.Main) {
-                    viewBinding.mainSideNav?.updatePaddingRelative(end = 0)
-                }
-            }
+            viewModel.contentWidthBottom.value = it
         }
     }
 
-    private fun setupUi() {
-        isLand = viewBinding.mainLinear != null
+    private fun setupUi(context: Context) {
+        colorIcon = ThemeUtil.getColor(context, R.attr.colorIcon)
 
-        colorIcon = ThemeUtil.getColor(mContext, R.attr.colorIcon)
-
-        // below: app bar and drawer with navigation
-//        val appBarConfiguration = AppBarConfiguration(navController.graph, mainDrawer)
-//        mainTB.setupWithNavController(navController, appBarConfiguration)
-//        mainBottomNav?.setupWithNavController(navController)
-
-        val navBarListener = NavigationBarView.OnItemSelectedListener {
-            mainNav(it.itemId)
-            true
-        }
-        viewBinding.mainBottomNav?.setOnItemSelectedListener(navBarListener)
-        viewBinding.mainSideNav?.setOnItemSelectedListener(navBarListener)
-
-        mainBottomNavRef = WeakReference(viewBinding.mainBottomNavContainer)
-        navScrollBehavior?.run {
-            onSlidedUpCallback = up@{
-                if (isNavUp || viewBinding.mainBottomNavContainer?.isGone == true) return@up
-                isNavUp = true
-                // hide bottom nav showing button
-                viewBinding.mainShowBottomNav?.let {
-                    animator.hideBottomNavShowing(it)
-                }
-                // change bottom content height
-                viewModel.contentWidthBottom.value = bottomNavHeight
-                // adjust nav bar
-                val config = primaryNavBarConfig
-                if (config != null && !config.isTransparentBar) {
-                    val newConfig = SystemBarConfig(config.isDarkIcon, isTransparentBar = true)
-                    SystemUtil.applyNavBarConfig(mContext, mWindow, newConfig)
-                }
-            }
-            onSlidedDownCallback = down@{
-                if (!isNavUp) return@down
-                isNavUp = false
-                // show bottom nav showing button
-                viewBinding.mainShowBottomNav?.let {
-                    animator.showBottomNavShowing(it)
-                }
-                // change bottom content height
-                viewModel.contentWidthBottom.value = viewModel.insetBottom.value
-                // adjust nav bar
-                primaryNavBarConfig?.let {
-                    SystemUtil.applyNavBarConfig(mContext, mWindow, it)
-                }
-            }
-        }
-        // show bottom navigation bar once clicking the button
-        viewBinding.mainShowBottomNav?.setOnClickListener { showNav() }
-
-        navController.addOnDestinationChangedListener { _, destination, _ ->
+        navController.addOnDestinationChangedListener { _, _, _ ->
             viewModel.removeCurrentUnit()
-            destinationChanged(destination)
             clearBackPressedCallback()
         }
 
@@ -393,7 +271,7 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
         checkTargetItem()
 
-        background?.setOnApplyWindowInsetsListener { v, insets ->
+        background.setOnApplyWindowInsetsListener { v, insets ->
             val isRtl = if (v.isLayoutDirectionResolved) v.layoutDirection == View.LAYOUT_DIRECTION_RTL else false
             consumeInsets(WindowInsets(insets, isRtl))
             insets
@@ -470,7 +348,6 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putBoolean(STATE_KEY_NAV_UP, isNavUp)
         mBackStack.toTypedArray().let {
             outState.putParcelableArray(STATE_KEY_BACK, it)
         }
@@ -512,7 +389,6 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     }
 
     private fun BackwardOperation.makeCallback(isForwardTheTop: Boolean = false): OnBackPressedCallback {
-        val shouldShowNavAfterBack = operationFlags[0]
         val shouldExitAppAfterBack = operationFlags[1]
         val navFm = navHostFragment.childFragmentManager
         tryToEnsure(navFm)
@@ -546,7 +422,6 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
                 if (backwardFragment is Democratic) {
                     backwardFragment.democratize(viewModel)
                 }
-                if (shouldShowNavAfterBack) showNav()
                 // make unit value matches reality
                 val isMoreUnit = !mBackStack.isEmpty()
                 if (backwardFragment != null) {
@@ -592,9 +467,7 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         // Low profile mode is used in ApiDecentFragment. Deprecated since Android 11.
         if (X.belowOff(X.R)) disableLowProfileModeLegacy(window)
         viewBinding.mainTB.run {
-            visibility = View.VISIBLE
-            // hide first child (logo layout)
-            this[0].isGone = true
+            isVisible = true
             menu.clear()
             navigationIcon = null
             title = null
@@ -605,14 +478,8 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         primaryStatusBarConfig?.let {
             SystemUtil.applyStatusBarConfig(mContext, mWindow, it)
         }
-        if (isNavUp) {
-            val config = primaryNavBarConfig
-            if (config != null && !config.isTransparentBar)
-                SystemUtil.applyNavBarConfig(mContext, mWindow, SystemBarConfig(config.isDarkIcon, isTransparentBar = true))
-        } else {
-            primaryNavBarConfig?.let {
-                SystemUtil.applyNavBarConfig(mContext, mWindow, it)
-            }
+        primaryNavBarConfig?.let {
+            SystemUtil.applyNavBarConfig(mContext, mWindow, it)
         }
     }
 
@@ -661,64 +528,6 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         return super.onKeyUp(navKeyCode, event)
     }
 
-    private val navScrollBehavior: MyHideBottomViewOnScrollBehavior<View>?
-        get() {
-            val nav = viewBinding.mainBottomNavContainer ?: return null
-            val params = nav.layoutParams as CoordinatorLayout.LayoutParams
-            return params.behavior as MyHideBottomViewOnScrollBehavior
-        }
-
-    private fun showNav() {
-        // set visible explicitly
-        viewBinding.mainBottomNavContainer?.isVisible = true
-        navScrollBehavior?.slideUp(viewBinding.mainBottomNavContainer!!)
-    }
-
-    private fun hideNav() {
-        // do not set visible explicitly, keep it untouched
-        navScrollBehavior?.slideDown(viewBinding.mainBottomNavContainer!!)
-    }
-
-    private fun noNav() {
-        navScrollBehavior?.slideDown(viewBinding.mainBottomNavContainer!!)
-        // set gone
-        viewBinding.mainBottomNavContainer?.isGone = true
-    }
-
-    private fun destinationChanged(destination: NavDestination) {
-        val destId = destination.id
-        viewBinding.mainBottomNav?.let { bottomNav ->
-            val menuItem: MenuItem? = bottomNav.menu.findItem(destId)
-            // change item state
-            menuItem?.isChecked = true
-            // show bottom nav bar when destination is one of the nav menu items, and hide otherwise
-            if (menuItem != null) showNav() else noNav()
-        }
-        viewBinding.mainSideNav?.let { sideNav ->
-            val menuItem: MenuItem? = sideNav.menu.findItem(destId)
-            // change item state
-            menuItem?.isChecked = true
-        }
-    }
-
-    private fun mainNav(id: Int) {
-        val isAlreadyDestination = navController.currentDestination?.id == id && viewModel.unit.value == null
-        if (isAlreadyDestination) return
-        viewModel.removeCurrentUnit()
-        val mainDestinationId = R.id.updatesFragment
-        val isToMain = id == mainDestinationId
-        NavOptions.Builder().run {
-            setPopUpTo(mainDestinationId, isToMain)
-            setLaunchSingleTop(true)
-            setEnterAnim(R.animator.nav_default_enter_anim)
-            setExitAnim(R.anim.nav_default_exit_anim)
-            setPopEnterAnim(R.anim.nav_default_pop_enter_anim)
-            setPopExitAnim(R.anim.nav_default_pop_exit_anim)
-        }.also { navController.navigate(id, null, it.build()) }
-        // clear back stack
-        clearBackPressedCallback()
-    }
-
     private fun consumeInsets(insets: WindowInsets) {
         val app = mainApplication
         app.insetTop = insets.top
@@ -737,9 +546,8 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
             val colorBack: Int
             val isDarkStatus: Boolean
             val background = background
-            if (mainApplication.exterior && background != null) {
-                var offsetX = viewModel.insetStart.value ?: 0
-                if (isLand == true) offsetX += viewBinding.mainSideNav?.width ?: 0
+            if (mainApplication.exterior) {
+                val offsetX = viewModel.insetStart.value ?: 0
                 val colors = GraphicsUtil.matchBackgroundColor(viewBinding.mainTB, background, offsetX) // extremely heavy
                 colorFore = colors[0]
                 colorBack = colors[1]
@@ -753,7 +561,6 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
                         val isTransparentNav = mainApplication.exterior || (viewModel.insetBottom.value ?: 0) < X.size(mContext, 15f, X.DP)
                         primaryNavBarConfig = SystemBarConfig(isDarkStatus, isTransparentBar = isTransparentNav)
                         SystemUtil.applyNavBarConfig(mContext, it, primaryNavBarConfig!!)
-                        navScrollBehavior?.onSlidedUpCallback?.invoke()
                     }
                 }
             } else {
@@ -764,7 +571,6 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
                         val configs = SystemUtil.applyDefaultSystemUiVisibility(mContext, it, viewModel.insetBottom.value ?: 0)
                         primaryStatusBarConfig = configs.first
                         primaryNavBarConfig = configs.second
-                        navScrollBehavior?.onSlidedUpCallback?.invoke()
                     }
                 }
             }
@@ -774,7 +580,6 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     private suspend fun setToolbarBackColor(color: Int) {
         withContext(Dispatchers.Main) {
             viewBinding.mainTB.setBackgroundColor(color)
-            viewBinding.mainBottomNav?.setBackgroundColor(color)
         }
     }
 
@@ -782,13 +587,13 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         val app = mainApplication
         if (!app.exterior) return
         if (app.background == null) {
-            background?.background = null
+            background.background = null
             return
         }
         val back = mainApplication.background ?: return
         val size = SystemUtil.getRuntimeWindowSize(mContext)
         val bitmap = BackgroundUtil.getBackground(back, size.x, size.y)
-        background?.background = BitmapDrawable(mContext.resources, bitmap)
+        background.background = BitmapDrawable(mContext.resources, bitmap)
     }
 
     private fun initExterior() {
@@ -805,7 +610,7 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
             primaryNavBarConfig = SystemBarConfig(mainApplication.isPaleTheme, isTransparentBar = mainApplication.exterior)
             SystemUtil.applyNavBarConfig(mContext, it, primaryNavBarConfig!!)
         }
-        if (!mainApplication.exterior) background?.background = null
+        if (!mainApplication.exterior) background.background = null
         initExterior()
     }
 }

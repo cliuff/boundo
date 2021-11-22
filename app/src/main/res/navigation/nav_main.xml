@@ -42,17 +42,11 @@
             android:defaultValue="0" />
     </fragment>
     <fragment
-        android:id="@+id/unitsFragment"
-        android:name="com.madness.collision.main.MainUnitsFragment"/>
-    <fragment
         android:id="@+id/unitsManagerFragment"
         android:name="com.madness.collision.unit.UnitsManagerFragment"/>
     <fragment
-        android:id="@+id/updatesFragment"
-        android:name="com.madness.collision.main.updates.UpdatesFragment"/>
-    <fragment
-        android:id="@+id/moreFragment"
-        android:name="com.madness.collision.main.more.MoreFragment">
+        android:id="@+id/mainFragment"
+        android:name="com.madness.collision.main.MainFragment">
         <action
             android:id="@+id/action_moreFragment_to_instantFragment"
             app:destination="@id/instantFragment"

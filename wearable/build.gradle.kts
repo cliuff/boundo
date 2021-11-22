@@ -180,6 +180,7 @@ dependencies {
             androidxPalette,
             androidxRecyclerView,
             androidxViewPager,
+            androidxLifecycleRuntime,
             androidxLifecycleCommon,
             androidxLifecycleViewModel,
             androidxLifecycleLiveData,

@@ -116,7 +116,8 @@ class Dependencies : Plugin<Project> {
         const val androidxViewPager = "androidx.viewpager2:viewpager2:${Versions.androidxViewPager}"
         const val androidxDocumentFile = "androidx.documentfile:documentfile:${Versions.androidxDocumentFile}"
 
-        const val androidxLifecycleCommon = "androidx.lifecycle:lifecycle-common-java8:${Versions.androidxLifecycle}"
+        const val androidxLifecycleRuntime = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.androidxLifecycle}"
+        const val androidxLifecycleCommon = "androidx.lifecycle:lifecycle-common:${Versions.androidxLifecycle}"
         const val androidxLifecycleViewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.androidxLifecycle}"
         const val androidxLifecycleLiveData = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.androidxLifecycle}"
         const val androidxCoreTesting = "androidx.arch.core:core-testing:${Versions.androidxCoreTesting}"
@@ -180,6 +181,7 @@ class Dependencies : Plugin<Project> {
                 androidxAppcompat,
                 androidxFragment,
                 androidxConstraintLayout,
+                androidxLifecycleRuntime,
                 androidxLifecycleCommon,
                 androidxLifecycleViewModel,
                 androidxLifecycleLiveData,

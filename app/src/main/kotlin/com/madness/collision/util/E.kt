@@ -151,12 +151,9 @@ val Fragment.availableWidth: Int
     get() {
         val context = context ?: return 0
         val mainViewModel: MainViewModel by activityViewModels()
-        // todo accurate occupiedWidth calculation, currently affected by side nav view inflation
-        val occupiedWidth = mainViewModel.sideNavWidth
-        val hasSideNav = occupiedWidth != 0
-        val extraInsetStart = if (occupiedWidth != 0) 0 else (mainViewModel.insetStart.value ?: 0)
+        val extraInsetStart = mainViewModel.insetStart.value ?: 0
         val extraInsetEnd = mainViewModel.insetEnd.value ?: 0
-        return X.getCurrentAppResolution(context).x - occupiedWidth - extraInsetEnd - extraInsetStart
+        return X.getCurrentAppResolution(context).x - extraInsetEnd - extraInsetStart
     }
 
 fun File.getProviderUri(context: Context): Uri = ContentProviderUtils.getUri(context, this)

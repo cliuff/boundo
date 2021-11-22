@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2021 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,11 @@ interface NavNode {
     val nodeDestinationId: Int
 
     fun Fragment.navigate(directions: NavDirections) {
-        val navController = findNavController()
+        navigateFrom(this, directions)
+    }
+
+    fun navigateFrom(fragment: Fragment, directions: NavDirections) {
+        val navController = fragment.findNavController()
         if (nodeDestinationId != navController.currentDestination?.id) return
         navController.navigate(directions)
     }

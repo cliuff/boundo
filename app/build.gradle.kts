@@ -209,6 +209,7 @@ dependencies {
             androidxCardView,
             androidxRecyclerView,
             androidxViewPager,
+            androidxLifecycleRuntime,
             androidxLifecycleCommon,
             androidxLifecycleViewModel,
             androidxLifecycleLiveData,

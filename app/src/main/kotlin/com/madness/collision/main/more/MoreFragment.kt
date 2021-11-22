@@ -25,18 +25,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
-import androidx.core.view.get
-import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
-import com.madness.collision.Democratic
 import com.madness.collision.R
+import com.madness.collision.main.*
 import com.madness.collision.main.ImmortalActivity
-import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.api_viewing.AccessAV
 import com.madness.collision.util.*
 import com.madness.collision.util.AppUtils.asBottomMargin
@@ -45,7 +42,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
 
-class MoreFragment : TaggedFragment(), Democratic, View.OnClickListener, NavNode {
+class MoreFragment : TaggedFragment(), View.OnClickListener {
 
     override val category: String = "More"
     override val id: String = "More"
@@ -55,15 +52,9 @@ class MoreFragment : TaggedFragment(), Democratic, View.OnClickListener, NavNode
         fun newInstance() = MoreFragment()
     }
 
-    override val nodeDestinationId: Int = R.id.moreFragment
     private val viewModel: MainViewModel by activityViewModels()
     private val exterior = mainApplication.exterior
     private var exteriorTransparency: Int = 0xFF
-
-    override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
-        toolbar[0].isVisible = true
-        return true
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val context = context
@@ -72,8 +63,7 @@ class MoreFragment : TaggedFragment(), Democratic, View.OnClickListener, NavNode
             val dp480 = X.size(context, 500f, X.DP)
             val dimension = SystemUtil.getRuntimeWindowSize(context)
             if (context.spanJustMore){
-                val occupiedWidth = viewModel.sideNavWidth
-                if (dimension.x - occupiedWidth >= dp480) res = R.layout.fragment_more_lm
+                if (dimension.x >= dp480) res = R.layout.fragment_more_lm
             } else if (dimension.x >= dp480) res = R.layout.fragment_more_lm
         }
         return inflater.inflate(res, container, false)
@@ -92,15 +82,18 @@ class MoreFragment : TaggedFragment(), Democratic, View.OnClickListener, NavNode
 
     private fun initData(){
         if (exterior) exteriorTransparency = resources.getInteger(R.integer.exteriorTransparency)
-        democratize(viewModel)
     }
 
     private fun bindData(mViews: View){
         viewModel.contentWidthTop.observe(viewLifecycleOwner){
             mViews.findViewById<LinearLayout>(R.id.moreContainer)?.alterPadding(top = it)
         }
-        viewModel.contentWidthBottom.observe(viewLifecycleOwner){
-            mViews.findViewById<LinearLayout>(R.id.moreContainer)?.alterPadding(bottom = asBottomMargin(it))
+        val parent = parentFragment
+        if (parent is MainFragment) {
+            val mainPageViewModel: MainPageViewModel by parent.viewModels()
+            mainPageViewModel.bottomContentWidth.observe(viewLifecycleOwner) {
+                mViews.findViewById<LinearLayout>(R.id.moreContainer)?.alterPadding(bottom = asBottomMargin(it))
+            }
         }
         val cardInstant = mViews.findViewById<MaterialCardView>(R.id.moreInstant)
         val cardSettings = mViews.findViewById<MaterialCardView>(R.id.moreSettings)
@@ -216,10 +209,13 @@ class MoreFragment : TaggedFragment(), Democratic, View.OnClickListener, NavNode
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.moreInstant -> MoreFragmentDirections.actionMoreFragmentToInstantFragment()
-            R.id.moreUnitsManager -> MoreFragmentDirections.actionMoreFragmentToUnitsManagerFragment()
-            R.id.moreSettings -> MoreFragmentDirections.actionMoreFragmentToSettingsFragment()
+            R.id.moreInstant -> MainFragmentDirections.actionMoreFragmentToInstantFragment()
+            R.id.moreUnitsManager -> MainFragmentDirections.actionMoreFragmentToUnitsManagerFragment()
+            R.id.moreSettings -> MainFragmentDirections.actionMoreFragmentToSettingsFragment()
             else -> null
-        }?.let { navigate(it) }
+        }?.let {
+            val parent = parentFragment
+            if (parent is NavNode) parent.navigateFrom(parent, it)
+        }
     }
 }

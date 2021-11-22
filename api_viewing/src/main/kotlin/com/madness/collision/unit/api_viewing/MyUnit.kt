@@ -34,9 +34,8 @@ import androidx.core.content.edit
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
 import com.madness.collision.R
-import com.madness.collision.main.MainActivity
-import com.madness.collision.main.MyHideBottomViewOnScrollBehavior
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
@@ -168,10 +167,10 @@ class MyUnit: com.madness.collision.unit.Unit() {
         }
     }
 
-    private val mScrollBehavior: MyHideBottomViewOnScrollBehavior<View>
+    private val mScrollBehavior: HideBottomViewOnScrollBehavior<View>
         get() {
             val params = viewBinding.apiDisplay.layoutParams as CoordinatorLayout.LayoutParams
-            return params.behavior as MyHideBottomViewOnScrollBehavior
+            return params.behavior as HideBottomViewOnScrollBehavior
         }
 
     private fun scrollToTop() {
@@ -393,8 +392,6 @@ class MyUnit: com.madness.collision.unit.Unit() {
         }
 
         refreshLayout.setOnRefreshListener(this::reloadList)
-
-        MainActivity.syncScroll(mScrollBehavior)
 
         if (!isSpecial) {
             displayItem = settingsPreferences.getInt(PrefUtil.AV_LIST_SRC_ITEM, PrefUtil.AV_LIST_SRC_ITEM_DEFAULT)

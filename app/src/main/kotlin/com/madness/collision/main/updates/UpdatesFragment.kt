@@ -22,16 +22,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import androidx.appcompat.widget.Toolbar
 import androidx.core.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListUpdateCallback
-import com.madness.collision.Democratic
 import com.madness.collision.databinding.FragmentUpdatesBinding
 import com.madness.collision.databinding.MainUpdatesHeaderBinding
+import com.madness.collision.main.MainFragment
+import com.madness.collision.main.MainPageViewModel
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.*
 import com.madness.collision.unit.Unit
@@ -45,7 +46,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
 
-internal class UpdatesFragment : TaggedFragment(), Democratic {
+internal class UpdatesFragment : TaggedFragment() {
 
     companion object {
         const val ARG_MODE = "mode"
@@ -80,11 +81,6 @@ internal class UpdatesFragment : TaggedFragment(), Democratic {
     private lateinit var viewBinding: FragmentUpdatesBinding
     private lateinit var inflater: LayoutInflater
 
-    override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
-        toolbar[0].isVisible = true
-        return true
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mContext = context ?: return
@@ -107,13 +103,16 @@ internal class UpdatesFragment : TaggedFragment(), Democratic {
 
         loadUpdates()
 
-        democratize(mainViewModel)
         val extra = X.size(mContext, 5f, X.DP).roundToInt()
         mainViewModel.contentWidthTop.observe(viewLifecycleOwner) {
             viewBinding.mainUpdatesContainer.alterPadding(top = it + extra)
         }
-        mainViewModel.contentWidthBottom.observe(viewLifecycleOwner) {
-            viewBinding.mainUpdatesContainer.alterPadding(bottom = asBottomMargin(it + extra))
+        val parent = parentFragment
+        if (parent is MainFragment) {
+            val mainPageViewModel: MainPageViewModel by parent.viewModels()
+            mainPageViewModel.bottomContentWidth.observe(viewLifecycleOwner) {
+                viewBinding.mainUpdatesContainer.alterPadding(bottom = asBottomMargin(it + extra))
+            }
         }
 
         val descViewModel: UnitDescViewModel by activityViewModels()

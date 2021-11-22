@@ -16,23 +16,18 @@
 
 package com.madness.collision.main
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.Toolbar
-import androidx.core.view.get
-import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
-import com.madness.collision.Democratic
+import androidx.fragment.app.viewModels
 import com.madness.collision.databinding.FragmentMainUnitsBinding
 import com.madness.collision.util.AppUtils.asBottomMargin
 import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.alterPadding
 
-internal class MainUnitsFragment : TaggedFragment(), Democratic {
-
+internal class MainUnitsFragment : TaggedFragment() {
     override val category: String = "MainUnits"
     override val id: String = "MainUnits"
 
@@ -46,26 +41,22 @@ internal class MainUnitsFragment : TaggedFragment(), Democratic {
 
     private lateinit var mViews: FragmentMainUnitsBinding
 
-    override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
-        toolbar[0].isVisible = true
-        return true
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         mViews = FragmentMainUnitsBinding.inflate(inflater, container, false)
         return mViews.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val mainViewModel: MainViewModel by activityViewModels()
-        democratize(mainViewModel)
-
         mainViewModel.contentWidthTop.observe(viewLifecycleOwner) {
             mViews.mainUnitsContainer.alterPadding(top = it)
         }
-        mainViewModel.contentWidthBottom.observe(viewLifecycleOwner) {
-            mViews.mainUnitsContainer.alterPadding(bottom = asBottomMargin(it))
+        val parent = parentFragment
+        if (parent is MainFragment) {
+            val mainPageViewModel: MainPageViewModel by parent.viewModels()
+            mainPageViewModel.bottomContentWidth.observe(viewLifecycleOwner) {
+                mViews.mainUnitsContainer.alterPadding(bottom = asBottomMargin(it))
+            }
         }
     }
 }
