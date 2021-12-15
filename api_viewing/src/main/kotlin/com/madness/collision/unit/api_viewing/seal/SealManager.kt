@@ -121,7 +121,7 @@ object SealManager {
             return ThemeUtil.getColor(context, attrRes)
         }
         when (apiLevel) {
-            OsUtils.S -> if (isAccent) "acdcb2" else "defbde"
+            OsUtils.S, OsUtils.S_V2 -> if (isAccent) "acdcb2" else "defbde"
             X.R -> if (isAccent) "acd5c1" else "defbf0"
             X.Q -> if (isAccent) "c1d5ac" else "f0fbde"
             X.P -> if (isAccent) "e0c8b0" else "fff6d5"

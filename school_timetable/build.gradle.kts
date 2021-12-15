@@ -28,7 +28,7 @@ android {
     sourceSets {
         getByName("main").java.srcDir("src/main/kotlin")
     }
-    compileSdk = 31
+    compileSdk = 32
 
     flavorDimensions.add("arch")
     productFlavors {

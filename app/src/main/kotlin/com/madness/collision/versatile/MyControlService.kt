@@ -396,8 +396,13 @@ class MyControlService : ControlsProviderService(), StateObservable {
                         // update status in 600ms
                         delay(600)
                         val updatePublisher = updatePublisher ?: return@launch
-                        getControl(context, controlId, sessionNo)?.apply {
-                            updatePublisher.onNext(this)
+                        getControl(context, controlId, sessionNo)?.let { c ->
+                            // IndexOutOfBoundsException (ReplayProcessor.java:772)
+                            try {
+                                updatePublisher.onNext(c)
+                            } catch (e: IndexOutOfBoundsException) {
+                                e.printStackTrace()
+                            }
                         }
                     }
                 }
