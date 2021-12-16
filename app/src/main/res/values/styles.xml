@@ -45,6 +45,18 @@
         <item name="dialogTheme">@style/AppTheme.Dialog</item>
     </style>
 
+    <!-- does not work well with adaptive icon below Android 12 -->
+<!--    <style name="SplashScreenBase" parent="Theme.SplashScreen">-->
+<!--        &lt;!&ndash; using the ones from jetpack splash screen library, without android prefix before item name &ndash;&gt;-->
+<!--        <item name="postSplashScreenTheme">@style/LaunchScreen</item>-->
+<!--        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>-->
+<!--&lt;!&ndash;        <item name="windowSplashScreenAnimationDuration">2000</item>&ndash;&gt;-->
+<!--    </style>-->
+
+<!--    <style name="SplashScreen" parent="SplashScreenBase">-->
+<!--        <item name="windowSplashScreenBackground">#FFFFFF</item>-->
+<!--    </style>-->
+
     <style name="LaunchScreenBase" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="themeId">@style/LaunchScreen</item>
         <item name="android:statusBarColor">?android:attr/colorBackground</item>
@@ -53,6 +65,10 @@
 <!--        <item name="android:drawableTint" tools:targetApi="m">?attr/colorControlNormal</item>-->
 <!--        <item name="colorABackground">?android:attr/colorBackground</item>-->
 <!--        <item name="colorASurface">?android:attr/colorBackground</item>-->
+
+        <!-- Splash screen for Android 12 (Jetpack compat version does not work well with adaptive icon) -->
+        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">@mipmap/ic_launcher</item>
+<!--        <item name="android:windowSplashScreenBackground" tools:targetApi="s">?android:attr/colorBackground</item>-->
     </style>
 
     <style name="LaunchScreen" parent="LaunchScreenBase">

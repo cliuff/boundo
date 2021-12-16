@@ -122,12 +122,14 @@ internal class AudioTimerService: Service() {
             this.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             putExtras(MainActivity.forItem(MyBridge.unitName))
         }
-        val clickPendingIntent = PendingIntent.getActivity(context, 0, clickIntent, 0)
+        val clickPendingIntentFlags = if (OsUtils.satisfy(OsUtils.M)) PendingIntent.FLAG_IMMUTABLE else 0
+        val clickPendingIntent = PendingIntent.getActivity(context, 0, clickIntent, clickPendingIntentFlags)
         val cancelIntent = Intent(context, NotificationActions::class.java).apply {
             this.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             putExtra(NotificationActions.ACTION, NotificationActions.ACTION_CANCEL)
         }
-        val cancelPendingIntent = PendingIntent.getService(context, 0, cancelIntent, 0)
+        val cancelPendingIntentFlags = if (OsUtils.satisfy(OsUtils.M)) PendingIntent.FLAG_IMMUTABLE else 0
+        val cancelPendingIntent = PendingIntent.getService(context, 0, cancelIntent, cancelPendingIntentFlags)
         val color = X.getColor(context, if (ThemeUtil.getIsNight(context)) R.color.primaryABlack else R.color.primaryAWhite)
         notificationBuilder = NotificationsUtil.Builder(context, NotificationsUtil.CHANNEL_AUDIO_TIMER)
                 .setSmallIcon(R.drawable.ic_timer_24)

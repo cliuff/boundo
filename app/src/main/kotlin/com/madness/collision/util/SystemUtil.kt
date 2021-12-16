@@ -62,11 +62,11 @@ object SystemUtil {
 
     private val Window.insetsCtrl: WindowInsetsController?
         @RequiresApi(X.R)
-        get() = try {
-            insetsController
-        } catch (e: NullPointerException) {
-            e.printStackTrace()
-            null
+        get() {
+            // avoid NullPointerException:
+            // 'WindowInsetsController com.android.internal.policy.DecorView.getWindowInsetsController()'
+            peekDecorView() ?: return null
+            return insetsController
         }
 
     fun isDarkStatusIcon(window: Window): Boolean {

@@ -7,4 +7,8 @@
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
     </style>
 
+<!--    <style name="SplashScreen" parent="SplashScreenBase">-->
+<!--        <item name="windowSplashScreenBackground">#121212</item>-->
+<!--    </style>-->
+
 </resources>

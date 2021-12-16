@@ -41,6 +41,7 @@ import com.madness.collision.BuildConfig
 import com.madness.collision.R
 import com.madness.collision.main.MainActivity
 import com.madness.collision.util.*
+import com.madness.collision.util.os.OsUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -86,12 +87,14 @@ object SettingsFunc {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 //            putExtra(MainActivity.LAUNCH_ITEM, MainActivity.ITEM_API)
             }
-            val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
+            val pendingIntentFlags = if (OsUtils.satisfy(OsUtils.M)) PendingIntent.FLAG_IMMUTABLE else 0
+            val pendingIntent = PendingIntent.getActivity(context, 0, intent, pendingIntentFlags)
             val updateIntent = Intent(context, NotificationActions::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 putExtra(NotificationActions.ACTION, NotificationActions.ACTION_APP_UPDATE)
             }
-            val updatePendingIntent = PendingIntent.getService(context, 0, updateIntent, 0)
+            val updPendingIntentFlags = if (OsUtils.satisfy(OsUtils.M)) PendingIntent.FLAG_IMMUTABLE else 0
+            val updatePendingIntent = PendingIntent.getService(context, 0, updateIntent, updPendingIntentFlags)
             val localeContext = SystemUtil.getLocaleContextSys(context)
             val color = X.getColor(context, if (ThemeUtil.getIsNight(context)) R.color.primaryABlack else R.color.primaryAWhite)
             val builder = NotificationsUtil.Builder(context, "")

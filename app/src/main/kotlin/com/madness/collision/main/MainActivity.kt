@@ -107,6 +107,14 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         super.onCreate(savedInstanceState)
         val context = this
         mContext = context
+
+//        val elapsingSplash = ElapsingTime()
+//        installSplashScreen().run {
+//            setKeepVisibleCondition {
+//                elapsingSplash.elapsed() < 3000
+//            }
+//        }
+
         val prefSettings = getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
 
         themeId = loadThemeId(context, prefSettings)

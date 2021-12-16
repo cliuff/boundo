@@ -79,7 +79,7 @@ android {
         manifestPlaceholders["buildPackage"] = buildPackage
         applicationId = "com.madness.collision"
         minSdk = 22
-        targetSdk = 30
+        targetSdk = 32
         versionCode = 21081315
         versionName = "3.7.6"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

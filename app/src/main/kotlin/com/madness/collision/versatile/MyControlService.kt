@@ -16,6 +16,7 @@
 
 package com.madness.collision.versatile
 
+import android.Manifest
 import android.annotation.TargetApi
 import android.app.PendingIntent
 import android.bluetooth.BluetoothDevice
@@ -126,6 +127,11 @@ class MyControlService : ControlsProviderService(), StateObservable {
         val dmManager = this.dmManager ?: DeviceManager()
         if (this.dmManager == null) this.dmManager = dmManager
         if (dmManager.isDisabled) return null
+        // check runtime bluetooth permission to get paired devices
+        if (OsUtils.satisfy(OsUtils.S)) {
+            val permission = Manifest.permission.BLUETOOTH_CONNECT
+            if (PermissionUtils.check(context, arrayOf(permission)).isNotEmpty()) return null
+        }
         if (!dmManager.hasProxy && sessionNo != dmSessionNo) {
             dmSessionNo = sessionNo
             dmManager.initProxy(context, 0)
@@ -146,8 +152,9 @@ class MyControlService : ControlsProviderService(), StateObservable {
                     putExtras(MainActivity.forItem(Unit.UNIT_NAME_AUDIO_TIMER))
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 }
+                val piMutabilityFlag = if (OsUtils.satisfy(OsUtils.M)) PendingIntent.FLAG_IMMUTABLE else 0
                 val pi = PendingIntent.getActivity(context, 0, intent,
-                        PendingIntent.FLAG_UPDATE_CURRENT)
+                        PendingIntent.FLAG_UPDATE_CURRENT or piMutabilityFlag)
                 val color = context.getColor(R.color.primaryAWhite)
                 val title = localeContext.getString(R.string.unit_audio_timer)
                 val iconDrawable = ContextCompat.getDrawable(context, R.drawable.ic_timer_24)
@@ -161,8 +168,9 @@ class MyControlService : ControlsProviderService(), StateObservable {
             }
             DEV_ID_MDU -> {
                 val intent = Intent(context, MainActivity::class.java)
+                val piMutabilityFlag = if (OsUtils.satisfy(OsUtils.M)) PendingIntent.FLAG_IMMUTABLE else 0
                 val pi = PendingIntent.getActivity(context, 0, intent,
-                        PendingIntent.FLAG_UPDATE_CURRENT)
+                        PendingIntent.FLAG_UPDATE_CURRENT or piMutabilityFlag)
                 val actionDesc = localeContext.getString(R.string.versatile_device_controls_mdu_ctrl_desc)
                 val controlButton = ControlButton(false, actionDesc)
                 val color = context.getColor(R.color.primaryAWhite)
@@ -184,8 +192,9 @@ class MyControlService : ControlsProviderService(), StateObservable {
                     putExtras(MainActivity.forItem(Unit.UNIT_NAME_DEVICE_MANAGER))
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 }
+                val piMutabilityFlag = if (OsUtils.satisfy(OsUtils.M)) PendingIntent.FLAG_IMMUTABLE else 0
                 val pi = PendingIntent.getActivity(context, 0, intent,
-                        PendingIntent.FLAG_UPDATE_CURRENT)
+                        PendingIntent.FLAG_UPDATE_CURRENT or piMutabilityFlag)
                 Control.StatefulBuilder(controlId, pi)
                         .setDeviceType(DeviceTypes.TYPE_GENERIC_ON_OFF)
                         .setStatus(Control.STATUS_OK)

@@ -16,6 +16,7 @@
 
 package com.madness.collision.unit.device_manager.list
 
+import android.Manifest
 import android.app.Activity
 import android.bluetooth.*
 import android.content.BroadcastReceiver
@@ -24,6 +25,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.WorkerThread
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
@@ -31,8 +33,10 @@ import androidx.lifecycle.lifecycleScope
 import com.madness.collision.R
 import com.madness.collision.databinding.UnitDmDeviceListBinding
 import com.madness.collision.unit.device_manager.manager.DeviceManager
+import com.madness.collision.util.PermissionUtils
 import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.notifyBriefly
+import com.madness.collision.util.os.OsUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -119,12 +123,34 @@ internal class DeviceListFragment: TaggedFragment(), StateObservable {
      */
     @WorkerThread
     private suspend fun loadDeviceItems() {
+        // request runtime bluetooth permission to get paired devices
+        if (OsUtils.satisfy(OsUtils.S)) {
+            val context = context ?: return
+            val permission = Manifest.permission.BLUETOOTH_CONNECT
+            if (PermissionUtils.check(context, arrayOf(permission)).isNotEmpty()) {
+                bluetoothConnectLauncher.launch(permission)
+            } else {
+                loadDeviceItemsActual()
+            }
+        } else {
+            loadDeviceItemsActual()
+        }
+    }
+
+    @WorkerThread
+    private suspend fun loadDeviceItemsActual() {
         val items = service.getDeviceItems()
         withContext(Dispatchers.Main) {
             viewModel.data.value = items to {
                 adapter.notifyDataSetChanged()
             }
         }
+    }
+
+    private val bluetoothConnectLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()) register@{ granted ->
+        if (!granted) return@register
+        lifecycleScope.launch(Dispatchers.Default) { loadDeviceItemsActual() }
     }
 
     @WorkerThread

@@ -38,6 +38,7 @@ import com.madness.collision.unit.*
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.UnitDescViewModel
 import com.madness.collision.util.AppUtils.asBottomMargin
+import com.madness.collision.util.ElapsingTime
 import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.X
 import com.madness.collision.util.alterPadding
@@ -78,6 +79,8 @@ internal class UpdatesFragment : TaggedFragment() {
     private var mode = MODE_NORMAL
     private val isNoUpdatesMode: Boolean
         get() = mode == MODE_NO_UPDATES
+    // last time view created
+    private val elapsingViewCreated = ElapsingTime()
     private lateinit var viewBinding: FragmentUpdatesBinding
     private lateinit var inflater: LayoutInflater
 
@@ -102,6 +105,7 @@ internal class UpdatesFragment : TaggedFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         loadUpdates()
+        elapsingViewCreated.reset()
 
         val extra = X.size(mContext, 5f, X.DP).roundToInt()
         mainViewModel.contentWidthTop.observe(viewLifecycleOwner) {
@@ -118,6 +122,16 @@ internal class UpdatesFragment : TaggedFragment() {
         val descViewModel: UnitDescViewModel by activityViewModels()
         descViewModel.updated.observe(viewLifecycleOwner) {
             updateItem(it)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // reload updates if it has been over 2 minutes
+        // since the last time updates were loaded
+        if (elapsingViewCreated.interval(120_000)) {
+            clearUpdates()
+            loadUpdates()
         }
     }
 

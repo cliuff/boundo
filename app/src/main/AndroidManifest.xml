@@ -25,6 +25,7 @@
     <uses-feature
         android:name="android.software.live_wallpaper"
         android:required="false" />
+    <!-- Device Manager -->
     <uses-feature
         android:name="android.hardware.bluetooth"
         android:required="false" />
@@ -36,6 +37,7 @@
     <uses-feature
         android:name="android.hardware.touchscreen"
         android:required="false" />
+    <!-- Bluetooth features -->
 <!--
     <uses-feature
         android:name="android.hardware.location"
@@ -60,7 +62,11 @@
     <!--<uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>-->
     <!-- Legacy shortcut -->
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+    <!-- Device Manager (legacy since Android 12) -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
+    <!-- Runtime permission: get paired Bluetooth devices for Device Manager (required since Android 12) -->
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <!-- Turn on Bluetooth for Device Manager -->
     <!-- initiate device discovery or manipulate Bluetooth settings -->
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <!-- a Bluetooth scan can be used to gather information about the location of the user -->
@@ -100,6 +106,7 @@
         <!-- Activities -->
         <activity
             android:name=".main.MainActivity"
+            android:exported="true"
             android:enabled="true"
             android:label="@string/app_name"
             android:launchMode="singleInstance">
@@ -114,6 +121,7 @@
         </activity>
         <activity
             android:name=".versatile.ApkSharing"
+            android:exported="true"
             android:enabled="true"
             android:excludeFromRecents="true"
             android:icon="@mipmap/ic_apk_sharing"
@@ -128,6 +136,7 @@
         </activity>
         <activity
             android:name=".versatile.TextProcessingActivity"
+            android:exported="true"
             android:enabled="true"
             android:excludeFromRecents="true"
             android:label="@string/activityTextProcessingApp">
@@ -141,6 +150,7 @@
         </activity>
         <activity
             android:name=".versatile.ApiViewingSearchActivity"
+            android:exported="true"
             android:enabled="true"
             android:excludeFromRecents="true"
             android:label="@string/activity_av_search">
@@ -155,12 +165,13 @@
 
         <activity
             android:name=".unit.themed_wallpaper.ConfigActivity"
+            android:exported="true"
             android:enabled="true"
-            android:excludeFromRecents="true"
-            android:exported="true" />
+            android:excludeFromRecents="true" />
 
         <activity
             android:name=".main.ImmortalActivity"
+            android:exported="false"
             android:enabled="true">
             <intent-filter>
                 <action android:name="${applicationId}.IMMORTALITY" />
@@ -180,11 +191,13 @@
         -->
         <activity
             android:name=".versatile.BarcodeScannerActivity"
+            android:exported="false"
             android:enabled="true"
             android:excludeFromRecents="true"
             android:theme="@style/AppTheme.Transparent"/>
         <activity
             android:name=".qs.PrefActivity"
+            android:exported="true"
             android:enabled="true"
             android:excludeFromRecents="true">
             <intent-filter>
@@ -194,9 +207,9 @@
         <!-- Tile Services -->
         <provider
             android:name="androidx.core.content.FileProvider"
+            android:exported="false"
             android:enabled="true"
             android:authorities="${applicationId}.fileProvider"
-            android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
@@ -204,6 +217,7 @@
         </provider>
         <service
             android:name=".unit.themed_wallpaper.ThemedWallpaperService"
+            android:exported="true"
             android:enabled="true"
             android:label="@string/twService"
             android:permission="android.permission.BIND_WALLPAPER">
@@ -217,6 +231,7 @@
         </service>
         <service
             android:name=".qs.TileServiceApiViewer"
+            android:exported="true"
             android:enabled="false"
             android:icon="@drawable/ic_android_24"
             android:label="@string/apiViewer"
@@ -227,6 +242,7 @@
         </service>
         <service
             android:name=".qs.TileServiceAudioTimer"
+            android:exported="true"
             android:enabled="false"
             android:icon="@drawable/ic_timer_24"
             android:label="@string/unit_audio_timer"
@@ -237,6 +253,7 @@
         </service>
         <service
             android:name=".qs.TileServiceBarcodeScanner"
+            android:exported="true"
             android:enabled="false"
             android:icon="@drawable/ic_alipay_tile"
             android:label="@string/tileBarCodeScanner"
@@ -247,6 +264,7 @@
         </service>
         <service
             android:name=".qs.TileServiceBarcodeScannerMm"
+            android:exported="true"
             android:enabled="false"
             android:icon="@drawable/ic_wechat_tile"
             android:label="@string/tileBarCodeScanner"
@@ -257,6 +275,7 @@
         </service>
         <service
             android:name=".qs.TileServiceMonthData"
+            android:exported="true"
             android:enabled="false"
             android:icon="@drawable/ic_data_usage_24"
             android:label="@string/tileData"
@@ -267,21 +286,26 @@
         </service>
         <service
             android:name=".util.NotificationActions"
+            android:exported="false"
             android:enabled="true" />
         <service
             android:name=".versatile.ScreenCapturingService"
+            android:exported="false"
             android:enabled="true"
             android:foregroundServiceType="mediaProjection"
             tools:ignore="UnusedAttribute" />
         <service
             android:name=".unit.audio_timer.AudioTimerService"
+            android:exported="false"
             android:enabled="true"/>
         <service
             android:name=".unit.audio_timer.NotificationActions"
+            android:exported="false"
             android:enabled="true"/>
         <!-- Device controls -->
         <service
             android:name=".versatile.MyControlService"
+            android:exported="true"
             android:label="@string/app_device_controls"
             android:permission="android.permission.BIND_CONTROLS">
             <intent-filter>
