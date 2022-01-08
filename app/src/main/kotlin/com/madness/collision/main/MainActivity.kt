@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Clifford Liu
+ * Copyright 2022 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package com.madness.collision.main
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.*
@@ -47,7 +46,6 @@ import com.madness.collision.util.controller.systemUi
 import com.madness.collision.util.notice.ToastUtils
 import kotlinx.coroutines.*
 import java.lang.ref.WeakReference
-import java.util.concurrent.atomic.AtomicInteger
 import kotlin.random.Random
 
 class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
@@ -89,7 +87,6 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     // ui appearance data
     private var primaryStatusBarConfig: SystemBarConfig? = null
     private var primaryNavBarConfig: SystemBarConfig? = null
-    private var isToolbarInflated = false
     private var colorIcon = 0
     // views
     private lateinit var navHostFragment: NavHostFragment
@@ -158,17 +155,8 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         val app = mainApplication
         if (!app.dead) return
         app.debug = prefSettings.getBoolean(P.ADVANCED, false)
-        app.statusBarHeight = getStatusBarHeight(context)
         if (!app.isDarkTheme) MiscMain.updateExteriorBackgrounds(context)
         app.dead = false
-    }
-
-    private fun getStatusBarHeight(context: Context): Int {
-        val result = AtomicInteger()
-        val resourceId = context.resources.getIdentifier("status_bar_height", "dimen", "android")
-        if (resourceId > 0) result.set(context.resources.getDimensionPixelSize(resourceId))
-        if (result.get() == 0) result.set(X.size(context, 30f, X.DP).toInt())
-        return result.get()
     }
 
     private fun inflateLayout(context: Context) {
@@ -185,10 +173,11 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         setupViewModel(context, prefSettings)
         // invocation will clear stack
         setupUi(context)
-        viewModel.background.observe(this) {
-            applyExterior()
-            if (isToolbarInflated || !mainApplication.exterior) applyColor()
-        }
+
+        val insetBottom = viewModel.insetBottom.value ?: 0
+        val configs = SystemUtil.applyDefaultSystemUiVisibility(mContext, mWindow, insetBottom)
+        primaryStatusBarConfig = configs.first
+        primaryNavBarConfig = configs.second
     }
 
     private fun setupNav() {
@@ -265,6 +254,9 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         viewModel.insetBottom.observe(this) {
             viewModel.contentWidthBottom.value = it
         }
+        viewModel.background.observe(this) {
+            applyExterior()
+        }
     }
 
     private fun setupUi(context: Context) {
@@ -285,17 +277,8 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
             insets
         }
 
-        lifecycleScope.launch(Dispatchers.Default) {
-            while (true) {
-                isToolbarInflated = viewBinding.mainTB.width > 0 && viewBinding.mainTB.height > 0
-                if (isToolbarInflated) {
-                    if (!mainApplication.dead) withContext(Dispatchers.Main) {
-                        initExterior()
-                    }
-                    break
-                }
-                delay(150)
-            }
+        if (!mainApplication.dead) {
+            viewModel.background.value = mainApplication.background
         }
     }
 
@@ -413,20 +396,7 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
                     finish()
                     return
                 }
-                navFm.beginTransaction().animRetreat.run {
-                    if (forwardFragment != null) {
-                        remove(forwardFragment)
-                    }
-                    if (backwardFragment != null) {
-                        if (backwardFragment.isAdded) {
-                            show(backwardFragment)
-                        } else {
-                            add(navHostFragment.view?.id
-                                    ?: 0, backwardFragment, backwardFragment.uid)
-                        }
-                    }
-                    commitNow()
-                }
+                navFm.beginTransaction().navigateBack(forwardFragment, backwardFragment)
                 if (backwardFragment is Democratic) {
                     backwardFragment.democratize(viewModel)
                 }
@@ -446,6 +416,25 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
             }
         }
         return cachedCallback!!
+    }
+
+    private fun FragmentTransaction.navigateBack(forwardFragment: Fragment?, backwardFragment: TaggedFragment?) {
+        setCustomAnimations(
+            R.animator.nav_default_pop_enter_anim, R.animator.nav_default_pop_exit_anim,
+            R.animator.nav_default_pop_enter_anim, R.animator.nav_default_pop_exit_anim
+        )
+        if (forwardFragment != null) {
+            remove(forwardFragment)
+        }
+        if (backwardFragment != null) {
+            if (backwardFragment.isAdded) {
+                show(backwardFragment)
+            } else {
+                val containerId = navHostFragment.view?.id ?: 0
+                add(containerId, backwardFragment, backwardFragment.uid)
+            }
+        }
+        commitNow()
     }
 
     private fun minusBackPressedCallback(callback: OnBackPressedCallback) {
@@ -503,12 +492,6 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
                 R.animator.nav_default_pop_enter_anim, R.animator.nav_default_pop_exit_anim
         )
 
-    private val FragmentTransaction.animRetreat: FragmentTransaction
-        get() = setCustomAnimations(
-                R.animator.nav_default_pop_enter_anim, R.animator.nav_default_pop_exit_anim,
-                R.animator.nav_default_pop_enter_anim, R.animator.nav_default_pop_exit_anim
-        )
-
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         item ?: return false
         return try {
@@ -548,49 +531,6 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         viewModel.insetEnd.value = app.insetEnd
     }
 
-    private fun applyColor() {
-        lifecycleScope.launch(Dispatchers.Default) {
-            val colorFore: Int
-            val colorBack: Int
-            val isDarkStatus: Boolean
-            val background = background
-            if (mainApplication.exterior) {
-                val offsetX = viewModel.insetStart.value ?: 0
-                val colors = GraphicsUtil.matchBackgroundColor(viewBinding.mainTB, background, offsetX) // extremely heavy
-                colorFore = colors[0]
-                colorBack = colors[1]
-                val backColor = colorBack and X.getColor(mContext, R.color.exteriorTransparencyColor)
-                setToolbarBackColor(backColor)
-                isDarkStatus = colorFore == Color.BLACK
-                withContext(Dispatchers.Main) {
-                    mWindow.let {
-                        primaryStatusBarConfig = SystemBarConfig(isDarkStatus, isTransparentBar = true)
-                        SystemUtil.applyStatusBarConfig(mContext, it, primaryStatusBarConfig!!)
-                        val isTransparentNav = mainApplication.exterior || (viewModel.insetBottom.value ?: 0) < X.size(mContext, 15f, X.DP)
-                        primaryNavBarConfig = SystemBarConfig(isDarkStatus, isTransparentBar = isTransparentNav)
-                        SystemUtil.applyNavBarConfig(mContext, it, primaryNavBarConfig!!)
-                    }
-                }
-            } else {
-                colorBack = ThemeUtil.getColor(mContext, R.attr.colorTb)
-                setToolbarBackColor(colorBack)
-                withContext(Dispatchers.Main) {
-                    mWindow.also {
-                        val configs = SystemUtil.applyDefaultSystemUiVisibility(mContext, it, viewModel.insetBottom.value ?: 0)
-                        primaryStatusBarConfig = configs.first
-                        primaryNavBarConfig = configs.second
-                    }
-                }
-            }
-        }
-    }
-
-    private suspend fun setToolbarBackColor(color: Int) {
-        withContext(Dispatchers.Main) {
-            viewBinding.mainTB.setBackgroundColor(color)
-        }
-    }
-
     private fun applyExterior() {
         val app = mainApplication
         if (!app.exterior) return
@@ -604,21 +544,13 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         background.background = BitmapDrawable(mContext.resources, bitmap)
     }
 
-    private fun initExterior() {
-//        if (viewModel.background.value == mainApplication.background) return
-        if (!isToolbarInflated) return
-        viewModel.background.value = mainApplication.background
-    }
-
     /**
      * for app background changing
      */
     private fun updateExterior() {
-        mWindow.let {
-            primaryNavBarConfig = SystemBarConfig(mainApplication.isPaleTheme, isTransparentBar = mainApplication.exterior)
-            SystemUtil.applyNavBarConfig(mContext, it, primaryNavBarConfig!!)
-        }
+        primaryNavBarConfig = SystemBarConfig(mainApplication.isPaleTheme, isTransparentBar = mainApplication.exterior)
+        SystemUtil.applyNavBarConfig(mContext, mWindow, primaryNavBarConfig!!)
         if (!mainApplication.exterior) background.background = null
-        initExterior()
+        viewModel.background.value = mainApplication.background
     }
 }

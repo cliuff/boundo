@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Clifford Liu
+ * Copyright 2022 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ import android.graphics.*
 import android.graphics.drawable.AdaptiveIconDrawable
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
@@ -433,81 +432,5 @@ object GraphicsUtil {
         drawable.setBounds(0, 0, canvas.width, canvas.height)
         drawable.draw(canvas)
         return bitmap
-    }
-
-    fun matchBackgroundColor(fore: View, back: View, offsetX: Int = 0, offsetY: Int = 0): IntArray {
-        val colors = IntArray(2)
-        if (back.background == null){
-            colors[0] = Color.BLACK
-            return colors
-        }
-        val prefWidth: Int
-        val prefHeight: Int
-        val isForeInflated = fore.width > 0
-        if (!isForeInflated){
-            fore.measure()
-            prefWidth = fore.measuredWidth
-            prefHeight = fore.measuredHeight
-        }else {
-            prefWidth = fore.width
-            prefHeight = fore.height
-        }
-        val drawable = back.background
-        if (drawable == null){
-            colors[0] = Color.BLACK
-            return colors
-        }
-        val foreBitmap: Bitmap
-        // Single color bitmap will be created of 1x1 pixel
-        if (drawable is BitmapDrawable && drawable.bitmap != null)
-        {
-            foreBitmap = drawable.bitmap.collisionBitmap
-        } else{
-            val intrinsicWidth = drawable.intrinsicWidth
-            val intrinsicHeight = drawable.intrinsicHeight
-            // Single color bitmap will be created of 1x1 pixel
-            foreBitmap = if (intrinsicWidth <= 0 || intrinsicHeight <= 0) {
-                Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
-            } else {
-                Bitmap.createBitmap(intrinsicWidth, intrinsicHeight, Bitmap.Config.ARGB_8888)
-            }
-            val canvas = Canvas(foreBitmap)
-            drawable.draw(canvas)
-        }
-        var bitmap: Bitmap
-        if (foreBitmap.width == 1 && foreBitmap.height == 1){
-            bitmap = foreBitmap
-        } else {
-            bitmap = Bitmap.createBitmap(prefWidth, prefHeight, Bitmap.Config.ARGB_8888)
-            val canvas = Canvas(bitmap)
-            val srcRect = Rect(offsetX, offsetY, prefWidth, prefHeight)
-            val dstRect = Rect(0, 0, prefWidth, prefHeight)
-            canvas.drawBitmap(foreBitmap, srcRect, dstRect, null)
-        }
-
-        val n = (max(bitmap.width, bitmap.height) / 800) + 1
-        bitmap = clipDown2(bitmap, n)
-        var backColor: Int
-        if (bitmap.width == 1 && bitmap.height == 1){
-            backColor = bitmap.getPixel(0, 0)
-        }else {
-            val paint = Paint(Color.WHITE)
-            paint.colorFilter = LightingColorFilter(0xFAFAFA, 0x050505)
-            Canvas(bitmap).drawBitmap(bitmap, 0f, 0f, paint)
-            val palette = try {
-                Palette.from(bitmap).generate()
-            } catch (e: Exception) {
-                e.printStackTrace()
-                null
-            }
-            // below: likely to get white for blurred images
-            backColor = palette?.getDominantColor(Color.WHITE) ?: Color.WHITE
-            backColor = ColorUtils.blendARGB(Color.BLACK, backColor, 0.98f)
-        }
-        val contrast1 = ColorUtils.calculateContrast(Color.WHITE, backColor)
-        val contrast2 = ColorUtils.calculateContrast(Color.BLACK, backColor)
-        colors[0] = if (contrast1 > contrast2) Color.WHITE else Color.BLACK
-        colors[1] = backColor
-        return colors
     }
 }
