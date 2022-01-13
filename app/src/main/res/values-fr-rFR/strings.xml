@@ -180,7 +180,7 @@
     <string name="apiTextSharingSelectApk">Sélectionnez l\'apk téléchargée</string>
     <string name="notifyChannelServiceDesc">Soyez informé de la demande du service de démarrer l\'activité</string>
     <string name="notifyChannelService">Service de requêtes</string>
-    <string name="prefExteriorForceDarkDesc">Pour obtenir la meilleure expérience visuel, vous ne devez pas activer l\'option Forcé l\'activation de Smart Dark dans les options du développeur.</string>
+    <string name="prefExteriorForceDarkDesc">Pour obtenir le meilleur assombrissement visuel, vous ne devez pas activer l\'option Forcer l\'activation de Smart Dark dans les options du développeur.</string>
     <string name="prefExteriorForceDarkDescDetail">Smart Dark est une fonction permettant aux développeurs de mettre rapidement en œuvre un thème sombre. En réglant forceDarkAllowed sur true, une application obtient automatiquement un thème sombre. Le développeur modifiera en outre certaines parties de l\'interface qui ne sont pas idéales et fixera forceDarkAllowed à false sur ces parties. En forçant l\'activation de Smart Dark, le système ignorera la valeur de forceDarkAllowed, ce qui entraînera le dysfonctionnement d\'un thème sombre correctement implémenté.</string>
     <string name="notifyChannelGroupApp">App</string>
     <string name="notifyChannelGroupAppDesc">Notifications relatives à l\'application</string>
