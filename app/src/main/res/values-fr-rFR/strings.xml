@@ -16,7 +16,7 @@
 
 <resources>
     <string name="app_name">Boundo</string>
-    <string name="appDesc">Un ensemble d'outils destinés à faire certaines choses pour vous</string>
+    <string name="appDesc">Un ensemble d\'outils destinés à faire certaines choses pour vous</string>
     <string name="ttExportCal">Vers le calendrier</string>
     <string name="Main_ToolBar_title_Settings">Paramètres</string>
     <string name="Settings_Button_SwitchLanguage">Langue</string>
@@ -40,7 +40,7 @@
     <string name="Main_TextView_Advice_Text">À propos de</string>
     <string name="textQQ">QQ</string>
     <string name="textEmail">Email</string>
-    <string name="Advice_QQ_Toast_Text">Ajouter comme contact avant d\'entamer une conversation, dans le cas contraire le message ne me sera pas envoyé</string>
+    <string name="Advice_QQ_Toast_Text">Ajouter comme contact avant d\'entamer une conversation, dans le cas contraire le message ne sera pas envoyé</string>
     <string name="Advice_Switch_Debug_Text">Mode de consommation</string>
     <string name="Settings_ImageView_Update">Mise à jour de l\'application</string>
     <string name="Settings_ImageView_Language">Langue</string>
@@ -49,7 +49,7 @@
     <string name="developertools_cropimage">Modification d\'image</string>
     <string name="toast_permission_storage_denied">Veuillez accorder l\'autorisation afin que nous puissions lire/écrire les données</string>
     <string name="apiViewer">API d\'application</string>
-    <string name="settingsfunction_downloaddescription">Télécharger une mise à jour</string>
+    <string name="settingsfunction_downloaddescription">Télécharger la mise à jour</string>
     <string name="text_OK">OK</string>
     <string name="text_cancel">Annuler</string>
     <string name="text_done">Terminer</string>
@@ -138,7 +138,7 @@
     <string name="tileData">Utilisation mensuelle des données</string>
     <string name="apiDisplayVolume">Sélectionner un dossier de fichier</string>
     <string name="activityApkSharing">Vérifier l\'API</string>
-    <string name="sharingNonApkLink">Pas de lien de téléchargement poir l\'apk</string>
+    <string name="sharingNonApkLink">Pas de lien de téléchargement pour l\'apk</string>
     <string name="textCapturingScreen">Capturer l\'écran</string>
     <string name="prefSettingsThemeDefault">Blanc pur</string>
     <string name="prefSettingsThemeBlack">Noir absolu</string>
@@ -178,10 +178,10 @@
     <string name="avAdapterActionsApk">Partager l\'apk</string>
     <string name="textFormat">Format</string>
     <string name="apiTextSharingSelectApk">Sélectionnez l\'apk téléchargée</string>
-    <string name="notifyChannelServiceDesc">Soyez informé de la demande du service de démarrer l\'activité</string>
+    <string name="notifyChannelServiceDesc">Soyez informé de la demande du service du démarrage d\'activité</string>
     <string name="notifyChannelService">Service de requêtes</string>
-    <string name="prefExteriorForceDarkDesc">Pour obtenir le meilleur assombrissement visuel, vous ne devez pas activer l\'option Forcer l\'activation de Smart Dark dans les options du développeur.</string>
-    <string name="prefExteriorForceDarkDescDetail">Smart Dark est une fonction permettant aux développeurs de mettre rapidement en œuvre un thème sombre. En réglant forceDarkAllowed sur true, une application obtient automatiquement un thème sombre. Le développeur modifiera en outre certaines parties de l\'interface qui ne sont pas idéales et fixera forceDarkAllowed à false sur ces parties. En forçant l\'activation de Smart Dark, le système ignorera la valeur de forceDarkAllowed, ce qui entraînera le dysfonctionnement d\'un thème sombre correctement implémenté.</string>
+    <string name="prefExteriorForceDarkDesc">Pour obtenir le meilleur assombrissement visuel, vous ne devez pas activer l\'option forcer l\'activation de Smart Dark dans le menu des développeurs</string>
+    <string name="prefExteriorForceDarkDescDetail">Smart Dark est une fonction permettant aux développeurs de mettre rapidement en œuvre un thème sombre. En réglant forceDarkAllowed sur true, une application obtient automatiquement un thème sombre. Le développeur modifiera en outre certaines parties de l\'interface qui ne sont pas idéales et fixera forceDarkAllowed à false sur ces parties. En activant forcer l\'activation de Smart Dark, le système ignorera la valeur de forceDarkAllowed, ce qui entraînera le dysfonctionnement d\'un thème sombre correctement implémenté.</string>
     <string name="notifyChannelGroupApp">App</string>
     <string name="notifyChannelGroupAppDesc">Notifications relatives à l\'application</string>
     <string name="fileActionsOpen">Ouvrir</string>
