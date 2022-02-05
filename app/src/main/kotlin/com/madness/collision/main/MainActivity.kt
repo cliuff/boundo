@@ -182,7 +182,7 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     private fun setupNav() {
         val graph = navController.navInflater.inflate(R.navigation.nav_main).apply {
-            startDestination = R.id.mainFragment
+            setStartDestination(R.id.mainFragment)
         }
         val startArgs = if (launchItem != null) Bundle().apply {
             putInt(UpdatesFragment.ARG_MODE, UpdatesFragment.MODE_NO_UPDATES)

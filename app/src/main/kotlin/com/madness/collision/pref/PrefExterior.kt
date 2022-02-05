@@ -69,14 +69,18 @@ internal class PrefExterior: PreferenceFragmentCompat(), NavNode {
         get() = resources.obtainTypedArray(R.array.prefExteriorDarkThemeValues)
     private val valuesApplyDark: TypedArray
         get() = resources.obtainTypedArray(R.array.prefExteriorDarkPlanValues)
-    private val pref: SharedPreferences
+    private val pref: SharedPreferences?
         get() = preferenceManager.sharedPreferences
     private var scheduleStart: String
-        get() = pref.getString(keyScheduleStart, getString(R.string.prefExteriorDefaultDarkPlanScheduleStart)) ?: ""
-        set(value) = pref.edit { putString(keyScheduleStart, value) }
+        get() = pref?.getString(keyScheduleStart, getString(R.string.prefExteriorDefaultDarkPlanScheduleStart)) ?: ""
+        set(value) {
+            pref?.edit { putString(keyScheduleStart, value) }
+        }
     private var scheduleEnd: String
-        get() = pref.getString(keyScheduleEnd, getString(R.string.prefExteriorDefaultDarkPlanScheduleEnd)) ?: ""
-        set(value) = pref.edit { putString(keyScheduleEnd, value) }
+        get() = pref?.getString(keyScheduleEnd, getString(R.string.prefExteriorDefaultDarkPlanScheduleEnd)) ?: ""
+        set(value) {
+            pref?.edit { putString(keyScheduleEnd, value) }
+        }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         preferenceManager.sharedPreferencesName = P.PREF_SETTINGS
@@ -92,12 +96,11 @@ internal class PrefExterior: PreferenceFragmentCompat(), NavNode {
         prefScheduleStart = findPref(keyScheduleStart) ?: return
         prefScheduleEnd = findPref(keyScheduleEnd) ?: return
 
-        val planValue = pref.getString(keyApplyDarkPlan, getString(R.string.prefExteriorDefaultDarkPlan)) ?: ""
+        val planValue = pref?.getString(keyApplyDarkPlan, getString(R.string.prefExteriorDefaultDarkPlan)) ?: ""
         updateScheduleEnabling(planValue)
     }
 
-    override fun onPreferenceTreeClick(preference: Preference?): Boolean {
-        if (preference == null) return super.onPreferenceTreeClick(preference)
+    override fun onPreferenceTreeClick(preference: Preference): Boolean {
         val context = context ?: return super.onPreferenceTreeClick(preference)
         return when(preference.key){
             getString(R.string.prefExteriorKeyBack) -> {
@@ -118,7 +121,7 @@ internal class PrefExterior: PreferenceFragmentCompat(), NavNode {
                 PopupUtil.selectSingle(context, R.string.prefExteriorLightTheme, entriesLightTheme, indexLightTheme) {
                     pop, _, index ->
                     pop.dismiss()
-                    preferenceManager.sharedPreferences.edit {
+                    preferenceManager.sharedPreferences?.edit {
                         putString(keyLightTheme, valuesLightTheme.use { it.getString(index) })
                     }
                     prefLightTheme.summaryProvider = summaryProvider
@@ -130,7 +133,7 @@ internal class PrefExterior: PreferenceFragmentCompat(), NavNode {
                 PopupUtil.selectSingle(context, R.string.prefExteriorDarkTheme, entriesDarkTheme, indexDarkTheme) {
                     pop, _, index ->
                     pop.dismiss()
-                    preferenceManager.sharedPreferences.edit {
+                    preferenceManager.sharedPreferences?.edit {
                         putString(keyDarkTheme, valuesDarkTheme.use { it.getString(index) })
                     }
                     prefDarkTheme.summaryProvider = summaryProvider
@@ -143,7 +146,7 @@ internal class PrefExterior: PreferenceFragmentCompat(), NavNode {
                     pop, _, index ->
                     pop.dismiss()
                     val value = valuesApplyDark.use { it.getString(index) }
-                    preferenceManager.sharedPreferences.edit {
+                    preferenceManager.sharedPreferences?.edit {
                         putString(keyApplyDarkPlan, value)
                     }
                     prefApplyDark.summaryProvider = summaryProvider
@@ -210,7 +213,7 @@ internal class PrefExterior: PreferenceFragmentCompat(), NavNode {
 
         val keyBS = getString(R.string.prefExteriorKeyDarkByBatterySaver)
         findPreference<SwitchPreference>(keyBS)?.setOnPreferenceChangeListener { _, newVal ->
-            pref.edit { putBoolean(keyBS, newVal as Boolean) }
+            pref?.edit { putBoolean(keyBS, newVal as Boolean) }
             updateTheme()
             true
         }
@@ -227,7 +230,7 @@ internal class PrefExterior: PreferenceFragmentCompat(), NavNode {
     }
 
     private val summaryProvider = Preference.SummaryProvider<Preference> { preference ->
-        val pref: SharedPreferences = preferenceManager.sharedPreferences
+        val pref: SharedPreferences = preferenceManager.sharedPreferences ?: return@SummaryProvider ""
         when(preference){
             prefLightTheme -> {
                 val lightValue = pref.getString(keyLightTheme, getString(R.string.prefExteriorDefaultLightTheme)) ?: ""

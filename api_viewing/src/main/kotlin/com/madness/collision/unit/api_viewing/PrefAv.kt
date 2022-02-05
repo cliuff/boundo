@@ -16,7 +16,6 @@
 
 package com.madness.collision.unit.api_viewing
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.core.content.edit
 import androidx.preference.Preference
@@ -75,13 +74,12 @@ internal class PrefAv: PreferenceFragmentCompat() {
         }
     }
 
-    override fun onPreferenceTreeClick(preference: Preference?): Boolean {
-        if (preference == null) return super.onPreferenceTreeClick(preference)
+    override fun onPreferenceTreeClick(preference: Preference): Boolean {
         val context = context ?: return super.onPreferenceTreeClick(preference)
         val prefKeyTags = context.getString(R.string.avTags)
         if (preference.key == prefKeyTags) {
-            val pref: SharedPreferences = preferenceManager.sharedPreferences
-            val prefValue = pref.getStringSet(prefKeyTags, null) ?: emptySet()
+            val pref = preferenceManager.sharedPreferences
+            val prefValue = pref?.getStringSet(prefKeyTags, null) ?: emptySet()
             val tags = AppTagManager.tags
             val rankedTags = tags.values.sortedBy { it.rank }
             val checkedIndexes = prefValue.mapNotNullTo(mutableSetOf()) { id ->
@@ -92,7 +90,7 @@ internal class PrefAv: PreferenceFragmentCompat() {
             PopupUtil.selectMulti(context, R.string.av_settings_tags, filterTags, tagIcons, checkedIndexes) { pop, _, indexes ->
                 pop.dismiss()
                 val resultSet = indexes.mapTo(mutableSetOf()) { rankedTags[it].id }
-                pref.edit { putStringSet(prefKeyTags, resultSet) }
+                pref?.edit { putStringSet(prefKeyTags, resultSet) }
             }.show()
             return true
         }

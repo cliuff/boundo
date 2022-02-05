@@ -154,10 +154,10 @@ android {
         resources.excludes.add("DebugProbesKt.bin")
     }
     lint {
-        isCheckReleaseBuilds = false
+        checkReleaseBuilds = false
         // Or, if you prefer, you can continue to check for errors in release builds,
         // but continue the build even when errors are found:
-        isAbortOnError = false
+        abortOnError = false
     }
     kotlinOptions.jvmTarget = JavaVersion.VERSION_11.toString()
     buildFeatures {
