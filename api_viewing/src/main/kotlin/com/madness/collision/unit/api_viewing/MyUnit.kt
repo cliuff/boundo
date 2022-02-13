@@ -304,9 +304,9 @@ class MyUnit: com.madness.collision.unit.Unit() {
         if (appFromStore != null) {
             dao.selectApp(appFromStore)?.load(context)?.let { viewModel.addApps(it) }
         } else {
-            dao.selectNameAlike(text).let {
-                viewModel.addApps(it)
-            }
+//            dao.selectNameAlike(text).let {
+//                viewModel.addApps(it)
+//            }
         }
         viewModel.sortApps(sortItem)
         refreshList()

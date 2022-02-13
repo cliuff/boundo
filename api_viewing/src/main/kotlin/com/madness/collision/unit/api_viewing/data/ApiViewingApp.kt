@@ -71,7 +71,6 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
         }
     }
 
-    var name: String = ""
     var verName = ""
     var verCode = 0L
     var targetAPI: Int = -1
@@ -85,6 +84,8 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
     @ColumnInfo(defaultValue = "-1")
     var jetpackComposed: Int = -1
 
+    @Ignore
+    var name: String = ""
     @Ignore
     var icon: Bitmap? = null
     @Ignore
@@ -143,10 +144,17 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
         }
     }
 
+    fun initIgnored(context: Context, info: ApplicationInfo? = getApplicationInfo(context)) {
+        initIgnored()
+        info ?: return
+        initExtraIgnored(context, info)
+    }
+
     /**
      * Initialize ignored properties
      */
     fun initIgnored() {
+        name = ""
         icon = null
         initApiVer()
         adaptiveIcon = false
@@ -154,6 +162,10 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
         type = TYPE_APP
         isLoadingIcon = false
         iconRetrievingDetails = null
+    }
+
+    fun initExtraIgnored(context: Context, info: ApplicationInfo) {
+        loadName(context, info)
     }
 
     fun init(context: Context, info: PackageInfo, preloadProcess: Boolean, archive: Boolean) {

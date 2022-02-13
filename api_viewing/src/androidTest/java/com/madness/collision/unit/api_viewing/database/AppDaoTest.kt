@@ -20,11 +20,8 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
-import com.google.common.truth.Truth.assertThat
-import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import org.junit.After
 import org.junit.Before
-import org.junit.Test
 import org.junit.runner.RunWith
 
 @SmallTest
@@ -45,24 +42,5 @@ class AppDaoTest {
     @After
     fun tearDown() {
         room.close()
-    }
-
-    @Test
-    fun selectNameAlike() {
-        val apps = listOf(
-                ApiViewingApp("a").apply { name = "boundo ax" },
-                ApiViewingApp("b").apply { name = "boundo cd" },
-                ApiViewingApp("c").apply { name = "boundo fr" },
-        )
-        dao.insert(apps)
-        dao.selectNameAlike("oun").let {
-            assertThat(it).containsExactly(apps)
-        }
-        dao.selectNameAlike("cd").let {
-            assertThat(it).containsExactly(apps[1])
-        }
-        dao.selectNameAlike("o1").let {
-            assertThat(it).isEmpty()
-        }
     }
 }

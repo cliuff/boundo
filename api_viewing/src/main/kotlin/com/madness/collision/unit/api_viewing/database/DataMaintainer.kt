@@ -48,7 +48,7 @@ object DataMaintainer {
         other.readParcel(parcel)
     }
 
-    private suspend fun mapToApp(list: List<*>, anApp: ApiViewingApp)
+    private suspend fun mapToApp(context: Context, list: List<*>, anApp: ApiViewingApp)
     : List<ApiViewingApp> = coroutineScope {
         val lastIndex = list.lastIndex
         list.mapIndexedNotNull { index, item ->
@@ -56,7 +56,8 @@ object DataMaintainer {
             async(Dispatchers.Default) {
                 val app = if (index == lastIndex) anApp else anApp.clone() as ApiViewingApp
                 item.copyTo(app)
-                app.initIgnored()
+                // get application info one at a time, may be optimized
+                app.initIgnored(context)
                 app
             }
         }.map { it.await() }
@@ -97,7 +98,7 @@ object DataMaintainer {
                         val dao = target.invoke() ?: return result
                         AppMaintainer.get(context, lifecycleOwner, dao).apply {
                             result.copyTo(this)
-                            initIgnored()
+                            initIgnored(context)
                         }
                     }
                     is List<*> -> {
@@ -106,7 +107,7 @@ object DataMaintainer {
                         if (result.isNotEmpty() && result[0] !is ApiViewingApp) return result
                         val dao = target.invoke() ?: return result
                         val anApp = AppMaintainer.get(context, lifecycleOwner, dao)
-                        runBlocking { mapToApp(result, anApp) }
+                        runBlocking { mapToApp(context, result, anApp) }
                     }
                     else -> result
                 }
