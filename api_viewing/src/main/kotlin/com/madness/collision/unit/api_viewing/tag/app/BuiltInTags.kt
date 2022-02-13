@@ -19,6 +19,8 @@ package com.madness.collision.unit.api_viewing.tag.app
 import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.util.Log
 import com.madness.collision.unit.api_viewing.R
 import com.madness.collision.unit.api_viewing.data.ApiUnit
@@ -319,7 +321,10 @@ private fun appIconRequisite(): AppTagInfo.Requisite = AppTagInfo.Requisite(
                 delay(400)
             }
         }
-        if (app.hasIcon.not()) app.retrieveAppIconInfo(app.getOriginalIconDrawable(context)!!.mutate())
+        if (app.hasIcon.not()) {
+            val icon = app.getOriginalIconDrawable(context)?.mutate() ?: ColorDrawable(Color.TRANSPARENT)
+            app.retrieveAppIconInfo(icon)
+        }
     }
 )
 

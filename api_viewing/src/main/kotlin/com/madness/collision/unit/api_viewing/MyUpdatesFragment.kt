@@ -25,6 +25,7 @@ import android.view.ViewGroup
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.Updatable
@@ -84,32 +85,37 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
             if (hostFragment.activity == null || hostFragment.isDetached || !hostFragment.isAdded) return false
             val mainViewModel: MainViewModel by hostFragment.activityViewModels()
             val mainTimestamp = mainViewModel.timestamp
-            val prefSettings = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
+            getChangedPackages(context, mainTimestamp, hostFragment).let {
+                previousRecords = it.first
+                changedPackages = it.second
+            }
+            return !changedPackages.isNullOrEmpty()
+        }
 
+        private fun getChangedPackages(
+            context: Context,
+            mainTimestamp: Long,
+            lifecycleOwner: LifecycleOwner,
+        ): Pair<List<ApiViewingApp>?, List<PackageInfo>> {
+            val prefSettings = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
             var lastTimestamp = prefSettings.getLong(P.PACKAGE_CHANGED_TIMESTAMP, -1)
             // app opened the first time in lifetime, keep this new-app session untouched until reopened
             if (lastTimestamp == -1L) newAppTimestamp = System.currentTimeMillis()
             // app reopened, which signals new-app session ended
             else if (mainTimestamp > newAppTimestamp) newAppTimestamp = 0L
             // display recent updates in last week if no history (by default)
-            if (isNewApp) lastTimestamp = System.currentTimeMillis() - 604800000
+            if (isNewApp) lastTimestamp = System.currentTimeMillis() - 604_800_000
             val isValidSession = lastTimestamp < mainTimestamp
             isBrandNewSession = isNewSession(mainTimestamp) && isValidSession
-            if (isBrandNewSession) {
-                Utils.getChangedPackages(context, hostFragment, lastTimestamp).let {
-                    previousRecords = it.first
-                    changedPackages = it.second
-                }
+            return if (isBrandNewSession) {
+                val result = Utils.getChangedPackages(context, lifecycleOwner, lastTimestamp)
                 prefSettings.edit { putLong(P.PACKAGE_CHANGED_TIMESTAMP, System.currentTimeMillis()) }
                 appTimestamp = lastTimestamp
                 sessionTimestamp = mainTimestamp
+                result
             } else {
-                Utils.getChangedPackages(context, hostFragment, appTimestamp).let {
-                    previousRecords = it.first
-                    changedPackages = it.second
-                }
+                Utils.getChangedPackages(context, lifecycleOwner, appTimestamp)
             }
-            return !changedPackages.isNullOrEmpty()
         }
     }
 

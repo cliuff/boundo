@@ -22,7 +22,9 @@ import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.graphics.drawable.AdaptiveIconDrawable
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Parcel
@@ -299,7 +301,7 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
             TYPE_APP -> {
                 applicationInfo ?: return this
                 load(context, {
-                    getOriginalIconDrawable(context, applicationInfo)!!.mutate()
+                    getOriginalIconDrawable(context, applicationInfo)?.mutate() ?: ColorDrawable(Color.TRANSPARENT)
                 }, { ManifestUtil.getRoundIcon(context, applicationInfo, appPackage.basePath) })
             }
             TYPE_ICON -> throw IllegalArgumentException("instance of TYPE_ICON must provide icon retrievers")

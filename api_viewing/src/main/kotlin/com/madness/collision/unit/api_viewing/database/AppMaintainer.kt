@@ -17,7 +17,9 @@
 package com.madness.collision.unit.api_viewing.database
 
 import android.content.Context
-import androidx.lifecycle.*
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -33,9 +35,8 @@ object AppMaintainer {
     fun registerCleaner(lifecycleOwner: LifecycleOwner, block: () -> Unit) {
         lifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             val lifecycle = lifecycleOwner.lifecycle
-            lifecycle.addObserver(object : LifecycleObserver {
-                @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-                fun onDestroy() {
+            lifecycle.addObserver(object : DefaultLifecycleObserver {
+                override fun onDestroy(owner: LifecycleOwner) {
                     lifecycle.removeObserver(this)
                     block.invoke()
                 }

@@ -33,7 +33,7 @@ import java.util.stream.Collectors
 /**
  * Api Viewing View Model
  */
-internal class ApiViewingViewModel(application: Application): AndroidViewModel(application), LifecycleOwner {
+internal class ApiViewingViewModel(application: Application): AndroidViewModel(application) {
 
     private val repository: AppRepository
 //    var scrollPosition: Int = 0
@@ -78,22 +78,24 @@ internal class ApiViewingViewModel(application: Application): AndroidViewModel(a
             return countUser to countSys
         }
 
-    private val lifecycleRegistry = LifecycleRegistry(this)
+    private val lifecycleOwner: LifecycleOwner
 
     init {
+        val lifecycleRegistry: LifecycleRegistry
+        lifecycleOwner = object : LifecycleOwner {
+            init { lifecycleRegistry = LifecycleRegistry(this) }
+            override fun getLifecycle(): Lifecycle = lifecycleRegistry
+        }
         viewModelScope.launch(Dispatchers.Main) {
             lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
         }
-        val dao = DataMaintainer.get(application, this)
-        repository = AppRepository(this, dao)
-    }
-
-    override fun getLifecycle(): Lifecycle {
-        return lifecycleRegistry
+        val dao = DataMaintainer.get(application, lifecycleOwner)
+        repository = AppRepository(lifecycleOwner, dao)
     }
 
     override fun onCleared() {
         viewModelScope.launch(Dispatchers.Main) {
+            val lifecycleRegistry = lifecycleOwner.lifecycle as LifecycleRegistry
             lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
         }
         val appCache = apps4Cache
