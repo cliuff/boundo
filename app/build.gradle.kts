@@ -232,7 +232,8 @@ dependencies {
             rxJava,
             jbAnnotations,
             coil,
-            androidDeviceNames
+            androidDeviceNames,
+            appIconLoader,
         ).forEach { implementation(it) }
 
         kapt(gglHiltCompiler)

@@ -84,6 +84,7 @@ object Versions {
     const val mockito = "4.1.0"
     // for checking apk dex, archived since 2019.11
     const val apkParser = "2.6.10"
+    const val appIconLoader = "1.3.1"
 }
 
 class Dependencies : Plugin<Project> {
@@ -164,6 +165,7 @@ class Dependencies : Plugin<Project> {
         const val gglHiltCompiler = "com.google.dagger:hilt-compiler:${Versions.gglHilt}"
         const val mockito = "org.mockito:mockito-android:${Versions.mockito}"
         const val apkParser = "net.dongliu:apk-parser:${Versions.apkParser}"
+        const val appIconLoader = "me.zhanghai.android.appiconloader:appiconloader-iconloaderlib:${Versions.appIconLoader}"
 
         // wear
         const val androidxPercentLayout = "androidx.percentlayout:percentlayout:${Versions.androidxPercentLayout}"

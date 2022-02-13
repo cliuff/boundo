@@ -25,6 +25,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
+import coil.loadAny
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.ChipGroup
 import com.madness.collision.R
@@ -33,6 +34,7 @@ import com.madness.collision.unit.api_viewing.ApiTaskManager
 import com.madness.collision.unit.api_viewing.AppTag
 import com.madness.collision.unit.api_viewing.MyUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
+import com.madness.collision.unit.api_viewing.data.AppPackageInfo
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.databinding.AdapterAvBinding
@@ -177,13 +179,16 @@ internal open class APIAdapter(context: Context, private val listener: Listener,
         holder.name.dartFuture(appInfo.name)
         holder.logo.setTag(R.bool.tagKeyAvAdapterItemId, appInfo)
 
-        if (!appInfo.hasIcon) {
-            scope.launch(Dispatchers.Default) {
-                ensureAppIcon(index, holder.logo)
-            }
-        } else {
-            holder.logo.setTag(R.bool.tagKeyAvAdapterItemIconId, appInfo)
-            holder.logo.setImageBitmap(appInfo.icon)
+//        if (!appInfo.hasIcon) {
+//            scope.launch(Dispatchers.Default) {
+//                ensureAppIcon(index, holder.logo)
+//            }
+//        } else {
+//            holder.logo.setTag(R.bool.tagKeyAvAdapterItemIconId, appInfo)
+//            holder.logo.setImageBitmap(appInfo.icon)
+//        }
+        scope.launch(Dispatchers.IO) {
+            holder.logo.loadAny(AppPackageInfo(context, appInfo))
         }
 
         val loadLimitHalf = loadPref.loadLimitHalf

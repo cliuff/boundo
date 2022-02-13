@@ -40,6 +40,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
+import coil.loadAny
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.card.MaterialCardView
@@ -51,6 +52,7 @@ import com.madness.collision.unit.api_viewing.ApiViewingViewModel
 import com.madness.collision.unit.api_viewing.AppTag
 import com.madness.collision.unit.api_viewing.Utils
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
+import com.madness.collision.unit.api_viewing.data.AppPackageInfo
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.databinding.AvShareBinding
@@ -253,13 +255,10 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
 //                applicationInfo = context.packageManager.getApplicationInfo(packageName, PackageManager.PERMISSION_GRANTED) // todo archive case
                 mViews.ver.text = verName
                 mvApp.name.text = name
-                mvApp.icon.setImageBitmap(icon)
+                mvApp.icon.loadAny(AppPackageInfo(context, this))
                 if (isAiAvailable) {
-                    if (adaptiveIcon) {
-                        mViews.app.badge.drawable.setTint(X.getColor(context, R.color.androidRobotGreen))
-                    } else {
-                        mViews.app.badge.drawable.setTint(Color.LTGRAY)
-                    }
+                    val tint = if (adaptiveIcon) X.getColor(context, R.color.androidRobotGreen) else Color.LTGRAY
+                    mViews.app.badge.drawable.setTint(tint)
                 }
                 lifecycleScope.launch(Dispatchers.Default) {
                     AppTag.inflateAllTagsAsync(context, mvApp.tags, it)

@@ -18,13 +18,18 @@ package com.madness.collision.main
 
 import android.content.Intent
 import android.graphics.drawable.Drawable
+import coil.ImageLoader
+import coil.ImageLoaderFactory
 import com.google.android.play.core.splitcompat.SplitCompatApplication
 import com.madness.collision.BuildConfig
+import com.madness.collision.util.X
+import com.madness.collision.util.ui.AppIconFetcher
 import dagger.hilt.android.HiltAndroidApp
+import kotlin.math.roundToInt
 import kotlin.system.exitProcess
 
 @HiltAndroidApp
-class MainApplication : SplitCompatApplication(), Thread.UncaughtExceptionHandler {
+class MainApplication : SplitCompatApplication(), Thread.UncaughtExceptionHandler, ImageLoaderFactory {
     companion object {
         lateinit var INSTANCE: MainApplication
     }
@@ -66,6 +71,18 @@ class MainApplication : SplitCompatApplication(), Thread.UncaughtExceptionHandle
         super.onCreate()
         // Setup handler for uncaught exceptions
         Thread.setDefaultUncaughtExceptionHandler (this)
+    }
+
+    // Configure Coil
+    override fun newImageLoader(): ImageLoader {
+        val context = applicationContext
+        val iconSIze = X.size(context, 48f, X.DP).roundToInt()
+        return ImageLoader.Builder(context)
+            .crossfade(true)
+            .componentRegistry {
+                add(AppIconFetcher(iconSIze, false, context))
+            }
+            .build()
     }
 
     override fun uncaughtException(t: Thread?, e: Throwable?) {

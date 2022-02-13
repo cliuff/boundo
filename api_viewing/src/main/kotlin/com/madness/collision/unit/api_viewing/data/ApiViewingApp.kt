@@ -85,6 +85,8 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
     var jetpackComposed: Int = -1
 
     @Ignore
+    var uid: Int = -1
+    @Ignore
     var name: String = ""
     @Ignore
     var icon: Bitmap? = null
@@ -154,6 +156,7 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
      * Initialize ignored properties
      */
     fun initIgnored() {
+        uid = -1
         name = ""
         icon = null
         initApiVer()
@@ -165,6 +168,7 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
     }
 
     fun initExtraIgnored(context: Context, info: ApplicationInfo) {
+        uid = info.uid
         loadName(context, info)
     }
 
@@ -176,6 +180,7 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
             verCode = PackageInfoCompat.getLongVersionCode(info)
             updateTime = info.lastUpdateTime
             preload = true
+            uid = info.applicationInfo.uid
             if (archive) {
                 apiUnit = ApiUnit.APK
                 name = packageName
