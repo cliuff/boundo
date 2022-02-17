@@ -21,12 +21,12 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
-import android.view.*
+import android.view.KeyEvent
+import android.view.View
+import android.view.Window
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
-import androidx.appcompat.widget.Toolbar
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.lifecycleScope
@@ -44,11 +44,14 @@ import com.madness.collision.unit.api_viewing.AccessAV
 import com.madness.collision.util.*
 import com.madness.collision.util.controller.systemUi
 import com.madness.collision.util.notice.ToastUtils
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.lang.ref.WeakReference
 import kotlin.random.Random
 
-class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
+class MainActivity : BaseActivity() {
     companion object {
         /**
          * the activity to launch
@@ -87,7 +90,6 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     // ui appearance data
     private var primaryStatusBarConfig: SystemBarConfig? = null
     private var primaryNavBarConfig: SystemBarConfig? = null
-    private var colorIcon = 0
     // views
     private lateinit var navHostFragment: NavHostFragment
     private lateinit var viewBinding: ActivityMainBinding
@@ -193,11 +195,12 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     private fun setupViewModel(context: Context, prefSettings: SharedPreferences) {
         viewModel.democratic.observe(this) {
             clearDemocratic()
-            viewBinding.mainTB.tag = viewBinding.mainToolbarDivider
-            it.createOptions(context, viewBinding.mainTB, colorIcon)
         }
         viewModel.unit.observe(this) {
             it ?: return@observe
+            showPage(it.first)
+        }
+        val legacy: (Pair<Fragment, BooleanArray>) -> kotlin.Unit = observe@{
             val (unitFragment, flags) = it
             // use the third flag to indicate false trigger
             if (flags.size >= 3 && flags[2]) return@observe
@@ -245,11 +248,7 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
             viewModel.action.value = "" to null
         }
         viewModel.insetTop.observe(this) {
-            viewBinding.mainTB.apply {
-                alterPadding(top = it)
-                measure()
-                viewModel.contentWidthTop.value = measuredHeight
-            }
+            viewModel.contentWidthTop.value = it
         }
         viewModel.insetBottom.observe(this) {
             viewModel.contentWidthBottom.value = it
@@ -260,14 +259,10 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     }
 
     private fun setupUi(context: Context) {
-        colorIcon = ThemeUtil.getColor(context, R.attr.colorIcon)
-
         navController.addOnDestinationChangedListener { _, _, _ ->
             viewModel.removeCurrentUnit()
             clearBackPressedCallback()
         }
-
-        viewBinding.mainTB.setOnMenuItemClickListener(this)
 
         checkTargetItem()
 
@@ -463,15 +458,6 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     private fun clearDemocratic() {
         // Low profile mode is used in ApiDecentFragment. Deprecated since Android 11.
         if (X.belowOff(X.R)) disableLowProfileModeLegacy(window)
-        viewBinding.mainTB.run {
-            isVisible = true
-            menu.clear()
-            navigationIcon = null
-            title = null
-            setNavigationOnClickListener(null)
-            setOnClickListener(null)
-        }
-        viewBinding.mainToolbarDivider.isVisible = true
         primaryStatusBarConfig?.let {
             SystemUtil.applyStatusBarConfig(mContext, mWindow, it)
         }
@@ -491,17 +477,6 @@ class MainActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
                 R.animator.nav_default_enter_anim, R.animator.nav_default_exit_anim,
                 R.animator.nav_default_pop_enter_anim, R.animator.nav_default_pop_exit_anim
         )
-
-    override fun onMenuItemClick(item: MenuItem?): Boolean {
-        item ?: return false
-        return try {
-            viewModel.democratic.value?.selectOption(item) ?: false
-        } catch (e: Exception) {
-            e.printStackTrace()
-            notifyBriefly(R.string.text_error)
-            false
-        }
-    }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
         if (SystemUtil.isSystemTvUi(this).not()) return super.onKeyUp(keyCode, event)

@@ -204,6 +204,10 @@
                 <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".main.MainPageActivity"
+            android:exported="false"
+            android:enabled="true" />
         <!-- Tile Services -->
         <provider
             android:name="androidx.core.content.FileProvider"
