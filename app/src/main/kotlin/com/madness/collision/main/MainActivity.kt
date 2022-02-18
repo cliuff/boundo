@@ -24,15 +24,9 @@ import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
 import android.view.Window
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.core.app.NotificationManagerCompat
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
-import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.base.BaseActivity
 import com.madness.collision.databinding.ActivityMainBinding
@@ -48,7 +42,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.lang.ref.WeakReference
 import kotlin.random.Random
 
 class MainActivity : BaseActivity() {
@@ -70,8 +63,6 @@ class MainActivity : BaseActivity() {
         const val ACTION_EXTERIOR = "mainExterior"
         const val ACTION_EXTERIOR_THEME = "mainExteriorTheme"
 
-        private const val STATE_KEY_BACK = "Back"
-
         // ui appearance data
         private var themeId = P.SETTINGS_THEME_NONE
 
@@ -85,22 +76,17 @@ class MainActivity : BaseActivity() {
 
     // session data
     private var launchItem: String? = null
-    private var mBackStack: ArrayDeque<BackwardOperation> = ArrayDeque()
     private val viewModel: MainViewModel by viewModels()
     // ui appearance data
     private var primaryStatusBarConfig: SystemBarConfig? = null
     private var primaryNavBarConfig: SystemBarConfig? = null
     // views
-    private lateinit var navHostFragment: NavHostFragment
     private lateinit var viewBinding: ActivityMainBinding
-    private var lastBackFragment: WeakReference<Fragment> = WeakReference(null)
     // android
     private lateinit var mContext: Context
     private lateinit var mWindow: Window
 
     private val background: View get() = viewBinding.mainContainer
-    private val navController: NavController
-        get() = navHostFragment.navController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -166,8 +152,6 @@ class MainActivity : BaseActivity() {
 
         viewBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
-
-        navHostFragment = supportFragmentManager.findFragmentById(R.id.mainNavHost) as NavHostFragment
     }
 
     private fun setupLayout(context: Context, prefSettings: SharedPreferences) {
@@ -183,13 +167,11 @@ class MainActivity : BaseActivity() {
     }
 
     private fun setupNav() {
-        val graph = navController.navInflater.inflate(R.navigation.nav_main).apply {
-            setStartDestination(R.id.mainFragment)
-        }
         val startArgs = if (launchItem != null) Bundle().apply {
             putInt(UpdatesFragment.ARG_MODE, UpdatesFragment.MODE_NO_UPDATES)
         } else null
-        navController.setGraph(graph, startArgs)
+        val fragment = MainFragment().apply { startArgs?.let { arguments = it } }
+        supportFragmentManager.beginTransaction().add(viewBinding.mainFragmentWrapper.id, fragment).commit()
     }
 
     private fun setupViewModel(context: Context, prefSettings: SharedPreferences) {
@@ -199,38 +181,6 @@ class MainActivity : BaseActivity() {
         viewModel.unit.observe(this) {
             it ?: return@observe
             showPage(it.first)
-        }
-        val legacy: (Pair<Fragment, BooleanArray>) -> kotlin.Unit = observe@{
-            val (unitFragment, flags) = it
-            // use the third flag to indicate false trigger
-            if (flags.size >= 3 && flags[2]) return@observe
-            val opFlags = if (flags.size >= 3) flags.dropLast(1).toBooleanArray() else flags
-            val navFm = navHostFragment.childFragmentManager
-            navFm.fragments.find { f -> f.isVisible }?.also { topFragment ->
-                if (topFragment === unitFragment) return@also
-                if (topFragment !is TaggedFragment) return@also
-                if (unitFragment !is TaggedFragment) return@also
-                if (topFragment.uid == unitFragment.uid) return@also
-                val operation = BackwardOperation(unitFragment, topFragment, opFlags)
-                mBackStack.addLast(operation)
-                onBackPressedDispatcher.addCallback(operation.makeCallback())
-                navFm.beginTransaction().animNew.run {
-                    hide(topFragment)
-                    if (unitFragment.isAdded) {
-                        show(unitFragment)
-                    } else {
-                        add(navHostFragment.view?.id ?: 0, unitFragment, unitFragment.uid)
-                    }
-                    commit()
-                }
-            }
-        }
-        viewModel.popUpBackStackFun = { isFromNav, _ ->
-            when {
-                onBackPressedDispatcher.hasEnabledCallbacks() -> onBackPressedDispatcher.onBackPressed()
-                isFromNav -> navController.popBackStack()
-                else -> supportFragmentManager.popBackStack()
-            }
         }
         viewModel.action.observe(this) {
             when (it.first) {
@@ -247,23 +197,12 @@ class MainActivity : BaseActivity() {
             }
             viewModel.action.value = "" to null
         }
-        viewModel.insetTop.observe(this) {
-            viewModel.contentWidthTop.value = it
-        }
-        viewModel.insetBottom.observe(this) {
-            viewModel.contentWidthBottom.value = it
-        }
         viewModel.background.observe(this) {
             applyExterior()
         }
     }
 
     private fun setupUi(context: Context) {
-        navController.addOnDestinationChangedListener { _, _, _ ->
-            viewModel.removeCurrentUnit()
-            clearBackPressedCallback()
-        }
-
         checkTargetItem()
 
         background.setOnApplyWindowInsetsListener { v, insets ->
@@ -332,127 +271,13 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        mBackStack.toTypedArray().let {
-            outState.putParcelableArray(STATE_KEY_BACK, it)
-        }
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        val callbacks = savedInstanceState.getParcelableArray(STATE_KEY_BACK) ?: return
-        callbacks.mapNotNull {
-            if (it is BackwardOperation) it else null
-        }.let { mBackStack = ArrayDeque(it) }
-        lifecycleScope.launch(Dispatchers.Default) {
-            // wait until fragments are in place
-            delay(500)
-            setupOnBackPressedDispatcher()
-        }
-    }
-
     override fun onDestroy() {
         val context = mContext
-        mBackStack.forEach {
-            it.cachedCallback?.remove()
-            it.cachedCallback = null
-        }
         AccessAV.clearContext()
         AccessAV.clearTags()
         AccessAV.clearSeals()
         MiscMain.clearCache(context)
         super.onDestroy()
-    }
-
-    private fun setupOnBackPressedDispatcher() {
-        if (mBackStack.isEmpty()) return
-        val last = mBackStack.last()
-        mBackStack.forEach {
-            val callback = it.makeCallback(it === last)
-            onBackPressedDispatcher.addCallback(callback)
-        }
-    }
-
-    private fun BackwardOperation.makeCallback(isForwardTheTop: Boolean = false): OnBackPressedCallback {
-        val shouldExitAppAfterBack = operationFlags[1]
-        val navFm = navHostFragment.childFragmentManager
-        tryToEnsure(navFm)
-        val forwardFragment = when {
-            isForwardTheTop -> navFm.fragments.find { f -> f.isVisible }
-            forwardPage.hasRef -> forwardPage.fragment
-            else -> null
-        }
-        val backwardFragment = backwardPage.fragment
-        cachedCallback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                minusBackPressedCallback(this)
-                if (shouldExitAppAfterBack) {
-                    finish()
-                    return
-                }
-                navFm.beginTransaction().navigateBack(forwardFragment, backwardFragment)
-                if (backwardFragment is Democratic) {
-                    backwardFragment.democratize(viewModel)
-                }
-                // make unit value matches reality
-                val isMoreUnit = !mBackStack.isEmpty()
-                if (backwardFragment != null) {
-                    viewModel.unit.value = if (isMoreUnit) backwardFragment to booleanArrayOf(false, false, true) else null
-                }
-                // fix extra fragment
-                if (!isMoreUnit) {
-                    navFm.fragments.find {
-                        it.isAdded && it !== backwardFragment
-                    }?.let {
-                        lastBackFragment = WeakReference(backwardFragment)
-                    }
-                }
-            }
-        }
-        return cachedCallback!!
-    }
-
-    private fun FragmentTransaction.navigateBack(forwardFragment: Fragment?, backwardFragment: TaggedFragment?) {
-        setCustomAnimations(
-            R.animator.nav_default_pop_enter_anim, R.animator.nav_default_pop_exit_anim,
-            R.animator.nav_default_pop_enter_anim, R.animator.nav_default_pop_exit_anim
-        )
-        if (forwardFragment != null) {
-            remove(forwardFragment)
-        }
-        if (backwardFragment != null) {
-            if (backwardFragment.isAdded) {
-                show(backwardFragment)
-            } else {
-                val containerId = navHostFragment.view?.id ?: 0
-                add(containerId, backwardFragment, backwardFragment.uid)
-            }
-        }
-        commitNow()
-    }
-
-    private fun minusBackPressedCallback(callback: OnBackPressedCallback) {
-        if (mBackStack.isEmpty()) return
-        if (mBackStack.last().cachedCallback === callback) {
-            mBackStack.removeLast().cachedCallback?.remove()
-        }
-    }
-
-    private fun clearBackPressedCallback() {
-        // fix the last fragment not hidden by nav controller
-        lastBackFragment.get()?.let {
-            lastBackFragment = WeakReference(null)
-            if (it.isAdded && it.isVisible) {
-                val navFm = navHostFragment.childFragmentManager
-                navFm.beginTransaction().hide(it).commitNowAllowingStateLoss()
-            }
-        }
-        if (mBackStack.isEmpty()) return
-        mBackStack.forEach {
-            it.cachedCallback?.remove()
-        }
-        mBackStack.clear()
     }
 
     private fun clearDemocratic() {
@@ -471,12 +296,6 @@ class MainActivity : BaseActivity() {
         val decorView = window.decorView
         decorView.systemUiVisibility = decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_LOW_PROFILE.inv()
     }
-
-    private val FragmentTransaction.animNew: FragmentTransaction
-        get() = disallowAddToBackStack().setCustomAnimations(
-                R.animator.nav_default_enter_anim, R.animator.nav_default_exit_anim,
-                R.animator.nav_default_pop_enter_anim, R.animator.nav_default_pop_exit_anim
-        )
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
         if (SystemUtil.isSystemTvUi(this).not()) return super.onKeyUp(keyCode, event)

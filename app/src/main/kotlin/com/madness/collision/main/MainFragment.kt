@@ -46,10 +46,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlin.math.roundToInt
 
-class MainFragment : TaggedFragment(), Democratic, NavNode {
+class MainFragment : TaggedFragment(), Democratic {
     override val category: String = "Main"
     override val id: String = "Main"
-    override val nodeDestinationId: Int = R.id.mainFragment
 
     companion object {
         private const val STATE_KEY_NAV_UP = "NavUp"
@@ -90,7 +89,7 @@ class MainFragment : TaggedFragment(), Democratic, NavNode {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        viewBinding = FragmentMainBinding.inflate(layoutInflater)
+        viewBinding = FragmentMainBinding.inflate(inflater)
         return viewBinding.root
     }
 
@@ -111,7 +110,11 @@ class MainFragment : TaggedFragment(), Democratic, NavNode {
     private fun setupViewModel(context: Context) {
         democratize(mainViewModel)
         mainViewModel.insetTop.observe(viewLifecycleOwner) {
-            viewBinding.mainTB.updatePaddingRelative(top = it)
+            viewBinding.mainTB.run {
+                updatePaddingRelative(top = it)
+                measure()
+                mainViewModel.contentWidthTop.value = measuredHeight
+            }
             // override navigation rail's automatic insets handling, todo remove after material 1.5
             lifecycleScope.launch(Dispatchers.Default) {
                 delay(50)

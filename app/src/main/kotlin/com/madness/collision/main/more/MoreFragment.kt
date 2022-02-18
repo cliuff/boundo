@@ -32,8 +32,11 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
 import com.madness.collision.R
+import com.madness.collision.instant.InstantFragment
 import com.madness.collision.main.*
 import com.madness.collision.main.ImmortalActivity
+import com.madness.collision.settings.SettingsFragment
+import com.madness.collision.unit.UnitsManagerFragment
 import com.madness.collision.unit.api_viewing.AccessAV
 import com.madness.collision.util.*
 import com.madness.collision.util.AppUtils.asBottomMargin
@@ -209,13 +212,9 @@ class MoreFragment : TaggedFragment(), View.OnClickListener {
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.moreInstant -> MainFragmentDirections.actionMoreFragmentToInstantFragment()
-            R.id.moreUnitsManager -> MainFragmentDirections.actionMoreFragmentToUnitsManagerFragment()
-            R.id.moreSettings -> MainFragmentDirections.actionMoreFragmentToSettingsFragment()
-            else -> null
-        }?.let {
-            val parent = parentFragment
-            if (parent is NavNode) parent.navigateFrom(parent, it)
+            R.id.moreInstant -> context?.showPage<InstantFragment>()
+            R.id.moreUnitsManager -> context?.showPage<UnitsManagerFragment>()
+            R.id.moreSettings -> context?.showPage<SettingsFragment>()
         }
     }
 }

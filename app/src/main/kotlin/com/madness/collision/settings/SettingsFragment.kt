@@ -34,13 +34,14 @@ import com.madness.collision.databinding.FragmentSettingsBinding
 import com.madness.collision.databinding.SettingsUnitItemBinding
 import com.madness.collision.main.MainActivity
 import com.madness.collision.main.MainViewModel
+import com.madness.collision.main.showPage
 import com.madness.collision.pref.PrefExterior
 import com.madness.collision.unit.DescRetriever
 import com.madness.collision.unit.Unit
 import com.madness.collision.util.*
 import com.madness.collision.util.AppUtils.asBottomMargin
 
-internal class SettingsFragment : TaggedFragment(), Democratic, NavNode {
+internal class SettingsFragment : TaggedFragment(), Democratic {
 
     override val category: String = "Settings"
     override val id: String = "Settings"
@@ -49,7 +50,6 @@ internal class SettingsFragment : TaggedFragment(), Democratic, NavNode {
         private const val TAG = "Settings"
     }
 
-    override val nodeDestinationId: Int = R.id.settingsFragment
     private val mainViewModel: MainViewModel by activityViewModels()
     private var _viewBinding: FragmentSettingsBinding? = null
     private val viewBinding: FragmentSettingsBinding
@@ -81,14 +81,14 @@ internal class SettingsFragment : TaggedFragment(), Democratic, NavNode {
         }
 
         viewBinding.settingsItemStyle.setOnClickListener {
-//            navigate(SettingsFragmentDirections.actionSettingsFragmentToUtilPage(TypedNavArg<PrefExterior>(), R.string.settings_exterior))
-            navigate(SettingsFragmentDirections.actionSettingsFragmentToUtilPage(TypedNavArg<PrefExterior>()).apply {
-                titleId = R.string.settings_exterior
-            })
+            context.showPage<Page> {
+                putString("fragmentClass", PrefExterior::class.qualifiedName)
+                putInt("titleId", R.string.settings_exterior)
+            }
         }
 
         viewBinding.settingsItemAbout.setOnClickListener {
-            navigate(SettingsFragmentDirections.actionSettingsFragmentToAdviceFragment())
+            context.showPage<AdviceFragment>()
         }
 
         val installedUnits = DescRetriever(context).retrieveInstalled()

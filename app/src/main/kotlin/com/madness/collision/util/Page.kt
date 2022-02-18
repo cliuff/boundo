@@ -18,8 +18,6 @@ package com.madness.collision.util
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Parcel
-import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -34,7 +32,6 @@ import com.madness.collision.main.MainViewModel
 import com.madness.collision.util.AppUtils.asBottomMargin
 import com.madness.collision.util.controller.getSavedFragment
 import com.madness.collision.util.controller.saveFragment
-import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
 
 @Suppress("FunctionName")
@@ -46,43 +43,6 @@ inline fun <reified T: Fragment> Page(titleId: Int = 0, democratic: Democratic? 
         null
     }
     return Page(f, titleId, democratic)
-}
-
-@Suppress("FunctionName")
-inline fun <reified T: Fragment> TypedNavArg(): TypedNavArg {
-    return TypedNavArg().apply {
-        clazz = T::class
-    }
-}
-
-class TypedNavArg() : Parcelable {
-
-    private var _clazz: Class<out Fragment>? = null
-    var clazz: KClass<out Fragment>? = null
-        get() = field ?: _clazz?.kotlin
-
-    @Suppress("UNCHECKED_CAST")
-    constructor(parcel: Parcel) : this() {
-        _clazz = parcel.readSerializable() as Class<Fragment>?
-    }
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeSerializable(_clazz)
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    companion object CREATOR : Parcelable.Creator<TypedNavArg> {
-        override fun createFromParcel(parcel: Parcel): TypedNavArg {
-            return TypedNavArg(parcel)
-        }
-
-        override fun newArray(size: Int): Array<TypedNavArg?> {
-            return arrayOfNulls(size)
-        }
-    }
 }
 
 /**
@@ -127,10 +87,9 @@ class Page(fragment: Fragment? = null, private var titleId: Int = 0, private val
         val args = arguments ?: return
         mFragment = childFragmentManager.getSavedFragment(savedInstanceState, STATE_KEY_FRA)
         if (mFragment == null) {
-            val fragmentClass = args.getParcelable<TypedNavArg>("fragmentClass")
-            if (fragmentClass != null) {
+            args.getString("fragmentClass")?.let {
                 mFragment = try {
-                    fragmentClass.clazz?.createInstance()
+                    Class.forName(it).declaredConstructors[0].newInstance() as Fragment
                 } catch (e: Throwable) {
                     e.printStackTrace()
                     null

@@ -31,12 +31,13 @@ import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.edit
 import androidx.fragment.app.activityViewModels
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.util.*
 
-internal class AdviceFragment : TaggedFragment(), Democratic, View.OnClickListener, NavNode {
+internal class AdviceFragment : TaggedFragment(), Democratic, View.OnClickListener {
 
     override val category: String = "Advice"
     override val id: String = "Advice"
@@ -44,7 +45,6 @@ internal class AdviceFragment : TaggedFragment(), Democratic, View.OnClickListen
     private lateinit var background: View
     private var count4DebugMode = 0
     private val mainViewModel: MainViewModel by activityViewModels()
-    override val nodeDestinationId: Int = R.id.adviceFragment
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
         mainViewModel.configNavigation(toolbar, iconColor)
@@ -90,7 +90,7 @@ internal class AdviceFragment : TaggedFragment(), Democratic, View.OnClickListen
                 notifyBriefly(R.string.text_done)
             }
             R.id.adviceLicense -> {
-                navigate(AdviceFragmentDirections.actionAdviceFragmentToOssActivity())
+                startActivity(Intent(context, OssLicensesMenuActivity::class.java))
             }
             R.id.adviceSourceCode -> {
                 val intent = Intent().apply {

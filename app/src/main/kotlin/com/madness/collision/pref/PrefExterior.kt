@@ -29,10 +29,11 @@ import androidx.preference.SwitchPreference
 import com.madness.collision.R
 import com.madness.collision.main.MainActivity
 import com.madness.collision.main.MainViewModel
+import com.madness.collision.main.showPage
 import com.madness.collision.settings.ExteriorFragment
 import com.madness.collision.util.*
 
-internal class PrefExterior: PreferenceFragmentCompat(), NavNode {
+internal class PrefExterior: PreferenceFragmentCompat() {
     companion object {
         const val TAG = "PrefExterior"
         private const val TIME_SCHEDULE_START = 0
@@ -42,7 +43,6 @@ internal class PrefExterior: PreferenceFragmentCompat(), NavNode {
         fun newInstance() = PrefExterior()
     }
 
-    override val nodeDestinationId: Int = R.id.utilPage
     private val mainViewModel: MainViewModel by activityViewModels()
     private lateinit var prefLightTheme: Preference
     private lateinit var prefDarkTheme: Preference
@@ -104,17 +104,15 @@ internal class PrefExterior: PreferenceFragmentCompat(), NavNode {
         val context = context ?: return super.onPreferenceTreeClick(preference)
         return when(preference.key){
             getString(R.string.prefExteriorKeyBack) -> {
-//                navigate(PageDirections.actionUtilPageToExteriorFragment(ExteriorFragment.MODE_LIGHT))
-                navigate(PageDirections.actionUtilPageToExteriorFragment().apply {
-                    mode = ExteriorFragment.MODE_LIGHT
-                })
+                context.showPage<ExteriorFragment> {
+                    putInt(ExteriorFragment.ARG_MODE, ExteriorFragment.MODE_LIGHT)
+                }
                 true
             }
             getString(R.string.prefExteriorKeyBackDark) -> {
-//                navigate(PageDirections.actionUtilPageToExteriorFragment(ExteriorFragment.MODE_DARK))
-                navigate(PageDirections.actionUtilPageToExteriorFragment().apply {
-                    mode = ExteriorFragment.MODE_DARK
-                })
+                context.showPage<ExteriorFragment> {
+                    putInt(ExteriorFragment.ARG_MODE, ExteriorFragment.MODE_DARK)
+                }
                 true
             }
             keyLightTheme -> {

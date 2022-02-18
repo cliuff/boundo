@@ -35,7 +35,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.navArgs
 import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.databinding.ActivityExteriorBinding
@@ -48,7 +47,9 @@ import com.madness.collision.util.os.OsUtils
 import com.madness.collision.util.ui.appLocale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.io.*
+import java.io.File
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
 import kotlin.math.min
 import kotlin.math.roundToInt
 
@@ -58,8 +59,7 @@ class ExteriorFragment: TaggedFragment(), Democratic {
     override val id: String = "Exterior"
 
     companion object {
-        private const val ARG_MODE = "exteriorMode"
-        private const val ARG_LAUNCH_MODE = "exteriorLaunchMode"
+        const val ARG_MODE = "exteriorMode"
         /**
          * App light background selecting
          */
@@ -76,14 +76,10 @@ class ExteriorFragment: TaggedFragment(), Democratic {
          * Themed Wallpaper dark wallpaper selecting
          */
         const val MODE_TW_DARK = 3
-        const val LAUNCH_MODE_NON_NAV = "nonNav"
 
         @JvmStatic
         fun newInstance(mode: Int) : ExteriorFragment{
-            val b = Bundle().apply {
-                putInt(ARG_MODE, mode)
-                putString(ARG_LAUNCH_MODE, LAUNCH_MODE_NON_NAV)
-            }
+            val b = Bundle().apply { putInt(ARG_MODE, mode) }
             return ExteriorFragment().apply { arguments = b }
         }
     }
@@ -167,9 +163,7 @@ class ExteriorFragment: TaggedFragment(), Democratic {
 
         lifecycleScope.launch(Dispatchers.Default) {
             val args = arguments
-            val isByNav = args?.getString(ARG_LAUNCH_MODE) != LAUNCH_MODE_NON_NAV
-            val navArgs: ExteriorFragmentArgs by navArgs()
-            mode = if (isByNav) navArgs.mode else (args?.getInt(ARG_MODE) ?: MODE_LIGHT)
+            mode = args?.getInt(ARG_MODE) ?: MODE_LIGHT
             isTW = (mode == MODE_TW_LIGHT || mode == MODE_TW_DARK)
             isDarkMode = (mode == if (isTW) MODE_TW_DARK else MODE_DARK)
             backPath = when (mode) {

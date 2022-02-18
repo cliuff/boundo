@@ -38,7 +38,6 @@ class MainViewModel: ViewModel(){
     val contentWidthBottom: MutableLiveData<Int> = MutableLiveData(insetBottom.value ?: 0)
     val background: MutableLiveData<Drawable?> = MutableLiveData(null)
     val unit: MutableLiveData<Pair<Fragment, BooleanArray>> = MutableLiveData()
-    var popUpBackStackFun: ((isFromNav: Boolean, shouldShowNavAfterBack: Boolean) -> kotlin.Unit)? = null
     private var _timestamp = 0L
     val timestamp: Long
         get() = _timestamp
@@ -62,16 +61,7 @@ class MainViewModel: ViewModel(){
         unit.value = fragment to booleanArrayOf(shouldShowNavAfterBack, shouldExitAppAfterBack)
     }
 
-    fun removeCurrentUnit() {
-        unit.value?.first?.let {
-            if (!it.isAdded) return@let
-            it.parentFragmentManager.beginTransaction().remove(it).commitNow()
-        }
-        unit.value = null
-    }
-
     fun popUpBackStack(isFromNav: Boolean = false, shouldShowNavAfterBack: Boolean = false) {
-        popUpBackStackFun?.invoke(isFromNav, shouldShowNavAfterBack)
     }
 
 }
