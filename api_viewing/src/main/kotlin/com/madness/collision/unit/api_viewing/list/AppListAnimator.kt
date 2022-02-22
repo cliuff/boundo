@@ -32,7 +32,7 @@ internal class AppListAnimator {
             duration = 100
             doOnEnd {
                 val app = logoView.getTag(R.bool.tagKeyAvAdapterItemId) as ApiViewingApp
-                logoView.setImageBitmap(app.icon)
+//                logoView.setImageBitmap(app.icon)
             }
         }
         val animShow = ObjectAnimator.ofFloat(logoView, "alpha",0.1f, 1f).apply {

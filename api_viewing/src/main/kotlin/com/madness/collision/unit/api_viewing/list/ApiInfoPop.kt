@@ -33,13 +33,13 @@ import android.widget.Toast
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.Guideline
-import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePaddingRelative
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
+import coil.load
 import coil.loadAny
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -79,7 +79,7 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
         const val ARG_APP = "app"
 
         private var initializedStoreLink = false
-        private val storeMap = mutableMapOf<String, Bitmap>()
+        private val storeMap = mutableMapOf<String, ApiViewingApp>()
 
         fun clearStores() {
             initializedStoreLink = false
@@ -367,29 +367,14 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
             val pn = it.packageName
             pn == packageCoolApk || pn == packagePlayStore || pn == packageSettings
         }
-        // load them if not loaded
         for (listApp in filtered) {
-            if (listApp.preload) {
-                listApp.load(context)
-            }
-            listApp.icon?.let {
-                storeMap[listApp.packageName] = it
-            }
+            storeMap[listApp.packageName] = listApp
         }
         // manually initialize those not found in loaded apps
         for (name in arrayOf(packageCoolApk, packagePlayStore, packageSettings)) {
             if (storeMap[name] != null) continue
-            val pi = MiscApp.getPackageInfo(context, packageName = name)
-            var app: ApiViewingApp? = null
-            if (pi != null) {
-                app = ApiViewingApp(context, pi, preloadProcess = true, archive = false)
-                app.load(context, pi.applicationInfo)
-            } else if (name == packageSettings) {
-                app = ApiViewingApp.icon()
-                app.load(context, { ContextCompat.getDrawable(context, R.mipmap.logo_settings)!! }, { null })
-            }
-            val icon = app?.icon
-            if (icon != null) storeMap[name] = icon
+            val pi = MiscApp.getPackageInfo(context, packageName = name) ?: continue
+            storeMap[name] = ApiViewingApp(context, pi, preloadProcess = true, archive = false)
         }
         return true
     }
@@ -431,15 +416,16 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
                 if (storeIcon == null) {
                     setPadding(0, 0, 0, 0)
                 } else {
-                    setImageBitmap(X.toTarget(storeIcon, iconWidth, iconWidth))
+                    loadAny(AppPackageInfo(context, storeIcon))
                     setOnClickListener(listener)
                 }
             }
         }
 
-        val settingsIcon = storeMap[packageSettings]
-        if (settingsIcon != null && (app.isNotArchive || X.belowOff(X.Q))) {
-            vSettings.setImageBitmap(X.toTarget(settingsIcon, iconWidth, iconWidth))
+        if (app.isNotArchive || X.belowOff(X.Q)) {
+            val settingsIcon = storeMap[packageSettings]
+            if (settingsIcon != null) vSettings.loadAny(AppPackageInfo(context, settingsIcon))
+            else vSettings.load(R.mipmap.logo_settings)
             vSettings.setOnClickListener {
                 if (app.isNotArchive) {
                     context.startActivity(app.settingsPage())

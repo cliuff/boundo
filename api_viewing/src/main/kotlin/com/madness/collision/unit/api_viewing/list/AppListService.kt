@@ -515,7 +515,7 @@ internal class AppListService {
 //        val flag = Intent.FLAG_GRANT_WRITE_URI_PERMISSION
         val previewPath = F.createPath(F.cachePublicPath(context), "App", "Logo", "${app.name}.png")
         val image = File(previewPath)
-        val appIcon = app.icon
+        val appIcon = app.getOriginalIcon(context)
         if (appIcon != null && F.prepare4(image)) X.savePNG(appIcon, previewPath)
         val imageUri = image.getProviderUri(context)
         fragmentManager.let {

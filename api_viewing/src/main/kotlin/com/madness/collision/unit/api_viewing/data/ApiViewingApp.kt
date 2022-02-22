@@ -91,8 +91,6 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
     @Ignore
     var name: String = ""
     @Ignore
-    var icon: Bitmap? = null
-    @Ignore
     var targetSDK: String = ""
     @Ignore
     var minSDK: String = ""
@@ -133,7 +131,7 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
     private val iconDetails: IconRetrievingDetails
         get() = iconRetrievingDetails!!
     val hasIcon: Boolean
-        get() = icon != null
+        get() = true
 
     constructor(): this("")
 
@@ -160,7 +158,6 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
     fun initIgnored() {
         uid = -1
         name = ""
-        icon = null
         initApiVer()
         adaptiveIcon = false
         preload = true
@@ -285,7 +282,7 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
     }
 
     fun getOriginalIcon(context: Context): Bitmap? {
-        return if (isIconOriginal && icon != null) icon else getOriginalIconDrawable(context)?.let { X.drawableToBitmap(it) }
+        return getOriginalIconDrawable(context)?.let { X.drawableToBitmap(it) }
     }
 
     fun getOriginalIconDrawable(context: Context, applicationInfo: ApplicationInfo? = getApplicationInfo(context)): Drawable? {
@@ -309,11 +306,10 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
         }
     }
 
-    fun load(context: Context, retrieverLogo: () -> Drawable, retrieverRound: () -> Drawable?): ApiViewingApp {
+    private fun load(context: Context, retrieverLogo: () -> Drawable, retrieverRound: () -> Drawable?): ApiViewingApp {
         if (!preload || isLoadingIcon || hasIcon) return this
         preload = false
         isLoadingIcon = true
-        loadLogo(context, retrieverLogo, retrieverRound)
         isLoadingIcon = false
         return this
     }
@@ -329,7 +325,7 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
         val originalIcon: Bitmap? by lazy {
             AppIconProcessor.retrieveAppIcon(context, isDefined, iconDrawable, iconDetails)
         }
-        icon = if (EasyAccess.shouldRoundIcon) {
+        val icon = if (EasyAccess.shouldRoundIcon) {
             val (roundIcon, roundIconDrawable) = adaptiveRoundIcon(context, iconDrawable, retrieverRound)
             roundIcon ?: originalIcon?.let {
                 AppIconProcessor.roundIcon(context, isDefined, it, roundIconDrawable, iconDetails)
@@ -338,9 +334,6 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
             originalIcon
         }
     }
-
-    val isIconOriginal: Boolean
-        get() = !EasyAccess.shouldRoundIcon
 
     fun retrieveAppIconInfo(iconDrawable: Drawable) {
         adaptiveIcon = OsUtils.satisfy(OsUtils.O) && iconDrawable is AdaptiveIconDrawable
@@ -452,7 +445,6 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
 
     fun clearIcons(){
         preload = true
-        icon = null
     }
 
     private constructor(parIn: Parcel): this(parIn.readString() ?: "") {
@@ -461,7 +453,6 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
 
     fun readParcel(parIn: Parcel) = parIn.run {
         packageName = readString() ?: ""
-        icon = readParcelable(Bitmap::class.java.classLoader)
         name = readString() ?: ""
         verName = readString() ?: ""
         verCode = readLong()
@@ -492,7 +483,6 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
 
     override fun writeToParcel(dest: Parcel, flags: Int) = dest.run {
         writeString(packageName)
-        writeParcelable(icon, flags)
         writeString(name)
         writeString(verName)
         writeLong(verCode)
