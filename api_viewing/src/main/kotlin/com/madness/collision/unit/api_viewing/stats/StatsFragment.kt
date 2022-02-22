@@ -20,7 +20,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
 import com.madness.collision.unit.api_viewing.ApiViewingViewModel
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.EasyAccess
@@ -57,7 +56,7 @@ internal class StatsFragment : TaggedFragment() {
         val adapter = StatsAdapter(context)
 
         val unit: Int = arguments?.getInt(ARG_TYPE) ?: ApiUnit.ALL_APPS
-        val viewModel: ApiViewingViewModel by activityViewModels()
+        val viewModel = ApiViewingViewModel.appListStats ?: return
 //        val (aiCountUser, aiCountSystem) = viewModel.aiCount
         adapter.resolveSpanCount(this, 500f) {
             viewBinding.avStatsRecycler.width

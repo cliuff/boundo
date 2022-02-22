@@ -23,7 +23,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
@@ -103,7 +102,12 @@ internal class StatsAdapter(context: Context) : SandwichAdapter<StatsAdapter.Hol
         // display a dot when API bigger than 99 (longer than 2 digits)
         val logoText = if (verInfo.api > 99) "•" else verInfo.apiText
         holder.logoText.dartFuture(logoText)
-        disposeAPIInfo(verInfo, holder.logoText, holder.logoBack)
+        if (EasyAccess.isSweet) {
+            val colorText = SealManager.getItemColorText(verInfo.api)
+            holder.logoText.setTextColor(colorText)
+        }
+        val bitmap: Bitmap = SealManager.disposeSealBack(context, verInfo.letter, itemLength)
+        holder.logoBack.setImageBitmap(X.circularBitmap(bitmap))
 
         SealManager.populate4Seal(context, verInfo.letter, itemLength)
         if (shouldShowDesserts){
@@ -125,16 +129,5 @@ internal class StatsAdapter(context: Context) : SandwichAdapter<StatsAdapter.Hol
         } else {
             holder.codeName.visibility = View.GONE
         }
-    }
-
-    private fun disposeAPIInfo(ver: VerInfo, logoText: TextView, logoBack: ImageView) {
-        logoText.text = ver.sdk
-        if (EasyAccess.isSweet){
-            val colorText = SealManager.getItemColorText(ver.api)
-            logoText.setTextColor(colorText)
-        }
-
-        val bitmap: Bitmap = SealManager.disposeSealBack(context, ver.letter, itemLength)
-        logoBack.setImageBitmap(X.circularBitmap(bitmap))
     }
 }

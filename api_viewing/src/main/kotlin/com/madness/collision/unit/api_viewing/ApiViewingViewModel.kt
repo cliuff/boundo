@@ -28,7 +28,21 @@ import com.madness.collision.util.StringUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.lang.ref.WeakReference
 import java.util.stream.Collectors
+
+class AppListStats {
+    var appsCountUser: Int = 0
+    var appsCountSystem: Int = 0
+    val appsCountAll: Int
+        get() = appsCountUser + appsCountSystem
+    var apiCountUser: SparseIntArray = SparseIntArray(0)
+    var apiCountSystem: SparseIntArray = SparseIntArray(0)
+    var apiCountAll: SparseIntArray = SparseIntArray(0)
+    var minApiCountUser: SparseIntArray = SparseIntArray(0)
+    var minApiCountSystem: SparseIntArray = SparseIntArray(0)
+    var minApiCountAll: SparseIntArray = SparseIntArray(0)
+}
 
 /**
  * Api Viewing View Model
@@ -45,24 +59,7 @@ internal class ApiViewingViewModel(application: Application): AndroidViewModel(a
     private set
     // for both internal and external access
     val apps4Cache: MutableList<ApiViewingApp> = mutableListOf()
-    var appsCountUser: Int = 0
-        private set
-    var appsCountSystem: Int = 0
-        private set
-    val appsCountAll: Int
-        get() = appsCountUser + appsCountSystem
-    var apiCountUser: SparseIntArray = SparseIntArray(0)
-        private set
-    var apiCountSystem: SparseIntArray = SparseIntArray(0)
-        private set
-    var apiCountAll: SparseIntArray = SparseIntArray(0)
-        private set
-    var minApiCountUser: SparseIntArray = SparseIntArray(0)
-        private set
-    var minApiCountSystem: SparseIntArray = SparseIntArray(0)
-        private set
-    var minApiCountAll: SparseIntArray = SparseIntArray(0)
-        private set
+    val appListStats: AppListStats = AppListStats()
     val aiCount: Pair<Int, Int>
         get() {
             var countUser = 0
@@ -81,6 +78,7 @@ internal class ApiViewingViewModel(application: Application): AndroidViewModel(a
     private val lifecycleOwner: LifecycleOwner
 
     init {
+        appListStatsRef = WeakReference(appListStats)
         val lifecycleRegistry: LifecycleRegistry
         lifecycleOwner = object : LifecycleOwner {
             init { lifecycleRegistry = LifecycleRegistry(this) }
@@ -91,6 +89,11 @@ internal class ApiViewingViewModel(application: Application): AndroidViewModel(a
         }
         val dao = DataMaintainer.get(application, lifecycleOwner)
         repository = AppRepository(lifecycleOwner, dao)
+        lifecycleRegistry.addObserver(object : DefaultLifecycleObserver {
+            override fun onDestroy(owner: LifecycleOwner) {
+                appListStatsRef.clear()
+            }
+        })
     }
 
     override fun onCleared() {
@@ -134,8 +137,8 @@ internal class ApiViewingViewModel(application: Application): AndroidViewModel(a
                 }
             }
         }
-        appsCountUser = countAppsUser
-        appsCountSystem = countAppsSystem
+        appListStats.appsCountUser = countAppsUser
+        appListStats.appsCountSystem = countAppsSystem
         updateDeviceAppsCountApi(true, apiCountMapUser, apiCountMapSystem)
         updateDeviceAppsCountApi(false, minApiCountMapUser, minApiCountMapSystem)
     }
@@ -148,7 +151,7 @@ internal class ApiViewingViewModel(application: Application): AndroidViewModel(a
             val c = if (appApiAll.indexOfKey(it.key) != -1) appApiAll.get(it.key) else 0
             appApiAll.put(it.key, c + it.value)
         }
-        if (isTarget) apiCountUser = appApi else minApiCountUser = appApi
+        if (isTarget) appListStats.apiCountUser = appApi else appListStats.minApiCountUser = appApi
         appApi = SparseIntArray(apiCountMapSystem.size)
         apiCountMapSystem.forEach {
             appApi.put(it.key, it.value)
@@ -156,11 +159,11 @@ internal class ApiViewingViewModel(application: Application): AndroidViewModel(a
             appApiAll.put(it.key, c + it.value)
         }
         if (isTarget) {
-            apiCountSystem = appApi
-            apiCountAll = appApiAll
+            appListStats.apiCountSystem = appApi
+            appListStats.apiCountAll = appApiAll
         } else {
-            minApiCountSystem = appApi
-            minApiCountAll = appApiAll
+            appListStats.minApiCountSystem = appApi
+            appListStats.minApiCountAll = appApiAll
         }
     }
 
@@ -265,6 +268,8 @@ internal class ApiViewingViewModel(application: Application): AndroidViewModel(a
     }
 
     companion object {
+        var appListStatsRef: WeakReference<AppListStats> = WeakReference(null)
+        val appListStats: AppListStats? get() = appListStatsRef.get()
 
         private fun compareName(o1: ApiViewingApp, o2: ApiViewingApp): Int {
             return StringUtils.compareName(o1.name, o2.name)
