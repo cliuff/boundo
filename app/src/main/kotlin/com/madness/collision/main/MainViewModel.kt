@@ -16,19 +16,30 @@
 
 package com.madness.collision.main
 
+import android.app.Activity
 import android.graphics.drawable.Drawable
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.madness.collision.Democratic
 import com.madness.collision.unit.Unit
 import com.madness.collision.util.mainApplication
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.launch
+import java.lang.ref.WeakReference
+
+class NavPage(val fragment: Fragment, val args: BooleanArray)
+
+fun Pair<Fragment, BooleanArray>.toPage() = NavPage(first, second)
 
 /**
  * For [MainActivity]
  */
 class MainViewModel: ViewModel(){
-    val democratic: MutableLiveData<Democratic> = MutableLiveData()
+    private val _democratic: MutableSharedFlow<Democratic> = MutableSharedFlow()
+    val democratic: Flow<Democratic> by ::_democratic
     val action: MutableLiveData<Pair<String, Any?>> = MutableLiveData("" to null)
     val insetTop: MutableLiveData<Int> = MutableLiveData(mainApplication.insetTop)
     val insetBottom: MutableLiveData<Int> = MutableLiveData(mainApplication.insetBottom)
@@ -37,10 +48,11 @@ class MainViewModel: ViewModel(){
     val contentWidthTop: MutableLiveData<Int> = MutableLiveData(insetTop.value ?: 0)
     val contentWidthBottom: MutableLiveData<Int> = MutableLiveData(insetBottom.value ?: 0)
     val background: MutableLiveData<Drawable?> = MutableLiveData(null)
-    val unit: MutableLiveData<Pair<Fragment, BooleanArray>> = MutableLiveData()
+    private val _page: MutableSharedFlow<NavPage> = MutableSharedFlow()
+    val page: Flow<NavPage> by ::_page
     private var _timestamp = 0L
-    val timestamp: Long
-        get() = _timestamp
+    val timestamp: Long by ::_timestamp
+    private var lastDemocratic: WeakReference<Democratic> = WeakReference(null)
 
     fun updateTimestamp() {
         _timestamp = System.currentTimeMillis()
@@ -54,14 +66,31 @@ class MainViewModel: ViewModel(){
         } else {
             args
         }
-        unit.value = Unit.getUnit(unitName, *mArgs)?.run { this to booleanArrayOf(shouldShowNavAfterBack, shouldExitAppAfterBack)}
+        val unit = Unit.getUnit(unitName, *mArgs) ?: return
+        val p = unit to booleanArrayOf(shouldShowNavAfterBack, shouldExitAppAfterBack)
+        viewModelScope.launch { _page.emit(p.toPage()) }
     }
 
     fun displayFragment(fragment: Fragment, shouldShowNavAfterBack: Boolean = false, shouldExitAppAfterBack: Boolean = false) {
-        unit.value = fragment to booleanArrayOf(shouldShowNavAfterBack, shouldExitAppAfterBack)
+        val p = fragment to booleanArrayOf(shouldShowNavAfterBack, shouldExitAppAfterBack)
+        viewModelScope.launch { _page.emit(p.toPage()) }
     }
 
-    fun popUpBackStack(isFromNav: Boolean = false, shouldShowNavAfterBack: Boolean = false) {
+    fun democratize(democratic: Democratic) {
+        viewModelScope.launch { _democratic.emit(democratic) }
+        lastDemocratic = WeakReference(democratic)
+    }
+
+    fun popUpBackStack() {
+        val democratic = lastDemocratic.get() ?: return
+        val activity = when (democratic) {
+            is Activity -> democratic
+            is Fragment -> democratic.activity
+            else -> null
+        }
+        activity ?: return
+        lastDemocratic.clear()
+        activity.finish()
     }
 
 }

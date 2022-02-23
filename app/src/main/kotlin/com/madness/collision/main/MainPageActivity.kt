@@ -25,12 +25,20 @@ import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
+import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.base.BaseActivity
 import com.madness.collision.databinding.ActivityMainPageBinding
 import com.madness.collision.diy.WindowInsets
 import com.madness.collision.util.*
+import com.madness.collision.util.controller.getSavedFragment
+import com.madness.collision.util.controller.saveFragment
 import com.madness.collision.util.controller.systemUi
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlin.reflect.KClass
 
 inline fun <reified F: Fragment> Context.showPage(noinline data: (Bundle.() -> Unit)? = null) {
@@ -55,6 +63,7 @@ class MainPageActivity : BaseActivity() {
     companion object {
         const val ARG_PAGE = "argPage"
         const val ARG_PAGE_DATA = "argPageData"
+        private const val STATE_KEY_PAGE = "stateKeyPage"
         private val pages = ArrayDeque<Fragment>()
 
         fun add(fragment: Fragment) = synchronized(pages) { pages.add(fragment) }
@@ -63,6 +72,8 @@ class MainPageActivity : BaseActivity() {
     private var _viewBinding: ActivityMainPageBinding? = null
     private val viewBinding: ActivityMainPageBinding get() = _viewBinding!!
     private val mainViewModel: MainViewModel by viewModels()
+    private var pageFragment: Fragment? = null
+    private var democratic: Democratic? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,13 +84,42 @@ class MainPageActivity : BaseActivity() {
         setContentView(viewBinding.root)
         setupUi()
         observeStates(this)
-        val extras = intent?.extras
-        if (extras != null) loadPage(extras) else loadPage()
+        setPage(savedInstanceState)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        pageFragment?.let { supportFragmentManager.saveFragment(outState, STATE_KEY_PAGE, it) }
+        super.onSaveInstanceState(outState)
     }
 
     override fun onDestroy() {
         _viewBinding = null
         super.onDestroy()
+    }
+
+    private fun setPage(savedState: Bundle?) {
+        val fMan = supportFragmentManager
+        pageFragment = if (savedState != null) {
+            fMan.getSavedFragment(savedState, STATE_KEY_PAGE)
+        } else {
+            val extras = intent?.extras
+            if (extras != null) loadPage(extras) else loadPage()
+        }
+        val page = pageFragment ?: return
+        if (page.isAdded) return
+        fMan.beginTransaction().add(viewBinding.mainPageContainer.id, page).commit()
+    }
+
+    private fun loadPage(extras: Bundle): Fragment? {
+        val className = extras.getString(ARG_PAGE) ?: return null
+        val pageData = extras.getBundle(ARG_PAGE_DATA)
+        val page = Class.forName(className).declaredConstructors[0].newInstance() as Fragment
+        pageData?.let { page.arguments = it }
+        return page
+    }
+
+    private fun loadPage(): Fragment? {
+        return synchronized(pages) { pages.removeFirstOrNull() }
     }
 
     private fun setupUi() {
@@ -91,7 +131,7 @@ class MainPageActivity : BaseActivity() {
         viewBinding.mainPageToolbar.setOnMenuItemClickListener click@{ item ->
             item ?: return@click false
             try {
-                mainViewModel.democratic.value?.selectOption(item) ?: false
+                democratic?.selectOption(item) ?: false
             } catch (e: Exception) {
                 e.printStackTrace()
                 notifyBriefly(R.string.text_error)
@@ -110,15 +150,23 @@ class MainPageActivity : BaseActivity() {
     private fun observeStates(context: Context) {
         val iconColor = ThemeUtil.getColor(context, R.attr.colorIcon)
         // for child fragment to access
-        mainViewModel.democratic.observe(this) {
-            clearDemocratic()
-            viewBinding.mainPageToolbar.tag = viewBinding.mainPageToolbarDivider
-            it.createOptions(this, viewBinding.mainPageToolbar, iconColor)
-        }
-        mainViewModel.unit.observe(this) {
-            it ?: return@observe
-            showPage(it.first)
-        }
+        mainViewModel.democratic
+            .flowWithLifecycle(lifecycle, Lifecycle.State.CREATED)
+            .onEach {
+                democratic = it
+                clearDemocratic()
+                viewBinding.mainPageToolbar.tag = viewBinding.mainPageToolbarDivider
+                it.createOptions(this, viewBinding.mainPageToolbar, iconColor)
+            }
+            .launchIn(lifecycleScope)
+        mainViewModel.page
+            .flowWithLifecycle(lifecycle)
+            .onEach {
+                showPage(it.fragment)
+                val shouldExit = it.args[1]
+                if (shouldExit) finish()
+            }
+            .launchIn(lifecycleScope)
         mainViewModel.insetTop.observe(this) {
             viewBinding.mainPageToolbar.run {
                 updatePadding(top = it)
@@ -149,18 +197,5 @@ class MainPageActivity : BaseActivity() {
     private fun disableLowProfileModeLegacy(window: Window) {
         val decorView = window.decorView
         decorView.systemUiVisibility = decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_LOW_PROFILE.inv()
-    }
-
-    private fun loadPage(extras: Bundle) {
-        val className = extras.getString(ARG_PAGE) ?: return
-        val pageData = extras.getBundle(ARG_PAGE_DATA)
-        val page = Class.forName(className).declaredConstructors[0].newInstance() as Fragment
-        pageData?.let { page.arguments = it }
-        supportFragmentManager.beginTransaction().add(viewBinding.mainPageContainer.id, page).commit()
-    }
-
-    private fun loadPage() {
-        val page = synchronized(pages) { pages.removeFirstOrNull() } ?: return
-        supportFragmentManager.beginTransaction().add(viewBinding.mainPageContainer.id, page).commit()
     }
 }

@@ -89,11 +89,6 @@ internal class ApiViewingViewModel(application: Application): AndroidViewModel(a
         }
         val dao = DataMaintainer.get(application, lifecycleOwner)
         repository = AppRepository(lifecycleOwner, dao)
-        lifecycleRegistry.addObserver(object : DefaultLifecycleObserver {
-            override fun onDestroy(owner: LifecycleOwner) {
-                appListStatsRef.clear()
-            }
-        })
     }
 
     override fun onCleared() {
@@ -101,6 +96,7 @@ internal class ApiViewingViewModel(application: Application): AndroidViewModel(a
             val lifecycleRegistry = lifecycleOwner.lifecycle as LifecycleRegistry
             lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
         }
+        appListStatsRef.clear()
         val appCache = apps4Cache
         synchronized(appCache) {
             val iterator = appCache.iterator()

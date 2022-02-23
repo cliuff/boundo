@@ -39,6 +39,8 @@ import com.madness.collision.databinding.FragmentMainBinding
 import com.madness.collision.main.more.MoreFragment
 import com.madness.collision.main.updates.UpdatesFragment
 import com.madness.collision.util.*
+import com.madness.collision.util.controller.getSavedFragment
+import com.madness.collision.util.controller.saveFragment
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -52,6 +54,7 @@ class MainFragment : TaggedFragment(), Democratic {
 
     companion object {
         private const val STATE_KEY_NAV_UP = "NavUp"
+        private const val STATE_KEY_NAV_ITEM = "NavItem"
     }
 
     // session data
@@ -81,10 +84,19 @@ class MainFragment : TaggedFragment(), Democratic {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val updatesMode = arguments?.getInt(UpdatesFragment.ARG_MODE)
+        val f = f@{ i: Int ->
+            savedInstanceState ?: return@f null
+            childFragmentManager.getSavedFragment<Fragment>(savedInstanceState, STATE_KEY_NAV_ITEM + i)
+        }
         navFragments = arrayOf(
-            lazy { updatesMode?.let { UpdatesFragment.newInstance(it) } ?: UpdatesFragment() },
-            lazy { MainUnitsFragment() },
-            lazy { MoreFragment() }
+            lazy {
+                f(0) ?: run {
+                    updatesMode ?: return@run UpdatesFragment()
+                    UpdatesFragment.newInstance(updatesMode)
+                }
+            },
+            lazy { f(1) ?: MainUnitsFragment() },
+            lazy { f(2) ?: MoreFragment() }
         )
     }
 
@@ -103,6 +115,10 @@ class MainFragment : TaggedFragment(), Democratic {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
+        navFragments.forEachIndexed { i, lazy ->
+            if (lazy.isInitialized().not()) return@forEachIndexed  // continue
+            childFragmentManager.saveFragment(outState, STATE_KEY_NAV_ITEM + i, lazy.value)
+        }
         super.onSaveInstanceState(outState)
         outState.putBoolean(STATE_KEY_NAV_UP, isNavUp)
     }
@@ -157,13 +173,15 @@ class MainFragment : TaggedFragment(), Democratic {
                 }
             }
         }
-        viewModel.navItemIndex.flowWithLifecycle(viewLifecycleOwner.lifecycle).onEach { index ->
-            val fragment = navFragments[index].value
-            childFragmentManager.beginTransaction().run {
-                if (!fragment.isAdded) replace(viewBinding.mainFragmentContainer.id, fragment)
-                commitNow()
+        viewModel.navItemIndex
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            .onEach { index ->
+                val fragment = navFragments[index].value
+                if (fragment.isAdded) return@onEach
+                val containerId = viewBinding.mainFragmentContainer.id
+                childFragmentManager.beginTransaction().replace(containerId, fragment).commit()
             }
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun setupUi(context: Context) {

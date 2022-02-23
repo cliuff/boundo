@@ -50,12 +50,12 @@ interface Democratic{
     }
 
     fun configNavigation(toolbar: Toolbar, iconColor: Int, mainViewModel: MainViewModel) {
-        toolbar.run {
-            navigationIcon = ContextCompat.getDrawable(context, R.drawable.ic_arrow_back_24)?.apply {
-                setTint(iconColor)
-            }
-            setNavigationOnClickListener { mainViewModel.popUpBackStack() }
+        val context = toolbar.context
+        ContextCompat.getDrawable(context, R.drawable.ic_arrow_back_24)?.let {
+            it.setTint(iconColor)
+            toolbar.navigationIcon = it
         }
+        toolbar.setNavigationOnClickListener { mainViewModel.popUpBackStack() }
     }
 
     fun MainViewModel.configNavigation(toolbar: Toolbar, iconColor: Int) {
@@ -63,6 +63,6 @@ interface Democratic{
     }
 
     fun democratize(mainViewModel: MainViewModel) {
-        mainViewModel.democratic.value = this
+        mainViewModel.democratize(this)
     }
 }

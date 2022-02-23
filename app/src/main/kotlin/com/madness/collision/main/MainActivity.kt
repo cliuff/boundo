@@ -26,6 +26,8 @@ import android.view.View
 import android.view.Window
 import androidx.activity.viewModels
 import androidx.core.app.NotificationManagerCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.madness.collision.R
 import com.madness.collision.base.BaseActivity
@@ -40,6 +42,8 @@ import com.madness.collision.util.controller.systemUi
 import com.madness.collision.util.notice.ToastUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.random.Random
@@ -117,7 +121,7 @@ class MainActivity : BaseActivity() {
             Unit.loadUnitClasses(context)
 
             withContext(Dispatchers.Main) {
-                setupLayout(context, prefSettings)
+                setupLayout(context, prefSettings, savedInstanceState)
             }
 
             checkMisc(context, prefSettings)
@@ -154,8 +158,8 @@ class MainActivity : BaseActivity() {
         setContentView(viewBinding.root)
     }
 
-    private fun setupLayout(context: Context, prefSettings: SharedPreferences) {
-        setupNav()
+    private fun setupLayout(context: Context, prefSettings: SharedPreferences, savedState: Bundle?) {
+        setupNav(savedState)
         setupViewModel(context, prefSettings)
         // invocation will clear stack
         setupUi(context)
@@ -166,22 +170,29 @@ class MainActivity : BaseActivity() {
         primaryNavBarConfig = configs.second
     }
 
-    private fun setupNav() {
-        val startArgs = if (launchItem != null) Bundle().apply {
-            putInt(UpdatesFragment.ARG_MODE, UpdatesFragment.MODE_NO_UPDATES)
+    private fun setupNav(savedState: Bundle?) {
+        if (savedState != null) return  // fragment is restored automatically
+        val startArgs = if (launchItem != null) {
+            Bundle().apply { putInt(UpdatesFragment.ARG_MODE, UpdatesFragment.MODE_NO_UPDATES) }
         } else null
         val fragment = MainFragment().apply { startArgs?.let { arguments = it } }
-        supportFragmentManager.beginTransaction().add(viewBinding.mainFragmentWrapper.id, fragment).commit()
+        val containerId = viewBinding.mainFragmentWrapper.id
+        supportFragmentManager.beginTransaction().add(containerId, fragment).commit()
     }
 
     private fun setupViewModel(context: Context, prefSettings: SharedPreferences) {
-        viewModel.democratic.observe(this) {
-            clearDemocratic()
-        }
-        viewModel.unit.observe(this) {
-            it ?: return@observe
-            showPage(it.first)
-        }
+        viewModel.democratic
+            .flowWithLifecycle(lifecycle, Lifecycle.State.CREATED)
+            .onEach { clearDemocratic() }
+            .launchIn(lifecycleScope)
+        viewModel.page
+            .flowWithLifecycle(lifecycle)
+            .onEach {
+                showPage(it.fragment)
+                val shouldExit = it.args[1]
+                if (shouldExit) finish()
+            }
+            .launchIn(lifecycleScope)
         viewModel.action.observe(this) {
             when (it.first) {
                 "" -> return@observe
