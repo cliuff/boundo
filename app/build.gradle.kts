@@ -103,7 +103,7 @@ android {
         resourceConfigurations.addAll(arrayOf(
             "en", "en-rGB", "en-rUS",
             "zh", "zh-rCN", "zh-rHK", "zh-rMO", "zh-rTW", "zh-rSG",
-            "ru", "ru-rRU", "es", "es-rES", "es-rUS",
+            "ru", "ru-rRU", "uk", "uk-rUA", "es", "es-rES", "es-rUS",
             "ar", "it", "it-rIT", "pt", "pt-rPT",
             "th", "th-rTH", "vi", "vi-rVN",
             "fr", "fr-rFR", "el", "el-rGR",

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2022 Clifford Liu
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="av_updates_recents">Нещодавно оновлено</string>
+    <string name="sdkcheck_dialog_targetsdktext">Ціль</string>
+    <string name="sdkcheck_dialog_minsdktext">Хв.</string>
+    <string name="sdkcheck_sortspinner_sortbyname">По імені</string>
+    <string name="sdkcheck_sortspinner_sortbyhighersdk">Найвищий API</string>
+    <string name="sdkcheck_sortspinner_sortbylowersdk">Найнижчий API</string>
+    <string name="sdkcheck_displayspinner_user">Мої програми</string>
+    <string name="sdkcheck_displayspinner_usersystem">Усі програми</string>
+    <string name="apiDetails">Деталі</string>
+    <string name="apiDetailsVerName">"Назва версії: "</string>
+    <string name="apiDetailsVerCode">"Код версії: "</string>
+    <string name="apiDetailsFirstInstall">"Перша інсталяція: "</string>
+    <string name="apiDetailsLastUpdate">"Останнє оновлення: "</string>
+    <string name="apiDetailsInsatllFrom">"Встановник: "</string>
+    <string name="apiDetailsInstallUnknown">Невідомо</string>
+    <string name="apiDetailsInstallGP">Google Play Store</string>
+    <string name="apiDetailsInstallPI">Інсталятор пакетів</string>
+    <string name="apiDetailsCert">Сертифікат</string>
+    <string name="apiDetailsValiSince">"Чинність з: "</string>
+    <string name="apiDetailsValiUntil">"Термін дії до: "</string>
+    <string name="apiDetailsIssuer">"Емітент: "</string>
+    <string name="apiDetailsSubject">"Тема: "</string>
+    <string name="apiDetailsSigAlg">"Алгоритм підпису: "</string>
+    <string name="apiDetailsSigAlgOID">"OID алгоритму підпису: "</string>
+    <string name="apiDetailsPermissions">Дозволи:</string>
+    <string name="apiDetailsActivities">Діяльність:</string>
+    <string name="apiDetailsReceivers">Приймачі мовлення:</string>
+    <string name="apiDetailsServices">Послуги:</string>
+    <string name="apiDetailsProviders">Провайдери:</string>
+    <string name="res_api_code_names_c">кекс</string>
+    <string name="res_api_code_names_d">Пончик</string>
+    <string name="res_api_code_names_e">Еклер</string>
+    <string name="res_api_code_names_f">Фройо</string>
+    <string name="res_api_code_names_g">Пряники</string>
+    <string name="res_api_code_names_h">Стільниковий</string>
+    <string name="res_api_code_names_i">Сендвіч із морозивом</string>
+    <string name="res_api_code_names_j">Желе</string>
+    <string name="res_api_code_names_k">Kit Kat</string>
+    <string name="res_api_code_names_l">Льодяник</string>
+    <string name="res_api_code_names_m">Зефір</string>
+    <string name="res_api_code_names_n">Нуга</string>
+    <string name="res_api_code_names_o">Oreo</string>
+    <string name="res_api_code_names_p">пиріг</string>
+    <string name="resApiCodeNamesB">Маленька четверта</string>
+    <string name="resPrincipalCN">Звичайне ім\'я</string>
+    <string name="resPrincipalOU">Організаційний підрозділ</string>
+    <string name="resPrincipalO">Організація</string>
+    <string name="resPrincipalL">Місто або населений пункт</string>
+    <string name="resPrincipalST">Штат або провінція</string>
+    <string name="resPrincipalC">Країна</string>
+    <string name="resPrincipalEmail">Електронна пошта</string>
+    <string name="apiInfoAiIconDes">Значок (APK)</string>
+    <string name="apiInfoAiIconRDes">Кругла піктограма (APK)</string>
+    <string name="apiInfoAiIconDesSys">Значок (система)</string>
+    <string name="apiInfoAiOverallDes">Існують два набори значків програми запуску, які можна відобразити в файлі .apk, один із яких є звичайним значком програми, а інший — круглим значком програми.\nОбидва набори можуть містити адаптивну піктограму, яка була представлена ​​в Android 8.0. Круглий значок програми з’явився в Android 7.1.</string>
+    <string name="avTBViewingTarget">Переглянути ціль/хв. API</string>
+    <string name="avManual">Інтерфейс прикладного програмування (API), загалом, це набір чітко визначених методів зв’язку між різними компонентами.\n\nНабір програмного забезпечення (SDK), як правило, є набір інструментів розробки програмного забезпечення, який дозволяє створювати програми для певну платформу розробки.\n\nОтже, SDK платформи містить відповідний API цієї платформи.\n\nВерсія API випуску Android називається Рівнем API.\n\nЗ кожним новим випуском Android внесено багато змін API, що забезпечують доступ до нових функцій, обмеження доступу до конфіденційності, покращення безпеки та покращення продуктивності, одночасно відмовляючись від небезпечних та неефективних API.\n\nІноді випуск Android містить лише виправлення помилок тощо, але не змінює API, тому його API Рівень залишається незмінним.\n\nЦільова версія SDK визначає цільовий рівень API, призначений для використання в додатку.\n\nМінімальна версія SDK визначає мінімальний рівень API, необхідний для програми.\n\nДеякі обмеження та покращення нових випусків Android застосовуватиметься до програм, лише якщо їх цільовий рівень API відповідає або перевищує рівень системи Android пристрою.</string>
+    <string name="av_share_full">Повний</string>
+    <string name="av_share_stroked">Погладжував</string>
+    <string name="av_updates_view_more">Дивитись більше</string>
+    <string name="av_settings_tags">Мітки</string>
+    <string name="av_settings_tags_system">Системний додаток</string>
+    <string name="av_adapter_tag_system">система</string>
+    <string name="av_ai">Адаптивний значок</string>
+    <string name="av_tag_has_splits">Android App Bundle</string>
+    <string name="av_apks_select_folder">Виберіть папку для сканування</string>
+    <string name="av_pref_loading">Завантаження списку</string>
+    <string name="av_pref_loading_summary">Оновіть вручну, щоб ініціювати зміни</string>
+    <string name="av_pref_displaying_summary">Зміни запускаються автоматично</string>
+    <string name="av_pref_displaying">Відображення списку</string>
+    <string name="av_adapter_tag_hidden">Прихований</string>
+    <string name="av_settings_tag_hidden">Значок програми не відображається на панелі запуску</string>
+    <string name="av_main_filter_tip">Спробуйте довго натискати тег</string>
+    <string name="av_main_option_device_api">API пристрою</string>
+    <string name="av_main_device_api_api">Рівень API</string>
+    <string name="av_upd_new">Нещодавно встановлений</string>
+    <string name="av_upd_upg">Оновлення API</string>
+    <string name="av_details_real_installer">"Справжній установник: "</string>
+    <string name="av_upd_ver_upd">Версія оновлена</string>
+    <string name="av_upd_pck_upd">Пакет оновлено</string>
+</resources>

@@ -95,6 +95,8 @@
         <item>@string/lang_zh_sg</item>
         <item>@string/languageRu</item>
         <item>@string/languageRuRU</item>
+        <item>@string/languageUk</item>
+        <item>@string/languageUkUA</item>
         <item>@string/lang_es</item>
         <item>@string/lang_es_es</item>
         <item>@string/lang_es_us</item>
@@ -133,6 +135,8 @@
         <item>zh_SG</item>
         <item>ru</item>
         <item>ru_RU</item>
+        <item>uk</item>
+        <item>uk_UA</item>
         <item>es</item>
         <item>es_ES</item>
         <item>es_US</item>
@@ -193,5 +197,7 @@
     <string name="lang_vi_vn" translatable="false">Tiếng Việt (Việt Nam)</string>
     <string name="languageRu" translatable="false">Русский</string>
     <string name="languageRuRU" translatable="false">Русский (Россия)</string>
+    <string name="languageUk" translatable="false">Українська</string>
+    <string name="languageUkUA" translatable="false">Українська (Україна)</string>
 
 </resources>
