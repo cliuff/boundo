@@ -271,8 +271,10 @@
         <item name="android:popupBackground">@drawable/popup_menu_back</item>
     </style>
 
+    <item name="overflowButton" type="id" />
     <style name="AppTheme.OverflowButton" parent="Widget.AppCompat.Light.ActionButton.Overflow">
         <item name="android:tint">?colorIcon</item>
+        <item name="android:id">@id/overflowButton</item>
     </style>
 
     <style name="LanguageItem">

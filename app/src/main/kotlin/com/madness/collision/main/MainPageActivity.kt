@@ -141,6 +141,7 @@ class MainPageActivity : BaseActivity() {
     }
 
     private fun consumeInsets(insets: WindowInsets) {
+        SystemUtil.applyDefaultSystemUiVisibility(this, window, insets.bottom)
         mainViewModel.insetTop.value = insets.top
         mainViewModel.insetBottom.value = insets.bottom
         mainViewModel.insetStart.value = insets.start
@@ -167,6 +168,13 @@ class MainPageActivity : BaseActivity() {
                 if (shouldExit) finish()
             }
             .launchIn(lifecycleScope)
+        mainViewModel.action.observe(this) {
+            when (it.first) {
+                "" -> return@observe
+                MainActivity.ACTION_RECREATE -> recreate()
+            }
+            mainViewModel.action.value = "" to null
+        }
         mainViewModel.insetTop.observe(this) {
             viewBinding.mainPageToolbar.run {
                 updatePadding(top = it)

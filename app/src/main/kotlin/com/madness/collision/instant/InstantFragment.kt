@@ -94,7 +94,7 @@ internal class InstantFragment: TaggedFragment(), Democratic {
         if (X.aboveOn(X.N) && availableTiles.isNotEmpty()) {
             val adapterTile = InstantAdapter(context,
                     mainViewModel, InstantAdapter.TYPE_TILE, availableTiles)
-            adapterTile.resolveSpanCount(this, 400f)
+            adapterTile.resolveSpanCount(this, 290f)
             viewBinding.instantRecyclerTile.run {
                 setHasFixedSize(true)
                 setItemViewCacheSize(availableTiles.size)
@@ -110,7 +110,7 @@ internal class InstantFragment: TaggedFragment(), Democratic {
         if (availableShortcuts.isNotEmpty()) {
             val adapterShortcut = InstantAdapter(context, mainViewModel,
                     InstantAdapter.TYPE_SHORTCUT, availableShortcuts)
-            adapterShortcut.resolveSpanCount(this, 400f)
+            adapterShortcut.resolveSpanCount(this, 290f)
             viewBinding.instantRecyclerShortcut.run {
                 setHasFixedSize(true)
                 setItemViewCacheSize(availableShortcuts.size)
@@ -128,7 +128,7 @@ internal class InstantFragment: TaggedFragment(), Democratic {
         if (availableOther.isNotEmpty()) {
             val adapterOther = InstantAdapter(context,
                     mainViewModel, InstantAdapter.TYPE_OTHER, availableOther)
-            adapterOther.resolveSpanCount(this, 400f)
+            adapterOther.resolveSpanCount(this, 290f)
             viewBinding.instantRecyclerOther.run {
                 setHasFixedSize(true)
                 setItemViewCacheSize(availableOther.size)

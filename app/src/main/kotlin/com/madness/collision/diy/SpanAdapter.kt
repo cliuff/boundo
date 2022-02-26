@@ -26,6 +26,7 @@ import com.madness.collision.util.X
 import com.madness.collision.util.alterMargin
 import com.madness.collision.util.availableWidth
 import kotlin.math.roundToInt
+import kotlin.math.truncate
 
 interface SpanAdapter {
     companion object {
@@ -42,13 +43,11 @@ interface SpanAdapter {
         return if (spanCount == 1) LinearLayoutManager(context) else GridLayoutManager(context, spanCount)
     }
 
-    fun resolveSpanCount(fragment: Fragment, unit: Float, width: () -> Int = {
-        fragment.availableWidth
-    }) {
+    fun resolveSpanCount(fragment: Fragment, unit: Float, width: () -> Int = { fragment.availableWidth }) {
         val unitWidth = X.size(context, unit, X.DP)
-        spanCount = (width.invoke() / unitWidth).roundToInt().run {
-            if (this < 2) 1 else this
-        }
+        val rawResult = width.invoke() / unitWidth
+        val result = truncate(rawResult).roundToInt()
+        spanCount = if (result < 2) 1 else result
     }
 
     fun getColumnIndex(index: Int): Int {

@@ -105,7 +105,7 @@ internal class DeviceListFragment: TaggedFragment(), StateObservable {
                 if (!re) notifyBriefly(R.string.text_error)
             }
         })
-        adapter.resolveSpanCount(this, 400f)
+        adapter.resolveSpanCount(this, 290f)
         viewBinding.dmDeviceListRecycler.run {
             layoutManager = this@DeviceListFragment.adapter.suggestLayoutManager()
             adapter = this@DeviceListFragment.adapter

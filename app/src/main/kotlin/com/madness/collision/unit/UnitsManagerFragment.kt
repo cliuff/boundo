@@ -73,7 +73,7 @@ internal class UnitsManagerFragment : TaggedFragment(), Democratic {
                 }
             }
         })
-        mAdapter.resolveSpanCount(this, 400f)
+        mAdapter.resolveSpanCount(this, 290f)
         mRecyclerView.layoutManager = mAdapter.suggestLayoutManager()
         mRecyclerView.adapter = mAdapter
 

@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.doOnLayout
 import com.madness.collision.unit.api_viewing.ApiViewingViewModel
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.EasyAccess
@@ -49,27 +50,27 @@ internal class StatsFragment : TaggedFragment() {
         return viewBinding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val context = context ?: return
-
-        val adapter = StatsAdapter(context)
-
         val unit: Int = arguments?.getInt(ARG_TYPE) ?: ApiUnit.ALL_APPS
         val viewModel = ApiViewingViewModel.appListStats ?: return
 //        val (aiCountUser, aiCountSystem) = viewModel.aiCount
-        adapter.resolveSpanCount(this, 500f) {
-            viewBinding.avStatsRecycler.width
-        }
-        viewBinding.avStatsRecycler.layoutManager = adapter.suggestLayoutManager()
-        when (unit) {
+        val stats = when (unit) {
             ApiUnit.USER -> if (EasyAccess.isViewingTarget) viewModel.apiCountUser else viewModel.minApiCountUser
             ApiUnit.SYS -> if (EasyAccess.isViewingTarget) viewModel.apiCountSystem else viewModel.minApiCountSystem
             ApiUnit.ALL_APPS -> if (EasyAccess.isViewingTarget) viewModel.apiCountAll else viewModel.minApiCountAll
             else -> null
-        }?.let { adapter.stats = it }
+        }
+        val adapter = StatsAdapter(context)
+        stats?.let { adapter.stats = it }
         viewBinding.avStatsRecycler.setHasFixedSize(true)
         viewBinding.avStatsRecycler.setItemViewCacheSize(adapter.itemCount)
         viewBinding.avStatsRecycler.adapter = adapter
+        viewBinding.root.doOnLayout {
+            viewBinding.avStatsRecycler.post {
+                adapter.resolveSpanCount(this, 290f) { viewBinding.root.width }
+                viewBinding.avStatsRecycler.layoutManager = adapter.suggestLayoutManager()
+            }
+        }
     }
 }

@@ -85,7 +85,7 @@ internal class AppListFragment : TaggedFragment(), AppList, Filterable {
             }
         }, lifecycleScope)
 
-        mAdapter.resolveSpanCount(this, 450f)
+        mAdapter.resolveSpanCount(this, 290f)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

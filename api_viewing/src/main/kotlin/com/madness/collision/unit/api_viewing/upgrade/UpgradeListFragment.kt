@@ -67,7 +67,7 @@ internal class UpgradeListFragment : TaggedFragment(), AppList {
             }
         }, lifecycleScope)
 
-        mAdapter.resolveSpanCount(this, 450f)
+        mAdapter.resolveSpanCount(this, 290f)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

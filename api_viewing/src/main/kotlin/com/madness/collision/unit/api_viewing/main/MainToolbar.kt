@@ -163,7 +163,9 @@ internal class MainToolbar(
                 if (popSort == null) {
                     // when in overflow menu, menu item has no icon button
                     // thus anchor would be null
-                    val anchor = toolbar.findViewById<View>(R.id.apiTBSort) ?: return false
+                    val anchor: View = toolbar.findViewById(R.id.apiTBSort)
+                        ?: toolbar.findViewById(MainR.id.overflowButton)
+                        ?: return false
                     popSort = PopupMenu(context, anchor).apply {
                         if (OsUtils.satisfy(OsUtils.Q)) setForceShowIcon(true)
                         inflate(R.menu.api_sort)
