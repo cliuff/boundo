@@ -25,8 +25,8 @@ internal class MaintainedApp(
     private val daoGetter: () -> AppDao?,
     private val scopeGetter: () -> CoroutineScope?
 ) : ApiViewingApp() {
-    override fun retrieveConsuming(target: Int) {
-        super.retrieveConsuming(target)
+    override fun retrieveConsuming(target: Int, arg: Any?) {
+        super.retrieveConsuming(target, arg)
         val dao = daoGetter.invoke() ?: return
         // update asynchronously
         scopeGetter.invoke()?.launch(Dispatchers.Default) {

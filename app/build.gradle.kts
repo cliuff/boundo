@@ -24,6 +24,8 @@ plugins {
     id("androidx.navigation.safeargs")
     id("dagger.hilt.android.plugin")
     id("kotlin-kapt")
+    // implement parcelable interface by using annotation
+    id("kotlin-parcelize")
 //    id("org.jetbrains.dokka")
 //    id("org.jetbrains.dokka-android")
     id("com.google.android.gms.oss-licenses-plugin")

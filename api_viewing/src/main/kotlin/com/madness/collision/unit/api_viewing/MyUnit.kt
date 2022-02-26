@@ -304,9 +304,10 @@ class MyUnit: com.madness.collision.unit.Unit() {
         if (appFromStore != null) {
             dao.selectApp(appFromStore)?.load(context)?.let { viewModel.addApps(it) }
         } else {
-//            dao.selectNameAlike(text).let {
-//                viewModel.addApps(it)
-//            }
+            val list = dao.selectAllApps()
+                .filter { it.name.contains(text, ignoreCase = true) }
+                .onEach { it.load(context) }
+            viewModel.addApps(list)
         }
         viewModel.sortApps(sortItem)
         refreshList()

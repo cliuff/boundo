@@ -31,10 +31,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import android.provider.Settings
 import androidx.core.content.pm.PackageInfoCompat
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.Ignore
-import androidx.room.PrimaryKey
+import androidx.room.*
 import com.madness.collision.misc.MiscApp
 import com.madness.collision.settings.LanguageMan
 import com.madness.collision.unit.api_viewing.Utils
@@ -44,7 +41,19 @@ import com.madness.collision.util.GraphicsUtil
 import com.madness.collision.util.SystemUtil
 import com.madness.collision.util.X
 import com.madness.collision.util.os.OsUtils
+import kotlinx.parcelize.Parcelize
 import java.io.File
+
+@Parcelize
+data class ApiViewingIconInfo(
+    @Embedded(prefix = "NIC")  // NormalICon
+    val normal: ApiViewingIconDetails,
+    @Embedded(prefix = "RIC")  // RoundICon
+    val round: ApiViewingIconDetails,
+): Parcelable
+
+@Parcelize
+class ApiViewingIconDetails(val isDefined: Boolean, val isAdaptive: Boolean): Parcelable
 
 @Entity(tableName = "app")
 open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parcelable, Cloneable {
@@ -85,6 +94,8 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
     lateinit var appPackage: AppPackage
     @ColumnInfo(defaultValue = "-1")
     var jetpackComposed: Int = -1
+    @Embedded
+    var iconInfo: ApiViewingIconInfo? = null
 
     @Ignore
     var uid: Int = -1
@@ -106,8 +117,7 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
     var targetSDKLetter: Char = '?'
     @Ignore
     var minSDKLetter: Char = '?'
-    @Ignore
-    var adaptiveIcon: Boolean = false
+    val adaptiveIcon: Boolean get() = iconInfo?.normal?.isAdaptive == true
     @Ignore
     var preload: Boolean = false
     @Ignore
@@ -130,8 +140,7 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
         get() = iconRetrievingDetails != null
     private val iconDetails: IconRetrievingDetails
         get() = iconRetrievingDetails!!
-    val hasIcon: Boolean
-        get() = true
+    val hasIcon: Boolean get() = iconInfo != null
 
     constructor(): this("")
 
@@ -159,7 +168,6 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
         uid = -1
         name = ""
         initApiVer()
-        adaptiveIcon = false
         preload = true
         type = TYPE_APP
         isLoadingIcon = false
@@ -310,6 +318,7 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
         if (!preload || isLoadingIcon || hasIcon) return this
         preload = false
         isLoadingIcon = true
+        retrieveAppIconInfo(retrieverLogo())
         isLoadingIcon = false
         return this
     }
@@ -336,7 +345,7 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
     }
 
     fun retrieveAppIconInfo(iconDrawable: Drawable) {
-        adaptiveIcon = OsUtils.satisfy(OsUtils.O) && iconDrawable is AdaptiveIconDrawable
+        retrieveConsuming(2, iconDrawable)
     }
 
     /**
@@ -384,7 +393,7 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
         retrieveConsuming(0)
     }
 
-    open fun retrieveConsuming(target: Int) {
+    open fun retrieveConsuming(target: Int, arg: Any? = null) {
         when (target) {
             0 -> {
                 synchronized(nativeLibraries) {
@@ -401,6 +410,17 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
                         ApkUtil.checkPkg(it, "androidx.compose")
                     }
                     jetpackComposed = if (checkResult) 1 else 0
+                }
+            }
+            2 -> {
+                synchronized(this) {
+                    if (iconInfo != null) return
+                    val iconDrawable = arg as Drawable
+                    val isAdaptive = OsUtils.satisfy(OsUtils.O) && iconDrawable is AdaptiveIconDrawable
+                    iconInfo = ApiViewingIconInfo(
+                        normal = ApiViewingIconDetails(isDefined = true, isAdaptive = isAdaptive),
+                        round = ApiViewingIconDetails(isDefined = false, isAdaptive = false),
+                    )
                 }
             }
         }
@@ -470,7 +490,6 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
         appPackage = readParcelable(AppPackage::class.java.classLoader) ?: AppPackage("")
         updateTime = readLong()
         type = readInt()
-        adaptiveIcon = readInt() == 1
         preload = readInt() == 1
         isLoadingIcon = readInt() == 1
         isNativeLibrariesRetrieved = readInt() == 1
@@ -479,6 +498,7 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
         nativeLibraries = BooleanArray(ApkUtil.NATIVE_LIB_SUPPORT_SIZE) { false }
         for (i in nativeLibraries.indices) nativeLibraries[i] = readInt() == 1
         jetpackComposed = readInt()
+        iconInfo = readParcelable(ApiViewingIconInfo::class.java.classLoader)
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) = dest.run {
@@ -500,7 +520,6 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
         writeParcelable(appPackage, flags)
         writeLong(updateTime)
         writeInt(type)
-        writeInt(if (adaptiveIcon) 1 else 0)
         writeInt(if (preload) 1 else 0)
         writeInt(if (isLoadingIcon) 1 else 0)
         writeInt(if (isNativeLibrariesRetrieved) 1 else 0)
@@ -508,6 +527,7 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
         writeParcelable(iconRetrievingDetails, flags)
         nativeLibraries.forEach { writeInt(if (it) 1 else 0) }
         writeInt(jetpackComposed)
+        writeParcelable(iconInfo, flags)
     }
 
     override fun describeContents(): Int {

@@ -22,6 +22,8 @@ plugins {
     id("com.android.dynamic-feature")
     kotlin("android")
     id("kotlin-kapt")
+    // implement parcelable interface by using annotation
+    id("kotlin-parcelize")
     id("com.cliuff.boundo.dependencies")
 }
 

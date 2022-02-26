@@ -1,0 +1,125 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 4,
+    "identityHash": "12fd44764b78886f75903876d96eab91",
+    "entities": [
+      {
+        "tableName": "app",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`packageName` TEXT NOT NULL, `verName` TEXT NOT NULL, `verCode` INTEGER NOT NULL, `targetAPI` INTEGER NOT NULL, `minAPI` INTEGER NOT NULL, `apiUnit` INTEGER NOT NULL, `updateTime` INTEGER NOT NULL, `isNativeLibrariesRetrieved` INTEGER NOT NULL, `nativeLibraries` TEXT NOT NULL, `isLaunchable` INTEGER NOT NULL, `appPackage` TEXT NOT NULL, `jetpackComposed` INTEGER NOT NULL DEFAULT -1, `NICisDefined` INTEGER, `NICisAdaptive` INTEGER, `RICisDefined` INTEGER, `RICisAdaptive` INTEGER, PRIMARY KEY(`packageName`))",
+        "fields": [
+          {
+            "fieldPath": "packageName",
+            "columnName": "packageName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "verName",
+            "columnName": "verName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "verCode",
+            "columnName": "verCode",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "targetAPI",
+            "columnName": "targetAPI",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "minAPI",
+            "columnName": "minAPI",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "apiUnit",
+            "columnName": "apiUnit",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updateTime",
+            "columnName": "updateTime",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isNativeLibrariesRetrieved",
+            "columnName": "isNativeLibrariesRetrieved",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nativeLibraries",
+            "columnName": "nativeLibraries",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isLaunchable",
+            "columnName": "isLaunchable",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "appPackage",
+            "columnName": "appPackage",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "jetpackComposed",
+            "columnName": "jetpackComposed",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "-1"
+          },
+          {
+            "fieldPath": "iconInfo.normal.isDefined",
+            "columnName": "NICisDefined",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "iconInfo.normal.isAdaptive",
+            "columnName": "NICisAdaptive",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "iconInfo.round.isDefined",
+            "columnName": "RICisDefined",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "iconInfo.round.isAdaptive",
+            "columnName": "RICisAdaptive",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "packageName"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '12fd44764b78886f75903876d96eab91')"
+    ]
+  }
+}
