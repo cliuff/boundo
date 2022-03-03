@@ -29,7 +29,6 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import com.madness.collision.R
 import com.madness.collision.base.BaseActivity
 import com.madness.collision.databinding.ActivityMainBinding
 import com.madness.collision.diy.WindowInsets
@@ -67,9 +66,6 @@ class MainActivity : BaseActivity() {
         const val ACTION_EXTERIOR = "mainExterior"
         const val ACTION_EXTERIOR_THEME = "mainExteriorTheme"
 
-        // ui appearance data
-        private var themeId = P.SETTINGS_THEME_NONE
-
         fun forItem(name: String, args: Bundle? = null): Bundle {
             val extras = Bundle()
             extras.putString(LAUNCH_ITEM, name)
@@ -106,7 +102,6 @@ class MainActivity : BaseActivity() {
 
         val prefSettings = getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
 
-        themeId = loadThemeId(context, prefSettings)
         // this needs to be invoked before update fragments are rendered
         viewModel.updateTimestamp()
 
@@ -126,20 +121,6 @@ class MainActivity : BaseActivity() {
 
             checkMisc(context, prefSettings)
             checkTarget(context)
-        }
-    }
-
-    private fun loadThemeId(context: Context, prefSettings: SharedPreferences) : Int {
-        val app = mainApplication
-        val globalValue = app.globalValue
-        return if (globalValue is Pair<*, *> && globalValue.first as String == ACTION_EXTERIOR_THEME) {
-            app.globalValue = null
-            val themeId = globalValue.second as Int
-            if (themeId != R.style.LaunchScreen) setTheme(themeId)
-            ThemeUtil.updateIsDarkTheme(context, ThemeUtil.getIsDarkTheme(context))
-            themeId
-        } else {
-            ThemeUtil.updateTheme(this, prefSettings)
         }
     }
 
@@ -194,18 +175,10 @@ class MainActivity : BaseActivity() {
             }
             .launchIn(lifecycleScope)
         viewModel.action.observe(this) {
-            when (it.first) {
-                "" -> return@observe
-                ACTION_EXTERIOR -> updateExterior()
-                ACTION_RECREATE -> recreate()
-                ACTION_EXTERIOR_THEME -> {
-                    val newThemeId = ThemeUtil.updateTheme(context, prefSettings, false)
-                    if (themeId != newThemeId) {
-                        mainApplication.globalValue = ACTION_EXTERIOR_THEME to newThemeId
-                        recreate()
-                    }
-                }
-            }
+            it ?: return@observe
+            if (it.first.isBlank()) return@observe
+            if (it.first == ACTION_EXTERIOR) updateExterior()
+            mainApplication.setAction(it)
             viewModel.action.value = "" to null
         }
         viewModel.background.observe(this) {

@@ -25,8 +25,14 @@ import com.madness.collision.BuildConfig
 import com.madness.collision.util.X
 import com.madness.collision.util.ui.AppIconFetcher
 import dagger.hilt.android.HiltAndroidApp
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 import kotlin.system.exitProcess
+
+typealias AppAction = Pair<String, Any?>
 
 @HiltAndroidApp
 class MainApplication : SplitCompatApplication(), Thread.UncaughtExceptionHandler, ImageLoaderFactory {
@@ -58,7 +64,14 @@ class MainApplication : SplitCompatApplication(), Thread.UncaughtExceptionHandle
     var debug: Boolean = false
     var dead: Boolean = true
     var notificationAvailable = true
-    var globalValue: Any? = null
+
+    private val coroutineScope = MainScope()
+    private val _action: MutableSharedFlow<AppAction> = MutableSharedFlow()
+    val action: Flow<AppAction> by ::_action
+
+    fun setAction(action: AppAction) {
+        coroutineScope.launch { _action.emit(action) }
+    }
 
     // changing application context locale will change Locale.Default and LocaleList APIs' returning value
     // in which case will not be able to obtain the system adjusted locale for this app

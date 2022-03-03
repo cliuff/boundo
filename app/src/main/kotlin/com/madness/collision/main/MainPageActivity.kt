@@ -77,8 +77,6 @@ class MainPageActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val prefSettings = getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
-        ThemeUtil.updateTheme(this, prefSettings)
         systemUi { fullscreen() }
         _viewBinding = ActivityMainPageBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
@@ -169,10 +167,9 @@ class MainPageActivity : BaseActivity() {
             }
             .launchIn(lifecycleScope)
         mainViewModel.action.observe(this) {
-            when (it.first) {
-                "" -> return@observe
-                MainActivity.ACTION_RECREATE -> recreate()
-            }
+            it ?: return@observe
+            if (it.first.isBlank()) return@observe
+            mainApplication.setAction(it)
             mainViewModel.action.value = "" to null
         }
         mainViewModel.insetTop.observe(this) {

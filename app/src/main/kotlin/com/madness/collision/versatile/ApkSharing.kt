@@ -27,17 +27,14 @@ import com.madness.collision.base.BaseActivity
 import com.madness.collision.main.MainActivity
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.api_viewing.AccessAV
-import com.madness.collision.util.P
-import com.madness.collision.util.ThemeUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-internal class ApkSharing: BaseActivity() {
+internal class ApkSharing : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ThemeUtil.updateTheme(this, getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE))
         setContentView(R.layout.fragment_loading)
         lifecycleScope.launch(Dispatchers.Default) {
             val context = this@ApkSharing
