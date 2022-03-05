@@ -19,7 +19,6 @@ package com.madness.collision.main
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
@@ -60,10 +59,6 @@ class MainActivity : BaseActivity(), SystemBarMaintainerOwner {
         const val LAUNCH_ITEM_ARGS = "launchItemArgs"
 
         const val ACTION_RECREATE = "mainRecreate"
-        /**
-         * update exterior after background has changed
-         */
-        const val ACTION_EXTERIOR = "mainExterior"
         const val ACTION_EXTERIOR_THEME = "mainExteriorTheme"
 
         fun forItem(name: String, args: Bundle? = null): Bundle {
@@ -120,11 +115,10 @@ class MainActivity : BaseActivity(), SystemBarMaintainerOwner {
         }
     }
 
-    private suspend fun initApplication(context: Context, prefSettings: SharedPreferences) {
+    private fun initApplication(context: Context, prefSettings: SharedPreferences) {
         val app = mainApplication
         if (!app.dead) return
         app.debug = prefSettings.getBoolean(P.ADVANCED, false)
-        if (!app.isDarkTheme) MiscMain.updateExteriorBackgrounds(context)
         app.dead = false
     }
 
@@ -164,12 +158,8 @@ class MainActivity : BaseActivity(), SystemBarMaintainerOwner {
         viewModel.action.observe(this) {
             it ?: return@observe
             if (it.first.isBlank()) return@observe
-            if (it.first == ACTION_EXTERIOR) updateExterior()
             mainApplication.setAction(it)
             viewModel.action.value = "" to null
-        }
-        viewModel.background.observe(this) {
-            applyExterior()
         }
     }
 
@@ -181,10 +171,6 @@ class MainActivity : BaseActivity(), SystemBarMaintainerOwner {
             val isRtl = if (v.isLayoutDirectionResolved) v.layoutDirection == View.LAYOUT_DIRECTION_RTL else false
             consumeInsets(WindowInsets(insets, isRtl))
             WindowInsetsCompat.CONSUMED.toWindowInsets()
-        }
-
-        if (!mainApplication.dead) {
-            viewModel.background.value = mainApplication.background
         }
     }
 
@@ -278,28 +264,5 @@ class MainActivity : BaseActivity(), SystemBarMaintainerOwner {
         viewModel.insetBottom.value = app.insetBottom
         viewModel.insetStart.value = app.insetStart
         viewModel.insetEnd.value = app.insetEnd
-    }
-
-    private fun applyExterior() {
-        val app = mainApplication
-        if (!app.exterior) return
-        if (app.background == null) {
-            background.background = null
-            return
-        }
-        val back = mainApplication.background ?: return
-        val size = SystemUtil.getRuntimeWindowSize(mContext)
-        val bitmap = BackgroundUtil.getBackground(back, size.x, size.y)
-        background.background = BitmapDrawable(mContext.resources, bitmap)
-    }
-
-    /**
-     * for app background changing
-     */
-    private fun updateExterior() {
-        primaryNavBarConfig = SystemBarConfig(mainApplication.isPaleTheme, isTransparentBar = mainApplication.exterior)
-        SystemUtil.applyNavBarConfig(mContext, mWindow, primaryNavBarConfig!!)
-        if (!mainApplication.exterior) background.background = null
-        viewModel.background.value = mainApplication.background
     }
 }

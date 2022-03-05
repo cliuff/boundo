@@ -178,8 +178,6 @@
     <string name="prefExteriorDarkPlan">策略</string>
     <string name="prefExteriorDarkByBatterySaver">節電模式下啟用</string>
     <string name="prefExteriorBackgrounds">背景</string>
-    <string name="prefExteriorBack">明亮背景</string>
-    <string name="prefExteriorBackDark">暗黑背景</string>
     <string name="prefExteriorDarkByBatterySaverSummaryOn">若係統實現了節電模式，當該模式開啟時啟用暗黑主題</string>
     <string name="prefExteriorDarkByBatterySaverSummaryOff">若係統實現了節電模式，當該模式開啟時不啟用暗黑主題，除非系統啟用了暗黑主題</string>
     <string name="prefExteriorDarkPlanScheduleStart">開啟時間</string>

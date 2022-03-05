@@ -175,8 +175,6 @@
     <string name="prefExteriorDarkPlan">戦略</string>
     <string name="prefExteriorDarkByBatterySaver">省電力モードで有効にする</string>
     <string name="prefExteriorBackgrounds">バックグラウンド</string>
-    <string name="prefExteriorBack">明るい背景</string>
-    <string name="prefExteriorBackDark">暗い背景</string>
     <string name="prefExteriorDarkByBatterySaverSummaryOn">システムが省電力モードを実装している場合、モードをオンにするとダークテーマが有効になります</string>
     <string name="prefExteriorDarkByBatterySaverSummaryOff">システムが省電力モードを実装している場合、システムがダークテーマを有効にしない限り、モードをオンにしてもダークテーマは有効になりません。</string>
     <string name="prefExteriorDarkPlanScheduleStart">開始時間</string>

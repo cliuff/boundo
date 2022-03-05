@@ -121,8 +121,6 @@
     <string name="notifyChannelService">Запросы на обслуживание</string>
     <string name="notifyChannelServiceDesc">Получить уведомление о запросе службы на начало деятельности</string>
     <string name="prefExteriorApplyDark">Применить темную тему</string>
-    <string name="prefExteriorBack">Яркий фон</string>
-    <string name="prefExteriorBackDark">Темный фон</string>
     <string name="prefExteriorBackgrounds">Фон</string>
     <string name="prefExteriorDarkByBatterySaver">По экономии заряда батареи</string>
     <string name="prefExteriorDarkByBatterySaverSummaryOff">Если Battery Saver реализован, не применяйте темную тему, когда она включена, за исключением переопределения системы</string>

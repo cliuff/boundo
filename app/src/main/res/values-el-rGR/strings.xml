@@ -177,8 +177,6 @@
     <string name="prefExteriorDarkPlan">Πρόγραμμα</string>
     <string name="prefExteriorDarkByBatterySaver">Με Εξοικονόμηση μπαταρίας</string>
     <string name="prefExteriorBackgrounds">Υπόβαθρα</string>
-    <string name="prefExteriorBack">Φωτεινό φόντο</string>
-    <string name="prefExteriorBackDark">Σκούρο φόντο</string>
     <string name="prefExteriorDarkByBatterySaverSummaryOn">Εάν η Εξοικονόμηση μπαταρίας έχει εφαρμοστεί, εφαρμόστε σκοτεινό θέμα όταν είναι ενεργοποιημένο</string>
     <string name="prefExteriorDarkByBatterySaverSummaryOff">Εάν η Εξοικονόμηση μπαταρίας έχει εφαρμοστεί, μην εφαρμόζετε σκοτεινό θέμα όταν είναι ενεργοποιημένη, εκτός από την παράκαμψη συστήματος</string>
     <string name="prefExteriorDarkPlanScheduleStart">Ωρα έναρξης</string>

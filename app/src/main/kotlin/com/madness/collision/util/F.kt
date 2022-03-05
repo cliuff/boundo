@@ -46,8 +46,6 @@ object F {
     fun valFilePubTtPrevious(context: Context) = createPath(valFilePubTtICal(context), "previous.ics")
     fun valFilePubTtCurrent(context: Context) = createPath(valFilePubTtICal(context), "current.ics")
     fun valFilePubExterior(context: Context) = createPath(filePublicPath(context), Environment.DIRECTORY_PICTURES, "Exterior")
-    fun valFilePubExteriorPortrait(context: Context) = createPath(valFilePubExterior(context), "back.webp")
-    fun valFilePubExteriorPortraitDark(context: Context) = createPath(valFilePubExterior(context), "backDark.webp")
     fun valFilePubTwPortrait(context: Context) = createPath(valFilePubExterior(context), "twBack.webp")
     fun valFilePubTwPortraitDark(context: Context) = createPath(valFilePubExterior(context), "twBackDark.webp")
 

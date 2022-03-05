@@ -96,8 +96,6 @@
     <string name="notifyChannelService">Solicitudes de servicio</string>
     <string name="notifyChannelServiceDesc">Recibir notificaciones de la solicitud del servicio para comenzar la actividad</string>
     <string name="prefExteriorApplyDark">Aplicar tema oscuro</string>
-    <string name="prefExteriorBack">Fondo claro</string>
-    <string name="prefExteriorBackDark">Fondo oscuro</string>
     <string name="prefExteriorBackgrounds">Fondos</string>
     <string name="prefExteriorDarkByBatterySaver">Por ahorro de batería</string>
     <string name="prefExteriorDarkByBatterySaverSummaryOff">Si se implementa el ahorro de batería, no aplique el tema oscuro cuando esté activado, excepto para anular el sistema</string>

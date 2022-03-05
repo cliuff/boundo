@@ -17,7 +17,6 @@
 package com.madness.collision.main
 
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import coil.ImageLoader
 import coil.ImageLoaderFactory
 import com.google.android.play.core.splitcompat.SplitCompatApplication
@@ -44,13 +43,11 @@ class MainApplication : SplitCompatApplication(), Thread.UncaughtExceptionHandle
         INSTANCE = this
     }
 
-    var background: Drawable? = null
     var insetTop: Int = 0
     var insetBottom: Int = 0
     var insetStart: Int = 0
     var insetEnd: Int = 0
     var minBottomMargin: IntArray = intArrayOf(-1, -1)
-    var exterior: Boolean = false
     /**
      * Having a primary color that is close to black.
      * Dark themes are tailored for use in low-light environments.

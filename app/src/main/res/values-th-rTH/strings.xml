@@ -174,8 +174,6 @@
     <string name="prefExteriorDarkPlan">ตารางเวลา</string>
     <string name="prefExteriorDarkByBatterySaver">โดย Battery Saver</string>
     <string name="prefExteriorBackgrounds">พื้นหลัง</string>
-    <string name="prefExteriorBack">พื้นหลังสดใส</string>
-    <string name="prefExteriorBackDark">พื้นหลังสีเข้ม</string>
     <string name="prefExteriorDarkByBatterySaverSummaryOn">หากมีการใช้งาน Battery Saver ให้ใช้ชุดรูปแบบสีเข้มเมื่อเปิดใช้งาน</string>
     <string name="prefExteriorDarkByBatterySaverSummaryOff">หากมีการใช้งาน Battery Saver ห้ามใช้ธีมมืดเมื่อเปิดใช้งานยกเว้นการแทนที่ระบบ</string>
     <string name="prefExteriorDarkPlanScheduleStart">เวลาเริ่มต้น</string>

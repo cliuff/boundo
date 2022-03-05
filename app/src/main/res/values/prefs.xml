@@ -18,8 +18,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- preference keys -->
-    <string name="prefExteriorKeyBack" translatable="false">prefExteriorBack</string>
-    <string name="prefExteriorKeyBackDark" translatable="false">prefExteriorBackDark</string>
     <string name="prefExteriorKeyDarkByBatterySaver" translatable="false">prefExteriorDarkByBatterySaver</string>
     <bool name="prefExteriorDefaultDarkByBatterySaver">true</bool>
     <string name="prefExteriorKeyDarkPlan" translatable="false">prefExteriorDarkPlan</string>

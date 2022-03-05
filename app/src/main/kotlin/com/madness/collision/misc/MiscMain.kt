@@ -19,27 +19,20 @@ package com.madness.collision.misc
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.ShortcutManager
-import android.graphics.drawable.Drawable
 import android.os.Environment
-import androidx.activity.ComponentActivity
-import androidx.activity.viewModels
 import androidx.core.content.edit
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.madness.collision.BuildConfig
 import com.madness.collision.instant.Instant
-import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.UnitManager
 import com.madness.collision.unit.api_viewing.AccessAV
 import com.madness.collision.util.*
 import com.madness.collision.util.os.OsUtils
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.IOException
+import java.lang.Exception
 import kotlin.random.Random
 
 internal object MiscMain {
@@ -89,8 +82,8 @@ internal object MiscMain {
             // move pics from cache to file
             val valCachePubExterior = F.createPath(F.cachePublicPath(context), Environment.DIRECTORY_PICTURES, "Exterior")
             listOf(
-                    F.createPath(valCachePubExterior, "back.webp") to F.valFilePubExteriorPortrait(context),
-                    F.createPath(valCachePubExterior, "backDark.webp") to F.valFilePubExteriorPortraitDark(context),
+                    F.createPath(valCachePubExterior, "back.webp") to F.createPath(F.valFilePubExterior(context), "back.webp"),
+                    F.createPath(valCachePubExterior, "backDark.webp") to F.createPath(F.valFilePubExterior(context), "backDark.webp"),
                     F.createPath(valCachePubExterior, "twBack.webp") to F.valFilePubTwPortrait(context),
                     F.createPath(valCachePubExterior, "twBackDark.webp") to F.valFilePubTwPortraitDark(context)
             ).forEach {
@@ -142,13 +135,22 @@ internal object MiscMain {
         if (verOri in 0 until 21090720) {
             AccessAV.updateTagSettings(context)
         }
-        if (verOri in 0 until 22030513) {
+        if (verOri in 0 until 22030517) {
             val desc = Unit.getDescription(Unit.UNIT_NAME_SCHOOL_TIMETABLE)
             if (desc != null) UnitManager(context).disableUnit(desc)
             // remove unit config of removed unit
             Unit.UNIT_NAME_SCHOOL_TIMETABLE.let {
                 Unit.unpinUnit(context, it, prefSettings)
                 Unit.removeFrequency(context, it, prefSettings)
+            }
+            // delete exterior app background
+            arrayOf(
+                F.createPath(F.valFilePubExterior(context), "back.webp"),
+                F.createPath(F.valFilePubExterior(context), "backDark.webp"),
+            ).forEach {
+                val file = File(it)
+                if (file.exists().not()) return@forEach
+                try { file.delete() } catch (e: Exception) { e.printStackTrace() }
             }
         }
     }
@@ -168,27 +170,6 @@ internal object MiscMain {
         paths.forEach {
             val f = File(it)
             if (f.exists()) f.deleteRecursively()
-        }
-    }
-
-    suspend fun updateExteriorBackgrounds(context: Context) {
-        loadExteriorBackgrounds(context)
-        val mainViewModel: MainViewModel by when (context) {
-            is ComponentActivity -> context.viewModels()
-            is Fragment -> context.activityViewModels()
-            else -> return
-        }
-        withContext(Dispatchers.Main) {
-            mainViewModel.background.value = mainApplication.background
-        }
-    }
-
-    private fun loadExteriorBackgrounds(context: Context){
-        val app = mainApplication
-        val backPath = if (app.isDarkTheme) F.valFilePubExteriorPortraitDark(context) else F.valFilePubExteriorPortrait(context)
-        (File(backPath).exists()).let {
-            if (it) app.background = Drawable.createFromPath(backPath)
-            app.exterior = it
         }
     }
 

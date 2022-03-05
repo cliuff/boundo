@@ -29,8 +29,6 @@ import androidx.preference.SwitchPreference
 import com.madness.collision.R
 import com.madness.collision.main.MainActivity
 import com.madness.collision.main.MainViewModel
-import com.madness.collision.main.showPage
-import com.madness.collision.settings.ExteriorFragment
 import com.madness.collision.util.*
 
 internal class PrefExterior: PreferenceFragmentCompat() {
@@ -103,18 +101,6 @@ internal class PrefExterior: PreferenceFragmentCompat() {
     override fun onPreferenceTreeClick(preference: Preference): Boolean {
         val context = context ?: return super.onPreferenceTreeClick(preference)
         return when(preference.key){
-            getString(R.string.prefExteriorKeyBack) -> {
-                context.showPage<ExteriorFragment> {
-                    putInt(ExteriorFragment.ARG_MODE, ExteriorFragment.MODE_LIGHT)
-                }
-                true
-            }
-            getString(R.string.prefExteriorKeyBackDark) -> {
-                context.showPage<ExteriorFragment> {
-                    putInt(ExteriorFragment.ARG_MODE, ExteriorFragment.MODE_DARK)
-                }
-                true
-            }
             keyLightTheme -> {
                 PopupUtil.selectSingle(context, R.string.prefExteriorLightTheme, entriesLightTheme, indexLightTheme) {
                     pop, _, index ->

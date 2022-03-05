@@ -155,8 +155,6 @@
     <string name="prefExteriorDarkPlan">Zeitplan</string>
     <string name="prefExteriorDarkByBatterySaver">Mit dem Batteriesparmodus</string>
     <string name="prefExteriorBackgrounds">Hintergründe</string>
-    <string name="prefExteriorBack">Heller Hintergrund</string>
-    <string name="prefExteriorBackDark">Dunkler Hintergrund</string>
     <string name="prefExteriorDarkByBatterySaverSummaryOn">Wenn Battery Saver implementiert ist, wenden Sie ein dunkles Thema an, wenn es eingeschaltet ist</string>
     <string name="prefExteriorDarkByBatterySaverSummaryOff">Wenn Battery Saver implementiert ist, wenden Sie kein dunkles Thema an, wenn es aktiviert ist, außer bei Systemüberschreibung</string>
     <string name="prefExteriorDarkPlanScheduleStart">Startzeit</string>

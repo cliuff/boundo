@@ -174,8 +174,6 @@
     <string name="prefExteriorDarkPlan">Cronograma</string>
     <string name="prefExteriorDarkByBatterySaver">Por Economia de Bateria</string>
     <string name="prefExteriorBackgrounds">Planos de fundo</string>
-    <string name="prefExteriorBack">Fundo brilhante</string>
-    <string name="prefExteriorBackDark">Fundo escuro</string>
     <string name="prefExteriorDarkByBatterySaverSummaryOn">Se o Economizador de bateria estiver implementado, aplique o tema escuro quando estiver ligado</string>
     <string name="prefExteriorDarkByBatterySaverSummaryOff">Se o Economizador de bateria estiver implementado, não aplique o tema escuro quando estiver ligado, exceto a substituição do sistema</string>
     <string name="prefExteriorDarkPlanScheduleStart">Hora de início</string>

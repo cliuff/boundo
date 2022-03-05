@@ -174,8 +174,6 @@
     <string name="prefExteriorDarkPlan">Programma</string>
     <string name="prefExteriorDarkByBatterySaver">Risparmio batteria</string>
     <string name="prefExteriorBackgrounds">sfondi</string>
-    <string name="prefExteriorBack">Sfondo luminoso</string>
-    <string name="prefExteriorBackDark">Sfondo scuro</string>
     <string name="prefExteriorDarkByBatterySaverSummaryOn">Se il risparmio batteria è implementato, applica il tema scuro quando è attivo</string>
     <string name="prefExteriorDarkByBatterySaverSummaryOff">Se il risparmio batteria è implementato, non applicare il tema scuro quando è attivo, ad eccezione della sostituzione del sistema</string>
     <string name="prefExteriorDarkPlanScheduleStart">Ora di inizio</string>

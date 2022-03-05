@@ -160,8 +160,6 @@
     <string name="prefExteriorDarkPlan">Programme</string>
     <string name="prefExteriorDarkByBatterySaver">Par l\'économiseur d\'énergie</string>
     <string name="prefExteriorBackgrounds">Arrière plan</string>
-    <string name="prefExteriorBack">Fond clair</string>
-    <string name="prefExteriorBackDark">Fond sombre</string>
     <string name="prefExteriorDarkByBatterySaverSummaryOn">Si l\'économiseur d\'énergie est implémenté, appliquez le thème sombre lorsqu\'il est activé</string>
     <string name="prefExteriorDarkByBatterySaverSummaryOff">Si l\'économiseur d\'énergie est implémenté, n\'appliquez pas le thème sombre lorsqu\'il est activé, sauf en remplacement des paramètres système</string>
     <string name="prefExteriorDarkPlanScheduleStart">Heure de début</string>

@@ -174,8 +174,6 @@
     <string name="prefExteriorDarkPlan">Lịch trình</string>
     <string name="prefExteriorDarkByBatterySaver">Tiết kiệm pin</string>
     <string name="prefExteriorBackgrounds">Tầng lớp</string>
-    <string name="prefExteriorBack">Nền sáng</string>
-    <string name="prefExteriorBackDark">Nền tối</string>
     <string name="prefExteriorDarkByBatterySaverSummaryOn">Nếu tiết kiệm pin được triển khai, hãy áp dụng chủ đề tối khi bật</string>
     <string name="prefExteriorDarkByBatterySaverSummaryOff">Nếu tiết kiệm pin được triển khai, không áp dụng chủ đề tối khi bật, ngoại trừ ghi đè hệ thống</string>
     <string name="prefExteriorDarkPlanScheduleStart">Thời gian bắt đầu</string>

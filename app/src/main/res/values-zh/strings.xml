@@ -159,7 +159,6 @@
     <string name="prefExteriorThemes">主题</string>
     <string name="textAlways">总是</string>
     <string name="textNever">从不</string>
-    <string name="prefExteriorBack">明亮背景</string>
     <string name="prefExteriorDarkByBatterySaverSummaryOff">若系统实现了节电模式，当该模式开启时不启用暗黑主题，除非系统启用了暗黑主题</string>
     <string name="prefExteriorDarkByBatterySaverSummaryOn">若系统实现了节电模式，当该模式开启时启用暗黑主题</string>
     <string name="prefExteriorDarkPlanScheduleEnd">结束时间</string>
@@ -176,7 +175,6 @@
     <string name="avAdapterActionsIcon">分享图标</string>
     <string name="prefSettingsThemeBlackGray">Material Design 黑</string>
     <string name="textFormat">格式</string>
-    <string name="prefExteriorBackDark">暗黑背景</string>
     <string name="prefExteriorBackgrounds">背景</string>
     <string name="apiTextSharingSelectApk">选取刚才下载的安装包</string>
     <string name="notifyChannelServiceDesc">Service 请求启动 activity 时进行通知</string>

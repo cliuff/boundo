@@ -177,8 +177,6 @@
     <string name="prefExteriorDarkPlan">program</string>
     <string name="prefExteriorDarkByBatterySaver">Battery Saver adlı geliştiriciden</string>
     <string name="prefExteriorBackgrounds">Arka plan</string>
-    <string name="prefExteriorBack">Parlak arka plan</string>
-    <string name="prefExteriorBackDark">Koyu arka plan</string>
     <string name="prefExteriorDarkByBatterySaverSummaryOn">Pil Tasarrufu uygulanmışsa, açıkken koyu tema uygulayın</string>
     <string name="prefExteriorDarkByBatterySaverSummaryOff">Pil Tasarrufu uygulanmışsa, sistem geçersiz kılma dışında karanlık temayı açıkken uygulamayın</string>
     <string name="prefExteriorDarkPlanScheduleStart">Başlangıç saati</string>

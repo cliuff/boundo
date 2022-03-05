@@ -56,8 +56,6 @@ class MoreFragment : TaggedFragment(), View.OnClickListener {
     }
 
     private val viewModel: MainViewModel by activityViewModels()
-    private val exterior = mainApplication.exterior
-    private var exteriorTransparency: Int = 0xFF
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val context = context
@@ -75,16 +73,11 @@ class MoreFragment : TaggedFragment(), View.OnClickListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val mViews = view ?: return
-        initData()
         bindData(mViews)
 
         // run test
         val context = context ?: return
         if (TestPlayground.hasTest) TestPlayground.start(context)
-    }
-
-    private fun initData(){
-        if (exterior) exteriorTransparency = resources.getInteger(R.integer.exteriorTransparency)
     }
 
     private fun bindData(mViews: View){
@@ -203,10 +196,6 @@ class MoreFragment : TaggedFragment(), View.OnClickListener {
         for (it in cards) {
             it ?: continue
             it.setOnClickListener(this)
-            if (exterior) {
-                val c = it.cardBackgroundColor
-                it.setCardBackgroundColor(c.withAlpha(exteriorTransparency))
-            }
         }
     }
 

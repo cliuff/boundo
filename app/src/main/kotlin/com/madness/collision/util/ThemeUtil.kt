@@ -26,13 +26,8 @@ import android.graphics.drawable.Drawable
 import android.os.PowerManager
 import android.util.TypedValue
 import androidx.core.content.res.use
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.lifecycleScope
 import com.madness.collision.R
-import com.madness.collision.misc.MiscMain
 import com.madness.collision.unit.themed_wallpaper.ThemedWallpaperEasyAccess
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import java.io.File
 import java.util.*
 
@@ -244,14 +239,7 @@ object ThemeUtil {
             mainApplication.isPaleTheme = getIsPaleTheme(context)
             val isDarkThemePrevious = mainApplication.isDarkTheme
             mainApplication.isDarkTheme = isDarkTheme
-            val darkChanged = isDarkThemePrevious != isDarkTheme
-            if (darkChanged) {
-                val scope = if (context is LifecycleOwner) context.lifecycleScope else GlobalScope
-                scope.launch {
-                    MiscMain.updateExteriorBackgrounds(context)
-                }
-            }
-            return darkChanged
+            return isDarkThemePrevious != isDarkTheme
         }
     }
 }

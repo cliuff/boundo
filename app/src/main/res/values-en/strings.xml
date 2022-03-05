@@ -159,7 +159,6 @@
     <string name="prefExteriorApplyDark">Apply dark theme</string>
     <string name="prefExteriorDarkPlan">Schedule</string>
     <string name="prefExteriorDarkByBatterySaver">By Battery Saver</string>
-    <string name="prefExteriorBack">Bright background</string>
     <string name="prefExteriorDarkByBatterySaverSummaryOn">If Battery Saver is implemented, apply dark theme when it is on</string>
     <string name="prefExteriorDarkByBatterySaverSummaryOff">If Battery Saver is implemented, do not apply dark theme when it is on, except for system override</string>
     <string name="prefExteriorDarkPlanScheduleStart">Start time</string>
@@ -176,7 +175,6 @@
     <string name="avAdapterActionsApk">Share apk</string>
     <string name="prefSettingsThemeBlackGray">Material Design dark</string>
     <string name="textFormat">Format</string>
-    <string name="prefExteriorBackDark">Dark background</string>
     <string name="prefExteriorBackgrounds">Backgrounds</string>
     <string name="apiTextSharingSelectApk">Select the downloaded apk</string>
     <string name="notifyChannelServiceDesc">Get notified of service\'s request to start activity</string>

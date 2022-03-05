@@ -38,7 +38,6 @@ import androidx.lifecycle.lifecycleScope
 import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.databinding.ActivityExteriorBinding
-import com.madness.collision.main.MainActivity
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.themed_wallpaper.AccessTw
 import com.madness.collision.unit.themed_wallpaper.ThemedWallpaperEasyAccess
@@ -61,14 +60,6 @@ class ExteriorFragment: TaggedFragment(), Democratic {
     companion object {
         const val ARG_MODE = "exteriorMode"
         /**
-         * App light background selecting
-         */
-        const val MODE_LIGHT = 0
-        /**
-         * App dark background selecting
-         */
-        const val MODE_DARK = 1
-        /**
          * Themed Wallpaper light wallpaper selecting
          */
         const val MODE_TW_LIGHT = 2
@@ -84,8 +75,7 @@ class ExteriorFragment: TaggedFragment(), Democratic {
         }
     }
 
-    private var mode: Int = MODE_LIGHT
-    private var isTW : Boolean = false
+    private var mode: Int = MODE_TW_LIGHT
     private var isDarkMode: Boolean = false
     private var imageUri: Uri? = null
     private var backPreview: Bitmap? = null
@@ -163,12 +153,9 @@ class ExteriorFragment: TaggedFragment(), Democratic {
 
         lifecycleScope.launch(Dispatchers.Default) {
             val args = arguments
-            mode = args?.getInt(ARG_MODE) ?: MODE_LIGHT
-            isTW = (mode == MODE_TW_LIGHT || mode == MODE_TW_DARK)
-            isDarkMode = (mode == if (isTW) MODE_TW_DARK else MODE_DARK)
+            mode = args?.getInt(ARG_MODE) ?: MODE_TW_LIGHT
+            isDarkMode = (mode == MODE_TW_DARK)
             backPath = when (mode) {
-                MODE_LIGHT -> F.valFilePubExteriorPortrait(context)
-                MODE_DARK -> F.valFilePubExteriorPortraitDark(context)
                 MODE_TW_LIGHT -> F.valFilePubTwPortrait(context)
                 MODE_TW_DARK -> F.valFilePubTwPortraitDark(context)
                 else -> ""
@@ -314,15 +301,9 @@ class ExteriorFragment: TaggedFragment(), Democratic {
             }
             launch(Dispatchers.Main) {
                 dialog.dismiss()
-                if (isTW){
-                    notifyBriefly(R.string.text_done, true)
-                    AccessTw.updateChangeTimestamp()
-                    mainViewModel.popUpBackStack()
-                } else{
-                    setImage(context, null)
-//                    findNavController().popBackStack(R.id.mainFragment, true)
-                    mainViewModel.action.value = MainActivity.ACTION_EXTERIOR to null
-                }
+                notifyBriefly(R.string.text_done, true)
+                AccessTw.updateChangeTimestamp()
+                mainViewModel.popUpBackStack()
             }
         }
     }
@@ -334,16 +315,9 @@ class ExteriorFragment: TaggedFragment(), Democratic {
             val background = File(backPath)
             F.prepare4(background) // delete if exist
 
-            if (isTW){
-                if (!ThemedWallpaperEasyAccess.isDead && ThemedWallpaperEasyAccess.isDark == isDarkMode){
-                    ThemedWallpaperEasyAccess.background = ColorDrawable(if (isDarkMode) Color.BLACK else Color.WHITE)
-                    ThemedWallpaperEasyAccess.wallpaperTimestamp = System.currentTimeMillis()
-                }
-            } else {
-                if (mainApplication.isDarkTheme == isDarkMode){
-                    mainApplication.background = null
-                    mainApplication.exterior = false
-                }
+            if (!ThemedWallpaperEasyAccess.isDead && ThemedWallpaperEasyAccess.isDark == isDarkMode){
+                ThemedWallpaperEasyAccess.background = ColorDrawable(if (isDarkMode) Color.BLACK else Color.WHITE)
+                ThemedWallpaperEasyAccess.wallpaperTimestamp = System.currentTimeMillis()
             }
             return
         }
@@ -362,7 +336,7 @@ class ExteriorFragment: TaggedFragment(), Democratic {
         // enlarge small image
         if (min(blurred.width, blurred.height) < size.x) blurred = X.toMin(blurred, size.x)
         // shrink large image
-        val maxWidth = if (isTW) 2 * size.y else size.y
+        val maxWidth = 2 * size.y
         val maxHeight = size.y
         if (blurred.height > maxHeight){
             val targetWidth = (blurred.width * maxHeight) / blurred.height
@@ -372,18 +346,9 @@ class ExteriorFragment: TaggedFragment(), Democratic {
             val targetHeight = (blurred.height * maxWidth) / blurred.width
             blurred = Bitmap.createScaledBitmap(blurred, maxWidth, targetHeight, true)
         }
-        if (isTW) {
-            if (!ThemedWallpaperEasyAccess.isDead && ThemedWallpaperEasyAccess.isDark == isDarkMode){
-                ThemedWallpaperEasyAccess.background = BitmapDrawable(resources, blurred)
-                ThemedWallpaperEasyAccess.wallpaperTimestamp = System.currentTimeMillis()
-            }
-        } else {
-            if (mainApplication.isDarkTheme == isDarkMode){
-                mainApplication.run {
-                    background = BitmapDrawable(resources, blurred)
-                    exterior = true
-                }
-            }
+        if (!ThemedWallpaperEasyAccess.isDead && ThemedWallpaperEasyAccess.isDark == isDarkMode){
+            ThemedWallpaperEasyAccess.background = BitmapDrawable(resources, blurred)
+            ThemedWallpaperEasyAccess.wallpaperTimestamp = System.currentTimeMillis()
         }
 
         if (F.prepareDir(exteriorPath)) {

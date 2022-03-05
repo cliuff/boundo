@@ -161,8 +161,6 @@
     <string name="prefExteriorDarkPlan">Розклад</string>
     <string name="prefExteriorDarkByBatterySaver">За режимом енергозбереження</string>
     <string name="prefExteriorBackgrounds">Фони</string>
-    <string name="prefExteriorBack">Яскравий фон</string>
-    <string name="prefExteriorBackDark">Темний фон</string>
     <string name="prefExteriorDarkByBatterySaverSummaryOn">Якщо ввімкнено режим економії заряду акумулятора, застосовуйте темну тему, коли вона ввімкнена</string>
     <string name="prefExteriorDarkByBatterySaverSummaryOff">Якщо ввімкнено режим економії заряду акумулятора, не застосовуйте темну тему, коли вона ввімкнена, за винятком системної заміни</string>
     <string name="prefExteriorDarkPlanScheduleStart">Час початку</string>

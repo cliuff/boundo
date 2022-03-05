@@ -17,7 +17,6 @@
 package com.madness.collision.main
 
 import android.app.Activity
-import android.graphics.drawable.Drawable
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -47,7 +46,6 @@ class MainViewModel: ViewModel(){
     val insetEnd: MutableLiveData<Int> = MutableLiveData(mainApplication.insetEnd)
     val contentWidthTop: MutableLiveData<Int> = MutableLiveData(insetTop.value ?: 0)
     val contentWidthBottom: MutableLiveData<Int> = MutableLiveData(insetBottom.value ?: 0)
-    val background: MutableLiveData<Drawable?> = MutableLiveData(null)
     private val _page: MutableSharedFlow<NavPage> = MutableSharedFlow()
     val page: Flow<NavPage> by ::_page
     private var _timestamp = 0L
