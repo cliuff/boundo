@@ -27,6 +27,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePaddingRelative
 import androidx.lifecycle.lifecycleScope
 import com.madness.collision.BuildConfig
@@ -36,18 +37,17 @@ import com.madness.collision.databinding.ActivityImmortalBinding
 import com.madness.collision.diy.WindowInsets
 import com.madness.collision.instant.Instant
 import com.madness.collision.util.*
-import com.madness.collision.util.controller.edgeToEdge
-import com.madness.collision.util.controller.immersiveNavigation
-import com.madness.collision.util.os.OsUtils
+import com.madness.collision.util.os.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.util.*
 
-internal class ImmortalActivity : BaseActivity(), View.OnClickListener {
+internal class ImmortalActivity : BaseActivity(), SystemBarMaintainerOwner, View.OnClickListener {
     private var logFile: File? = null
     private lateinit var viewBinding: ActivityImmortalBinding
+    override val systemBarMaintainer: SystemBarMaintainer = ActivitySystemBarMaintainer(this)
 
     override fun onClick(v: View?) {
         when (v?.id) {
@@ -140,7 +140,7 @@ internal class ImmortalActivity : BaseActivity(), View.OnClickListener {
         Log.i("Immortal", "immortal onCreate")
         // true: from settings, false: from crash
         val isMortal = intent.getStringExtra(P.IMMORTAL_EXTRA_LAUNCH_MODE) == P.IMMORTAL_EXTRA_LAUNCH_MODE_MORTAL
-        edgeToEdge()
+        enableEdgeToEdge()
         viewBinding = ActivityImmortalBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
         applyInsets()
@@ -185,9 +185,10 @@ internal class ImmortalActivity : BaseActivity(), View.OnClickListener {
 
     private fun applyInsets() {
         viewBinding.immortalRoot.setOnApplyWindowInsetsListener { v, insets ->
+            if (checkInsets(insets)) edgeToEdge(insets, false)
             val isRtl = if (v.isLayoutDirectionResolved) v.layoutDirection == View.LAYOUT_DIRECTION_RTL else false
             consumeInsets(WindowInsets(insets, isRtl))
-            insets
+            WindowInsetsCompat.CONSUMED.toWindowInsets()
         }
     }
 
@@ -202,6 +203,5 @@ internal class ImmortalActivity : BaseActivity(), View.OnClickListener {
             measure()
             viewBinding.immortalContent.updatePaddingRelative(top = measuredHeight)
         }
-        immersiveNavigation(insets.bottom)
     }
 }

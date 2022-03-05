@@ -22,8 +22,10 @@ import android.os.Bundle
 import android.view.View
 import android.view.Window
 import androidx.activity.viewModels
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
+import androidx.core.view.updatePaddingRelative
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -36,7 +38,7 @@ import com.madness.collision.diy.WindowInsets
 import com.madness.collision.util.*
 import com.madness.collision.util.controller.getSavedFragment
 import com.madness.collision.util.controller.saveFragment
-import com.madness.collision.util.controller.systemUi
+import com.madness.collision.util.os.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlin.reflect.KClass
@@ -59,7 +61,7 @@ fun Context.showPage(fragment: Fragment) {
     startActivity(intent)
 }
 
-class MainPageActivity : BaseActivity() {
+class MainPageActivity : BaseActivity(), SystemBarMaintainerOwner {
     companion object {
         const val ARG_PAGE = "argPage"
         const val ARG_PAGE_DATA = "argPageData"
@@ -74,10 +76,11 @@ class MainPageActivity : BaseActivity() {
     private val mainViewModel: MainViewModel by viewModels()
     private var pageFragment: Fragment? = null
     private var democratic: Democratic? = null
+    override val systemBarMaintainer: SystemBarMaintainer = ActivitySystemBarMaintainer(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        systemUi { fullscreen() }
+        enableEdgeToEdge()
         _viewBinding = ActivityMainPageBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
         setupUi()
@@ -122,9 +125,10 @@ class MainPageActivity : BaseActivity() {
 
     private fun setupUi() {
         viewBinding.root.setOnApplyWindowInsetsListener { v, insets ->
+            if (checkInsets(insets)) edgeToEdge(insets, false)
             val isRtl = if (v.isLayoutDirectionResolved) v.layoutDirection == View.LAYOUT_DIRECTION_RTL else false
             consumeInsets(WindowInsets(insets, isRtl))
-            insets
+            WindowInsetsCompat.CONSUMED.toWindowInsets()
         }
         viewBinding.mainPageToolbar.setOnMenuItemClickListener click@{ item ->
             item ?: return@click false
@@ -139,7 +143,6 @@ class MainPageActivity : BaseActivity() {
     }
 
     private fun consumeInsets(insets: WindowInsets) {
-        SystemUtil.applyDefaultSystemUiVisibility(this, window, insets.bottom)
         mainViewModel.insetTop.value = insets.top
         mainViewModel.insetBottom.value = insets.bottom
         mainViewModel.insetStart.value = insets.start
@@ -181,6 +184,12 @@ class MainPageActivity : BaseActivity() {
         }
         mainViewModel.insetBottom.observe(this) {
             mainViewModel.contentWidthBottom.value = it
+        }
+        mainViewModel.insetStart.observe(this) {
+            viewBinding.root.updatePaddingRelative(start = it)
+        }
+        mainViewModel.insetEnd.observe(this) {
+            viewBinding.root.updatePaddingRelative(end = it)
         }
     }
 

@@ -26,7 +26,7 @@ import android.view.View
 import android.view.Window
 import androidx.activity.viewModels
 import androidx.core.app.NotificationManagerCompat
-import androidx.lifecycle.Lifecycle
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.madness.collision.base.BaseActivity
@@ -37,8 +37,8 @@ import com.madness.collision.misc.MiscMain
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.api_viewing.AccessAV
 import com.madness.collision.util.*
-import com.madness.collision.util.controller.systemUi
 import com.madness.collision.util.notice.ToastUtils
+import com.madness.collision.util.os.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
@@ -47,7 +47,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.random.Random
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity(), SystemBarMaintainerOwner {
     companion object {
         /**
          * the activity to launch
@@ -77,16 +77,12 @@ class MainActivity : BaseActivity() {
     // session data
     private var launchItem: String? = null
     private val viewModel: MainViewModel by viewModels()
-    // ui appearance data
-    private var primaryStatusBarConfig: SystemBarConfig? = null
-    private var primaryNavBarConfig: SystemBarConfig? = null
     // views
     private lateinit var viewBinding: ActivityMainBinding
     // android
     private lateinit var mContext: Context
     private lateinit var mWindow: Window
-
-    private val background: View get() = viewBinding.mainContainer
+    override val systemBarMaintainer: SystemBarMaintainer = ActivitySystemBarMaintainer(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -133,7 +129,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun inflateLayout(context: Context) {
-        systemUi { fullscreen() }
+        enableEdgeToEdge()
 
         viewBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
@@ -144,11 +140,6 @@ class MainActivity : BaseActivity() {
         setupViewModel(context, prefSettings)
         // invocation will clear stack
         setupUi(context)
-
-        val insetBottom = viewModel.insetBottom.value ?: 0
-        val configs = SystemUtil.applyDefaultSystemUiVisibility(mContext, mWindow, insetBottom)
-        primaryStatusBarConfig = configs.first
-        primaryNavBarConfig = configs.second
     }
 
     private fun setupNav(savedState: Bundle?) {
@@ -162,10 +153,6 @@ class MainActivity : BaseActivity() {
     }
 
     private fun setupViewModel(context: Context, prefSettings: SharedPreferences) {
-        viewModel.democratic
-            .flowWithLifecycle(lifecycle, Lifecycle.State.CREATED)
-            .onEach { clearDemocratic() }
-            .launchIn(lifecycleScope)
         viewModel.page
             .flowWithLifecycle(lifecycle)
             .onEach {
@@ -189,10 +176,11 @@ class MainActivity : BaseActivity() {
     private fun setupUi(context: Context) {
         checkTargetItem()
 
-        background.setOnApplyWindowInsetsListener { v, insets ->
+        viewBinding.root.setOnApplyWindowInsetsListener { v, insets ->
+            if (checkInsets(insets)) edgeToEdge(insets, false)
             val isRtl = if (v.isLayoutDirectionResolved) v.layoutDirection == View.LAYOUT_DIRECTION_RTL else false
             consumeInsets(WindowInsets(insets, isRtl))
-            insets
+            WindowInsetsCompat.CONSUMED.toWindowInsets()
         }
 
         if (!mainApplication.dead) {
@@ -262,23 +250,6 @@ class MainActivity : BaseActivity() {
         AccessAV.clearSeals()
         MiscMain.clearCache(context)
         super.onDestroy()
-    }
-
-    private fun clearDemocratic() {
-        // Low profile mode is used in ApiDecentFragment. Deprecated since Android 11.
-        if (X.belowOff(X.R)) disableLowProfileModeLegacy(window)
-        primaryStatusBarConfig?.let {
-            SystemUtil.applyStatusBarConfig(mContext, mWindow, it)
-        }
-        primaryNavBarConfig?.let {
-            SystemUtil.applyNavBarConfig(mContext, mWindow, it)
-        }
-    }
-
-    @Suppress("deprecation")
-    private fun disableLowProfileModeLegacy(window: Window) {
-        val decorView = window.decorView
-        decorView.systemUiVisibility = decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_LOW_PROFILE.inv()
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {

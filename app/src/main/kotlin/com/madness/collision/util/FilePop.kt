@@ -28,23 +28,23 @@ import android.text.format.Formatter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePaddingRelative
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.madness.collision.R
 import com.madness.collision.databinding.FileActionsBinding
-import com.madness.collision.util.controller.edgeToEdge
-import com.madness.collision.util.os.OsUtils
+import com.madness.collision.diy.WindowInsets
+import com.madness.collision.util.os.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileNotFoundException
 import kotlin.math.max
 import kotlin.math.roundToInt
 
-class FilePop: BottomSheetDialogFragment(){
+class FilePop: BottomSheetDialogFragment(), SystemBarMaintainerOwner {
     companion object{
         const val TAG = "FilePop"
         private const val ARG_INTENT = "argIntent"
@@ -91,25 +91,20 @@ class FilePop: BottomSheetDialogFragment(){
     private var imageLabel = ""
 
     private lateinit var mViews: FileActionsBinding
+    override val systemBarMaintainer: SystemBarMaintainer = DialogFragmentSystemBarMaintainer(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.AppTheme_Pop)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         mViews = FileActionsBinding.inflate(inflater, container, false)
         return mViews.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val context = context ?: return
-        // delay some time to fix nav bar icon not set to dark on Android O (Nexus 9)
-        // likely bottom sheet's bug
-        lifecycleScope.launch {
-            delay(200)
-            configEdgeToEdge(context)
-        }
+        applyInsets()
     }
 
     override fun onStart() {
@@ -121,16 +116,28 @@ class FilePop: BottomSheetDialogFragment(){
         }
     }
 
-    private fun configEdgeToEdge(context: Context) {
-        var isEdgeToEdge: Boolean //= true
-        edgeToEdge(mainApplication.insetBottom) {
+    private fun applyInsets() {
+        mViews.root.setOnApplyWindowInsetsListener { v, insets ->
+            if (checkInsets(insets)) {
+                configEdgeToEdge(insets)
+                val isRtl = if (v.isLayoutDirectionResolved) v.layoutDirection == View.LAYOUT_DIRECTION_RTL else false
+                consumeInsets(WindowInsets(insets, isRtl))
+            }
+            WindowInsetsCompat.CONSUMED.toWindowInsets()
+        }
+    }
+
+    private fun configEdgeToEdge(insets: android.view.WindowInsets): Boolean {
+        val context = context ?: return false
+        var isEdgeToEdge = false //= true
+        edgeToEdge(insets, false) {
             // keep status bar icon color untouched from the activity before this
-            statusBar {
+            top {
                 activity?.window?.let { window ->
                     isDarkIcon = SystemUtil.isDarkStatusIcon(window)
                 }
             }
-            navigationBar {
+            bottom {
                 val colorSurface = ThemeUtil.getColor(context, R.attr.colorASurface)
                 isEdgeToEdge = (isDarkIcon == true && OsUtils.dissatisfy(OsUtils.O)).not()
                 color = if (isEdgeToEdge) {
@@ -141,16 +148,15 @@ class FilePop: BottomSheetDialogFragment(){
                 transparentBar()
             }
         }
+        return isEdgeToEdge
+    }
 
-        // wrap the following code in this if not delayed
-//        if (isEdgeToEdge) {
-//        }
+    private fun consumeInsets(insets: WindowInsets) {
+        val context = context ?: return
         val minMargin = X.size(context, 12f, X.DP).roundToInt()
-        val extraMargin = max(mainApplication.insetBottom, minMargin)
+        val extraMargin = max(insets.bottom, minMargin)
         mViews.fileActionsContainer.updatePaddingRelative(bottom = extraMargin)
-
-        mViews.fileActionsRoot.updatePaddingRelative(
-            start = mainApplication.insetStart, end = mainApplication.insetEnd)
+        mViews.fileActionsRoot.updatePaddingRelative(start = insets.start, end = insets.end)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

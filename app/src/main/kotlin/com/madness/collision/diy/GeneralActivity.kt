@@ -23,7 +23,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.madness.collision.util.os.OsUtils
 
 
-internal class WindowInsets {
+class WindowInsets {
     private var _start: Int = 0
     // rtl layout friendly
     val start: Int

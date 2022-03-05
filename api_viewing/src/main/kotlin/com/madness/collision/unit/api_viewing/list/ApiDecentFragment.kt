@@ -23,13 +23,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.lifecycleScope
 import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.main.MainViewModel
@@ -39,7 +39,15 @@ import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.databinding.ApiDecentFragmentBinding
 import com.madness.collision.unit.api_viewing.seal.SealManager
-import com.madness.collision.util.*
+import com.madness.collision.util.TaggedFragment
+import com.madness.collision.util.X
+import com.madness.collision.util.adapted
+import com.madness.collision.util.mainApplication
+import com.madness.collision.util.os.SystemBarMaintainerOwner
+import com.madness.collision.util.os.systemBars
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 internal class ApiDecentFragment : TaggedFragment(), Democratic {
 
@@ -72,24 +80,31 @@ internal class ApiDecentFragment : TaggedFragment(), Democratic {
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
         toolbar.visibility = View.INVISIBLE
         (toolbar.tag as View?)?.isVisible = false  // hide toolbar divider
-        updateBars()
+        // delay to avoid overriding by activity's configuration
+        lifecycleScope.launch(Dispatchers.Main) {
+            delay(30)
+            updateBars()
+        }
         return true
     }
 
     private fun updateBars() {
-        val context = context ?: return
-        activity?.window?.let { window ->
-            // Low profile mode is deprecated since Android 11.
-            if (X.belowOff(X.R)) applyLowProfileModeLegacy(window)
-            SystemUtil.applyStatusBarColor(context, window, isDarkBar, isTransparentBar = true)
-            SystemUtil.applyNavBarColor(context, window, isDarkBar, isTransparentBar = true)
+        val activity = activity
+        if (activity !is SystemBarMaintainerOwner) return
+        val systemBarMaintainer = activity.systemBarMaintainer
+        with(activity) {
+            val insets = systemBarMaintainer.activeInsets ?: return
+            systemBars(insets, true) {
+                top {
+                    isDarkIcon = isDarkBar
+                    transparentBar()
+                }
+                bottom {
+                    isDarkIcon = isDarkBar
+                    transparentBar()
+                }
+            }
         }
-    }
-
-    @Suppress("deprecation")
-    private fun applyLowProfileModeLegacy(window: Window) {
-        val decorView = window.decorView
-        decorView.systemUiVisibility = decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_LOW_PROFILE
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

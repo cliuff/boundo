@@ -41,6 +41,8 @@ import com.madness.collision.main.updates.UpdatesFragment
 import com.madness.collision.util.*
 import com.madness.collision.util.controller.getSavedFragment
 import com.madness.collision.util.controller.saveFragment
+import com.madness.collision.util.os.SystemBarConfig
+import com.madness.collision.util.os.SystemBarUtils
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -225,7 +227,7 @@ class MainFragment : TaggedFragment(), Democratic {
                 if (config != null && !config.isTransparentBar) {
                     val newConfig = SystemBarConfig(config.isDarkIcon, isTransparentBar = true)
                     activity?.window?.let {
-                        SystemUtil.applyNavBarConfig(context, it, newConfig)
+                        SystemBarUtils.applyNavBarConfig(context, it, newConfig)
                     }
                 }
             }
@@ -241,7 +243,7 @@ class MainFragment : TaggedFragment(), Democratic {
                 // adjust nav bar
                 primaryNavBarConfig?.let {
                     activity?.window?.let { w ->
-                        SystemUtil.applyNavBarConfig(context, w, it)
+                        SystemBarUtils.applyNavBarConfig(context, w, it)
                     }
                 }
             }

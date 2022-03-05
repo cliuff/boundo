@@ -20,45 +20,18 @@ import android.app.Activity
 import android.app.UiModeManager
 import android.content.Context
 import android.content.res.Configuration
-import android.graphics.Color
 import android.graphics.Point
 import android.os.LocaleList
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.madness.collision.R
 import com.madness.collision.settings.LanguageMan
 import com.madness.collision.util.os.OsUtils
 import com.madness.collision.util.ui.appContext
 import java.util.*
 
-/**
- * Pass as argument, differ from the actual color
- */
-class SystemBarConfig(val isDarkIcon: Boolean, val barColor: Int = Color.TRANSPARENT,
-                      val isTransparentBar: Boolean = barColor == Color.TRANSPARENT,
-                      val setDarkIcon: Boolean = true)
-
-
 object SystemUtil {
-
-    fun applyDefaultSystemUiVisibility(context: Context, window: Window, insetBottom: Int)
-            : Pair<SystemBarConfig, SystemBarConfig> {
-        val darkBar = mainApplication.isPaleTheme
-        val isTransparentNav = insetBottom < X.size(context, 20f, X.DP)
-        return applyStatusBarColor(context, window, darkBar, true) to
-                applyNavBarColor(context, window, darkBar, isTransparentNav)
-    }
-
-    fun applyStatusBarColor(context: Context, window: Window, isDarkIcon: Boolean,
-                            isTransparentBar: Boolean = false,
-                            color: Int = Color.TRANSPARENT): SystemBarConfig {
-        SystemBarConfig(isDarkIcon, color, isTransparentBar).let {
-            applyStatusBarConfig(context, window, it)
-            return it
-        }
-    }
 
     private val Window.insetsCtrl: WindowInsetsController?
         @RequiresApi(X.R)
@@ -95,115 +68,6 @@ object SystemUtil {
     @RequiresApi(OsUtils.O)
     private fun isDarkNavIconLegacy(window: Window): Boolean {
         return window.decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR != 0
-    }
-
-    fun applyStatusBarConfig(context: Context, window: Window, config: SystemBarConfig){
-        if (OsUtils.satisfy(OsUtils.M)) {
-            if (config.setDarkIcon) {
-                // todo use substitute in androidx
-                // The IME needs a text view to be focused to be shown
-//            val insetsCtrl = WindowInsetsControllerCompat(window, null)
-                // todo Neither method can change status bar color of MainActivity on Android 11 (R)
-                // (tested on Pixel 2 XL and emulator)
-                if (OsUtils.satisfy(OsUtils.R)) {
-                    val mask = WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
-                    val appearance = if (config.isDarkIcon) mask else 0
-                    window.insetsCtrl?.setSystemBarsAppearance(appearance, mask)
-                } else {
-                    applyStatusBarConfigLegacy(window, config)
-                }
-            }
-            window.statusBarColor = when {
-                config.isTransparentBar -> Color.TRANSPARENT
-                config.barColor != Color.TRANSPARENT -> config.barColor
-                else -> {
-                    val colorBack = ThemeUtil.getColor(context, R.attr.colorABackground)
-                    colorBack and 0xE6FFFFFF.toInt()
-                }
-            }
-        } else window.statusBarColor = when {
-            config.isDarkIcon || !config.isTransparentBar -> {
-                if (config.barColor != Color.TRANSPARENT) {
-                    config.barColor
-                } else if (!config.isDarkIcon) {
-                    val colorBack = ThemeUtil.getColor(context, R.attr.colorABackground)
-                    colorBack and 0xE6FFFFFF.toInt()
-                } else {
-                    val colorBack = ThemeUtil.getColor(context, R.attr.colorAOnBackground)
-                    colorBack and 0x45FFFFFF
-                }
-            }
-            else -> Color.TRANSPARENT
-        }
-    }
-
-    @Suppress("deprecation")
-    @RequiresApi(X.M)
-    private fun applyStatusBarConfigLegacy(window: Window, config: SystemBarConfig) {
-        window.decorView.apply {
-            systemUiVisibility = if (config.isDarkIcon) {
-                systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-            } else {
-                systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
-            }
-        }
-    }
-
-    fun applyNavBarColor(context: Context, window: Window, isDarkIcon: Boolean,
-                         isTransparentBar: Boolean = false,
-                         color: Int = Color.TRANSPARENT): SystemBarConfig {
-        SystemBarConfig(isDarkIcon, color, isTransparentBar).let {
-            applyNavBarConfig(context, window, it)
-            return it
-        }
-    }
-
-    fun applyNavBarConfig(context: Context, window: Window, config: SystemBarConfig){
-        if (X.aboveOn(X.O)) {
-            if (config.setDarkIcon) {
-                // todo use substitute in androidx
-                if (X.aboveOn(X.R)) {
-                    val mask = WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS
-                    val appearance = if (config.isDarkIcon) mask else 0
-                    window.insetsCtrl?.setSystemBarsAppearance(appearance, mask)
-                } else {
-                    applyNavBarConfigLegacy(window, config)
-                }
-            }
-            window.navigationBarColor = when {
-                config.isTransparentBar -> Color.TRANSPARENT
-                config.barColor != Color.TRANSPARENT -> config.barColor
-                else -> {
-                    val colorBack = ThemeUtil.getColor(context, R.attr.colorABackground)
-                    colorBack and 0x56FFFFFF
-                }
-            }
-        } else window.navigationBarColor = when {
-            config.isDarkIcon || !config.isTransparentBar -> {
-                if (config.barColor != Color.TRANSPARENT) {
-                    config.barColor
-                } else if (!config.isDarkIcon) {
-                    val colorBack = ThemeUtil.getColor(context, R.attr.colorABackground)
-                    colorBack and 0x56FFFFFF
-                } else {
-                    val colorBack = ThemeUtil.getColor(context, R.attr.colorAOnBackground)
-                    colorBack and 0x19FFFFFF
-                }
-            }
-            else -> Color.TRANSPARENT
-        }
-    }
-
-    @Suppress("deprecation")
-    @RequiresApi(X.O)
-    private fun applyNavBarConfigLegacy(window: Window, config: SystemBarConfig) {
-        window.decorView.apply {
-            systemUiVisibility = if (config.isDarkIcon) {
-                systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-            } else {
-                systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR.inv()
-            }
-        }
     }
 
     fun applyIfLandscape(activity: Activity, normal: () -> Any, superior: () -> Any) {

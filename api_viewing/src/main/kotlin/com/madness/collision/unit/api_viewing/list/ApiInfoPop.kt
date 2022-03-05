@@ -33,6 +33,7 @@ import android.widget.Toast
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.Guideline
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePaddingRelative
 import androidx.fragment.app.activityViewModels
@@ -46,6 +47,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.ChipGroup
 import com.madness.collision.R
+import com.madness.collision.diy.WindowInsets
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.misc.MiscApp
 import com.madness.collision.unit.api_viewing.ApiViewingViewModel
@@ -58,17 +60,15 @@ import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.databinding.AvShareBinding
 import com.madness.collision.unit.api_viewing.seal.SealManager
 import com.madness.collision.util.*
-import com.madness.collision.util.controller.edgeToEdge
-import com.madness.collision.util.os.OsUtils
+import com.madness.collision.util.os.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
 import kotlin.math.max
 import kotlin.math.roundToInt
 import com.madness.collision.unit.api_viewing.R as MyR
 
-internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
+internal class ApiInfoPop: BottomSheetDialogFragment(), SystemBarMaintainerOwner, View.OnClickListener{
 
     companion object {
         private const val packageCoolApk = ApiViewingApp.packageCoolApk
@@ -129,6 +129,7 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
     }
 
     private val viewModel: ApiInfoViewModel by viewModels()
+    override val systemBarMaintainer: SystemBarMaintainer = DialogFragmentSystemBarMaintainer(this)
 
     private lateinit var mViews: ViewHolder
 
@@ -164,13 +165,7 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val context = context ?: return
-        // delay some time to fix nav bar icon not set to dark on Android O (Nexus 9)
-        // likely bottom sheet's bug
-        lifecycleScope.launch {
-            delay(10)
-            configEdgeToEdge(context)
-        }
+        applyInsets()
     }
 
     override fun onStart() {
@@ -187,21 +182,33 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
         super.dismiss()
     }
 
-    private fun configEdgeToEdge(context: Context) {
-        var isEdgeToEdge: Boolean //= true
-        edgeToEdge(mainApplication.insetBottom) {
+    private fun applyInsets() {
+        mViews.view.setOnApplyWindowInsetsListener { v, insets ->
+            if (checkInsets(insets)) {
+                configEdgeToEdge(insets)
+                val isRtl = if (v.isLayoutDirectionResolved) v.layoutDirection == View.LAYOUT_DIRECTION_RTL else false
+                consumeInsets(WindowInsets(insets, isRtl))
+            }
+            WindowInsetsCompat.CONSUMED.toWindowInsets()
+        }
+    }
+
+    private fun configEdgeToEdge(insets: android.view.WindowInsets): Boolean {
+        val context = context ?: return false
+        var isEdgeToEdge = false //= true
+        edgeToEdge(insets, false) {
             // keep status bar icon color untouched
             // Actually this works as intended only when app theme is set to follow system,
             // not configuring this icon color makes it follow dialog's style/theme,
             // which is defined in styles.xml and it follows system dark mode setting.
             // To fix this, set it to the window config of the activity before this.
-            statusBar {
+            top {
                 // fix status bar icon color
                 activity?.window?.let { window ->
                     isDarkIcon = SystemUtil.isDarkStatusIcon(window)
                 }
             }
-            navigationBar {
+            bottom {
                 val colorSurface = ThemeUtil.getColor(context, R.attr.colorASurface)
                 isEdgeToEdge = (isDarkIcon == true && OsUtils.dissatisfy(OsUtils.O)).not()
                 color = if (isEdgeToEdge) {
@@ -212,12 +219,13 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
                 transparentBar()
             }
         }
+        return isEdgeToEdge
+    }
 
-        // wrap the following code in this if not delayed
-//        if (isEdgeToEdge) {
-//        }
+    private fun consumeInsets(insets: WindowInsets) {
+        val context = context ?: return
         val minMargin = X.size(context, 10f, X.DP).roundToInt()
-        val extraMargin = max(mainApplication.insetBottom, minMargin)
+        val extraMargin = max(insets.bottom, minMargin)
         mViews.guidelineBottom.setGuidelineEnd(extraMargin)
 
         val margin = context.resources.getDimensionPixelOffset(MyR.dimen.avAppInfoOptionsMarginBottom)
@@ -225,8 +233,7 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), View.OnClickListener{
             bottomMargin = extraMargin + margin
         }
 
-        mViews.container.updatePaddingRelative(
-            start = mainApplication.insetStart, end = mainApplication.insetEnd)
+        mViews.container.updatePaddingRelative(start = insets.start, end = insets.end)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

@@ -23,11 +23,11 @@ import android.graphics.Color
 import android.view.Window
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.DialogFragment
-import com.madness.collision.util.SystemBarConfig
-import com.madness.collision.util.SystemUtil
 import com.madness.collision.util.X
 import com.madness.collision.util.mainApplication
 import com.madness.collision.util.os.OsUtils
+import com.madness.collision.util.os.SystemBarConfig
+import com.madness.collision.util.os.SystemBarUtils
 
 interface SystemUiBarConfig {
     // null property value means stay untouched
@@ -130,13 +130,13 @@ private fun configSystemUi(context: Context, window: Window, block: SystemUiScop
         )
     }
     systemUiConfig.statusBarConfig?.let { config ->
-        SystemUtil.applyStatusBarConfig(context, window, toConfig(config))
+        SystemBarUtils.applyStatusBarConfig(context, window, toConfig(config))
         config.isContrastEnforced?.let { enforced ->
             if (OsUtils.satisfy(OsUtils.Q)) window.isStatusBarContrastEnforced = enforced
         }
     }
     systemUiConfig.navigationBarConfig?.let { config ->
-        SystemUtil.applyNavBarConfig(context, window, toConfig(config))
+        SystemBarUtils.applyNavBarConfig(context, window, toConfig(config))
         config.isContrastEnforced?.let { enforced ->
             if (OsUtils.satisfy(OsUtils.Q)) window.isNavigationBarContrastEnforced = enforced
         }
