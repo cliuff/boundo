@@ -32,6 +32,7 @@ import com.madness.collision.BuildConfig
 import com.madness.collision.instant.Instant
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.Unit
+import com.madness.collision.unit.UnitManager
 import com.madness.collision.unit.api_viewing.AccessAV
 import com.madness.collision.util.*
 import com.madness.collision.util.os.OsUtils
@@ -141,6 +142,15 @@ internal object MiscMain {
         if (verOri in 0 until 21090720) {
             AccessAV.updateTagSettings(context)
         }
+        if (verOri in 0 until 22030513) {
+            val desc = Unit.getDescription(Unit.UNIT_NAME_SCHOOL_TIMETABLE)
+            if (desc != null) UnitManager(context).disableUnit(desc)
+            // remove unit config of removed unit
+            Unit.UNIT_NAME_SCHOOL_TIMETABLE.let {
+                Unit.unpinUnit(context, it, prefSettings)
+                Unit.removeFrequency(context, it, prefSettings)
+            }
+        }
     }
 
     private fun initPinnedUnits(pref: SharedPreferences) {
@@ -148,7 +158,6 @@ internal object MiscMain {
         listOf(
                 Unit.UNIT_NAME_API_VIEWING,
                 Unit.UNIT_NAME_AUDIO_TIMER,
-                Unit.UNIT_NAME_SCHOOL_TIMETABLE
         ).forEach {
             pinnedUnits.add(it)
         }

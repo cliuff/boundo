@@ -26,9 +26,9 @@
     <ImageButton
         android:id="@+id/avAppInfoOptions"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/avAppInfoCapture"
         android:layout_marginEnd="18dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="10dp"
         android:padding="7dp"
         android:contentDescription="@null"
         app:tint="?colorTextSub"
@@ -42,10 +42,10 @@
 
     <ImageButton
         android:id="@+id/avAppInfoCapture"
-        app:layout_constraintEnd_toStartOf="@id/avAppInfoOptions"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginEnd="10dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginEnd="18dp"
+        android:layout_marginTop="22dp"
         android:padding="9dp"
         android:contentDescription="@null"
         app:tint="?colorTextSub"
@@ -71,7 +71,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="46dp" />
+            app:layout_constraintGuide_begin="16dp" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/sdk_info_guideline_start"

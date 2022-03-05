@@ -84,20 +84,24 @@ class MainFragment : TaggedFragment(), Democratic {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val updatesMode = arguments?.getInt(UpdatesFragment.ARG_MODE)
-        val f = f@{ i: Int ->
+        val f = (0..2).map f@{ i: Int ->
             savedInstanceState ?: return@f null
             childFragmentManager.getSavedFragment<Fragment>(savedInstanceState, STATE_KEY_NAV_ITEM + i)
         }
         navFragments = arrayOf(
             lazy {
-                f(0) ?: run {
+                f[0] ?: run {
                     updatesMode ?: return@run UpdatesFragment()
                     UpdatesFragment.newInstance(updatesMode)
                 }
             },
-            lazy { f(1) ?: MainUnitsFragment() },
-            lazy { f(2) ?: MoreFragment() }
+            lazy { f[1] ?: MainUnitsFragment() },
+            lazy { f[2] ?: MoreFragment() },
         )
+        val savedIndexes = f.mapIndexedNotNull { i, _ -> i }
+        // manually initialize lazy for saved ones,
+        // so their initialization states are checked correctly in onSaveInstanceState
+        savedIndexes.forEach { navFragments[it].value }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

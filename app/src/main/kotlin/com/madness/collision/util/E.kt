@@ -21,7 +21,6 @@ import android.graphics.Bitmap
 import android.graphics.Point
 import android.net.Uri
 import android.os.Build
-import android.text.PrecomputedText
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.LeadingMarginSpan
@@ -39,12 +38,7 @@ import com.madness.collision.R
 import com.madness.collision.main.MainApplication
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.util.file.ContentProviderUtils
-import com.madness.collision.util.ui.appLocale
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import java.io.File
-import java.lang.ref.WeakReference
 import kotlin.math.roundToInt
 
 /**
@@ -53,66 +47,26 @@ import kotlin.math.roundToInt
 val mainApplication = MainApplication.INSTANCE
 
 /**
- * pre-compute text and set text when computing work is finished
- * 19040222
- */
-infix fun TextView.dart(text: CharSequence) = dartText(this, text)
-
-private fun dartText(view: TextView, text: CharSequence) {
-    val ref = WeakReference(view)
-    GlobalScope.launch {
-        if (X.aboveOn(X.P)) {
-            val text4View = PrecomputedText.create(text, view.textMetricsParams)
-            GlobalScope.launch(Dispatchers.Main) {
-                ref.get()?.let { tv ->
-                    tv.textMetricsParams = text4View.params
-                    tv.text = text4View
-                }
-            }
-        } else {
-            val text4View = PrecomputedTextCompat.create(text, TextViewCompat.getTextMetricsParams(view))
-            GlobalScope.launch(Dispatchers.Main) {
-                ref.get()?.let { tv ->
-                    TextViewCompat.setTextMetricsParams(tv, text4View.params)
-                    TextViewCompat.setPrecomputedText(tv, text4View)
-                }
-            }
-        }
-    }
-}
-
-/**
- * pre-computed text boost performance but cause bug, cannot measure accurately,
- * set a character in order to measure
- * 19040222
- */
-infix fun TextView.dartHold(text: CharSequence) {
-    this.text = P.DART_PLACEHOLDER
-    this dart text
-}
-
-/**
  * IllegalArgumentException: Given text can not be applied to TextView
  * Meizu 15 Plus, API 24
  * [TextViewCompat.setPrecomputedText]
  *
  * IllegalArgumentException: PrecomputedText's Parameters don't match the parameters of this TextView.
  * Consider using setTextMetricsParams(precomputedText.getParams()) to override the settings of this TextView.
- * meizu 17 Pro, API 30
+ * meizu 17 Pro, API 30; Samsung Galaxy Note20 Ultra 5G Dual-SIM, API 31
  */
 infix fun AppCompatTextView.dartFuture(text: CharSequence) {
-    if (Build.MANUFACTURER.lowercase(appLocale) == "meizu") {
+    if (Build.MANUFACTURER.compareTo("meizu", ignoreCase = true) == 0) {
         setText(text)
         return
     }
-    val textFuture = try {
-        PrecomputedTextCompat.getTextFuture(text, textMetricsParamsCompat, null)
+    try {
+        val textFuture = PrecomputedTextCompat.getTextFuture(text, textMetricsParamsCompat, null)
+        setTextFuture(textFuture)
     } catch (e: IllegalArgumentException) {
         e.printStackTrace()
         setText(text)
-        return
     }
-    setTextFuture(textFuture)
 }
 
 fun View.alterPadding(
