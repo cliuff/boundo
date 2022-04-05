@@ -18,7 +18,24 @@ package com.madness.collision.unit.device_manager.list
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
+
+sealed class DeviceListUiState {
+    object None : DeviceListUiState()
+    object PermissionGranted : DeviceListUiState()
+    object PermissionDenied : DeviceListUiState()
+    object BluetoothDisabled : DeviceListUiState()
+    object AccessAvailable : DeviceListUiState()
+}
 
 internal class DeviceListViewModel : ViewModel() {
-    lateinit var data: MutableLiveData<Pair<List<DeviceItem>, (() -> Unit)?>>
+    val data: MutableLiveData<Pair<List<DeviceItem>, (() -> Unit)?>> = MutableLiveData()
+    private val _uiState: MutableStateFlow<DeviceListUiState> = MutableStateFlow(DeviceListUiState.None)
+    val uiState: StateFlow<DeviceListUiState> by ::_uiState
+
+    fun setState(state: DeviceListUiState) {
+        _uiState.update { state }
+    }
 }

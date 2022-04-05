@@ -26,6 +26,7 @@
             android:key="@string/avIncludeDisabled"
             android:title="@string/prefSettingsAvIncludeDisabled" />
 
+<!--
         <androidx.preference.SwitchPreference
             android:defaultValue="@bool/API_CIRCULAR_ICON_DEFAULT"
             android:key="@string/API_CIRCULAR_ICON"
@@ -40,6 +41,7 @@
             android:defaultValue="@bool/avClipRoundDefault"
             android:key="@string/avClipRound"
             android:title="@string/prefSettingsTrim2Round" />
+-->
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory

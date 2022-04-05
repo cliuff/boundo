@@ -17,8 +17,9 @@
 package com.madness.collision.unit.device_manager.list
 
 import android.Manifest
-import android.app.Activity
-import android.bluetooth.*
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothProfile
 import android.content.BroadcastReceiver
 import android.content.Intent
 import android.os.Bundle
@@ -28,7 +29,9 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.WorkerThread
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.madness.collision.R
 import com.madness.collision.databinding.UnitDmDeviceListBinding
@@ -38,6 +41,8 @@ import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.notifyBriefly
 import com.madness.collision.util.os.OsUtils
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -45,10 +50,6 @@ internal class DeviceListFragment: TaggedFragment(), StateObservable {
 
     override val category: String = "DM"
     override val id: String = "DM-DeviceList"
-
-    companion object {
-        private const val REQUEST_ENABLE_BT = 1
-    }
 
     private val viewModel: DeviceListViewModel by viewModels()
     private val manager = DeviceManager()
@@ -60,9 +61,9 @@ internal class DeviceListFragment: TaggedFragment(), StateObservable {
     override val stateReceiver: BroadcastReceiver = stateReceiverImp
 
     override fun onBluetoothStateChanged(state: Int) {
-        lifecycleScope.launch(Dispatchers.Default) {
-            loadDeviceItems()
-        }
+        val uiState = if (state == BluetoothAdapter.STATE_ON) DeviceListUiState.AccessAvailable
+        else DeviceListUiState.BluetoothDisabled
+        viewModel.setState(uiState)
     }
 
     override fun onDeviceStateChanged(device: BluetoothDevice, state: Int) {
@@ -75,6 +76,12 @@ internal class DeviceListFragment: TaggedFragment(), StateObservable {
         super.onCreate(savedInstanceState)
         val context = context ?: return
         registerStateReceiver(context)
+        lifecycle.addObserver(object : DefaultLifecycleObserver {
+            override fun onDestroy(owner: LifecycleOwner) {
+                unregisterStateReceiver(context)
+                manager.close()
+            }
+        })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -84,15 +91,6 @@ internal class DeviceListFragment: TaggedFragment(), StateObservable {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val context = context ?: return
-        viewModel.data = MutableLiveData()
-        if (manager.isDisabled) {
-            val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
-        }
-        lifecycleScope.launch(Dispatchers.Default) {
-            if (manager.isEnabled) manager.initProxy(context)
-            loadDeviceItems()
-        }
 
         adapter = DeviceItemAdapter(context, object : DeviceItemAdapter.Listener {
             override val click: (DeviceItem) -> Unit = {
@@ -116,24 +114,44 @@ internal class DeviceListFragment: TaggedFragment(), StateObservable {
             adapter.setData(items)
             updateBlock?.invoke()
         }
+        viewModel.uiState
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            .onEach(::resolveUiState)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
-    /**
-     * Get device items from service and load them
-     */
-    @WorkerThread
-    private suspend fun loadDeviceItems() {
-        // request runtime bluetooth permission to get paired devices
-        if (OsUtils.satisfy(OsUtils.S)) {
-            val context = context ?: return
-            val permission = Manifest.permission.BLUETOOTH_CONNECT
-            if (PermissionUtils.check(context, arrayOf(permission)).isNotEmpty()) {
-                bluetoothConnectLauncher.launch(permission)
-            } else {
-                loadDeviceItemsActual()
+    private suspend fun resolveUiState(uiState: DeviceListUiState) {
+        when (uiState) {
+            DeviceListUiState.None -> {
+                if (OsUtils.dissatisfy(OsUtils.S)) {
+                    viewModel.setState(DeviceListUiState.PermissionGranted)
+                    return
+                }
+                val context = context ?: return
+                val permission = Manifest.permission.BLUETOOTH_CONNECT
+                if (PermissionUtils.check(context, arrayOf(permission)).isNotEmpty()) {
+                    bluetoothConnectLauncher.launch(permission)
+                } else {
+                    viewModel.setState(DeviceListUiState.PermissionGranted)
+                }
             }
-        } else {
-            loadDeviceItemsActual()
+            DeviceListUiState.PermissionGranted -> {
+                if (manager.isEnabled) {
+                    viewModel.setState(DeviceListUiState.AccessAvailable)
+                    return
+                }
+                val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+                bluetoothEnableLauncher.launch(enableBtIntent)
+            }
+            DeviceListUiState.PermissionDenied -> {}
+            DeviceListUiState.BluetoothDisabled -> {}
+            DeviceListUiState.AccessAvailable -> {
+                val context = context ?: return
+                withContext(Dispatchers.Default) {
+                    manager.initProxy(context)
+                    loadDeviceItemsActual()
+                }
+            }
         }
     }
 
@@ -149,9 +167,14 @@ internal class DeviceListFragment: TaggedFragment(), StateObservable {
 
     private val bluetoothConnectLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()) register@{ granted ->
-        if (!granted) return@register
-        lifecycleScope.launch(Dispatchers.Default) { loadDeviceItemsActual() }
+        val state = if (granted) DeviceListUiState.PermissionGranted
+        else DeviceListUiState.PermissionDenied
+        viewModel.setState(state)
     }
+
+    // Observe state change in state receiver instead
+    private val bluetoothEnableLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()) { }
 
     @WorkerThread
     private suspend fun updateDeviceItem(mac: String, state: Int) {
@@ -168,25 +191,6 @@ internal class DeviceListFragment: TaggedFragment(), StateObservable {
             }
             updateRegulator.regulate(regulation)
             break
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        manager.close()
-        val context = context ?: return
-        unregisterStateReceiver(context)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_ENABLE_BT) {
-            if (resultCode != Activity.RESULT_OK) return
-            val context = context ?: return
-            if (manager.isDisabled) return
-            lifecycleScope.launch(Dispatchers.Default) {
-                manager.initProxy(context)
-                loadDeviceItems()
-            }
         }
     }
 }

@@ -55,6 +55,7 @@ import com.madness.collision.util.os.OsUtils
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.processors.ReplayProcessor
 import kotlinx.coroutines.*
+import okio.ArrayIndexOutOfBoundsException
 import org.reactivestreams.FlowAdapters
 import java.util.concurrent.Flow
 import java.util.function.Consumer
@@ -407,9 +408,14 @@ class MyControlService : ControlsProviderService(), StateObservable {
                         val updatePublisher = updatePublisher ?: return@launch
                         getControl(context, controlId, sessionNo)?.let { c ->
                             // IndexOutOfBoundsException (ReplayProcessor.java:772)
+                            // todo concurrency must be the root cause
                             try {
                                 updatePublisher.onNext(c)
                             } catch (e: IndexOutOfBoundsException) {
+                                e.printStackTrace()
+                            } catch (e: ArrayIndexOutOfBoundsException) {
+                                e.printStackTrace()
+                            } catch (e: NullPointerException) {
                                 e.printStackTrace()
                             }
                         }

@@ -62,41 +62,34 @@ internal object MiscMain {
             initPinnedUnits(prefSettings)
             // init tags
             AccessAV.initTagSettings(context, prefSettings)
+            // disable school timetable unit
+            val desc = Unit.getDescription(Unit.UNIT_NAME_SCHOOL_TIMETABLE)
+            if (desc != null) UnitManager(context).disableUnit(desc)
             return
         }
         // below: app in update process to the newest
         // below: apply actions
         if (verOri in 0 until 20032901) {
-            // covert to json
-            val pref: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
-            val data = pref.getStringSet(P.UNIT_FREQUENCIES, HashSet())!!
+            // remove old format frequency data
+            val pref = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
             pref.edit { remove(P.UNIT_FREQUENCIES) }
-            val originalData = data.associate { it.split(":").run { this[0] to this[1] } }
-            PrefsUtil.putCompoundItem(pref, P.UNIT_FREQUENCIES, originalData)
             // init pinned units
             initPinnedUnits(prefSettings)
             // init tags
             AccessAV.initTagSettings(context, prefSettings)
         }
         if (verOri in 0 until 20042923) {
-            // move pics from cache to file
+            // delete legacy location pics in cache
             val valCachePubExterior = F.createPath(F.cachePublicPath(context), Environment.DIRECTORY_PICTURES, "Exterior")
-            listOf(
-                    F.createPath(valCachePubExterior, "back.webp") to F.createPath(F.valFilePubExterior(context), "back.webp"),
-                    F.createPath(valCachePubExterior, "backDark.webp") to F.createPath(F.valFilePubExterior(context), "backDark.webp"),
-                    F.createPath(valCachePubExterior, "twBack.webp") to F.valFilePubTwPortrait(context),
-                    F.createPath(valCachePubExterior, "twBackDark.webp") to F.valFilePubTwPortraitDark(context)
+            arrayOf(
+                F.createPath(valCachePubExterior, "back.webp"),
+                F.createPath(valCachePubExterior, "backDark.webp"),
+                F.createPath(valCachePubExterior, "twBack.webp"),
+                F.createPath(valCachePubExterior, "twBackDark.webp"),
             ).forEach {
-                val oriFile = File(it.first)
-                val newFile = File(it.second)
-                if (oriFile.exists() && F.prepare4(newFile)) {
-                    try {
-                        X.copyFileLessTwoGB(oriFile, newFile)
-                        oriFile.delete()
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                    }
-                }
+                val oriFile = File(it)
+                if (oriFile.exists().not()) return@forEach  // continue
+                try { oriFile.delete() } catch (e: IOException) { e.printStackTrace() }
             }
         }
         if ((verOri in 0 until 20092514) && X.aboveOn(X.N_MR1)) {
@@ -136,6 +129,7 @@ internal object MiscMain {
             AccessAV.updateTagSettings(context)
         }
         if (verOri in 0 until 22030517) {
+            // disable school timetable unit
             val desc = Unit.getDescription(Unit.UNIT_NAME_SCHOOL_TIMETABLE)
             if (desc != null) UnitManager(context).disableUnit(desc)
             // remove unit config of removed unit
