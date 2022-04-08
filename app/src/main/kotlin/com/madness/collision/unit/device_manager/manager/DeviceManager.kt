@@ -21,10 +21,12 @@ import android.content.Context
 import android.util.SparseArray
 import androidx.core.util.size
 import com.madness.collision.util.os.OsUtils
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import java.lang.reflect.Method
 import kotlin.collections.set
+import kotlin.coroutines.resume
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.ExperimentalTime
 
 /**
  * No need to invoke [close] if [useProxy] is false
@@ -82,8 +84,24 @@ class DeviceManager(useProxy: Boolean = true): AutoCloseable {
         return profiles.map { proxies[it]?.connectedDevices ?: emptyList() }.flatten()
     }
 
-    fun initProxy(context: Context, timeout: Long = 400) {
+    @OptIn(ExperimentalTime::class)  // use Duration
+    suspend fun initProxy(context: Context) {
         if (!doUseProxy || hasProxy) return
+        initMethods()
+        // wait for proxies to be ready
+        withTimeoutOrNull(6.seconds) { connectProfileProxy(context) }
+    }
+
+    fun initProxySync(context: Context) {
+        if (!doUseProxy || hasProxy) return
+        initMethods()
+        val profileListener = getProfileListener { }
+        // Establish connection to the proxy.
+        profiles.filter { proxies[it] == null }
+            .forEach { adapter?.getProfileProxy(context, profileListener, it) }
+    }
+
+    private fun initMethods() {
         val proxyClasses = arrayOf(BluetoothHeadset::class.java, BluetoothA2dp::class.java)
         val paramClass = BluetoothDevice::class.java
         profiles.forEachIndexed { index, profile ->
@@ -99,33 +117,29 @@ class DeviceManager(useProxy: Boolean = true): AutoCloseable {
             if (OsUtils.satisfy(OsUtils.S)) methods[profile] = profileMethods
             else methods.put(profile, profileMethods)
         }
+    }
 
-        val profileListener = object : BluetoothProfile.ServiceListener {
-            override fun onServiceConnected(profile: Int, proxy: BluetoothProfile) {
-                if (OsUtils.satisfy(OsUtils.S)) proxies[profile] = proxy
-                else proxies.put(profile, proxy)
-            }
+    private inline fun getProfileListener(crossinline block: () -> Unit)
+    = object : BluetoothProfile.ServiceListener {
+        override fun onServiceConnected(profile: Int, proxy: BluetoothProfile) {
+            if (OsUtils.satisfy(OsUtils.S)) proxies[profile] = proxy
+            else proxies.put(profile, proxy)
+            block()
+        }
 
-            override fun onServiceDisconnected(profile: Int) {
-                proxies.remove(profile)
-            }
+        override fun onServiceDisconnected(profile: Int) {
+            proxies.remove(profile)
         }
-        for (profile in profiles) {
-            if (proxies[profile] != null) continue
-            // Establish connection to the proxy.
-            adapter?.getProfileProxy(context, profileListener, profile)
+    }
+
+    private suspend fun connectProfileProxy(context: Context): Unit
+    = suspendCancellableCoroutine co@{ continuation ->
+        val profileListener = getProfileListener {
+            if (hasProxy) continuation.resume(Unit)
         }
-        // skip waiting
-        if (timeout < 100) return
-        // wait for proxies to be ready
-        runBlocking {
-            val startTime = System.currentTimeMillis()
-            while (true) {
-                delay(100)
-                if (hasProxy) break
-                if (System.currentTimeMillis() - startTime > timeout) break
-            }
-        }
+        // Establish connection to the proxy.
+        profiles.filter { proxies[it] == null }
+            .forEach { adapter?.getProfileProxy(context, profileListener, it) }
     }
 
     override fun close() {
