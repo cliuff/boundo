@@ -82,6 +82,12 @@ internal class AppListService {
             ver.apiText + context.getString(R.string.textParentheses, sdkDetails)
         }
 
+        val compileVer = VerInfo(appInfo.compileAPI, true)
+        builder.append("Compile SDK", StyleSpan(Typeface.BOLD), spanFlags)
+                .append(context.getString(R.string.textColon), StyleSpan(Typeface.BOLD), spanFlags)
+                .append(sdkInfo.invoke(compileVer))
+                .append('\n')
+
         val targetVer = VerInfo(appInfo.targetAPI, true)
         builder.append(context.getString(R.string.apiSdkTarget), StyleSpan(Typeface.BOLD), spanFlags)
                 .append(context.getString(R.string.textColon), StyleSpan(Typeface.BOLD), spanFlags)

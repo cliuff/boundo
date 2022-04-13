@@ -21,7 +21,6 @@ import com.cliuff.boundo.dependency.Dependencies
 plugins {
     id("com.android.application")
     kotlin("android")
-    id("androidx.navigation.safeargs")
     id("dagger.hilt.android.plugin")
     id("kotlin-kapt")
     // implement parcelable interface by using annotation
@@ -82,8 +81,8 @@ android {
         applicationId = "com.madness.collision"
         minSdk = 22
         targetSdk = 32
-        versionCode = 21081315
-        versionName = "3.7.6"
+        versionCode = 22041320
+        versionName = "3.8.3"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testApplicationId = "${applicationId}.test"
         renderscriptSupportModeEnabled = true

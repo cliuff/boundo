@@ -2,6 +2,106 @@
 Tag content regex: \n((((?!(<.*>)).)*)\n)*((?!(<.*>)).)+
 
 
+- **3.8.1** 22022701
+<en-US>
+• Support Ukrainian
+• Improved navigation experience
+• Enhanced experience for screen rotation and split screen
+</en-US>
+<ar>
+• دعم الأوكرانية
+• تحسين تجربة الملاحة
+• تجربة محسنة لتدوير الشاشة وتقسيم الشاشة
+</ar>
+<de-DE>
+• Ukrainisch unterstützen
+• Verbessertes Navigationserlebnis
+• Verbessertes Erlebnis für Bildschirmrotation und geteilten Bildschirm
+</de-DE>
+<el-GR>
+• Υποστήριξη της Ουκρανίας
+• Βελτιωμένη εμπειρία πλοήγησης
+• Βελτιωμένη εμπειρία για περιστροφή οθόνης και διαχωρισμό οθόνης
+</el-GR>
+<en-GB>
+• Support Ukrainian
+• Improved navigation experience
+• Enhanced experience for screen rotation and split screen
+</en-GB>
+<es-419>
+• Apoyar al ucraniano
+• Experiencia de navegación mejorada
+• Experiencia mejorada para rotación de pantalla y pantalla dividida
+</es-419>
+<es-ES>
+• Apoyar al ucraniano
+• Experiencia de navegación mejorada
+• Experiencia mejorada para rotación de pantalla y pantalla dividida
+</es-ES>
+<es-US>
+• Apoyar al ucraniano
+• Experiencia de navegación mejorada
+• Experiencia mejorada para rotación de pantalla y pantalla dividida
+</es-US>
+<fr-FR>
+• Soutenir l'ukrainien
+• Expérience de navigation améliorée
+• Expérience améliorée pour la rotation de l'écran et l'écran partagé
+</fr-FR>
+<it-IT>
+• Supporto ucraino
+• Esperienza di navigazione migliorata
+• Esperienza migliorata per la rotazione dello schermo e lo schermo diviso
+</it-IT>
+<ja-JP>
+•ウクライナ語のサポート
+•ナビゲーションエクスペリエンスの向上
+•強化された画面回転と分割画面エクスペリエンス
+</ja-JP>
+<ko-KR>
+• 우크라이나어 지원
+• 향상된 탐색 경험
+• 향상된 화면 회전 및 분할 화면 경험
+</ko-KR>
+<pt-PT>
+• Suporte ucraniano
+• Experiência de navegação aprimorada
+• Experiência aprimorada para rotação de tela e tela dividida
+</pt-PT>
+<ru-RU>
+• Поддержите украинский
+• Улучшенная навигация
+• Расширенные возможности поворота экрана и разделения экрана.
+</ru-RU>
+<th>
+• สนับสนุนภาษายูเครน
+• ปรับปรุงประสบการณ์การนำทาง
+• ประสบการณ์ที่เพิ่มขึ้นสำหรับการหมุนหน้าจอและการแบ่งหน้าจอ
+</th>
+<tr-TR>
+• Ukraynaca'yı destekleyin
+• İyileştirilmiş navigasyon deneyimi
+• Ekran döndürme ve bölünmüş ekran için gelişmiş deneyim
+</tr-TR>
+<vi>
+• Hỗ trợ tiếng Ukraina
+• Cải thiện trải nghiệm điều hướng
+• Nâng cao trải nghiệm xoay màn hình và chia đôi màn hình
+</vi>
+<zh-CN>
+• 支持乌克兰语
+• 提升了导航、转屏、分屏体验
+</zh-CN>
+<zh-HK>
+• 支持烏克蘭語
+• 提升了導航、轉屏、分屏體驗
+</zh-HK>
+<zh-TW>
+• 支持烏克蘭語
+• 提升了導航、轉屏、分屏體驗
+</zh-TW>
+
+
 - **3.7.9** 21110823
 <en-US>
   دعم تغيير لغة العرض في التطبيق.
@@ -1166,13 +1266,13 @@ Khác
 • 按標籤過濾應用列表
 • 將應用列表導出為CSV表格
 • 新標籤：隱藏，找出不顯示桌面圖標的應用
-• 軟件包安裝程序和跨平台框​​架的標籤現在顯示圖標
+• 軟件包安裝程序和跨平台框架的標籤現在顯示圖標
 </zh-HK>
 <zh-TW>
 • 按標籤過濾應用列表
 • 將應用列表導出為CSV表格
 • 新標籤：隱藏，找出不顯示桌面圖標的應用
-• 軟件包安裝程序和跨平台框​​架的標籤現在顯示圖標
+• 軟件包安裝程序和跨平台框架的標籤現在顯示圖標
 </zh-TW>
 
 - **3.5.2** 20071212

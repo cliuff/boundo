@@ -128,7 +128,7 @@ internal object MiscMain {
         if (verOri in 0 until 21090720) {
             AccessAV.updateTagSettings(context)
         }
-        if (verOri in 0 until 22030517) {
+        if (verOri in 0 until 22041320) {
             // disable school timetable unit
             val desc = Unit.getDescription(Unit.UNIT_NAME_SCHOOL_TIMETABLE)
             if (desc != null) UnitManager(context).disableUnit(desc)

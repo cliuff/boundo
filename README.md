@@ -1,8 +1,8 @@
 # Boundo
 
 **Requirements**
-- Android Studio Arctic Fox
-- Gradle 7.1.1
+- Android Studio Bumblebee
+- Gradle 7.3.3
 - Java 11
 
 **After Git check-out**

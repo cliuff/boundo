@@ -84,6 +84,10 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
 
     var verName = ""
     var verCode = 0L
+    @Ignore
+    var compileAPI: Int = -1
+    @Ignore
+    var compileApiCodeName: String? = null
     var targetAPI: Int = -1
     var minAPI: Int = -1
     var apiUnit: Int = ApiUnit.NON
@@ -166,6 +170,8 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
      */
     fun initIgnored() {
         uid = -1
+        compileAPI = -1
+        compileApiCodeName = null
         name = ""
         initApiVer()
         preload = true
@@ -176,6 +182,10 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
 
     fun initExtraIgnored(context: Context, info: ApplicationInfo) {
         uid = info.uid
+        if (OsUtils.satisfy(OsUtils.S)) {
+            compileAPI = info.compileSdkVersion
+            compileApiCodeName = info.compileSdkVersionCodename
+        }
         loadName(context, info)
     }
 
@@ -200,6 +210,10 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
             }
 
             // API ver
+            if (OsUtils.satisfy(OsUtils.S)) {
+                compileAPI = info.applicationInfo.compileSdkVersion
+                compileApiCodeName = info.applicationInfo.compileSdkVersionCodename
+            }
             targetAPI = info.applicationInfo.targetSdkVersion
             if (OsUtils.satisfy(OsUtils.N)) {
                 minAPI = info.applicationInfo.minSdkVersion
@@ -287,6 +301,11 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
     fun getApplicationInfo(context: Context): ApplicationInfo? {
         return if (this.isArchive) MiscApp.getApplicationInfo(context, apkPath = appPackage.basePath)
         else MiscApp.getApplicationInfo(context, packageName = packageName)
+    }
+
+    fun getPackageInfo(context: Context): PackageInfo? {
+        return if (this.isArchive) MiscApp.getPackageArchiveInfo(context, path = appPackage.basePath)
+        else MiscApp.getPackageInfo(context, packageName = packageName)
     }
 
     fun getOriginalIcon(context: Context): Bitmap? {

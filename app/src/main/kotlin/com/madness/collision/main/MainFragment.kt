@@ -100,7 +100,7 @@ class MainFragment : TaggedFragment(), Democratic {
             lazy { f[1] ?: MainUnitsFragment() },
             lazy { f[2] ?: MoreFragment() },
         )
-        val savedIndexes = f.mapIndexedNotNull { i, _ -> i }
+        val savedIndexes = f.mapIndexedNotNull { i, it -> it?.let { i } }
         // manually initialize lazy for saved ones,
         // so their initialization states are checked correctly in onSaveInstanceState
         savedIndexes.forEach { navFragments[it].value }
