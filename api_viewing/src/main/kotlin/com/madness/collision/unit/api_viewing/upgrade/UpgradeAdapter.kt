@@ -28,7 +28,6 @@ import com.madness.collision.unit.api_viewing.databinding.AvUpdUpgItemBinding
 import com.madness.collision.unit.api_viewing.list.APIAdapter
 import com.madness.collision.unit.api_viewing.seal.SealManager
 import com.madness.collision.util.X
-import com.madness.collision.util.dartFuture
 import kotlinx.coroutines.CoroutineScope
 
 internal class UpgradeAdapter(context: Context, listener: Listener, scope: CoroutineScope)
@@ -70,13 +69,13 @@ internal class UpgradeAdapter(context: Context, listener: Listener, scope: Corou
     }
 
     override fun onMakeBody(holder: APIAdapter.Holder, index: Int) {
-        val holder = holder as Holder
+        if (holder !is Holder) return
         super.onMakeBody(holder, index)
         val upgrade = upgrades[index]
-        holder.newVer.dartFuture(upgrade.versionName.second)
+        holder.newVer.text = upgrade.versionName.second
 
         val verInfo = VerInfo(upgrade.targetApi.first)
-        holder.preApi.dartFuture(verInfo.displaySdk)
+        holder.preApi.text = verInfo.displaySdk
 
         SealManager.populate4Seal(context, verInfo.letter, itemLength)
         if (loadPref.shouldShowDesserts) {
@@ -96,9 +95,9 @@ internal class UpgradeAdapter(context: Context, listener: Listener, scope: Corou
             holder.preBack.setBackgroundColor(colorSurface)
         }
 
-        holder.preVer.dartFuture(upgrade.versionName.first)
+        holder.preVer.text = upgrade.versionName.first
         val updateTime = DateUtils.getRelativeTimeSpanString(upgrade.updateTime.first,
                 System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS)
-        holder.preTime.dartFuture(updateTime)
+        holder.preTime.text = updateTime
     }
 }

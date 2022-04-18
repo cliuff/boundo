@@ -176,7 +176,7 @@ internal open class APIAdapter(context: Context, private val listener: Listener,
         optimizeSideMargin(index, 15f, innerMargin, holder.card)
         holder.card.alterMargin(top = margin, bottom = margin)
         val appInfo = apps[index]
-        holder.name.dartFuture(appInfo.name)
+        holder.name.text = appInfo.name
         holder.logo.setTag(R.bool.tagKeyAvAdapterItemId, appInfo)
 
 //        if (!appInfo.hasIcon) {
@@ -214,7 +214,7 @@ internal open class APIAdapter(context: Context, private val listener: Listener,
 
         val verInfo = if (loadPref.isViewingTarget) VerInfo.targetDisplay(appInfo)
         else VerInfo.minDisplay(appInfo)
-        holder.api.dartFuture(verInfo.displaySdk)
+        holder.api.text = verInfo.displaySdk
 
         SealManager.populate4Seal(context, verInfo.letter, itemLength)
         if (loadPref.shouldShowDesserts) {
@@ -237,7 +237,7 @@ internal open class APIAdapter(context: Context, private val listener: Listener,
         if (shouldShowTime && appInfo.isNotArchive) {
             val updateTime = DateUtils.getRelativeTimeSpanString(appInfo.updateTime,
                     System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS)
-            holder.updateTime.dartFuture(updateTime)
+            holder.updateTime.text = updateTime
             holder.updateTime.visibility = View.VISIBLE
         } else {
             holder.updateTime.visibility = View.GONE

@@ -114,8 +114,8 @@ class MyUnit: Unit(){
         viewBinding.toolsImageFormat.setAdapter(ArrayAdapter(context, R.layout.pop_list_item, formatItems))
         val appLocale = appLocale
         val initialFraction = String.format(appLocale, "%d/%d", 0, 100)
-        (viewBinding.imageBlurValue as AppCompatTextView).dartFuture(initialFraction)
-        (viewBinding.imageCompressValue as AppCompatTextView).dartFuture(initialFraction)
+        (viewBinding.imageBlurValue as AppCompatTextView).text = initialFraction
+        (viewBinding.imageCompressValue as AppCompatTextView).text = initialFraction
         val onSeek = object : SeekBar.OnSeekBarChangeListener{
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
                 val v = when(p0?.id){
@@ -123,7 +123,7 @@ class MyUnit: Unit(){
                     R.id.imageCompress -> viewBinding.imageCompressValue
                     else -> null
                 } as AppCompatTextView? ?: return
-                v.dartFuture(String.format(appLocale, "%d/%d", p1, 100))
+                v.text = String.format(appLocale, "%d/%d", p1, 100)
             }
             override fun onStartTrackingTouch(p0: SeekBar?) {}
             override fun onStopTrackingTouch(p0: SeekBar?) {}

@@ -138,7 +138,7 @@ class ExteriorFragment: TaggedFragment(), Democratic {
         rs = GaussianBlur(context)
         val appLocale = appLocale
         val initialFraction = String.format(appLocale, "%d/%d", 0, 100)
-        (viewBinding.exteriorBlurValue as AppCompatTextView).dartFuture(initialFraction)
+        (viewBinding.exteriorBlurValue as AppCompatTextView).text = initialFraction
         sb.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, i : Int, b: Boolean) {
                 viewBinding.exteriorBlurValue.text = String.format(appLocale, "%d/%d", i, 100)

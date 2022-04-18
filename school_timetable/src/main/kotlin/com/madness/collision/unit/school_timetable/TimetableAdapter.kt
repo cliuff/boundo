@@ -36,7 +36,6 @@ import com.madness.collision.unit.school_timetable.databinding.TtAdapterActionsB
 import com.madness.collision.util.CollisionDialog
 import com.madness.collision.util.ThemeUtil
 import com.madness.collision.util.X
-import com.madness.collision.util.dartFuture
 import java.util.concurrent.atomic.AtomicBoolean
 import com.madness.collision.unit.school_timetable.R as MyR
 
@@ -129,9 +128,9 @@ internal class TimetableAdapter(private var context: Context , var timetable: Ti
 
             val courseViews = inflater.inflate(MyR.layout.tt_adapter_course, holder.container, false)
             holder.container.addView(courseViews)
-            courseViews.findViewById<AppCompatTextView>(MyR.id.ttAdapterCourseName).dartFuture(course.name)
-            courseViews.findViewById<AppCompatTextView>(MyR.id.ttAdapterCoursePeriod).dartFuture(Repetition.toString(course.educating.repetitions))
-            courseViews.findViewById<AppCompatTextView>(MyR.id.ttAdapterCourseRoom).dartFuture(course.educating.location)
+            courseViews.findViewById<AppCompatTextView>(MyR.id.ttAdapterCourseName).text = course.name
+            courseViews.findViewById<AppCompatTextView>(MyR.id.ttAdapterCoursePeriod).text = Repetition.toString(course.educating.repetitions)
+            courseViews.findViewById<AppCompatTextView>(MyR.id.ttAdapterCourseRoom).text = course.educating.location
 
             if(course.name == context.getString(MyR.string.ics_alter_cname) || course.legacyDuplicate) {
                 courseViews.addOnAttachStateChangeListener(object: View.OnAttachStateChangeListener {

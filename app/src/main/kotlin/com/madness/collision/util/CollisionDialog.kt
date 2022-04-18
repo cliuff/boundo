@@ -263,7 +263,7 @@ class CollisionDialog private constructor(private val mContext: Context, private
 
     fun setContent(content: CharSequence) {
         val textView: AppCompatTextView = this.content
-        textView.dartFuture(content)
+        textView.text = content
         textView.visibility = View.VISIBLE
         val dpDiez = X.size(mContext, 10f, X.DP).toInt()
         textView.alterMargin(dpDiez * 2, dpDiez, dpDiez * 2, 0)

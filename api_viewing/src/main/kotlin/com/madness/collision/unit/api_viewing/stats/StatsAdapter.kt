@@ -34,7 +34,6 @@ import com.madness.collision.unit.api_viewing.seal.SealManager
 import com.madness.collision.util.X
 import com.madness.collision.util.adapted
 import com.madness.collision.util.alterMargin
-import com.madness.collision.util.dartFuture
 import com.madness.collision.util.os.OsUtils
 import kotlin.math.roundToInt
 
@@ -96,12 +95,13 @@ internal class StatsAdapter(context: Context) : SandwichAdapter<StatsAdapter.Hol
             verInfo.sdk.isEmpty() -> "API ${verInfo.api}"
             else -> verInfo.sdk
         }
-        holder.version.dartFuture("Android $ver")
-        holder.count.dartFuture(statsCount.adapted)
+        val versionText = "Android $ver"
+        holder.version.text = versionText
+        holder.count.text = statsCount.adapted
 
         // display a dot when API bigger than 99 (longer than 2 digits)
         val logoText = if (verInfo.api > 99) "•" else verInfo.apiText
-        holder.logoText.dartFuture(logoText)
+        holder.logoText.text = logoText
         if (EasyAccess.isSweet) {
             val colorText = SealManager.getItemColorText(verInfo.api)
             holder.logoText.setTextColor(colorText)
@@ -124,7 +124,7 @@ internal class StatsAdapter(context: Context) : SandwichAdapter<StatsAdapter.Hol
         }
 
         if (isSweet && verInfo.codeName(context) != verInfo.sdk) {
-            holder.codeName.dartFuture(verInfo.codeName(context))
+            holder.codeName.text = verInfo.codeName(context)
             holder.codeName.visibility = View.VISIBLE
         } else {
             holder.codeName.visibility = View.GONE

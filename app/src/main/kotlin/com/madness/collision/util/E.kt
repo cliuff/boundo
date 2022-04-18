@@ -20,17 +20,13 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Point
 import android.net.Uri
-import android.os.Build
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.LeadingMarginSpan
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.appcompat.widget.AppCompatTextView
-import androidx.core.text.PrecomputedTextCompat
 import androidx.core.view.updateMarginsRelative
-import androidx.core.widget.TextViewCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -45,29 +41,6 @@ import kotlin.math.roundToInt
  * extensions
  */
 val mainApplication = MainApplication.INSTANCE
-
-/**
- * IllegalArgumentException: Given text can not be applied to TextView
- * Meizu 15 Plus, API 24
- * [TextViewCompat.setPrecomputedText]
- *
- * IllegalArgumentException: PrecomputedText's Parameters don't match the parameters of this TextView.
- * Consider using setTextMetricsParams(precomputedText.getParams()) to override the settings of this TextView.
- * meizu 17 Pro, API 30; Samsung Galaxy Note20 Ultra 5G Dual-SIM, API 31
- */
-infix fun AppCompatTextView.dartFuture(text: CharSequence) {
-    if (Build.MANUFACTURER.compareTo("meizu", ignoreCase = true) == 0) {
-        setText(text)
-        return
-    }
-    try {
-        val textFuture = PrecomputedTextCompat.getTextFuture(text, textMetricsParamsCompat, null)
-        setTextFuture(textFuture)
-    } catch (e: IllegalArgumentException) {
-        e.printStackTrace()
-        setText(text)
-    }
-}
 
 fun View.alterPadding(
         start: Int = this.paddingStart,
