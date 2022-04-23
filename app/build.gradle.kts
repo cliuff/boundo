@@ -17,6 +17,7 @@
 
 import java.util.*
 import com.cliuff.boundo.dependency.Dependencies
+import com.cliuff.boundo.dependency.Versions
 
 plugins {
     id("com.android.application")
@@ -180,6 +181,11 @@ android {
     buildFeatures {
         dataBinding = true
         viewBinding = true
+        compose = true
+    }
+    composeOptions {
+        // Jetpack Compose compiler version
+        kotlinCompilerExtensionVersion = Versions.androidxCompose
     }
     dynamicFeatures.addAll(arrayOf(":school_timetable", ":api_viewing"))
     bundle {
@@ -200,6 +206,14 @@ dependencies {
 //            androidxWorkFirebase,
             androidxCore,
             androidxCoreKtx,
+            androidxComposeActivity,
+            androidxComposeMaterial3,
+            androidxComposeMaterialIcons,
+            androidxComposeMaterialIconsExtended,
+            androidxComposeAnimation,
+            androidxComposeUiTooling,
+            androidxComposeViewModel,
+            androidxComposeUiTest,
             androidxActivity,
             androidxAppcompat,
             androidxFragment,

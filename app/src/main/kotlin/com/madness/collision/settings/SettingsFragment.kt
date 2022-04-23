@@ -25,21 +25,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.appcompat.widget.Toolbar
+import androidx.compose.material3.*
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.content.edit
 import androidx.core.content.res.use
+import androidx.core.view.updatePadding
 import androidx.fragment.app.activityViewModels
 import com.madness.collision.Democratic
 import com.madness.collision.R
-import com.madness.collision.databinding.FragmentSettingsBinding
-import com.madness.collision.databinding.SettingsUnitItemBinding
 import com.madness.collision.main.MainActivity
 import com.madness.collision.main.MainViewModel
-import com.madness.collision.main.showPage
-import com.madness.collision.pref.PrefExterior
-import com.madness.collision.unit.DescRetriever
-import com.madness.collision.unit.Unit
 import com.madness.collision.util.*
 import com.madness.collision.util.AppUtils.asBottomMargin
+import com.madness.collision.util.os.OsUtils
 
 internal class SettingsFragment : TaggedFragment(), Democratic {
 
@@ -51,9 +51,8 @@ internal class SettingsFragment : TaggedFragment(), Democratic {
     }
 
     private val mainViewModel: MainViewModel by activityViewModels()
-    private var _viewBinding: FragmentSettingsBinding? = null
-    private val viewBinding: FragmentSettingsBinding
-        get() = _viewBinding!!
+    private var _composeView: ComposeView? = null
+    private val composeView: ComposeView get() = _composeView!!
 
     private lateinit var prHandler: PermissionRequestHandler
 
@@ -64,48 +63,35 @@ internal class SettingsFragment : TaggedFragment(), Democratic {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _viewBinding = FragmentSettingsBinding.inflate(inflater, container, false)
-        return viewBinding.root
+        _composeView = ComposeView(inflater.context)
+        return composeView
     }
 
     override fun onDestroyView() {
-        _viewBinding = null
+        _composeView = null
         super.onDestroyView()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        democratize(mainViewModel)
+        mainViewModel.contentWidthTop.observe(viewLifecycleOwner) {
+            composeView.updatePadding(top = it)
+        }
+        mainViewModel.contentWidthBottom.observe(viewLifecycleOwner) {
+            composeView.updatePadding(bottom = asBottomMargin(it))
+        }
+
         val context = context ?: return
-
-        viewBinding.settingsItemLang.setOnClickListener {
-            showLanguages(context)
+        composeView.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+        val colorScheme = if (mainApplication.isDarkTheme) {
+            if (OsUtils.satisfy(OsUtils.S)) dynamicDarkColorScheme(context) else darkColorScheme()
+        } else {
+            if (OsUtils.satisfy(OsUtils.S)) dynamicLightColorScheme(context)
+            else lightColorScheme(primary = Color(0xff572ad2), primaryContainer = Color(0xfff9f0f7))
         }
-
-        viewBinding.settingsItemStyle.setOnClickListener {
-            context.showPage<Page> {
-                putString("fragmentClass", PrefExterior::class.qualifiedName)
-                putInt("titleId", R.string.settings_exterior)
-            }
-        }
-
-        viewBinding.settingsItemAbout.setOnClickListener {
-            context.showPage<AdviceFragment>()
-        }
-
-        val installedUnits = DescRetriever(context).retrieveInstalled()
-        val inflater = LayoutInflater.from(context)
-        val parent = viewBinding.settingsUnits
-        for (state in installedUnits) {
-            val unit = state.unitName
-            val unitBridge = Unit.getBridge(unit) ?: continue
-            val settingsPage = unitBridge.getSettings() ?: continue
-            val unitDesc = state.description
-            val checkerBinding = SettingsUnitItemBinding.inflate(inflater, parent, true)
-            checkerBinding.settingsUnitItemContainer.setOnClickListener {
-                mainViewModel.displayFragment(settingsPage)
-            }
-            checkerBinding.settingsUnitItem.run {
-                text = unitDesc.getName(context)
-                setCompoundDrawablesRelativeWithIntrinsicBounds(unitDesc.getIcon(context), null, null, null)
+        composeView.setContent {
+            MaterialTheme(colorScheme = colorScheme) {
+                SettingsPage(mainViewModel) { showLanguages(it) }
             }
         }
     }
@@ -132,17 +118,6 @@ internal class SettingsFragment : TaggedFragment(), Democratic {
                 mainViewModel.action.value = MainActivity.ACTION_RECREATE to null
             }
         }.show()
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        democratize(mainViewModel)
-        mainViewModel.contentWidthTop.observe(viewLifecycleOwner) {
-            viewBinding.settingsUnits.alterPadding(top = it)
-        }
-        mainViewModel.contentWidthBottom.observe(viewLifecycleOwner) {
-            viewBinding.settingsUnits.alterPadding(bottom = asBottomMargin(it))
-        }
     }
 
     // check update from CoolApk, not used now, need INTERNET permission

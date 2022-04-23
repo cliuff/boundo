@@ -26,6 +26,8 @@ object Versions {
     const val androidxTestEspresso = "3.2.0"
 
     const val androidxCore = "1.7.0"
+    const val androidxCompose = "1.1.1"
+    const val androidxComposeMaterial3 = "1.0.0-alpha10"
     const val androidxActivity = "1.4.0"
     const val androidxAppcompat = "1.4.1"
     const val androidxLifecycle = "2.4.1"
@@ -103,6 +105,20 @@ class Dependencies : Plugin<Project> {
 
         const val androidxCore = "androidx.core:core:${Versions.androidxCore}"
         const val androidxCoreKtx = "androidx.core:core-ktx:${Versions.androidxCore}"
+        // Integration with activities
+        const val androidxComposeActivity = "androidx.activity:activity-compose:${Versions.androidxActivity}"
+        // Compose Material Design
+        const val androidxComposeMaterial3 = "androidx.compose.material3:material3:${Versions.androidxComposeMaterial3}"
+        const val androidxComposeMaterialIcons = "androidx.compose.material:material:${Versions.androidxCompose}"
+        const val androidxComposeMaterialIconsExtended = "androidx.compose.material:material-icons-extended:${Versions.androidxCompose}"
+        // Animations
+        const val androidxComposeAnimation = "androidx.compose.animation:animation:${Versions.androidxCompose}"
+        // Toolingsupport (Previews, etc.)
+        const val androidxComposeUiTooling = "androidx.compose.ui:ui-tooling:${Versions.androidxCompose}"
+        // Integration with ViewModels
+        const val androidxComposeViewModel = "androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.androidxLifecycle}"
+        // UI Tests
+        const val androidxComposeUiTest = "androidx.compose.ui:ui-test-junit4:${Versions.androidxCompose}"
         const val androidxActivity = "androidx.activity:activity-ktx:${Versions.androidxActivity}"
         const val androidxAppcompat = "androidx.appcompat:appcompat:${Versions.androidxAppcompat}"
         const val androidxFragment = "androidx.fragment:fragment-ktx:${Versions.androidxFragment}"

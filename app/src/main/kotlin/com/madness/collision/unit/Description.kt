@@ -22,7 +22,7 @@ import androidx.core.content.ContextCompat
 import com.madness.collision.BuildConfig
 import com.madness.collision.util.NameCached
 
-open class Description(val unitName: String, displayNameResId: Int, private val iconResId: Int)
+open class Description(val unitName: String, displayNameResId: Int, val iconResId: Int)
     : DynamicItem(displayNameResId,  {
     Unit.getDescription(unitName)?.let {
         UnitDescFragment.newInstance(it)
