@@ -38,10 +38,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.madness.collision.R
+import com.madness.collision.instant.InstantFragment
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.main.showPage
 import com.madness.collision.pref.PrefExterior
 import com.madness.collision.unit.DescRetriever
+import com.madness.collision.unit.UnitsManagerFragment
 import com.madness.collision.util.Page
 import kotlinx.coroutines.delay
 
@@ -61,6 +63,12 @@ fun SettingsPage(mainViewModel: MainViewModel, showLanguages: (context: Context)
             },
             Triple(R.string.Main_TextView_Advice_Text, R.drawable.ic_info_24) {
                 context.showPage<AdviceFragment>()
+            },
+            Triple(R.string.unitsManager, R.drawable.ic_extension_24) {
+                context.showPage<UnitsManagerFragment>()
+            },
+            Triple(R.string.Main_TextView_Launcher, R.drawable.ic_flash_24) {
+                context.showPage<InstantFragment>()
             },
         )
         val unitOptions = getUnitOptions(mainViewModel, context)
@@ -162,6 +170,8 @@ private fun SettingsPreview() {
             Triple(R.string.settings_exterior, R.drawable.ic_palette_24) { },
             Triple(R.string.Settings_Button_SwitchLanguage, R.drawable.ic_language_24) { },
             Triple(R.string.Main_TextView_Advice_Text, R.drawable.ic_info_24) { },
+            Triple(R.string.unitsManager, R.drawable.ic_extension_24) { },
+            Triple(R.string.Main_TextView_Launcher, R.drawable.ic_flash_24) { },
         )
     }
     Settings(options = options)

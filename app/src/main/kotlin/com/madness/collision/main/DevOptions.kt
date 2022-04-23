@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Clifford Liu
+ * Copyright 2022 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,103 +14,34 @@
  * limitations under the License.
  */
 
-package com.madness.collision.main.more
+package com.madness.collision.main
 
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.cardview.widget.CardView
-import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.card.MaterialCardView
 import com.madness.collision.R
-import com.madness.collision.instant.InstantFragment
-import com.madness.collision.main.*
-import com.madness.collision.main.ImmortalActivity
-import com.madness.collision.settings.SettingsFragment
-import com.madness.collision.unit.UnitsManagerFragment
+import com.madness.collision.main.more.DisplayInfo
 import com.madness.collision.unit.api_viewing.AccessAV
 import com.madness.collision.util.*
-import com.madness.collision.util.AppUtils.asBottomMargin
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
 
-class MoreFragment : TaggedFragment(), View.OnClickListener {
-
-    override val category: String = "More"
-    override val id: String = "More"
-    
-    companion object {
-        @JvmStatic
-        fun newInstance() = MoreFragment()
-    }
-
-    private val viewModel: MainViewModel by activityViewModels()
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val context = context
-        var res = R.layout.fragment_more
-        if (context != null) {
-            val dp480 = X.size(context, 500f, X.DP)
-            val dimension = SystemUtil.getRuntimeWindowSize(context)
-            if (context.spanJustMore){
-                if (dimension.x >= dp480) res = R.layout.fragment_more_lm
-            } else if (dimension.x >= dp480) res = R.layout.fragment_more_lm
-        }
-        return inflater.inflate(res, container, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        val mViews = view ?: return
-        bindData(mViews)
-
-        // run test
-        val context = context ?: return
-        if (TestPlayground.hasTest) TestPlayground.start(context)
-    }
-
-    private fun bindData(mViews: View){
-        viewModel.contentWidthTop.observe(viewLifecycleOwner){
-            mViews.findViewById<LinearLayout>(R.id.moreContainer)?.alterPadding(top = it)
-        }
-        val parent = parentFragment
-        if (parent is MainFragment) {
-            val mainPageViewModel: MainPageViewModel by parent.viewModels()
-            mainPageViewModel.bottomContentWidth.observe(viewLifecycleOwner) {
-                mViews.findViewById<LinearLayout>(R.id.moreContainer)?.alterPadding(bottom = asBottomMargin(it))
-            }
-        }
-        val cardInstant = mViews.findViewById<MaterialCardView>(R.id.moreInstant)
-        val cardSettings = mViews.findViewById<MaterialCardView>(R.id.moreSettings)
-        val cardUnitManager = mViews.findViewById<MaterialCardView>(R.id.moreUnitsManager)
-        prepareCards(cardInstant, cardSettings, cardUnitManager)
-        cardSettings.setOnLongClickListener {
-            val context = context ?: return@setOnLongClickListener true
-            showDevOptions(context)
-            true
-        }
-    }
-
+class DevOptions(private val scope: CoroutineScope) {
     private val devOptions: List<Pair<String, (Context) -> Unit>> = listOf(
         "Immortal" to { context ->
             val intent = Intent(context, ImmortalActivity::class.java).apply {
                 putExtra(P.IMMORTAL_EXTRA_LAUNCH_MODE, P.IMMORTAL_EXTRA_LAUNCH_MODE_MORTAL)
             }
-            startActivity(intent)
+            context.startActivity(intent)
         },
         "Display info" to { context ->
-            lifecycleScope.launch(Dispatchers.Default) {
+            scope.launch(Dispatchers.Default) {
                 val displayInfo = DisplayInfo.getDisplaysAndInfo(context)
                 withContext(Dispatchers.Main) {
                     showInfoDialog(context, displayInfo)
@@ -118,7 +49,7 @@ class MoreFragment : TaggedFragment(), View.OnClickListener {
             }
         },
         "App Room info" to { context ->
-            lifecycleScope.launch(Dispatchers.Default) {
+            scope.launch(Dispatchers.Default) {
                 val roomInfo = AccessAV.getRoomInfo(context)
                 withContext(Dispatchers.Main) {
                     showInfoDialog(context, roomInfo)
@@ -126,24 +57,24 @@ class MoreFragment : TaggedFragment(), View.OnClickListener {
             }
         },
         "Clean App Room" to { context ->
-            lifecycleScope.launch(Dispatchers.Default) {
+            scope.launch(Dispatchers.Default) {
                 AccessAV.clearRoom(context)
                 withContext(Dispatchers.Main) {
-                    notifyBriefly(R.string.text_done)
+                    context.notifyBriefly(R.string.text_done)
                 }
             }
         },
         "Nuke App Room" to { context ->
-            lifecycleScope.launch(Dispatchers.Default) {
+            scope.launch(Dispatchers.Default) {
                 val re = AccessAV.nukeAppRoom(context)
                 withContext(Dispatchers.Main) {
-                    notifyBriefly(if (re) R.string.text_done else R.string.text_error)
+                    context.notifyBriefly(if (re) R.string.text_done else R.string.text_error)
                 }
             }
         },
     )
 
-    private fun showDevOptions(context: Context) {
+    fun show(context: Context) {
         val customContent = LinearLayout(context).apply {
             orientation = LinearLayout.VERTICAL
         }
@@ -190,20 +121,5 @@ class MoreFragment : TaggedFragment(), View.OnClickListener {
             decentHeight()
             setListener { dismiss() }
         }.show()
-    }
-
-    private fun prepareCards(vararg cards: CardView?){
-        for (it in cards) {
-            it ?: continue
-            it.setOnClickListener(this)
-        }
-    }
-
-    override fun onClick(v: View) {
-        when (v.id) {
-            R.id.moreInstant -> context?.showPage<InstantFragment>()
-            R.id.moreUnitsManager -> context?.showPage<UnitsManagerFragment>()
-            R.id.moreSettings -> context?.showPage<SettingsFragment>()
-        }
     }
 }

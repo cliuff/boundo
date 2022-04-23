@@ -36,8 +36,8 @@ import com.google.android.material.navigation.NavigationBarView
 import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.databinding.FragmentMainBinding
-import com.madness.collision.main.more.MoreFragment
 import com.madness.collision.main.updates.UpdatesFragment
+import com.madness.collision.settings.SettingsFragment
 import com.madness.collision.util.*
 import com.madness.collision.util.controller.getSavedFragment
 import com.madness.collision.util.controller.saveFragment
@@ -98,7 +98,7 @@ class MainFragment : TaggedFragment(), Democratic {
                 }
             },
             lazy { f[1] ?: MainUnitsFragment() },
-            lazy { f[2] ?: MoreFragment() },
+            lazy { f[2] ?: SettingsFragment() },
         )
         val savedIndexes = f.mapIndexedNotNull { i, it -> it?.let { i } }
         // manually initialize lazy for saved ones,
