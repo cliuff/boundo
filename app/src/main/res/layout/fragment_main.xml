@@ -17,7 +17,6 @@
 
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/mainFrame"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -48,57 +47,4 @@
             android:layout_width="match_parent"
             android:layout_height="0.5dp" />
     </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/mainBottomNavContainer"
-        app:layout_behavior="com.madness.collision.main.MyHideBottomViewOnScrollBehavior"
-        android:layout_gravity="bottom"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <View
-            android:alpha="0.3"
-            android:background="?colorStroke"
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp" />
-
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            app:menu="@menu/drawer"
-            android:id="@+id/mainBottomNav"
-            app:backgroundTint="?colorABackground"
-            app:elevation="0dp"
-            app:insetForeground="@null"
-            app:itemIconTint="@color/drawer_icon_states"
-            app:itemTextColor="@color/drawer_text_states"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/mainShowBottomNav"
-        android:visibility="gone"
-        android:layout_marginStart="30dp"
-        android:layout_gravity="bottom|start"
-        app:cardCornerRadius="20dp"
-        app:cardElevation="0dp"
-        app:cardBackgroundColor="@android:color/transparent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:contentDescription="@null"
-            android:src="?colorTextSub"
-            android:alpha="0.1"
-            android:layout_width="40dp"
-            android:layout_height="40dp"/>
-
-        <ImageView
-            android:contentDescription="@null"
-            android:src="@drawable/ic_more_horiz_24"
-            app:tint="?colorTextSub"
-            android:padding="8dp"
-            android:layout_width="40dp"
-            android:layout_height="40dp"/>
-    </com.google.android.material.card.MaterialCardView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

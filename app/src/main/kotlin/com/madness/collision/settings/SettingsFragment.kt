@@ -26,19 +26,16 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.appcompat.widget.Toolbar
 import androidx.compose.material3.*
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.content.edit
 import androidx.core.content.res.use
-import androidx.core.view.updatePadding
 import androidx.fragment.app.activityViewModels
 import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.main.MainActivity
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.util.*
-import com.madness.collision.util.AppUtils.asBottomMargin
 import com.madness.collision.util.os.OsUtils
 
 internal class SettingsFragment : TaggedFragment(), Democratic {
@@ -74,20 +71,12 @@ internal class SettingsFragment : TaggedFragment(), Democratic {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         democratize(mainViewModel)
-        mainViewModel.contentWidthTop.observe(viewLifecycleOwner) {
-            composeView.updatePadding(top = it)
-        }
-        mainViewModel.contentWidthBottom.observe(viewLifecycleOwner) {
-            composeView.updatePadding(bottom = asBottomMargin(it))
-        }
-
         val context = context ?: return
         composeView.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-        val colorScheme = if (mainApplication.isDarkTheme) {
-            if (OsUtils.satisfy(OsUtils.S)) dynamicDarkColorScheme(context) else darkColorScheme()
+        val colorScheme = if (OsUtils.satisfy(OsUtils.S)) {
+            if (mainApplication.isDarkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         } else {
-            if (OsUtils.satisfy(OsUtils.S)) dynamicLightColorScheme(context)
-            else lightColorScheme(primary = Color(0xff572ad2), primaryContainer = Color(0xfff9f0f7))
+            if (mainApplication.isDarkTheme) darkColorScheme() else lightColorScheme()
         }
         composeView.setContent {
             MaterialTheme(colorScheme = colorScheme) {

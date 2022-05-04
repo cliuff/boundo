@@ -19,19 +19,18 @@ package com.madness.collision.settings
 import android.content.Context
 import android.content.res.Configuration
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -39,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.madness.collision.R
 import com.madness.collision.instant.InstantFragment
+import com.madness.collision.main.DevOptions
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.main.showPage
 import com.madness.collision.pref.PrefExterior
@@ -74,8 +74,19 @@ fun SettingsPage(mainViewModel: MainViewModel, showLanguages: (context: Context)
         val unitOptions = getUnitOptions(mainViewModel, context)
         builtIn + unitOptions
     }
-    Settings(options = options)
+    val contentInsetTop by mainViewModel.contentWidthTop.observeAsState(0)
+    val contentInsetBottom by mainViewModel.contentWidthBottom.observeAsState(0)
+    CompositionLocalProvider(
+        LocalContentInsets provides (contentInsetTop to contentInsetBottom)
+    ) {
+        Settings(options = options)
+    }
 }
+
+val LocalContentInsets = compositionLocalOf { 0 to 0 }
+
+@Composable
+private fun Int.toDp() = with(LocalDensity.current) { toDp() }
 
 @Composable
 private fun Settings(options: List<Triple<Int, Int, () -> Unit>>) {
@@ -85,6 +96,7 @@ private fun Settings(options: List<Triple<Int, Int, () -> Unit>>) {
                 .fillMaxWidth()
                 .verticalScroll(rememberScrollState())
         ) {
+            Spacer(modifier = Modifier.height(LocalContentInsets.current.first.toDp()))
             Spacer(modifier = Modifier.height(8.dp))
             options.forEachIndexed { index, (label, icon, onClick) ->
                 if (index != 0) {
@@ -98,6 +110,8 @@ private fun Settings(options: List<Triple<Int, Int, () -> Unit>>) {
                     onClick = onClick
                 )
             }
+            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(LocalContentInsets.current.second.toDp()))
         }
     }
 }
@@ -114,6 +128,7 @@ private fun getUnitOptions(mainViewModel: MainViewModel, context: Context): List
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun SettingsItem(icon: Int, label: String, isTertiary: Boolean = false, onClick: () -> Unit) {
     val colorScheme = MaterialTheme.colorScheme
@@ -140,7 +155,15 @@ private fun SettingsItem(icon: Int, label: String, isTertiary: Boolean = false, 
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick)
+            .run {
+                if (!isTertiary) return@run clickable(onClick = onClick)
+                val scope = rememberCoroutineScope()
+                val context = LocalContext.current
+                combinedClickable(
+                    onLongClick = { DevOptions(scope).show(context) },
+                    onClick = onClick
+                )
+            }
             .padding(horizontal = 24.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -172,6 +195,7 @@ private fun SettingsPreview() {
             Triple(R.string.Main_TextView_Advice_Text, R.drawable.ic_info_24) { },
             Triple(R.string.unitsManager, R.drawable.ic_extension_24) { },
             Triple(R.string.Main_TextView_Launcher, R.drawable.ic_flash_24) { },
+            Triple(R.string.apiViewer, R.drawable.ic_android_24) { },
         )
     }
     Settings(options = options)

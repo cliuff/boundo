@@ -30,13 +30,13 @@
 
         <TextView
             android:id="@+id/mainUpdatesSecPinned"
-            android:text="@string/mainSecStarred"
+            android:text="@string/units"
             style="@style/MainSectionHeader"
             android:layout_marginTop="0dp"/>
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/mainUpdatesPinned"
-            android:name="com.madness.collision.main.updates.PinnedUnitsFragment"
+            android:name="com.madness.collision.main.UnitBarFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 

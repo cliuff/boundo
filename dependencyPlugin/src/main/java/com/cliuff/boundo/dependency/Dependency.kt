@@ -105,6 +105,7 @@ class Dependencies : Plugin<Project> {
 
         const val androidxCore = "androidx.core:core:${Versions.androidxCore}"
         const val androidxCoreKtx = "androidx.core:core-ktx:${Versions.androidxCore}"
+        const val androidxComposeRuntimeLiveData = "androidx.compose.runtime:runtime-livedata:${Versions.androidxCompose}"
         // Integration with activities
         const val androidxComposeActivity = "androidx.activity:activity-compose:${Versions.androidxActivity}"
         // Compose Material Design

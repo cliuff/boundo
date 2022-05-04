@@ -206,6 +206,7 @@ dependencies {
 //            androidxWorkFirebase,
             androidxCore,
             androidxCoreKtx,
+            androidxComposeRuntimeLiveData,
             androidxComposeActivity,
             androidxComposeMaterial3,
             androidxComposeMaterialIcons,
