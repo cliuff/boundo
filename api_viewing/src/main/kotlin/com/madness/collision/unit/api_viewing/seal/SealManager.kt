@@ -75,6 +75,7 @@ object SealManager {
     fun getAndroidCodenameImageRes(letter: Char): Int {
         if (!EasyAccess.isSweet) return 0
         return when (letter) {
+            't' -> MyR.drawable.seal_t
             's' -> MyR.drawable.seal_s
             'r' -> MyR.drawable.seal_r_vector
             'q' -> MyR.drawable.seal_q_vector
@@ -121,6 +122,7 @@ object SealManager {
             return ThemeUtil.getColor(context, attrRes)
         }
         when (apiLevel) {
+            OsUtils.T -> if (isAccent) "a3d5c1" else "d7fbf0"
             OsUtils.S, OsUtils.S_V2 -> if (isAccent) "acdcb2" else "defbde"
             X.R -> if (isAccent) "acd5c1" else "defbf0"
             X.Q -> if (isAccent) "c1d5ac" else "f0fbde"

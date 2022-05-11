@@ -62,7 +62,7 @@ class DeviceManager(useProxy: Boolean = true): AutoCloseable {
                 OP_CONNECT -> if (device in proxy.connectedDevices) continue
                 OP_DISCONNECT -> if (device !in proxy.connectedDevices) continue
             }
-            val re = methods[profile][operation]?.invoke(proxy, device) == true
+            val re = methods[profile]?.get(operation)?.invoke(proxy, device) == true
             isSuccess = if (isSuccess == null) re else (re && isSuccess == true)
         }
         return isSuccess ?: false

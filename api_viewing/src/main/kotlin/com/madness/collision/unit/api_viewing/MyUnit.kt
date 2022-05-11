@@ -19,13 +19,12 @@ package com.madness.collision.unit.api_viewing
 import android.Manifest
 import android.content.*
 import android.content.pm.PackageInfo
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
 import android.net.Uri
-import android.os.*
+import android.os.Bundle
 import android.provider.DocumentsContract
 import android.view.*
-import android.widget.*
+import android.widget.Filter
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.Toolbar
@@ -45,10 +44,7 @@ import com.madness.collision.unit.api_viewing.databinding.FragmentApiBinding
 import com.madness.collision.unit.api_viewing.list.APIAdapter
 import com.madness.collision.unit.api_viewing.list.ApiInfoPop
 import com.madness.collision.unit.api_viewing.list.AppListFragment
-import com.madness.collision.unit.api_viewing.main.MainDataConfig
-import com.madness.collision.unit.api_viewing.main.MainListLoader
-import com.madness.collision.unit.api_viewing.main.MainStatus
-import com.madness.collision.unit.api_viewing.main.MainToolbar
+import com.madness.collision.unit.api_viewing.main.*
 import com.madness.collision.unit.api_viewing.util.ApkRetriever
 import com.madness.collision.unit.api_viewing.util.PrefUtil
 import com.madness.collision.util.*
@@ -56,7 +52,10 @@ import com.madness.collision.util.AppUtils.asBottomMargin
 import com.madness.collision.util.controller.getSavedFragment
 import com.madness.collision.util.controller.saveFragment
 import com.madness.collision.util.os.OsUtils
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import com.madness.collision.unit.api_viewing.R as MyR
 
 class MyUnit: com.madness.collision.unit.Unit() {
@@ -75,38 +74,6 @@ class MyUnit: com.madness.collision.unit.Unit() {
         const val STATE_KEY_LIST = "ListFragment"
     }
 
-    class LaunchMethod(val mode: Int) {
-        companion object {
-            const val EXTRA_DATA_STREAM = AccessAV.EXTRA_DATA_STREAM
-            const val EXTRA_LAUNCH_MODE = AccessAV.EXTRA_LAUNCH_MODE
-            const val LAUNCH_MODE_NORMAL = 0
-            const val LAUNCH_MODE_SEARCH = AccessAV.LAUNCH_MODE_SEARCH
-
-            /**
-             * from url link sharing
-             */
-            const val LAUNCH_MODE_LINK = AccessAV.LAUNCH_MODE_LINK
-        }
-
-        var textExtra: String? = null
-            private set
-        var dataStreamExtra: PackageInfo? = null
-            private set
-
-        constructor(bundle: Bundle?) : this(when {
-            bundle == null -> LAUNCH_MODE_NORMAL
-            // below: from share action
-            bundle.getInt(EXTRA_LAUNCH_MODE, LAUNCH_MODE_NORMAL) == LAUNCH_MODE_LINK -> LAUNCH_MODE_LINK
-            // below: from text processing activity or text sharing
-            else -> LAUNCH_MODE_SEARCH
-        }) {
-            when (mode) {
-                LAUNCH_MODE_SEARCH -> textExtra = bundle?.getString(Intent.EXTRA_TEXT) ?: ""
-                LAUNCH_MODE_LINK -> dataStreamExtra = bundle?.getParcelable(EXTRA_DATA_STREAM)
-            }
-        }
-    }
-
     private val viewModel: ApiViewingViewModel by activityViewModels()
 
     // data
@@ -117,8 +84,6 @@ class MyUnit: com.madness.collision.unit.Unit() {
     private var displayItem: Int by dataConfig::displayItem
     private val loadedItems: ApiUnit
         get() = viewModel.loadedItems
-    private var floatTop: Int = 0
-    private var tbDrawable: Drawable? = null
     private lateinit var apkRetriever: ApkRetriever
     private lateinit var settingsPreferences: SharedPreferences
 
@@ -126,6 +91,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
     private lateinit var toolbarMan: MainToolbar
     private lateinit var statusMan: MainStatus
     private lateinit var listLoadingMan: MainListLoader
+    private val operationMan = MainOperations()
 
     // views
     private val refreshLayout: SwipeRefreshLayout
@@ -146,7 +112,6 @@ class MyUnit: com.madness.collision.unit.Unit() {
             listFragment.loadAppIcons(refreshLayout)
             listFragment.clearBottomAppIcons()
         }
-        toolbar.background.mutate().constantState?.newDrawable()?.let { tbDrawable = it }
         return true
     }
 
@@ -187,8 +152,6 @@ class MyUnit: com.madness.collision.unit.Unit() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val context = context ?: return
-        val colorTb = ThemeUtil.getColor(context, R.attr.colorTb)
-        if (tbDrawable == null) tbDrawable = ColorDrawable(colorTb)
 
         settingsPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
         EasyAccess.init(context, settingsPreferences)
@@ -354,6 +317,12 @@ class MyUnit: com.madness.collision.unit.Unit() {
         adapter.setSortMethod(sortItem)
 
         launchMethod = LaunchMethod(arguments)
+
+        democratize()
+        observeStates(context)
+
+        refreshLayout.setOnRefreshListener(this::reloadList)
+
         val isSpecial = when (launchMethod.mode) {
             LaunchMethod.LAUNCH_MODE_LINK, LaunchMethod.LAUNCH_MODE_SEARCH -> true
             else -> false
@@ -363,38 +332,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
             if (!isRestore) lifecycleScope.launch(Dispatchers.Default) {
                 loadSortedList(ApiUnit.NON, sortEfficiently = true, fg = true)
             }
-        }
-
-        democratize()
-        val dp5 = X.size(context, 5f, X.DP).toInt()
-        mainViewModel.contentWidthTop.observe(viewLifecycleOwner) {
-            val listInsetTop: Int
-            when (launchMethod.mode) {
-                LaunchMethod.LAUNCH_MODE_SEARCH -> {
-                    floatTop = 0
-                    listInsetTop = it
-                }
-                LaunchMethod.LAUNCH_MODE_LINK -> {
-                    floatTop = it
-                    listInsetTop = floatTop + dp5
-                }
-                else -> {
-                    viewBinding.apiDisplay.run { alterPadding(top = it) }
-                    viewBinding.apiSpinnerDisplayBack.measure()
-                    floatTop = viewBinding.apiSpinnerDisplayBack.measuredHeight + it + dp5 * 2
-                    listInsetTop = floatTop + dp5
-                }
-            }
-            refreshLayout.setProgressViewOffset(false, listInsetTop + 2 * dp5, listInsetTop + 7 * dp5)
-            adapter.topCover = listInsetTop
-        }
-        mainViewModel.contentWidthBottom.observe(viewLifecycleOwner) {
-            adapter.bottomCover = asBottomMargin(it)
-        }
-
-        refreshLayout.setOnRefreshListener(this::reloadList)
-
-        if (!isSpecial) {
+        } else {
             displayItem = settingsPreferences.getInt(PrefUtil.AV_LIST_SRC_ITEM, PrefUtil.AV_LIST_SRC_ITEM_DEFAULT)
             statusMan.createListSrcPopup(context, viewBinding.apiSpinnerDisplayBack)
             viewBinding.avListSrc.setOnClickListener { statusMan.showListSrcPopup() }
@@ -416,32 +354,54 @@ class MyUnit: com.madness.collision.unit.Unit() {
 
         if (OsUtils.satisfy(OsUtils.N)) setupDragAndDrop(context)
 
-        if (launchMethod.mode != LaunchMethod.LAUNCH_MODE_SEARCH
-                && launchMethod.mode != LaunchMethod.LAUNCH_MODE_LINK) {
-            // fix refreshing animation not shown
-            lifecycleScope.launch(Dispatchers.Default) {
-                delay(1)
-                withContext(Dispatchers.Main) {
-                    if (!isRestore) {
-                        statusMan.selectListSrcItem(displayItem)
-                    } else {
-                        statusMan.loadListSrcItem(displayItem)
-                        updateStats()
-                    }
+        when (launchMethod.mode) {
+            LaunchMethod.LAUNCH_MODE_SEARCH -> if (!isRestore) fixRefreshAnim()
+            LaunchMethod.LAUNCH_MODE_LINK -> { }
+            else -> fixRefresh(isRestore)
+        }
+    }
+
+    private fun observeStates(context: Context) {
+        val dp5 = X.size(context, 5f, X.DP).toInt()
+        mainViewModel.contentWidthTop.observe(viewLifecycleOwner) {
+            val listInsetTop = when (launchMethod.mode) {
+                LaunchMethod.LAUNCH_MODE_SEARCH -> it
+                LaunchMethod.LAUNCH_MODE_LINK -> it + dp5
+                else -> {
+                    viewBinding.apiDisplay.run { alterPadding(top = it) }
+                    viewBinding.apiSpinnerDisplayBack.measure()
+                    val floatTop = viewBinding.apiSpinnerDisplayBack.measuredHeight + it + dp5 * 2
+                    floatTop + dp5
                 }
+            }
+            refreshLayout.setProgressViewOffset(false, listInsetTop + 2 * dp5, listInsetTop + 7 * dp5)
+            adapter.topCover = listInsetTop
+        }
+        mainViewModel.contentWidthBottom.observe(viewLifecycleOwner) {
+            adapter.bottomCover = asBottomMargin(it)
+        }
+    }
+
+    // fix refreshing animation not shown
+    private fun fixRefresh(isRestore: Boolean) {
+        lifecycleScope.launch(Dispatchers.Main) {
+            delay(1)
+            if (!isRestore) {
+                statusMan.selectListSrcItem(displayItem)
+            } else {
+                statusMan.loadListSrcItem(displayItem)
+                updateStats()
             }
         }
-        if (!isRestore && launchMethod.mode == LaunchMethod.LAUNCH_MODE_SEARCH) {
-            // fix refreshing animation not shown
-            // invoke only the first time
-            if (loadedItems.isBusy && viewModel.apps4Cache.isEmpty()) {
-                lifecycleScope.launch(Dispatchers.Default) {
-                    delay(1)
-                    withContext(Dispatchers.Main) {
-                        refreshLayout.isRefreshing = true
-                    }
-                }
-            }
+    }
+
+    // fix refreshing animation not shown, invoke only the first time
+    private fun fixRefreshAnim() {
+        val doFix = loadedItems.isBusy && viewModel.apps4Cache.isEmpty()
+        if (!doFix) return
+        lifecycleScope.launch(Dispatchers.Main) {
+            delay(1)
+            refreshLayout.isRefreshing = true
         }
     }
 
@@ -670,38 +630,25 @@ class MyUnit: com.madness.collision.unit.Unit() {
     }
 
     private val getContentLauncher = registerForActivityResult(
-        ActivityResultContracts.GetMultipleContents()
-    ) { uriList ->
+        ActivityResultContracts.GetMultipleContents()) register@{ uriList ->
         if (uriList.isEmpty()) {
             notify(R.string.text_no_content)
-            return@registerForActivityResult
+            return@register
         }
-        val context = context ?: return@registerForActivityResult
+        val context = context ?: return@register
         lifecycleScope.launch(Dispatchers.Default) {
             uriList.forEach { displayApk(context, it) }
             ceaseRefresh(if (launchMethod.mode == LaunchMethod.LAUNCH_MODE_LINK) ApiUnit.NON else ApiUnit.SELECTED)
         }
     }
 
-    private val openDirectoryLauncher = registerForActivityResult(
-        object : ActivityResultContracts.OpenDocumentTree() {
-            override fun createIntent(context: Context, input: Uri?): Intent {
-                return super.createIntent(context, input).apply {
-                    // make it possible to persist
-                    addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
-                    // make it possible to access children
-                    addFlags(Intent.FLAG_GRANT_PREFIX_URI_PERMISSION)
-                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                }
-            }
-        }
-    ) { uri: Uri? ->
+    private val openDirectoryLauncher = operationMan.registerDirectoryOpening(this) register@{ uri: Uri? ->
         if (uri == null) {
             notifyBriefly(R.string.text_no_content)
             ceaseRefresh(ApiUnit.APK)
-            return@registerForActivityResult
+            return@register
         }
-        val context = context ?: return@registerForActivityResult
+        val context = context ?: return@register
         lifecycleScope.launch(Dispatchers.Default) {
             val takeFlags: Int = Intent.FLAG_GRANT_READ_URI_PERMISSION
             context.contentResolver.takePersistableUriPermission(uri, takeFlags)
@@ -712,23 +659,13 @@ class MyUnit: com.madness.collision.unit.Unit() {
         }
     }
 
-    private val openVolumeLauncher = registerForActivityResult(
-        object : ActivityResultContracts.OpenDocumentTree() {
-            override fun createIntent(context: Context, input: Uri?): Intent {
-                return super.createIntent(context, input).apply {
-                    // make it possible to access children
-                    addFlags(Intent.FLAG_GRANT_PREFIX_URI_PERMISSION)
-                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                }
-            }
-        }
-    ) { uri ->
+    private val openVolumeLauncher = operationMan.registerVolumeOpening(this) register@{ uri ->
         if (uri == null) {
             notifyBriefly(R.string.text_no_content)
             ceaseRefresh(ApiUnit.VOLUME)
-            return@registerForActivityResult
+            return@register
         }
-        val context = context ?: return@registerForActivityResult
+        val context = context ?: return@register
         // todo
         lifecycleScope.launch(Dispatchers.Default) {
             apkRetriever.fromUri(uri) { displayApk(context, it) }

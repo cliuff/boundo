@@ -70,12 +70,13 @@
                     app:layout_constraintStart_toStartOf="parent"
                     style="@style/VerIconActionText"
                     android:textColor="?colorTextSub"
-                    android:textSize="12sp"
+                    android:textSize="10sp"
                     android:textDirection="locale"
                     android:gravity="center_vertical|start"
-                    android:maxLines="2"
-                    android:ellipsize="end"
-                    tools:text="com.madness.collision.main.MainActivity" />
+                    android:singleLine="true"
+                    android:ellipsize="start"
+                    tools:text="com.madness.collision.main.MainActivity"
+                    tools:ignore="SmallSp" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
 
