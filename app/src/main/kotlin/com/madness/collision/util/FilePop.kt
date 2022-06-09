@@ -28,7 +28,6 @@ import android.text.format.Formatter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePaddingRelative
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -92,6 +91,7 @@ class FilePop: BottomSheetDialogFragment(), SystemBarMaintainerOwner {
 
     private lateinit var mViews: FileActionsBinding
     override val systemBarMaintainer: SystemBarMaintainer = DialogFragmentSystemBarMaintainer(this)
+    private val edgeToEdge = BottomSheetEdgeToEdge(this, this::consumeInsets) { activity?.window }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,51 +104,15 @@ class FilePop: BottomSheetDialogFragment(), SystemBarMaintainerOwner {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        applyInsets()
+        val context = context ?: return
+        edgeToEdge.applyInsets(view, context)
     }
 
     override fun onStart() {
         super.onStart()
         val context = context ?: return
         val rootView = view ?: return
-        BottomSheetBehavior.from(rootView.parent as View).run {
-            configure(context)
-        }
-    }
-
-    private fun applyInsets() {
-        mViews.root.setOnApplyWindowInsetsListener { v, insets ->
-            if (checkInsets(insets)) {
-                configEdgeToEdge(insets)
-                val isRtl = if (v.isLayoutDirectionResolved) v.layoutDirection == View.LAYOUT_DIRECTION_RTL else false
-                consumeInsets(WindowInsets(insets, isRtl))
-            }
-            WindowInsetsCompat.CONSUMED.toWindowInsets()
-        }
-    }
-
-    private fun configEdgeToEdge(insets: android.view.WindowInsets): Boolean {
-        val context = context ?: return false
-        var isEdgeToEdge = false //= true
-        edgeToEdge(insets, false) {
-            // keep status bar icon color untouched from the activity before this
-            top {
-                activity?.window?.let { window ->
-                    isDarkIcon = SystemUtil.isDarkStatusIcon(window)
-                }
-            }
-            bottom {
-                val colorSurface = ThemeUtil.getColor(context, R.attr.colorASurface)
-                isEdgeToEdge = (isDarkIcon == true && OsUtils.dissatisfy(OsUtils.O)).not()
-                color = if (isEdgeToEdge) {
-                    colorSurface
-                } else {
-                    ColorUtil.darkenAs(colorSurface, 0.9f)
-                }
-                transparentBar()
-            }
-        }
-        return isEdgeToEdge
+        BottomSheetBehavior.from(rootView.parent as View).configure(context)
     }
 
     private fun consumeInsets(insets: WindowInsets) {

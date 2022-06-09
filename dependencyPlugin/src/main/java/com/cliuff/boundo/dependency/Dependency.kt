@@ -27,7 +27,7 @@ object Versions {
 
     const val androidxCore = "1.7.0"
     const val androidxCompose = "1.1.1"
-    const val androidxComposeMaterial3 = "1.0.0-alpha10"
+    const val androidxComposeMaterial3 = "1.0.0-alpha11"
     const val androidxActivity = "1.4.0"
     const val androidxAppcompat = "1.4.1"
     const val androidxLifecycle = "2.4.1"
@@ -86,7 +86,7 @@ object Versions {
     const val mockito = "4.1.0"
     // for checking apk dex, archived since 2019.11
     const val apkParser = "2.6.10"
-    const val appIconLoader = "1.3.1"
+    const val appIconLoader = "1.4.0"
 }
 
 class Dependencies : Plugin<Project> {
@@ -158,6 +158,7 @@ class Dependencies : Plugin<Project> {
         const val googlePlayServicesOSSLicenses = "com.google.android.gms:play-services-oss-licenses:${Versions.googlePlayServicesOSSLicenses}"
         const val googlePlayServicesBasement = "com.google.android.gms:play-services-basement:${Versions.googlePlayServicesBasement}"
         const val coil = "io.coil-kt:coil:${Versions.coil}"
+        const val coilCompose = "io.coil-kt:coil-compose:${Versions.coil}"
         const val jsoup = "org.jsoup:jsoup:${Versions.jsoup}"
         const val kotlinStdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Versions.kotlin}"
         const val kotlinReflect = "org.jetbrains.kotlin:kotlin-reflect:${Versions.kotlin}"
@@ -196,6 +197,15 @@ class Dependencies : Plugin<Project> {
         val dynamicFeatureBasics = listOf(
                 androidxCore,
                 androidxCoreKtx,
+                androidxComposeRuntimeLiveData,
+                androidxComposeActivity,
+                androidxComposeMaterial3,
+                androidxComposeMaterialIcons,
+                androidxComposeMaterialIconsExtended,
+                androidxComposeAnimation,
+                androidxComposeUiTooling,
+                androidxComposeViewModel,
+                androidxComposeUiTest,
                 androidxActivity,
                 androidxAppcompat,
                 androidxFragment,
@@ -210,6 +220,7 @@ class Dependencies : Plugin<Project> {
                 gglGuava,
                 jbAnnotations,
                 coil,
+                coilCompose,
         )
     }
 }

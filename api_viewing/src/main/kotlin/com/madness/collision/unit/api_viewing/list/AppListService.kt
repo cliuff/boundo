@@ -43,6 +43,7 @@ import com.madness.collision.unit.api_viewing.database.AppRoom
 import com.madness.collision.unit.api_viewing.util.ApkUtil
 import com.madness.collision.util.*
 import com.madness.collision.util.os.OsUtils
+import com.madness.collision.util.ui.appContext
 import com.madness.collision.util.ui.appLocale
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -57,21 +58,63 @@ import javax.security.cert.X509Certificate
 import kotlin.math.roundToInt
 import com.madness.collision.unit.api_viewing.R as RAv
 
-internal class AppListService {
+internal class AppListService(private val serviceContext: Context? = null) {
     private var regexFields: MutableMap<String, String> = HashMap()
 
     fun getAppDetails(context: Context, appInfo: ApiViewingApp): CharSequence {
         val builder = SpannableStringBuilder()
-        var pi = retrieveOn(context, appInfo, 0, "") ?: return ""
-        val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", appLocale)
         val spanFlags = Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-        builder.append(context.getString(R.string.apiDetailsPackageName), StyleSpan(Typeface.BOLD), spanFlags)
-                .append(appInfo.packageName).append('\n')
-        builder.append(context.getString(RAv.string.apiDetailsVerName), StyleSpan(Typeface.BOLD), spanFlags)
-                .append(appInfo.verName)
-                .append('\n')
-        builder.append(context.getString(RAv.string.apiDetailsVerCode), StyleSpan(Typeface.BOLD), spanFlags)
-                .append(appInfo.verCode.toString()).append('\n')
+        getAppDetailsSequence(context, appInfo).forEach { item ->
+            when (item) {
+                is AppInfoItem.Normal -> builder.append(item.text)
+                is AppInfoItem.Bold -> builder.append(item.text, StyleSpan(Typeface.BOLD), spanFlags)
+            }
+        }
+        return SpannableString.valueOf(builder)
+    }
+
+    sealed class AppInfoItem(val text: String) {
+        class Normal(text: String) : AppInfoItem(text)
+        class Bold(text: String) : AppInfoItem(text)
+    }
+
+    private val String.item: AppInfoItem.Normal get() = AppInfoItem.Normal(this)
+    private val Int.item: AppInfoItem.Normal get() = AppInfoItem.Normal((serviceContext ?: appContext).getString(this))
+    private val String.boldItem: AppInfoItem.Bold get() = AppInfoItem.Bold(this)
+    private val Int.boldItem: AppInfoItem.Bold get() = AppInfoItem.Bold((serviceContext ?: appContext).getString(this))
+
+    private val LineBreakItem = "\n".item
+    private suspend fun SequenceScope<AppInfoItem>.yield(text: String) = yield(text.item)
+    private suspend fun SequenceScope<AppInfoItem>.yield(resId: Int) = yield(resId.item)
+    private suspend fun SequenceScope<AppInfoItem>.yieldLineBreak() = yield(LineBreakItem)
+
+    fun getRetrievedPkgInfo(context: Context, app: ApiViewingApp): PackageInfo? {
+        return retrieveOn(context, app, 0, "")
+    }
+
+    fun getAppDetailsSequence(context: Context, appInfo: ApiViewingApp): Sequence<AppInfoItem> {
+        val pkgInfo = getRetrievedPkgInfo(context, appInfo) ?: return emptySequence()
+        return sequenceOf(
+            getAppInfoDetailsSequence(context, appInfo, pkgInfo),
+            sequenceOf(LineBreakItem, LineBreakItem),
+            getAppExtendedDetailsSequence(context, appInfo, pkgInfo),
+        ).flatten()
+    }
+
+    fun getAppInfoDetailsSequence(context: Context, appInfo: ApiViewingApp, pkgInfo: PackageInfo) = sequence<AppInfoItem> {
+        val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", appLocale)
+
+        yield(R.string.apiDetailsPackageName.boldItem)
+        yield(appInfo.packageName)
+        yieldLineBreak()
+
+        yield(RAv.string.apiDetailsVerName.boldItem)
+        yield(appInfo.verName)
+        yieldLineBreak()
+
+        yield(RAv.string.apiDetailsVerCode.boldItem)
+        yield(appInfo.verCode.toString())
+        yieldLineBreak()
 
         val sdkInfo = sdkInfo@ { ver: VerInfo ->
             val androidVer = if (ver.api == OsUtils.DEV) "Developer Preview" else ver.sdk
@@ -82,34 +125,34 @@ internal class AppListService {
             ver.apiText + context.getString(R.string.textParentheses, sdkDetails)
         }
 
-        val compileVer = VerInfo(appInfo.compileAPI, true)
-        builder.append("Compile SDK", StyleSpan(Typeface.BOLD), spanFlags)
-                .append(context.getString(R.string.textColon), StyleSpan(Typeface.BOLD), spanFlags)
-                .append(sdkInfo.invoke(compileVer))
-                .append('\n')
+        yield(RAv.string.av_list_info_compile_sdk.boldItem)
+        yield(R.string.textColon.boldItem)
+        yield(sdkInfo(VerInfo(appInfo.compileAPI, true)))
+        yieldLineBreak()
 
-        val targetVer = VerInfo(appInfo.targetAPI, true)
-        builder.append(context.getString(R.string.apiSdkTarget), StyleSpan(Typeface.BOLD), spanFlags)
-                .append(context.getString(R.string.textColon), StyleSpan(Typeface.BOLD), spanFlags)
-                .append(sdkInfo.invoke(targetVer))
-                .append('\n')
+        yield(R.string.apiSdkTarget.boldItem)
+        yield(R.string.textColon.boldItem)
+        yield(sdkInfo(VerInfo(appInfo.targetAPI, true)))
+        yieldLineBreak()
 
-        val minVer = VerInfo(appInfo.minAPI, true)
-        builder.append(context.getString(R.string.apiSdkMin), StyleSpan(Typeface.BOLD), spanFlags)
-                .append(context.getString(R.string.textColon), StyleSpan(Typeface.BOLD), spanFlags)
-                .append(sdkInfo.invoke(minVer))
-                .append('\n')
+        yield(R.string.apiSdkMin.boldItem)
+        yield(R.string.textColon.boldItem)
+        yield(sdkInfo(VerInfo(appInfo.minAPI, true)))
+        yieldLineBreak()
 
         if (appInfo.isNotArchive) {
             val cal = Calendar.getInstance()
-            cal.timeInMillis = pi.firstInstallTime
-            builder.append(context.getString(RAv.string.apiDetailsFirstInstall), StyleSpan(Typeface.BOLD), spanFlags)
-                    .append(format.format(cal.time))
-                    .append('\n')
-            cal.timeInMillis = pi.lastUpdateTime
-            builder.append(context.getString(RAv.string.apiDetailsLastUpdate), StyleSpan(Typeface.BOLD), spanFlags)
-                    .append(format.format(cal.time))
-                    .append('\n')
+            cal.timeInMillis = pkgInfo.firstInstallTime
+            cal.timeInMillis = pkgInfo.lastUpdateTime
+
+            yield(RAv.string.apiDetailsFirstInstall.boldItem)
+            yield(format.format(cal.time))
+            yieldLineBreak()
+
+            yield(RAv.string.apiDetailsLastUpdate.boldItem)
+            yield(format.format(cal.time))
+            yieldLineBreak()
+
             var installer: String? = null
             var realInstaller: String? = null
             if (OsUtils.satisfy(OsUtils.R)) {
@@ -127,36 +170,39 @@ internal class AppListService {
                     // need the INSTALL_PACKAGES permission, which is granted to system apps only
                     val originating = si.originatingPackageName
                     if (originating != null) {
-                        builder.append("Install originator: ", StyleSpan(Typeface.BOLD), spanFlags)
-                        builder.append(originating).append('\n')
+                        yield("Install originator: ".boldItem)
+                        yield(originating)
+                        yieldLineBreak()
                     }
                 }
             } else {
                 installer = getInstallerLegacy(context, appInfo)
             }
-            builder.append(context.getString(RAv.string.apiDetailsInsatllFrom), StyleSpan(Typeface.BOLD), spanFlags)
-            builder.append(getInstallerName(context, installer))
-            builder.append('\n')
+
+            yield(RAv.string.apiDetailsInsatllFrom.boldItem)
+            yield(getInstallerName(context, installer))
+            yieldLineBreak()
+
             if (OsUtils.satisfy(OsUtils.R)) {
-                builder.append(context.getString(RAv.string.av_details_real_installer), StyleSpan(Typeface.BOLD), spanFlags)
-                builder.append(getInstallerName(context, realInstaller))
-                builder.append('\n')
+                yield(RAv.string.av_details_real_installer.boldItem)
+                yield(getInstallerName(context, realInstaller))
+                yieldLineBreak()
             }
         }
 
         if (!appInfo.isNativeLibrariesRetrieved) appInfo.retrieveNativeLibraries()
         val nls = appInfo.nativeLibraries
-        builder.append(context.getString(R.string.av_details_native_libs), StyleSpan(Typeface.BOLD), spanFlags)
-                .append("armeabi-v7a ").append(if (nls[0]) '✓' else '✗').append("  ")
-                .append("arm64-v8a ").append(if (nls[1]) '✓' else '✗').append("  ")
-                .append("x86 ").append(if (nls[2]) '✓' else '✗').append("  ")
-                .append("x86_64 ").append(if (nls[3]) '✓' else '✗').append("  ")
-                .append("Flutter ").append(if (nls[4]) '✓' else '✗').append("  ")
-                .append("React Native ").append(if (nls[5]) '✓' else '✗').append("  ")
-                .append("Xamarin ").append(if (nls[6]) '✓' else '✗').append("  ")
-                .append("Kotlin ").append(if (nls[7]) '✓' else '✗')
-                .append('\n')
+        val nlItem = arrayOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64", "Flutter", "React Native", "Xamarin", "Kotlin")
+            .mapIndexed { i, s -> "$s " + (if (nls[i]) "✓" else "✗") }
+            .joinToString(separator = "  ")
 
+        yield(R.string.av_details_native_libs.boldItem)
+        yield(nlItem)
+        yieldLineBreak()
+    }
+
+    fun getAppExtendedDetailsSequence(context: Context, appInfo: ApiViewingApp, pkgInfo: PackageInfo) = sequence<AppInfoItem> {
+        var pi = pkgInfo
         var permissions: Array<String> = emptyArray()
         var activities: Array<ActivityInfo> = emptyArray()
         var receivers: Array<ActivityInfo> = emptyArray()
@@ -222,49 +268,59 @@ internal class AppListService {
             if (cert != null) {
                 val issuerInfo = Utils.getDesc(regexFields, cert.issuerDN)
                 val subjectInfo = Utils.getDesc(regexFields, cert.subjectDN)
-                val formerPart = "\n\nX.509 " +
+                val formerPart = "X.509 " +
                         context.getString(RAv.string.apiDetailsCert) +
                         "\nNo." + cert.serialNumber.toString(16).uppercase(appLocale) +
-                        " v" +
-                        (cert.version + 1).toString() +
+                        " v${cert.version + 1}" +
                         '\n' + context.getString(RAv.string.apiDetailsValiSince)
-                builder.append(formerPart, StyleSpan(Typeface.BOLD), spanFlags)
-                        .append(format.format(cert.notBefore)).append('\n')
-                        .append(context.getString(RAv.string.apiDetailsValiUntil), StyleSpan(Typeface.BOLD), spanFlags)
-                        .append(format.format(cert.notAfter)).append('\n')
-                        .append(context.getString(RAv.string.apiDetailsIssuer), StyleSpan(Typeface.BOLD), spanFlags)
-                        .append(issuerInfo).append('\n')
-                        .append(context.getString(RAv.string.apiDetailsSubject), StyleSpan(Typeface.BOLD), spanFlags)
-                        .append(subjectInfo).append('\n')
-                        .append(context.getString(RAv.string.apiDetailsSigAlg), StyleSpan(Typeface.BOLD), spanFlags)
-                        .append(cert.sigAlgName).append('\n')
-                        .append(context.getString(RAv.string.apiDetailsSigAlgOID), StyleSpan(Typeface.BOLD), spanFlags)
-                        .append(cert.sigAlgOID)
-                        .append('\n')
+
+                val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", appLocale)
+
+                yield(formerPart.boldItem)
+                yield(format.format(cert.notBefore))
+                yieldLineBreak()
+
+                yield(RAv.string.apiDetailsValiUntil.boldItem)
+                yield(format.format(cert.notAfter))
+                yieldLineBreak()
+
+                yield(RAv.string.apiDetailsIssuer.boldItem)
+                yield(issuerInfo)
+                yieldLineBreak()
+
+                yield(RAv.string.apiDetailsSubject.boldItem)
+                yield(subjectInfo)
+                yieldLineBreak()
+
+                yield(RAv.string.apiDetailsSigAlg.boldItem)
+                yield(cert.sigAlgName)
+                yieldLineBreak()
+
+                yield(RAv.string.apiDetailsSigAlgOID.boldItem)
+                yield(cert.sigAlgOID)
+                yieldLineBreak()
             }
         }
 
-        builder.appendSection(context, RAv.string.apiDetailsPermissions)
+        appendSection(context, RAv.string.apiDetailsPermissions)
         if (permissions.isNotEmpty()) {
             Arrays.sort(permissions)
             for (permission in permissions) {
-                builder.append(permission).append('\n')
+                yield(permission)
+                yieldLineBreak()
             }
         } else {
-            builder.append(context.getString(R.string.text_no_content)).append('\n')
+            yield(R.string.text_no_content)
+            yieldLineBreak()
         }
 
-        builder.run {
-            appendCompSection(context, RAv.string.apiDetailsActivities, activities)
-            appendCompSection(context, RAv.string.apiDetailsReceivers, receivers)
-            appendCompSection(context, RAv.string.apiDetailsServices, services)
-            appendCompSection(context, RAv.string.apiDetailsProviders, providers)
-        }
-
-        return SpannableString.valueOf(builder)
+        appendCompSection(context, RAv.string.apiDetailsActivities, activities)
+        appendCompSection(context, RAv.string.apiDetailsReceivers, receivers)
+        appendCompSection(context, RAv.string.apiDetailsServices, services)
+        appendCompSection(context, RAv.string.apiDetailsProviders, providers)
     }
 
-    private fun getInstallerName(context: Context, installer: String?): String {
+    fun getInstallerName(context: Context, installer: String?): String {
         return if (installer != null) {
             val installerName = MiscApp.getApplicationInfo(context, packageName = installer)
                     ?.loadLabel(context.packageManager)?.toString() ?: ""
@@ -285,22 +341,27 @@ internal class AppListService {
         }
     }
 
-    private fun SpannableStringBuilder.appendSection(context: Context, titleId: Int) {
-        append("\n\n")
-        append(context.getString(titleId), StyleSpan(Typeface.BOLD), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        append('\n')
+    private suspend fun SequenceScope<AppInfoItem>.appendSection(context: Context, titleId: Int) {
+        yieldLineBreak()
+        yieldLineBreak()
+        yield(titleId.boldItem)
+        yieldLineBreak()
     }
 
-    private fun SpannableStringBuilder.appendComp(context: Context, components: Array<out ComponentInfo>) {
+    private suspend fun SequenceScope<AppInfoItem>.appendComp(context: Context, components: Array<out ComponentInfo>) {
         if (components.isNotEmpty()) {
             Arrays.sort(components) { o1, o2 -> o1.name.compareTo(o2.name) }
-            for (p in components) append(p.name).append('\n')
+            for (p in components) {
+                yield(p.name)
+                yieldLineBreak()
+            }
         } else {
-            append(context.getString(R.string.text_no_content)).append('\n')
+            yield(R.string.text_no_content)
+            yieldLineBreak()
         }
     }
 
-    private fun SpannableStringBuilder.appendCompSection(
+    private suspend fun SequenceScope<AppInfoItem>.appendCompSection(
             context: Context, titleId: Int, components: Array<out ComponentInfo>) {
         appendSection(context, titleId)
         appendComp(context, components)
@@ -490,7 +551,7 @@ internal class AppListService {
         }
     }
 
-    private fun actionIcon(context: Context, app: ApiViewingApp, fragmentManager: FragmentManager) {
+    fun actionIcon(context: Context, app: ApiViewingApp, fragmentManager: FragmentManager) {
         val path = F.createPath(F.cachePublicPath(context), "App", "Logo", "${app.name}.png")
         val image = File(path)
         app.getOriginalIcon(context)?.let {
@@ -504,7 +565,7 @@ internal class AppListService {
     }
 
     // todo split APKs
-    private fun actionApk(context: Context, app: ApiViewingApp, scope: CoroutineScope, fragmentManager: FragmentManager) {
+    fun actionApk(context: Context, app: ApiViewingApp, scope: CoroutineScope, fragmentManager: FragmentManager) {
         val path = F.createPath(F.cachePublicPath(context), "App", "APK", "${app.name}-${app.verName}.apk")
         val apk = File(path)
         if (F.prepare4(apk)) {

@@ -135,6 +135,7 @@ class DeviceManager(useProxy: Boolean = true): AutoCloseable {
     private suspend fun connectProfileProxy(context: Context): Unit
     = suspendCancellableCoroutine co@{ continuation ->
         val profileListener = getProfileListener {
+            if (continuation.isCompleted) return@getProfileListener
             if (hasProxy) continuation.resume(Unit)
         }
         // Establish connection to the proxy.

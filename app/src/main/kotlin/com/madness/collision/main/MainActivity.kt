@@ -143,7 +143,7 @@ class MainActivity : BaseActivity(), SystemBarMaintainerOwner {
         } else null
         val fragment = MainFragment().apply { startArgs?.let { arguments = it } }
         val containerId = viewBinding.mainFragmentWrapper.id
-        supportFragmentManager.beginTransaction().add(containerId, fragment).commit()
+        supportFragmentManager.beginTransaction().add(containerId, fragment).commitNowAllowingStateLoss()
     }
 
     private fun setupViewModel(context: Context, prefSettings: SharedPreferences) {

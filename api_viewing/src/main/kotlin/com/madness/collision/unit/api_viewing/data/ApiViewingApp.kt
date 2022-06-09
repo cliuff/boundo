@@ -182,10 +182,7 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
 
     fun initExtraIgnored(context: Context, info: ApplicationInfo) {
         uid = info.uid
-        if (OsUtils.satisfy(OsUtils.S)) {
-            compileAPI = info.compileSdkVersion
-            compileApiCodeName = info.compileSdkVersionCodename
-        }
+        loadCompileSdk(info)
         loadName(context, info)
     }
 
@@ -210,10 +207,7 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
             }
 
             // API ver
-            if (OsUtils.satisfy(OsUtils.S)) {
-                compileAPI = info.applicationInfo.compileSdkVersion
-                compileApiCodeName = info.applicationInfo.compileSdkVersionCodename
-            }
+            loadCompileSdk(info.applicationInfo)
             targetAPI = info.applicationInfo.targetSdkVersion
             if (OsUtils.satisfy(OsUtils.N)) {
                 minAPI = info.applicationInfo.minSdkVersion
@@ -233,6 +227,20 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
     private fun getMinApiLevelFromArchive(): Int {
         val minApiText = ManifestUtil.getMinSdk(appPackage.basePath)
         return if (minApiText.isNotEmpty()) minApiText.toInt() else -1 // fix cloneable
+    }
+
+    private fun loadCompileSdk(applicationInfo: ApplicationInfo) {
+        if (OsUtils.satisfy(OsUtils.S)) {
+            compileAPI = applicationInfo.compileSdkVersion
+            compileApiCodeName = applicationInfo.compileSdkVersionCodename
+        } else {
+            compileAPI = getCompileSdkFromArchive()
+        }
+    }
+
+    private fun getCompileSdkFromArchive(): Int {
+        val apiText = ManifestUtil.getCompileSdk(appPackage.basePath)
+        return if (apiText.isNotEmpty()) apiText.toInt() else -1 // fix cloneable
     }
 
     private fun initApiVer() {

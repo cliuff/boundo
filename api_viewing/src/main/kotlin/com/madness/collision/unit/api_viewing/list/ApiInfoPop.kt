@@ -164,8 +164,10 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), SystemBarMaintainerOwner
         return mViews.view
     }
 
+    private val edgeToEdge = BottomSheetEdgeToEdge(this, this::consumeInsets) { activity?.window }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        applyInsets()
+        val context = context ?: return
+        edgeToEdge.applyInsets(view, context)
     }
 
     override fun onStart() {
@@ -180,46 +182,6 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), SystemBarMaintainerOwner
     override fun dismiss() {
         popStore?.dismiss()
         super.dismiss()
-    }
-
-    private fun applyInsets() {
-        mViews.view.setOnApplyWindowInsetsListener { v, insets ->
-            if (checkInsets(insets)) {
-                configEdgeToEdge(insets)
-                val isRtl = if (v.isLayoutDirectionResolved) v.layoutDirection == View.LAYOUT_DIRECTION_RTL else false
-                consumeInsets(WindowInsets(insets, isRtl))
-            }
-            WindowInsetsCompat.CONSUMED.toWindowInsets()
-        }
-    }
-
-    private fun configEdgeToEdge(insets: android.view.WindowInsets): Boolean {
-        val context = context ?: return false
-        var isEdgeToEdge = false //= true
-        edgeToEdge(insets, false) {
-            // keep status bar icon color untouched
-            // Actually this works as intended only when app theme is set to follow system,
-            // not configuring this icon color makes it follow dialog's style/theme,
-            // which is defined in styles.xml and it follows system dark mode setting.
-            // To fix this, set it to the window config of the activity before this.
-            top {
-                // fix status bar icon color
-                activity?.window?.let { window ->
-                    isDarkIcon = SystemUtil.isDarkStatusIcon(window)
-                }
-            }
-            bottom {
-                val colorSurface = ThemeUtil.getColor(context, R.attr.colorASurface)
-                isEdgeToEdge = (isDarkIcon == true && OsUtils.dissatisfy(OsUtils.O)).not()
-                color = if (isEdgeToEdge) {
-                    colorSurface
-                } else {
-                    ColorUtil.darkenAs(colorSurface, 0.9f)
-                }
-                transparentBar()
-            }
-        }
-        return isEdgeToEdge
     }
 
     private fun consumeInsets(insets: WindowInsets) {

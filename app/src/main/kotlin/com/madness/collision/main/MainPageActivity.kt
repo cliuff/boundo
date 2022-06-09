@@ -108,7 +108,7 @@ class MainPageActivity : BaseActivity(), SystemBarMaintainerOwner {
         }
         val page = pageFragment ?: return
         if (page.isAdded) return
-        fMan.beginTransaction().add(viewBinding.mainPageContainer.id, page).commit()
+        fMan.beginTransaction().add(viewBinding.mainPageContainer.id, page).commitNowAllowingStateLoss()
     }
 
     private fun loadPage(extras: Bundle): Fragment? {

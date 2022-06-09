@@ -84,4 +84,15 @@ object ManifestUtil {
         }
         return ""
     }
+
+    fun getCompileSdk(sourceDir: String): String {
+        try {
+            val res = getManifestAttr(sourceDir, arrayOf("manifest", "compileSdkVersion"))
+            if (res.isEmpty()) return ""
+            return res
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return ""
+    }
 }
