@@ -70,7 +70,7 @@ internal class AppTagInfo(
 
     class Description(
         val tagDesc: Label? = null,
-        val checkResultDesc: Label? = null,
+        val checkResultDesc: ((Resources) -> Label)? = null,
     )
 
     class Resources(
@@ -79,8 +79,9 @@ internal class AppTagInfo(
         var pkgInfo: PackageInfo? = null,
         var pkgInstaller: String? = null,
         var isPkgInstallerRetrieved: Boolean = false,
-        var dynamicIconKey: String? = null,
-        var dynamicLabel: String? = null,
+        // requisite ID as key, values are requisite (rather than tag) bound
+        val dynamicRequisiteIconKeys: MutableMap<String, String> = hashMapOf(),
+        val dynamicRequisiteLabels: MutableMap<String, String> = hashMapOf(),
     )
 
     class Requisite(

@@ -74,13 +74,11 @@ internal class AppListFragment : TaggedFragment(), AppList, Filterable {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mContext = context ?: return
-        val context = mContext
         mAdapter = APIAdapter(mContext, object : APIAdapter.Listener {
             override val click: (ApiViewingApp) -> Unit = {
-                ApiInfoPop.newInstance(it).show(childFragmentManager, ApiInfoPop.TAG)
+                AppInfoFragment(it.packageName).show(childFragmentManager, AppInfoFragment.TAG)
             }
             override val longClick: (ApiViewingApp) -> Boolean = {
-                service.showOptions(context, it, this@AppListFragment)
                 true
             }
         }, lifecycleScope)
@@ -204,7 +202,7 @@ internal class AppListFragment : TaggedFragment(), AppList, Filterable {
 
     override fun onPause() {
         childFragmentManager.run {
-            (findFragmentByTag(ApiInfoPop.TAG) as BottomSheetDialogFragment?)?.dismiss()
+            (findFragmentByTag(AppInfoFragment.TAG) as BottomSheetDialogFragment?)?.dismiss()
         }
         super.onPause()
     }

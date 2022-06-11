@@ -17,6 +17,7 @@
 
 import java.net.URI
 import com.cliuff.boundo.dependency.Dependencies
+import com.cliuff.boundo.dependency.Versions
 
 plugins {
     id("com.android.dynamic-feature")
@@ -76,6 +77,11 @@ android {
     }
     kotlinOptions.jvmTarget = JavaVersion.VERSION_11.toString()
     buildFeatures.viewBinding = true
+    buildFeatures.compose = true
+    composeOptions {
+        // Jetpack Compose compiler version
+        kotlinCompilerExtensionVersion = Versions.androidxCompose
+    }
 }
 
 repositories {

@@ -47,11 +47,20 @@ internal object AppTag {
 
     fun clearContext() = AppTagInflater.clearContext()
 
+    fun ensureAllTagIcons(context: Context) {
+        ensureTagIcons(context, null)
+    }
+
     // prepare icons
     fun ensureTagIcons(context: Context) {
+        ensureTagIcons(context) { displayingTags[it.id].isSelected }
+    }
+
+    // prepare icons
+    private fun ensureTagIcons(context: Context, filter: ((AppTagInfo) -> Boolean)?) {
         for (id in AppTagInfo.IdGroup.STATIC_ICON) {
             val tagInfo = AppTagManager.tags[id] ?: continue
-            if (displayingTags[tagInfo.id].isSelected.not()) continue
+            if (filter != null && filter(tagInfo).not()) continue
             val iconKey = tagInfo.iconKey ?: continue
             val icon = tagInfo.icon
             when {
@@ -74,21 +83,36 @@ internal object AppTag {
         return res
     }
 
+    // for all tags
+    suspend fun ensureRequisitesForAllAsync(context: Context, app: ApiViewingApp, perRequisite: (
+    suspend (requisite: AppTagInfo.Requisite, tagIds: List<String>, res: AppTagInfo.Resources) -> Unit
+    )?): AppTagInfo.Resources {
+        return ensureRequisitesAsync(context, app, perRequisite, null)
+    }
+
+    suspend fun ensureRequisitesAsync(context: Context, app: ApiViewingApp, perRequisite: (
+    suspend (requisite: AppTagInfo.Requisite, tagIds: List<String>, res: AppTagInfo.Resources) -> Unit
+    )?): AppTagInfo.Resources {
+        return ensureRequisitesAsync(context, app, perRequisite) { tagIds ->
+            tagIds.any { displayingTags[it].isDeselected.not() }
+        }
+    }
+
     /**
      * Resource loading: selected or anti-selected (anti any tag requires resource loading to confirm).
      *
      * If requisite is checked, include it in [perRequisite] but without duplicate loading,
      * Also when requisite tags are all deselected (not checking, i.e., not selected or anti-selected).
      */
-    suspend fun ensureRequisitesAsync(context: Context, app: ApiViewingApp, perRequisite: (
+    private suspend fun ensureRequisitesAsync(context: Context, app: ApiViewingApp, perRequisite: (
     suspend (requisite: AppTagInfo.Requisite, tagIds: List<String>, res: AppTagInfo.Resources) -> Unit
-    )?): AppTagInfo.Resources = coroutineScope {
+    )?, filter: ((tagIds: List<String>) -> Boolean)?): AppTagInfo.Resources = coroutineScope {
         val res = AppTagInfo.Resources(context, app)
         getGroupedRequisites().map { (p, tagIds) ->
             val (_, requisite) = p
             async(Dispatchers.Default) {
-                // skip when requisite is checked, or no tag needs checking
-                val skip = requisite.checker(res) || tagIds.all { displayingTags[it].isDeselected }
+                // skip when requisite is checked
+                val skip = requisite.checker(res) || (filter != null && filter(tagIds).not())
                 if (skip.not()) requisite.loader(res)
                 requisite to tagIds
             }
@@ -161,32 +185,40 @@ internal object AppTag {
         if (tagInfo.requisites?.any { it.checker(res).not() } == true) return
         // selected and expressed true
         if (displayingTags[tagInfo.id].isSelected && tagInfo.express(res)) {
-            // normal label or dynamic label
-            val label = tagInfo.label.normal ?: kotlin.run {
-                val string = if (tagInfo.label.isDynamic) res.dynamicLabel else null
-                AppTagInfo.Label(string = string)
-            }
-            val tagIcon = tagInfo.icon
-            // support dynamic icon
-            val (iconBitmap, isExternalIcon) = when {
-                tagIcon.drawableResId != null || tagIcon.drawable != null -> tagInfo.iconKey to false
-                tagIcon.text != null -> null to false
-                tagIcon.pkgName != null -> tagIcon.pkgName to true
-                tagIcon.isDynamic -> res.dynamicIconKey to true
-                else -> null to false
-            }.let { (iconKey, isExternal) ->
-                val ic = if (iconKey == null) null else AppTagInflater.tagIcons[iconKey]
-                ic to isExternal
-            }
-            val icon = AppTagInflater.TagInfo.Icon(iconBitmap, tagIcon.text.get(context), isExternalIcon)
-            // terminate if no label string available
-            if (label.stringResId == null && label.string == null) return
-            // construct tag info object
-            val info = AppTagInflater.TagInfo(nameResId = label.stringResId,
-                name = label.string?.toString(), icon = icon, rank = tagInfo.rank)
-            // inflate tag
+            val info = getTagViewInfo(tagInfo, res, context) ?: return
             AppTagInflater.inflateTag(context, container, info)
         }
+    }
+
+    private fun getTagViewInfo(tagInfo: AppTagInfo, res: AppTagInfo.Resources, context: Context): AppTagInflater.TagInfo? {
+        return getTagViewInfo(tagInfo, res, context) { it.label.normal }
+    }
+
+    fun getTagViewInfo(tagInfo: AppTagInfo, res: AppTagInfo.Resources, context: Context, labelSelector: (AppTagInfo) -> AppTagInfo.Label?): AppTagInflater.TagInfo? {
+        // normal label or dynamic label
+        val label = labelSelector(tagInfo) ?: kotlin.run {
+            val string = if (tagInfo.label.isDynamic)
+                tagInfo.requisites?.firstNotNullOfOrNull { res.dynamicRequisiteLabels[it.id] } else null
+            AppTagInfo.Label(string = string)
+        }
+        val tagIcon = tagInfo.icon
+        // support dynamic icon
+        val (iconBitmap, isExternalIcon) = when {
+            tagIcon.drawableResId != null || tagIcon.drawable != null -> tagInfo.iconKey to false
+            tagIcon.text != null -> null to false
+            tagIcon.pkgName != null -> tagIcon.pkgName to true
+            tagIcon.isDynamic -> tagInfo.requisites?.firstNotNullOfOrNull { res.dynamicRequisiteIconKeys[it.id] } to true
+            else -> null to false
+        }.let { (iconKey, isExternal) ->
+            val ic = if (iconKey == null) null else AppTagInflater.tagIcons[iconKey]
+            ic to isExternal
+        }
+        val icon = AppTagInflater.TagInfo.Icon(iconBitmap, tagIcon.text.get(context), isExternalIcon)
+        // terminate if no label string available
+        if (label.stringResId == null && label.string == null) return null
+        // construct tag info object
+        return AppTagInflater.TagInfo(nameResId = label.stringResId,
+            name = label.string?.toString(), icon = icon, rank = tagInfo.rank)
     }
 
     // Filtering: selected matches expressing, or ExpressibleTag.express().

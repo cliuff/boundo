@@ -25,6 +25,7 @@ import android.util.Log
 import com.madness.collision.unit.api_viewing.R
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
+import com.madness.collision.unit.api_viewing.list.AppListService
 import com.madness.collision.unit.api_viewing.tag.inflater.AppTagInflater
 import com.madness.collision.util.ElapsingTime
 import com.madness.collision.util.os.OsUtils
@@ -33,13 +34,15 @@ import kotlinx.coroutines.delay
 internal fun builtInTags(): Map<String, AppTagInfo> = listOf(
     AppTagInfo(
         id = AppTagInfo.ID_APP_INSTALLER_PLAY, category = 0.cat, icon = ApiViewingApp.packagePlayStore.appIcon,
-        label = AppTagInfo.Labels(full = R.string.apiDetailsInstallGP.label, isDynamic = true), rank = 0,
+        label = R.string.apiDetailsInstallGP.labels, rank = 0,  // todo dynamic label
+        desc = installerResultDesc,
         requisites = pkgInstallerRequisite().list,
         expressing = expressing { res -> res.pkgInstaller == ApiViewingApp.packagePlayStore }
     ).apply { iconKey = ApiViewingApp.packagePlayStore },
     AppTagInfo(
         id = AppTagInfo.ID_APP_INSTALLER, category = 0.cat, icon = AppTagInfo.Icon(isDynamic = true),
         label = AppTagInfo.Labels(full = R.string.apiDetailsInstallPI.label, isDynamic = true), rank = 1,
+        desc = installerResultDesc,
         requisites = pkgInstallerRequisite().list,
         expressing = expressing { res ->
             val installer = res.pkgInstaller ?: return@expressing false
@@ -50,30 +53,35 @@ internal fun builtInTags(): Map<String, AppTagInfo> = listOf(
     AppTagInfo(
         id = AppTagInfo.ID_TECH_KOTLIN, category = 0.cat, icon = R.drawable.ic_kotlin_72.icon,
         label = "Kotlin".labels, rank = 2,
+        desc = "kotlin.kotlin_builtins".fileResultDesc,
         requisites = nativeLibrariesRequisite().list,
         expressing = commonExpressing { it.nativeLibraries[7] }
     ).apply { iconKey = "kot" },
     AppTagInfo(
         id = AppTagInfo.ID_TECH_X_COMPOSE, category = 0.cat, icon = R.drawable.ic_cmp_72.icon,
         label = "Jetpack Compose".labels, rank = 3,
+        desc = "androidx.compose".packageResultDesc,
         requisites = thirdPartyPkgRequisite().list,
         expressing = commonExpressing { it.isJetpackComposed }
     ).apply { iconKey = "xcm" },
     AppTagInfo(
         id = AppTagInfo.ID_TECH_FLUTTER, category = 0.cat, icon = R.drawable.ic_flutter_72.icon,
         label = "Flutter".labels, rank = 4,
+        desc = "libflutter.so".fileResultDesc,
         requisites = nativeLibrariesRequisite().list,
         expressing = commonExpressing { it.nativeLibraries[4] }
     ).apply { iconKey = "flu" },
     AppTagInfo(
         id = AppTagInfo.ID_TECH_REACT_NATIVE, category = 0.cat, icon = R.drawable.ic_react_72.icon,
         label = "React Native".labels, rank = 5,
+        desc = "libreactnativejni.so".fileResultDesc,
         requisites = nativeLibrariesRequisite().list,
         expressing = commonExpressing { it.nativeLibraries[5] }
     ).apply { iconKey = "rn" },
     AppTagInfo(
         id = AppTagInfo.ID_TECH_XAMARIN, category = 0.cat, icon = R.drawable.ic_xamarin_72.icon,
         label = "Xamarin".labels, rank = 6,
+        desc = "libxamarin-app.so".fileResultDesc,
         requisites = nativeLibrariesRequisite().list,
         expressing = commonExpressing { it.nativeLibraries[6] }
     ).apply { iconKey = "xam" },
@@ -81,28 +89,33 @@ internal fun builtInTags(): Map<String, AppTagInfo> = listOf(
     AppTagInfo(
         id = AppTagInfo.ID_APP_ADAPTIVE_ICON, category = 0.cat, icon = R.drawable.ic_ai_72.icon,
         label = R.string.av_ai.labels, rank = 7,
+        desc = R.string.av_tag_result_ai.resultDesc,
         requisites = appIconRequisite().list,
         expressing = commonExpressing { it.adaptiveIcon }
     ).apply { iconKey = "ai" },
     AppTagInfo(
         id = AppTagInfo.ID_PKG_AAB, category = 0.cat, icon = R.drawable.ic_aab_72.icon,
         label = R.string.av_tag_has_splits.labels, rank = 8,
+        desc = R.string.av_tag_result_aab.resultDesc,
         expressing = commonExpressing { it.appPackage.hasSplits }
     ).apply { iconKey = "aab" },
     AppTagInfo(
         id = AppTagInfo.ID_APP_SYSTEM, category = 0.cat, icon = R.drawable.ic_system_72.icon,
         label = (R.string.av_adapter_tag_system to R.string.av_settings_tags_system).resLabels, rank = 9,
+        desc = R.string.av_tag_result_sys.resultDesc,
         expressing = commonExpressing { it.apiUnit == ApiUnit.SYS }
     ).apply { iconKey = "sys" },
     AppTagInfo(
         id = AppTagInfo.ID_APP_HIDDEN, category = 0.cat, icon = R.drawable.ic_hidden_72.icon,
         label = (R.string.av_adapter_tag_hidden to R.string.av_settings_tag_hidden).resLabels, rank = 10,
+        desc = R.string.av_tag_result_hidden.resultDesc,
         expressing = commonExpressing { !it.isLaunchable }
     ).apply { iconKey = "hid" },
 
     AppTagInfo(
         id = AppTagInfo.ID_PKG_64BIT, category = 0.cat, icon = R.string.av_tag_full_64bit.label.icon,
         label = (R.string.av_tag_full_64bit_normal to R.string.av_tag_full_64bit_full).resLabels, rank = 11,
+        desc = R.string.av_tag_result_full_64bit.resultDesc,
         requisites = nativeLibrariesRequisite().list,
         expressing = commonExpressing { it.nativeLibraries.let { n -> (!n[0] || n[1]) && (!n[2] || n[3]) } }
     ).apply { iconKey = "64b" },
@@ -110,24 +123,28 @@ internal fun builtInTags(): Map<String, AppTagInfo> = listOf(
     AppTagInfo(
         id = AppTagInfo.ID_PKG_ARM32, category = 0.cat, icon = "ARM 32".icon,
         label = R.string.av_tag_arm_32bit.labels, rank = 12,
+        desc = dirArm32ResultDesc,
         requisites = nativeLibrariesRequisite().list,
         expressing = commonExpressing { it.nativeLibraries[0] }
     ),
     AppTagInfo(
         id = AppTagInfo.ID_PKG_ARM64, category = 0.cat, icon = "ARM 64".icon,
         label = R.string.av_tag_arm_64bit.labels, rank = 13,
+        desc = "lib/arm64-v8a".dirResultDesc,
         requisites = nativeLibrariesRequisite().list,
         expressing = commonExpressing { it.nativeLibraries[1] }
     ),
     AppTagInfo(
         id = AppTagInfo.ID_PKG_X86, category = 0.cat, icon = "x86".icon,
         label = "x86".labels, rank = 14,
+        desc = "lib/x86".dirResultDesc,
         requisites = nativeLibrariesRequisite().list,
         expressing = commonExpressing { it.nativeLibraries[2] }
     ),
     AppTagInfo(
         id = AppTagInfo.ID_PKG_X64, category = 0.cat, icon = "x64".icon,
         label = ("x64" to "x86-64 (x64)").strLabels, rank = 15,
+        desc = "lib/x86_64".dirResultDesc,
         requisites = nativeLibrariesRequisite().list,
         expressing = commonExpressing { it.nativeLibraries[3] }
     ),
@@ -135,72 +152,84 @@ internal fun builtInTags(): Map<String, AppTagInfo> = listOf(
     AppTagInfo(
         id = AppTagInfo.ID_MSG_FCM, category = 0.cat, icon = R.drawable.ic_firebase_72.icon,
         label = ("FCM" to "Firebase Cloud Messaging (FCM)").strLabels, rank = 16,
+        desc = "com.google.firebase.messaging.FirebaseMessagingService".serviceResultDesc,
         requisites = pkgServicesRequisite().list,
         expressing = serviceExpressing("com.google.firebase.messaging.FirebaseMessagingService")
     ).apply { iconKey = "fcm" },
     AppTagInfo(
         id = AppTagInfo.ID_MSG_HUAWEI, category = 0.cat, icon = R.drawable.ic_huawei_72.icon,
         label = R.string.av_settings_tag_huawei_push.labels, rank = 17,
+        desc = "com.huawei.hms.support.api.push.service.HmsMsgService".serviceResultDesc,
         requisites = pkgServicesRequisite().list,
         expressing = serviceExpressing("com.huawei.hms.support.api.push.service.HmsMsgService")
     ).apply { iconKey = "hwp" },
     AppTagInfo(
         id = AppTagInfo.ID_MSG_XIAOMI, category = 0.cat, icon = R.drawable.ic_xiaomi_72.icon,
         label = R.string.av_settings_tag_xiaomi_push.labels, rank = 18,
+        desc = "com.xiaomi.mipush.sdk.MessageHandleService".mipushServiceResultDesc,
         requisites = pkgServicesRequisite().list,
         expressing = xiaomiMsgExpressing()
     ).apply { iconKey = "mip" },
     AppTagInfo(
         id = AppTagInfo.ID_MSG_MEIZU, category = 0.cat, icon = R.drawable.ic_meizu_72.icon,
         label = R.string.av_settings_tag_meizu_push.labels, rank = 19,
+        desc = "com.meizu.cloud.pushsdk.NotificationService".serviceResultDesc,
         requisites = pkgServicesRequisite().list,
         expressing = serviceExpressing("com.meizu.cloud.pushsdk.NotificationService")
     ).apply { iconKey = "mzp" },
     AppTagInfo(
         id = AppTagInfo.ID_MSG_OPPO, category = 0.cat, icon = R.drawable.ic_oppo_72.icon,
         label = R.string.av_settings_tag_oppo_push.labels, rank = 20,
+        desc = "com.heytap.mcssdk.AppPushService".serviceResultDesc,
         requisites = pkgServicesRequisite().list,
         expressing = serviceExpressing("com.heytap.mcssdk.AppPushService")
     ).apply { iconKey = "oop" },
     AppTagInfo(
         id = AppTagInfo.ID_MSG_VIVO, category = 0.cat, icon = R.drawable.ic_vivo_72.icon,
         label = R.string.av_settings_tag_vivo_push.labels, rank = 21,
+        desc = "com.vivo.push.sdk.service.CommandClientService".serviceResultDesc,
         requisites = pkgServicesRequisite().list,
         expressing = serviceExpressing("com.vivo.push.sdk.service.CommandClientService")
     ).apply { iconKey = "vvp" },
     AppTagInfo(
         id = AppTagInfo.ID_MSG_JPUSH, category = 0.cat, icon = R.drawable.ic_aurora_72.icon,
         label = (R.string.av_tag_jpush_normal to R.string.av_settings_tag_jpush).resLabels, rank = 22,
+        desc = "cn.jpush.android.service.PushService".serviceResultDesc,
         requisites = pkgServicesRequisite().list,
         expressing = serviceExpressing("cn.jpush.android.service.PushService")
     ).apply { iconKey = "j-p" },
     AppTagInfo(
         id = AppTagInfo.ID_MSG_UPUSH, category = 0.cat, icon = R.drawable.ic_umeng_72.icon,
         label = (R.string.av_tag_upush_normal to R.string.av_settings_tag_upush).resLabels, rank = 23,
+        desc = "com.umeng.message.UmengIntentService".serviceResultDesc,
         requisites = pkgServicesRequisite().list,
         expressing = serviceExpressing("com.umeng.message.UmengIntentService")
     ).apply { iconKey = "u-p" },
     AppTagInfo(
         id = AppTagInfo.ID_MSG_TPNS, category = 0.cat, icon = R.drawable.ic_tpns_72.icon,
         label = (R.string.av_tag_tpns_normal to R.string.av_settings_tag_tpns).resLabels, rank = 24,
+        desc = "com.tencent.android.tpush.service.XGVipPushService".serviceResultDesc,
         requisites = pkgServicesRequisite().list,
         expressing = serviceExpressing("com.tencent.android.tpush.service.XGVipPushService")
     ).apply { iconKey = "tpn" },
     AppTagInfo(
         id = AppTagInfo.ID_MSG_ALI, category = 0.cat, icon = R.drawable.ic_emas_72.icon,
         label = (R.string.av_tag_ali_push_normal to R.string.av_settings_tag_ali_push).resLabels, rank = 25,
+        desc = "org.android.agoo.accs.AgooService".serviceResultDesc,
         requisites = pkgServicesRequisite().list,
         expressing = serviceExpressing("org.android.agoo.accs.AgooService")
     ).apply { iconKey = "alp" },
     AppTagInfo(
         id = AppTagInfo.ID_MSG_BAIDU, category = 0.cat, icon = R.drawable.ic_baidu_push_72.icon,
         label = R.string.av_settings_tag_baidu_push.labels, rank = 26,
+        desc = "com.baidu.android.pushservice.PushService".serviceResultDesc,
         requisites = pkgServicesRequisite().list,
         expressing = serviceExpressing("com.baidu.android.pushservice.PushService")
     ).apply { iconKey = "dup" },
     AppTagInfo(
         id = AppTagInfo.ID_MSG_GETUI, category = 0.cat, icon = R.drawable.ic_getui_72.icon,
         label = R.string.av_settings_tag_getui.labels, rank = 27,
+        desc = "com.igexin.sdk.PushService".serviceResultDesc,
         requisites = pkgServicesRequisite().list,
         expressing = serviceExpressing("com.igexin.sdk.PushService")
     ).apply { iconKey = "get" },
@@ -244,6 +273,36 @@ private val Pair<Int, Int>.resLabels: AppTagInfo.Labels
 
 private val Int.desc: AppTagInfo.Description
     get() = AppTagInfo.Description(this.label)
+
+private val Int.resultDesc: AppTagInfo.Description
+    get() = AppTagInfo.Description(checkResultDesc = { this.label })
+
+private val CharSequence.resultDesc: AppTagInfo.Description
+    get() = AppTagInfo.Description(checkResultDesc = { this.label })
+
+private val CharSequence.serviceResultDesc: AppTagInfo.Description
+    get() = AppTagInfo.Description(checkResultDesc = { it.context.getString(R.string.av_tag_result_service, this).label })
+
+private val CharSequence.mipushServiceResultDesc: AppTagInfo.Description
+    get() = AppTagInfo.Description(checkResultDesc = { it.context.getString(R.string.av_tag_result_mipush_service, this).label })
+
+private val CharSequence.fileResultDesc: AppTagInfo.Description
+    get() = AppTagInfo.Description(checkResultDesc = { it.context.getString(R.string.av_tag_result_file, this).label })
+
+private val CharSequence.packageResultDesc: AppTagInfo.Description
+    get() = AppTagInfo.Description(checkResultDesc = { it.context.getString(R.string.av_tag_result_pkg, this).label })
+
+private val installerResultDesc: AppTagInfo.Description
+    get() = AppTagInfo.Description(checkResultDesc = {
+        val name = AppListService().getInstallerName(it.context, it.pkgInstaller)
+        it.context.getString(R.string.av_tag_result_installer, name).label
+    })
+
+private val CharSequence.dirResultDesc: AppTagInfo.Description
+    get() = AppTagInfo.Description(checkResultDesc = { it.context.getString(R.string.av_tag_result_dir, this).label })
+
+private val dirArm32ResultDesc: AppTagInfo.Description
+    get() = AppTagInfo.Description(checkResultDesc = { it.context.getString(R.string.av_tag_result_dir_arm32).label })
 
 private val Any.cat: AppTagInfo.Category
     get() = AppTagInfo.Category()
@@ -399,8 +458,9 @@ private fun pkgInstallerRequisite(): AppTagInfo.Requisite = AppTagInfo.Requisite
         AppTagInflater.ensureTagIcon(context, installer)
         res.pkgInstaller = installer
         res.isPkgInstallerRetrieved = true
-        res.dynamicLabel = installer
-        res.dynamicIconKey = installer
+        val reqId = "ReqPkgInstaller"
+        res.dynamicRequisiteLabels[reqId] = installer
+        res.dynamicRequisiteIconKeys[reqId] = installer
     }
 )
 

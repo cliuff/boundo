@@ -248,6 +248,7 @@ dependencies {
             rxJava,
             jbAnnotations,
             coil,
+            coilCompose,
             androidDeviceNames,
             appIconLoader,
         ).forEach { implementation(it) }

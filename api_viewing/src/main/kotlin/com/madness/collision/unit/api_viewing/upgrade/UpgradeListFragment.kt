@@ -56,13 +56,11 @@ internal class UpgradeListFragment : TaggedFragment(), AppList {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mContext = context ?: return
-        val context = mContext
         mAdapter = UpgradeAdapter(mContext, object : APIAdapter.Listener {
             override val click: (ApiViewingApp) -> Unit = {
-                ApiInfoPop.newInstance(it).show(childFragmentManager, ApiInfoPop.TAG)
+                AppInfoFragment(it.packageName).show(childFragmentManager, AppInfoFragment.TAG)
             }
             override val longClick: (ApiViewingApp) -> Boolean = {
-                service.showOptions(context, it, this@UpgradeListFragment)
                 true
             }
         }, lifecycleScope)
@@ -140,7 +138,7 @@ internal class UpgradeListFragment : TaggedFragment(), AppList {
 
     override fun onPause() {
         childFragmentManager.run {
-            (findFragmentByTag(ApiInfoPop.TAG) as BottomSheetDialogFragment?)?.dismiss()
+            (findFragmentByTag(AppInfoFragment.TAG) as BottomSheetDialogFragment?)?.dismiss()
         }
         super.onPause()
     }

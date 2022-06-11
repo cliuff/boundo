@@ -32,8 +32,7 @@ internal class VerInfo(val api: Int, sdk: String, val letter: Char) {
     }
 
     private var codeName: String? = null
-    val sdk: String
-    init {
+    val sdk: String by lazy(LazyThreadSafetyMode.NONE) {
         val patterns = listOf(
             regexOf("""\d+"""),  // integer
             regexOf("""\d+\.(\d+)"""),  // decimal
@@ -41,7 +40,7 @@ internal class VerInfo(val api: Int, sdk: String, val letter: Char) {
             regexOf("""(\d+\.\d+)([^\d.\s]+)"""),  // 4.4W
             regexOf("""((?:\d+\.)+)([^\d.\s]+)"""),  // 4.3.x
         )
-        this.sdk = try {
+        try {
             when {
                 sdk.matches(patterns[0].toRegex()) -> sdk.toInt().adapted
                 sdk.matches(patterns[1].toRegex()) -> {
@@ -61,7 +60,7 @@ internal class VerInfo(val api: Int, sdk: String, val letter: Char) {
             sdk
         }
     }
-    val apiText: String = api.adapted
+    val apiText: String by lazy(LazyThreadSafetyMode.NONE) { api.adapted }
 
     val displaySdk: String
         get() = if (api == X.DEV) "X" else sdk
