@@ -453,6 +453,10 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
         }
     }
 
+    private fun checkKotlin() {  // todo improve Kotlin detection
+        appPackage.apkPaths.any { ApkUtil.checkPkg(it, "kotlin") }
+    }
+
     fun storePage(name: String, direct: Boolean = true): Intent = when (name) {
         packageCoolApk -> coolApkPage(direct)
         packagePlayStore -> playStorePage(direct)

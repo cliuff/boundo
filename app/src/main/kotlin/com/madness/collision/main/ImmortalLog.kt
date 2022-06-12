@@ -57,6 +57,8 @@ class ImmortalLog(private val context: Context) {
     private val deviceName by lazy { DeviceName.getDeviceName() }
 
     fun produceFile(): File {
+        // colon(:) is illegal when used in file name in external download folder on Android 11+
+        // (while in app files dir is fine, due to MediaStore (database)?)
         val time = SimpleDateFormat("yyyyMMdd:HHmm", appLocale).format(Calendar.getInstance().time)
         val fileName = "Boundo $verName($ver) $time $manufacture $deviceName $apiLevel.html"
         val logFile = F.createFile(F.cachePublicPath(context), P.DIR_NAME_LOG, fileName)

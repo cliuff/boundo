@@ -96,4 +96,18 @@
     <string name="av_details_real_installer">"ตัวติดตั้งจริง: "</string>
     <string name="av_upd_ver_upd">อัปเดตเวอร์ชันแล้ว</string>
     <string name="av_upd_pck_upd">แพ็คเกจอัพเดท</string>
+    <string name="av_tag_result_service">พบ %s ในแอพนี้</string>
+    <string name="av_tag_result_mipush_service">ตรวจสอบโดย MiPush SDK ไม่เช่นนั้นจะพบ %s ในแอปนี้</string>
+    <string name="av_tag_result_file">พบ %s ใน APK</string>
+    <string name="av_tag_result_ai">แอพนี้มีไอคอนที่ปรับเปลี่ยนได้</string>
+    <string name="av_tag_result_aab">พบ APK แยกสำหรับแอพนี้</string>
+    <string name="av_tag_result_sys">แอพนี้ได้รับการติดตั้งเป็นแอพระบบ</string>
+    <string name="av_tag_result_hidden">ไม่พบกิจกรรมตัวเรียกใช้สำหรับแอพนี้</string>
+    <string name="av_tag_result_full_64bit">แอพนี้รองรับทั้ง ARM 64- บิตและ x86 64- บิต</string>
+    <string name="av_tag_result_pkg">พบแพ็กเกจ %s ในไฟล์ APK dex</string>
+    <string name="av_tag_result_installer">แอพนี้ติดตั้งโดย %s</string>
+    <string name="av_tag_result_dir">พบไฟล์ภายใต้ %s ใน APK</string>
+    <string name="av_tag_result_dir_arm32">ไฟล์อยู่ภายใต้ lib/armeabi-v7a หรือ lib/armeabi ใน APK</string>
+    <string name="av_list_info_compile_sdk">คอมไพล์ SDK</string>
+    <string name="av_list_info_min_sdk">SDK ขั้นต่ำ</string>
 </resources>

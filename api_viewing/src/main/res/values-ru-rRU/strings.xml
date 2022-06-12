@@ -96,4 +96,18 @@
     <string name="av_details_real_installer">"Настоящий установщик: "</string>
     <string name="av_upd_ver_upd">Версия обновлена</string>
     <string name="av_upd_pck_upd">Пакет обновлен</string>
+    <string name="av_tag_result_service">%s находится в этом приложении</string>
+    <string name="av_tag_result_mipush_service">Проверено MiPush SDK, иначе в этом приложении найден %s</string>
+    <string name="av_tag_result_file">%s находится в APK</string>
+    <string name="av_tag_result_ai">Это приложение имеет адаптивный значок</string>
+    <string name="av_tag_result_aab">Для этого приложения найдены разделенные APK</string>
+    <string name="av_tag_result_sys">Это приложение установлено как системное</string>
+    <string name="av_tag_result_hidden">Для этого приложения не найдено доступных действий запуска.</string>
+    <string name="av_tag_result_full_64bit">Это приложение совместимо как с 64-разрядной версией ARM, так и с 64-разрядной версией x86.</string>
+    <string name="av_tag_result_pkg">Пакет %s находится в файлах APK dex</string>
+    <string name="av_tag_result_installer">Это приложение было установлено пользователем %s</string>
+    <string name="av_tag_result_dir">Файлы находятся в разделе %s в APK</string>
+    <string name="av_tag_result_dir_arm32">Файлы находятся в lib/armeabi-v7a или lib/armeabi в APK</string>
+    <string name="av_list_info_compile_sdk">Скомпилировать SDK</string>
+    <string name="av_list_info_min_sdk">Минимальный SDK</string>
 </resources>

@@ -4,6 +4,149 @@ Tag content regex: \n((((?!(<.*>)).)*)\n)*((?!(<.*>)).)+
 
 - **3.8.1** 22022701
 <en-US>
+• Themed app icon on Android 13
+• Animated splash screen on Android 12
+• Brand new app details page in App API
+• Revamped home page with great simplicity
+• Revamped settings page with Material You dynamic colors
+</en-US>
+<ar>
+• شاشة البداية المتحركة على Android 12
+• أيقونة التطبيق ذات السمات في Android 13
+• صفحة تفاصيل التطبيق الجديدة تمامًا في App API
+• الصفحة الرئيسية المجددة ببساطة كبيرة
+• صفحة إعدادات مجددة مع مادة أنت الألوان الديناميكية
+</ar>
+<de-DE>
+• Thematisches App-Symbol auf Android 13
+• Animierter Begrüßungsbildschirm auf Android 12
+• Brandneue App-Detailseite in der App-API
+• Überarbeitete Homepage mit großer Einfachheit
+• Überarbeitete Einstellungsseite mit Material You dynamischen Farben
+</de-DE>
+<el-GR>
+• Κινούμενη οθόνη εκκίνησης στο Android 12
+• Εικονίδιο θεματικής εφαρμογής στο Android 13
+• Ολοκαίνουργια σελίδα λεπτομερειών εφαρμογής στο App API
+• Ανανεωμένη αρχική σελίδα με μεγάλη απλότητα
+• Ανανεωμένη σελίδα ρυθμίσεων με δυναμικά χρώματα Material You
+</el-GR>
+<en-GB>
+• Themed app icon on Android 13
+• Animated splash screen on Android 12
+• Brand new app details page in App API
+• Revamped home page with great simplicity
+• Revamped settings page with Material You dynamic colors
+</en-GB>
+<es-419>
+• Ícono de aplicación temática en Android 13
+• Pantalla de bienvenida animada en Android 12
+• Nueva página de detalles de la aplicación en la API de la aplicación
+• Página de inicio renovada con gran sencillez
+• Página de configuración renovada con colores dinámicos de Material You
+</es-419>
+<es-ES>
+• Ícono de aplicación temática en Android 13
+• Pantalla de bienvenida animada en Android 12
+• Nueva página de detalles de la aplicación en la API de la aplicación
+• Página de inicio renovada con gran sencillez
+• Página de configuración renovada con colores dinámicos de Material You
+</es-ES>
+<es-US>
+• Ícono de aplicación temática en Android 13
+• Pantalla de bienvenida animada en Android 12
+• Nueva página de detalles de la aplicación en la API de la aplicación
+• Página de inicio renovada con gran sencillez
+• Página de configuración renovada con colores dinámicos de Material You
+</es-US>
+<fr-FR>
+• Écran de démarrage animé sur Android 12
+• Icône d'application thématique sur Android 13
+• Nouvelle page de détails de l'application dans l'API de l'application
+• Page d'accueil relookée avec une grande simplicité
+• Page de paramètres remaniée avec les couleurs dynamiques de Material You
+</fr-FR>
+<it-IT>
+• Icona dell'app a tema su Android 13
+• Schermata iniziale animata su Android 12
+• Nuova pagina dei dettagli dell'app nell'API dell'app
+• Pagina iniziale rinnovata con grande semplicità
+• Pagina delle impostazioni rinnovata con colori dinamici Material You
+</it-IT>
+<ja-JP>
+•Android12ブートアニメーション
+•Android13デスクトップテーマアイコン
+•新しいアプリの詳細ページ
+•複雑さを簡素化する新しいホームページ
+•動的カラーピッキングの新しい設定ページ
+</ja-JP>
+<ko-KR>
+• Android 12 부팅 애니메이션
+• Android 13 바탕 화면 테마 아이콘
+• 새로운 앱 세부정보 페이지
+• 복잡성을 단순화하는 새로운 홈페이지
+• 동적 색상 선택을 위한 새로운 설정 페이지
+</ko-KR>
+<pt-PT>
+• Tela inicial animada no Android 12
+• Ícone de aplicativo temático no Android 13
+• Nova página de detalhes do aplicativo na API do aplicativo
+• Página inicial renovada com grande simplicidade
+• Página de configurações renovada com cores dinâmicas do Material You
+</pt-PT>
+<ru-RU>
+• Анимированная заставка на Android 12.
+• Тематический значок приложения на Android 13.
+• Совершенно новая страница сведений о приложении в App API.
+• Обновленная домашняя страница стала очень простой.
+• Обновленная страница настроек с динамическими цветами Material You.
+</ru-RU>
+<th>
+• ไอคอนแอพตามธีมบน Android 13
+• หน้าจอสแปลชเคลื่อนไหวบน Android 12
+• หน้ารายละเอียดแอปใหม่ล่าสุดใน App API
+• หน้าแรกปรับปรุงใหม่ด้วยความเรียบง่ายที่ดี
+• หน้าการตั้งค่าปรับปรุงใหม่ด้วยสีไดนามิกของวัสดุ
+</th>
+<tr-TR>
+• Android 13'te temalı uygulama simgesi
+• Android 12'de animasyonlu açılış ekranı
+• Uygulama API'sinde yepyeni uygulama ayrıntıları sayfası
+• Büyük sadelikle yenilenmiş ana sayfa
+• Material You dinamik renkleri ile yenilenmiş ayarlar sayfası
+</tr-TR>
+<vi>
+• Màn hình giật gân hoạt hình trên Android 12
+• Biểu tượng ứng dụng theo chủ đề trên Android 13
+• Trang chi tiết ứng dụng hoàn toàn mới trong API ứng dụng
+• Trang chủ được cải tiến với sự đơn giản tuyệt vời
+• Trang cài đặt được cải tiến với màu sắc năng động Material You
+</vi>
+<zh-CN>
+• 安卓12启动动画
+• 安卓13桌面主题图标
+• 全新的应用详情页面
+• 化繁为简的全新主页
+• 动态取色的全新设置页面
+</zh-CN>
+<zh-HK>
+• 安卓12啟動動畫
+• 安卓13桌面主題圖標
+• 全新的應用詳情頁面
+• 化繁為簡的全新主頁
+• 動態取色的全新設置頁面
+</zh-HK>
+<zh-TW>
+• 安卓12啟動動畫
+• 安卓13桌面主題圖標
+• 全新的應用詳情頁面
+• 化繁為簡的全新主頁
+• 動態取色的全新設置頁面
+</zh-TW>
+
+
+- **3.8.1** 22022701
+<en-US>
 • Support Ukrainian
 • Improved navigation experience
 • Enhanced experience for screen rotation and split screen

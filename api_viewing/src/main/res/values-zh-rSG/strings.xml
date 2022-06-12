@@ -116,4 +116,18 @@
     <string name="av_tag_full_64bit_full">全64位（ARM 64位、x86 64位）</string>
     <string name="av_tag_arm_32bit">ARM 32位</string>
     <string name="av_tag_arm_64bit">ARM 64位</string>
+    <string name="av_tag_result_service">该应用内发现了 %s</string>
+    <string name="av_tag_result_mipush_service">由小米推送SDK鉴别，或者该应用内发现了 %s</string>
+    <string name="av_tag_result_file">该应用安装包内发现了 %s</string>
+    <string name="av_tag_result_ai">该应用含有自适应图标</string>
+    <string name="av_tag_result_aab">该应用含有 Split APK</string>
+    <string name="av_tag_result_sys">该应用是系统应用</string>
+    <string name="av_tag_result_hidden">未发现该应用的可用启动入口</string>
+    <string name="av_tag_result_full_64bit">该应用兼容 ARM 64位、x86 64位</string>
+    <string name="av_tag_result_pkg">该应用安装包dex文件中发现了包名 %s</string>
+    <string name="av_tag_result_installer">该应用由%s安装</string>
+    <string name="av_tag_result_dir">该应用安装包内 %s 目录下发现了文件</string>
+    <string name="av_tag_result_dir_arm32">该应用安装包内 lib/armeabi-v7a 或 lib/armeabi 目录下发现了文件</string>
+    <string name="av_list_info_compile_sdk">编译 SDK</string>
+    <string name="av_list_info_min_sdk">最低 SDK</string>
 </resources>

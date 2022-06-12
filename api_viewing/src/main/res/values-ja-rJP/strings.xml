@@ -96,4 +96,18 @@
     <string name="av_details_real_installer">"実際のインストール手順："</string>
     <string name="av_upd_ver_upd">新しいバージョンの更新</string>
     <string name="av_upd_pck_upd">パッケージの更新</string>
+    <string name="av_tag_result_service">%sはこのアプリで見つかりました</string>
+    <string name="av_tag_result_mipush_service">MiPush SDKによってチェックされます。そうでない場合、このアプリで%sが見つかります</string>
+    <string name="av_tag_result_file">%sはAPKにあります</string>
+    <string name="av_tag_result_ai">このアプリにはアダプティブアイコンがあります</string>
+    <string name="av_tag_result_aab">このアプリの分割APKが見つかりました</string>
+    <string name="av_tag_result_sys">このアプリはシステムアプリとしてインストールされます</string>
+    <string name="av_tag_result_hidden">このアプリで利用できるランチャーアクティビティが見つかりません</string>
+    <string name="av_tag_result_full_64bit">このアプリは、ARM64ビットとx86 64ビットの両方と互換性があります</string>
+    <string name="av_tag_result_pkg">パッケージ%sはAPK dexファイルにあります</string>
+    <string name="av_tag_result_installer">このアプリは%sによってインストールされました</string>
+    <string name="av_tag_result_dir">ファイルはAPKの%sの下にあります</string>
+    <string name="av_tag_result_dir_arm32">ファイルはAPKのlib/armeabi-v7aまたはlib/armeabiにあります</string>
+    <string name="av_list_info_compile_sdk">SDKをコンパイルします</string>
+    <string name="av_list_info_min_sdk">最小SDK</string>
 </resources>

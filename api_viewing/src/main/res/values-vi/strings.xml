@@ -96,4 +96,18 @@
     <string name="av_details_real_installer">"Trình cài đặt thực: "</string>
     <string name="av_upd_ver_upd">Đã cập nhật phiên bản</string>
     <string name="av_upd_pck_upd">Đã cập nhật gói</string>
+    <string name="av_tag_result_service">%s được tìm thấy trong ứng dụng này</string>
+    <string name="av_tag_result_mipush_service">Được kiểm tra bởi MiPush SDK, nếu không, %s được tìm thấy trong ứng dụng này</string>
+    <string name="av_tag_result_file">%s được tìm thấy trong APK</string>
+    <string name="av_tag_result_ai">Ứng dụng này có biểu tượng thích ứng</string>
+    <string name="av_tag_result_aab">APK phân tách được tìm thấy cho ứng dụng này</string>
+    <string name="av_tag_result_sys">Ứng dụng này được cài đặt dưới dạng ứng dụng hệ thống</string>
+    <string name="av_tag_result_hidden">Không tìm thấy hoạt động trình khởi chạy nào cho ứng dụng này</string>
+    <string name="av_tag_result_full_64bit">Ứng dụng này tương thích với cả ARM 64-bit và x86 64-bit</string>
+    <string name="av_tag_result_pkg">Gói %s được tìm thấy trong các tệp APK dex</string>
+    <string name="av_tag_result_installer">Ứng dụng này đã được cài đặt bởi %s</string>
+    <string name="av_tag_result_dir">Các tệp được tìm thấy dưới %s trong APK</string>
+    <string name="av_tag_result_dir_arm32">Các tệp được tìm thấy dưới lib / armeabi-v7a hoặc lib / armeabi trong APK</string>
+    <string name="av_list_info_compile_sdk">Biên dịch SDK</string>
+    <string name="av_list_info_min_sdk">SDK tối thiểu</string>
 </resources>

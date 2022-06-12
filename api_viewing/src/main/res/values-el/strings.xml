@@ -96,4 +96,18 @@
     <string name="av_details_real_installer">"Πραγματικός εγκαταστάτης: "</string>
     <string name="av_upd_ver_upd">Η έκδοση ενημερώθηκε</string>
     <string name="av_upd_pck_upd">Το πακέτο ενημερώθηκε</string>
+    <string name="av_tag_result_service">Το %s βρίσκεται σε αυτήν την εφαρμογή</string>
+    <string name="av_tag_result_mipush_service">Ελέγχθηκε από το MiPush SDK, διαφορετικά το %s βρίσκεται σε αυτήν την εφαρμογή</string>
+    <string name="av_tag_result_file">Το %s βρίσκεται στο APK</string>
+    <string name="av_tag_result_ai">Αυτή η εφαρμογή έχει ένα προσαρμοστικό εικονίδιο</string>
+    <string name="av_tag_result_aab">Βρέθηκαν διαχωρισμένα APK για αυτήν την εφαρμογή</string>
+    <string name="av_tag_result_sys">Αυτή η εφαρμογή είναι εγκατεστημένη ως εφαρμογή συστήματος</string>
+    <string name="av_tag_result_hidden">Δεν βρέθηκε διαθέσιμη δραστηριότητα εκκίνησης για αυτήν την εφαρμογή</string>
+    <string name="av_tag_result_full_64bit">Αυτή η εφαρμογή είναι συμβατή με ARM 64-bit και x86 64-bit</string>
+    <string name="av_tag_result_pkg">Το πακέτο %s βρίσκεται στα αρχεία dex APK</string>
+    <string name="av_tag_result_installer">Αυτή η εφαρμογή εγκαταστάθηκε από το %s</string>
+    <string name="av_tag_result_dir">Τα αρχεία βρίσκονται κάτω από το %s στο APK</string>
+    <string name="av_tag_result_dir_arm32">Τα αρχεία βρίσκονται κάτω από lib/armeabi-v7a ή lib/armeabi στο APK</string>
+    <string name="av_list_info_compile_sdk">Μεταγλώττιση SDK</string>
+    <string name="av_list_info_min_sdk">Ελάχ. SDK</string>
 </resources>

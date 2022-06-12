@@ -67,7 +67,8 @@
 <!--        <item name="colorASurface">?android:attr/colorBackground</item>-->
 
         <!-- Splash screen for Android 12 (Jetpack compat version does not work well with adaptive icon) -->
-        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">@mipmap/ic_launcher</item>
+        <item name="android:windowSplashScreenAnimatedIcon" tools:ignore="NewApi">@drawable/anim_splash_logo</item>
+        <item name="android:windowSplashScreenAnimationDuration" tools:ignore="NewApi">1000</item>
 <!--        <item name="android:windowSplashScreenBackground" tools:targetApi="s">?android:attr/colorBackground</item>-->
     </style>
 

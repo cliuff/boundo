@@ -29,18 +29,15 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.Guideline
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePaddingRelative
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
-import coil.load
 import coil.loadAny
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -49,8 +46,6 @@ import com.google.android.material.chip.ChipGroup
 import com.madness.collision.R
 import com.madness.collision.diy.WindowInsets
 import com.madness.collision.main.MainViewModel
-import com.madness.collision.misc.MiscApp
-import com.madness.collision.unit.api_viewing.ApiViewingViewModel
 import com.madness.collision.unit.api_viewing.AppTag
 import com.madness.collision.unit.api_viewing.Utils
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
@@ -60,7 +55,10 @@ import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.databinding.AvShareBinding
 import com.madness.collision.unit.api_viewing.seal.SealManager
 import com.madness.collision.util.*
-import com.madness.collision.util.os.*
+import com.madness.collision.util.os.BottomSheetEdgeToEdge
+import com.madness.collision.util.os.DialogFragmentSystemBarMaintainer
+import com.madness.collision.util.os.SystemBarMaintainer
+import com.madness.collision.util.os.SystemBarMaintainerOwner
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
@@ -71,20 +69,7 @@ import com.madness.collision.unit.api_viewing.R as MyR
 internal class ApiInfoPop: BottomSheetDialogFragment(), SystemBarMaintainerOwner, View.OnClickListener{
 
     companion object {
-        private const val packageCoolApk = ApiViewingApp.packageCoolApk
-        private const val packagePlayStore = ApiViewingApp.packagePlayStore
-        private const val packageSettings = "com.android.settings"
-
-        const val TAG = "APIInfoPop"
         const val ARG_APP = "app"
-
-        private var initializedStoreLink = false
-        private val storeMap = mutableMapOf<String, ApiViewingApp>()
-
-        fun clearStores() {
-            initializedStoreLink = false
-            storeMap.clear()
-        }
 
         fun newInstance(app: ApiViewingApp) = ApiInfoPop().apply {
             arguments = Bundle().apply {
@@ -145,8 +130,6 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), SystemBarMaintainerOwner
     private val ViewHolder.target: MaterialCardView
         get() = targetApi.view as MaterialCardView
 
-    private var popStore: CollisionDialog? = null
-
     private val isAiAvailable = X.aboveOn(X.O)
 
     private var itemLength = 0
@@ -177,11 +160,6 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), SystemBarMaintainerOwner
         BottomSheetBehavior.from(rootView.parent as View).run {
             configure(context)
         }
-    }
-
-    override fun dismiss() {
-        popStore?.dismiss()
-        super.dismiss()
     }
 
     private fun consumeInsets(insets: WindowInsets) {
@@ -265,6 +243,7 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), SystemBarMaintainerOwner
         apiBack.setImageBitmap(bitmap)
     }
 
+    private val infoService = AppInfoService()
     override fun onClick(v: View?) {
         v ?: return
         val context = context ?: return
@@ -293,7 +272,7 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), SystemBarMaintainerOwner
                     mvm.displayFragment(it)
                 }
             }
-            MyR.id.api_info_back -> actionStores(context, app)
+            MyR.id.api_info_back -> infoService.actionStores(this, app, lifecycleScope)
             MyR.id.avAppInfoCapture -> actionShare(context)
             MyR.id.avAppInfoOptions -> {
                 val parent = parentFragment
@@ -302,116 +281,6 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), SystemBarMaintainerOwner
                 parent.showAppOptions(app)
             }
         }
-    }
-
-    private fun actionStores(context: Context, app: ApiViewingApp) {
-        if (!initializedStoreLink) {
-            lifecycleScope.launch(Dispatchers.Default) {
-                if (!initStores(context)) return@launch
-                launch(Dispatchers.Main) {
-                    // dismiss after viewModel access in initStores
-                    dismiss()
-                    showStores(context, app)
-                }
-            }
-        } else {
-            dismiss()
-            showStores(context, app)
-        }
-    }
-
-    private fun initStores(context: Context): Boolean {
-        // by activityViewModels() may produce IllegalArgumentException due to getActivity null value
-        // by activityViewModels() may produce IllegalStateException[java.lang.IllegalStateException: Can't access ViewModels from detached fragment]
-        // due to fragment being detached?
-        if (activity == null || isDetached || !isAdded) {
-            X.toast(context, R.string.text_error, Toast.LENGTH_SHORT)
-            return false
-        }
-        initializedStoreLink = true
-        val searchSize = 3
-        val avViewModel: ApiViewingViewModel by activityViewModels()
-        // find from loaded apps
-        val filtered = avViewModel.findApps(searchSize) {
-            val pn = it.packageName
-            pn == packageCoolApk || pn == packagePlayStore || pn == packageSettings
-        }
-        for (listApp in filtered) {
-            storeMap[listApp.packageName] = listApp
-        }
-        // manually initialize those not found in loaded apps
-        for (name in arrayOf(packageCoolApk, packagePlayStore, packageSettings)) {
-            if (storeMap[name] != null) continue
-            val pi = MiscApp.getPackageInfo(context, packageName = name) ?: continue
-            storeMap[name] = ApiViewingApp(context, pi, preloadProcess = true, archive = false)
-        }
-        return true
-    }
-
-    private fun showStores(context: Context, app: ApiViewingApp) {
-        val vCoolApk : ImageView
-        val vPlayStore : ImageView
-        val vSettings: ImageView
-        popStore = CollisionDialog(context, R.string.text_forgetit).apply {
-            setListener { dismiss() }
-            setTitleCollision(R.string.avStoreLink, 0, 0)
-            setContent(0)
-            setCustomContent(MyR.layout.pop_av_store_link)
-            vCoolApk = findViewById(MyR.id.vCoolApk)
-            vPlayStore = findViewById(MyR.id.vPlayStore)
-            vSettings = findViewById(MyR.id.vSettings)
-        }
-        val iconWidth = X.size(context, 60f, X.DP).roundToInt()
-        val storePackages = arrayOf(packageCoolApk to storeMap[packageCoolApk],
-                packagePlayStore to storeMap[packagePlayStore])
-        for ((name, storeIcon) in storePackages) {
-            var listener: View.OnClickListener? = null
-            if (storeIcon != null) {
-                listener = View.OnClickListener {
-                    try {
-                        context.startActivity(app.storePage(name, true))
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                        context.startActivity(app.storePage(name, false))
-                    }
-                    popStore?.dismiss()
-                }
-            }
-            when(name) {
-                packageCoolApk -> vCoolApk
-                packagePlayStore -> vPlayStore
-                else -> null
-            }?.run {
-                if (storeIcon == null) {
-                    setPadding(0, 0, 0, 0)
-                } else {
-                    loadAny(AppPackageInfo(context, storeIcon))
-                    setOnClickListener(listener)
-                }
-            }
-        }
-
-        if (app.isNotArchive || X.belowOff(X.Q)) {
-            val settingsIcon = storeMap[packageSettings]
-            if (settingsIcon != null) vSettings.loadAny(AppPackageInfo(context, settingsIcon))
-            else vSettings.load(R.mipmap.logo_settings)
-            vSettings.setOnClickListener {
-                if (app.isNotArchive) {
-                    context.startActivity(app.settingsPage())
-                } else {
-                    try {
-                        context.startActivity(app.apkPage())
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                        CollisionDialog.infoCopyable(context, app.appPackage.basePath).show()
-                    }
-                }
-                popStore?.dismiss()
-            }
-        } else {
-            vSettings.setPadding(0, 0, 0, 0)
-        }
-        popStore?.show()
     }
 
     private fun actionShare(context: Context) {
