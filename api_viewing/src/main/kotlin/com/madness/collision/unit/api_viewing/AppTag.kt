@@ -20,17 +20,13 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.view.ViewGroup
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
-import com.madness.collision.unit.api_viewing.tag.*
 import com.madness.collision.unit.api_viewing.tag.app.AppTagInfo
 import com.madness.collision.unit.api_viewing.tag.app.AppTagManager
 import com.madness.collision.unit.api_viewing.tag.app.get
 import com.madness.collision.unit.api_viewing.tag.app.toExpressible
 import com.madness.collision.unit.api_viewing.tag.inflater.AppTagInflater
 import com.madness.collision.unit.api_viewing.util.PrefUtil
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 internal object AppTag {
 
@@ -57,7 +53,7 @@ internal object AppTag {
     }
 
     // prepare icons
-    private fun ensureTagIcons(context: Context, filter: ((AppTagInfo) -> Boolean)?) {
+    fun ensureTagIcons(context: Context, filter: ((AppTagInfo) -> Boolean)?) {
         for (id in AppTagInfo.IdGroup.STATIC_ICON) {
             val tagInfo = AppTagManager.tags[id] ?: continue
             if (filter != null && filter(tagInfo).not()) continue
@@ -108,27 +104,37 @@ internal object AppTag {
     suspend (requisite: AppTagInfo.Requisite, tagIds: List<String>, res: AppTagInfo.Resources) -> Unit
     )?, filter: ((tagIds: List<String>) -> Boolean)?): AppTagInfo.Resources = coroutineScope {
         val res = AppTagInfo.Resources(context, app)
-        getGroupedRequisites().map { (p, tagIds) ->
+        val (checked, unchecked) = getGroupedRequisites().partition { (p, tagIds) ->
+            p.second.checker(res) || (filter != null && filter(tagIds).not())
+        }
+        val uncheckedDeferred = unchecked.map { (p, tagIds) ->
             val (_, requisite) = p
             async(Dispatchers.Default) {
-                // skip when requisite is checked
-                val skip = requisite.checker(res) || (filter != null && filter(tagIds).not())
-                if (skip.not()) requisite.loader(res)
+                requisite.loader(res)
                 requisite to tagIds
             }
-        }.forEach { deferred ->
-            val (requisite, tagIds) = deferred.await()
-            perRequisite?.invoke(requisite, tagIds, res)
+        }
+        if (perRequisite != null) {
+            checked.forEach { (p, tagIds) ->
+                val (_, requisite) = p
+                perRequisite(requisite, tagIds, res)
+            }
+            uncheckedDeferred.forEach { deferred ->
+                val (requisite, tagIds) = deferred.await()
+                perRequisite(requisite, tagIds, res)
+            }
+        } else {
+            uncheckedDeferred.awaitAll()
         }
         res
     }
 
     // Direct tags that have no requisites are excluded
     private fun getGroupedRequisites(): List<Pair< Pair<String, AppTagInfo.Requisite>, List<String> >> {
-        return AppTagManager.tags.mapNotNull { (tagId, tagInfo) ->
-            val requisites = tagInfo.requisites ?: return@mapNotNull null
+        return AppTagManager.tags.flatMap m@{ (tagId, tagInfo) ->
+            val requisites = tagInfo.requisites ?: return@m emptyList()
             requisites.map { requisite -> tagId to requisite }
-        }.flatten().groupBy { (_, requisite) -> // group requisites of the same ID together
+        }.groupBy { (_, requisite) -> // group requisites of the same ID together
             requisite.id // this key is only used for grouping
         }.map { (reqId, tagIdList) ->
             // (requisiteId-requisite) - List{tagId}

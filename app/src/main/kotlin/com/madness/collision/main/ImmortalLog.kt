@@ -59,14 +59,14 @@ class ImmortalLog(private val context: Context) {
     fun produceFile(): File {
         // colon(:) is illegal when used in file name in external download folder on Android 11+
         // (while in app files dir is fine, due to MediaStore (database)?)
-        val time = SimpleDateFormat("yyyyMMdd:HHmm", appLocale).format(Calendar.getInstance().time)
+        val time = SimpleDateFormat("yyyyMMdd'T'HHmm", appLocale).format(Calendar.getInstance().time)
         val fileName = "Boundo $verName($ver) $time $manufacture $deviceName $apiLevel.html"
         val logFile = F.createFile(F.cachePublicPath(context), P.DIR_NAME_LOG, fileName)
         // - clear extra log files
         logFile.parentFile?.deleteRecursively()
         if (!F.prepare4(logFile)) throw Exception("Error occurred while preparing file")
         FileWriter(logFile).use { writeInfo(it) }
-        Log.i("Immortal", "immortal log: ${logFile.path}")
+        Log.i("Immortal", "Immortal log: ${logFile.path}")
         return logFile
     }
 

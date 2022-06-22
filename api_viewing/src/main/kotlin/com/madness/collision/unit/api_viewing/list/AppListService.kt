@@ -125,20 +125,26 @@ internal class AppListService(private val serviceContext: Context? = null) {
             ver.apiText + context.getString(R.string.textParentheses, sdkDetails)
         }
 
-        yield(RAv.string.av_list_info_compile_sdk.boldItem)
-        yield(R.string.textColon.boldItem)
-        yield(sdkInfo(VerInfo(appInfo.compileAPI, true)))
-        yieldLineBreak()
+        if (appInfo.compileAPI >= OsUtils.A) {
+            yield(RAv.string.av_list_info_compile_sdk.boldItem)
+            yield(R.string.textColon.boldItem)
+            yield(sdkInfo(VerInfo(appInfo.compileAPI, true)))
+            yieldLineBreak()
+        }
 
-        yield(R.string.apiSdkTarget.boldItem)
-        yield(R.string.textColon.boldItem)
-        yield(sdkInfo(VerInfo(appInfo.targetAPI, true)))
-        yieldLineBreak()
+        if (appInfo.targetAPI >= OsUtils.A) {
+            yield(R.string.apiSdkTarget.boldItem)
+            yield(R.string.textColon.boldItem)
+            yield(sdkInfo(VerInfo(appInfo.targetAPI, true)))
+            yieldLineBreak()
+        }
 
-        yield(R.string.apiSdkMin.boldItem)
-        yield(R.string.textColon.boldItem)
-        yield(sdkInfo(VerInfo(appInfo.minAPI, true)))
-        yieldLineBreak()
+        if (appInfo.minAPI >= OsUtils.A) {
+            yield(R.string.apiSdkMin.boldItem)
+            yield(R.string.textColon.boldItem)
+            yield(sdkInfo(VerInfo(appInfo.minAPI, true)))
+            yieldLineBreak()
+        }
 
         if (appInfo.isNotArchive) {
             val cal = Calendar.getInstance()

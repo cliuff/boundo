@@ -202,12 +202,12 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
                 val isNotSysApp = (info.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM) == 0
                 apiUnit = if (isNotSysApp) ApiUnit.USER else ApiUnit.SYS
                 appPackage = AppPackage(info.applicationInfo)
+                loadCompileSdk(info.applicationInfo)
                 loadName(context, info.applicationInfo)
                 //name = manager.getApplicationLabel(pi.applicationInfo).toString();
             }
 
             // API ver
-            loadCompileSdk(info.applicationInfo)
             targetAPI = info.applicationInfo.targetSdkVersion
             if (OsUtils.satisfy(OsUtils.N)) {
                 minAPI = info.applicationInfo.minSdkVersion
@@ -270,6 +270,7 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
 
     fun initArchive(context: Context, applicationInfo: ApplicationInfo): ApiViewingApp {
         appPackage = AppPackage(applicationInfo)
+        loadCompileSdk(applicationInfo)
 
         // API<N and is archive
         if (OsUtils.dissatisfy(OsUtils.N)) {

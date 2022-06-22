@@ -36,6 +36,8 @@ import com.madness.collision.misc.MiscMain
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.api_viewing.AccessAV
 import com.madness.collision.util.*
+import com.madness.collision.util.controller.getSavedFragment
+import com.madness.collision.util.controller.saveFragment
 import com.madness.collision.util.notice.ToastUtils
 import com.madness.collision.util.os.*
 import kotlinx.coroutines.Dispatchers
@@ -78,6 +80,7 @@ class MainActivity : BaseActivity(), SystemBarMaintainerOwner {
     private lateinit var mContext: Context
     private lateinit var mWindow: Window
     override val systemBarMaintainer: SystemBarMaintainer = ActivitySystemBarMaintainer(this)
+    private var mainFragment: MainFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,6 +118,11 @@ class MainActivity : BaseActivity(), SystemBarMaintainerOwner {
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        mainFragment?.let { supportFragmentManager.saveFragment(outState, "mainF", it) }
+        super.onSaveInstanceState(outState)
+    }
+
     private fun initApplication(context: Context, prefSettings: SharedPreferences) {
         val app = mainApplication
         if (!app.dead) return
@@ -137,13 +145,18 @@ class MainActivity : BaseActivity(), SystemBarMaintainerOwner {
     }
 
     private fun setupNav(savedState: Bundle?) {
-        if (savedState != null) return  // fragment is restored automatically
-        val startArgs = if (launchItem != null) {
-            Bundle().apply { putInt(UpdatesFragment.ARG_MODE, UpdatesFragment.MODE_NO_UPDATES) }
-        } else null
-        val fragment = MainFragment().apply { startArgs?.let { arguments = it } }
-        val containerId = viewBinding.mainFragmentWrapper.id
-        supportFragmentManager.beginTransaction().add(containerId, fragment).commitNowAllowingStateLoss()
+        val fMan = supportFragmentManager
+        val fragment = fMan.getSavedFragment(savedState, "mainF") ?: MainFragment()
+        mainFragment = fragment
+        if (launchItem != null) {
+            fragment.arguments = Bundle().apply {
+                putInt(UpdatesFragment.ARG_MODE, UpdatesFragment.MODE_NO_UPDATES)
+            }
+        }
+        if (fragment.isAdded.not()) {
+            val containerId = viewBinding.mainFragmentWrapper.id
+            fMan.beginTransaction().replace(containerId, fragment).commitNowAllowingStateLoss()
+        }
     }
 
     private fun setupViewModel(context: Context, prefSettings: SharedPreferences) {
@@ -260,7 +273,7 @@ class MainActivity : BaseActivity(), SystemBarMaintainerOwner {
         app.insetBottom = insets.bottom
         app.insetStart = insets.start
         app.insetEnd = insets.end
-        viewModel.insetTop.value = app.insetTop
+        viewModel.updateInsetTop(app.insetTop)
         viewModel.insetBottom.value = app.insetBottom
         viewModel.insetStart.value = app.insetStart
         viewModel.insetEnd.value = app.insetEnd

@@ -143,7 +143,7 @@ class MainPageActivity : BaseActivity(), SystemBarMaintainerOwner {
     }
 
     private fun consumeInsets(insets: WindowInsets) {
-        mainViewModel.insetTop.value = insets.top
+        mainViewModel.updateInsetTop(insets.top)
         mainViewModel.insetBottom.value = insets.bottom
         mainViewModel.insetStart.value = insets.start
         mainViewModel.insetEnd.value = insets.end

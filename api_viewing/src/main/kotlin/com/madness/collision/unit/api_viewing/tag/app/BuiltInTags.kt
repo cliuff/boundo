@@ -109,7 +109,7 @@ internal fun builtInTags(): Map<String, AppTagInfo> = listOf(
         id = AppTagInfo.ID_APP_HIDDEN, category = 0.cat, icon = R.drawable.ic_hidden_72.icon,
         label = (R.string.av_adapter_tag_hidden to R.string.av_settings_tag_hidden).resLabels, rank = 10,
         desc = R.string.av_tag_result_hidden.resultDesc,
-        expressing = commonExpressing { !it.isLaunchable }
+        expressing = commonExpressing { it.isNotArchive && !it.isLaunchable }
     ).apply { iconKey = "hid" },
 
     AppTagInfo(

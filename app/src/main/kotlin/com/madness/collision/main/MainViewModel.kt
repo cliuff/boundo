@@ -18,9 +18,7 @@ package com.madness.collision.main
 
 import android.app.Activity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.madness.collision.Democratic
 import com.madness.collision.unit.Unit
 import com.madness.collision.util.mainApplication
@@ -36,11 +34,12 @@ fun Pair<Fragment, BooleanArray>.toPage() = NavPage(first, second)
 /**
  * For [MainActivity]
  */
-class MainViewModel: ViewModel(){
+class MainViewModel(private val savedState: SavedStateHandle): ViewModel() {
     private val _democratic: MutableSharedFlow<Democratic> = MutableSharedFlow()
     val democratic: Flow<Democratic> by ::_democratic
     val action: MutableLiveData<Pair<String, Any?>> = MutableLiveData("" to null)
-    val insetTop: MutableLiveData<Int> = MutableLiveData(mainApplication.insetTop)
+    private val _insetTop: MutableLiveData<Int> = MutableLiveData(savedState["lastInsetTop"] ?: mainApplication.insetTop)
+    val insetTop: LiveData<Int> by ::_insetTop
     val insetBottom: MutableLiveData<Int> = MutableLiveData(mainApplication.insetBottom)
     val insetStart: MutableLiveData<Int> = MutableLiveData(mainApplication.insetStart)
     val insetEnd: MutableLiveData<Int> = MutableLiveData(mainApplication.insetEnd)
@@ -51,6 +50,11 @@ class MainViewModel: ViewModel(){
     private var _timestamp = 0L
     val timestamp: Long by ::_timestamp
     private var lastDemocratic: WeakReference<Democratic> = WeakReference(null)
+
+    fun updateInsetTop(value: Int) {
+        _insetTop.value = value
+        savedState["lastInsetTop"] = value
+    }
 
     fun updateTimestamp() {
         _timestamp = System.currentTimeMillis()

@@ -76,7 +76,7 @@ internal class AppListFragment : TaggedFragment(), AppList, Filterable {
         mContext = context ?: return
         mAdapter = APIAdapter(mContext, object : APIAdapter.Listener {
             override val click: (ApiViewingApp) -> Unit = {
-                AppInfoFragment(it.packageName).show(childFragmentManager, AppInfoFragment.TAG)
+                AppInfoFragment(it).show(childFragmentManager, AppInfoFragment.TAG)
             }
             override val longClick: (ApiViewingApp) -> Boolean = {
                 true

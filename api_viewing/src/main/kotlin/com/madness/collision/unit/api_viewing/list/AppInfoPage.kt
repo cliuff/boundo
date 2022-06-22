@@ -16,6 +16,7 @@
 
 package com.madness.collision.unit.api_viewing.list
 
+import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -24,7 +25,7 @@ import android.text.format.Formatter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -45,6 +46,7 @@ import androidx.compose.ui.platform.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -75,20 +77,24 @@ import com.madness.collision.unit.api_viewing.tag.inflater.AppTagInflater
 import com.madness.collision.util.configure
 import com.madness.collision.util.mainApplication
 import com.madness.collision.util.os.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.io.File
 import kotlin.io.path.Path
 import kotlin.io.path.name
 
 class AppInfoFragment(private val appPkgName: String) : BottomSheetDialogFragment(), SystemBarMaintainerOwner {
     private val mainViewModel: MainViewModel by activityViewModels()
+    private var infoApp: ApiViewingApp? = null
     private var _composeView: ComposeView? = null
     private val composeView: ComposeView get() = _composeView!!
     override val systemBarMaintainer: SystemBarMaintainer = DialogFragmentSystemBarMaintainer(this)
 
     companion object {
         const val TAG = "AppInfoFragment"
+    }
+
+    constructor(app: ApiViewingApp) : this(app.packageName) {
+        infoApp = app
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -148,13 +154,15 @@ class AppInfoFragment(private val appPkgName: String) : BottomSheetDialogFragmen
 
     @Composable
     private fun AppInfoPageContent(colorScheme: ColorScheme) {
-        var app: ApiViewingApp? by remember { mutableStateOf(null) }
+        var app: ApiViewingApp? by remember { mutableStateOf(infoApp) }
         val scope = rememberCoroutineScope()
         val context = LocalContext.current
-        val lifecycleOwner = this
-        SideEffect {
-            scope.launch(Dispatchers.Default) {
-                app = DataMaintainer.get(context, lifecycleOwner).selectApp(appPkgName)
+        if (app == null) {
+            val lifecycleOwner = this
+            SideEffect {
+                scope.launch(Dispatchers.Default) {
+                    app = DataMaintainer.get(context, lifecycleOwner).selectApp(appPkgName)
+                }
             }
         }
         MaterialTheme(colorScheme = colorScheme) {
@@ -163,6 +171,7 @@ class AppInfoFragment(private val appPkgName: String) : BottomSheetDialogFragmen
                     val color = SealManager.getItemColorBack(context, a.targetAPI)
                     setBackgroundColor(color)
                 }
+                // use parent instead of child fragment manager to show dialog after dismiss()
                 val fMan = remember { parentFragmentManager }
                 CompositionLocalProvider(LocalApp provides a) {
                     AppInfoPage(mainViewModel, {
@@ -170,7 +179,9 @@ class AppInfoFragment(private val appPkgName: String) : BottomSheetDialogFragmen
                         AppListService().actionIcon(context, a, fMan)
                     }, {
                         dismiss()
-                        AppListService().actionApk(context, a, scope, fMan)
+                        // calling dismiss() cancels composable scope
+                        val apkScope = CoroutineScope(Job())
+                        AppListService().actionApk(context, a, apkScope, fMan)
                     })
                 }
             }
@@ -181,6 +192,48 @@ class AppInfoFragment(private val appPkgName: String) : BottomSheetDialogFragmen
 // app is unlikely to change
 private val LocalApp = staticCompositionLocalOf<ApiViewingApp> { error("App not provided") }
 
+private fun getTagViewInfo(tag: AppTagInfo, res: AppTagInfo.Resources, context: Context) = run m@{
+    if (tag.requisites?.all { it.checker(res) } == false) return@m null
+    val express = tag.toExpressible().setRes(res).express()
+    val viewInfo = AppTag.getTagViewInfo(tag, res, context) {
+        it.label.run {
+            normal ?: return@run null
+            if (express) (full ?: normal) else normal
+        }
+    }
+    viewInfo ?: return@m null
+    val desc = run {
+        val checkDesc = tag.desc?.checkResultDesc ?: return@run null
+        checkDesc(res).get(context)?.toString()
+    }
+    (tag to viewInfo) to (express to desc)
+}
+
+private fun getExpressedTags(tags: List<AppTagInfo>, res: AppTagInfo.Resources, context: Context)
+        : List<ExpressedTag> {
+    val rawList = tags.mapNotNull { getTagViewInfo(it, res, context) }
+    val (list, expressList) = rawList.unzip()
+    // g-play is subset of package installer
+    val playIndex = list.indexOfFirst { it.first.id == AppTagInfo.ID_APP_INSTALLER_PLAY }
+    val removeIndex = if (expressList.getOrNull(playIndex)?.first != true) playIndex
+    else list.indexOfFirst { it.first.id == AppTagInfo.ID_APP_INSTALLER }
+    val infoList = list.filterIndexed { i, _ -> i != removeIndex }
+    val ex = expressList.filterIndexed { i, _ -> i != removeIndex }
+    val listService = AppListService()
+    val pkgRegex = """[\w.]+""".toRegex()
+    return infoList.zip(ex) { tagInfo, express ->
+        val info = tagInfo.second
+        val activated = express.first
+        val label = run {
+            if (activated && info.name?.matches(pkgRegex) == true) {
+                return@run listService.getInstallerName(context, info.name)
+            }
+            info.name ?: info.nameResId?.let { context.getString(it) } ?: "Unknown"
+        }
+        ExpressedTag(tagInfo.first, label, tagInfo.second, express.second, express.first)
+    }
+}
+
 @Composable
 fun AppInfoPage(
     mainViewModel: MainViewModel,
@@ -189,50 +242,6 @@ fun AppInfoPage(
 ) {
     val app = LocalApp.current
     val context = LocalContext.current
-    var lists: List<ExpressedTag>? by remember {
-        mutableStateOf(null)
-    }
-    val tags = remember { AppTagManager.tags.values }
-    LaunchedEffect(Unit) {
-        AppTag.ensureAllTagIcons(context)
-        val res = AppTag.ensureRequisitesForAllAsync(context, app, null)
-        val rawList = tags.mapNotNull m@{ tag ->
-            if (tag.requisites?.all { it.checker(res) } == false) return@m null
-            val express = tag.toExpressible().setRes(res).express()
-            val viewInfo = AppTag.getTagViewInfo(tag, res, context) {
-                it.label.run {
-                    normal ?: return@run null
-                    if (express) (full ?: normal) else normal
-                }
-            }
-            viewInfo ?: return@m null
-            val desc = kotlin.run {
-                val checkDesc = tag.desc?.checkResultDesc ?: return@run null
-                checkDesc(res).get(context)?.toString()
-            }
-            (tag to viewInfo) to (express to desc)
-        }
-        val (list, expressList) = rawList.unzip()
-        // g-play is subset of package installer
-        val playIndex = list.indexOfFirst { it.first.id == AppTagInfo.ID_APP_INSTALLER_PLAY }
-        val removeIndex = if (expressList.getOrNull(playIndex)?.first != true) playIndex
-        else list.indexOfFirst { it.first.id == AppTagInfo.ID_APP_INSTALLER }
-        val infoList = list.filterIndexed { i, _ -> i != removeIndex }
-        val ex = expressList.filterIndexed { i, _ -> i != removeIndex }
-        val listService = AppListService()
-        val pkgRegex = """[\w.]+""".toRegex()
-        lists = infoList.zip(ex) { tagInfo, express ->
-            val info = tagInfo.second
-            val activated = express.first
-            val label = run {
-                if (activated && info.name?.matches(pkgRegex) == true) {
-                    return@run listService.getInstallerName(context, info.name)
-                }
-                info.name ?: info.nameResId?.let { context.getString(it) } ?: "Unknown"
-            }
-            ExpressedTag(tagInfo.first, label, tagInfo.second, express.second, express.first)
-        }
-    }
     val verInfo = remember { listOf(VerInfo.minDisplay(app), VerInfo.targetDisplay(app), VerInfo(app.compileAPI)) }
     val itemColor = remember { SealManager.getItemColorBack(context, app.targetAPI) }
     val itemWidth = with(LocalDensity.current) { 45.dp.roundToPx() }
@@ -258,16 +267,12 @@ fun AppInfoPage(
             else -> null
         }
     }
-    lists?.let {
-        val isDark = mainApplication.isDarkTheme
-        AppInfo(it, Color(itemColor), isDark, verInfo, bitmaps, updateTime,
-            shareIcon, shareApk, getClick)
-    }
+    val isDark = mainApplication.isDarkTheme
+    AppInfo(Color(itemColor), isDark, verInfo, bitmaps, updateTime, shareIcon, shareApk, getClick)
 }
 
 @Composable
 private fun AppInfo(
-    tags: List<ExpressedTag>,
     itemBackColor: Color,
     isDarkTheme: Boolean,
     verInfoList: List<VerInfo>,
@@ -279,13 +284,18 @@ private fun AppInfo(
 ) {
     val cardColor = remember { if (isDarkTheme) Color(0xff0c0c0c) else Color.White }
     AppInfoWithHeader(itemBackColor, cardColor, isDarkTheme) {
-        var pageIndex by remember { mutableStateOf(0) }
-        if (pageIndex == 0) {
-            val scope = rememberCoroutineScope()
-            FrontAppInfo(tags, cardColor, verInfoList, bitmaps, updateTime,
-                { scope.launch { pageIndex = 1 } }, getClick)
-        } else if (pageIndex == 1) {
-            DetailedAppInfo(cardColor, shareIcon, shareApk)
+        BoxWithConstraints {
+            val margin = remember {
+                if (maxWidth > 600.dp) 30.dp else if (maxWidth > 360.dp) 24.dp else 12.dp
+            }
+            var pageIndex by remember { mutableStateOf(0) }
+            if (pageIndex == 0) {
+                val scope = rememberCoroutineScope()
+                FrontAppInfo(cardColor, margin, verInfoList, bitmaps, updateTime,
+                    { scope.launch { pageIndex = 1 } }, getClick)
+            } else if (pageIndex == 1) {
+                DetailedAppInfo(cardColor, margin, shareIcon, shareApk)
+            }
         }
     }
 }
@@ -323,12 +333,13 @@ private fun AppInfoWithHeader(
 @Composable
 private fun DetailedAppInfo(
     cardColor: Color,
+    horizontalMargin: Dp,
     shareIcon: () -> Unit,
     shareApk: () -> Unit,
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         Card(
-            modifier = Modifier.padding(horizontal = 30.dp),
+            modifier = Modifier.padding(horizontal = horizontalMargin),
             elevation = CardDefaults.elevatedCardElevation(),
             shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
             colors = CardDefaults.elevatedCardColors(containerColor = cardColor),
@@ -341,8 +352,8 @@ private fun DetailedAppInfo(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun FrontAppInfo(
-    tags: List<ExpressedTag>,
     cardColor: Color,
+    horizontalMargin: Dp,
     verInfoList: List<VerInfo>,
     bitmaps: List<Bitmap?>,
     updateTime: String?,
@@ -364,7 +375,7 @@ private fun FrontAppInfo(
     }
     Column {
         Card(
-            modifier = Modifier.padding(horizontal = 30.dp),
+            modifier = Modifier.padding(horizontal = horizontalMargin),
             elevation = CardDefaults.elevatedCardElevation(),
             shape = RoundedCornerShape(20.dp),
             colors = CardDefaults.elevatedCardColors(containerColor = cardColor),
@@ -373,7 +384,7 @@ private fun FrontAppInfo(
         }
         Spacer(modifier = Modifier.height(18.dp))
         Card(
-            modifier = Modifier.padding(horizontal = 30.dp),
+            modifier = Modifier.padding(horizontal = horizontalMargin),
             elevation = CardDefaults.elevatedCardElevation(),
             shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
             colors = CardDefaults.elevatedCardColors(containerColor = cardColor),
@@ -382,7 +393,7 @@ private fun FrontAppInfo(
                 val extraHeight = remember { maxHeight / 2 }
                 NestedScrollContent {
                     Column {
-                        TagDetailsContent(tags, getClick, splitApks)
+                        TagDetailsContent(getClick, splitApks)
                         Spacer(Modifier.height(extraHeight))
                     }
                 }
@@ -418,7 +429,7 @@ private fun AppHeaderContent(cardColor: Color) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             val context = LocalContext.current
             val pkgInfo = remember { AppPackageInfo(context, app) }
-            if (pkgInfo.uid > 0) {
+            if (pkgInfo.uid > 0 || app.isArchive) {
                 Image(
                     modifier = Modifier.size(40.dp),
                     painter = rememberImagePainter(pkgInfo),
@@ -645,12 +656,55 @@ private class ExpressedTag(
 
 @Composable
 private fun TagDetailsContent(
+    getClick: (AppTagInfo) -> (() -> Unit)?,
+    splitApks: List<Pair<String, String>>,
+) {
+    val app = LocalApp.current
+    val context = LocalContext.current
+    var lists: List<ExpressedTag>? by remember { mutableStateOf(null) }
+    LaunchedEffect(Unit) {
+        val allTags = AppTagManager.tags.values
+        val emptyRes = AppTagInfo.Resources(context, app)
+        // init tags and icons that do not have requisites or are satisfied first
+        val selTags = allTags.filter { i ->
+            i.requisites ?: return@filter true
+            i.requisites.all { it.checker(emptyRes) }
+        }
+        val selTagIdSet = selTags.mapTo(HashSet(selTags.size)) { it.id }
+        AppTag.ensureTagIcons(context) { it.id in selTagIdSet }
+        lists = getExpressedTags(selTags, emptyRes, context).sortedBy { it.intrinsic.rank }
+
+        val tags = AppTagManager.tags
+        AppTag.ensureAllTagIcons(context)
+        AppTag.ensureRequisitesForAllAsync(context, app) { _, ids, res ->
+            val reqTags = ids.mapNotNull { id -> tags[id]?.takeIf { it.id !in selTagIdSet } }
+            val l = getExpressedTags(reqTags, res, context) + lists.orEmpty()
+            lists = l.sortedBy { it.intrinsic.rank }
+        }
+    }
+    val list = lists
+    if (list != null) {
+        Column(modifier = Modifier.padding(vertical = 8.dp)) {
+            TagDetailsContent(list, getClick, splitApks)
+        }
+    } else {
+        Box(Modifier)
+    }
+}
+
+@Composable
+private fun TagDetailsContent(
     tags: List<ExpressedTag>,
     getClick: (AppTagInfo) -> (() -> Unit)?,
     splitApks: List<Pair<String, String>>,
 ) {
-    Column(modifier = Modifier.padding(vertical = 8.dp)) {
-        tags.forEachIndexed { index, expressed ->
+    for (index in tags.indices) {
+        val expressed = tags[index]
+        val key = run {
+            if (index == 0) return@run expressed.intrinsic.id
+            expressed.intrinsic.id + tags[index - 1].intrinsic.id
+        }
+        key(key) {
             val info = expressed.info
             val activated = expressed.activated
             val showDivider = remember { index != 0 && (activated || tags[index - 1].activated) }
@@ -678,7 +732,7 @@ private fun TagDetailsContent(
                         }
                     }
                 }
-                val onClick = kotlin.run {
+                val onClick = run {
                     if (!isAab) return@run expressed.intrinsic.let(getClick);
                     { showAabDetails = !showAabDetails }
                 }
@@ -691,7 +745,11 @@ private fun TagDetailsContent(
                     onClick = onClick,
                 )
                 if (isAab) {
-                    AnimatedVisibility(showAabDetails) {
+                    AnimatedVisibility(
+                        visible = showAabDetails,
+                        enter = fadeIn() + expandVertically(),
+                        exit = shrinkVertically() + fadeOut(),
+                    ) {
                         AppBundleDetails(splitApks)
                     }
                 }
@@ -890,7 +948,7 @@ private fun AppInfoPreview() {
         val verInfo = remember {
             listOf(VerInfo.minDisplay(app), VerInfo.targetDisplay(app), VerInfo(app.compileAPI))
         }
-        AppInfo(list, color, isSystemInDarkTheme(), verInfo, List(3) { null },
+        AppInfo(color, isSystemInDarkTheme(), verInfo, List(3) { null },
             "6 days ago", shareIcon = { }, shareApk = { }, getClick = { null })
     }
 }
@@ -921,7 +979,7 @@ private fun DetailedAppInfoPreview() {
         val app = LocalApp.current
         val itemColor = remember { SealManager.getItemColorBack(context, app.targetAPI) }
         AppInfoWithHeader(Color(itemColor), cardColor, isDarkTheme) {
-            DetailedAppInfo(cardColor, { }, { })
+            DetailedAppInfo(cardColor, 30.dp, { }, { })
         }
     }
 }
