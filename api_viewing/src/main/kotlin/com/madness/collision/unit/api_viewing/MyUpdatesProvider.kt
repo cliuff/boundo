@@ -25,6 +25,10 @@ internal class MyUpdatesProvider : UpdatesProvider() {
         get() = MyUpdatesFragment()
 
     override fun hasUpdates(hostFragment: Fragment): Boolean {
-        return MyUpdatesFragment.checkUpdate(hostFragment)
+        return MyUpdatesFragment.checkNewUpdateSync(hostFragment) != null
+    }
+
+    override fun hasNewUpdate(hostFragment: Fragment): Boolean? {
+        return MyUpdatesFragment.checkNewUpdateSync(hostFragment)
     }
 }

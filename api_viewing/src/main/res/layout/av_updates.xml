@@ -16,70 +16,18 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/avUpdNewTitle"
-        android:visibility="gone"
-        android:text="@string/av_upd_new"
-        app:drawableEndCompat="@drawable/res_circle"
-        android:drawableTint="@color/androidRobotGreen"
-        style="@style/AvUpdSecTitle"
-        android:layout_width="wrap_content"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/avUpdListRecycler"
+        android:divider="@null"
+        android:scrollbars="none"
+        android:requiresFadingEdge="none"
+        android:nestedScrollingEnabled="false"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/avUpdNewListContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <TextView
-        android:id="@+id/avUpdUpgTitle"
-        android:visibility="gone"
-        android:text="@string/av_upd_upg"
-        app:drawableEndCompat="@drawable/res_circle"
-        android:drawableTint="@color/androidRobotGreen"
-        style="@style/AvUpdSecTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/avUpdUpgListContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <TextView
-        android:id="@+id/avUpdVerTitle"
-        android:visibility="gone"
-        android:text="@string/av_upd_ver_upd"
-        app:drawableEndCompat="@drawable/res_circle"
-        android:drawableTint="@color/androidRobotGreen"
-        style="@style/AvUpdSecTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/avUpdVerListContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <TextView
-        android:id="@+id/avUpdatesRecentsTitle"
-        android:visibility="gone"
-        android:text="@string/av_upd_pck_upd"
-        app:drawableEndCompat="@drawable/res_circle"
-        android:drawableTint="@color/androidRobotGreen"
-        style="@style/AvUpdSecTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/avUpdatesRecentsListContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/avUpdatesRecentsMore"

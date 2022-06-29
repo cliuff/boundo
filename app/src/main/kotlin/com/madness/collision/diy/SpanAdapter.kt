@@ -34,20 +34,27 @@ interface SpanAdapter {
         const val COL_POS_START = 0
         const val COL_POS_CENTER = 1
         const val COL_POS_END = 2
+
+        fun suggestLayoutManager(context: Context, spanCount: Int): RecyclerView.LayoutManager {
+            return if (spanCount == 1) LinearLayoutManager(context) else GridLayoutManager(context, spanCount)
+        }
+
+        fun getSpanCount(fragment: Fragment, unit: Float, width: () -> Int = { fragment.availableWidth }): Int {
+            val context = fragment.context ?: return 1
+            val unitWidth = X.size(context, unit, X.DP)
+            val rawResult = width.invoke() / unitWidth
+            val result = truncate(rawResult).roundToInt()
+            return if (result < 2) 1 else result
+        }
     }
 
     val context: Context
     var spanCount: Int
 
-    fun suggestLayoutManager(): RecyclerView.LayoutManager {
-        return if (spanCount == 1) LinearLayoutManager(context) else GridLayoutManager(context, spanCount)
-    }
+    fun suggestLayoutManager() = suggestLayoutManager(context, spanCount)
 
     fun resolveSpanCount(fragment: Fragment, unit: Float, width: () -> Int = { fragment.availableWidth }) {
-        val unitWidth = X.size(context, unit, X.DP)
-        val rawResult = width.invoke() / unitWidth
-        val result = truncate(rawResult).roundToInt()
-        spanCount = if (result < 2) 1 else result
+        spanCount = getSpanCount(fragment, unit, width)
     }
 
     fun getColumnIndex(index: Int): Int {

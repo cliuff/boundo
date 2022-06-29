@@ -109,7 +109,7 @@ abstract class SandwichAdapter<VH : RecyclerView.ViewHolder>(override val contex
 
     @Suppress("UNCHECKED_CAST")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when (holder.itemViewType) {
+        when (getItemViewType(position)) {
             TYPE_TOP_COVER -> onMakeTopCover(holder)
             TYPE_FILL_IN -> onMakeFillIn(holder)
             TYPE_BOTTOM_COVER -> onMakeBottomCover(holder)

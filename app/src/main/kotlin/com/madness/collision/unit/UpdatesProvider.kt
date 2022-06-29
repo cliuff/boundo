@@ -39,6 +39,10 @@ abstract class UpdatesProvider: Updatable {
         return updatable?.hasUpdates(hostFragment) ?: false
     }
 
+    open fun hasNewUpdate(hostFragment: Fragment): Boolean? {
+        return if (hasUpdates(hostFragment)) false else null
+    }
+
     override fun updateState() {
         updatable?.updateState()
     }

@@ -18,7 +18,9 @@ package com.madness.collision.main
 
 import android.content.Context
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
@@ -140,13 +142,23 @@ class MainFragment : TaggedFragment(), Democratic {
 
         val iconColor = ThemeUtil.getColor(context, R.attr.colorIcon)
         inflateAndTint(R.menu.toolbar_main, viewBinding.mainTB, iconColor)
-        viewBinding.mainTB.setOnMenuItemClickListener click@{
-            if (it.itemId == R.id.mainToolbarSettings) {
-                mainViewModel.displayFragment(SettingsFragment())
-                return@click true
+        viewBinding.mainTB.setOnMenuItemClickListener(object : Toolbar.OnMenuItemClickListener {
+            private var lastRefreshTime = -1L
+            override fun onMenuItemClick(item: MenuItem?): Boolean {
+                item ?: return false
+                if (item.itemId == R.id.mainToolbarSettings) {
+                    mainViewModel.displayFragment(SettingsFragment())
+                    return true
+                } else if (item.itemId == R.id.mainToolbarRefresh) {
+                    val time = SystemClock.uptimeMillis()
+                    if (time - lastRefreshTime < 500) return true
+                    lastRefreshTime = time
+                    (navFragments[0].value as? UpdatesFragment)?.refreshUpdates()
+                    return true
+                }
+                return false
             }
-            false
-        }
+        })
     }
 }
 

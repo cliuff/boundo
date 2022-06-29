@@ -3,8 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/mainToolbarRefresh"
+        android:icon="@drawable/ic_refresh_24"
+        app:showAsAction="ifRoom"
+        android:title="@string/text_refresh"/>
+
+    <item
         android:id="@+id/mainToolbarSettings"
         android:icon="@drawable/ic_settings_24"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         android:title="@string/Main_ToolBar_title_Settings"/>
 </menu>
