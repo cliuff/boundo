@@ -70,7 +70,7 @@ class MyUnit: Unit(){
         configNavigation(toolbar, iconColor)
         toolbar.setTitle(R.string.developertools_cropimage)
         toolbar.inflateMenu(R.menu.toolbar_im)
-        toolbar.menu.findItem(R.id.imToolbarDone).icon.setTint(ThemeUtil.getColor(context, R.attr.colorActionPass))
+        toolbar.menu.findItem(R.id.imToolbarDone).icon?.setTint(ThemeUtil.getColor(context, R.attr.colorActionPass))
         return true
     }
 

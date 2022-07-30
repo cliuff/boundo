@@ -220,8 +220,7 @@ internal class MainToolbar(
         val activity = activity ?: return
         // action view is not expanded for the time being, make it in a listener
         menuItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
-            override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
-                item ?: return true
+            override fun onMenuItemActionExpand(item: MenuItem): Boolean {
                 searchBackPressedCallback?.remove()
                 searchBackPressedCallback = object : OnBackPressedCallback(true) {
                     override fun handleOnBackPressed() {
@@ -232,8 +231,7 @@ internal class MainToolbar(
                 }.also { activity.onBackPressedDispatcher.addCallback(it) }
                 return true
             }
-            override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
-                item ?: return true
+            override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
                 removeSearchBackCallback()
                 return true
             }

@@ -16,13 +16,16 @@
 
 package com.madness.collision.unit.audio_timer
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.edit
 import com.madness.collision.R
 import com.madness.collision.databinding.UnitAudioTimerBinding
@@ -32,6 +35,7 @@ import com.madness.collision.util.P
 import com.madness.collision.util.X
 import com.madness.collision.util.alterMargin
 import com.madness.collision.util.alterPadding
+import com.madness.collision.util.os.OsUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -71,9 +75,9 @@ class MyUnit : Unit() {
         if (timeMinute != 0) viewBinding.atMinute.setText(timeMinute.toString())
         updateStatus()
         viewBinding.atStart.setOnClickListener {
-            val intent = Intent(context, AudioTimerService::class.java)
             // stop if running already
             if (AudioTimerService.isRunning) {
+                val intent = Intent(context, AudioTimerService::class.java)
                 context.stopService(intent)
                 GlobalScope.launch {
                     delay(100)
@@ -83,28 +87,48 @@ class MyUnit : Unit() {
                 }
                 return@setOnClickListener
             }
-            val hourInput = viewBinding.atHour.text?.toString() ?: ""
-            val targetHour = if (hourInput.isEmpty()) 0 else hourInput.toInt()
-            val minuteInput = viewBinding.atMinute.text?.toString() ?: ""
-            val targetMinute = if (minuteInput.isEmpty()) 0 else minuteInput.toInt()
-            val targetDuration = (targetHour * 60 + targetMinute) * 60000L
-            context.stopService(intent)
-            intent.putExtra(AudioTimerService.ARG_DURATION, targetDuration)
-            context.startService(intent)
-            GlobalScope.launch {
-                delay(100)
-                launch(Dispatchers.Main) {
-                    updateStatus()
-                }
+            kotlin.run p@{
+                // request runtime permission on Android 13
+                if (OsUtils.dissatisfy(OsUtils.T)) return@p
+                if (NotificationManagerCompat.from(context).areNotificationsEnabled()) return@p
+                postNotificationsLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                return@setOnClickListener
             }
-            val shouldUpdateHour = hourInput.isNotEmpty()
-            val shouldUpdateMinute = minuteInput.isNotEmpty()
-            pref.edit {
-                if (shouldUpdateHour) putInt(P.AT_TIME_HOUR, targetHour)
-                else remove(P.AT_TIME_HOUR)
-                if (shouldUpdateMinute) putInt(P.AT_TIME_MINUTE, targetMinute)
-                else remove(P.AT_TIME_MINUTE)
+            startTimer(context)
+        }
+    }
+
+    private val postNotificationsLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()) register@{ granted ->
+        if (!granted) return@register
+        val context = context ?: return@register
+        startTimer(context)
+    }
+
+    private fun startTimer(context: Context) {
+        val hourInput = viewBinding.atHour.text?.toString() ?: ""
+        val targetHour = if (hourInput.isEmpty()) 0 else hourInput.toInt()
+        val minuteInput = viewBinding.atMinute.text?.toString() ?: ""
+        val targetMinute = if (minuteInput.isEmpty()) 0 else minuteInput.toInt()
+        val targetDuration = (targetHour * 60 + targetMinute) * 60000L
+        val intent = Intent(context, AudioTimerService::class.java)
+        context.stopService(intent)
+        intent.putExtra(AudioTimerService.ARG_DURATION, targetDuration)
+        context.startService(intent)
+        GlobalScope.launch {
+            delay(100)
+            launch(Dispatchers.Main) {
+                updateStatus()
             }
+        }
+        val shouldUpdateHour = hourInput.isNotEmpty()
+        val shouldUpdateMinute = minuteInput.isNotEmpty()
+        val pref = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
+        pref.edit {
+            if (shouldUpdateHour) putInt(P.AT_TIME_HOUR, targetHour)
+            else remove(P.AT_TIME_HOUR)
+            if (shouldUpdateMinute) putInt(P.AT_TIME_MINUTE, targetMinute)
+            else remove(P.AT_TIME_MINUTE)
         }
     }
 

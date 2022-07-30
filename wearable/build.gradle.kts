@@ -54,7 +54,7 @@ val signingKeyPassword: String = prop("signingKeyPassword", "")
 //}
 
 android {
-    buildToolsVersion = "32.0.0"
+    buildToolsVersion = "33.0.0"
     sourceSets {
         getByName("main").java.srcDir("src/main/kotlin")
     }
@@ -68,7 +68,7 @@ android {
             }
         }
     }
-    compileSdk = 32
+    compileSdk = 33
     defaultConfig {
         // below: manifest placeholders
         manifestPlaceholders["buildPackage"] = buildPackage

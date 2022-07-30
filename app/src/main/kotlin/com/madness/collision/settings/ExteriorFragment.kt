@@ -97,8 +97,8 @@ class ExteriorFragment: TaggedFragment(), Democratic {
         mainViewModel.configNavigation(toolbar, iconColor)
         toolbar.setTitle(R.string.prefExteriorBackgrounds)
         toolbar.inflateMenu(R.menu.toolbar_exterior)
-        toolbar.menu.findItem(R.id.exteriorTBClear).icon.setTint(ThemeUtil.getColor(context, R.attr.colorActionAlert))
-        toolbar.menu.findItem(R.id.exteriorTBDone).icon.setTint(ThemeUtil.getColor(context, R.attr.colorActionPass))
+        toolbar.menu.findItem(R.id.exteriorTBClear).icon?.setTint(ThemeUtil.getColor(context, R.attr.colorActionAlert))
+        toolbar.menu.findItem(R.id.exteriorTBDone).icon?.setTint(ThemeUtil.getColor(context, R.attr.colorActionPass))
         return true
     }
 

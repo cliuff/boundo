@@ -1,7 +1,7 @@
 # Boundo
 
 **Requirements**
-- Android Studio Bumblebee
+- Android Studio Chipmunk Patch 1
 - Gradle 7.3.3
 - Java 11
 

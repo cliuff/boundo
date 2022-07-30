@@ -74,8 +74,8 @@ internal class TimeFragment: Unit() {
         val menu = toolbar.menu
         toolbar.setTitle(MyR.string.ics_Button_date_picker)
         toolbar.inflateMenu(MyR.menu.toolbar_tt_time)
-        menu.findItem(MyR.id.ttTimeTBDone).icon.setTint(ThemeUtil.getColor(context, R.attr.colorActionPass))
-        menu.findItem(MyR.id.ttTimeTBRestore).icon.setTint(ThemeUtil.getColor(context, R.attr.colorActionAlert))
+        menu.findItem(MyR.id.ttTimeTBDone).icon?.setTint(ThemeUtil.getColor(context, R.attr.colorActionPass))
+        menu.findItem(MyR.id.ttTimeTBRestore).icon?.setTint(ThemeUtil.getColor(context, R.attr.colorActionAlert))
         return true
     }
 

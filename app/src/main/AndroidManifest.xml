@@ -74,6 +74,8 @@
     <!-- to perform a scan of nearby companion devices on behalf of your app -->
     <!-- without requiring the location permission -->
     <!--<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />-->
+    <!-- Runtime permission to show notifications since Android 13 -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <!-- workaround to remove READ_PHONE_STATE permission, which is added by some unknown dependency -->
     <uses-permission
         android:name="android.permission.READ_PHONE_STATE"

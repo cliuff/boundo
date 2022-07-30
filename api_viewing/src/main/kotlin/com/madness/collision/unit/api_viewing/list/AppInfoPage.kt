@@ -139,7 +139,7 @@ class AppInfoFragment(private val appPkgName: String) : BottomSheetDialogFragmen
         val context = context ?: return
         view.setOnApplyWindowInsetsListener { _, insets ->
             if (checkInsets(insets)) edgeToEdge(insets, false)
-            WindowInsetsCompat.CONSUMED.toWindowInsets()
+            WindowInsetsCompat.CONSUMED.toWindowInsets()!!
         }
         composeView.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
         val colorScheme = if (OsUtils.satisfy(OsUtils.S)) {

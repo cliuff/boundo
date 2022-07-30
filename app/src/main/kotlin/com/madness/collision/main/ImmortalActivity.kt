@@ -188,7 +188,7 @@ internal class ImmortalActivity : BaseActivity(), SystemBarMaintainerOwner, View
             if (checkInsets(insets)) edgeToEdge(insets, false)
             val isRtl = if (v.isLayoutDirectionResolved) v.layoutDirection == View.LAYOUT_DIRECTION_RTL else false
             consumeInsets(WindowInsets(insets, isRtl))
-            WindowInsetsCompat.CONSUMED.toWindowInsets()
+            WindowInsetsCompat.CONSUMED.toWindowInsets()!!
         }
     }
 

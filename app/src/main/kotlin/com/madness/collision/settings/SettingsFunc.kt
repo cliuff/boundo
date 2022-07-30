@@ -107,7 +107,8 @@ object SettingsFunc {
                     .setAutoCancel(true)
 //                    .addAction(R.drawable.ic_update_24, localeContext.getString(R.string.SettingsSync_Update_AlertDialog_PositiveButtonText), updatePendingIntent)
             with(NotificationManagerCompat.from(context)){
-                notify(0, builder.build())// todo id, update action & update interface
+                // todo id, update action & update interface, permission
+                notify(0, builder.build())
             }
         }else{
             GlobalScope.launch(Dispatchers.Main) {
