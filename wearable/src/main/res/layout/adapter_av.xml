@@ -32,18 +32,21 @@
                     android:id="@+id/avAdapterInfoName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxLines="1"
+                    tools:text="Boundo for Wear OS"
+                    android:maxLines="2"
                     android:ellipsize="end"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
                     android:textColor="?colorAOnBackground"/>
                 <TextView
                     android:id="@+id/avAdapterInfoTime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
+                    android:layout_marginTop="0dp"
                     android:maxLines="1"
                     android:ellipsize="end"
                     android:textSize="8sp"
+                    android:textStyle="bold"
                     android:textColor="?colorTextSub"
                     tools:ignore="SmallSp" />
             </LinearLayout>
@@ -52,9 +55,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="2dp"
-                android:paddingEnd="20dp"
+                android:paddingEnd="26dp"
+                tools:text="13"
                 android:textStyle="bold"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textColor="?colorAOnBackground"
                 android:layout_gravity="center"
                 android:gravity="center"/>

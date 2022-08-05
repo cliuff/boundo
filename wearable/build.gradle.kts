@@ -74,9 +74,9 @@ android {
         manifestPlaceholders["buildPackage"] = buildPackage
         applicationId = "com.madness.collision"
         minSdk = 23
-        targetSdk = 30
-        versionCode = 20122524
-        versionName = "3.6.6"
+        targetSdk = 33
+        versionCode = 22080521
+        versionName = "3.9.2"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testApplicationId = "${applicationId}.test"
         if (configSigning) {
@@ -188,9 +188,7 @@ dependencies {
             googleMaterialComponents,
             kotlinStdlib,
             androidxPercentLayout,
-            androidxLegacyV4,
             androidxWear,
-            googleSupportWearable
         ).forEach { implementation(it) }
 
         compileOnly(googleWearable)

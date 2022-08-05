@@ -179,7 +179,7 @@ internal class ApiFragment: Fragment(), AdapterView.OnItemSelectedListener, Menu
             adapter.apps = it
         }
 
-        sortItem = settingsPreferences.getInt("SDKCheckSortSpinnerSelection", 0)
+        sortItem = settingsPreferences.getInt("SDKCheckSortSpinnerSelection1", SORT_POSITION_API_TIME)
         rSort = RunnableSort(sortItem)
         adapter.setSortMethod(sortItem)
 
@@ -361,7 +361,7 @@ internal class ApiFragment: Fragment(), AdapterView.OnItemSelectedListener, Menu
     private inner class RunnableSort(override var position: Int) : Runnable, RunnableAPI {
         override fun run()  {
             adapter.setSortMethod(position)
-            settingsPreferences.edit { putInt("SDKCheckSortSpinnerSelection", position) }
+            settingsPreferences.edit { putInt("SDKCheckSortSpinnerSelection1", position) }
             viewModel.sortApps(sortItem)
             context?.let { handleRefreshList(it) }
         }

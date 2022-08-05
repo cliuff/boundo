@@ -40,6 +40,8 @@ internal class APIAdapter(private val context: Context) : SandwichAdapter<APIAda
     companion object {
         fun getItemColorAccent(apiLevel: Int): Int {
             when (apiLevel) {
+                X.T -> "a3d5c1"
+                X.S, X.S_V2 -> "acdcb2"
                 X.R -> "acd5c1"
                 X.Q -> "c1d5ac"
                 X.P -> "e0c8b0"

@@ -50,10 +50,9 @@ object Versions {
     const val androidxDocumentFile = "1.0.1"
 
     const val androidxPercentLayout = "1.0.0"
-    const val androidxLegacyV4 = "1.0.0"
     // This dependency is for the Wear UI Library,
     // which has classes that exemplify best practices
-    const val androidxWear = "1.1.0"
+    const val androidxWear = "1.2.0"
 
     const val googleTruth = "1.1.3"
     const val googleMaterialComponents = "1.4.0"
@@ -64,9 +63,6 @@ object Versions {
     const val googlePlayCoreKtx = "1.8.1"
     const val gglGuava = "31.0.1-android"
     const val gglHilt = "2.40.2"
-    // This dependency is for the Wearable Support Library,
-    // which has additional classes (including for watch faces)
-    const val googleSupportWearable = "2.8.1"
     // This dependency is set to compile only
     const val googleWearable = "2.8.1"
     const val coil = "1.4.0"
@@ -187,9 +183,7 @@ class Dependencies : Plugin<Project> {
 
         // wear
         const val androidxPercentLayout = "androidx.percentlayout:percentlayout:${Versions.androidxPercentLayout}"
-        const val androidxLegacyV4 = "androidx.legacy:legacy-support-v4:${Versions.androidxLegacyV4}"
         const val androidxWear = "androidx.wear:wear:${Versions.androidxWear}"
-        const val googleSupportWearable = "com.google.android.support:wearable:${Versions.googleSupportWearable}"
         const val googleWearable = "com.google.android.wearable:wearable:${Versions.googleWearable}"
 
         val fileTreeValue = mapOf("dir" to "libs", "include" to listOf("*.jar"))
