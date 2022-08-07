@@ -78,6 +78,7 @@ import com.madness.collision.util.configure
 import com.madness.collision.util.mainApplication
 import com.madness.collision.util.os.*
 import kotlinx.coroutines.*
+import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape
 import java.io.File
 import kotlin.io.path.Path
 import kotlin.io.path.name
@@ -341,7 +342,9 @@ private fun DetailedAppInfo(
         Card(
             modifier = Modifier.padding(horizontal = horizontalMargin),
             elevation = CardDefaults.elevatedCardElevation(),
-            shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
+            shape = AbsoluteSmoothCornerShape(
+                cornerRadiusTL = 20.dp, smoothnessAsPercentTL = 100,
+                cornerRadiusTR = 20.dp, smoothnessAsPercentTR = 100),
             colors = CardDefaults.elevatedCardColors(containerColor = cardColor),
         ) {
             ExtendedAppInfo(LocalApp.current, shareIcon, shareApk)
@@ -377,7 +380,7 @@ private fun FrontAppInfo(
         Card(
             modifier = Modifier.padding(horizontal = horizontalMargin),
             elevation = CardDefaults.elevatedCardElevation(),
-            shape = RoundedCornerShape(20.dp),
+            shape = AbsoluteSmoothCornerShape(20.dp, 100),
             colors = CardDefaults.elevatedCardColors(containerColor = cardColor),
         ) {
             AppDetailsContent(verInfoList, bitmaps, updateTime, clickDetails)
@@ -386,7 +389,9 @@ private fun FrontAppInfo(
         Card(
             modifier = Modifier.padding(horizontal = horizontalMargin),
             elevation = CardDefaults.elevatedCardElevation(),
-            shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
+            shape = AbsoluteSmoothCornerShape(
+                cornerRadiusTL = 20.dp, smoothnessAsPercentTL = 100,
+                cornerRadiusTR = 20.dp, smoothnessAsPercentTR = 100),
             colors = CardDefaults.elevatedCardColors(containerColor = cardColor),
         ) {
             BoxWithConstraints(modifier = Modifier.weight(1f)) {

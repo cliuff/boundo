@@ -148,13 +148,13 @@ internal class AppListService(private val serviceContext: Context? = null) {
 
         if (appInfo.isNotArchive) {
             val cal = Calendar.getInstance()
-            cal.timeInMillis = pkgInfo.firstInstallTime
-            cal.timeInMillis = pkgInfo.lastUpdateTime
 
+            cal.timeInMillis = pkgInfo.firstInstallTime
             yield(RAv.string.apiDetailsFirstInstall.boldItem)
             yield(format.format(cal.time))
             yieldLineBreak()
 
+            cal.timeInMillis = pkgInfo.lastUpdateTime
             yield(RAv.string.apiDetailsLastUpdate.boldItem)
             yield(format.format(cal.time))
             yieldLineBreak()
@@ -328,7 +328,8 @@ internal class AppListService(private val serviceContext: Context? = null) {
 
     fun getInstallerName(context: Context, installer: String?): String {
         return if (installer != null) {
-            val installerName = MiscApp.getApplicationInfo(context, packageName = installer)
+            val msg = "av.info.x" to "Installer not found: $installer"
+            val installerName = MiscApp.getApplicationInfo(context, packageName = installer, errorMsg = msg)
                     ?.loadLabel(context.packageManager)?.toString() ?: ""
             if (installerName.isNotEmpty()) {
                 installerName

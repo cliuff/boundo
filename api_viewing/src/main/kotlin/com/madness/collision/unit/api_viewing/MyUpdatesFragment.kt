@@ -288,8 +288,16 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
         // an issue caused by inappropriate fragment management in UpdatesFragment.
         // For child fragments are saved automatically but not properly restored,
         // causing multiple instances of the same fragment class to co-exist at the same time.
+
+        // The interval must not be big. This method gets invoked during restoration,
+        // which happens before the restoration of UpdatesFragment,
+        // thus it must be possible to be invoked shortly after (150ms) to apply updates.
         val time = SystemClock.uptimeMillis()
-        if (time - lastUpdateTime < 200) return
+        val interval = time - lastUpdateTime
+        if (interval < 100) {
+            Log.d("AvUpdates", "Skipping this update within ${interval}ms")
+            return
+        }
         lastUpdateTime = time
         val fragment = this
         lifecycleScope.launch(Dispatchers.Default) {

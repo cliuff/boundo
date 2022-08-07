@@ -60,7 +60,6 @@ class MainApplication : SplitCompatApplication(), Thread.UncaughtExceptionHandle
     var isPaleTheme: Boolean = false
     var debug: Boolean = false
     var dead: Boolean = true
-    var notificationAvailable = true
 
     private val coroutineScope = MainScope()
     private val _action: MutableSharedFlow<AppAction> = MutableSharedFlow()

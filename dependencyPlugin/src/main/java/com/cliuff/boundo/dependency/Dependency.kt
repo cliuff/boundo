@@ -83,6 +83,8 @@ object Versions {
     // for checking apk dex, archived since 2019.11
     const val apkParser = "2.6.10"
     const val appIconLoader = "1.4.0"
+    // Superellipse shape for Compose
+    const val smoothCornerCompose = "v1.0.0"
 }
 
 class Dependencies : Plugin<Project> {
@@ -180,6 +182,7 @@ class Dependencies : Plugin<Project> {
         const val mockito = "org.mockito:mockito-android:${Versions.mockito}"
         const val apkParser = "net.dongliu:apk-parser:${Versions.apkParser}"
         const val appIconLoader = "me.zhanghai.android.appiconloader:appiconloader-iconloaderlib:${Versions.appIconLoader}"
+        const val smoothCornerCompose = "com.github.racra:smooth-corner-rect-android-compose:${Versions.smoothCornerCompose}"
 
         // wear
         const val androidxPercentLayout = "androidx.percentlayout:percentlayout:${Versions.androidxPercentLayout}"

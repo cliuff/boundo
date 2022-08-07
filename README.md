@@ -1,7 +1,7 @@
 # Boundo
 
 **Requirements**
-- Android Studio Chipmunk Patch 1
+- Android Studio Chipmunk Patch 2
 - Gradle 7.3.3
 - Java 11
 

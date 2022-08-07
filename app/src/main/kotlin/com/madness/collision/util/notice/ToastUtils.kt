@@ -20,9 +20,9 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
+import androidx.core.app.NotificationManagerCompat
 import com.madness.collision.R
 import com.madness.collision.util.CollisionDialog
-import com.madness.collision.util.mainApplication
 import com.madness.collision.util.os.OsUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -33,7 +33,10 @@ object ToastUtils {
     }
 
     suspend fun toast(context: Context, message: CharSequence, duration: Int) = withContext(Dispatchers.Main) {
-        if (!mainApplication.notificationAvailable) {
+        kotlin.run n@{
+            // Abort check on Android 13
+            if (OsUtils.satisfy(OsUtils.T)) return@n
+            if (NotificationManagerCompat.from(context).areNotificationsEnabled()) return@n
             if (context is Activity) popRequestNotification(context)
             else popNotifyNotification(context)
         }

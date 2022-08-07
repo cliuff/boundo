@@ -114,7 +114,8 @@ private fun ExternalActions() {
     }
     val packs = remember {
         storePkgNames.map {
-            val info = MiscApp.getPackageInfo(context, packageName = it) ?: return@map null
+            val msg = "av.info.x" to "External store not found: $it"
+            val info = MiscApp.getPackageInfo(context, packageName = it, errorMsg = msg) ?: return@map null
             AppIconPackageInfo(info)
         }
     }

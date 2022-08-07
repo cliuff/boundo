@@ -211,10 +211,12 @@ class MainActivity : BaseActivity(), SystemBarMaintainerOwner {
      * update notification availability, notification channels and check app update
      */
     private suspend fun checkMisc(context: Context, prefSettings: SharedPreferences) {
-        val app = mainApplication
         // enable notification
-        app.notificationAvailable = NotificationManagerCompat.from(context).areNotificationsEnabled()
-        if (!app.notificationAvailable && Random(System.currentTimeMillis()).nextInt(10) == 0) {
+        kotlin.run n@{
+            // Abort check on Android 13
+            if (OsUtils.satisfy(OsUtils.T)) return@n
+            if (NotificationManagerCompat.from(context).areNotificationsEnabled()) return@n
+            if (Random.nextInt(10) != 0) return@n
             withContext(Dispatchers.Main) {
                 ToastUtils.popRequestNotification(this@MainActivity)
             }
