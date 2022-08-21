@@ -24,9 +24,9 @@ import androidx.lifecycle.*
 import com.madness.collision.R
 import com.madness.collision.main.AppAction
 import com.madness.collision.main.MainActivity
-import com.madness.collision.settings.LanguageMan
 import com.madness.collision.util.P
 import com.madness.collision.util.ThemeUtil
+import com.madness.collision.util.config.LocaleUtils
 import com.madness.collision.util.mainApplication
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -39,7 +39,7 @@ abstract class BaseActivity : AppCompatActivity() {
     private var lastActionData: Pair<String, Any>? = null
 
     override fun attachBaseContext(newBase: Context) {
-        val context = LanguageMan(newBase).getLocaleContext()
+        val context = LocaleUtils.getBaseContext(newBase)
         super.attachBaseContext(context)
     }
 

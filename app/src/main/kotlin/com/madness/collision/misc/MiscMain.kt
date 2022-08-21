@@ -25,10 +25,12 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.madness.collision.BuildConfig
 import com.madness.collision.instant.Instant
+import com.madness.collision.settings.LanguageMan
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.UnitManager
 import com.madness.collision.unit.api_viewing.AccessAV
 import com.madness.collision.util.*
+import com.madness.collision.util.config.LocaleUtils
 import com.madness.collision.util.os.OsUtils
 import java.io.File
 import java.io.IOException
@@ -146,6 +148,10 @@ internal object MiscMain {
                 if (file.exists().not()) return@forEach
                 try { file.delete() } catch (e: Exception) { e.printStackTrace() }
             }
+        }
+        if (verOri in 0 until 22082119 && OsUtils.satisfy(OsUtils.T)) {
+            val locale = LanguageMan(context).getLocaleOrNull()
+            if (locale != null) LocaleUtils.set(locale)
         }
     }
 

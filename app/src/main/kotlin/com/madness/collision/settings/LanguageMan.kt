@@ -20,16 +20,21 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.madness.collision.util.P
-import com.madness.collision.util.SystemUtil
+import com.madness.collision.util.config.LocaleUtils
 import java.util.*
 
 class LanguageMan(private val context: Context) {
     companion object {
         const val AUTO = "auto"
 
-        fun getLocaleContext(context: Context, lang: String): Context {
-            if (lang == AUTO) return context
-            return SystemUtil.getLocaleContext(context, SystemUtil.toLocale(lang))
+        fun getLocale(lang: String): Locale? {
+            if (lang == AUTO) return null
+            return toLocale(lang)
+        }
+
+        private fun toLocale(localeString: String): Locale {
+            val result = "(.+)_(.+)".toRegex().find(localeString) ?: return Locale(localeString)
+            return Locale(result.groupValues[1], result.groupValues[2])
         }
     }
 
@@ -41,15 +46,19 @@ class LanguageMan(private val context: Context) {
         return pref.getString(P.SETTINGS_LANGUAGE, AUTO) ?: AUTO
     }
 
+    fun getLanguageOrNull() = getLanguage().takeIf { it != AUTO }
+
     fun setLanguage(language: String) {
         pref.edit { putString(P.SETTINGS_LANGUAGE, language) }
     }
 
     fun getLocale(): Locale {
-        return SystemUtil.toLocale(getLanguage())
+        val lang = getLanguageOrNull() ?: return LocaleUtils.getApp()[0]
+        return toLocale(lang)
     }
 
-    fun getLocaleContext(): Context {
-        return getLocaleContext(context, getLanguage())
+    fun getLocaleOrNull(): Locale? {
+        val lang = getLanguageOrNull() ?: return null
+        return toLocale(lang)
     }
 }

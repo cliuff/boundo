@@ -36,7 +36,9 @@ import com.madness.collision.R
 import com.madness.collision.main.MainActivity
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.util.*
+import com.madness.collision.util.config.LocaleUtils
 import com.madness.collision.util.os.OsUtils
+import java.util.*
 
 internal class SettingsFragment : TaggedFragment(), Democratic {
 
@@ -85,11 +87,13 @@ internal class SettingsFragment : TaggedFragment(), Democratic {
         }
     }
 
+    // get lang_country only: zh_Hant_TW -> zh_TW
+    private fun Locale.toRegionalString() = "${language}_$country"
+
     private fun showLanguages(context: Context) {
         val langEntries = context.resources.obtainTypedArray(R.array.prefSettingsLangEntries)
         val langValues = context.resources.obtainTypedArray(R.array.prefSettingsLangValues)
-        val langMan = LanguageMan(context)
-        val lang = langMan.getLanguage()
+        val lang = LocaleUtils.getSet()?.first()?.toRegionalString() ?: LanguageMan.AUTO
         Log.i(TAG, "Currently set: $lang")
         val langIndex = P.getPrefIndex(lang, langValues)
         PopupUtil.selectSingle(context, R.string.Settings_Language_Dialog_Title, langEntries, langIndex) {
@@ -97,12 +101,14 @@ internal class SettingsFragment : TaggedFragment(), Democratic {
             pop.dismiss()
             val values = context.resources.obtainTypedArray(R.array.prefSettingsLangValues)
             val newLang = values.use { it.getString(index) } ?: LanguageMan.AUTO
-            val systemAppLang = SystemUtil.getLocaleApp().toString()
+            val newLocale = LanguageMan.getLocale(newLang)
+            val systemAppLang = LocaleUtils.getApp()[0].toString()
             Log.i(TAG, "New lang: $newLang, system app lang: $systemAppLang")
-            val oldLocaleString = SystemUtil.getLocaleUsr(context).toString()
-            langMan.setLanguage(newLang)
-            val newLocaleString = SystemUtil.getLocaleUsr(context).toString()
-            val shouldSwitch = oldLocaleString != newLocaleString
+
+            val oldLangTag = LocaleUtils.getRuntimeFirst().toLanguageTag()
+            LocaleUtils.set(newLocale)
+            val newLangTag = LocaleUtils.getRuntimeFirst().toLanguageTag()
+            val shouldSwitch = OsUtils.dissatisfy(OsUtils.T) && oldLangTag != newLangTag
             if (shouldSwitch) {
                 mainViewModel.action.value = MainActivity.ACTION_RECREATE to null
             }
