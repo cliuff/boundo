@@ -26,9 +26,8 @@ import android.view.*
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.madness.collision.settings.LanguageMan
+import com.madness.collision.util.config.LocaleUtils
 import com.madness.collision.util.os.OsUtils
-import com.madness.collision.util.ui.appContext
 import java.util.*
 
 object SystemUtil {
@@ -136,66 +135,16 @@ object SystemUtil {
         return size
     }
 
-    /**
-     * Language settings in system
-     */
-    fun getLocaleSys(): Locale{
-        return if (X.aboveOn(X.N)) LocaleList.getDefault()[0] else Locale.getDefault()
-    }
-
-    /**
-     * Language system adjusted for app
-     */
-    fun getLocaleApp(): Locale{
-        return if (X.aboveOn(X.N)) LocaleList.getAdjustedDefault()[0] else Locale.getDefault()
-    }
-
-    fun toLocale(localeString: String): Locale {
-        if (localeString == LanguageMan.AUTO) return getLocaleApp()
-        return "(.+)_(.+)".toRegex().find(localeString)?.run {
-            Locale(groupValues[1], groupValues[2])
-        } ?: Locale(localeString)
-    }
-
-    /**
-     * In-app usr selected language
-     */
-    fun getLocaleUsr(context: Context): Locale {
-        return toLocale(LanguageMan(context).getLanguage())
-    }
-
-    fun getUserLocaleList(): List<Locale> {
-        return makeLocaleArray(getLocaleUsr(appContext)).toList()
-    }
-
-    private fun makeLocaleArray(locale: Locale): Array<Locale> {
-        return if (OsUtils.satisfy(OsUtils.N)) {
-            val currentLocaleList = LocaleList.getAdjustedDefault()
-            val localeIndex = currentLocaleList.indexOf(locale)
-            if (localeIndex >= 0) {
-                // move locale to top
-                Array(currentLocaleList.size()) { newIndex ->
-                    when (newIndex) {
-                        0 -> locale
-                        in 1..localeIndex -> currentLocaleList[newIndex - 1]
-                        else -> currentLocaleList[newIndex]
-                    }
-                }
-            } else {
-                // add locale to top
-                Array(currentLocaleList.size() + 1) { newIndex ->
-                    if (newIndex == 0) locale else currentLocaleList[newIndex - 1]
-                }
-            }
-        } else {
-            arrayOf(locale)
-        }
-    }
-
     fun getLocaleContext(context: Context, locale: Locale): Context {
         val newConfig = Configuration(context.resources.configuration).apply {
             if (OsUtils.satisfy(OsUtils.N)) {
-                setLocales(LocaleList(*makeLocaleArray(locale)))
+                val appList = LocaleUtils.getApp()
+                val list = buildList(appList.size + 1) {
+                    add(locale)
+                    addAll(appList.filterNot { it == locale })
+                }
+                val array = list.toTypedArray()
+                setLocales(LocaleList(*array))
             } else {
                 setLocale(locale)
             }
@@ -204,7 +153,7 @@ object SystemUtil {
     }
 
     fun getLocaleContextSys(context: Context): Context {
-        return getLocaleContext(context, getLocaleSys())
+        return getLocaleContext(context, LocaleUtils.getApp()[0])
     }
 
     @RequiresApi(X.R)

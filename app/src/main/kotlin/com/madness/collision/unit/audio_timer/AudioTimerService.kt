@@ -32,6 +32,7 @@ import androidx.core.app.NotificationManagerCompat
 import com.madness.collision.R
 import com.madness.collision.main.MainActivity
 import com.madness.collision.util.*
+import com.madness.collision.util.config.LocaleUtils
 import com.madness.collision.util.notice.ToastUtils
 import com.madness.collision.util.os.OsUtils
 import com.madness.collision.util.ui.appLocale
@@ -100,7 +101,7 @@ internal class AudioTimerService: Service() {
     private lateinit var mRunnable: Runnable
     private var targetTime: Long = 0
     private var duration: Long = 0
-    private val sysTimeFormat = SimpleDateFormat("mm:ss", SystemUtil.getLocaleSys())
+    private val sysTimeFormat = SimpleDateFormat("mm:ss", LocaleUtils.getApp()[0])
     private val appTimeFormat by lazy { SimpleDateFormat("mm:ss", appLocale) }
     private val notificationId = NotificationsUtil.ID_AUDIO_TIMER
     private lateinit var notificationBuilder: NotificationCompat.Builder
@@ -185,7 +186,7 @@ internal class AudioTimerService: Service() {
         get() = String.format(appLocale, "%d", this)
 
     private val Long.sysAdapted: String
-        get() = String.format(SystemUtil.getLocaleSys(), "%d", this)
+        get() = String.format(LocaleUtils.getApp()[0], "%d", this)
 
     private fun tick() {
         val timeLeft = targetTime - System.currentTimeMillis()

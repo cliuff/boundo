@@ -33,13 +33,12 @@ import android.provider.Settings
 import androidx.core.content.pm.PackageInfoCompat
 import androidx.room.*
 import com.madness.collision.misc.MiscApp
-import com.madness.collision.settings.LanguageMan
 import com.madness.collision.unit.api_viewing.Utils
 import com.madness.collision.unit.api_viewing.util.ApkUtil
 import com.madness.collision.unit.api_viewing.util.ManifestUtil
 import com.madness.collision.util.GraphicsUtil
-import com.madness.collision.util.SystemUtil
 import com.madness.collision.util.X
+import com.madness.collision.util.config.LocaleUtils
 import com.madness.collision.util.os.OsUtils
 import kotlinx.parcelize.Parcelize
 import java.io.File
@@ -298,11 +297,17 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
             loadName(context, applicationInfo, false)
             return
         }
-        val langCode = LanguageMan(context).getLanguage()
-        if (langCode == LanguageMan.AUTO || langCode == SystemUtil.getLocaleApp().toString()) {
-            loadName(context, applicationInfo, false)
-        } else {
-            val label = AppInfoProcessor.loadLabel(context, packageName, langCode)
+        kotlin.run {
+            if (OsUtils.satisfy(OsUtils.T)) {
+                loadName(context, applicationInfo, false)
+                return
+            }
+            val locale = LocaleUtils.getSet()?.first()
+            if (locale == null || locale == LocaleUtils.getApp()[0]) {
+                loadName(context, applicationInfo, false)
+                return
+            }
+            val label = AppInfoProcessor.loadLabel(context, packageName, locale)
             if (label != null) name = label else loadName(context, applicationInfo, false)
         }
     }

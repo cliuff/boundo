@@ -18,8 +18,8 @@ package com.madness.collision.util.ui
 
 import android.content.Context
 import com.madness.collision.main.MainApplication
-import com.madness.collision.util.SystemUtil
+import com.madness.collision.util.config.LocaleUtils
 import java.util.*
 
 val appContext: Context get() = MainApplication.INSTANCE
-val appLocale: Locale get() = SystemUtil.getLocaleUsr(appContext)
+val appLocale: Locale get() = LocaleUtils.getRuntimeFirst()

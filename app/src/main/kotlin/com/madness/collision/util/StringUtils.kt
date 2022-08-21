@@ -16,6 +16,7 @@
 
 package com.madness.collision.util
 
+import com.madness.collision.util.config.LocaleUtils
 import com.madness.collision.util.ui.appLocale
 import java.text.Collator
 import java.text.DecimalFormat
@@ -51,7 +52,7 @@ object StringUtils {
     }
 
     fun compareName(name1: String, name2: String): Int {
-        return compareName(SystemUtil.getUserLocaleList(), name1, name2)
+        return compareName(LocaleUtils.getRuntime(), name1, name2)
     }
 
     /**

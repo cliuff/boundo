@@ -18,10 +18,11 @@ package com.madness.collision.unit.api_viewing.data
 
 import android.content.Context
 import android.content.pm.PackageManager
-import com.madness.collision.settings.LanguageMan
+import com.madness.collision.util.SystemUtil
+import java.util.*
 
 object AppInfoProcessor {
-    fun loadLabel(context: Context, pkgName: String, langCode: String): String? {
+    fun loadLabel(context: Context, pkgName: String, locale: Locale): String? {
         val nContext: Context
         try {
             nContext = context.createPackageContext(pkgName, Context.CONTEXT_RESTRICTED)
@@ -29,7 +30,7 @@ object AppInfoProcessor {
             e.printStackTrace()
             return null
         }
-        val localeContext = LanguageMan.getLocaleContext(nContext, langCode)
+        val localeContext = SystemUtil.getLocaleContext(nContext, locale)
         val labelRes = localeContext.applicationInfo.labelRes
         if (labelRes == 0) return null
         try {
