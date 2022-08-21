@@ -110,4 +110,5 @@
     <string name="av_tag_result_dir_arm32">Các tệp được tìm thấy dưới lib / armeabi-v7a hoặc lib / armeabi trong APK</string>
     <string name="av_list_info_compile_sdk">Biên dịch SDK</string>
     <string name="av_list_info_min_sdk">SDK tối thiểu</string>
+    <string name="av_list_info_aab_total_size">Tổng kích thước: %s</string>
 </resources>

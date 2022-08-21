@@ -294,7 +294,7 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
         // thus it must be possible to be invoked shortly after (150ms) to apply updates.
         val time = SystemClock.uptimeMillis()
         val interval = time - lastUpdateTime
-        if (interval < 100) {
+        if (interval < 80) {
             Log.d("AvUpdates", "Skipping this update within ${interval}ms")
             return
         }

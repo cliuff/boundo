@@ -110,4 +110,5 @@
     <string name="av_tag_result_dir_arm32">Τα αρχεία βρίσκονται κάτω από lib/armeabi-v7a ή lib/armeabi στο APK</string>
     <string name="av_list_info_compile_sdk">Μεταγλώττιση SDK</string>
     <string name="av_list_info_min_sdk">Ελάχ. SDK</string>
+    <string name="av_list_info_aab_total_size">Συνολικό μέγεθος: %s</string>
 </resources>

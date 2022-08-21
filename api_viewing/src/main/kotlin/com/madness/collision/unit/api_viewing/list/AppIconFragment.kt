@@ -32,6 +32,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.madness.collision.Democratic
@@ -44,6 +46,7 @@ import com.madness.collision.unit.api_viewing.util.ApkUtil
 import com.madness.collision.unit.api_viewing.util.ManifestUtil
 import com.madness.collision.util.*
 import com.madness.collision.util.AppUtils.asBottomMargin
+import com.madness.collision.util.os.OsUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
@@ -157,15 +160,17 @@ internal class AppIconFragment : TaggedFragment(), Democratic {
             iconWidth = X.size(context, 72f, X.DP).toInt()
 
             launch(Dispatchers.Main) {
-                setIcon(dIcon, res, idIcon, apkPath, appName,
-                        viewBinding.apiInfoAiIcon, viewBinding.apiInfoAiIconFore, viewBinding.apiInfoAiIconBack,
-                        viewBinding.apiInfoAiIconRound, viewBinding.apiInfoAiIconRounded, viewBinding.apiInfoAiIconSquircle,
-                        viewBinding.apiInfoAiIconGroup, viewBinding.apiInfoAiIconGroupAi)
+                viewBinding.run {
+                    setIcon(dIcon, res, idIcon, apkPath, appName,
+                        apiInfoAiIcon, apiInfoAiIconFore, apiInfoAiIconBack,
+                        apiInfoAiIconRound, apiInfoAiIconRounded, apiInfoAiIconSquircle,
+                        apiInfoAiIconGroup, apiInfoAiIconGroupAi, apiInfoAiMono, apiInfoAiMonoDes)
 
-                setIcon(dIconR, res, idIconR, apkPath, "$appName-R",
-                        viewBinding.apiInfoAiIconR, viewBinding.apiInfoAiIconRFore, viewBinding.apiInfoAiIconRBack,
-                        viewBinding.apiInfoAiIconRRound, viewBinding.apiInfoAiIconRRounded, viewBinding.apiInfoAiIconRSquircle,
-                        viewBinding.apiInfoAiIconRGroup, viewBinding.apiInfoAiIconRGroupAi)
+                    setIcon(dIconR, res, idIconR, apkPath, "$appName-R",
+                        apiInfoAiIconR, apiInfoAiIconRFore, apiInfoAiIconRBack,
+                        apiInfoAiIconRRound, apiInfoAiIconRRounded, apiInfoAiIconRSquircle,
+                        apiInfoAiIconRGroup, apiInfoAiIconRGroupAi, apiInfoAiMonoR, apiInfoAiMonoRDes)
+                }
             }
         }
     }
@@ -173,9 +178,9 @@ internal class AppIconFragment : TaggedFragment(), Democratic {
     private fun setIcon(drawable: Drawable?, res: Resources, iconId: Int, apkPath: String, exportPrefix: String,
                         vIcon: ImageView, vIconFore: ImageView, vIconBack: ImageView,
                         vIconRound: TextView, vIconRounded: TextView, vIconSquircle: TextView,
-                        vIconGroup: View, vAiGroup: View) {
+                        vIconGroup: View, vAiGroup: View, vMono: ImageView, vMonoLabel: TextView) {
         if (drawable == null) {
-            X.makeGone(vIconGroup, vAiGroup)
+            arrayOf(vIconGroup, vAiGroup, vMono, vMonoLabel).forEach { it.isGone = true }
             return
         }
         val context = context ?: return
@@ -183,12 +188,19 @@ internal class AppIconFragment : TaggedFragment(), Democratic {
         vIcon.setIcon(icon.bitmap, res, iconId, apkPath, "$exportPrefix-Full")
         vIconGroup.visibility = View.VISIBLE
         if (!icon.isAdaptive || !X.aboveOn(X.O)) {
-            X.makeGone(vAiGroup)
+            arrayOf(vAiGroup, vMono, vMonoLabel).forEach { it.isGone = true }
             return
         }
         val logoDrawable = icon.drawable as AdaptiveIconDrawable
-        vIconFore.setIconLayer(logoDrawable.foreground, "$exportPrefix-Fore")
-        vIconBack.setIconLayer(logoDrawable.background, "$exportPrefix-Back")
+        val mono = if (OsUtils.satisfy(OsUtils.T)) logoDrawable.monochrome else null
+        if (mono == null) {
+            arrayOf(vMono, vMonoLabel).forEach { it.isGone = true }
+        } else {
+            vMono.setIconLayer(mono, "$exportPrefix-Mono")
+            arrayOf(vMono, vMonoLabel).forEach { it.isVisible = true }
+        }
+        logoDrawable.foreground?.let { vIconFore.setIconLayer(it, "$exportPrefix-Fore") }
+        logoDrawable.background?.let { vIconBack.setIconLayer(it, "$exportPrefix-Back") }
         vIconRound.setShapedIcon(icon.round, "$exportPrefix-Round")
         vIconRounded.setShapedIcon(icon.rounded, "$exportPrefix-Rounded")
         vIconSquircle.setShapedIcon(icon.squircle, "$exportPrefix-Squircle")

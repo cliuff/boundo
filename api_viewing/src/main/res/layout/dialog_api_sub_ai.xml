@@ -68,7 +68,7 @@
         <ImageView
             android:id="@+id/apiInfoAiIconShade"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="265dp"
             android:layout_marginTop="20dp"
             app:layout_constraintTop_toBottomOf="@id/apiInfoAiDes"
             app:layout_constraintStart_toStartOf="@id/apiInfoAiGuideStart"
@@ -80,12 +80,39 @@
             android:src="@drawable/res_dialog_md2"/>
 
         <ImageView
+            android:id="@+id/apiInfoAiMono"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_marginTop="20dp"
+            android:background="#080808"
+            app:tint="#FFFFFF"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintTop_toTopOf="@id/apiInfoAiIconShade"
+            app:layout_constraintStart_toStartOf="@id/apiInfoAiGuideStart"
+            app:layout_constraintEnd_toEndOf="@id/apiInfoAiGuideEnd"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/apiInfoAiMonoDes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="110dp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="12dp"
+            android:text="Monochrome"
+            app:layout_constraintStart_toStartOf="@id/apiInfoAiMono"
+            app:layout_constraintEnd_toEndOf="@id/apiInfoAiMono"
+            app:layout_constraintTop_toBottomOf="@id/apiInfoAiMono"/>
+
+        <ImageView
             android:id="@+id/apiInfoAiIcon"
             android:layout_width="72dp"
             android:layout_height="72dp"
             app:layout_constraintHorizontal_chainStyle="spread"
             android:layout_marginTop="20dp"
-            app:layout_constraintTop_toTopOf="@id/apiInfoAiIconShade"
+            app:layout_constraintTop_toBottomOf="@id/apiInfoAiMonoDes"
             app:layout_constraintStart_toStartOf="@id/apiInfoAiGuideStart"
             app:layout_constraintEnd_toStartOf="@id/apiInfoAiIconFore"
             tools:srcCompat="@tools:sample/avatars" />
@@ -105,8 +132,7 @@
             android:layout_marginStart="40dp"
             android:layout_marginEnd="40dp"
             app:layout_goneMarginStart="0dp"
-            android:layout_marginTop="20dp"
-            app:layout_constraintTop_toTopOf="@id/apiInfoAiIconShade"
+            app:layout_constraintTop_toTopOf="@id/apiInfoAiIcon"
             app:layout_constraintEnd_toStartOf="@id/apiInfoAiIconBack"
             app:layout_constraintStart_toEndOf="@id/apiInfoAiIcon"
             android:contentDescription="@string/apiInfoAiSubFore"
@@ -125,8 +151,7 @@
             android:layout_width="72dp"
             android:layout_height="72dp"
             app:layout_constraintHorizontal_chainStyle="spread"
-            android:layout_marginTop="20dp"
-            app:layout_constraintTop_toTopOf="@id/apiInfoAiIconShade"
+            app:layout_constraintTop_toTopOf="@id/apiInfoAiIcon"
             app:layout_constraintStart_toEndOf="@id/apiInfoAiIconFore"
             app:layout_constraintEnd_toEndOf="@id/apiInfoAiGuideEnd"
             android:contentDescription="@string/apiInfoAiSubBack"
@@ -202,7 +227,7 @@
         <ImageView
             android:id="@+id/apiInfoAiIconRShade"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="265dp"
             android:layout_marginTop="60dp"
             app:layout_constraintTop_toBottomOf="@id/apiInfoAiIconRound"
             app:layout_constraintStart_toStartOf="@id/apiInfoAiGuideStart"
@@ -214,12 +239,39 @@
             android:src="@drawable/res_dialog_md2"/>
 
         <ImageView
+            android:id="@+id/apiInfoAiMonoR"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_marginTop="20dp"
+            android:background="#080808"
+            app:tint="#FFFFFF"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintTop_toTopOf="@id/apiInfoAiIconRShade"
+            app:layout_constraintStart_toStartOf="@id/apiInfoAiGuideStart"
+            app:layout_constraintEnd_toEndOf="@id/apiInfoAiGuideEnd"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/apiInfoAiMonoRDes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="110dp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="12dp"
+            android:text="Monochrome"
+            app:layout_constraintStart_toStartOf="@id/apiInfoAiMonoR"
+            app:layout_constraintEnd_toEndOf="@id/apiInfoAiMonoR"
+            app:layout_constraintTop_toBottomOf="@id/apiInfoAiMonoR"/>
+
+        <ImageView
             android:id="@+id/apiInfoAiIconR"
             android:layout_width="72dp"
             android:layout_height="72dp"
             app:layout_constraintHorizontal_chainStyle="spread"
             android:layout_marginTop="20dp"
-            app:layout_constraintTop_toTopOf="@id/apiInfoAiIconRShade"
+            app:layout_constraintTop_toBottomOf="@id/apiInfoAiMonoRDes"
             app:layout_constraintStart_toStartOf="@id/apiInfoAiGuideStart"
             app:layout_constraintEnd_toStartOf="@id/apiInfoAiIconRFore"
             tools:srcCompat="@tools:sample/avatars" />
@@ -239,8 +291,7 @@
             android:layout_marginStart="40dp"
             android:layout_marginEnd="40dp"
             app:layout_goneMarginStart="0dp"
-            android:layout_marginTop="20dp"
-            app:layout_constraintTop_toTopOf="@id/apiInfoAiIconRShade"
+            app:layout_constraintTop_toTopOf="@id/apiInfoAiIconR"
             app:layout_constraintEnd_toStartOf="@id/apiInfoAiIconRBack"
             app:layout_constraintStart_toEndOf="@id/apiInfoAiIconR"
             android:contentDescription="@string/apiInfoAiSubFore"
@@ -259,8 +310,7 @@
             android:layout_width="72dp"
             android:layout_height="72dp"
             app:layout_constraintHorizontal_chainStyle="spread"
-            android:layout_marginTop="20dp"
-            app:layout_constraintTop_toTopOf="@id/apiInfoAiIconRShade"
+            app:layout_constraintTop_toTopOf="@id/apiInfoAiIconR"
             app:layout_constraintStart_toEndOf="@id/apiInfoAiIconRFore"
             app:layout_constraintEnd_toEndOf="@id/apiInfoAiGuideEnd"
             android:contentDescription="@string/apiInfoAiSubBack"

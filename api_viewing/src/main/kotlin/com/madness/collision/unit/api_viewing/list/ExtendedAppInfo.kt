@@ -16,11 +16,15 @@
 
 package com.madness.collision.unit.api_viewing.list
 
+import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.compose.foundation.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -42,6 +46,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
+import com.madness.collision.BuildConfig
 import com.madness.collision.R
 import com.madness.collision.misc.MiscApp
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
@@ -86,7 +91,7 @@ private fun ExtendedAppInfo(shareIcon: () -> Unit, shareApk: () -> Unit) {
         BoxWithConstraints(modifier = Modifier.weight(1f)) {
             val extraHeight = remember { maxHeight / 2 }
             NestedScrollContent {
-                Column(modifier = Modifier.padding(vertical = 12.dp, horizontal = 20.dp)) {
+                Column {
                     AppDetails()
                     Spacer(Modifier.height(extraHeight))
                 }
@@ -105,12 +110,34 @@ private fun InfoDivider() {
 }
 
 private const val packageSettings = "com.android.settings"
+private const val packageAppManager = "io.github.muntashirakon.AppManager"
+private const val infoAppManager = "io.github.muntashirakon.AppManager.details.AppDetailsActivity"
+
+@Suppress("deprecation")
+private fun PackageManager.queryIntentLegacy(intent: Intent) = queryIntentActivities(intent, 0)
 
 @Composable
 private fun ExternalActions() {
     val context = LocalContext.current
+    val appInfoOwners = remember {
+        val intent = Intent(Intent.ACTION_SHOW_APP_INFO)
+        val activities = run a@{
+            val pkgMan = context.packageManager
+            if (OsUtils.dissatisfy(OsUtils.T)) return@a pkgMan.queryIntentLegacy(intent)
+            val flags = PackageManager.ResolveInfoFlags.of(0)
+            pkgMan.queryIntentActivities(intent, flags)
+        }
+        activities.mapTo(LinkedHashSet(activities.size)) { it.activityInfo.packageName }
+    }
     val storePkgNames = remember {
-        arrayOf(ApiViewingApp.packagePlayStore, ApiViewingApp.packageCoolApk, packageSettings)
+        val extras = arrayOf(ApiViewingApp.packagePlayStore, ApiViewingApp.packageCoolApk)
+        buildSet(extras.size + appInfoOwners.size + 2) {
+            addAll(extras)
+            addAll(appInfoOwners)
+            add(packageAppManager)
+            add(packageSettings)
+            remove(BuildConfig.APPLICATION_ID)
+        }.toList()
     }
     val packs = remember {
         storePkgNames.map {
@@ -119,7 +146,12 @@ private fun ExternalActions() {
             AppIconPackageInfo(info)
         }
     }
-    Row(modifier = Modifier.padding(vertical = 8.dp, horizontal = 20.dp)) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .horizontalScroll(rememberScrollState())
+            .padding(vertical = 8.dp, horizontal = 20.dp)
+    ) {
         val app = LocalApp.current
         val isInspected = LocalInspectionMode.current
         val activeStores = remember {
@@ -138,21 +170,49 @@ private fun ExternalActions() {
             if (pkgName == packageSettings) {
                 ExternalActionItem(p) c@{
                     if (app.isNotArchive) {
-                        context.startActivity(app.settingsPage())
+                        safely { context.startActivity(app.settingsPage()) }
                         return@c
                     }
-                    try {
-                        context.startActivity(app.apkPage())
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                        CollisionDialog.infoCopyable(context, app.appPackage.basePath).show()
-                    }
+                    safely { context.startActivity(app.apkPage()) }
+                        ?: CollisionDialog.infoCopyable(context, app.appPackage.basePath).show()
                 }
-            } else {
-                ExternalStoreAction(packs[i], storePkgNames[i])
+                continue
+            }
+            if (pkgName == packageAppManager) {
+                ExternalActionItem(p) c@{
+                    val intent = Intent()
+                        .setClassName(packageAppManager, infoAppManager)
+                        .putExtra("pkg", app.packageName)
+                    safely { context.startActivity(intent) }
+                }
+                continue
+            }
+            if (pkgName in appInfoOwners) {
+                ExternalActionItem(p) c@{
+                    val intent = Intent(Intent.ACTION_SHOW_APP_INFO)
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        .putExtra(Intent.EXTRA_PACKAGE_NAME, app.packageName)
+                        .setPackage(pkgName)
+                    safely { context.startActivity(intent) }
+                }
+                continue
+            }
+            ExternalActionItem(p) {
+                safely { context.startActivity(app.storePage(pkgName, direct = true)) }
+                    ?: safely { context.startActivity(app.storePage(pkgName, direct = false)) }
             }
         }
     }
+}
+
+inline fun safely(block: () -> Unit): Unit? {
+    try {
+        block()
+    } catch (e: Exception) {
+        e.printStackTrace()
+        return null
+    }
+    return Unit
 }
 
 @Composable
@@ -167,13 +227,16 @@ private fun AppDetails() {
             detailsContent = service.getAppInfoDetailsSequence(context, app, pkgInfo).annotated()
         }
     }
-    Column(modifier = Modifier.fillMaxWidth()) {
-        var showExtended by remember { mutableStateOf(false) }
+    var showExtended by remember { mutableStateOf(false) }
+    Column(
+        modifier = Modifier.fillMaxWidth()
+            .let { if (showExtended) it else it.clickable { showExtended = true } }
+            .padding(vertical = 12.dp, horizontal = 20.dp)
+    ) {
         Text(
             text = detailsContent,
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
             fontSize = 9.sp,
-            modifier = if (showExtended) Modifier else Modifier.clickable { showExtended = true },
             lineHeight = 12.sp,
         )
         if (showExtended) {
@@ -193,9 +256,7 @@ private fun AppDetails() {
         }
         if (!showExtended) {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { showExtended = true },
+                modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
@@ -221,25 +282,15 @@ private fun Sequence<AppListService.AppInfoItem>.annotated() = buildAnnotatedStr
 }
 
 @Composable
-private fun ExternalStoreAction(pack: AppIconPackageInfo?, pkgName: String) {
-    val app = LocalApp.current
-    val context = LocalContext.current
-    ExternalActionItem(pack) {
-        try {
-            context.startActivity(app.storePage(pkgName, direct = true))
-        } catch (e: Exception) {
-            e.printStackTrace()
-            context.startActivity(app.storePage(pkgName, direct = false))
-        }
-    }
-}
-
-@Composable
 private fun ExternalActionItem(packInfo: AppIconPackageInfo?, onClick: () -> Unit) {
     if (packInfo != null) {
         Image(
             modifier = Modifier
-                .clickable(onClick = onClick)
+                .clickable(
+                    onClick = onClick,
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple(bounded = false),
+                )
                 .size(40.dp),
             painter = rememberImagePainter(packInfo),
             contentDescription = null,

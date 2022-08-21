@@ -110,4 +110,5 @@
     <string name="av_tag_result_dir_arm32">Dateien befinden sich unter lib/armeabi-v7a oder lib/armeabi in der APK</string>
     <string name="av_list_info_compile_sdk">SDK kompilieren</string>
     <string name="av_list_info_min_sdk">Mindest-SDK</string>
+    <string name="av_list_info_aab_total_size">Gesamtgröße: %s</string>
 </resources>

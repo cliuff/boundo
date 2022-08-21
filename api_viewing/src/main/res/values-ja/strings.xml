@@ -110,4 +110,5 @@
     <string name="av_tag_result_dir_arm32">ファイルはAPKのlib/armeabi-v7aまたはlib/armeabiにあります</string>
     <string name="av_list_info_compile_sdk">SDKをコンパイルします</string>
     <string name="av_list_info_min_sdk">最小SDK</string>
+    <string name="av_list_info_aab_total_size">合計サイズ: %s</string>
 </resources>

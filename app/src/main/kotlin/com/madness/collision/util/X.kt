@@ -228,12 +228,6 @@ object X {
 
     fun belowOff(apiLevel: Int): Boolean = Build.VERSION.SDK_INT < apiLevel
 
-    fun belowOn(apiLevel: Int): Boolean = Build.VERSION.SDK_INT <= apiLevel
-
-    fun makeGone(vararg views: View){
-        for (view in views) if (view.visibility != View.GONE) view.visibility = View.GONE
-    }
-
     fun toast(context: Context, messageRes: Int, duration: Int) {
         toast(context, context.getString(messageRes), duration)
     }

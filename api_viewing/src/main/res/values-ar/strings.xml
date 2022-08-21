@@ -130,4 +130,5 @@
     <string name="av_tag_result_dir_arm32">تم العثور على الملفات ضمن lib / armeabi-v7a أو lib / armeabi في ملف APK</string>
     <string name="av_list_info_compile_sdk">تجميع SDK</string>
     <string name="av_list_info_min_sdk">دقيقة SDK</string>
+    <string name="av_list_info_aab_total_size">الحجم الإجمالي: %s</string>
 </resources>

@@ -43,6 +43,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.*
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -258,6 +259,12 @@ fun AppInfoPage(
     }
     val getClick = { tag: AppTagInfo ->
         when (tag.id) {
+            AppTagInfo.ID_APP_INSTALLER_PLAY -> {
+                {
+                    val intent = app.storePage(ApiViewingApp.packagePlayStore, direct = true)
+                    safely { context.startActivity(intent) } ?: Unit
+                }
+            }
             AppTagInfo.ID_APP_ADAPTIVE_ICON -> {
                 {
                     val f = AppIconFragment.newInstance(
@@ -369,11 +376,14 @@ private fun FrontAppInfo(
         val pkg = app.appPackage
         val baseName = if (OsUtils.satisfy(OsUtils.O)) Path(pkg.basePath).name else File(pkg.basePath).name
         val parentPath = pkg.basePath.replaceFirst(baseName, "")
-        pkg.apkPaths.map { path ->
+        val sizes = pkg.apkPaths.map { path ->
             val fileName = path.replaceFirst(parentPath, "")
-            val file = File(path).takeIf { it.exists() } ?: return@map fileName to ""
-            val size = Formatter.formatFileSize(context, file.length())
-            fileName to size
+            val file = File(path).takeIf { it.exists() } ?: return@map fileName to -1L
+            fileName to file.length()
+        }
+        buildList(sizes.size + 1) {
+            add("" to Formatter.formatFileSize(context, sizes.sumOf { it.second }))
+            addAll(sizes.map { it.first to Formatter.formatFileSize(context, it.second) })
         }
     }
     Column {
@@ -725,6 +735,7 @@ private fun TagDetailsContent(
                 val chevron by remember(showAabDetails) {
                     derivedStateOf {
                         when (expressed.intrinsic.id) {
+                            AppTagInfo.ID_APP_INSTALLER_PLAY -> Icons.Outlined.Launch
                             AppTagInfo.ID_APP_ADAPTIVE_ICON -> {
                                 if (direction == LayoutDirection.Rtl) Icons.Outlined.ChevronLeft
                                 else Icons.Outlined.ChevronRight
@@ -883,7 +894,18 @@ private fun AppBundleDetails(list: List<Pair<String, String>>) {
     Column(modifier = Modifier
         .padding(horizontal = 20.dp)
         .padding(bottom = 12.dp)) {
-        list.forEach {
+        val totalSize = list[0].second
+        Text(
+            text = stringResource(AvR.string.av_list_info_aab_total_size, totalSize),
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
+            fontSize = 10.sp,
+            fontWeight = FontWeight.Medium,
+            lineHeight = 11.sp,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+        Spacer(modifier = Modifier.height(2.dp))
+        list.subList(1, list.size).forEach {
             AppBundleApkItem(it.first, it.second)
         }
     }

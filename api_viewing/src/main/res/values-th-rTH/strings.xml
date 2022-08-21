@@ -110,4 +110,5 @@
     <string name="av_tag_result_dir_arm32">ไฟล์อยู่ภายใต้ lib/armeabi-v7a หรือ lib/armeabi ใน APK</string>
     <string name="av_list_info_compile_sdk">คอมไพล์ SDK</string>
     <string name="av_list_info_min_sdk">SDK ขั้นต่ำ</string>
+    <string name="av_list_info_aab_total_size">ขนาดทั้งหมด: %s</string>
 </resources>
