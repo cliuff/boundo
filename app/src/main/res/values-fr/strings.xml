@@ -24,7 +24,6 @@
     <string name="Settings_LanguagePicker_Auto">Suivre les paramètres système</string>
     <string name="Settings_Language_Button_Cancel">Annuler</string>
     <string name="Settings_Language_Dialog_Title">Langue</string>
-    <string name="Settings_Button_Derive">Obtenir en texte brut</string>
     <string name="ttExportICalFile">Fichier iCalendar</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">Nouvelle version disponible</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">Nouvelle version</string>
@@ -53,7 +52,6 @@
     <string name="text_OK">OK</string>
     <string name="text_cancel">Annuler</string>
     <string name="text_done">Terminer</string>
-    <string name="advice_textview_derive_details">Remplacer le texte enrichi du site web dans le presse-papiers par le texte brut correspondant</string>
     <string name="text_no_content">Aucun contenu</string>
     <string name="settings_exterior">Style</string>
     <string name="text_reset">Réinitialisation</string>
@@ -230,7 +228,6 @@
     <string name="versatile_device_controls_mdu_ctrl_desc">Actualiser les données</string>
     <string name="versatile_device_controls_mdu_hint">Appuyez pour actualiser</string>
     <string name="advice_source_code">Code source</string>
-    <string name="advice_translation_program">Programme de traduction</string>
     <string name="app_device_controls">Commandes Boundo</string>
     <string name="access_sys_usage">Autoriser Boundo à accéder aux données d\'utilisation</string>
     <string name="versatile_device_controls_at_status_on">%.0f min</string>
@@ -241,7 +238,6 @@
     <string name="at_hour_hint">Heure</string>
     <string name="at_minute_hint">Minute</string>
     <string name="advice_source_sub">Rediriger vers Github</string>
-    <string name="advice_translation_sub">Rediriger vers Google Docs</string>
     <string name="unit_desc_requirement_tw">Support de fond d\'écran en direct</string>
     <string name="unit_device_manager">Gestionnaire de périphériques</string>
     <string name="versatile_device_controls_dm_hint_off">Appuyez pour vous connecter</string>

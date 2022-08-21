@@ -25,7 +25,6 @@
     <string name="Settings_LanguagePicker_Auto">Folgen Sie dem System</string>
     <string name="Settings_Language_Button_Cancel">Stornieren</string>
     <string name="Settings_Language_Dialog_Title">Sprachen</string>
-    <string name="Settings_Button_Derive">Leiten Sie einfachen Text ab</string>
     <string name="ttExportICalFile">iCalendar-Datei</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">Neue Version gefunden</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">Neue Version</string>
@@ -54,7 +53,6 @@
     <string name="text_OK">OK</string>
     <string name="text_cancel">Stornieren</string>
     <string name="text_done">Fertig</string>
-    <string name="advice_textview_derive_details">Ersetzen Sie den Rich-Text von der Website in der Zwischenablage durch den entsprechenden Klartext</string>
     <string name="text_no_content">Kein Inhalt</string>
     <string name="settings_exterior">Stil</string>
     <string name="text_reset">Zurücksetzen</string>
@@ -231,7 +229,6 @@
     <string name="versatile_device_controls_mdu_ctrl_desc">Daten aktualisieren</string>
     <string name="versatile_device_controls_mdu_hint">Tippen Sie zum Aktualisieren auf</string>
     <string name="advice_source_code">Quellcode</string>
-    <string name="advice_translation_program">Übersetzungsprogramm</string>
     <string name="app_device_controls">Boundo-Steuerelemente</string>
     <string name="access_sys_usage">Ermöglichen Sie Boundo den Zugriff auf Nutzungsdaten</string>
     <string name="versatile_device_controls_at_status_on">%.0f min</string>
@@ -242,7 +239,6 @@
     <string name="at_hour_hint">Stunde</string>
     <string name="at_minute_hint">Minute</string>
     <string name="advice_source_sub">Weiterleiten an Github</string>
-    <string name="advice_translation_sub">Weiterleiten an Google Text &amp; Tabellen</string>
     <string name="unit_desc_requirement_tw">Live Wallpaper Unterstützung</string>
     <string name="unit_device_manager">Gerätemanager</string>
     <string name="versatile_device_controls_dm_hint_off">Tippen Sie auf, um eine Verbindung herzustellen</string>

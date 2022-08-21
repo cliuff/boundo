@@ -25,7 +25,6 @@
     <string name="Settings_LanguagePicker_Auto">ติดตามระบบ</string>
     <string name="Settings_Language_Button_Cancel">ยกเลิก</string>
     <string name="Settings_Language_Dialog_Title">ภาษา</string>
-    <string name="Settings_Button_Derive">สืบทอดข้อความธรรมดา</string>
     <string name="ttExportICalFile">ไฟล์ iCalendar</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">พบเวอร์ชันใหม่</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">เวอร์ชั่นใหม่</string>
@@ -54,7 +53,6 @@
     <string name="text_OK">ตกลง</string>
     <string name="text_cancel">ยกเลิก</string>
     <string name="text_done">เสร็จสิ้น</string>
-    <string name="advice_textview_derive_details">แทนที่ข้อความที่หลากหลายจากเว็บไซต์ในคลิปบอร์ดด้วยข้อความธรรมดาที่สอดคล้องกัน</string>
     <string name="text_no_content">ไม่มีเนื้อหา</string>
     <string name="settings_exterior">สไตล์</string>
     <string name="text_reset">ตั้งค่าใหม่</string>
@@ -231,7 +229,6 @@
     <string name="versatile_device_controls_mdu_ctrl_desc">รีเฟรชข้อมูล</string>
     <string name="versatile_device_controls_mdu_hint">แตะเพื่อรีเฟรช</string>
     <string name="advice_source_code">รหัสแหล่งที่มา</string>
-    <string name="advice_translation_program">โปรแกรมแปล</string>
     <string name="app_device_controls">การควบคุม Boundo</string>
     <string name="access_sys_usage">อนุญาตให้ Boundo เข้าถึงข้อมูลการใช้งาน</string>
     <string name="versatile_device_controls_at_status_on">%.0f นาที</string>
@@ -242,7 +239,6 @@
     <string name="at_hour_hint">ชั่วโมง</string>
     <string name="at_minute_hint">นาที</string>
     <string name="advice_source_sub">เปลี่ยนเส้นทางไปที่ Github</string>
-    <string name="advice_translation_sub">เปลี่ยนเส้นทางไปที่ Google เอกสาร</string>
     <string name="unit_desc_requirement_tw">การสนับสนุนวอลล์เปเปอร์สด</string>
     <string name="unit_device_manager">ตัวจัดการอุปกรณ์</string>
     <string name="versatile_device_controls_dm_hint_off">แตะเพื่อเชื่อมต่อ</string>

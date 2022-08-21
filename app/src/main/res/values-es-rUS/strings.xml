@@ -31,7 +31,6 @@
     <string name="SettingsSync_Update_AlertDialog_PositiveButtonText">Actualizar</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">Nueva versión encontrada</string>
     <string name="Settings_Button_CheckUpdate">Actualización de la aplicación</string>
-    <string name="Settings_Button_Derive">Derivar texto plano</string>
     <string name="Settings_Button_SwitchLanguage">Idiomas</string>
     <string name="Settings_ImageView_Language">Idiomas</string>
     <string name="Settings_ImageView_Update">Actualización de la aplicación</string>
@@ -43,7 +42,6 @@
     <string name="activity_av_search">API de la app</string>
     <string name="advice_license">Licencias de código abierto</string>
     <string name="advice_license_details">Detalles de la licencia para software abierto que ayuda a Boundo a tomar forma</string>
-    <string name="advice_textview_derive_details">Sustituya el texto enriquecido del sitio web en el portapapeles por el texto sin formato correspondiente</string>
     <string name="apiDisplayAPK">APKs del dispositivo</string>
     <string name="apiDisplayFile">Seleccionar APKs</string>
     <string name="apiDisplaySys">Apps del sistema</string>
@@ -231,7 +229,6 @@
     <string name="versatile_device_controls_mdu_ctrl_desc">Actualizar datos</string>
     <string name="versatile_device_controls_mdu_hint">Toca para actualizar</string>
     <string name="advice_source_code">Código fuente</string>
-    <string name="advice_translation_program">Programa de traducción</string>
     <string name="app_device_controls">Controles de Boundo</string>
     <string name="access_sys_usage">Permitir que Boundo acceda a los datos de uso</string>
     <string name="versatile_device_controls_at_status_on">%.0f min</string>
@@ -242,7 +239,6 @@
     <string name="at_hour_hint">Hora</string>
     <string name="at_minute_hint">Minuto</string>
     <string name="advice_source_sub">Redirigir a Github</string>
-    <string name="advice_translation_sub">Redirigir a Google Docs</string>
     <string name="unit_desc_requirement_tw">Soporte de fondos de pantalla en vivo</string>
     <string name="unit_device_manager">Gestor de dispositivos</string>
     <string name="versatile_device_controls_dm_hint_off">Toca para conectarte</string>

@@ -25,7 +25,6 @@
     <string name="Settings_LanguagePicker_Auto">Segui il sistema</string>
     <string name="Settings_Language_Button_Cancel">Annulla</string>
     <string name="Settings_Language_Dialog_Title">Le lingue</string>
-    <string name="Settings_Button_Derive">Deriva il testo normale</string>
     <string name="ttExportICalFile">file iCalendar</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">Nuova versione trovata</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">Nuova versione</string>
@@ -54,7 +53,6 @@
     <string name="text_OK">ok</string>
     <string name="text_cancel">Annulla</string>
     <string name="text_done">finire</string>
-    <string name="advice_textview_derive_details">Sostituisci il rich text dal sito Web negli Appunti con il corrispondente testo normale</string>
     <string name="text_no_content">Nessun contenuto</string>
     <string name="settings_exterior">Stile</string>
     <string name="text_reset">Ripristina</string>
@@ -231,7 +229,6 @@
     <string name="versatile_device_controls_mdu_ctrl_desc">Aggiorna i dati</string>
     <string name="versatile_device_controls_mdu_hint">Tocca per aggiornare</string>
     <string name="advice_source_code">Codice sorgente</string>
-    <string name="advice_translation_program">Programma di traduzione</string>
     <string name="app_device_controls">Boundo Controls</string>
     <string name="access_sys_usage">Consenti a Boundo di accedere ai dati di utilizzo</string>
     <string name="versatile_device_controls_at_status_on">%.0f min</string>
@@ -242,7 +239,6 @@
     <string name="at_hour_hint">Ora</string>
     <string name="at_minute_hint">Minuto</string>
     <string name="advice_source_sub">Reindirizza a Github</string>
-    <string name="advice_translation_sub">Reindirizza a Google Docs</string>
     <string name="unit_desc_requirement_tw">Supporto per sfondi animati</string>
     <string name="unit_device_manager">Gestore dispositivi</string>
     <string name="versatile_device_controls_dm_hint_off">Tocca per connetterti</string>

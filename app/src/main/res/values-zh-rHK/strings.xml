@@ -25,7 +25,6 @@
     <string name="Settings_LanguagePicker_Auto">跟隨系統</string>
     <string name="Settings_Language_Button_Cancel">取消</string>
     <string name="Settings_Language_Dialog_Title">語言</string>
-    <string name="Settings_Button_Derive">提取純文本</string>
     <string name="ttExportICalFile">iCalendar 文件</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">檢測到新版本</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">新版</string>
@@ -54,7 +53,6 @@
     <string name="text_OK">好的</string>
     <string name="text_cancel">取消</string>
     <string name="text_done">完成</string>
-    <string name="advice_textview_derive_details">將剪貼板裡的網頁富文本替換為相應的純文本</string>
     <string name="text_no_content">空空如也</string>
     <string name="settings_exterior">風格</string>
     <string name="text_reset">恢復默認</string>
@@ -232,7 +230,6 @@
     <string name="versatile_device_controls_mdu_ctrl_desc">刷新數據</string>
     <string name="versatile_device_controls_mdu_hint">點擊刷新</string>
     <string name="advice_source_code">源代碼</string>
-    <string name="advice_translation_program">翻譯計劃</string>
     <string name="app_device_controls">斑朵控制中心</string>
     <string name="access_sys_usage">允許斑朵讀取使用情況數據</string>
     <string name="twWallpaperLight">亮色調壁紙</string>
@@ -242,7 +239,6 @@
     <string name="at_hour_hint">小時</string>
     <string name="at_minute_hint">分鐘</string>
     <string name="advice_source_sub">跳轉 Github</string>
-    <string name="advice_translation_sub">跳轉谷歌文檔</string>
     <string name="unit_desc_requirement_tw">動態壁紙支持</string>
     <string name="unit_device_manager">設備管理</string>
     <string name="versatile_device_controls_dm_hint_off">點擊連接</string>

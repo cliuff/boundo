@@ -25,7 +25,6 @@
     <string name="Settings_LanguagePicker_Auto">システムをフォローする</string>
     <string name="Settings_Language_Button_Cancel">キャンセル</string>
     <string name="Settings_Language_Dialog_Title">言語</string>
-    <string name="Settings_Button_Derive">プレーンテキストを抽出する</string>
     <string name="ttExportICalFile">iCalendarファイル</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">新しいバージョンが検出されました</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">新版</string>
@@ -54,7 +53,6 @@
     <string name="text_OK">OK</string>
     <string name="text_cancel">キャンセル</string>
     <string name="text_done">実施する</string>
-    <string name="advice_textview_derive_details">クリップボードのWebページのリッチテキストを対応するプレーンテキストに置き換えます</string>
     <string name="text_no_content">空の</string>
     <string name="settings_exterior">スタイル</string>
     <string name="text_reset">リセット</string>
@@ -232,7 +230,6 @@
     <string name="versatile_device_controls_mdu_ctrl_desc">データを更新する</string>
     <string name="versatile_device_controls_mdu_hint">更新をクリックします</string>
     <string name="advice_source_code">ソースコード</string>
-    <string name="advice_translation_program">翻訳プラン</string>
     <string name="app_device_controls">Boundoコントロールセンター</string>
     <string name="access_sys_usage">Boundoに使用状況データの読み取りを許可する</string>
     <string name="twWallpaperLight">明るいトーンの壁紙</string>
@@ -242,7 +239,6 @@
     <string name="at_hour_hint">時間</string>
     <string name="at_minute_hint">分</string>
     <string name="advice_source_sub">Githubにジャンプ</string>
-    <string name="advice_translation_sub">Googleドキュメントにジャンプ</string>
     <string name="unit_desc_requirement_tw">ライブ壁紙のサポート</string>
     <string name="unit_device_manager">機器管理</string>
     <string name="versatile_device_controls_dm_hint_off">クリックして接続</string>

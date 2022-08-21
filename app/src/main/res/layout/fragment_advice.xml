@@ -70,46 +70,13 @@
                     android:orientation="vertical">
 
                     <LinearLayout
-                        android:id="@+id/adviceDerive"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:foreground="?android:attr/selectableItemBackground"
-                        android:orientation="vertical"
-                        android:paddingStart="30dp"
-                        android:paddingTop="25dp"
-                        android:paddingEnd="30dp"
-                        android:paddingBottom="10dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/Settings_Button_Derive"
-                            android:textColor="?android:textColor"
-                            android:textSize="18sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/advice_textview_derive_details"
-                            android:textColor="?colorTextSub"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginStart="30dp"
-                        android:layout_marginEnd="30dp"
-                        android:background="?colorStroke" />
-
-                    <LinearLayout
                         android:id="@+id/adviceLicense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:foreground="?android:attr/selectableItemBackground"
                         android:orientation="vertical"
                         android:paddingStart="30dp"
-                        android:paddingTop="10dp"
+                        android:paddingTop="25dp"
                         android:paddingEnd="30dp"
                         android:paddingBottom="10dp">
 
@@ -144,7 +111,7 @@
                         android:paddingStart="30dp"
                         android:paddingTop="10dp"
                         android:paddingEnd="30dp"
-                        android:paddingBottom="10dp">
+                        android:paddingBottom="25dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -157,39 +124,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/advice_source_sub"
-                            android:textColor="?colorTextSub"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginStart="30dp"
-                        android:layout_marginEnd="30dp"
-                        android:background="?colorStroke" />
-
-                    <LinearLayout
-                        android:id="@+id/adviceTranslation"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:foreground="?android:attr/selectableItemBackground"
-                        android:orientation="vertical"
-                        android:paddingStart="30dp"
-                        android:paddingTop="10dp"
-                        android:paddingEnd="30dp"
-                        android:paddingBottom="25dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/advice_translation_program"
-                            android:textColor="?android:textColor"
-                            android:textSize="18sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/advice_translation_sub"
                             android:textColor="?colorTextSub"
                             android:textSize="12sp" />
                     </LinearLayout>

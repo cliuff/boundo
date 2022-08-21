@@ -25,7 +25,6 @@
     <string name="Settings_LanguagePicker_Auto">Слідкуйте за системою</string>
     <string name="Settings_Language_Button_Cancel">Скасувати</string>
     <string name="Settings_Language_Dialog_Title">Мови</string>
-    <string name="Settings_Button_Derive">Отримайте простий текст</string>
     <string name="ttExportICalFile">файл iCalendar</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">Нова версія знайдена</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">Нова версія</string>
@@ -54,7 +53,6 @@
     <string name="text_OK">гаразд</string>
     <string name="text_cancel">Скасувати</string>
     <string name="text_done">Закінчити</string>
-    <string name="advice_textview_derive_details">Замініть розширений текст із веб-сайту в буфер обміну відповідним простим текстом</string>
     <string name="text_no_content">Немає вмісту</string>
     <string name="settings_exterior">Стиль</string>
     <string name="text_reset">Скинути</string>
@@ -234,7 +232,6 @@
     <string name="versatile_device_controls_mdu_ctrl_desc">Оновити дані</string>
     <string name="versatile_device_controls_mdu_hint">Торкніться, щоб оновити</string>
     <string name="advice_source_code">Вихідний код</string>
-    <string name="advice_translation_program">Програма перекладу</string>
     <string name="twWallpaperLight">Яскраві шпалери</string>
     <string name="twWallpaperDark">Темні шпалери</string>
     <string name="twDesc">Ця функція представлена вам як живі шпалери.\nПерейдіть на темні шпалери, коли\n1. Темну тему системи ввімкнено\n2. Для плану темної теми в налаштуваннях програми встановлено значення «Розклад», і час настав</string>
@@ -242,7 +239,6 @@
     <string name="at_hour_hint">годину</string>
     <string name="at_minute_hint">Хвилина</string>
     <string name="advice_source_sub">Перенаправити на Github</string>
-    <string name="advice_translation_sub">Переспрямування на Google Docs</string>
     <string name="unit_desc_requirement_tw">Підтримка живих шпалер</string>
     <string name="unit_device_manager">Диспетчер пристроїв</string>
     <string name="versatile_device_controls_dm_hint_off">Торкніться, щоб підключитися</string>

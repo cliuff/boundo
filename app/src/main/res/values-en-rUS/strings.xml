@@ -24,7 +24,6 @@
     <string name="Settings_LanguagePicker_Auto">Follow system</string>
     <string name="Settings_Language_Button_Cancel">Cancel</string>
     <string name="Settings_Language_Dialog_Title">Languages</string>
-    <string name="Settings_Button_Derive">Derive plain text</string>
     <string name="ttExportICalFile">iCalendar file</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">New version found</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">New version</string>
@@ -53,7 +52,6 @@
     <string name="settingsfunction_downloaddescription">Downloading an update</string>
     <string name="text_cancel">Cancel</string>
     <string name="text_done">Done</string>
-    <string name="advice_textview_derive_details">Substitute the rich text from website in clipboard by corresponding plain text</string>
     <string name="text_no_content">There\'s nothing here</string>
     <string name="settings_exterior">Style</string>
     <string name="text_reset">Reset</string>
@@ -233,10 +231,8 @@
     <string name="versatile_device_controls_mdu_ctrl_desc">Refresh data</string>
     <string name="versatile_device_controls_mdu_hint">Tap to refresh</string>
     <string name="advice_source_code">Source code</string>
-    <string name="advice_translation_program">Translation program</string>
     <string name="versatile_device_controls_at_status_off">Stopped</string>
     <string name="advice_source_sub">Redirect to Github</string>
-    <string name="advice_translation_sub">Redirect to Google Docs</string>
     <string name="unit_desc_requirement_tw">Live wallpaper support</string>
     <string name="unit_device_manager">Device Manager</string>
     <string name="versatile_device_controls_dm_hint_off">Tap to connect</string>

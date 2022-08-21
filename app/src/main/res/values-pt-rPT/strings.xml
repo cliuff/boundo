@@ -25,7 +25,6 @@
     <string name="Settings_LanguagePicker_Auto">Siga o sistema</string>
     <string name="Settings_Language_Button_Cancel">Cancelar</string>
     <string name="Settings_Language_Dialog_Title">línguas</string>
-    <string name="Settings_Button_Derive">Derivar texto sem formatação</string>
     <string name="ttExportICalFile">arquivo iCalendar</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">Nova versão encontrada</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">Nova versão</string>
@@ -54,7 +53,6 @@
     <string name="text_OK">Está bem</string>
     <string name="text_cancel">Cancelar</string>
     <string name="text_done">Terminar</string>
-    <string name="advice_textview_derive_details">Substitua o rich text do site na área de transferência pelo texto sem formatação correspondente</string>
     <string name="text_no_content">Sem conteúdo</string>
     <string name="settings_exterior">Estilo</string>
     <string name="text_reset">Redefinir</string>
@@ -231,7 +229,6 @@
     <string name="versatile_device_controls_mdu_ctrl_desc">Atualizar dados</string>
     <string name="versatile_device_controls_mdu_hint">Toque para atualizar</string>
     <string name="advice_source_code">Código fonte</string>
-    <string name="advice_translation_program">Programa de tradução</string>
     <string name="app_device_controls">Boundo Controls</string>
     <string name="access_sys_usage">Permitir que Boundo acesse os dados de uso</string>
     <string name="versatile_device_controls_at_status_on">%.0f min</string>
@@ -242,7 +239,6 @@
     <string name="at_hour_hint">Hora</string>
     <string name="at_minute_hint">Minuto</string>
     <string name="advice_source_sub">Redirecionar para Github</string>
-    <string name="advice_translation_sub">Redirecionar para o Google Docs</string>
     <string name="unit_desc_requirement_tw">Suporte para papel de parede ao vivo</string>
     <string name="unit_device_manager">Gerenciador de Dispositivos</string>
     <string name="versatile_device_controls_dm_hint_off">Toque para conectar</string>

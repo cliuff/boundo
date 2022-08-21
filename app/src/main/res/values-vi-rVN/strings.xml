@@ -25,7 +25,6 @@
     <string name="Settings_LanguagePicker_Auto">Theo hệ thống</string>
     <string name="Settings_Language_Button_Cancel">Hủy bỏ</string>
     <string name="Settings_Language_Dialog_Title">Ngôn ngữ</string>
-    <string name="Settings_Button_Derive">Văn bản gốc</string>
     <string name="ttExportICalFile">tập tin iCalWiki</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">Đã tìm thấy phiên bản mới</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">Phiên bản mới</string>
@@ -54,7 +53,6 @@
     <string name="text_OK">đồng ý</string>
     <string name="text_cancel">Hủy bỏ</string>
     <string name="text_done">Hoàn thành</string>
-    <string name="advice_textview_derive_details">Thay thế văn bản phong phú từ trang web trong clipboard bằng văn bản thuần túy tương ứng</string>
     <string name="text_no_content">Không có nội dung</string>
     <string name="settings_exterior">Phong cách</string>
     <string name="text_reset">Cài lại</string>
@@ -231,7 +229,6 @@
     <string name="versatile_device_controls_mdu_ctrl_desc">Làm mới dữ liệu</string>
     <string name="versatile_device_controls_mdu_hint">Nhấn để làm mới</string>
     <string name="advice_source_code">Mã nguồn</string>
-    <string name="advice_translation_program">Chương trình dịch thuật</string>
     <string name="app_device_controls">Điều khiển Boundo</string>
     <string name="access_sys_usage">Cho phép Boundo truy cập dữ liệu sử dụng</string>
     <string name="versatile_device_controls_at_status_on">%.0f phút</string>
@@ -242,7 +239,6 @@
     <string name="at_hour_hint">Giờ</string>
     <string name="at_minute_hint">Phút</string>
     <string name="advice_source_sub">Chuyển hướng đến Github</string>
-    <string name="advice_translation_sub">Chuyển hướng đến Google Tài liệu</string>
     <string name="unit_desc_requirement_tw">Hỗ trợ hình nền động</string>
     <string name="unit_device_manager">Quản lý thiết bị</string>
     <string name="versatile_device_controls_dm_hint_off">Nhấn để kết nối</string>

@@ -16,8 +16,6 @@
 
 package com.madness.collision.settings
 
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.AnimatedVectorDrawable
@@ -66,10 +64,8 @@ internal class AdviceFragment : TaggedFragment(), Democratic, View.OnClickListen
         val vLogo = view.findViewById<ImageView>(R.id.adviceLogo)
         (vLogo.drawable as AnimatedVectorDrawable).start()
         arrayOf(
-                view.findViewById(R.id.adviceDerive),
                 view.findViewById(R.id.adviceLicense),
                 view.findViewById(R.id.adviceSourceCode),
-                view.findViewById(R.id.adviceTranslation),
                 vLogo as View
         ).forEach { it.setOnClickListener(this) }
     }
@@ -77,18 +73,6 @@ internal class AdviceFragment : TaggedFragment(), Democratic, View.OnClickListen
     override fun onClick(view: View) {
         val context = context ?: return
         when (view.id) {
-            R.id.adviceDerive ->{
-                val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                val clipData = clipboard.primaryClip
-                if (clipData == null) {
-                    notifyBriefly(R.string.text_no_content)
-                    return
-                }
-                val builder = StringBuilder()
-                for (i in 0 until clipData.itemCount) builder.append(clipData.getItemAt(i).htmlText)
-                clipboard.setPrimaryClip(ClipData.newPlainText("text", builder.toString()))
-                notifyBriefly(R.string.text_done)
-            }
             R.id.adviceLicense -> {
                 startActivity(Intent(context, OssLicensesMenuActivity::class.java))
             }
@@ -97,14 +81,6 @@ internal class AdviceFragment : TaggedFragment(), Democratic, View.OnClickListen
                     action = Intent.ACTION_VIEW
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK
                     data = Uri.parse(P.LINK_SOURCE_CODE)
-                }
-                startActivity(intent)
-            }
-            R.id.adviceTranslation -> {
-                val intent = Intent().apply {
-                    action = Intent.ACTION_VIEW
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                    data = Uri.parse(P.LINK_TRANSLATION_PROGRAM)
                 }
                 startActivity(intent)
             }

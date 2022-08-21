@@ -64,7 +64,6 @@
     <string name="SettingsSync_Update_AlertDialog_NeutralButtonText">Не напоминай</string>
     <string name="SettingsSync_Update_AlertDialog_PositiveButtonText">Обновить</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">Найдена новая версия</string>
-    <string name="Settings_Button_Derive">Получить простой текст</string>
     <string name="Settings_ImageView_Language">Языки</string>
     <string name="Settings_ImageView_Update">Обновление приложения</string>
     <string name="Settings_LanguagePicker_Auto">Следуйте системе</string>
@@ -73,7 +72,6 @@
     <string name="activity_av_search">API приложения</string>
     <string name="advice_license">Лицензии с открытым исходным кодом</string>
     <string name="advice_license_details">Сведения о лицензии для открытого программного обеспечения, которое помогает Boundo прийти в форму</string>
-    <string name="advice_textview_derive_details">Замените форматированный текст с сайта в буфере обмена соответствующим текстом</string>
     <string name="apiDetailsPackageName">"Имя пакета: "</string>
     <string name="apiDisplayAPK">Устройство APK</string>
     <string name="apiDisplayFile">Выберите APK</string>
@@ -231,7 +229,6 @@
     <string name="versatile_device_controls_mdu_ctrl_desc">Обновить данные</string>
     <string name="versatile_device_controls_mdu_hint">Нажмите, чтобы обновить</string>
     <string name="advice_source_code">Исходный код</string>
-    <string name="advice_translation_program">Программа перевода</string>
     <string name="app_device_controls">Boundo Controls</string>
     <string name="access_sys_usage">Разрешить Boundo доступ к данным об использовании</string>
     <string name="versatile_device_controls_at_status_on">%.0f мин</string>
@@ -242,7 +239,6 @@
     <string name="at_hour_hint">Час</string>
     <string name="at_minute_hint">минут</string>
     <string name="advice_source_sub">Перенаправить на Github</string>
-    <string name="advice_translation_sub">Перенаправить в Google Документы</string>
     <string name="unit_desc_requirement_tw">Поддержка живых обоев</string>
     <string name="unit_device_manager">Диспетчер устройств</string>
     <string name="versatile_device_controls_dm_hint_off">Нажмите, чтобы подключиться</string>

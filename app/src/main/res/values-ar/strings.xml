@@ -25,7 +25,6 @@
     <string name="Settings_LanguagePicker_Auto">اتبع النظام</string>
     <string name="Settings_Language_Button_Cancel">إلغاء</string>
     <string name="Settings_Language_Dialog_Title">اللغات</string>
-    <string name="Settings_Button_Derive">اشتق النص العادي</string>
     <string name="ttExportICalFile">ملف iCalendar</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">تم العثور على نسخة جديدة</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">نسخة جديدة</string>
@@ -54,7 +53,6 @@
     <string name="text_OK">حسنا</string>
     <string name="text_cancel">إلغاء</string>
     <string name="text_done">إنهاء</string>
-    <string name="advice_textview_derive_details">استبدل النص المنسق من موقع الويب في الحافظة بالنص العادي المقابل</string>
     <string name="text_no_content">لا يوجد محتوى</string>
     <string name="settings_exterior">أسلوب</string>
     <string name="text_reset">إعادة تعيين</string>
@@ -231,7 +229,6 @@
     <string name="versatile_device_controls_mdu_ctrl_desc">تحديث البيانات</string>
     <string name="versatile_device_controls_mdu_hint">انقر للتحديث</string>
     <string name="advice_source_code">مصدر الرمز</string>
-    <string name="advice_translation_program">برنامج الترجمة</string>
     <string name="app_device_controls">ضوابط Boundo</string>
     <string name="access_sys_usage">السماح لـ Boundo بالوصول إلى بيانات الاستخدام</string>
     <string name="versatile_device_controls_at_status_on">%.0f min</string>
@@ -242,7 +239,6 @@
     <string name="at_hour_hint">ساعة</string>
     <string name="at_minute_hint">دقيقة</string>
     <string name="advice_source_sub">إعادة التوجيه إلى جيثب</string>
-    <string name="advice_translation_sub">إعادة التوجيه إلى محرر مستندات Google</string>
     <string name="unit_desc_requirement_tw">دعم خلفية حية</string>
     <string name="unit_device_manager">مدير الجهاز</string>
     <string name="versatile_device_controls_dm_hint_off">انقر للاتصال</string>

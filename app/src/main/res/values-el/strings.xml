@@ -25,7 +25,6 @@
     <string name="Settings_LanguagePicker_Auto">Ακολουθήστε το σύστημα</string>
     <string name="Settings_Language_Button_Cancel">Ματαίωση</string>
     <string name="Settings_Language_Dialog_Title">Γλώσσες</string>
-    <string name="Settings_Button_Derive">Παράγει απλό κείμενο</string>
     <string name="ttExportICalFile">Αρχείο iCalendar</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">Βρέθηκε νέα έκδοση</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">Νέα έκδοση</string>
@@ -57,7 +56,6 @@
     <string name="text_no_content">Χωρίς περιεχόμενο</string>
     <string name="settings_exterior">Στυλ</string>
     <string name="text_reset">Επαναφορά</string>
-    <string name="advice_textview_derive_details">Αντικαταστήστε το εμπλουτισμένο κείμενο από τον ιστότοπο στο πρόχειρο με αντίστοιχο απλό κείμενο</string>
     <string name="exterior_dark_staus">Σκούρο εικονίδιο γραμμής κατάστασης</string>
     <string name="exterior_dark_navigation">Σκούρο εικονίδιο γραμμής πλοήγησης</string>
     <string name="text_remove">Αφαιρώ</string>
@@ -231,7 +229,6 @@
     <string name="versatile_device_controls_mdu_ctrl_desc">Ανανέωση δεδομένων</string>
     <string name="versatile_device_controls_mdu_hint">Πατήστε για ανανέωση</string>
     <string name="advice_source_code">Πηγαίος κώδικας</string>
-    <string name="advice_translation_program">Πρόγραμμα μετάφρασης</string>
     <string name="app_device_controls">Έλεγχοι Boundo</string>
     <string name="access_sys_usage">Επιτρέψτε στο Boundo να έχει πρόσβαση στα δεδομένα χρήσης</string>
     <string name="versatile_device_controls_at_status_on">%.0f min</string>
@@ -242,7 +239,6 @@
     <string name="at_hour_hint">Ωρα</string>
     <string name="at_minute_hint">Λεπτό</string>
     <string name="advice_source_sub">Ανακατεύθυνση στο Github</string>
-    <string name="advice_translation_sub">Ανακατεύθυνση στα Έγγραφα Google</string>
     <string name="unit_desc_requirement_tw">Υποστήριξη ζωντανής ταπετσαρίας</string>
     <string name="unit_device_manager">Διαχειριστή της συσκευής</string>
     <string name="versatile_device_controls_dm_hint_off">Πατήστε για σύνδεση</string>

@@ -25,7 +25,6 @@
     <string name="Settings_LanguagePicker_Auto">시스템을 따르십시오</string>
     <string name="Settings_Language_Button_Cancel">취소</string>
     <string name="Settings_Language_Dialog_Title">언어</string>
-    <string name="Settings_Button_Derive">일반 텍스트 추출</string>
     <string name="ttExportICalFile">iCalendar 파일</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">새로운 버전 감지</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">새로운 에디션</string>
@@ -54,7 +53,6 @@
     <string name="text_OK">확인</string>
     <string name="text_cancel">취소</string>
     <string name="text_done">수행하다</string>
-    <string name="advice_textview_derive_details">클립 보드에있는 웹 페이지의 서식있는 텍스트를 해당 일반 텍스트로 바꿉니다.</string>
     <string name="text_no_content">빈</string>
     <string name="settings_exterior">스타일</string>
     <string name="text_reset">초기화</string>
@@ -232,7 +230,6 @@
     <string name="versatile_device_controls_mdu_ctrl_desc">데이터 새로 고침</string>
     <string name="versatile_device_controls_mdu_hint">새로 고침을 클릭하십시오.</string>
     <string name="advice_source_code">소스 코드</string>
-    <string name="advice_translation_program">번역 계획</string>
     <string name="app_device_controls">Boundo 제어 센터</string>
     <string name="access_sys_usage">Boundo가 사용 데이터를 읽도록 허용</string>
     <string name="twWallpaperLight">밝은 톤 벽지</string>
@@ -242,7 +239,6 @@
     <string name="at_hour_hint">시</string>
     <string name="at_minute_hint">분</string>
     <string name="advice_source_sub">Github로 이동</string>
-    <string name="advice_translation_sub">Google 문서로 이동</string>
     <string name="unit_desc_requirement_tw">라이브 배경 화면 지원</string>
     <string name="unit_device_manager">장비 관리</string>
     <string name="versatile_device_controls_dm_hint_off">연결하려면 클릭</string>

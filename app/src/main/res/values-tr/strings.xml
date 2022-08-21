@@ -25,7 +25,6 @@
     <string name="Settings_LanguagePicker_Auto">Sistemi takip et</string>
     <string name="Settings_Language_Button_Cancel">İptal etmek</string>
     <string name="Settings_Language_Dialog_Title">Diller</string>
-    <string name="Settings_Button_Derive">Düz metin türetme</string>
     <string name="ttExportICalFile">iCalendar dosyası</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">Yeni sürüm bulundu</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">Yeni sürüm</string>
@@ -57,7 +56,6 @@
     <string name="text_no_content">İçerik yok</string>
     <string name="settings_exterior">stil</string>
     <string name="text_reset">Sıfırla</string>
-    <string name="advice_textview_derive_details">Zengin metni, web sitesindeki karşılık gelen düz metne göre değiştirin</string>
     <string name="exterior_dark_staus">Karanlık durum çubuğu simgesi</string>
     <string name="exterior_dark_navigation">Karanlık gezinti çubuğu simgesi</string>
     <string name="text_remove">Kaldırmak</string>
@@ -231,7 +229,6 @@
     <string name="versatile_device_controls_mdu_ctrl_desc">Bilgiyi Yenile</string>
     <string name="versatile_device_controls_mdu_hint">Yenilemek için dokunun</string>
     <string name="advice_source_code">Kaynak kodu</string>
-    <string name="advice_translation_program">Çeviri programı</string>
     <string name="app_device_controls">Boundo Kontrolleri</string>
     <string name="access_sys_usage">Boundo\'nun kullanım verilerine erişmesine izin verin</string>
     <string name="versatile_device_controls_at_status_on">%.0f min</string>
@@ -242,7 +239,6 @@
     <string name="at_hour_hint">Saat</string>
     <string name="at_minute_hint">Dakika</string>
     <string name="advice_source_sub">Github\'a yeniden yönlendir</string>
-    <string name="advice_translation_sub">Google Dokümanlar\'a yönlendirin</string>
     <string name="unit_desc_requirement_tw">Canlı duvar kağıdı desteği</string>
     <string name="unit_device_manager">Aygıt Yöneticisi</string>
     <string name="versatile_device_controls_dm_hint_off">Bağlanmak için dokunun</string>
