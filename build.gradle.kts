@@ -30,7 +30,7 @@ buildscript {
         }
     }
     val versions = object {
-        val kotlin = "1.6.10"
+        val kotlin = "1.7.10"
 //        val dokka = "0.10.1" // dokka and dokka gradle plugin
 //        val dokkaAndroidGradlePlugin = "0.9.18" // dokka android gradle plugin
         val gglHiltGradlePlugin = "2.38.1"  // 2.40.2 fails the build

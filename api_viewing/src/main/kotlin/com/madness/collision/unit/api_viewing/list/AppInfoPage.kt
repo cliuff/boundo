@@ -337,7 +337,6 @@ private fun AppInfoWithHeader(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DetailedAppInfo(
     cardColor: Color,
@@ -359,7 +358,6 @@ private fun DetailedAppInfo(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun FrontAppInfo(
     cardColor: Color,
@@ -724,9 +722,9 @@ private fun TagDetailsContent(
             val activated = expressed.activated
             val showDivider = remember { index != 0 && (activated || tags[index - 1].activated) }
             if (showDivider) Divider(
+                modifier = Modifier.padding(start = 20.dp),
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.15f),
                 thickness = 0.5.dp,
-                startIndent = 20.dp
             )
             if (activated) {
                 var showAabDetails by remember { mutableStateOf(false) }

@@ -16,6 +16,7 @@
 
 package com.madness.collision.unit.api_viewing.list
 
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.compose.foundation.*
@@ -103,9 +104,9 @@ private fun ExtendedAppInfo(shareIcon: () -> Unit, shareApk: () -> Unit) {
 @Composable
 private fun InfoDivider() {
     Divider(
+        modifier = Modifier.padding(start = 20.dp),
         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.15f),
         thickness = 0.5.dp,
-        startIndent = 20.dp,
     )
 }
 
@@ -120,7 +121,7 @@ private fun PackageManager.queryIntentLegacy(intent: Intent) = queryIntentActivi
 private fun ExternalActions() {
     val context = LocalContext.current
     val appInfoOwners = remember {
-        val intent = Intent(Intent.ACTION_SHOW_APP_INFO)
+        val intent = Intent(actionShowAppInfo)
         val activities = run a@{
             val pkgMan = context.packageManager
             if (OsUtils.dissatisfy(OsUtils.T)) return@a pkgMan.queryIntentLegacy(intent)
@@ -167,40 +168,47 @@ private fun ExternalActions() {
         for (i in activeStores.indices) {
             if (i > 0) Spacer(modifier = Modifier.width(10.dp))
             val (pkgName, p) = activeStores[i]
-            if (pkgName == packageSettings) {
-                ExternalActionItem(p) c@{
-                    if (app.isNotArchive) {
-                        safely { context.startActivity(app.settingsPage()) }
-                        return@c
-                    }
-                    safely { context.startActivity(app.apkPage()) }
-                        ?: CollisionDialog.infoCopyable(context, app.appPackage.basePath).show()
-                }
-                continue
-            }
-            if (pkgName == packageAppManager) {
-                ExternalActionItem(p) c@{
-                    val intent = Intent()
-                        .setClassName(packageAppManager, infoAppManager)
-                        .putExtra("pkg", app.packageName)
-                    safely { context.startActivity(intent) }
-                }
-                continue
-            }
-            if (pkgName in appInfoOwners) {
-                ExternalActionItem(p) c@{
-                    val intent = Intent(Intent.ACTION_SHOW_APP_INFO)
-                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        .putExtra(Intent.EXTRA_PACKAGE_NAME, app.packageName)
-                        .setPackage(pkgName)
-                    safely { context.startActivity(intent) }
-                }
-                continue
-            }
             ExternalActionItem(p) {
-                safely { context.startActivity(app.storePage(pkgName, direct = true)) }
-                    ?: safely { context.startActivity(app.storePage(pkgName, direct = false)) }
+                launchOwner(pkgName in appInfoOwners, pkgName, app, context)
             }
+        }
+    }
+}
+
+private val actionShowAppInfo: String
+    get() = if (OsUtils.satisfy(OsUtils.N)) Intent.ACTION_SHOW_APP_INFO
+    else "android.intent.action.SHOW_APP_INFO"
+
+private val extraPackageName: String
+    get() = if (OsUtils.satisfy(OsUtils.N)) Intent.EXTRA_PACKAGE_NAME
+    else "android.intent.extra.PACKAGE_NAME"
+
+private fun launchOwner(isStandard: Boolean, pkgName: String, app: ApiViewingApp, context: Context) {
+    when {
+        isStandard -> {
+            val intent = Intent(actionShowAppInfo)
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                .putExtra(extraPackageName, app.packageName)
+                .setPackage(pkgName)
+            safely { context.startActivity(intent) }
+        }
+        pkgName == packageSettings -> {
+            if (app.isNotArchive) {
+                safely { context.startActivity(app.settingsPage()) }
+                return
+            }
+            safely { context.startActivity(app.apkPage()) }
+                ?: CollisionDialog.infoCopyable(context, app.appPackage.basePath).show()
+        }
+        pkgName == packageAppManager -> {
+            val intent = Intent()
+                .setClassName(packageAppManager, infoAppManager)
+                .putExtra("pkg", app.packageName)
+            safely { context.startActivity(intent) }
+        }
+        else -> {
+            safely { context.startActivity(app.storePage(pkgName, direct = true)) }
+                ?: safely { context.startActivity(app.storePage(pkgName, direct = false)) }
         }
     }
 }

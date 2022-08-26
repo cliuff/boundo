@@ -94,9 +94,9 @@ class MainApplication : SplitCompatApplication(), Thread.UncaughtExceptionHandle
             .build()
     }
 
-    override fun uncaughtException(t: Thread?, e: Throwable?) {
+    override fun uncaughtException(t: Thread, e: Throwable) {
         // not all Android versions will print the stack trace automatically
-        e?.printStackTrace()
+        e.printStackTrace()
 
         val intent = Intent ()
         intent.action = BuildConfig.APPLICATION_ID + ".IMMORTALITY"

@@ -80,7 +80,7 @@ android {
     buildFeatures.compose = true
     composeOptions {
         // Jetpack Compose compiler version
-        kotlinCompilerExtensionVersion = Versions.androidxCompose
+        kotlinCompilerExtensionVersion = Versions.androidxComposeCompiler
     }
 }
 

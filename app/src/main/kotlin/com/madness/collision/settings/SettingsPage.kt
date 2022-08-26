@@ -101,7 +101,11 @@ private fun Settings(options: List<Triple<Int, Int, () -> Unit>>) {
             options.forEachIndexed { index, (label, icon, onClick) ->
                 if (index != 0) {
                     val dividerColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.22f)
-                    Divider(color = dividerColor, thickness = 0.5.dp, startIndent = 70.dp)
+                    Divider(
+                        modifier = Modifier.padding(start = 70.dp),
+                        color = dividerColor,
+                        thickness = 0.5.dp,
+                    )
                 }
                 SettingsItem(
                     icon = icon,

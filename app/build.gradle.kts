@@ -185,7 +185,7 @@ android {
     }
     composeOptions {
         // Jetpack Compose compiler version
-        kotlinCompilerExtensionVersion = Versions.androidxCompose
+        kotlinCompilerExtensionVersion = Versions.androidxComposeCompiler
     }
     dynamicFeatures.addAll(arrayOf(":school_timetable", ":api_viewing"))
     bundle {
