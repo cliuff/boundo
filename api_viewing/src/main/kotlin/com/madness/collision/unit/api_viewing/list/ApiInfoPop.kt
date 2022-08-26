@@ -38,7 +38,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
-import coil.loadAny
+import coil.load
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.card.MaterialCardView
@@ -202,7 +202,7 @@ internal class ApiInfoPop: BottomSheetDialogFragment(), SystemBarMaintainerOwner
 //                applicationInfo = context.packageManager.getApplicationInfo(packageName, PackageManager.PERMISSION_GRANTED) // todo archive case
                 mViews.ver.text = verName
                 mvApp.name.text = name
-                mvApp.icon.loadAny(AppPackageInfo(context, this))
+                mvApp.icon.load(AppPackageInfo(context, this))
                 if (isAiAvailable) {
                     val tint = if (adaptiveIcon) X.getColor(context, R.color.androidRobotGreen) else Color.LTGRAY
                     mViews.app.badge.drawable.setTint(tint)

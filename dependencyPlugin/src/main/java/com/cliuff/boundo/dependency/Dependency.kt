@@ -66,7 +66,7 @@ object Versions {
     const val gglHilt = "2.40.2"
     // This dependency is set to compile only
     const val googleWearable = "2.8.1"
-    const val coil = "1.4.0"
+    const val coil = "2.2.0"
     const val jsoup = "1.14.3"
     const val junit4 = "4.13.2"
     const val junitJupiter = "5.8.1"

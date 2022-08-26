@@ -23,6 +23,7 @@ import com.google.android.play.core.splitcompat.SplitCompatApplication
 import com.madness.collision.BuildConfig
 import com.madness.collision.util.X
 import com.madness.collision.util.ui.AppIconFetcher
+import com.madness.collision.util.ui.AppIconKeyer
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.Flow
@@ -88,8 +89,9 @@ class MainApplication : SplitCompatApplication(), Thread.UncaughtExceptionHandle
         val iconSIze = X.size(context, 48f, X.DP).roundToInt()
         return ImageLoader.Builder(context)
             .crossfade(true)
-            .componentRegistry {
-                add(AppIconFetcher(iconSIze, false, context))
+            .components {
+                add(AppIconKeyer(context))
+                add(AppIconFetcher.Factory(iconSIze, false, context))
             }
             .build()
     }

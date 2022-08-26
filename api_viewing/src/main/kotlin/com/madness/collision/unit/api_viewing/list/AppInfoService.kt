@@ -24,7 +24,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import coil.load
-import coil.loadAny
 import com.madness.collision.misc.MiscApp
 import com.madness.collision.R
 import com.madness.collision.unit.api_viewing.ApiViewingViewModel
@@ -142,7 +141,7 @@ class AppInfoService {
                 if (storeIcon == null) {
                     setPadding(0, 0, 0, 0)
                 } else {
-                    loadAny(AppPackageInfo(context, storeIcon))
+                    load(AppPackageInfo(context, storeIcon))
                     setOnClickListener(listener)
                 }
             }
@@ -150,7 +149,7 @@ class AppInfoService {
 
         if (app.isNotArchive || X.belowOff(X.Q)) {
             val settingsIcon = storeMap[packageSettings]
-            if (settingsIcon != null) vSettings.loadAny(AppPackageInfo(context, settingsIcon))
+            if (settingsIcon != null) vSettings.load(AppPackageInfo(context, settingsIcon))
             else vSettings.load(R.mipmap.logo_settings)
             vSettings.setOnClickListener {
                 if (app.isNotArchive) {

@@ -55,7 +55,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.activityViewModels
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -445,7 +445,7 @@ private fun AppHeaderContent(cardColor: Color) {
             if (pkgInfo.uid > 0 || app.isArchive) {
                 Image(
                     modifier = Modifier.size(40.dp),
-                    painter = rememberImagePainter(pkgInfo),
+                    painter = rememberAsyncImagePainter(pkgInfo),
                     contentDescription = null,
                 )
             } else {

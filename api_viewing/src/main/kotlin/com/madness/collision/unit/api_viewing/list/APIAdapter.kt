@@ -25,7 +25,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
-import coil.loadAny
+import coil.load
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.ChipGroup
 import com.madness.collision.R
@@ -188,7 +188,7 @@ internal open class APIAdapter(context: Context, private val listener: Listener,
 //            holder.logo.setImageBitmap(appInfo.icon)
 //        }
         scope.launch(Dispatchers.IO) {
-            holder.logo.loadAny(AppPackageInfo(context, appInfo))
+            holder.logo.load(AppPackageInfo(context, appInfo))
         }
 
         val loadLimitHalf = loadPref.loadLimitHalf

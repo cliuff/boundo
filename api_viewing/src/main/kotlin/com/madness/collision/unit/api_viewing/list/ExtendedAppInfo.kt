@@ -46,7 +46,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.madness.collision.BuildConfig
 import com.madness.collision.R
 import com.madness.collision.misc.MiscApp
@@ -300,7 +300,7 @@ private fun ExternalActionItem(packInfo: AppIconPackageInfo?, onClick: () -> Uni
                     indication = rememberRipple(bounded = false),
                 )
                 .size(40.dp),
-            painter = rememberImagePainter(packInfo),
+            painter = rememberAsyncImagePainter(packInfo),
             contentDescription = null,
         )
     } else {

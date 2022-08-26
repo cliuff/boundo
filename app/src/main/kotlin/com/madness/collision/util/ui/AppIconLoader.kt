@@ -26,13 +26,13 @@ import android.util.ArrayMap
 import androidx.annotation.Px
 import androidx.core.content.pm.PackageInfoCompat
 import androidx.core.os.UserHandleCompat
-import coil.bitmap.BitmapPool
+import coil.ImageLoader
 import coil.decode.DataSource
-import coil.decode.Options
 import coil.fetch.DrawableResult
 import coil.fetch.FetchResult
 import coil.fetch.Fetcher
-import coil.size.Size
+import coil.key.Keyer
+import coil.request.Options
 import me.zhanghai.android.appiconloader.iconloaderlib.BaseIconFactory
 import me.zhanghai.android.appiconloader.iconloaderlib.BitmapInfo
 import java.util.concurrent.ConcurrentLinkedQueue
@@ -100,19 +100,31 @@ class AppIconLoader(
     }
 }
 
-class AppIconFetcher(@Px iconSize: Int, shrinkNonAdaptiveIcons: Boolean, context: Context) :
-    Fetcher<PackageInfo> {
-    private val context = context.applicationContext
-    private val iconLoader = AppIconLoader(iconSize, shrinkNonAdaptiveIcons, this.context)
+class AppIconFetcher(private val iconLoader: AppIconLoader, private val data: PackageInfo, private val context: Context) : Fetcher {
 
-    override suspend fun fetch(pool: BitmapPool, data: PackageInfo, size: Size, options: Options): FetchResult {
+    class Factory(@Px iconSize: Int, shrinkNonAdaptiveIcons: Boolean, context: Context)
+        : Fetcher.Factory<PackageInfo> {
+        private val context = context.applicationContext
+        private val iconLoader = AppIconLoader(iconSize, shrinkNonAdaptiveIcons, this.context)
+
+        override fun create(data: PackageInfo, options: Options, imageLoader: ImageLoader): Fetcher {
+            return AppIconFetcher(iconLoader, data, context)
+        }
+    }
+
+    override suspend fun fetch(): FetchResult {
         val icon = iconLoader.loadIcon(data.applicationInfo)
         return DrawableResult(BitmapDrawable(context.resources, icon), true, DataSource.DISK)
     }
+}
 
-    override fun handles(data: PackageInfo): Boolean = data.handleable
+class AppIconKeyer(context: Context) : Keyer<PackageInfo> {
+    private val context = context.applicationContext
 
-    override fun key(data: PackageInfo): String = AppIconLoader.getIconKey(data, context)
+    override fun key(data: PackageInfo, options: Options): String? {
+        if (data.handleable.not()) return null
+        return AppIconLoader.getIconKey(data, context)
+    }
 }
 
 interface PackageInfo {
