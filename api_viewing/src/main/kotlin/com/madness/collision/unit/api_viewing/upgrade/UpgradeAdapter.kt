@@ -68,6 +68,20 @@ internal class UpgradeAdapter(context: Context, listener: Listener, scope: Corou
         return Holder(binding)
     }
 
+    override fun onMakeBody(holder: APIAdapter.Holder, index: Int, payloads: MutableList<Any>) {
+        if (payloads.isEmpty()) {
+            onMakeBody(holder, index)
+            return
+        }
+        if (holder !is Holder) return
+        payloads.forEach p@{ p ->
+            if (p !is Payload) return@p  // continue
+            when (p) {
+                Payload.UpdateTime -> bindUpdateTime(holder, upgrades[index])
+            }
+        }
+    }
+
     override fun onMakeBody(holder: APIAdapter.Holder, index: Int) {
         if (holder !is Holder) return
         super.onMakeBody(holder, index)
@@ -96,8 +110,12 @@ internal class UpgradeAdapter(context: Context, listener: Listener, scope: Corou
         }
 
         holder.preVer.text = upgrade.versionName.first
+        bindUpdateTime(holder, upgrade)
+    }
+
+    private fun bindUpdateTime(holder: Holder, upgrade: Upgrade) {
         val updateTime = DateUtils.getRelativeTimeSpanString(upgrade.updateTime.first,
-                System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS)
+            System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS)
         holder.preTime.text = updateTime
     }
 }

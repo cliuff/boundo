@@ -331,7 +331,17 @@ private fun AppInfoWithHeader(
             .background(brush = backGradient)
     ) {
         Column(modifier = Modifier) {
-            AppHeaderContent(cardColor)
+            BoxWithConstraints {
+                val sizeToken = remember { maxWidth > 360.dp }
+                val margin = if (sizeToken) 40.dp else 30.dp
+                val (mTop, mBottom) = if (sizeToken) (30.dp to 18.dp) else (18.dp to 14.dp)
+                AppHeaderContent(
+                    cardColor,
+                    modifier = Modifier
+                        .padding(horizontal = margin)
+                        .padding(top = mTop, bottom = mBottom),
+                )
+            }
             content()
         }
     }
@@ -432,13 +442,10 @@ fun NestedScrollContent(content: @Composable () -> Unit) {
 }
 
 @Composable
-private fun AppHeaderContent(cardColor: Color) {
+private fun AppHeaderContent(cardColor: Color, modifier: Modifier = Modifier) {
     val app = LocalApp.current
     val seal = remember { SealManager.seals[app.targetSDKLetter] }
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 40.dp)) {
-        Spacer(modifier = Modifier.height(30.dp))
+    Column(modifier = modifier.fillMaxWidth()) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             val context = LocalContext.current
             val pkgInfo = remember { AppPackageInfo(context, app) }
@@ -474,7 +481,6 @@ private fun AppHeaderContent(cardColor: Color) {
                 )
             }
         }
-        Spacer(modifier = Modifier.height(18.dp))
     }
 }
 
@@ -697,7 +703,7 @@ private fun TagDetailsContent(
     }
     val list = lists
     if (list != null) {
-        Column(modifier = Modifier.padding(vertical = 8.dp)) {
+        Column {
             TagDetailsContent(list, getClick, splitApks)
         }
     } else {
@@ -750,13 +756,17 @@ private fun TagDetailsContent(
                     if (!isAab) return@run expressed.intrinsic.let(getClick);
                     { showAabDetails = !showAabDetails }
                 }
+                val shrinkTop = index > 0 && !showDivider
                 TagItem(
                     title = expressed.label,
                     desc = expressed.desc,
                     icon = info.icon?.bitmap,
-                    shrinkTop = index > 0 && !showDivider,
                     chevron = chevron,
                     onClick = onClick,
+                    modifier = Modifier
+                        .let { if (index == 0) it.padding(top = 8.dp) else it }
+                        .let { if (index == tags.lastIndex) it.padding(bottom = 8.dp) else it }
+                        .padding(top = if (shrinkTop) 0.dp else 12.dp, bottom = 12.dp),
                 )
                 if (isAab) {
                     AnimatedVisibility(
@@ -768,11 +778,15 @@ private fun TagDetailsContent(
                     }
                 }
             } else {
+                val shrinkTop = index > 0 && !showDivider
                 TagItemDeactivated(
                     title = expressed.label,
                     desc = expressed.desc,
                     icon = info.icon?.bitmap,
-                    shrinkTop = index > 0 && !showDivider,
+                    modifier = Modifier
+                        .let { if (index == 0) it.padding(top = 8.dp) else it }
+                        .let { if (index == tags.lastIndex) it.padding(bottom = 8.dp) else it }
+                        .padding(top = if (shrinkTop) 0.dp else 6.dp, bottom = 6.dp),
                 )
             }
         }
@@ -784,15 +798,15 @@ private fun TagItem(
     title: String,
     desc: String?,
     icon: Bitmap?,
-    shrinkTop: Boolean,
     chevron: ImageVector?,
+    modifier: Modifier = Modifier,
     onClick: (() -> Unit)? = null,
 ) {
     Row(
         modifier = Modifier
             .let { if (onClick != null) it.clickable(onClick = onClick) else it }
             .padding(horizontal = 20.dp)
-            .padding(top = if (shrinkTop) 0.dp else 12.dp, bottom = 12.dp),
+            .then(modifier),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(modifier = Modifier.weight(1f)) {
@@ -830,13 +844,9 @@ private fun TagItem(
 }
 
 @Composable
-private fun TagItemDeactivated(title: String, desc: String?, icon: Bitmap?, shrinkTop: Boolean) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp)
-            .padding(top = if (shrinkTop) 0.dp else 6.dp, bottom = 6.dp)
-    ) {
+private fun TagItemDeactivated(
+    title: String, desc: String?, icon: Bitmap?, modifier: Modifier = Modifier) {
+    Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp).then(modifier)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             TagItemIcon(icon = icon, activated = false)
             Spacer(modifier = Modifier.width(6.dp))

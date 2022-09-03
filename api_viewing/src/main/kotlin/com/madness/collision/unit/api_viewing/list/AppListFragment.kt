@@ -18,16 +18,22 @@ package com.madness.collision.unit.api_viewing.list
 
 import android.content.Context
 import android.os.Bundle
+import android.os.SystemClock
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Filterable
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.madness.collision.unit.api_viewing.MyUnit
 import com.madness.collision.unit.api_viewing.Utils
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
@@ -35,9 +41,8 @@ import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.databinding.AvListBinding
 import com.madness.collision.util.*
 import com.madness.collision.util.ui.appLocale
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
+import kotlin.time.Duration.Companion.seconds
 
 internal class AppListFragment : TaggedFragment(), AppList, Filterable {
 
@@ -110,6 +115,33 @@ internal class AppListFragment : TaggedFragment(), AppList, Filterable {
 
         viewModel.apps4Display.observe(viewLifecycleOwner) {
             mAdapter.apps = it
+            timeUpdateJob?.cancel()
+            if (mAdapter.getSortMethod() != MyUnit.SORT_POSITION_API_TIME) return@observe
+            if (it.isNullOrEmpty()) return@observe
+            timeUpdateJob = scheduleTimeUpdate()
+        }
+    }
+
+    private var timeUpdateJob: Job? = null
+
+    private fun scheduleTimeUpdate(lifecycle: Lifecycle = viewLifecycleOwner.lifecycle)
+    = lifecycle.coroutineScope.launch {
+        val scheduleTime = SystemClock.uptimeMillis()
+        val man = mManager as LinearLayoutManager
+        lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            // delay only right after scheduling
+            if (SystemClock.uptimeMillis() - scheduleTime < 500) delay(30.seconds)
+            while (isActive) {
+                val startIndex = man.findFirstVisibleItemPosition()
+                val endIndex = man.findLastVisibleItemPosition()
+                if (startIndex <= endIndex) {
+                    val indexCount = endIndex - startIndex + 1
+                    val payload = APIAdapter.Payload.UpdateTime
+                    mAdapter.notifyItemRangeChanged(startIndex, indexCount, payload)
+                    Log.d("av.list", "Updated time for $indexCount items from $startIndex")
+                }
+                delay(45.seconds)
+            }
         }
     }
 

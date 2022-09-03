@@ -27,8 +27,7 @@ import android.view.ViewGroup
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.*
 import androidx.recyclerview.widget.*
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.madness.collision.diy.SpanAdapter
@@ -48,13 +47,12 @@ import com.madness.collision.unit.api_viewing.upgrade.UpgradeComparator
 import com.madness.collision.util.P
 import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.X
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import kotlinx.coroutines.withContext
 import kotlin.math.min
 import kotlin.math.roundToInt
+import kotlin.time.Duration.Companion.seconds
 
 internal class MyUpdatesFragment : TaggedFragment(), Updatable {
 
@@ -339,7 +337,7 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
                     if (newList.isNotEmpty()) insertSections(0, newList)
                 } else if (newList.isEmpty()) {
                     val adapters = concatAdapter.adapters
-                    adapters.forEach { concatAdapter.removeAdapter(it) }
+                    adapters.forEach { removeAdapter(it) }
                 }
                 sectionList = newList
             }
@@ -397,8 +395,9 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
                         val index = position + offset
                         val adapterIndex = index * 2
                         Log.d("AvUpdates", "Diff remove: ${diffList[index].first} at $index, adapter at $adapterIndex")
-                        concatAdapter.removeAdapter(adapters[adapterIndex + 1])
-                        concatAdapter.removeAdapter(adapters[adapterIndex])
+                        arrayOf(adapterIndex + 1, adapterIndex)
+                            .mapNotNull { adapters.getOrNull(it) }
+                            .forEach { removeAdapter(it) }
                         diffList.removeAt(index)
                     }
                 }
@@ -464,6 +463,55 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
             val adapterPos = position + i * 2
             concatAdapter.addAdapter(adapterPos, titleAdapter)
             concatAdapter.addAdapter(adapterPos + 1, adapter)
+        }
+        timeUpdateJob?.cancel()
+        if (concatAdapter.adapters.filterIsInstance<APIAdapter>().isEmpty()) return
+        timeUpdateJob = scheduleTimeUpdate()
+    }
+
+    private fun removeAdapter(adapter: RecyclerView.Adapter<*>) {
+        val concat = concatAdapter
+        concat.removeAdapter(adapter)
+        if (concat.adapters.filterIsInstance<APIAdapter>().isEmpty()) {
+            timeUpdateJob?.cancel()
+        }
+    }
+
+    private var timeUpdateJob: Job? = null
+
+    private fun scheduleTimeUpdate(lifecycle: Lifecycle = viewLifecycleOwner.lifecycle)
+    = lifecycle.coroutineScope.launch {
+        val scheduleTime = SystemClock.uptimeMillis()
+        val man = viewBinding.avUpdListRecycler.layoutManager as LinearLayoutManager
+        lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            // delay only right after scheduling
+            if (SystemClock.uptimeMillis() - scheduleTime < 500) delay(30.seconds)
+            while (isActive) {
+                val startIndex = man.findFirstVisibleItemPosition()
+                val endIndex = man.findLastVisibleItemPosition()
+                if (startIndex <= endIndex) {
+                    Log.d("av.updates", "Updating time [$startIndex, $endIndex]")
+                    updateTime(startIndex, endIndex)
+                }
+                delay(45.seconds)
+            }
+        }
+    }
+
+    private fun updateTime(startIndex: Int, endIndex: Int) {
+        val adapters = concatAdapter.adapters
+        val accu = adapters.runningFold(0) { c, it -> c + it.itemCount }
+        adapters.forEachIndexed m@{ i, adapter ->
+            if (adapter !is APIAdapter) return@m
+            val accuCount = accu[i]
+            if (startIndex >= accuCount) return@m
+            val lastAccuCount = if (i > 0) accu[i - 1] else 0
+            if (endIndex < accuCount && endIndex < lastAccuCount) return@m
+            val changeIndex = if (startIndex >= lastAccuCount) startIndex - lastAccuCount else 0
+            val changeEnd = if (endIndex < accuCount) endIndex + 1 - lastAccuCount else adapter.itemCount
+            val changeCount = changeEnd - changeIndex
+            adapter.notifyItemRangeChanged(changeIndex, changeCount, APIAdapter.Payload.UpdateTime)
+            Log.d("av.updates", "Updated time for $changeCount items from $changeIndex")
         }
     }
 

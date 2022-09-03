@@ -92,6 +92,10 @@ abstract class SandwichAdapter<VH : RecyclerView.ViewHolder>(override val contex
 
     protected open fun onMakeBody(holder: VH, index: Int) {}
 
+    protected open fun onMakeBody(holder: VH, index: Int, payloads: MutableList<Any>) {
+        onMakeBody(holder, index)
+    }
+
     private fun onMakeFillIn(holder: RecyclerView.ViewHolder) {
         if (holder !is SpaceHolder) return
         holder.space.minimumHeight = 0
@@ -114,6 +118,16 @@ abstract class SandwichAdapter<VH : RecyclerView.ViewHolder>(override val contex
             TYPE_FILL_IN -> onMakeFillIn(holder)
             TYPE_BOTTOM_COVER -> onMakeBottomCover(holder)
             else -> onMakeBody(holder as VH, position - frontCount)
+        }
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, payloads: MutableList<Any>) {
+        when (getItemViewType(position)) {
+            TYPE_TOP_COVER -> onMakeTopCover(holder)
+            TYPE_FILL_IN -> onMakeFillIn(holder)
+            TYPE_BOTTOM_COVER -> onMakeBottomCover(holder)
+            else -> onMakeBody(holder as VH, position - frontCount, payloads)
         }
     }
 }

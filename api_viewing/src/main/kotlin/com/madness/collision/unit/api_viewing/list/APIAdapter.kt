@@ -73,6 +73,8 @@ internal open class APIAdapter(context: Context, private val listener: Listener,
         }
     }
 
+    enum class Payload { UpdateTime }
+
     @Suppress("unchecked_cast")
     open var appList: List<*>
         get() = apps
@@ -112,6 +114,8 @@ internal open class APIAdapter(context: Context, private val listener: Listener,
         this.sortMethod = sortMethod
         return this
     }
+
+    fun getSortMethod() = sortMethod
 
     override fun onCreateBodyItemViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val binding = AdapterAvBinding.inflate(inflater, parent, false)
@@ -165,6 +169,19 @@ internal open class APIAdapter(context: Context, private val listener: Listener,
             }
             if (elapsingTime.elapsed() >= 6000) break
             delay(200)
+        }
+    }
+
+    override fun onMakeBody(holder: Holder, index: Int, payloads: MutableList<Any>) {
+        if (payloads.isEmpty()) {
+            onMakeBody(holder, index)
+            return
+        }
+        payloads.forEach p@{ p ->
+            if (p !is Payload) return@p  // continue
+            when (p) {
+                Payload.UpdateTime -> bindUpdateTime(holder, apps[index])
+            }
         }
     }
 
@@ -234,14 +251,7 @@ internal open class APIAdapter(context: Context, private val listener: Listener,
             holder.card.setCardBackgroundColor(colorSurface)
         }
 
-        if (shouldShowTime && appInfo.isNotArchive) {
-            val updateTime = DateUtils.getRelativeTimeSpanString(appInfo.updateTime,
-                    System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS)
-            holder.updateTime.text = updateTime
-            holder.updateTime.visibility = View.VISIBLE
-        } else {
-            holder.updateTime.visibility = View.GONE
-        }
+        bindUpdateTime(holder, appInfo)
 
         holder.tags.removeAllViews()
         scope.launch(Dispatchers.Default) {
@@ -258,6 +268,17 @@ internal open class APIAdapter(context: Context, private val listener: Listener,
 
         holder.card.setOnLongClickListener {
             listener.longClick.invoke(appInfo)
+        }
+    }
+
+    private fun bindUpdateTime(holder: Holder, appInfo: ApiViewingApp) {
+        if (shouldShowTime && appInfo.isNotArchive) {
+            val updateTime = DateUtils.getRelativeTimeSpanString(appInfo.updateTime,
+                System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS)
+            holder.updateTime.text = updateTime
+            holder.updateTime.visibility = View.VISIBLE
+        } else {
+            holder.updateTime.visibility = View.GONE
         }
     }
 
