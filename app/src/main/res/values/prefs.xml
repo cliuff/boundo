@@ -119,6 +119,21 @@
         <item>@string/lang_tr_tr</item>
         <item>@string/lang_de</item>
         <item>@string/lang_de_de</item>
+        <item>@string/lang_bn</item>
+        <item>@string/lang_bn_bd</item>
+        <item>@string/lang_fa</item>
+        <item>@string/lang_fa_af</item>
+        <item>@string/lang_fa_ir</item>
+        <item>@string/lang_hi</item>
+        <item>@string/lang_hi_in</item>
+        <item>@string/lang_in</item>
+        <item>@string/lang_in_id</item>
+        <item>@string/lang_mr</item>
+        <item>@string/lang_mr_in</item>
+        <item>@string/lang_pa</item>
+        <item>@string/lang_pa_pk</item>
+        <item>@string/lang_pl</item>
+        <item>@string/lang_pl_pl</item>
     </string-array>
     <string-array name="prefSettingsLangValues">
         <item>auto</item>
@@ -159,6 +174,21 @@
         <item>tr_TR</item>
         <item>de</item>
         <item>de_DE</item>
+        <item>bn</item>
+        <item>bn_BD</item>
+        <item>fa</item>
+        <item>fa_AF</item>
+        <item>fa_IR</item>
+        <item>hi</item>
+        <item>hi_IN</item>
+        <item>in</item>
+        <item>in_ID</item>
+        <item>mr</item>
+        <item>mr_IN</item>
+        <item>pa</item>
+        <item>pa_PK</item>
+        <item>pl</item>
+        <item>pl_PL</item>
     </string-array>
     <string name="Settings_LanguagePicker_English" translatable="false">English</string>
     <string name="language_en_us" translatable="false">English (US)</string>
@@ -197,5 +227,20 @@
     <string name="languageRuRU" translatable="false">Русский (Россия)</string>
     <string name="languageUk" translatable="false">Українська</string>
     <string name="languageUkUA" translatable="false">Українська (Україна)</string>
+    <string name="lang_bn" translatable="false">বাংলা</string>
+    <string name="lang_bn_bd" translatable="false">বাংলা (বাংলাদেশ)</string>
+    <string name="lang_fa" translatable="false">فارسی</string>
+    <string name="lang_fa_af" translatable="false">فارسی (افغانستان)</string>
+    <string name="lang_fa_ir" translatable="false">فارسی (ایران)</string>
+    <string name="lang_hi" translatable="false">हिन्दी</string>
+    <string name="lang_hi_in" translatable="false">हिन्दी (भारत)</string>
+    <string name="lang_in" translatable="false">Indonesia</string>
+    <string name="lang_in_id" translatable="false">Indonesia (Indonesia)</string>
+    <string name="lang_mr" translatable="false">मराठी</string>
+    <string name="lang_mr_in" translatable="false">मराठी (भारत)</string>
+    <string name="lang_pa" translatable="false">ਪੰਜਾਬੀ</string>
+    <string name="lang_pa_pk" translatable="false">ਪੰਜਾਬੀ (ਪਾਕਿਸਤਾਨ)</string>
+    <string name="lang_pl" translatable="false">polski</string>
+    <string name="lang_pl_pl" translatable="false">polski (Polska)</string>
 
 </resources>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2021 Clifford Liu
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="av_updates_recents">Baru-baru ini diperbarui</string>
+    <string name="sdkcheck_dialog_targetsdktext">Target</string>
+    <string name="sdkcheck_dialog_minsdktext">min.</string>
+    <string name="sdkcheck_sortspinner_sortbyname">Dengan nama</string>
+    <string name="sdkcheck_sortspinner_sortbyhighersdk">API tertinggi</string>
+    <string name="sdkcheck_sortspinner_sortbylowersdk">API Terendah</string>
+    <string name="sdkcheck_displayspinner_user">Aplikasi saya</string>
+    <string name="sdkcheck_displayspinner_usersystem">Semua aplikasi</string>
+    <string name="apiDetails">rincian</string>
+    <string name="apiDetailsVerName">"Nama versi: "</string>
+    <string name="apiDetailsVerCode">"Kode versi: "</string>
+    <string name="apiDetailsFirstInstall">"Instal pertama: "</string>
+    <string name="apiDetailsLastUpdate">"Pembaharuan Terakhir: "</string>
+    <string name="apiDetailsInsatllFrom">"Pemasang: "</string>
+    <string name="apiDetailsInstallUnknown">Tidak dikenal</string>
+    <string name="apiDetailsInstallGP">Google Play Store</string>
+    <string name="apiDetailsInstallPI">Pemasang Paket</string>
+    <string name="apiDetailsCert">Sertifikat</string>
+    <string name="apiDetailsValiSince">"Keabsahan sejak: "</string>
+    <string name="apiDetailsValiUntil">"Berlaku sampai: "</string>
+    <string name="apiDetailsIssuer">"Penerbit: "</string>
+    <string name="apiDetailsSubject">"Subjek: "</string>
+    <string name="apiDetailsSigAlg">"Algoritme tanda tangan: "</string>
+    <string name="apiDetailsSigAlgOID">"OID algoritma tanda tangan: "</string>
+    <string name="apiDetailsPermissions">Izin:</string>
+    <string name="apiDetailsActivities">Kegiatan:</string>
+    <string name="apiDetailsReceivers">Penerima Siaran:</string>
+    <string name="apiDetailsServices">Jasa:</string>
+    <string name="apiDetailsProviders">Penyedia:</string>
+    <string name="res_api_code_names_c">kue mangkok</string>
+    <string name="res_api_code_names_d">Donat</string>
+    <string name="res_api_code_names_e">Eclair</string>
+    <string name="res_api_code_names_f">Froyo</string>
+    <string name="res_api_code_names_g">roti jahe</string>
+    <string name="res_api_code_names_h">Sarang madu</string>
+    <string name="res_api_code_names_i">Sandwich Es Krim</string>
+    <string name="res_api_code_names_j">Jelly Bean</string>
+    <string name="res_api_code_names_k">Kit Kat</string>
+    <string name="res_api_code_names_l">permen lolipop</string>
+    <string name="res_api_code_names_m">Marshmallow</string>
+    <string name="res_api_code_names_n">Nougat</string>
+    <string name="res_api_code_names_o">Oreo</string>
+    <string name="res_api_code_names_p">Pai</string>
+    <string name="resApiCodeNamesB">Petit Empat</string>
+    <string name="resPrincipalCN">Nama yang umum</string>
+    <string name="resPrincipalOU">Unit organisasi</string>
+    <string name="resPrincipalO">Organisasi</string>
+    <string name="resPrincipalL">Kota atau Lokalitas</string>
+    <string name="resPrincipalST">Negara atau Provinsi</string>
+    <string name="resPrincipalC">Negara</string>
+    <string name="resPrincipalEmail">Surel</string>
+    <string name="apiInfoAiIconDes">Ikon (APK)</string>
+    <string name="apiInfoAiIconRDes">Ikon Bulat (APK)</string>
+    <string name="apiInfoAiIconDesSys">Ikon (sistem)</string>
+    <string name="apiInfoAiOverallDes">Ada dua set ikon peluncur yang dapat dimanifestasikan dalam apk, yang satu adalah ikon aplikasi normal dan yang lainnya adalah ikon aplikasi bulat.\nKedua set dapat berisi Ikon Adaptif, yang diperkenalkan dengan Android 8.0. Ikon aplikasi bulat diperkenalkan dengan Android 7.1.</string>
+    <string name="avTBViewingTarget">Lihat target/mnt. API</string>
+    <string name="avManual">Antarmuka pemrograman aplikasi (API), secara umum, adalah seperangkat metode komunikasi yang didefinisikan dengan jelas di antara berbagai komponen.\n\nKit pengembangan perangkat lunak (SDK) biasanya adalah seperangkat alat pengembangan perangkat lunak yang memungkinkan pembuatan aplikasi untuk platform pengembangan tertentu.\n\nAkibatnya, SDK platform berisi API yang sesuai dari platform tersebut.\n\nVersi API rilis Android disebut sebagai API Level.\n\nDengan setiap rilis Android baru datang banyak perubahan API, menghadirkan akses fitur baru, pembatasan akses privasi, peningkatan keamanan, dan peningkatan kinerja sambil menghentikan API yang tidak aman dan tidak efisien.\n\nTerkadang rilis Android hanya berisi perbaikan bug dan sebagainya tetapi tidak ada perubahan API sehingga API-nya Level tetap sama.\n\nTarget SDK Version menentukan API Level target yang dirancang aplikasi untuk digunakan.\n\nVersi SDK Minimum menentukan API Level minimum yang diperlukan aplikasi.\n\nBeberapa batasan dan penyempurnaan rilis Android baru akan berlaku untuk aplikasi hanya jika API Level targetnya cocok atau melebihi sistem Android perangkat.</string>
+    <string name="av_share_full">Penuh</string>
+    <string name="av_share_stroked">Dibelai</string>
+    <string name="av_updates_view_more">Lihat lebih banyak</string>
+    <string name="av_settings_tags">Tag</string>
+    <string name="av_settings_tags_system">Aplikasi sistem</string>
+    <string name="av_adapter_tag_system">Sistem</string>
+    <string name="av_ai">Ikon adaptif</string>
+    <string name="av_tag_has_splits">Bundel Aplikasi Android</string>
+    <string name="av_apks_select_folder">Pilih folder untuk dipindai</string>
+    <string name="av_pref_loading">Pemuatan daftar</string>
+    <string name="av_pref_loading_summary">Segarkan secara manual untuk memicu perubahan</string>
+    <string name="av_pref_displaying_summary">Perubahan dipicu secara otomatis</string>
+    <string name="av_pref_displaying">Menampilkan daftar</string>
+    <string name="av_adapter_tag_hidden">Tersembunyi</string>
+    <string name="av_settings_tag_hidden">Ikon aplikasi tidak ditampilkan di peluncur</string>
+    <string name="av_main_filter_tip">Coba tekan lama tag</string>
+    <string name="av_main_option_device_api">API Perangkat</string>
+    <string name="av_main_device_api_api">tingkat API</string>
+    <string name="av_upd_new">Baru dipasang</string>
+    <string name="av_upd_upg">Peningkatan API</string>
+    <string name="av_details_real_installer">"Pemasang sebenarnya: "</string>
+    <string name="av_upd_ver_upd">Versi diperbarui</string>
+    <string name="av_upd_pck_upd">Paket diperbarui</string>
+    <string name="av_tag_result_service">%s ditemukan di aplikasi ini</string>
+    <string name="av_tag_result_mipush_service">Diperiksa oleh MiPush SDK, jika tidak %s ditemukan di aplikasi ini</string>
+    <string name="av_tag_result_file">%s ditemukan di APK</string>
+    <string name="av_tag_result_ai">Aplikasi ini memiliki ikon adaptif</string>
+    <string name="av_tag_result_aab">APK terpisah ditemukan untuk aplikasi ini</string>
+    <string name="av_tag_result_sys">Aplikasi ini diinstal sebagai aplikasi sistem</string>
+    <string name="av_tag_result_hidden">Tidak ada aktivitas peluncur yang tersedia untuk aplikasi ini</string>
+    <string name="av_tag_result_full_64bit">Aplikasi ini kompatibel dengan ARM 64-bit dan x86 64-bit</string>
+    <string name="av_tag_result_pkg">Paket %s ditemukan di file dex APK</string>
+    <string name="av_tag_result_installer">Aplikasi ini dipasang oleh %s</string>
+    <string name="av_tag_result_dir">File ditemukan di bawah %s di APK</string>
+    <string name="av_tag_result_dir_arm32">File ditemukan di bawah lib/armeabi-v7a atau lib/armeabi di APK</string>
+    <string name="av_list_info_compile_sdk">Kompilasi SDK</string>
+    <string name="av_list_info_min_sdk">SDK minimal</string>
+    <string name="av_list_info_aab_total_size">Ukuran total: %s</string>
+    <string name="av_upd_used">Baru - baru ini digunakan</string>
+    <string name="av_upd_usage_access">Akses Penggunaan</string>
+    <string name="av_upd_usage_access_msg">Berikan akses sekarang untuk melihat aplikasi yang baru saja digunakan</string>
+</resources>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2021 Clifford Liu
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="av_updates_recents">हाल ही में अद्यतित</string>
+    <string name="sdkcheck_dialog_targetsdktext">लक्ष्य</string>
+    <string name="sdkcheck_dialog_minsdktext">न्यूनतम।</string>
+    <string name="sdkcheck_sortspinner_sortbyname">नाम से</string>
+    <string name="sdkcheck_sortspinner_sortbyhighersdk">उच्चतम एपीआई</string>
+    <string name="sdkcheck_sortspinner_sortbylowersdk">सबसे कम एपीआई</string>
+    <string name="sdkcheck_displayspinner_user">मेरी एप्प्स</string>
+    <string name="sdkcheck_displayspinner_usersystem">सभी एप्लीकेशन</string>
+    <string name="apiDetails">विवरण</string>
+    <string name="apiDetailsVerName">"संस्करण का नाम: "</string>
+    <string name="apiDetailsVerCode">"संस्करण कोड: "</string>
+    <string name="apiDetailsFirstInstall">"पहले स्थापित करें: "</string>
+    <string name="apiDetailsLastUpdate">"आखिरी अपडेट: "</string>
+    <string name="apiDetailsInsatllFrom">"इंस्टॉलर: "</string>
+    <string name="apiDetailsInstallUnknown">अनजान</string>
+    <string name="apiDetailsInstallGP">गूगल प्ले स्टोर</string>
+    <string name="apiDetailsInstallPI">पैकेज संस्थापक</string>
+    <string name="apiDetailsCert">प्रमाणपत्र</string>
+    <string name="apiDetailsValiSince">"वैधता के बाद से: "</string>
+    <string name="apiDetailsValiUntil">"वैधता जब तक: "</string>
+    <string name="apiDetailsIssuer">"जारीकर्ता: "</string>
+    <string name="apiDetailsSubject">"विषय: "</string>
+    <string name="apiDetailsSigAlg">"हस्ताक्षर एल्गोरिथ्म: "</string>
+    <string name="apiDetailsSigAlgOID">"हस्ताक्षर एल्गोरिथ्म OID: "</string>
+    <string name="apiDetailsPermissions">अनुमतियां:</string>
+    <string name="apiDetailsActivities">गतिविधियां:</string>
+    <string name="apiDetailsReceivers">प्रसारण रिसीवर:</string>
+    <string name="apiDetailsServices">सेवाएं:</string>
+    <string name="apiDetailsProviders">प्रदाता:</string>
+    <string name="res_api_code_names_c">Cupcake</string>
+    <string name="res_api_code_names_d">डोनट</string>
+    <string name="res_api_code_names_e">Eclair</string>
+    <string name="res_api_code_names_f">फ्रायो</string>
+    <string name="res_api_code_names_g">जिंजरब्रेड</string>
+    <string name="res_api_code_names_h">मधुकोश का</string>
+    <string name="res_api_code_names_i">आइसक्रीम सैंडविच</string>
+    <string name="res_api_code_names_j">जेली बीन</string>
+    <string name="res_api_code_names_k">किट कैट</string>
+    <string name="res_api_code_names_l">चूसने की मिठाई</string>
+    <string name="res_api_code_names_m">marshmallow</string>
+    <string name="res_api_code_names_n">नूगा</string>
+    <string name="res_api_code_names_o">ओरियो</string>
+    <string name="res_api_code_names_p">पाई</string>
+    <string name="resApiCodeNamesB">छोटे ओवन</string>
+    <string name="resPrincipalCN">साधारण नाम</string>
+    <string name="resPrincipalOU">संगठित इकाई</string>
+    <string name="resPrincipalO">संगठन</string>
+    <string name="resPrincipalL">शहर या इलाका</string>
+    <string name="resPrincipalST">राज्य या प्रांत</string>
+    <string name="resPrincipalC">देश</string>
+    <string name="resPrincipalEmail">ईमेल</string>
+    <string name="apiInfoAiIconDes">चिह्न (एपीके)</string>
+    <string name="apiInfoAiIconRDes">गोल चिह्न (APK)</string>
+    <string name="apiInfoAiIconDesSys">चिह्न (प्रणाली)</string>
+    <string name="apiInfoAiOverallDes">लॉन्चर आइकॉन के दो सेट होते हैं जिन्हें एपीके में दिखाया जा सकता है, जिसमें एक सामान्य ऐप आइकॉन होता है और दूसरा राउंड ऐप आइकॉन होता है।\nदोनों सेट में एडेप्टिव आइकॉन हो सकता है, जिसे एंड्रॉइड 8.0 के साथ पेश किया गया था। Android 7.1 के साथ राउंड ऐप आइकन पेश किया गया था।</string>
+    <string name="avTBViewingTarget">लक्ष्य/मिनट देखें। एपीआई</string>
+    <string name="avManual">एक एप्लीकेशन प्रोग्रामिंग इंटरफेस (एपीआई), सामान्य शब्दों में, विभिन्न घटकों के बीच संचार के स्पष्ट रूप से परिभाषित तरीकों का एक सेट है। एक निश्चित विकास मंच।\n\nपरिणामस्वरूप किसी प्लेटफॉर्म के एसडीके में उस प्लेटफॉर्म का संबंधित एपीआई होता है।\n\nएंड्रॉइड रिलीज के एपीआई के संस्करण को एपीआई स्तर कहा जाता है।\n\nप्रत्येक नए एंड्रॉइड रिलीज के साथ असुरक्षित और अक्षम एपीआई को हटाते हुए नई सुविधाओं तक पहुंच, गोपनीयता पहुंच प्रतिबंध, सुरक्षा संवर्द्धन और प्रदर्शन में सुधार लाने, एपीआई परिवर्तनों का एक बड़ा सौदा आता है। स्तर वही रहता है।\n\nलक्ष्य एसडीके संस्करण लक्ष्य एपीआई स्तर को परिभाषित करता है जिसे एक ऐप का उपयोग करने के लिए डिज़ाइन किया गया है।\n\nन्यूनतम एसडीके संस्करण न्यूनतम एपीआई स्तर को परिभाषित करता है जिसकी एक ऐप को आवश्यकता होती है। नए Android रिलीज़ की संख्या केवल उन ऐप्स पर लागू होगी, जब उनका लक्ष्य API स्तर डिवाइस के Android सिस्टम से मेल खाता है या उससे अधिक है।</string>
+    <string name="av_share_full">भरा हुआ</string>
+    <string name="av_share_stroked">stroked</string>
+    <string name="av_updates_view_more">और देखें</string>
+    <string name="av_settings_tags">टैग</string>
+    <string name="av_settings_tags_system">सिस्टम ऐप</string>
+    <string name="av_adapter_tag_system">व्यवस्था</string>
+    <string name="av_ai">अनुकूली आइकन</string>
+    <string name="av_tag_has_splits">Android ऐप बंडल</string>
+    <string name="av_apks_select_folder">स्कैन करने के लिए एक फ़ोल्डर चुनें</string>
+    <string name="av_pref_loading">सूची लोड हो रहा है</string>
+    <string name="av_pref_loading_summary">परिवर्तनों को ट्रिगर करने के लिए मैन्युअल रूप से रीफ़्रेश करें</string>
+    <string name="av_pref_displaying_summary">परिवर्तन स्वचालित रूप से ट्रिगर होते हैं</string>
+    <string name="av_pref_displaying">सूची प्रदर्शित करना</string>
+    <string name="av_adapter_tag_hidden">छुपे हुए</string>
+    <string name="av_settings_tag_hidden">लॉन्चर में ऐप आइकन नहीं दिखाया गया</string>
+    <string name="av_main_filter_tip">किसी टैग को देर तक दबाकर देखें</string>
+    <string name="av_main_option_device_api">डिवाइस एपीआई</string>
+    <string name="av_main_device_api_api">एपीआई स्तर</string>
+    <string name="av_upd_new">नव स्थापित</string>
+    <string name="av_upd_upg">एपीआई अपग्रेड</string>
+    <string name="av_details_real_installer">"असली इंस्टॉलर: "</string>
+    <string name="av_upd_ver_upd">संस्करण अपडेट किया गया</string>
+    <string name="av_upd_pck_upd">पैकेज अपडेट किया गया</string>
+    <string name="av_tag_result_service">%s इस ऐप में पाया जाता है</string>
+    <string name="av_tag_result_mipush_service">MiPush SDK द्वारा चेक किया गया, अन्यथा %s इस ऐप में पाया जाता है</string>
+    <string name="av_tag_result_file">%s APK में पाया जाता है</string>
+    <string name="av_tag_result_ai">इस ऐप में एक अनुकूली आइकन है</string>
+    <string name="av_tag_result_aab">इस ऐप के लिए स्प्लिट एपीके पाए जाते हैं</string>
+    <string name="av_tag_result_sys">यह ऐप एक सिस्टम ऐप के रूप में स्थापित है</string>
+    <string name="av_tag_result_hidden">इस ऐप के लिए कोई लॉन्चर गतिविधि उपलब्ध नहीं है</string>
+    <string name="av_tag_result_full_64bit">यह ऐप एआरएम 64-बिट और x86 64-बिट दोनों संगत है</string>
+    <string name="av_tag_result_pkg">पैकेज %s एपीके डीएक्स फाइलों में पाया जाता है</string>
+    <string name="av_tag_result_installer">यह ऐप %s . द्वारा स्थापित किया गया था</string>
+    <string name="av_tag_result_dir">एपीके में %s के अंतर्गत फ़ाइलें पाई जाती हैं</string>
+    <string name="av_tag_result_dir_arm32">APK में lib/armeabi-v7a या lib/armeabi के अंतर्गत फ़ाइलें पाई जाती हैं</string>
+    <string name="av_list_info_compile_sdk">एसडीके संकलित करें</string>
+    <string name="av_list_info_min_sdk">न्यूनतम एसडीके</string>
+    <string name="av_list_info_aab_total_size">कुल आकार: %s</string>
+    <string name="av_upd_used">हाल ही में उपयोग किया गया</string>
+    <string name="av_upd_usage_access">उपयोग पहुंच</string>
+    <string name="av_upd_usage_access_msg">हाल ही में उपयोग किए गए ऐप्स देखने के लिए अभी पहुंच प्रदान करें</string>
+</resources>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2021 Clifford Liu
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="av_updates_recents">ਹਾਲ ਹੀ ਵਿੱਚ ਅੱਪਡੇਟ ਕੀਤਾ ਗਿਆ</string>
+    <string name="sdkcheck_dialog_targetsdktext">ਨਿਸ਼ਾਨਾ</string>
+    <string name="sdkcheck_dialog_minsdktext">ਘੱਟੋ-ਘੱਟ</string>
+    <string name="sdkcheck_sortspinner_sortbyname">ਨਾਮ ਦੁਆਰਾ</string>
+    <string name="sdkcheck_sortspinner_sortbyhighersdk">ਉੱਚਤਮ API</string>
+    <string name="sdkcheck_sortspinner_sortbylowersdk">ਸਭ ਤੋਂ ਘੱਟ API</string>
+    <string name="sdkcheck_displayspinner_user">ਮੇਰੀਆਂ ਐਪਾਂ</string>
+    <string name="sdkcheck_displayspinner_usersystem">ਸਾਰੀਆਂ ਐਪਾਂ</string>
+    <string name="apiDetails">ਵੇਰਵੇ</string>
+    <string name="apiDetailsVerName">"ਵਰਜਨ ਦਾ ਨਾਮ: "</string>
+    <string name="apiDetailsVerCode">"ਵਰਜਨ ਕੋਡ: "</string>
+    <string name="apiDetailsFirstInstall">"ਪਹਿਲੀ ਸਥਾਪਨਾ: "</string>
+    <string name="apiDetailsLastUpdate">"ਆਖਰੀ ਅੱਪਡੇਟ: "</string>
+    <string name="apiDetailsInsatllFrom">"ਇੰਸਟਾਲਰ: "</string>
+    <string name="apiDetailsInstallUnknown">ਅਗਿਆਤ</string>
+    <string name="apiDetailsInstallGP">ਗੂਗਲ ਪਲੇ ਸਟੋਰ</string>
+    <string name="apiDetailsInstallPI">ਪੈਕੇਜ ਇੰਸਟਾਲਰ</string>
+    <string name="apiDetailsCert">ਸਰਟੀਫਿਕੇਟ</string>
+    <string name="apiDetailsValiSince">"ਇਸ ਤੋਂ ਵੈਧਤਾ: "</string>
+    <string name="apiDetailsValiUntil">"ਉਦੋਂ ਤੱਕ ਵੈਧਤਾ: "</string>
+    <string name="apiDetailsIssuer">"ਜਾਰੀਕਰਤਾ: "</string>
+    <string name="apiDetailsSubject">"ਵਿਸ਼ਾ: "</string>
+    <string name="apiDetailsSigAlg">"ਦਸਤਖਤ ਐਲਗੋਰਿਦਮ: "</string>
+    <string name="apiDetailsSigAlgOID">"ਦਸਤਖਤ ਐਲਗੋਰਿਦਮ OID: "</string>
+    <string name="apiDetailsPermissions">ਇਜਾਜ਼ਤਾਂ:</string>
+    <string name="apiDetailsActivities">ਗਤੀਵਿਧੀਆਂ:</string>
+    <string name="apiDetailsReceivers">ਪ੍ਰਸਾਰਣ ਪ੍ਰਾਪਤਕਰਤਾ:</string>
+    <string name="apiDetailsServices">ਸੇਵਾਵਾਂ:</string>
+    <string name="apiDetailsProviders">ਪ੍ਰਦਾਤਾ:</string>
+    <string name="res_api_code_names_c">ਕੱਪਕੇਕ</string>
+    <string name="res_api_code_names_d">ਡੋਨਟ</string>
+    <string name="res_api_code_names_e">ਏਕਲੇਅਰ</string>
+    <string name="res_api_code_names_f">ਫਰੋਯੋ</string>
+    <string name="res_api_code_names_g">ਜਿੰਜਰਬੈੱਡ</string>
+    <string name="res_api_code_names_h">ਹਨੀਕੋੰਬ</string>
+    <string name="res_api_code_names_i">ਆਇਸ ਕ੍ਰੀਮ ਸੈਂਡਵਿਚ</string>
+    <string name="res_api_code_names_j">ਕੈਂਡੀ</string>
+    <string name="res_api_code_names_k">ਕਿਟਕੈਟ</string>
+    <string name="res_api_code_names_l">Lollipop</string>
+    <string name="res_api_code_names_m">ਮਾਰਸ਼ਮੈਲੋ</string>
+    <string name="res_api_code_names_n">ਨੌਗਟ</string>
+    <string name="res_api_code_names_o">ਓਰੀਓ</string>
+    <string name="res_api_code_names_p">ਪਾਈ</string>
+    <string name="resApiCodeNamesB">ਪੇਟਿਟ ਚਾਰ</string>
+    <string name="resPrincipalCN">ਆਮ ਨਾਮ</string>
+    <string name="resPrincipalOU">ਸੰਗਠਨਾਤਮਕ ਇਕਾਈ</string>
+    <string name="resPrincipalO">ਸੰਗਠਨ</string>
+    <string name="resPrincipalL">ਸ਼ਹਿਰ ਜਾਂ ਇਲਾਕਾ</string>
+    <string name="resPrincipalST">ਰਾਜ ਸੂਬੇ</string>
+    <string name="resPrincipalC">ਦੇਸ਼</string>
+    <string name="resPrincipalEmail">ਈ - ਮੇਲ</string>
+    <string name="apiInfoAiIconDes">ਆਈਕਨ (APK)</string>
+    <string name="apiInfoAiIconRDes">ਗੋਲ ਆਈਕਨ (APK)</string>
+    <string name="apiInfoAiIconDesSys">ਆਈਕਨ (ਸਿਸਟਮ)</string>
+    <string name="apiInfoAiOverallDes">ਲਾਂਚਰ ਆਈਕਨਾਂ ਦੇ ਦੋ ਸੈੱਟ ਹਨ ਜੋ ਇੱਕ apk ਵਿੱਚ ਪ੍ਰਗਟ ਕੀਤੇ ਜਾ ਸਕਦੇ ਹਨ, ਜਿਸ ਵਿੱਚ ਇੱਕ ਸਧਾਰਨ ਐਪ ਆਈਕਨ ਹੈ ਅਤੇ ਦੂਜਾ ਗੋਲ ਐਪ ਆਈਕਨ ਹੈ।\nਦੋਵਾਂ ਸੈੱਟਾਂ ਵਿੱਚ ਅਡੈਪਟਿਵ ਆਈਕਨ ਹੋ ਸਕਦਾ ਹੈ, ਜੋ ਕਿ Android 8.0 ਨਾਲ ਪੇਸ਼ ਕੀਤਾ ਗਿਆ ਸੀ। ਰਾਊਂਡ ਐਪ ਆਈਕਨ ਨੂੰ ਐਂਡ੍ਰਾਇਡ 7.1 ਦੇ ਨਾਲ ਪੇਸ਼ ਕੀਤਾ ਗਿਆ ਸੀ।</string>
+    <string name="avTBViewingTarget">ਟੀਚਾ/ਮਿੰਟ ਦੇਖੋ। API</string>
+    <string name="avManual">ਇੱਕ ਐਪਲੀਕੇਸ਼ਨ ਪ੍ਰੋਗ੍ਰਾਮਿੰਗ ਇੰਟਰਫੇਸ (API), ਆਮ ਸ਼ਬਦਾਂ ਵਿੱਚ, ਵੱਖ-ਵੱਖ ਹਿੱਸਿਆਂ ਵਿੱਚ ਸੰਚਾਰ ਦੇ ਸਪਸ਼ਟ ਤੌਰ \'ਤੇ ਪਰਿਭਾਸ਼ਿਤ ਤਰੀਕਿਆਂ ਦਾ ਇੱਕ ਸਮੂਹ ਹੈ।\n\nਇੱਕ ਸਾਫਟਵੇਅਰ ਡਿਵੈਲਪਮੈਂਟ ਕਿੱਟ (SDK) ਆਮ ਤੌਰ \'ਤੇ ਸਾਫਟਵੇਅਰ ਡਿਵੈਲਪਮੈਂਟ ਟੂਲਸ ਦਾ ਇੱਕ ਸਮੂਹ ਹੈ ਜੋ ਐਪਲੀਕੇਸ਼ਨਾਂ ਨੂੰ ਬਣਾਉਣ ਦੀ ਇਜਾਜ਼ਤ ਦਿੰਦਾ ਹੈ ਇੱਕ ਖਾਸ ਵਿਕਾਸ ਪਲੇਟਫਾਰਮ।\n\nਨਤੀਜੇ ਵਜੋਂ ਇੱਕ ਪਲੇਟਫਾਰਮ ਦੇ SDK ਵਿੱਚ ਉਸ ਪਲੇਟਫਾਰਮ ਦੇ ਅਨੁਸਾਰੀ API ਸ਼ਾਮਲ ਹੁੰਦੇ ਹਨ।\n\nAndroid ਰੀਲੀਜ਼ ਦੇ API ਦੇ ਸੰਸਕਰਣ ਨੂੰ API ਪੱਧਰ ਕਿਹਾ ਜਾਂਦਾ ਹੈ।\n\nਹਰ ਨਵੀਂ Android ਰੀਲੀਜ਼ ਦੇ ਨਾਲ ਅਸੁਰੱਖਿਅਤ ਅਤੇ ਅਕੁਸ਼ਲ API ਨੂੰ ਬਰਤਰਫ਼ ਕਰਦੇ ਹੋਏ, ਨਵੀਆਂ ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਦੀ ਪਹੁੰਚ, ਗੋਪਨੀਯਤਾ ਪਹੁੰਚ ਪਾਬੰਦੀਆਂ, ਸੁਰੱਖਿਆ ਸੁਧਾਰਾਂ ਅਤੇ ਪ੍ਰਦਰਸ਼ਨ ਵਿੱਚ ਸੁਧਾਰ ਲਿਆਉਣ ਦੇ ਨਾਲ ਬਹੁਤ ਸਾਰੇ API ਬਦਲਾਅ ਆਉਂਦੇ ਹਨ।\n\nਕਈ ਵਾਰ ਇੱਕ ਐਂਡਰੌਇਡ ਰੀਲੀਜ਼ ਵਿੱਚ ਸਿਰਫ ਬੱਗ ਫਿਕਸ ਆਦਿ ਸ਼ਾਮਲ ਹੁੰਦੇ ਹਨ ਪਰ ਕੋਈ API ਨਹੀਂ ਬਦਲਦਾ ਹੈ ਇਸ ਤਰ੍ਹਾਂ ਇਸਦੇ API ਪੱਧਰ ਉਹੀ ਰਹਿੰਦਾ ਹੈ।\n\nਨਿਸ਼ਾਨਾ SDK ਸੰਸਕਰਣ ਟੀਚਾ API ਪੱਧਰ ਨੂੰ ਪਰਿਭਾਸ਼ਿਤ ਕਰਦਾ ਹੈ ਜਿਸਨੂੰ ਇੱਕ ਐਪ ਵਰਤਣ ਲਈ ਤਿਆਰ ਕੀਤਾ ਗਿਆ ਹੈ।\n\nਨਿਊਨਤਮ SDK ਸੰਸਕਰਣ ਇੱਕ ਐਪ ਲਈ ਲੋੜੀਂਦੇ ਘੱਟੋ-ਘੱਟ API ਪੱਧਰ ਨੂੰ ਪਰਿਭਾਸ਼ਿਤ ਕਰਦਾ ਹੈ।\n\nਕੁਝ ਪਾਬੰਦੀਆਂ ਅਤੇ ਸੁਧਾਰ ਨਵੇਂ ਐਂਡਰੌਇਡ ਰੀਲੀਜ਼ਾਂ ਵਿੱਚੋਂ ਸਿਰਫ਼ ਐਪਸ \'ਤੇ ਲਾਗੂ ਹੋਣਗੇ ਜਦੋਂ ਉਹਨਾਂ ਦਾ ਟੀਚਾ API ਪੱਧਰ ਡਿਵਾਈਸ ਦੇ ਐਂਡਰੌਇਡ ਸਿਸਟਮ ਨਾਲ ਮੇਲ ਖਾਂਦਾ ਹੈ ਜਾਂ ਇਸ ਤੋਂ ਵੱਧ ਜਾਂਦਾ ਹੈ।</string>
+    <string name="av_share_full">ਪੂਰਾ</string>
+    <string name="av_share_stroked">ਸਟਰੋਕ ਕੀਤਾ</string>
+    <string name="av_updates_view_more">ਹੋਰ ਵੇਖੋ</string>
+    <string name="av_settings_tags">ਟੈਗਸ</string>
+    <string name="av_settings_tags_system">ਸਿਸਟਮ ਐਪ</string>
+    <string name="av_adapter_tag_system">ਸਿਸਟਮ</string>
+    <string name="av_ai">ਅਨੁਕੂਲਿਤ ਪ੍ਰਤੀਕ</string>
+    <string name="av_tag_has_splits">Android ਐਪ ਬੰਡਲ</string>
+    <string name="av_apks_select_folder">ਸਕੈਨ ਕਰਨ ਲਈ ਇੱਕ ਫੋਲਡਰ ਚੁਣੋ</string>
+    <string name="av_pref_loading">ਸੂਚੀ ਲੋਡ ਹੋ ਰਹੀ ਹੈ</string>
+    <string name="av_pref_loading_summary">ਤਬਦੀਲੀਆਂ ਨੂੰ ਟਰਿੱਗਰ ਕਰਨ ਲਈ ਹੱਥੀਂ ਰਿਫ੍ਰੈਸ਼ ਕਰੋ</string>
+    <string name="av_pref_displaying_summary">ਤਬਦੀਲੀਆਂ ਆਟੋਮੈਟਿਕ ਹੀ ਸ਼ੁਰੂ ਹੋ ਜਾਂਦੀਆਂ ਹਨ</string>
+    <string name="av_pref_displaying">ਸੂਚੀ ਦਿਖਾਈ ਜਾ ਰਹੀ ਹੈ</string>
+    <string name="av_adapter_tag_hidden">ਲੁਕਿਆ ਹੋਇਆ</string>
+    <string name="av_settings_tag_hidden">ਐਪ ਆਈਕਨ ਲਾਂਚਰ ਵਿੱਚ ਨਹੀਂ ਦਿਖਾਇਆ ਗਿਆ</string>
+    <string name="av_main_filter_tip">ਟੈਗ ਨੂੰ ਲੰਬੇ ਸਮੇਂ ਤੱਕ ਦਬਾਉਣ ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰੋ</string>
+    <string name="av_main_option_device_api">ਡਿਵਾਈਸ API</string>
+    <string name="av_main_device_api_api">API ਪੱਧਰ</string>
+    <string name="av_upd_new">ਨਵੇਂ ਸਥਾਪਿਤ ਕੀਤੇ ਗਏ</string>
+    <string name="av_upd_upg">API ਅੱਪਗਰੇਡ</string>
+    <string name="av_details_real_installer">"ਅਸਲ ਇੰਸਟਾਲਰ: "</string>
+    <string name="av_upd_ver_upd">ਵਰਜਨ ਅੱਪਡੇਟ ਕੀਤਾ ਗਿਆ</string>
+    <string name="av_upd_pck_upd">ਪੈਕੇਜ ਅੱਪਡੇਟ ਕੀਤਾ ਗਿਆ</string>
+    <string name="av_tag_result_service">%s ਇਸ ਐਪ ਵਿੱਚ ਪਾਇਆ ਗਿਆ ਹੈ</string>
+    <string name="av_tag_result_mipush_service">MiPush SDK ਦੁਆਰਾ ਜਾਂਚ ਕੀਤੀ ਗਈ, ਨਹੀਂ ਤਾਂ %s ਇਸ ਐਪ ਵਿੱਚ ਪਾਇਆ ਜਾਂਦਾ ਹੈ</string>
+    <string name="av_tag_result_file">%s APK ਵਿੱਚ ਪਾਇਆ ਗਿਆ ਹੈ</string>
+    <string name="av_tag_result_ai">ਇਸ ਐਪ ਵਿੱਚ ਇੱਕ ਅਨੁਕੂਲ ਆਈਕਨ ਹੈ</string>
+    <string name="av_tag_result_aab">ਇਸ ਐਪ ਲਈ ਸਪਲਿਟ ਏਪੀਕੇ ਲੱਭੇ ਗਏ ਹਨ</string>
+    <string name="av_tag_result_sys">ਇਹ ਐਪ ਇੱਕ ਸਿਸਟਮ ਐਪ ਵਜੋਂ ਸਥਾਪਤ ਕੀਤੀ ਗਈ ਹੈ</string>
+    <string name="av_tag_result_hidden">ਇਸ ਐਪ ਲਈ ਕੋਈ ਲਾਂਚਰ ਗਤੀਵਿਧੀ ਉਪਲਬਧ ਨਹੀਂ ਹੈ</string>
+    <string name="av_tag_result_full_64bit">ਇਹ ਐਪ ARM 64-bit ਅਤੇ x86 64-bit ਦੋਵੇਂ ਅਨੁਕੂਲ ਹੈ</string>
+    <string name="av_tag_result_pkg">ਪੈਕੇਜ %s APK dex ਫਾਈਲਾਂ ਵਿੱਚ ਪਾਇਆ ਗਿਆ ਹੈ</string>
+    <string name="av_tag_result_installer">ਇਹ ਐਪ %s ਦੁਆਰਾ ਸਥਾਪਤ ਕੀਤੀ ਗਈ ਸੀ</string>
+    <string name="av_tag_result_dir">ਫ਼ਾਈਲਾਂ APK ਵਿੱਚ %s ਦੇ ਹੇਠਾਂ ਮਿਲਦੀਆਂ ਹਨ</string>
+    <string name="av_tag_result_dir_arm32">ਫ਼ਾਈਲਾਂ APK ਵਿੱਚ lib/armeabi-v7a ਜਾਂ lib/armeabi ਦੇ ਅਧੀਨ ਮਿਲਦੀਆਂ ਹਨ</string>
+    <string name="av_list_info_compile_sdk">SDK ਕੰਪਾਇਲ ਕਰੋ</string>
+    <string name="av_list_info_min_sdk">ਘੱਟੋ-ਘੱਟ SDK</string>
+    <string name="av_list_info_aab_total_size">ਕੁੱਲ ਆਕਾਰ: %s</string>
+    <string name="av_upd_used">ਹਾਲ ਹੀ ਵਿੱਚ ਵਰਤਿਆ</string>
+    <string name="av_upd_usage_access">ਵਰਤੋਂ ਪਹੁੰਚ</string>
+    <string name="av_upd_usage_access_msg">ਹਾਲ ਹੀ ਵਿੱਚ ਵਰਤੀਆਂ ਗਈਆਂ ਐਪਾਂ ਨੂੰ ਦੇਖਣ ਲਈ ਹੁਣੇ ਪਹੁੰਚ ਦਿਓ</string>
+</resources>

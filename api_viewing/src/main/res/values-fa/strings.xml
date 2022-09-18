@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2021 Clifford Liu
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="av_updates_recents">به تازگی به روز شده است</string>
+    <string name="sdkcheck_dialog_targetsdktext">هدف</string>
+    <string name="sdkcheck_dialog_minsdktext">حداقل</string>
+    <string name="sdkcheck_sortspinner_sortbyname">بر اساس اسم</string>
+    <string name="sdkcheck_sortspinner_sortbyhighersdk">بالاترین API</string>
+    <string name="sdkcheck_sortspinner_sortbylowersdk">پایین ترین API</string>
+    <string name="sdkcheck_displayspinner_user">برنامه های من</string>
+    <string name="sdkcheck_displayspinner_usersystem">همه برنامه ها</string>
+    <string name="apiDetails">جزئیات</string>
+    <string name="apiDetailsVerName">"نام نسخه: "</string>
+    <string name="apiDetailsVerCode">"کد نسخه: "</string>
+    <string name="apiDetailsFirstInstall">"نصب اول: "</string>
+    <string name="apiDetailsLastUpdate">"اخرین بروزرسانی: "</string>
+    <string name="apiDetailsInsatllFrom">"نصاب: "</string>
+    <string name="apiDetailsInstallUnknown">ناشناس</string>
+    <string name="apiDetailsInstallGP">فروشگاه Google Play</string>
+    <string name="apiDetailsInstallPI">نصب کننده بسته</string>
+    <string name="apiDetailsCert">گواهی</string>
+    <string name="apiDetailsValiSince">"اعتبار از زمان: "</string>
+    <string name="apiDetailsValiUntil">"اعتبار تا: "</string>
+    <string name="apiDetailsIssuer">"صادر کننده: "</string>
+    <string name="apiDetailsSubject">"موضوع: "</string>
+    <string name="apiDetailsSigAlg">"الگوریتم امضا: "</string>
+    <string name="apiDetailsSigAlgOID">"الگوریتم امضای OID: "</string>
+    <string name="apiDetailsPermissions">مجوزها:</string>
+    <string name="apiDetailsActivities">فعالیت ها:</string>
+    <string name="apiDetailsReceivers">گیرنده های پخش:</string>
+    <string name="apiDetailsServices">خدمات:</string>
+    <string name="apiDetailsProviders">ارائه دهندگان:</string>
+    <string name="res_api_code_names_c">کیک کوچک</string>
+    <string name="res_api_code_names_d">دونات</string>
+    <string name="res_api_code_names_e">اکلر</string>
+    <string name="res_api_code_names_f">فرویو</string>
+    <string name="res_api_code_names_g">نان زنجفیل</string>
+    <string name="res_api_code_names_h">شانه عسل</string>
+    <string name="res_api_code_names_i">بستنی نونی</string>
+    <string name="res_api_code_names_j">ژله باقلا</string>
+    <string name="res_api_code_names_k">کیت کت</string>
+    <string name="res_api_code_names_l">آب نبات چوبی</string>
+    <string name="res_api_code_names_m">مارشمالو</string>
+    <string name="res_api_code_names_n">نوقا</string>
+    <string name="res_api_code_names_o">Oreo</string>
+    <string name="res_api_code_names_p">پای</string>
+    <string name="resApiCodeNamesB">پتی فور</string>
+    <string name="resPrincipalCN">نام متداول</string>
+    <string name="resPrincipalOU">واحد سازمانی</string>
+    <string name="resPrincipalO">سازمان</string>
+    <string name="resPrincipalL">شهر یا محله</string>
+    <string name="resPrincipalST">ایالت یا استان</string>
+    <string name="resPrincipalC">کشور</string>
+    <string name="resPrincipalEmail">پست الکترونیک</string>
+    <string name="apiInfoAiIconDes">نماد (APK)</string>
+    <string name="apiInfoAiIconRDes">نماد گرد (APK)</string>
+    <string name="apiInfoAiIconDesSys">نماد (سیستم)</string>
+    <string name="apiInfoAiOverallDes">دو مجموعه از نمادهای راه‌انداز وجود دارد که می‌توانند در یک apk نمایش داده شوند، که در آن یکی نماد برنامه عادی و دیگری نماد برنامه گرد است.\nهر دو مجموعه می‌توانند دارای نماد تطبیقی باشند که با Android 8.0 معرفی شده است. آیکون برنامه گرد با اندروید 7.1 معرفی شد.</string>
+    <string name="avTBViewingTarget">مشاهده هدف/دقیقه API</string>
+    <string name="avManual">یک رابط برنامه‌نویسی کاربردی (API)، به‌طور کلی، مجموعه‌ای از روش‌های ارتباطی کاملاً تعریف‌شده بین اجزای مختلف است.\n\nکیت توسعه نرم‌افزار (SDK) معمولاً مجموعه‌ای از ابزارهای توسعه نرم‌افزار است که امکان ایجاد برنامه‌های کاربردی را برای یک پلتفرم توسعه خاص.\n\nدر نتیجه SDK یک پلتفرم حاوی API مربوط به آن پلتفرم است.\n\nنسخه API نسخه Android به عنوان سطح API نامیده می‌شود.\n\nبا هر نسخه جدید Android تغییرات زیادی در API ایجاد می‌شود که دسترسی به ویژگی‌های جدید، محدودیت‌های دسترسی به حریم خصوصی، بهبودهای امنیتی و بهبود عملکرد را به همراه می‌آورد و در عین حال API‌های ناامن و ناکارآمد را منسوخ می‌کند.\n\nگاهی اوقات نسخه Android فقط شامل رفع اشکال و غیره است، اما API تغییری نمی‌کند، بنابراین API آن سطح ثابت باقی می ماند.\n\nنسخه SDK هدف، سطح API هدفی را که برنامه برای استفاده از آن طراحی شده است، تعریف می کند.\n\nنسخه حداقل SDK حداقل سطح API مورد نیاز یک برنامه را تعیین می کند.\n\nبرخی محدودیت ها و پیشرفت ها نسخه‌های جدید اندروید فقط زمانی برای برنامه‌ها اعمال می‌شود که سطح API هدف آنها با سیستم Android دستگاه مطابقت داشته باشد یا از آن فراتر رود.</string>
+    <string name="av_share_full">پر شده</string>
+    <string name="av_share_stroked">نوازش کرد</string>
+    <string name="av_updates_view_more">بیشتر ببینید</string>
+    <string name="av_settings_tags">برچسب ها</string>
+    <string name="av_settings_tags_system">برنامه سیستم</string>
+    <string name="av_adapter_tag_system">سیستم</string>
+    <string name="av_ai">نماد تطبیقی</string>
+    <string name="av_tag_has_splits">&#8207;Android App Bundle</string>
+    <string name="av_apks_select_folder">پوشه ای را برای اسکن انتخاب کنید</string>
+    <string name="av_pref_loading">در حال بارگذاری لیست</string>
+    <string name="av_pref_loading_summary">به صورت دستی بازخوانی کنید تا تغییرات ایجاد شود</string>
+    <string name="av_pref_displaying_summary">تغییرات به صورت خودکار فعال می شوند</string>
+    <string name="av_pref_displaying">نمایش لیست</string>
+    <string name="av_adapter_tag_hidden">پنهان شده است</string>
+    <string name="av_settings_tag_hidden">نماد برنامه در راه‌انداز نشان داده نمی‌شود</string>
+    <string name="av_main_filter_tip">فشار دادن طولانی یک برچسب را امتحان کنید</string>
+    <string name="av_settings_tag_huawei_push">&#8207;Huawei push</string>
+    <string name="av_settings_tag_xiaomi_push">&#8207;Xiaomi push</string>
+    <string name="av_settings_tag_meizu_push">&#8207;Meizu push</string>
+    <string name="av_settings_tag_oppo_push">&#8207;Oppo push</string>
+    <string name="av_settings_tag_vivo_push">&#8207;Vivo push</string>
+    <string name="av_settings_tag_jpush">&#8207;Aurora JPush</string>
+    <string name="av_settings_tag_upush">&#8207;Umeng U-Push</string>
+    <string name="av_settings_tag_tpns">&#8207;Tencent Push Notification Service (TPNS)</string>
+    <string name="av_settings_tag_ali_push">&#8207;Alibaba Cloud EMAS Mobile Push</string>
+    <string name="av_settings_tag_baidu_push">&#8207;Baidu push</string>
+    <string name="av_settings_tag_getui">&#8207;Getui push</string>
+    <string name="av_main_option_device_api">API دستگاه</string>
+    <string name="av_main_device_api_api">سطح API</string>
+    <string name="av_upd_new">تازه نصب شده</string>
+    <string name="av_upd_upg">ارتقاء API</string>
+    <string name="av_details_real_installer">"نصب واقعی: "</string>
+    <string name="av_upd_ver_upd">نسخه به روز شد</string>
+    <string name="av_upd_pck_upd">بسته به روز شد</string>
+    <string name="av_tag_jpush_normal">&#8207;JPush</string>
+    <string name="av_tag_upush_normal">&#8207;U-Push</string>
+    <string name="av_tag_tpns_normal">&#8207;TPNS</string>
+    <string name="av_tag_ali_push_normal">&#8207;Alibaba Cloud push</string>
+    <string name="av_tag_full_64bit">64-bit</string>
+    <string name="av_tag_full_64bit_normal">64-bit</string>
+    <string name="av_tag_full_64bit_full">&#8206;64-bit (ARM 64-bit, x86 64-bit)</string>
+    <string name="av_tag_arm_32bit">&#8207;ARM 32-bit</string>
+    <string name="av_tag_arm_64bit">&#8207;ARM 64-bit</string>
+    <string name="av_tag_result_service">%s در این برنامه یافت می شود</string>
+    <string name="av_tag_result_mipush_service">توسط MiPush SDK بررسی شده است، در غیر این صورت %s در این برنامه یافت می شود</string>
+    <string name="av_tag_result_file">%s در APK یافت می شود</string>
+    <string name="av_tag_result_ai">این برنامه دارای نماد تطبیقی است</string>
+    <string name="av_tag_result_aab">فایل‌های APK تقسیم‌شده برای این برنامه یافت می‌شوند</string>
+    <string name="av_tag_result_sys">این برنامه به عنوان یک برنامه سیستمی نصب شده است</string>
+    <string name="av_tag_result_hidden">هیچ فعالیت راه‌اندازی برای این برنامه در دسترس نیست</string>
+    <string name="av_tag_result_full_64bit">این برنامه با ARM 64 بیتی و x86 64 بیتی سازگار است</string>
+    <string name="av_tag_result_pkg">بسته %s در فایل‌های APK dex یافت می‌شود</string>
+    <string name="av_tag_result_installer">این برنامه توسط %s نصب شده است</string>
+    <string name="av_tag_result_dir">فایل‌ها در زیر %s در APK یافت می‌شوند</string>
+    <string name="av_tag_result_dir_arm32">فایل‌ها تحت lib/armeabi-v7a یا lib/armeabi در APK یافت می‌شوند.</string>
+    <string name="av_list_info_compile_sdk">&#8207;SDK را کامپایل کنید</string>
+    <string name="av_list_info_min_sdk">حداقل SDK</string>
+    <string name="av_list_info_aab_total_size">اندازه کل: %s</string>
+    <string name="av_upd_used">اخیرا مورد استفاده قرار گرفته</string>
+    <string name="av_upd_usage_access">دسترسی به استفاده</string>
+    <string name="av_upd_usage_access_msg">برای مشاهده برنامه‌های اخیراً استفاده شده، اکنون اجازه دسترسی بدهید</string>
+</resources>

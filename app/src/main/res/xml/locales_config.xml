@@ -37,4 +37,19 @@
     <locale android:name="tr-TR"/>
     <locale android:name="de"/>
     <locale android:name="de-DE"/>
+    <locale android:name="bn"/>
+    <locale android:name="bn-BD"/>
+    <locale android:name="fa"/>
+    <locale android:name="fa-AF"/>
+    <locale android:name="fa-IR"/>
+    <locale android:name="hi"/>
+    <locale android:name="hi-IN"/>
+    <locale android:name="in"/>
+    <locale android:name="in-ID"/>
+    <locale android:name="mr"/>
+    <locale android:name="mr-IN"/>
+    <locale android:name="pa"/>
+    <locale android:name="pa-PK"/>
+    <locale android:name="pl"/>
+    <locale android:name="pl-PL"/>
 </locale-config>

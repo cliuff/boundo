@@ -108,7 +108,11 @@ android {
             "th", "th-rTH", "vi", "vi-rVN",
             "fr", "fr-rFR", "el", "el-rGR",
             "ja", "ja-rJP", "ko", "ko-rKR",
-            "tr", "tr-rTR", "de", "de-rDE"
+            "tr", "tr-rTR", "de", "de-rDE",
+            "bn", "bn-rBD", "fa", "fa-rAF", "fa-rIR",
+            "hi", "hi-rIN", "in", "in-rID",
+            "mr", "mr-rIN", "pa", "pa-rPK",
+            "pl", "pl-rPL",
         ))
     }
     flavorDimensions.add("arch")

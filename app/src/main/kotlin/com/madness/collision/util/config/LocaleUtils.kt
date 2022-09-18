@@ -39,6 +39,10 @@ object LocaleUtils {
         "fr", "fr-FR", "el", "el-GR",
         "ja", "ja-JP", "ko", "ko-KR",
         "tr", "tr-TR", "de", "de-DE",
+        "bn", "bn-BD", "fa", "fa-AF", "fa-IR",
+        "hi", "hi-IN", "in", "in-ID",
+        "mr", "mr-IN", "pa", "pa-PK",
+        "pl", "pl-PL",
     )
     private var supportedLocales: List<Locale>? = null
 
