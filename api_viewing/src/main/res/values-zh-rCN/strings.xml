@@ -131,4 +131,7 @@
     <string name="av_list_info_compile_sdk">编译 SDK</string>
     <string name="av_list_info_min_sdk">最低 SDK</string>
     <string name="av_list_info_aab_total_size">总大小：%s</string>
+    <string name="av_upd_used">最近使用</string>
+    <string name="av_upd_usage_access">使用情况权限</string>
+    <string name="av_upd_usage_access_msg">立即授予权限以查看最近使用的应用</string>
 </resources>

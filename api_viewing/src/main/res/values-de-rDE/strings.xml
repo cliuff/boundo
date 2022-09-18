@@ -111,4 +111,7 @@
     <string name="av_list_info_compile_sdk">SDK kompilieren</string>
     <string name="av_list_info_min_sdk">Mindest-SDK</string>
     <string name="av_list_info_aab_total_size">Gesamtgröße: %s</string>
+    <string name="av_upd_used">Kürzlich verwendet</string>
+    <string name="av_upd_usage_access">Nutzungszugriff</string>
+    <string name="av_upd_usage_access_msg">Gewähren Sie jetzt Zugriff, um kürzlich verwendete Apps anzuzeigen</string>
 </resources>

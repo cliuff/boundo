@@ -111,4 +111,7 @@
     <string name="av_list_info_compile_sdk">SDKをコンパイルします</string>
     <string name="av_list_info_min_sdk">最小SDK</string>
     <string name="av_list_info_aab_total_size">合計サイズ: %s</string>
+    <string name="av_upd_used">最近使用された</string>
+    <string name="av_upd_usage_access">利用方法 アクセス</string>
+    <string name="av_upd_usage_access_msg">最近使用したアプリを表示するには、今すぐアクセスを許可してください</string>
 </resources>

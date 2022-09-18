@@ -131,4 +131,7 @@
     <string name="av_list_info_compile_sdk">تجميع SDK</string>
     <string name="av_list_info_min_sdk">دقيقة SDK</string>
     <string name="av_list_info_aab_total_size">الحجم الإجمالي: %s</string>
+    <string name="av_upd_used">مستخدم حديثا</string>
+    <string name="av_upd_usage_access">الوصول إلى الاستخدام</string>
+    <string name="av_upd_usage_access_msg">امنح حق الوصول الآن لعرض التطبيقات المستخدمة مؤخرًا</string>
 </resources>

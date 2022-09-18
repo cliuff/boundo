@@ -16,8 +16,6 @@
 
 package com.madness.collision
 
-import android.app.usage.UsageStats
-import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.LauncherApps
@@ -25,26 +23,9 @@ import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.graphics.BitmapRegionDecoder
 import android.graphics.Rect
-import com.madness.collision.util.PermissionUtils
 import java.io.InputStream
-import java.util.*
 
 object Test {
-
-    fun go(context: Context) {
-        if (PermissionUtils.isUsageAccessPermitted(context)) getForegroundApp(context)
-    }
-
-    // need PACKAGE_USAGE_STATS permission
-    fun getForegroundApp(context: Context): String {
-        val time = System.currentTimeMillis()
-        val manager: UsageStatsManager = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
-        val stats: List<UsageStats> = manager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, time - 1000 * 1000, time)
-        if (stats.isNullOrEmpty()) return ""
-        val mySortedMap: SortedMap<Long, UsageStats> = TreeMap()
-        stats.forEach { mySortedMap[it.lastTimeUsed] = it }
-        return mySortedMap[mySortedMap.lastKey()]?.packageName ?: ""
-    }
 
     fun getLauncherActivities(context: Context): List<ResolveInfo> {
         val pm: PackageManager = context.packageManager

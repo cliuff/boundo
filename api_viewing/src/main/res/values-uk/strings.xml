@@ -110,4 +110,7 @@
     <string name="av_list_info_compile_sdk">Скомпілювати SDK</string>
     <string name="av_list_info_min_sdk">Мінімальний пакет SDK</string>
     <string name="av_list_info_aab_total_size">Загальний розмір: %s</string>
+    <string name="av_upd_used">Нещодавно використаний</string>
+    <string name="av_upd_usage_access">Доступ до використання</string>
+    <string name="av_upd_usage_access_msg">Надайте доступ зараз, щоб переглянути нещодавно використані програми</string>
 </resources>

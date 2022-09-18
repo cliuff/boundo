@@ -111,4 +111,7 @@
     <string name="av_list_info_compile_sdk">Μεταγλώττιση SDK</string>
     <string name="av_list_info_min_sdk">Ελάχ. SDK</string>
     <string name="av_list_info_aab_total_size">Συνολικό μέγεθος: %s</string>
+    <string name="av_upd_used">Πρόσφατα χρησιμοποιημένο</string>
+    <string name="av_upd_usage_access">Πρόσβαση χρήσης</string>
+    <string name="av_upd_usage_access_msg">Παραχωρήστε τώρα πρόσβαση για προβολή εφαρμογών που χρησιμοποιήθηκαν πρόσφατα</string>
 </resources>

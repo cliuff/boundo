@@ -17,14 +17,17 @@
 package com.madness.collision.unit.api_viewing
 
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageInfo
 import android.os.Bundle
 import android.os.SystemClock
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.edit
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.*
@@ -32,6 +35,7 @@ import androidx.recyclerview.widget.*
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.madness.collision.diy.SpanAdapter
 import com.madness.collision.main.MainViewModel
+import com.madness.collision.misc.MiscApp
 import com.madness.collision.unit.Updatable
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
@@ -41,12 +45,14 @@ import com.madness.collision.unit.api_viewing.databinding.AvUpdatesBinding
 import com.madness.collision.unit.api_viewing.list.APIAdapter
 import com.madness.collision.unit.api_viewing.list.AppInfoFragment
 import com.madness.collision.unit.api_viewing.origin.AppRetriever
+import com.madness.collision.unit.api_viewing.update.UpdateLists
 import com.madness.collision.unit.api_viewing.upgrade.Upgrade
 import com.madness.collision.unit.api_viewing.upgrade.UpgradeAdapter
 import com.madness.collision.unit.api_viewing.upgrade.UpgradeComparator
 import com.madness.collision.util.P
 import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.X
+import com.madness.collision.util.hasUsageAccess
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -65,6 +71,7 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
         private const val I_VER = 2
         private const val I_PCK = 3
         private const val I_REC = 4
+        private const val I_USE = 10
 
         // timestamp to retrieve app updates, set the first retrieval
         private var appTimestamp: Long = 0L
@@ -81,12 +88,17 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
          */
         val isNewApp: Boolean
             get() = newAppTimestamp > 0L
-        var previousRecords: List<ApiViewingApp>? = null
-        var changedPackages: List<PackageInfo>? = null
+        private var pkgChangeRecords: UpdateLists.PkgRecords? = null
         var isBrandNewSession = false
+        // the latest change records (until now), we only need "package name" and "update time"
+        // (to compare with the time of new changes, thus determine whether to update views)
         private var lastChangedRecords: Map<String, Long> = emptyMap()
+        private var hasPkgChanges = false
         private val mutexUpdateCheck = Mutex()
         private val lockUpdateCheck = Any()
+        // the latest used packages (until now)
+        private var usedPkgNames: List<String>? = null
+        private var isUsedPkgNamesChanged = false
 
         fun isNewSession(mainTimestamp: Long): Boolean {
             return sessionTimestamp == 0L || sessionTimestamp != mainTimestamp
@@ -102,27 +114,31 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
 
         private fun checkNewUpdateActual(hostFragment: Fragment): Boolean? {
             val context = hostFragment.context ?: return null
-            if (hostFragment.activity == null || hostFragment.isDetached || !hostFragment.isAdded) return null
+            if (hostFragment.run { activity == null || isDetached || !isAdded }) return null
+
             val mainViewModel: MainViewModel by hostFragment.activityViewModels()
             val mainTimestamp = mainViewModel.timestamp
-            val (prev, changed) = getChangedPackages(context, mainTimestamp, hostFragment)
-            previousRecords = prev
-            changedPackages = changed
-            val lastChanged = lastChangedRecords
-            lastChangedRecords = changed.associate { it.packageName to it.lastUpdateTime }
-            val lastRecords = lastChanged.map { "${it.key}-${it.value}" }.joinToString()
-            val changedRecords = changed.joinToString { "${it.packageName}-${it.lastUpdateTime}" }
-            Log.d("AvUpdates", "Checked new update: \n> $lastRecords\n> $changedRecords")
-            if (changed.isEmpty()) return null
-            if (changed.size != lastChanged.size) return true
-            return changed.any { it.lastUpdateTime != lastChanged[it.packageName] }
+            val pkg = UpdateLists.getPkgListChanges(context, mainTimestamp, hostFragment, lastChangedRecords)
+            val pkgRecords = pkg.records
+            pkgChangeRecords = pkgRecords
+            lastChangedRecords = pkg.lastChangedRecords
+            hasPkgChanges = pkg.hasPkgChanges
+
+            val used = UpdateLists.getUsedListChanges(context, usedPkgNames)
+            usedPkgNames = used.usedPkgNames
+            isUsedPkgNamesChanged = used.isUsedPkgNamesChanged
+
+            if (used.isUsedPkgNamesChanged) return true
+            if (pkgRecords.changedPackages.isEmpty()) {
+                // always show usage access request
+                if (!used.hasUsageAccess) return true
+                if (used.usedPkgNames.isEmpty()) return null
+            }
+            return pkg.hasPkgChanges
         }
 
-        private fun getChangedPackages(
-            context: Context,
-            mainTimestamp: Long,
-            lifecycleOwner: LifecycleOwner,
-        ): Pair<List<ApiViewingApp>?, List<PackageInfo>> {
+        fun getChangedPackages(context: Context, mainTimestamp: Long, lifecycleOwner: LifecycleOwner)
+        : Pair<List<ApiViewingApp>?, List<PackageInfo>> {
             val prefSettings = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
             var lastTimestamp = prefSettings.getLong(P.PACKAGE_CHANGED_TIMESTAMP, -1)
             // app opened the first time in lifetime, keep this new-app session untouched until reopened
@@ -215,6 +231,14 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
         super.onPause()
     }
 
+    private suspend fun getUsedList(context: Context, used: List<String>) {
+        val packages = used.mapNotNull { MiscApp.getPackageInfo(context, packageName = it) }
+        val lifecycleOwner = this@MyUpdatesFragment
+        val anApp = AppMaintainer.get(context, lifecycleOwner)
+        val appList = AppRetriever.mapToApp(packages, context, anApp)
+        sections[I_USE] = appList
+    }
+
     private suspend fun getUpdateLists(
         context: Context, changedPkgList: List<PackageInfo>, detectNew: Boolean,
         previousRecords: Map<String, ApiViewingApp>, listLimitSize: Int
@@ -301,21 +325,39 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
         lifecycleScope.launch(Dispatchers.Default) {
             // skip when restoring, which happens before updates page checks, to avoid duplicates
             // restoration happens when fMan.getFragment() is called
-            if (!isRestoring && changedPackages == null) {
+            if (!isRestoring && pkgChangeRecords == null) {
                 checkNewUpdate(fragment)
             }
-            val mChangedPackages = changedPackages ?: emptyList()
-            val noRecords = previousRecords == null
-            val mPreviousRecords = previousRecords?.associateBy { it.packageName } ?: emptyMap()
-            changedPackages = null
-            previousRecords = null
 
-            if (mChangedPackages.isNotEmpty()) {
-                val detectNew = isNewApp || noRecords
-                val spanCount = if (activity == null || isDetached || !isAdded) 1
-                else SpanAdapter.getSpanCount(fragment, 290f)
-                val listLimitSize = min(mChangedPackages.size, 15 * spanCount)
-                getUpdateLists(mContext, mChangedPackages, detectNew, mPreviousRecords, listLimitSize)
+            val spanCount = if (activity == null || isDetached || !isAdded) 1
+            else SpanAdapter.getSpanCount(fragment, 290f)
+
+            if (hasPkgChanges) {
+                hasPkgChanges = false
+                val pkgRecords = pkgChangeRecords
+                pkgChangeRecords = null
+                val mChangedPackages = pkgRecords?.changedPackages ?: emptyList()
+                val previousRecords = pkgRecords?.previousRecords
+                val noRecords = previousRecords == null
+                val mPreviousRecords = previousRecords?.associateBy { it.packageName } ?: emptyMap()
+                if (mChangedPackages.isNotEmpty()) {
+                    val detectNew = isNewApp || noRecords
+                    val listLimitSize = min(mChangedPackages.size, 15 * spanCount)
+                    getUpdateLists(mContext, mChangedPackages, detectNew, mPreviousRecords, listLimitSize)
+                }
+            }
+
+            val usedPkgList = usedPkgNames.orEmpty()
+            if (isUsedPkgNamesChanged) {
+                isUsedPkgNamesChanged = false
+                val usedLimit = when (spanCount) {
+                    1 -> 5
+                    2 -> 6
+                    3 -> 6
+                    else -> 6
+                }
+                val usedSize = min(usedPkgList.size, usedLimit)
+                getUsedList(mContext, usedPkgList.subList(0, usedSize))
             }
 
             updateDiff()
@@ -420,7 +462,6 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
                         if (adapter !is APIAdapter) continue
                         Log.d("AvUpdates", "Diff change: at $index")
                         adapter.appList = newList[newPos + offset].second
-                        adapter.notifyDataSetChanged()
                     }
                 }
             })
@@ -444,6 +485,7 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
             I_VER to R.string.av_upd_ver_upd,
             I_PCK to R.string.av_upd_pck_upd,
             I_REC to R.string.av_updates_recents,
+            I_USE to R.string.av_upd_used,
         )
         val fragment = this
         val space = X.size(mContext, 5f, X.DP).roundToInt()
@@ -525,6 +567,26 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
                 mainViewModel.displayUnit(MyBridge.unitName, shouldShowNavAfterBack = true)
             }
         }
+        val hasUsageAccess = context?.hasUsageAccess == true
+        viewBinding.avUpdUsageAccess.run {
+            if (hasUsageAccess) {
+                setOnClickListener(null)
+            } else {
+                setOnClickListener click@{
+                    val context = context ?: return@click
+                    getUsageAccess(context)
+                }
+            }
+            isVisible = !hasUsageAccess
+        }
+    }
+
+    private fun getUsageAccess(context: Context) {
+        val intent = Intent().apply {
+            action = Settings.ACTION_USAGE_ACCESS_SETTINGS
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        }
+        context.startActivity(intent)
     }
 
 }

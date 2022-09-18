@@ -16,6 +16,8 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -26,12 +28,15 @@
         android:scrollbars="none"
         android:requiresFadingEdge="none"
         android:nestedScrollingEnabled="false"
+        tools:listitem="@layout/adapter_av"
+        tools:itemCount="2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/avUpdatesRecentsMore"
         android:visibility="gone"
+        tools:visibility="visible"
         android:text="@string/av_updates_view_more"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:textAllCaps="false"
@@ -44,4 +49,81 @@
         android:textColor="?colorTextSub"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/avUpdUsageAccess"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:paddingVertical="8dp"
+            android:paddingHorizontal="20dp"
+            app:layout_constraintWidth_max="450dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.card.MaterialCardView
+                app:cardCornerRadius="14.5dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="?colorAItem"
+                app:contentPadding="7dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:src="@drawable/ic_info_24"
+                    android:contentDescription="@null"
+                    app:tint="?colorAOnItem"
+                    android:alpha="0.65"
+                    android:adjustViewBounds="true"
+                    android:layout_width="15dp"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="@string/av_upd_usage_access"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.01"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:text="@string/av_upd_usage_access_msg"
+                    android:textSize="10sp"
+                    android:textColor="?colorTextSub"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:ignore="SmallSp" />
+            </LinearLayout>
+
+            <ImageView
+                android:src="@drawable/ic_arrow_forward_24"
+                android:contentDescription="@null"
+                app:tint="?colorAOnBackground"
+                android:alpha="0.75"
+                android:layout_marginStart="25dp"
+                android:adjustViewBounds="true"
+                android:layout_width="16dp"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

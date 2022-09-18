@@ -111,4 +111,7 @@
     <string name="av_list_info_compile_sdk">Biên dịch SDK</string>
     <string name="av_list_info_min_sdk">SDK tối thiểu</string>
     <string name="av_list_info_aab_total_size">Tổng kích thước: %s</string>
+    <string name="av_upd_used">Được sử dụng gần đây</string>
+    <string name="av_upd_usage_access">Quyền sử dụng</string>
+    <string name="av_upd_usage_access_msg">Cấp quyền truy cập ngay bây giờ để xem các ứng dụng được sử dụng gần đây</string>
 </resources>

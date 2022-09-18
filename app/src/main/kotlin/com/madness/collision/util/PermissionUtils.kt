@@ -19,8 +19,10 @@ package com.madness.collision.util
 import android.app.AppOpsManager
 import android.content.Context
 import android.content.pm.PackageManager
+import android.os.Process
 import androidx.core.content.ContextCompat
-import com.madness.collision.misc.MiscApp
+import androidx.core.content.getSystemService
+import com.madness.collision.BuildConfig
 import com.madness.collision.util.os.OsUtils
 
 internal object PermissionUtils {
@@ -31,12 +33,13 @@ internal object PermissionUtils {
         }
     }
 
+    fun hasUsageAccess(context: Context) = isUsageAccessPermitted(context)
+
     fun isUsageAccessPermitted(context: Context): Boolean {
-        val appInfo = MiscApp.getApplicationInfo(context, packageName = context.packageName) ?: return false
-        val opsManager = context.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
+        val opsManager = context.getSystemService<AppOpsManager>() ?: return false
         val op = AppOpsManager.OPSTR_GET_USAGE_STATS
         val f = if (OsUtils.satisfy(OsUtils.Q)) AppOpsManager::unsafeCheckOpNoThrow else ::checkOpLegacy
-        return f(opsManager, op, appInfo.uid, appInfo.packageName) == AppOpsManager.MODE_ALLOWED
+        return f(opsManager, op, Process.myUid(), BuildConfig.APPLICATION_ID) == AppOpsManager.MODE_ALLOWED
     }
 
     @Suppress("deprecation")
@@ -44,3 +47,5 @@ internal object PermissionUtils {
         return appOpsManager.checkOpNoThrow(op, uid, packageName)
     }
 }
+
+val Context.hasUsageAccess: Boolean get() = PermissionUtils.hasUsageAccess(this)

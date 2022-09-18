@@ -111,4 +111,7 @@
     <string name="av_list_info_compile_sdk">SDK\'yı derle</string>
     <string name="av_list_info_min_sdk">Minimum SDK</string>
     <string name="av_list_info_aab_total_size">Toplam boyut: %s</string>
+    <string name="av_upd_used">Son zamanlarda kullanılmış</string>
+    <string name="av_upd_usage_access">Kullanım Erişimi</string>
+    <string name="av_upd_usage_access_msg">Son kullanılan uygulamaları görüntülemek için şimdi erişim verin</string>
 </resources>

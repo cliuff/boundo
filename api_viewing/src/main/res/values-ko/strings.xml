@@ -111,4 +111,7 @@
     <string name="av_list_info_compile_sdk">SDK 컴파일</string>
     <string name="av_list_info_min_sdk">최소 SDK</string>
     <string name="av_list_info_aab_total_size">총 크기: %s</string>
+    <string name="av_upd_used">최근 사용</string>
+    <string name="av_upd_usage_access">사용 액세스</string>
+    <string name="av_upd_usage_access_msg">최근에 사용한 앱을 보려면 지금 액세스 권한을 부여하세요.</string>
 </resources>
