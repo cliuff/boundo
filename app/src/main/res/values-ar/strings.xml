@@ -192,7 +192,7 @@
     <string name="instantTileScannerAlipayManual">انقر على البلاط لالتقاط الشاشة واستدعاء الماسح الضوئي Alipay لمسح الصورة.</string>
     <string name="instantTileMDUManual">انقر فوق التجانب لتحديث البيانات. ستتم مطالبتك بمنح إذن \"وصول الاستخدام\" عند إضافة التجانب.</string>
     <string name="textWeekNum">الأسبوع %d</string>
-    <string name="textColon">": "</string>
+    <string name="textColon">"&#1564;: "</string>
     <string name="textParentheses">" (%s)"</string>
     <string name="settings_fun_update_via_browser">تنزيل عبر المتصفح\n(المس مع الاستمرار لنسخ الرابط)</string>
     <string name="textAsk4Notification">يرجى منحنا الإذن لإظهار الإخطارات ، فنحن نعتمد على Toast Notifications لتوفر لك أفضل تجربة. يتم استخدامه لإعلامك بالتعليمات والنصائح والاقتراحات ورسائل التشغيل الناجحة وأحيانًا رسائل الخطأ. قد تواجه التباسًا في تطبيقنا إذا اخترت عدم منحنا إذن الإخطار.</string>
@@ -200,7 +200,7 @@
     <string name="instantManual">الضغط لفترة طويلة على أيقونة التطبيق في المشغّل لإظهار اختصارات التطبيقات.\nاسحب ظل الإشعار إلى أسفل ، والإعدادات التي يتم تبديلها أعلى منطقة الإشعارات هي بلاط الإعدادات السريعة الذي تبحث عنه.</string>
     <string name="immortalMessage">لا لا!\nنحن غاضبون من خطأ.\nلا تقلق ، لقد تم التقاطها!\nتسليم السجل إلينا لإجراء البحوث على!</string>
     <string name="unit_desc_av">• التحقق من مستوى Android API لجميع التطبيقات والتطبيقات على الجهاز\n• التحقق من دعم أيقونة التكيف من جميع التطبيقات\n• احصائيات API التطبيق\n• &#1564;APK واستخراج الرمز\n• تفاصيل الحزمة وتفاصيل التوقيع</string>
-    <string name="unit_desc_st">للمستخدمين الصينيين\n• إضافة بالطبع يدويا\n• تحليل الجدول الزمني للمدرسة من موقع النظام التعليمي للمدرسة (بعض من نظام التعليم ZFSoft فقط)\n • إنشاء ملف iCalendar (.ics)\n• تصدير إلى تقويم Google إلخ.</string>
+    <string name="unit_desc_st">للمستخدمين الصينيين\n• إضافة بالطبع يدويا\n• تحليل الجدول الزمني للمدرسة من موقع النظام التعليمي للمدرسة (بعض من نظام التعليم ZFSoft فقط)\n• إنشاء ملف iCalendar (.ics)\n• تصدير إلى تقويم Google إلخ.</string>
     <string name="unit_desc_im">• تعديل القرار• تعديل الشكل: png jpg webp heif• طمس الصورة</string>
     <string name="unit_desc_tw">• اجعل ورق الحائط الخاص بك يتوافق مع السمة المظلم لنظام Android 10 من خلال تطبيق ورق الحائط الداكن تلقائيًا</string>
     <string name="unit_desc_at">• إيقاف الصوت من اللعب</string>

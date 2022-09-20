@@ -46,6 +46,7 @@ import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.X
 import com.madness.collision.util.alterPadding
 import com.madness.collision.util.controller.saveFragment
+import com.madness.collision.util.dev.idString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -70,6 +71,7 @@ internal class UpdatesFragment : TaggedFragment() {
     override val category: String = "MainUpdates"
     override val id: String = "Updates"
 
+    private val dID = "@" + idString.takeLast(2)
     private lateinit var mContext: Context
     private val mainViewModel: MainViewModel by activityViewModels()
     // used for assignment and thread-safe modification
@@ -90,7 +92,7 @@ internal class UpdatesFragment : TaggedFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("HomeUpdates", "onCreate() hasState=${savedInstanceState != null}")
+        Log.d("HomeUpdates", "$dID onCreate() hasState=${savedInstanceState != null}")
         mContext = context ?: return
         inflater = LayoutInflater.from(mContext)
         mode = arguments?.getInt(ARG_MODE) ?: MODE_NORMAL
@@ -108,19 +110,19 @@ internal class UpdatesFragment : TaggedFragment() {
                 fMan.getFragment(savedState, "UF-$u")?.let { u to it }
             }
             _fragments = fList
-            Log.d("HomeUpdates", fList.joinToString(prefix = "Restored: ") { (u, f) -> "$u-$f" })
+            Log.d("HomeUpdates", fList.joinToString(prefix = "$dID Restored: ") { (u, f) -> "$u-$f" })
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        Log.d("HomeUpdates", "onCreateView() hasState=${savedInstanceState != null}")
+        Log.d("HomeUpdates", "$dID onCreateView() hasState=${savedInstanceState != null}")
         viewBinding = FragmentUpdatesBinding.inflate(inflater, container, false)
         return viewBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("HomeUpdates", "onViewCreated() hasState=${savedInstanceState != null}")
+        Log.d("HomeUpdates", "$dID onViewCreated() hasState=${savedInstanceState != null}")
         fragments.forEach { restoreUpdateFragment(it) }
 
         updateUpdates()
@@ -158,7 +160,7 @@ internal class UpdatesFragment : TaggedFragment() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        Log.d("HomeUpdates", "onSaveInstanceState()")
+        Log.d("HomeUpdates", "$dID onSaveInstanceState()")
         fragments.let s@{ fList ->
             if (fList.isEmpty()) return@s
             outState.putStringArrayList("UFS", ArrayList(fList.map { it.first }))
@@ -252,7 +254,7 @@ internal class UpdatesFragment : TaggedFragment() {
     }
 
     private fun updateUpdates() = lifecycleScope.launch(Dispatchers.Default) {
-        Log.d("HomeUpdates", "---------  Checking  -------------")
+        Log.d("HomeUpdates", "---------  $dID Checking  -------------")
         val host = this@UpdatesFragment
         val oldFragments = fragments
         val oldFMap = oldFragments.toMap()
@@ -265,7 +267,7 @@ internal class UpdatesFragment : TaggedFragment() {
         val newFragments = updatesInfo.mapTo(ArrayList(updatesInfo.size)) { it.first to it.second }
         val logOld = oldFragments.joinToString { it.first }
         val logNew = updatesInfo.joinToString { it.first + "-${it.third}" }
-        Log.d("HomeUpdates", "Applying u $logOld -> $logNew")
+        Log.d("HomeUpdates", "$dID Applying u $logOld -> $logNew")
         if (oldFragments.isEmpty() || updatesInfo.isEmpty()) {
             // Use whenStarted() to avoid IllegalArgumentException:
             // No view found for id 0x1 (unknown) for fragment MyUpdatesFragment
@@ -316,11 +318,11 @@ internal class UpdatesFragment : TaggedFragment() {
                         val oldItem = diffFragments[position - 1]
                         updatesInfo.indexOfFirst { it.first == oldItem.first } + 1
                     }
-                    Log.d("HomeUpdates", "Diff insert: pos=$position, count=$count, newPos=$newPos")
+                    Log.d("HomeUpdates", "$dID Diff insert: pos=$position, count=$count, newPos=$newPos")
                     for (offset in 0 until count) {
                         val index = position + offset
                         val f = updatesInfo[newPos + offset].run { first to second }
-                        Log.d("HomeUpdates", "Diff insert: ${f.first} at $index")
+                        Log.d("HomeUpdates", "$dID Diff insert: ${f.first} at $index")
                         addUpdateFragment(f, index)
                         diffFragments.add(index, f)
                     }
@@ -328,25 +330,25 @@ internal class UpdatesFragment : TaggedFragment() {
 
                 override fun onRemoved(position: Int, count: Int) {
                     if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED).not()) return
-                    Log.d("HomeUpdates", "Diff remove: pos=$position, count=$count")
+                    Log.d("HomeUpdates", "$dID Diff remove: pos=$position, count=$count")
                     for (offset in (0 until count).reversed()) {
                         val index = position + offset
-                        Log.d("HomeUpdates", "Diff remove: ${diffFragments[index].first} at $index")
+                        Log.d("HomeUpdates", "$dID Diff remove: ${diffFragments[index].first} at $index")
                         removeUpdateFragment(diffFragments[index], index)
                         diffFragments.removeAt(index)
                     }
                 }
 
                 override fun onMoved(fromPosition: Int, toPosition: Int) {
-                    Log.d("HomeUpdates", "Diff move: from=$fromPosition, to=$toPosition")
+                    Log.d("HomeUpdates", "$dID Diff move: from=$fromPosition, to=$toPosition")
                 }
 
                 override fun onChanged(position: Int, count: Int, payload: Any?) {
                     if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED).not()) return
-                    Log.d("HomeUpdates", "Diff change: pos=$position, count=$count")
+                    Log.d("HomeUpdates", "$dID Diff change: pos=$position, count=$count")
                     for (offset in 0 until count) {
                         val index = position + offset
-                        Log.d("HomeUpdates", "Diff change: ${diffFragments[index].first} at $index")
+                        Log.d("HomeUpdates", "$dID Diff change: ${diffFragments[index].first} at $index")
                         val u = diffFragments[index].second as? Updatable ?: continue
                         u.updateState()
                     }

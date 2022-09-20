@@ -119,4 +119,7 @@ object LocaleUtils {
 }
 
 // get lang-country only: zh-Hant-TW -> zh-TW
-fun Locale.toRegionalTag() = "$language-$country"
+fun Locale.toRegionalTag(): String {
+    if (language.isEmpty()) return ""
+    return arrayOf(language, country).filterNot { it.isEmpty() }.joinToString(separator = "-")
+}

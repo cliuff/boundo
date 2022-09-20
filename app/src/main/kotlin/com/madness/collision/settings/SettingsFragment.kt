@@ -88,7 +88,10 @@ internal class SettingsFragment : TaggedFragment(), Democratic {
     }
 
     // get lang_country only: zh_Hant_TW -> zh_TW
-    private fun Locale.toRegionalString() = "${language}_$country"
+    private fun Locale.toRegionalString(): String {
+        if (language.isEmpty()) return ""
+        return arrayOf(language, country).filterNot { it.isEmpty() }.joinToString(separator = "_")
+    }
 
     private fun showLanguages(context: Context) {
         val langEntries = context.resources.obtainTypedArray(R.array.prefSettingsLangEntries)

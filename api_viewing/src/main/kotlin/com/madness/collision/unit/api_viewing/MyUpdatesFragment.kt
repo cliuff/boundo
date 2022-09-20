@@ -52,6 +52,7 @@ import com.madness.collision.unit.api_viewing.upgrade.UpgradeComparator
 import com.madness.collision.util.P
 import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.X
+import com.madness.collision.util.dev.idString
 import com.madness.collision.util.hasUsageAccess
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
@@ -89,7 +90,7 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
         val isNewApp: Boolean
             get() = newAppTimestamp > 0L
         private var pkgChangeRecords: UpdateLists.PkgRecords? = null
-        var isBrandNewSession = false
+        private var isBrandNewSession = false
         // the latest change records (until now), we only need "package name" and "update time"
         // (to compare with the time of new changes, thus determine whether to update views)
         private var lastChangedRecords: Map<String, Long> = emptyMap()
@@ -124,7 +125,9 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
             lastChangedRecords = pkg.lastChangedRecords
             hasPkgChanges = pkg.hasPkgChanges
 
-            val used = UpdateLists.getUsedListChanges(context, usedPkgNames)
+            // recreate from language switching or orientation change (configuration changes)
+            val lastUsed = if (isBrandNewSession) null else usedPkgNames
+            val used = UpdateLists.getUsedListChanges(context, lastUsed)
             usedPkgNames = used.usedPkgNames
             isUsedPkgNamesChanged = used.isUsedPkgNamesChanged
 
@@ -166,6 +169,7 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
         }
     }
 
+    private val dID = "@" + idString.takeLast(2)
     private lateinit var mContext: Context
     private var _viewBinding: AvUpdatesBinding? = null
     private val viewBinding: AvUpdatesBinding
@@ -176,14 +180,14 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
     @Suppress("UNCHECKED_CAST")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("AvUpdates", "onCreate() hasState=${savedInstanceState != null}")
+        Log.d("AvUpdates", "$dID onCreate() hasState=${savedInstanceState != null}")
         mContext = context ?: return
         EasyAccess.init(mContext)
         concatAdapter = ConcatAdapter()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        Log.d("AvUpdates", "onCreateView() hasState=${savedInstanceState != null}")
+        Log.d("AvUpdates", "$dID onCreateView() hasState=${savedInstanceState != null}")
         _viewBinding = AvUpdatesBinding.inflate(inflater, container, false)
         return viewBinding.root
     }
@@ -194,7 +198,7 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Log.d("AvUpdates", "onViewCreated() hasState=${savedInstanceState != null}")
+        Log.d("AvUpdates", "$dID onViewCreated() hasState=${savedInstanceState != null}")
         val spanCount = SpanAdapter.getSpanCount(this, 290f)
         val manager = SpanAdapter.suggestLayoutManager(requireContext(), spanCount)
         viewBinding.avUpdListRecycler.run {
@@ -317,7 +321,7 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
         val time = SystemClock.uptimeMillis()
         val interval = time - lastUpdateTime
         if (interval < 80) {
-            Log.d("AvUpdates", "Skipping this update within ${interval}ms")
+            Log.d("AvUpdates", "$dID Skipping this update within ${interval}ms")
             return
         }
         lastUpdateTime = time
@@ -372,7 +376,7 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
         val newList = sections.map { it.key to it.value }.filterNot { it.second.isEmpty() }.sortedBy { it.first }
         val logOld = oldList.joinToString { it.first.toString() }
         val logNew = newList.joinToString { it.first.toString() }
-        Log.d("AvUpdates", "Applying $logOld -> $logNew")
+        Log.d("AvUpdates", "$dID Applying $logOld -> $logNew")
         if (oldList.isEmpty() || newList.isEmpty()) {
             withContext(Dispatchers.Main) {
                 if (oldList.isEmpty()) {
@@ -424,19 +428,19 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
                         val oldItem = diffList[position - 1]
                         newList.indexOfFirst { it.first == oldItem.first } + 1
                     }
-                    Log.d("AvUpdates", "Diff insert: pos=$position, count=$count, newPos=$newPos")
+                    Log.d("AvUpdates", "$dID Diff insert: pos=$position, count=$count, newPos=$newPos")
                     val newSec = newList.subList(newPos, newPos + count)
                     insertSections(position * 2, newSec)
                     diffList.addAll(position, newSec)
                 }
 
                 override fun onRemoved(position: Int, count: Int) {
-                    Log.d("AvUpdates", "Diff remove: pos=$position, count=$count")
+                    Log.d("AvUpdates", "$dID Diff remove: pos=$position, count=$count")
                     val adapters = concatAdapter.adapters
                     for (offset in (0 until count).reversed()) {
                         val index = position + offset
                         val adapterIndex = index * 2
-                        Log.d("AvUpdates", "Diff remove: ${diffList[index].first} at $index, adapter at $adapterIndex")
+                        Log.d("AvUpdates", "$dID Diff remove: ${diffList[index].first} at $index, adapter at $adapterIndex")
                         arrayOf(adapterIndex + 1, adapterIndex)
                             .mapNotNull { adapters.getOrNull(it) }
                             .forEach { removeAdapter(it) }
@@ -445,7 +449,7 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
                 }
 
                 override fun onMoved(fromPosition: Int, toPosition: Int) {
-                    Log.d("AvUpdates", "Diff move: from=$fromPosition, to=$toPosition")
+                    Log.d("AvUpdates", "$dID Diff move: from=$fromPosition, to=$toPosition")
                 }
 
                 override fun onChanged(position: Int, count: Int, payload: Any?) {
@@ -453,14 +457,14 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
                         val oldItem = diffList[position]
                         newList.indexOfFirst { it.first == oldItem.first }
                     }
-                    Log.d("AvUpdates", "Diff change: pos=$position, count=$count, newPos=$newPos")
+                    Log.d("AvUpdates", "$dID Diff change: pos=$position, count=$count, newPos=$newPos")
                     val adapters = concatAdapter.adapters
                     for (offset in 0 until count) {
                         val index = position + offset
                         val adapterIndex = index * 2
                         val adapter = adapters[adapterIndex + 1]
                         if (adapter !is APIAdapter) continue
-                        Log.d("AvUpdates", "Diff change: at $index")
+                        Log.d("AvUpdates", "$dID Diff change: at $index")
                         adapter.appList = newList[newPos + offset].second
                     }
                 }
@@ -532,7 +536,7 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
                 val startIndex = man.findFirstVisibleItemPosition()
                 val endIndex = man.findLastVisibleItemPosition()
                 if (startIndex <= endIndex) {
-                    Log.d("av.updates", "Updating time [$startIndex, $endIndex]")
+                    Log.d("av.updates", "$dID Updating time [$startIndex, $endIndex]")
                     updateTime(startIndex, endIndex)
                 }
                 delay(45.seconds)
@@ -553,7 +557,7 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
             val changeEnd = if (endIndex < accuCount) endIndex + 1 - lastAccuCount else adapter.itemCount
             val changeCount = changeEnd - changeIndex
             adapter.notifyItemRangeChanged(changeIndex, changeCount, APIAdapter.Payload.UpdateTime)
-            Log.d("av.updates", "Updated time for $changeCount items from $changeIndex")
+            Log.d("av.updates", "$dID Updated time for $changeCount items from $changeIndex")
         }
     }
 

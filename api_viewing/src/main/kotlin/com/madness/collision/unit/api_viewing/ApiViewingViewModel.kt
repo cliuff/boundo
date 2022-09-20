@@ -266,31 +266,26 @@ internal class ApiViewingViewModel(application: Application): AndroidViewModel(a
     companion object {
         var appListStatsRef: WeakReference<AppListStats> = WeakReference(null)
         val appListStats: AppListStats? get() = appListStatsRef.get()
-
-        private fun compareName(o1: ApiViewingApp, o2: ApiViewingApp): Int {
-            return StringUtils.compareName(o1.name, o2.name)
-        }
+        private val nameComparator get() = compareBy(StringUtils.comparator, ApiViewingApp::name)
 
         private fun compareApi(list: List<ApiViewingApp>, isTarget: Boolean, isAsc: Boolean): List<ApiViewingApp> {
             val compareInt = if (isTarget) ApiViewingApp::targetAPI else ApiViewingApp::minAPI
-            val comparator = Comparator.comparingInt(compareInt).run {
-                if (isAsc) this else reversed()
-            }.thenComparing(this::compareName)
+            val comparator = compareBy(compareInt)
+                .let { if (isAsc) it else it.reversed() }
+                .then(nameComparator)
             return list.parallelStream().sorted(comparator).collect(Collectors.toList())
         }
 
         private fun compareName(list: List<ApiViewingApp>): List<ApiViewingApp> {
-            return list.toMutableList().apply {
-                sortWith(Comparator(this@Companion::compareName))
-            }
+            return list.toMutableList().apply { sortWith(nameComparator) }
         }
 
         private fun compareTime(list: List<ApiViewingApp>): List<ApiViewingApp> {
-            val comparator: Comparator<ApiViewingApp> = Comparator.comparingLong(ApiViewingApp::updateTime)/*
+            val comparator = compareBy(ApiViewingApp::updateTime)/*
                         .thenComparingInt(APIApp::targetAPI)
                         .thenComparingDouble(APIApp::targetSDK)*/
                     .reversed()
-                    .thenComparing(this::compareName)
+                    .then(nameComparator)
             return list.parallelStream().sorted(comparator).collect(Collectors.toList())
         }
 

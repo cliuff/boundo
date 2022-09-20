@@ -22,9 +22,7 @@ import java.util.stream.Collectors
 object UpgradeComparator {
     fun compareTime(list: List<Upgrade>): List<Upgrade> {
         return if (OsUtils.satisfy(OsUtils.N)) {
-            val comparator: Comparator<Upgrade> = Comparator.comparingLong { u: Upgrade ->
-                u.updateTime.second
-            }.reversed()
+            val comparator = compareBy<Upgrade> { it.updateTime.second }.reversed()
             list.parallelStream().sorted(comparator).collect(Collectors.toList())
         } else {
             list.toMutableList().apply {

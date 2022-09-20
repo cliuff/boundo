@@ -25,9 +25,7 @@ import java.util.*
 import kotlin.Comparator
 
 object StringUtils {
-    private val MIXABLE_LANG = mapOf(
-            "en" to listOf("zh")
-    )
+    private val MIXABLE_LANG = mapOf("en" to listOf("zh"))
 
     /**
      * Impossible to sort in more than the primary language.
@@ -40,26 +38,34 @@ object StringUtils {
      * Consequently any more language is still ignored.
      */
     fun compareName(localeList: List<Locale>, name1: String, name2: String): Int {
-        if (localeList.isEmpty()) return 0
-        val primaryLocale = localeList[0]
-        val primaryCollator by lazy { Collator.getInstance(primaryLocale) }
-        if (localeList.size == 1) return primaryCollator.compare(name1, name2)
-        val mixable = MIXABLE_LANG[primaryLocale.language] ?: emptyList()
-        val secondaryLocale = localeList[1]
-        if (secondaryLocale.language !in mixable) return primaryCollator.compare(name1, name2)
-        val secondaryCollator = Collator.getInstance(secondaryLocale)
-        return secondaryCollator.compare(name1, name2)
+        return getComparator(localeList).compare(name1, name2)
     }
 
+    /**
+     * Caution: this function is only suitable for one-time usage,
+     * use comparator or the other overload instead for usages in a loop
+     * (avoid making locale list every iteration)
+     */
     fun compareName(name1: String, name2: String): Int {
         return compareName(LocaleUtils.getRuntime(), name1, name2)
+    }
+
+    fun getComparator(localeList: List<Locale>): Comparator<in String> {
+        if (localeList.isEmpty()) return Comparator { _, _ -> 0 }
+        val collators = localeList.take(2)
+            .map { lazy(LazyThreadSafetyMode.NONE) { Collator.getInstance(it) } }
+        if (localeList.size == 1) return collators[0].value
+        val primaryLocale = localeList[0]
+        val mixable = MIXABLE_LANG[primaryLocale.language] ?: emptyList()
+        val secondaryLocale = localeList[1]
+        if (secondaryLocale.language !in mixable) return collators[0].value
+        return collators[1].value
     }
 
     /**
      * Used with a list of String
      */
-    val comparator: Comparator<in String>
-        get() = Comparator(StringUtils::compareName)
+    val comparator: Comparator<in String> get() = getComparator(LocaleUtils.getRuntime())
 }
 
 inline fun <T> Iterable<T>.sortedWithUtilsBy(crossinline selector: (T) -> String): List<T> {

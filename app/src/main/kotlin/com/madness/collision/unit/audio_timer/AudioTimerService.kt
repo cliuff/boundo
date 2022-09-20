@@ -97,7 +97,7 @@ internal class AudioTimerService: Service() {
 
     private lateinit var mNotificationManager: NotificationManagerCompat
     private lateinit var localeContext: Context
-    private lateinit var mHandler:Handler
+    private var mHandler: Handler? = null
     private lateinit var mRunnable: Runnable
     private var targetTime: Long = 0
     private var duration: Long = 0
@@ -151,18 +151,19 @@ internal class AudioTimerService: Service() {
 
     override fun onDestroy() {
         isRunning = false
-        mHandler.removeCallbacks(mRunnable)
+        mHandler?.removeCallbacks(mRunnable)
         super.onDestroy()
     }
 
     private fun start() {
         Thread {
             Looper.prepare()
-            mHandler = Handler(Looper.myLooper()!!)
+            val handler = Handler(Looper.myLooper()!!)
+            mHandler = handler
             mRunnable = runnable {
                 val shouldContinue = updateStatus()
-                if (shouldContinue) mHandler.postDelayed(this, 1000)
-                else mHandler.removeCallbacks(this)
+                if (shouldContinue) handler.postDelayed(this, 1000)
+                else handler.removeCallbacks(this)
             }
             mRunnable.run()
             Looper.loop()

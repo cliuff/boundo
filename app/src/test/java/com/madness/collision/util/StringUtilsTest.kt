@@ -27,9 +27,7 @@ internal class StringUtilsTest {
         val locales = listOf(Locale("en"), Locale("zh"))
         val names = listOf("重庆市民通", "墨墨背单词", "bilibili", "酷安", "Google")
         val expected = listOf(names[2], names[4], names[3], names[1], names[0])
-        val sorted = names.sortedWith { s1, s2 ->
-            StringUtils.compareName(locales, s1, s2)
-        }
+        val sorted = names.sortedWith(StringUtils.getComparator(locales))
         assertThat(sorted).isEqualTo(expected)
     }
 }
