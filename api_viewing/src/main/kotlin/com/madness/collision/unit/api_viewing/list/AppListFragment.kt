@@ -32,7 +32,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.madness.collision.unit.api_viewing.MyUnit
 import com.madness.collision.unit.api_viewing.Utils
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
@@ -75,13 +74,14 @@ internal class AppListFragment : TaggedFragment(), AppList, Filterable {
     private lateinit var viewBinding: AvListBinding
     private val service = AppListService()
     private val viewModel: AppListViewModel by viewModels()
+    private val popOwner = AppPopOwner()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mContext = context ?: return
         mAdapter = APIAdapter(mContext, object : APIAdapter.Listener {
             override val click: (ApiViewingApp) -> Unit = {
-                AppInfoFragment(it).show(childFragmentManager, AppInfoFragment.TAG)
+                popOwner.pop(this@AppListFragment, it)
             }
             override val longClick: (ApiViewingApp) -> Boolean = {
                 true
@@ -89,6 +89,7 @@ internal class AppListFragment : TaggedFragment(), AppList, Filterable {
         }, lifecycleScope)
 
         mAdapter.resolveSpanCount(this, 290f)
+        popOwner.register(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -230,13 +231,6 @@ internal class AppListFragment : TaggedFragment(), AppList, Filterable {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-    }
-
-    override fun onPause() {
-        childFragmentManager.run {
-            (findFragmentByTag(AppInfoFragment.TAG) as BottomSheetDialogFragment?)?.dismiss()
-        }
-        super.onPause()
     }
 
     abstract class Filter: android.widget.Filter() {

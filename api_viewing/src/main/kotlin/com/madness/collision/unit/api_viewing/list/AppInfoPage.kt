@@ -25,6 +25,9 @@ import android.text.format.Formatter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.ComponentDialog
+import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.animation.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -175,7 +178,14 @@ class AppInfoFragment(private val appPkgName: String) : BottomSheetDialogFragmen
                 }
                 // use parent instead of child fragment manager to show dialog after dismiss()
                 val fMan = remember { parentFragmentManager }
-                CompositionLocalProvider(LocalApp provides a) {
+                // provide dialog's onBackPressedDispatcher to implement custom back handler
+                val providedBackDispatcher = remember dis@{
+                    val dia = dialog ?: return@dis null
+                    if (dia !is ComponentDialog) return@dis null
+                    LocalOnBackPressedDispatcherOwner provides dia
+                }
+                val providedValues = arrayOf(providedBackDispatcher).filterNotNull().toTypedArray()
+                CompositionLocalProvider(LocalApp provides a, *providedValues) {
                     AppInfoPage(mainViewModel, {
                         dismiss()
                         AppListService().actionIcon(context, a, fMan)
@@ -296,13 +306,28 @@ private fun AppInfo(
             val margin = remember {
                 if (maxWidth > 600.dp) 30.dp else if (maxWidth > 360.dp) 24.dp else 12.dp
             }
+            val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+            // use coefficient to invert slide animation offset for RTL layout
+            val offsetCoeff = if (isRtl) -1 else 1
             var pageIndex by remember { mutableStateOf(0) }
-            if (pageIndex == 0) {
+            AnimatedVisibility(
+                visible = pageIndex == 0,
+                enter = fadeIn() + slideInHorizontally(initialOffsetX = { offsetCoeff * -it / 2 }),
+                exit = fadeOut(),
+            ) {
                 val scope = rememberCoroutineScope()
                 FrontAppInfo(cardColor, margin, verInfoList, bitmaps, updateTime,
                     { scope.launch { pageIndex = 1 } }, getClick)
-            } else if (pageIndex == 1) {
+            }
+            AnimatedVisibility(
+                visible = pageIndex == 1,
+                enter = fadeIn() + slideInHorizontally(initialOffsetX = { offsetCoeff * it / 2 }),
+                exit = fadeOut(),
+            ) {
                 DetailedAppInfo(cardColor, margin, shareIcon, shareApk)
+            }
+            if (pageIndex == 1) {
+                BackHandler { pageIndex = 0 }
             }
         }
     }

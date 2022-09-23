@@ -73,6 +73,7 @@ internal class UpgradeAdapter(context: Context, listener: Listener, scope: Corou
             onMakeBody(holder, index)
             return
         }
+        super.onMakeBody(holder, index, payloads)
         if (holder !is Holder) return
         payloads.forEach p@{ p ->
             if (p !is Payload) return@p  // continue

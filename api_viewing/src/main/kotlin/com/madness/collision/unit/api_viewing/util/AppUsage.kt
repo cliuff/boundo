@@ -18,7 +18,6 @@ package com.madness.collision.unit.api_viewing.util
 
 import android.app.usage.UsageStatsManager
 import android.content.Context
-import android.util.Log
 import androidx.core.content.getSystemService
 
 object AppUsage {
@@ -29,8 +28,6 @@ object AppUsage {
         val stats = manager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, beginTime, endTime)
         if (stats.isNullOrEmpty()) return emptyList()
         val st = stats.filter { it.lastTimeUsed > 0 }.sortedByDescending { it.lastTimeUsed }
-        val s = st.joinToString(prefix = "Apps:\n", separator = "\n") { "${it.packageName}:${it.lastTimeUsed}" }
-        Log.d("test.usage", s)
         return st.map { it.packageName }
     }
 }

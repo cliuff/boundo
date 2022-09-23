@@ -32,7 +32,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.*
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.madness.collision.diy.SpanAdapter
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.misc.MiscApp
@@ -42,8 +41,8 @@ import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.database.AppMaintainer
 import com.madness.collision.unit.api_viewing.databinding.AvUpdSectionBinding
 import com.madness.collision.unit.api_viewing.databinding.AvUpdatesBinding
+import com.madness.collision.unit.api_viewing.list.*
 import com.madness.collision.unit.api_viewing.list.APIAdapter
-import com.madness.collision.unit.api_viewing.list.AppInfoFragment
 import com.madness.collision.unit.api_viewing.origin.AppRetriever
 import com.madness.collision.unit.api_viewing.update.UpdateLists
 import com.madness.collision.unit.api_viewing.upgrade.Upgrade
@@ -176,6 +175,7 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
         get() = _viewBinding!!
     private val sections: MutableMap<Int, List<*>> = LinkedHashMap()
     private lateinit var concatAdapter: ConcatAdapter
+    private val popOwner = AppPopOwner()
 
     @Suppress("UNCHECKED_CAST")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -184,6 +184,7 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
         mContext = context ?: return
         EasyAccess.init(mContext)
         concatAdapter = ConcatAdapter()
+        popOwner.register(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -227,12 +228,6 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
             }
         }
         updateStateActual(savedInstanceState != null)
-    }
-
-    override fun onPause() {
-        val fMan = childFragmentManager
-        (fMan.findFragmentByTag(AppInfoFragment.TAG) as? BottomSheetDialogFragment?)?.dismiss()
-        super.onPause()
     }
 
     private suspend fun getUsedList(context: Context, used: List<String>) {
@@ -477,7 +472,7 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
         if (newSections.isEmpty()) return
         val listListener = object : APIAdapter.Listener {
             override val click: (ApiViewingApp) -> Unit = {
-                AppInfoFragment(it).show(childFragmentManager, AppInfoFragment.TAG)
+                popOwner.pop(this@MyUpdatesFragment, it)
             }
             override val longClick: (ApiViewingApp) -> Boolean = {
                 true

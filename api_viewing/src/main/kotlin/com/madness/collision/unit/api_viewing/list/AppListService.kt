@@ -51,7 +51,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.IOException
-import java.text.SimpleDateFormat
+import java.text.DateFormat
 import java.util.*
 import javax.security.cert.CertificateException
 import javax.security.cert.X509Certificate
@@ -102,7 +102,7 @@ internal class AppListService(private val serviceContext: Context? = null) {
     }
 
     fun getAppInfoDetailsSequence(context: Context, appInfo: ApiViewingApp, pkgInfo: PackageInfo) = sequence<AppInfoItem> {
-        val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", appLocale)
+        val format = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM, appLocale)
 
         yield(R.string.apiDetailsPackageName.boldItem)
         yield(appInfo.packageName)
@@ -280,7 +280,7 @@ internal class AppListService(private val serviceContext: Context? = null) {
                         " v${cert.version + 1}" +
                         '\n' + context.getString(RAv.string.apiDetailsValiSince)
 
-                val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", appLocale)
+                val format = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM, appLocale)
 
                 yield(formerPart.boldItem)
                 yield(format.format(cert.notBefore))
