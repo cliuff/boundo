@@ -18,15 +18,21 @@ package com.madness.collision.settings
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.AnimatedVectorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.Toast
+import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.Toolbar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.twotone.Code
+import androidx.compose.material.icons.twotone.Email
+import androidx.compose.material3.*
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.content.edit
 import androidx.fragment.app.activityViewModels
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
@@ -34,15 +40,15 @@ import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.util.*
+import com.madness.collision.util.os.OsUtils
 
-internal class AdviceFragment : TaggedFragment(), Democratic, View.OnClickListener {
-
+internal class AdviceFragment : TaggedFragment(), Democratic {
     override val category: String = "Advice"
     override val id: String = "Advice"
-    
-    private lateinit var background: View
-    private var count4DebugMode = 0
+
     private val mainViewModel: MainViewModel by activityViewModels()
+    private var mutableComposeView: ComposeView? = null
+    private val composeView: ComposeView get() = mutableComposeView!!
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
         mainViewModel.configNavigation(toolbar, iconColor)
@@ -50,49 +56,92 @@ internal class AdviceFragment : TaggedFragment(), Democratic, View.OnClickListen
         return true
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_advice, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        mutableComposeView = ComposeView(inflater.context)
+        return composeView
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        val view = view ?: return
+    override fun onDestroyView() {
+        mutableComposeView = null
+        super.onDestroyView()
+    }
+
+    private val @receiver:DrawableRes Int.icon get() = AboutOptionIcon.Res(this)
+    private val ImageVector.icon get() = AboutOptionIcon.Vector(this)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         democratize(mainViewModel)
-
-        background = view.findViewById(R.id.advice_display_background)
-
-        val vLogo = view.findViewById<ImageView>(R.id.adviceLogo)
-        (vLogo.drawable as AnimatedVectorDrawable).start()
-        arrayOf(
-                view.findViewById(R.id.adviceLicense),
-                view.findViewById(R.id.adviceSourceCode),
-                vLogo as View
-        ).forEach { it.setOnClickListener(this) }
+        val context = context ?: return
+        val options = listOf(
+            AboutOption(Icons.TwoTone.Code.icon, getString(R.string.advice_license), "", false) {
+                startActivity(Intent(context, OssLicensesMenuActivity::class.java))
+            },
+            AboutOption(R.drawable.ic_github_24.icon, "Github", "cliuff/boundo", true) {
+                openUrl(context, P.LINK_SOURCE_CODE)
+            },
+            AboutOption(Icons.TwoTone.Email.icon, "Email", P.CONTACT_EMAIL, true) {
+                openEmail(context, P.CONTACT_EMAIL)
+            },
+            AboutOption(R.drawable.ic_twitter_24.icon, "Twitter", getString(R.string.about_twitter_account), true) {
+                openUrl(context, P.LINK_TWITTER_ACCOUNT)
+            },
+            AboutOption(R.drawable.ic_telegram_24.icon, "Telegram", "t.me/cliuff_boundo", true) {
+                openUrl(context, P.LINK_TELEGRAM_GROUP)
+            },
+        )
+        composeView.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+        val colorScheme = if (OsUtils.satisfy(OsUtils.S)) {
+            if (mainApplication.isDarkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+        } else {
+            if (mainApplication.isDarkTheme) darkColorScheme() else lightColorScheme()
+        }
+        composeView.setContent {
+            MaterialTheme(colorScheme = colorScheme) {
+                AboutPage(mainViewModel, options = options)
+            }
+        }
     }
 
-    override fun onClick(view: View) {
-        val context = context ?: return
-        when (view.id) {
-            R.id.adviceLicense -> {
-                startActivity(Intent(context, OssLicensesMenuActivity::class.java))
-            }
-            R.id.adviceSourceCode -> {
-                val intent = Intent().apply {
-                    action = Intent.ACTION_VIEW
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                    data = Uri.parse(P.LINK_SOURCE_CODE)
-                }
-                startActivity(intent)
-            }
-            R.id.adviceLogo -> {
-                count4DebugMode++
-                if (count4DebugMode != 6) return
-                count4DebugMode = 0
-                val pref = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
-                mainApplication.debug = !mainApplication.debug
-                pref.edit { putBoolean(P.ADVANCED, mainApplication.debug) }
-                X.toast(context, getString(R.string.Advice_Switch_Debug_Text) + ": O" + if (mainApplication.debug) "n" else "ff", Toast.LENGTH_LONG)
-            }
+    private fun openUrl(context: Context, url: String) {
+        val intent = Intent().apply {
+            action = Intent.ACTION_VIEW
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            data = Uri.parse(url)
+        }
+        try {
+            startActivity(intent)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            CollisionDialog.infoCopyable(context, url).show()
+        }
+    }
+
+    private fun openEmail(context: Context, address: String) {
+        val intent = Intent().apply {
+            action = Intent.ACTION_SENDTO
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            data = Uri.parse("mailto:$address")
+        }
+        try {
+            startActivity(intent)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            CollisionDialog.infoCopyable(context, address).show()
+        }
+    }
+
+    private fun debugMode(context: Context) = object : View.OnClickListener {
+        private var count4DebugMode = 0
+        override fun onClick(v: View?) {
+            count4DebugMode++
+            if (count4DebugMode != 6) return
+            count4DebugMode = 0
+            val app = mainApplication
+            app.debug = !app.debug
+            val pref = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
+            pref.edit { putBoolean(P.ADVANCED, app.debug) }
+            val switchMsg = if (app.debug) "ON" else "OFF"
+            X.toast(context, getString(R.string.Advice_Switch_Debug_Text) + " $switchMsg", Toast.LENGTH_LONG)
         }
     }
 }

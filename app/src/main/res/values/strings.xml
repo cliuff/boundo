@@ -263,4 +263,5 @@
     <string name="im_toast_finish">Saved in gallery</string>
     <string name="unit_man_disabled">Disabled</string>
     <string name="unit_man_dynamic_feature">Dynamic feature</string>
+    <string name="about_twitter_account">\@libekliff</string>
 </resources>

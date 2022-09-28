@@ -55,7 +55,6 @@ internal class ImmortalActivity : BaseActivity(), SystemBarMaintainerOwner, View
             R.id.immortalBagShare -> actionShareLog()
             R.id.immortalBagSend -> actionIssueReport()
             R.id.immortalContactEmail -> actionEmail()
-            R.id.immortalContactQQ -> actionQQ()
         }
     }
 
@@ -112,21 +111,6 @@ internal class ImmortalActivity : BaseActivity(), SystemBarMaintainerOwner, View
         } catch (e: Exception) {
             e.printStackTrace()
             CollisionDialog.infoCopyable(this, P.CONTACT_EMAIL).show()
-        }
-    }
-
-    private fun actionQQ() {
-        val intent = Intent().apply {
-            action = Intent.ACTION_VIEW
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            data = Uri.parse("mqqwpa://im/chat?chat_type=wpa&uin=${P.CONTACT_QQ}&version=1")
-        }
-        try {
-            startActivity(intent)
-            X.toast(this, R.string.Advice_QQ_Toast_Text, Toast.LENGTH_LONG)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            CollisionDialog.infoCopyable(this, P.CONTACT_QQ).show()
         }
     }
 

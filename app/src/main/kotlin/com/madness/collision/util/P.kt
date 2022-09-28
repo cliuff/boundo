@@ -102,10 +102,11 @@ object P {
 
     const val DIR_NAME_LOG = "Log"
 
-    const val CONTACT_EMAIL = "ballupon@gmail.com"
-    const val CONTACT_QQ = "909713819"
+    const val CONTACT_EMAIL = "libekliff@gmail.com"
 
     const val LINK_SOURCE_CODE = "https://github.com/cliuff/boundo"
+    const val LINK_TELEGRAM_GROUP = "https://t.me/cliuff_boundo"
+    const val LINK_TWITTER_ACCOUNT = "https://twitter.com/libekliff"
 
     const val IMMORTAL_EXTRA_LAUNCH_MODE = "immortalLaunchMode"
     const val IMMORTAL_EXTRA_LAUNCH_MODE_MORTAL = "mortal"

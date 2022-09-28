@@ -83,7 +83,7 @@ fun SettingsPage(mainViewModel: MainViewModel, showLanguages: (context: Context)
     }
 }
 
-val LocalContentInsets = compositionLocalOf { 0 to 0 }
+private val LocalContentInsets = compositionLocalOf { 0 to 0 }
 
 @Composable
 private fun Int.toDp() = with(LocalDensity.current) { toDp() }

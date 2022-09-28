@@ -181,22 +181,6 @@
                                 android:text="@string/textEmail" />
                         </LinearLayout>
 
-                        <LinearLayout
-                            style="@style/IconActionContainer">
-                            <com.google.android.material.card.MaterialCardView
-                                style="@style/IconActionCard">
-                                <ImageView
-                                    android:id="@+id/immortalContactQQ"
-                                    android:onClick="onClick"
-                                    style="@style/IconActionIcon"
-                                    android:src="@drawable/ic_qq_24" />
-                            </com.google.android.material.card.MaterialCardView>
-                            <TextView
-                                style="@style/IconActionText"
-                                android:textColor="?colorAOnBackground"
-                                android:text="@string/textQQ" />
-                        </LinearLayout>
-
                     </LinearLayout>
 
                 </HorizontalScrollView>
