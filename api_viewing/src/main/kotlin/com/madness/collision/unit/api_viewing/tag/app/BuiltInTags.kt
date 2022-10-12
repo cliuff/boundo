@@ -27,6 +27,7 @@ import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.list.AppListService
 import com.madness.collision.unit.api_viewing.tag.inflater.AppTagInflater
+import com.madness.collision.unit.api_viewing.util.ManifestUtil
 import com.madness.collision.util.ElapsingTime
 import com.madness.collision.util.os.OsUtils
 import kotlinx.coroutines.delay
@@ -380,9 +381,12 @@ private fun appIconRequisite(): AppTagInfo.Requisite = AppTagInfo.Requisite(
                 delay(400)
             }
         }
-        if (app.hasIcon.not()) {
-            val icon = app.getOriginalIconDrawable(context)?.mutate() ?: ColorDrawable(Color.TRANSPARENT)
-            app.retrieveAppIconInfo(icon)
+        run icon@{
+            if (app.hasIcon) return@icon
+            val appInfo = app.getApplicationInfo(context) ?: return@icon
+            val icon = app.getOriginalIconDrawable(context, appInfo)?.mutate() ?: ColorDrawable(Color.TRANSPARENT)
+            val set = listOf(icon) + ManifestUtil.getIconSet(context, appInfo, app.appPackage.basePath)
+            app.retrieveAppIconInfo(set)
         }
     }
 )

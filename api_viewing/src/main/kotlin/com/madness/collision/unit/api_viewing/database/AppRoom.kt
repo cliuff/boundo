@@ -22,13 +22,14 @@ import androidx.room.migration.AutoMigrationSpec
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 
 @Database(
-    version = 4,
+    version = 5,
     exportSchema = true,
     entities = [ApiViewingApp::class],
     autoMigrations = [
         AutoMigration(from = 1, to = 2),
         AutoMigration(from = 2, to = 3, spec = AppNameMigrationSpec::class),
         AutoMigration(from = 3, to = 4),
+        AutoMigration(from = 4, to = 5, spec = AppIconSetMigrationSpec::class),
     ]
 )
 @TypeConverters(Converters::class)
@@ -55,3 +56,9 @@ internal abstract class AppRoom : RoomDatabase() {
 
 @DeleteColumn(tableName = "app", columnName = "name")
 class AppNameMigrationSpec : AutoMigrationSpec
+
+@DeleteColumn(tableName = "app", columnName = "NICisDefined")
+@DeleteColumn(tableName = "app", columnName = "NICisAdaptive")
+@DeleteColumn(tableName = "app", columnName = "RICisDefined")
+@DeleteColumn(tableName = "app", columnName = "RICisAdaptive")
+class AppIconSetMigrationSpec : AutoMigrationSpec

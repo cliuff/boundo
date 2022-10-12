@@ -50,6 +50,50 @@ object ManifestUtil {
         }
     }
 
+    fun <R> mapAttrs(sourceDir: String, attrSet: Array<Array<String>>, block: (Int, String?) -> R): List<R>? {
+        try {
+            val values = ZipFile(File(sourceDir)).use zip@{ zip ->
+                val entry = zip.getEntry("AndroidManifest.xml") ?: return@zip null
+                attrSet.mapIndexed icon@{ index, attr ->
+                    try {
+                        val attrValue = zip.getInputStream(entry).use {
+                            Xml(it.readBytes(), Xml.MODE_FIND, attr).attrAsset
+                        }
+                        block(index, attrValue)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        block(index, null)
+                    }
+                }
+            }
+            values?.let { return it }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return null
+    }
+
+    fun getIconSet(context: Context, info: ApplicationInfo, sourceDir: String): List<Drawable?> {
+        val apkIconAttr = arrayOf(arrayOf("application", "icon"), arrayOf("application", "roundIcon"))
+        try {
+            val res = context.packageManager.getResourcesForApplication(info)
+            val apkIcons = mapAttrs(sourceDir, apkIconAttr) icon@{ _, value ->
+                if (value.isNullOrBlank()) return@icon null
+                val id = value.toIntOrNull() ?: return@icon null
+                try {
+                    ResourcesCompat.getDrawable(res, id, null)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    null
+                }
+            }
+            apkIcons?.let { return it }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return listOf(null, null)
+    }
+
     fun getIcon(context: Context, applicationInfo: ApplicationInfo, sourceDir: String): Drawable? {
         try {
             val res = context.packageManager.getResourcesForApplication(applicationInfo)

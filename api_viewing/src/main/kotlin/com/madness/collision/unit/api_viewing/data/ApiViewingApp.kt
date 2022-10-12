@@ -45,9 +45,11 @@ import java.io.File
 
 @Parcelize
 data class ApiViewingIconInfo(
-    @Embedded(prefix = "NIC")  // NormalICon
+    @Embedded(prefix = "icS_")  // SystemICon from API (modified by system, may be from an icon pack)
+    val system: ApiViewingIconDetails,
+    @Embedded(prefix = "icN_")  // NormalICon from APK (unmodified original app icon)
     val normal: ApiViewingIconDetails,
-    @Embedded(prefix = "RIC")  // RoundICon
+    @Embedded(prefix = "icR_")  // RoundICon from APK (unmodified original app icon)
     val round: ApiViewingIconDetails,
 ): Parcelable
 
@@ -120,7 +122,8 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
     var targetSDKLetter: Char = '?'
     @Ignore
     var minSDKLetter: Char = '?'
-    val adaptiveIcon: Boolean get() = iconInfo?.normal?.isAdaptive == true
+    val adaptiveIcon: Boolean
+        get() = iconInfo?.run { listOf(system, normal, round).any { it.isDefined && it.isAdaptive } } == true
     @Ignore
     var preload: Boolean = false
     @Ignore
@@ -339,7 +342,8 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
             TYPE_APP -> {
                 applicationInfo ?: return this
                 load(context, {
-                    getOriginalIconDrawable(context, applicationInfo)?.mutate() ?: ColorDrawable(Color.TRANSPARENT)
+                    val ic = getOriginalIconDrawable(context, applicationInfo)?.mutate() ?: ColorDrawable(Color.TRANSPARENT)
+                    listOf(ic) + ManifestUtil.getIconSet(context, applicationInfo, appPackage.basePath)
                 }, { ManifestUtil.getRoundIcon(context, applicationInfo, appPackage.basePath) })
             }
             TYPE_ICON -> throw IllegalArgumentException("instance of TYPE_ICON must provide icon retrievers")
@@ -347,7 +351,7 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
         }
     }
 
-    private fun load(context: Context, retrieverLogo: () -> Drawable, retrieverRound: () -> Drawable?): ApiViewingApp {
+    private fun load(context: Context, retrieverLogo: () -> List<Drawable?>, retrieverRound: () -> Drawable?): ApiViewingApp {
         if (!preload || isLoadingIcon || hasIcon) return this
         preload = false
         isLoadingIcon = true
@@ -377,8 +381,12 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
         }
     }
 
-    fun retrieveAppIconInfo(iconDrawable: Drawable) {
-        retrieveConsuming(2, iconDrawable)
+    private fun retrieveAppIconInfo(iconDrawable: Drawable) {
+        retrieveAppIconInfo(listOf(iconDrawable, null, null))
+    }
+
+    fun retrieveAppIconInfo(iconSet: List<Drawable?>) {
+        retrieveConsuming(2, iconSet)
     }
 
     /**
@@ -448,12 +456,13 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
             2 -> {
                 synchronized(this) {
                     if (iconInfo != null) return
-                    val iconDrawable = arg as Drawable
-                    val isAdaptive = OsUtils.satisfy(OsUtils.O) && iconDrawable is AdaptiveIconDrawable
-                    iconInfo = ApiViewingIconInfo(
-                        normal = ApiViewingIconDetails(isDefined = true, isAdaptive = isAdaptive),
-                        round = ApiViewingIconDetails(isDefined = false, isAdaptive = false),
-                    )
+                    val iconSet = (arg as List<*>).filterIsInstance<Drawable?>()
+                    val list = (0..2).map { iconSet.getOrNull(it) }.map { ic ->
+                        val isDefined = ic != null
+                        val isAdaptive = isDefined && OsUtils.satisfy(OsUtils.O) && ic is AdaptiveIconDrawable
+                        ApiViewingIconDetails(isDefined, isAdaptive)
+                    }
+                    iconInfo = ApiViewingIconInfo(system = list[0], normal = list[1], round = list[2])
                 }
             }
         }

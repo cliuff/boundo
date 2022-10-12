@@ -21,6 +21,7 @@ import android.content.ClipData
 import android.content.ClipDescription
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.drawable.Icon
 import android.net.Uri
 import android.os.Bundle
@@ -267,18 +268,51 @@ class FilePop: BottomSheetDialogFragment(), SystemBarMaintainerOwner {
     }
 
     private fun share(){
-        startActivity(Intent().apply {
+        val intent = Intent().apply {
             action = Intent.ACTION_SEND
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION
             type = fileType
             putExtra(Intent.EXTRA_STREAM, fileUri)
-            // set android q preview title
-            if (X.aboveOn(X.Q) && title.isNotBlank()) putExtra(Intent.EXTRA_TITLE, title)
-            // set android q preview image
-            if (X.aboveOn(X.Q) && imageUri != null) clipData = ClipData.newUri(mContext.contentResolver, imageLabel, imageUri)
-        }.let { Intent.createChooser(it, title) }) // deprecated in android 10
+            if (OsUtils.satisfy(OsUtils.Q)) {
+                // Setting Intent.FLAG_GRANT_READ_URI_PERMISSION
+                // to intent's flags only applies to Intent.data and Intent.clipData,
+                // whereas in this case we are using Intent.putExtra() to add our target file.
+                grantUriPermission(mContext, fileUri)
+                // set android q preview title
+                if (title.isNotBlank()) putExtra(Intent.EXTRA_TITLE, title)
+                // set android q preview image
+                if (imageUri != null) {
+                    clipData = ClipData.newUri(mContext.contentResolver, imageLabel, imageUri)
+                }
+            }
+        }
+        val chooser = Intent.createChooser(intent, title)
+        // URI exceptions are produced in showing the chooser dialog,
+        // so grant it (the chooser dialog activity itself) the permission as well
+        chooser.grantUriPermission(mContext, fileUri)
+        startActivity(chooser)
         dismiss()
     }
+
+    // Get the list of activities matching the intent and grant permission to all of them
+    private fun Intent.grantUriPermission(context: Context, uri: Uri) {
+        val intent = this
+        val resolveFlag = PackageManager.MATCH_DEFAULT_ONLY
+        val resolveList = if (OsUtils.satisfy(OsUtils.T)) {
+            val flags = PackageManager.ResolveInfoFlags.of(resolveFlag.toLong())
+            context.packageManager.queryIntentActivities(intent, flags)
+        } else {
+            context.packageManager.queryLegacy(intent, resolveFlag)
+        }
+        resolveList.forEach {
+            val pkgName = it.activityInfo.packageName
+            context.grantUriPermission(pkgName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+    }
+
+    @Suppress("deprecation")
+    private fun PackageManager.queryLegacy(intent: Intent, flags: Int) =
+        queryIntentActivities(intent, flags)
 
     private fun save() {
         val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {

@@ -57,6 +57,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.NestedScrollView
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import coil.compose.rememberAsyncImagePainter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -186,7 +187,7 @@ class AppInfoFragment(private val appPkgName: String) : BottomSheetDialogFragmen
                 }
                 val providedValues = arrayOf(providedBackDispatcher).filterNotNull().toTypedArray()
                 CompositionLocalProvider(LocalApp provides a, *providedValues) {
-                    AppInfoPage(mainViewModel, {
+                    AppInfoPage(mainViewModel, this, {
                         dismiss()
                         AppListService().actionIcon(context, a, fMan)
                     }, {
@@ -249,6 +250,7 @@ private fun getExpressedTags(tags: List<AppTagInfo>, res: AppTagInfo.Resources, 
 @Composable
 fun AppInfoPage(
     mainViewModel: MainViewModel,
+    hostFragment: DialogFragment,
     shareIcon: () -> Unit,
     shareApk: () -> Unit,
 ) {
@@ -277,6 +279,7 @@ fun AppInfoPage(
             }
             AppTagInfo.ID_APP_ADAPTIVE_ICON -> {
                 {
+                    hostFragment.dismiss()
                     val f = AppIconFragment.newInstance(
                         app.name, app.packageName, app.appPackage.basePath, app.isArchive)
                     mainViewModel.displayFragment(f)
@@ -393,6 +396,26 @@ private fun DetailedAppInfo(
     }
 }
 
+private fun getApkSizeList(pkg: AppPackage, context: Context): List<Pair<String, String?>> {
+    val baseName = if (OsUtils.satisfy(OsUtils.O)) Path(pkg.basePath).name else File(pkg.basePath).name
+    val parentPath = pkg.basePath.replaceFirst(baseName, "")
+    val sizes = pkg.apkPaths.map { path ->
+        val fileName = path.replaceFirst(parentPath, "")
+        val file = File(path).takeIf { it.exists() } ?: return@map fileName to null
+        fileName to file.length()
+    }
+    val totalBytes = sizes.sumOf { it.second ?: 0 }.takeIf { it > 0 }
+    val totalSize = totalBytes?.let { Formatter.formatFileSize(context, it) }
+    val itemSizeList = sizes.map apkSize@{ (name, bytes) ->
+        bytes ?: return@apkSize name to null
+        name to Formatter.formatFileSize(context, bytes)
+    }
+    return buildList(itemSizeList.size + 1) {
+        add("" to totalSize)
+        addAll(itemSizeList)
+    }
+}
+
 @Composable
 private fun FrontAppInfo(
     cardColor: Color,
@@ -405,20 +428,7 @@ private fun FrontAppInfo(
 ) {
     val app = LocalApp.current
     val context = LocalContext.current
-    val splitApks = remember {
-        val pkg = app.appPackage
-        val baseName = if (OsUtils.satisfy(OsUtils.O)) Path(pkg.basePath).name else File(pkg.basePath).name
-        val parentPath = pkg.basePath.replaceFirst(baseName, "")
-        val sizes = pkg.apkPaths.map { path ->
-            val fileName = path.replaceFirst(parentPath, "")
-            val file = File(path).takeIf { it.exists() } ?: return@map fileName to -1L
-            fileName to file.length()
-        }
-        buildList(sizes.size + 1) {
-            add("" to Formatter.formatFileSize(context, sizes.sumOf { it.second }))
-            addAll(sizes.map { it.first to Formatter.formatFileSize(context, it.second) })
-        }
-    }
+    val splitApks = remember { getApkSizeList(app.appPackage, context) }
     Column {
         Card(
             modifier = Modifier.padding(horizontal = horizontalMargin),
@@ -426,7 +436,7 @@ private fun FrontAppInfo(
             shape = AbsoluteSmoothCornerShape(20.dp, 100),
             colors = CardDefaults.elevatedCardColors(containerColor = cardColor),
         ) {
-            AppDetailsContent(verInfoList, bitmaps, updateTime, clickDetails)
+            AppDetailsContent(verInfoList, bitmaps, splitApks[0].second, updateTime, clickDetails)
         }
         Spacer(modifier = Modifier.height(18.dp))
         Card(
@@ -513,6 +523,7 @@ private fun AppHeaderContent(cardColor: Color, modifier: Modifier = Modifier) {
 private fun AppDetailsContent(
     verInfoList: List<VerInfo>,
     bitmaps: List<Bitmap?>,
+    totalSize: String?,
     updateTime: String?,
     clickDetails: () -> Unit,
 ) {
@@ -572,9 +583,10 @@ private fun AppDetailsContent(
             Column(modifier = Modifier.weight(1f)) {
                 val app = LocalApp.current
                 if (updateTime != null) {
-                    AppDetailsItem1(app.verName, updateTime, Icons.Outlined.Info)
+                    AppDetailsItem1(app.verName, totalSize, updateTime, Icons.Outlined.Info)
                 } else {
-                    AppDetailsItem(app.verName, Icons.Outlined.Info)
+                    val verSize = if (totalSize != null) "${app.verName} • $totalSize" else app.verName
+                    AppDetailsItem(verSize, Icons.Outlined.Info)
                 }
                 AppDetailsItem(app.packageName, Icons.Outlined.Inventory2)
             }
@@ -657,7 +669,7 @@ private fun AppDetailsItem(label: String, icon: ImageVector) {
 }
 
 @Composable
-private fun AppDetailsItem1(label: String, label1: String, icon: ImageVector) {
+private fun AppDetailsItem1(label: String, label0: String?, label1: String, icon: ImageVector) {
     Row(
         modifier = Modifier.padding(vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -678,6 +690,24 @@ private fun AppDetailsItem1(label: String, label1: String, icon: ImageVector) {
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.weight(1f, fill = false),
         )
+        if (label0 != null) {
+            Text(
+                text = " • ",
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Medium,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+            Text(
+                text = label0,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Medium,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
         Spacer(modifier = Modifier.width(7.dp))
         Text(
             text = label1,
@@ -701,7 +731,7 @@ private class ExpressedTag(
 @Composable
 private fun TagDetailsContent(
     getClick: (AppTagInfo) -> (() -> Unit)?,
-    splitApks: List<Pair<String, String>>,
+    splitApks: List<Pair<String, String?>>,
 ) {
     val app = LocalApp.current
     val context = LocalContext.current
@@ -740,7 +770,7 @@ private fun TagDetailsContent(
 private fun TagDetailsContent(
     tags: List<ExpressedTag>,
     getClick: (AppTagInfo) -> (() -> Unit)?,
-    splitApks: List<Pair<String, String>>,
+    splitApks: List<Pair<String, String?>>,
 ) {
     for (index in tags.indices) {
         val expressed = tags[index]
@@ -751,13 +781,19 @@ private fun TagDetailsContent(
         key(key) {
             val info = expressed.info
             val activated = expressed.activated
-            val showDivider = remember { index != 0 && (activated || tags[index - 1].activated) }
+            val isAi = expressed.intrinsic.id == AppTagInfo.ID_APP_ADAPTIVE_ICON
+            val showDivider = remember show@{
+                if (index == 0) return@show false
+                if (activated || isAi) return@show true
+                val lastTag = tags[index - 1]
+                lastTag.activated || lastTag.intrinsic.id == AppTagInfo.ID_APP_ADAPTIVE_ICON
+            }
             if (showDivider) Divider(
                 modifier = Modifier.padding(start = 20.dp),
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.15f),
                 thickness = 0.5.dp,
             )
-            if (activated) {
+            if (activated || isAi) {
                 var showAabDetails by remember { mutableStateOf(false) }
                 val isAab = expressed.intrinsic.id == AppTagInfo.ID_PKG_AAB
                 val direction = LocalLayoutDirection.current
@@ -777,6 +813,8 @@ private fun TagDetailsContent(
                         }
                     }
                 }
+                val itemColor = MaterialTheme.colorScheme.onSurface
+                    .copy(alpha = if (activated) 0.75f else 0.35f)
                 val onClick = run {
                     if (!isAab) return@run expressed.intrinsic.let(getClick);
                     { showAabDetails = !showAabDetails }
@@ -787,6 +825,8 @@ private fun TagDetailsContent(
                     desc = expressed.desc,
                     icon = info.icon?.bitmap,
                     chevron = chevron,
+                    itemColor = itemColor,
+                    isIconActivated = activated,
                     onClick = onClick,
                     modifier = Modifier
                         .let { if (index == 0) it.padding(top = 8.dp) else it }
@@ -824,6 +864,8 @@ private fun TagItem(
     desc: String?,
     icon: Bitmap?,
     chevron: ImageVector?,
+    itemColor: Color,
+    isIconActivated: Boolean,
     modifier: Modifier = Modifier,
     onClick: (() -> Unit)? = null,
 ) {
@@ -836,11 +878,11 @@ private fun TagItem(
     ) {
         Column(modifier = Modifier.weight(1f)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                TagItemIcon(icon = icon, activated = true)
+                TagItemIcon(icon = icon, activated = isIconActivated)
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
                     text = title,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
+                    color = itemColor,
                     fontSize = 13.sp,
                     fontWeight = FontWeight.Medium,
                     lineHeight = 14.sp,
@@ -850,7 +892,7 @@ private fun TagItem(
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = desc,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
+                    color = itemColor,
                     fontSize = 10.sp,
                     fontWeight = FontWeight.Medium,
                     lineHeight = 11.sp,
@@ -862,7 +904,7 @@ private fun TagItem(
                 modifier = Modifier.size(16.dp),
                 imageVector = chevron,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
+                tint = itemColor,
             )
         }
     }
@@ -923,13 +965,13 @@ private fun TagItemIcon(icon: Bitmap?, activated: Boolean) {
 }
 
 @Composable
-private fun AppBundleDetails(list: List<Pair<String, String>>) {
+private fun AppBundleDetails(list: List<Pair<String, String?>>) {
     Column(modifier = Modifier
         .padding(horizontal = 20.dp)
         .padding(bottom = 12.dp)) {
         val totalSize = list[0].second
         Text(
-            text = stringResource(AvR.string.av_list_info_aab_total_size, totalSize),
+            text = stringResource(AvR.string.av_list_info_aab_total_size, totalSize ?: "0"),
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
             fontSize = 10.sp,
             fontWeight = FontWeight.Medium,
@@ -945,7 +987,7 @@ private fun AppBundleDetails(list: List<Pair<String, String>>) {
 }
 
 @Composable
-private fun AppBundleApkItem(label: String, label1: String) {
+private fun AppBundleApkItem(label: String, label1: String?) {
     Row(
         modifier = Modifier.padding(vertical = 3.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -967,16 +1009,18 @@ private fun AppBundleApkItem(label: String, label1: String) {
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.weight(1f, fill = false),
         )
-        Spacer(modifier = Modifier.width(6.dp))
-        Text(
-            text = label1,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
-            fontSize = 10.sp,
-            fontWeight = FontWeight.Medium,
-            lineHeight = 11.sp,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
+        if (label1 != null) {
+            Spacer(modifier = Modifier.width(6.dp))
+            Text(
+                text = label1,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                fontSize = 10.sp,
+                fontWeight = FontWeight.Medium,
+                lineHeight = 11.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
     }
 }
 
