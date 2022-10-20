@@ -114,4 +114,15 @@
     <string name="av_upd_used">Недавно использованный</string>
     <string name="av_upd_usage_access">Доступ к использованию</string>
     <string name="av_upd_usage_access_msg">Предоставьте доступ сейчас, чтобы просмотреть недавно использованные приложения</string>
+    <string name="av_ic_info_src_api">СИСТЕМНЫЙ API</string>
+    <string name="av_ic_info_label_runtime">Значок приложения среды выполнения</string>
+    <string name="av_ic_info_label_apk_normal">Обычный значок приложения</string>
+    <string name="av_ic_info_label_apk_round">Круглый значок приложения</string>
+    <string name="av_ic_info_ai_back">Фоновый слой</string>
+    <string name="av_ic_info_ai_fore">Слой переднего плана</string>
+    <string name="av_ic_info_ai_mono">Монохромный значок</string>
+    <string name="av_ic_info_preview_full">Полный предварительный просмотр</string>
+    <string name="av_ic_info_preview_rect">Предварительный просмотр прямоугольника со скругленными углами</string>
+    <string name="av_ic_info_preview_squircle">Предварительный просмотр суперэллипса</string>
+    <string name="av_ic_info_preview_round">Предварительный просмотр раунда</string>
 </resources>

@@ -114,4 +114,15 @@
     <string name="av_upd_used">ใช้ล่าสุด</string>
     <string name="av_upd_usage_access">การเข้าถึงการใช้งาน</string>
     <string name="av_upd_usage_access_msg">ให้สิทธิ์เข้าถึงตอนนี้เพื่อดูแอพที่ใช้ล่าสุด</string>
+    <string name="av_ic_info_src_api">SYSTEM API</string>
+    <string name="av_ic_info_label_runtime">ไอคอนแอปรันไทม์</string>
+    <string name="av_ic_info_label_apk_normal">ไอคอนแอปปกติ</string>
+    <string name="av_ic_info_label_apk_round">ไอคอนแอพกลม</string>
+    <string name="av_ic_info_ai_back">เลเยอร์พื้นหลัง</string>
+    <string name="av_ic_info_ai_fore">ชั้นเบื้องหน้า</string>
+    <string name="av_ic_info_ai_mono">ไอคอนขาวดำ</string>
+    <string name="av_ic_info_preview_full">ดูตัวอย่างเต็ม</string>
+    <string name="av_ic_info_preview_rect">ตัวอย่างสี่เหลี่ยมผืนผ้าโค้งมน</string>
+    <string name="av_ic_info_preview_squircle">ตัวอย่าง Superellipse</string>
+    <string name="av_ic_info_preview_round">ตัวอย่างรอบ</string>
 </resources>

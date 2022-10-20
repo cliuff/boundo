@@ -114,4 +114,15 @@
     <string name="av_upd_used">Được sử dụng gần đây</string>
     <string name="av_upd_usage_access">Quyền sử dụng</string>
     <string name="av_upd_usage_access_msg">Cấp quyền truy cập ngay bây giờ để xem các ứng dụng được sử dụng gần đây</string>
+    <string name="av_ic_info_src_api">API HỆ THỐNG</string>
+    <string name="av_ic_info_label_runtime">Biểu tượng ứng dụng thời gian chạy</string>
+    <string name="av_ic_info_label_apk_normal">Biểu tượng ứng dụng bình thường</string>
+    <string name="av_ic_info_label_apk_round">Biểu tượng ứng dụng tròn</string>
+    <string name="av_ic_info_ai_back">Lớp nền</string>
+    <string name="av_ic_info_ai_fore">Lớp tiền cảnh</string>
+    <string name="av_ic_info_ai_mono">Biểu tượng đơn sắc</string>
+    <string name="av_ic_info_preview_full">Bản xem trước đầy đủ</string>
+    <string name="av_ic_info_preview_rect">Bản xem trước hình chữ nhật tròn</string>
+    <string name="av_ic_info_preview_squircle">Bản xem trước Superellipse</string>
+    <string name="av_ic_info_preview_round">Xem trước vòng</string>
 </resources>

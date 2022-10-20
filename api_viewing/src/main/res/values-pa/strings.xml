@@ -114,4 +114,15 @@
     <string name="av_upd_used">ਹਾਲ ਹੀ ਵਿੱਚ ਵਰਤਿਆ</string>
     <string name="av_upd_usage_access">ਵਰਤੋਂ ਪਹੁੰਚ</string>
     <string name="av_upd_usage_access_msg">ਹਾਲ ਹੀ ਵਿੱਚ ਵਰਤੀਆਂ ਗਈਆਂ ਐਪਾਂ ਨੂੰ ਦੇਖਣ ਲਈ ਹੁਣੇ ਪਹੁੰਚ ਦਿਓ</string>
+    <string name="av_ic_info_src_api">ਸਿਸਟਮ API</string>
+    <string name="av_ic_info_label_runtime">ਰਨਟਾਈਮ ਐਪ ਪ੍ਰਤੀਕ</string>
+    <string name="av_ic_info_label_apk_normal">ਸਧਾਰਨ ਐਪ ਪ੍ਰਤੀਕ</string>
+    <string name="av_ic_info_label_apk_round">ਗੋਲ ਐਪ ਪ੍ਰਤੀਕ</string>
+    <string name="av_ic_info_ai_back">ਬੈਕਗ੍ਰਾਊਂਡ ਪਰਤ</string>
+    <string name="av_ic_info_ai_fore">ਫੋਰਗਰਾਉਂਡ ਪਰਤ</string>
+    <string name="av_ic_info_ai_mono">ਮੋਨੋਕ੍ਰੋਮ ਪ੍ਰਤੀਕ</string>
+    <string name="av_ic_info_preview_full">ਪੂਰੀ ਝਲਕ</string>
+    <string name="av_ic_info_preview_rect">ਗੋਲ ਆਇਤਕਾਰ ਝਲਕ</string>
+    <string name="av_ic_info_preview_squircle">Superellipse ਪੂਰਵ-ਝਲਕ</string>
+    <string name="av_ic_info_preview_round">ਗੋਲ ਝਲਕ</string>
 </resources>

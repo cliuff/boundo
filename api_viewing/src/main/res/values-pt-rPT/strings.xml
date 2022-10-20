@@ -114,4 +114,15 @@
     <string name="av_upd_used">Usado recentemente</string>
     <string name="av_upd_usage_access">Acesso de uso</string>
     <string name="av_upd_usage_access_msg">Conceder acesso agora para ver os aplicativos usados recentemente</string>
+    <string name="av_ic_info_src_api">API do SISTEMA</string>
+    <string name="av_ic_info_label_runtime">Ícone do aplicativo em tempo de execução</string>
+    <string name="av_ic_info_label_apk_normal">Ícone normal do aplicativo</string>
+    <string name="av_ic_info_label_apk_round">Ícone redondo do aplicativo</string>
+    <string name="av_ic_info_ai_back">Camada de fundo</string>
+    <string name="av_ic_info_ai_fore">Camada de primeiro plano</string>
+    <string name="av_ic_info_ai_mono">Ícone monocromático</string>
+    <string name="av_ic_info_preview_full">Visualização completa</string>
+    <string name="av_ic_info_preview_rect">Visualização do retângulo arredondado</string>
+    <string name="av_ic_info_preview_squircle">Visualização da superelipse</string>
+    <string name="av_ic_info_preview_round">Pré-visualização da rodada</string>
 </resources>

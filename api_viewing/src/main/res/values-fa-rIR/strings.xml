@@ -134,4 +134,15 @@
     <string name="av_upd_used">اخیرا مورد استفاده قرار گرفته</string>
     <string name="av_upd_usage_access">دسترسی به استفاده</string>
     <string name="av_upd_usage_access_msg">برای مشاهده برنامه‌های اخیراً استفاده شده، اکنون اجازه دسترسی بدهید</string>
+    <string name="av_ic_info_src_api">SYSTEM API</string>
+    <string name="av_ic_info_label_runtime">نماد برنامه زمان اجرا</string>
+    <string name="av_ic_info_label_apk_normal">نماد برنامه عادی</string>
+    <string name="av_ic_info_label_apk_round">نماد برنامه گرد</string>
+    <string name="av_ic_info_ai_back">لایه پس زمینه</string>
+    <string name="av_ic_info_ai_fore">لایه پیش زمینه</string>
+    <string name="av_ic_info_ai_mono">نماد تک رنگ</string>
+    <string name="av_ic_info_preview_full">پیش نمایش کامل</string>
+    <string name="av_ic_info_preview_rect">پیش نمایش مستطیل گرد</string>
+    <string name="av_ic_info_preview_squircle">پیش نمایش Superellipse</string>
+    <string name="av_ic_info_preview_round">پیش نمایش دور</string>
 </resources>

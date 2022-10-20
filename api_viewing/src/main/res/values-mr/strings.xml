@@ -114,4 +114,15 @@
     <string name="av_upd_used">अलीकडे वापरले</string>
     <string name="av_upd_usage_access">वापर प्रवेश</string>
     <string name="av_upd_usage_access_msg">अलीकडे वापरलेले अॅप्स पाहण्यासाठी आता प्रवेश मंजूर करा</string>
+    <string name="av_ic_info_src_api">SYSTEM API</string>
+    <string name="av_ic_info_label_runtime">रनटाइम अॅप चिन्ह</string>
+    <string name="av_ic_info_label_apk_normal">सामान्य अॅप चिन्ह</string>
+    <string name="av_ic_info_label_apk_round">गोल अॅप चिन्ह</string>
+    <string name="av_ic_info_ai_back">पार्श्वभूमी स्तर</string>
+    <string name="av_ic_info_ai_fore">अग्रभाग स्तर</string>
+    <string name="av_ic_info_ai_mono">मोनोक्रोम चिन्ह</string>
+    <string name="av_ic_info_preview_full">पूर्ण पूर्वावलोकन</string>
+    <string name="av_ic_info_preview_rect">गोलाकार आयत पूर्वावलोकन</string>
+    <string name="av_ic_info_preview_squircle">सुपरएलिप्स पूर्वावलोकन</string>
+    <string name="av_ic_info_preview_round">गोल पूर्वावलोकन</string>
 </resources>

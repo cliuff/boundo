@@ -134,4 +134,15 @@
     <string name="av_upd_used">最近使用</string>
     <string name="av_upd_usage_access">使用情况权限</string>
     <string name="av_upd_usage_access_msg">立即授予权限以查看最近使用的应用</string>
+    <string name="av_ic_info_src_api">系统 API</string>
+    <string name="av_ic_info_label_runtime">运行时应用图标</string>
+    <string name="av_ic_info_label_apk_normal">一般应用图标</string>
+    <string name="av_ic_info_label_apk_round">圆形应用图标</string>
+    <string name="av_ic_info_ai_back">背景图层</string>
+    <string name="av_ic_info_ai_fore">前景图层</string>
+    <string name="av_ic_info_ai_mono">单色图标</string>
+    <string name="av_ic_info_preview_full">完整预览</string>
+    <string name="av_ic_info_preview_rect">圆角矩形预览</string>
+    <string name="av_ic_info_preview_squircle">方圆形预览</string>
+    <string name="av_ic_info_preview_round">圆形预览</string>
 </resources>

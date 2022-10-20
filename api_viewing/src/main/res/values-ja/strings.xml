@@ -114,4 +114,15 @@
     <string name="av_upd_used">最近使用された</string>
     <string name="av_upd_usage_access">利用方法 アクセス</string>
     <string name="av_upd_usage_access_msg">最近使用したアプリを表示するには、今すぐアクセスを許可してください</string>
+    <string name="av_ic_info_src_api">システム API</string>
+    <string name="av_ic_info_label_runtime">ランタイム アプリのアイコン</string>
+    <string name="av_ic_info_label_apk_normal">通常のアプリ アイコン</string>
+    <string name="av_ic_info_label_apk_round">丸いアプリ アイコン</string>
+    <string name="av_ic_info_ai_back">背景レイヤー</string>
+    <string name="av_ic_info_ai_fore">前景レイヤー</string>
+    <string name="av_ic_info_ai_mono">モノクロ アイコン</string>
+    <string name="av_ic_info_preview_full">フルプレビュー</string>
+    <string name="av_ic_info_preview_rect">角丸長方形のプレビュー</string>
+    <string name="av_ic_info_preview_squircle">超楕円のプレビュー</string>
+    <string name="av_ic_info_preview_round">ラウンドプレビュー</string>
 </resources>

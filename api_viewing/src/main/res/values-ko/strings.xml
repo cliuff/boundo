@@ -114,4 +114,15 @@
     <string name="av_upd_used">최근 사용</string>
     <string name="av_upd_usage_access">사용 액세스</string>
     <string name="av_upd_usage_access_msg">최근에 사용한 앱을 보려면 지금 액세스 권한을 부여하세요.</string>
+    <string name="av_ic_info_src_api">시스템 API</string>
+    <string name="av_ic_info_label_runtime">런타임 앱 아이콘</string>
+    <string name="av_ic_info_label_apk_normal">일반 앱 아이콘</string>
+    <string name="av_ic_info_label_apk_round">둥근 앱 아이콘</string>
+    <string name="av_ic_info_ai_back">배경 레이어</string>
+    <string name="av_ic_info_ai_fore">전경 레이어</string>
+    <string name="av_ic_info_ai_mono">흑백 아이콘</string>
+    <string name="av_ic_info_preview_full">전체 미리보기</string>
+    <string name="av_ic_info_preview_rect">둥근 사각형 미리보기</string>
+    <string name="av_ic_info_preview_squircle">초타원 미리보기</string>
+    <string name="av_ic_info_preview_round">라운드 미리보기</string>
 </resources>

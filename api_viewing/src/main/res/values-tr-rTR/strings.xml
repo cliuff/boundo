@@ -114,4 +114,15 @@
     <string name="av_upd_used">Son zamanlarda kullanılmış</string>
     <string name="av_upd_usage_access">Kullanım Erişimi</string>
     <string name="av_upd_usage_access_msg">Son kullanılan uygulamaları görüntülemek için şimdi erişim verin</string>
+    <string name="av_ic_info_src_api">SİSTEM API\'si</string>
+    <string name="av_ic_info_label_runtime">Çalışma zamanı uygulaması simgesi</string>
+    <string name="av_ic_info_label_apk_normal">Normal uygulama simgesi</string>
+    <string name="av_ic_info_label_apk_round">Yuvarlak uygulama simgesi</string>
+    <string name="av_ic_info_ai_back">Arka plan katmanı</string>
+    <string name="av_ic_info_ai_fore">Ön plan katmanı</string>
+    <string name="av_ic_info_ai_mono">tek renkli simge</string>
+    <string name="av_ic_info_preview_full">Tam önizleme</string>
+    <string name="av_ic_info_preview_rect">Yuvarlatılmış dikdörtgen önizleme</string>
+    <string name="av_ic_info_preview_squircle">Süperelips önizlemesi</string>
+    <string name="av_ic_info_preview_round">Yuvarlak önizleme</string>
 </resources>

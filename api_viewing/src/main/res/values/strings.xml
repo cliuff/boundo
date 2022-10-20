@@ -134,4 +134,15 @@
     <string name="av_upd_used">Recently used</string>
     <string name="av_upd_usage_access">Usage Access</string>
     <string name="av_upd_usage_access_msg">Grant access now to view recently used apps</string>
+    <string name="av_ic_info_src_api">SYSTEM API</string>
+    <string name="av_ic_info_label_runtime">Runtime app icon</string>
+    <string name="av_ic_info_label_apk_normal">Normal app icon</string>
+    <string name="av_ic_info_label_apk_round">Round app icon</string>
+    <string name="av_ic_info_ai_back">Background layer</string>
+    <string name="av_ic_info_ai_fore">Foreground layer</string>
+    <string name="av_ic_info_ai_mono">Monochrome icon</string>
+    <string name="av_ic_info_preview_full">Full preview</string>
+    <string name="av_ic_info_preview_rect">Rounded rectangle preview</string>
+    <string name="av_ic_info_preview_squircle">Squircle preview</string>
+    <string name="av_ic_info_preview_round">Round preview</string>
 </resources>

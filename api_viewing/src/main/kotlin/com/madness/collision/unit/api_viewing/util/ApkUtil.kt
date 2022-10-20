@@ -83,13 +83,21 @@ object ApkUtil {
 
     /**
      * R.mipmap.ic_launcher
+     */
+    fun getResourceEntryName(resources: Resources, resId: Int): Pair<String, String> {
+        val type = resources.getResourceTypeName(resId)
+        val targetEntry = resources.getResourceEntryName(resId)
+        return type to targetEntry
+    }
+
+    /**
+     * R.mipmap.ic_launcher
      *
      * res/mipmap-anydpi-v26/ic_launcher.xml
      * res/mipmap-xxxhdpi/ic_launcher.png
      */
     fun getResourceEntries(resources: Resources, resId: Int, file: File): Pair<String, List<String>> {
-        val type = resources.getResourceTypeName(resId)
-        val targetEntry = resources.getResourceEntryName(resId)
+        val (type, targetEntry) = getResourceEntryName(resources, resId)
         val dirPrefix = "res/$type"
         val dirPattern = "${dirPrefix}(-[a-z\\d]+)*/"
         val namePattern = "$dirPattern$targetEntry\\.((?!\\.).)+".toRegex()

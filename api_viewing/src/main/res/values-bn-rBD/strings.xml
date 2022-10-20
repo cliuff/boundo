@@ -114,4 +114,15 @@
     <string name="av_upd_used">সম্প্রতি ব্যবহৃত</string>
     <string name="av_upd_usage_access">ব্যবহার অ্যাক্সেস</string>
     <string name="av_upd_usage_access_msg">সম্প্রতি ব্যবহৃত অ্যাপগুলি দেখতে এখনই অ্যাক্সেস দিন</string>
+    <string name="av_ic_info_src_api">সিস্টেম API</string>
+    <string name="av_ic_info_label_runtime">রানটাইম অ্যাপ আইকন</string>
+    <string name="av_ic_info_label_apk_normal">সাধারণ অ্যাপ আইকন</string>
+    <string name="av_ic_info_label_apk_round">গোলাকার অ্যাপ আইকন</string>
+    <string name="av_ic_info_ai_back">পটভূমি স্তর</string>
+    <string name="av_ic_info_ai_fore">ফোরগ্রাউন্ড স্তর</string>
+    <string name="av_ic_info_ai_mono">একরঙা আইকন</string>
+    <string name="av_ic_info_preview_full">সম্পূর্ণ পূর্বরূপ</string>
+    <string name="av_ic_info_preview_rect">বৃত্তাকার আয়তক্ষেত্রের পূর্বরূপ</string>
+    <string name="av_ic_info_preview_squircle">Superellipse পূর্বরূপ</string>
+    <string name="av_ic_info_preview_round">বৃত্তাকার পূর্বরূপ</string>
 </resources>

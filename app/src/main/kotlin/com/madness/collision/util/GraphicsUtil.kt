@@ -156,7 +156,7 @@ object GraphicsUtil {
         when (flavor) {
             AI_FLAVOR_ROUND -> path.addCircle(radius, radius, radiusInner, Path.Direction.CW)
             AI_FLAVOR_ROUNDED -> {
-                val cornerRadius = context.resources.getDimension(R.dimen.radius)
+                val cornerRadius = X.size(context, 12.6f, X.DP)
                 val end = radiusInner * 2 + offset
                 path.addRoundRect(offset, offset, end, end, cornerRadius, cornerRadius, Path.Direction.CW)
             }
@@ -226,7 +226,7 @@ object GraphicsUtil {
         when (flavor) {
             AI_FLAVOR_ROUND -> path.addCircle(targetRadiusFloat, targetRadiusFloat, displayRadiusFloat, Path.Direction.CW)
             AI_FLAVOR_ROUNDED -> {
-                val radius = context.resources.getDimension(R.dimen.radius)
+                val radius = X.size(context, 12.6f, X.DP)
                 val end = displayDiameterFloat + unitOneSixthFloat
                 path.addRoundRect(unitOneSixthFloat, unitOneSixthFloat, end, end, radius, radius, Path.Direction.CW)
             }
@@ -253,7 +253,7 @@ object GraphicsUtil {
             when (flavor) {
                 AI_FLAVOR_ROUND -> pathStroke.addCircle(targetRadiusFloat, targetRadiusFloat, displayRadiusFloat, Path.Direction.CW)
                 AI_FLAVOR_ROUNDED -> {
-                    val radius = context.resources.getDimension(R.dimen.radius)
+                    val radius = X.size(context, 12.6f, X.DP)
                     val end = displayDiameterFloat + unitOneSixthFloat
                     pathStroke.addRoundRect(unitOneSixthFloat, unitOneSixthFloat, end, end, radius, radius, Path.Direction.CW)
                 }

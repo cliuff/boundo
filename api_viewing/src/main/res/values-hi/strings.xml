@@ -114,4 +114,15 @@
     <string name="av_upd_used">हाल ही में उपयोग किया गया</string>
     <string name="av_upd_usage_access">उपयोग पहुंच</string>
     <string name="av_upd_usage_access_msg">हाल ही में उपयोग किए गए ऐप्स देखने के लिए अभी पहुंच प्रदान करें</string>
+    <string name="av_ic_info_src_api">सिस्टम एपीआई</string>
+    <string name="av_ic_info_label_runtime">रनटाइम ऐप आइकन</string>
+    <string name="av_ic_info_label_apk_normal">सामान्य ऐप आइकन</string>
+    <string name="av_ic_info_label_apk_round">गोल ऐप आइकन</string>
+    <string name="av_ic_info_ai_back">पृष्ठभूमि परत</string>
+    <string name="av_ic_info_ai_fore">अग्रभूमि परत</string>
+    <string name="av_ic_info_ai_mono">मोनोक्रोम आइकन</string>
+    <string name="av_ic_info_preview_full">पूर्ण पूर्वावलोकन</string>
+    <string name="av_ic_info_preview_rect">गोल आयत पूर्वावलोकन</string>
+    <string name="av_ic_info_preview_squircle">सुपरलिप्स पूर्वावलोकन</string>
+    <string name="av_ic_info_preview_round">गोल पूर्वावलोकन</string>
 </resources>

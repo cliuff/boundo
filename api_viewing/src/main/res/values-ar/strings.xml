@@ -134,4 +134,15 @@
     <string name="av_upd_used">مستخدم حديثا</string>
     <string name="av_upd_usage_access">الوصول إلى الاستخدام</string>
     <string name="av_upd_usage_access_msg">امنح حق الوصول الآن لعرض التطبيقات المستخدمة مؤخرًا</string>
+    <string name="av_ic_info_src_api">واجهة برمجة تطبيقات النظام</string>
+    <string name="av_ic_info_label_runtime">رمز تطبيق وقت التشغيل</string>
+    <string name="av_ic_info_label_apk_normal">رمز التطبيق العادي</string>
+    <string name="av_ic_info_label_apk_round">رمز التطبيق المستدير</string>
+    <string name="av_ic_info_ai_back">طبقة الخلفية</string>
+    <string name="av_ic_info_ai_fore">الطبقة الأمامية</string>
+    <string name="av_ic_info_ai_mono">رمز أحادي اللون</string>
+    <string name="av_ic_info_preview_full">معاينة كاملة</string>
+    <string name="av_ic_info_preview_rect">معاينة مستطيل مستدير الزوايا</string>
+    <string name="av_ic_info_preview_squircle">معاينة Superellipse</string>
+    <string name="av_ic_info_preview_round">معاينة مستديرة</string>
 </resources>

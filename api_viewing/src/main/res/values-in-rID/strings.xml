@@ -114,4 +114,15 @@
     <string name="av_upd_used">Baru - baru ini digunakan</string>
     <string name="av_upd_usage_access">Akses Penggunaan</string>
     <string name="av_upd_usage_access_msg">Berikan akses sekarang untuk melihat aplikasi yang baru saja digunakan</string>
+    <string name="av_ic_info_src_api">API SISTEM</string>
+    <string name="av_ic_info_label_runtime">Ikon aplikasi waktu proses</string>
+    <string name="av_ic_info_label_apk_normal">Ikon aplikasi biasa</string>
+    <string name="av_ic_info_label_apk_round">Ikon aplikasi bulat</string>
+    <string name="av_ic_info_ai_back">Lapisan latar belakang</string>
+    <string name="av_ic_info_ai_fore">Lapisan latar depan</string>
+    <string name="av_ic_info_ai_mono">Ikon monokrom</string>
+    <string name="av_ic_info_preview_full">Pratinjau penuh</string>
+    <string name="av_ic_info_preview_rect">Pratinjau persegi panjang bulat</string>
+    <string name="av_ic_info_preview_squircle">Pratinjau superelips</string>
+    <string name="av_ic_info_preview_round">Pratinjau bulat</string>
 </resources>
