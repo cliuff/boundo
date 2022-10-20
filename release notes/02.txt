@@ -1,0 +1,175 @@
+
+- **2.8.1** 20010506
+
+  <en-US>
+  In app icon details page, click any icon to export
+  In app details page, native libraries insight checks 64-bit and cross-platform framework support
+  CoolApk App Info is now a module that you can uninstall
+  </en-US>
+
+  <zh-CN>
+  在应用图标详情页面点击任意图标以导出
+  应用详情页面新增原生库检测：64位和跨平台框架支持
+  酷安应用详情功能已模块化，可卸载
+  </zh-CN>
+
+- **2.7.2** 19120911
+
+  <en-US>
+
+  Bug fix
+
+  </en-US>
+
+  <zh-CN>
+
+  错误修复
+
+  </zh-CN>
+
+- **2.7.1** 19113022
+
+  <en-US>
+  • Android 5.0 is no longer supported
+  • Various improvements
+  • Now available on Wear OS by Google
+    Check the API of your smartwatch apps
+  </en-US>
+
+  <zh-CN>
+  • 不再支持安卓 5.0
+  • 一些优化
+  • 现已登陆 Wear OS by Google
+    查看智能手表上应用的 API
+  </zh-CN>
+
+- **2.7** 19101814
+
+  [en-US]
+
+  * Convert your photos to HEIF format
+
+    No struggling between small size and high quality, now you can have both! Available on Android 9+
+
+  * Wallpaper now translates much more smoothly
+
+  * Now available on Wear OS by Google
+
+    Check the API of your smartwatch apps
+
+
+  [zh-CN]
+
+  * 将图片转换为 HEIF 格式
+
+    存储空间和图片质量可以兼得！需要安卓 9+
+
+  * 壁纸滚动现在无比跟手了
+
+  * 现已登陆 Wear OS by Google
+
+    查看智能手表上应用的 API
+
+
+- **2.6.2** 19092517
+
+  [en-US]
+
+  App API: exclude disabled apps by default, you can change it in app settings
+
+  New red theme added
+
+  Home screen widgets comply with Android 10 dark theme settings
+
+  [zh-CN]
+
+  应用 API：设置是否包含已禁用的应用
+
+  新增红色主题
+
+  桌面小部件跟随安卓 10 黑暗模式
+
+- **2.6.1** 19091517
+
+  [en-US]
+
+  Screen barcode scanning bug on Android 10 gets fixed
+
+  [zh-CN]
+
+  修复 Android 10 屏幕扫码问题
+
+- **2.6** 19091423
+
+  [en-US]
+
+  A bundle of tools to improve your smartphone experience
+
+  [zh-CN]
+
+  一些增强体验的实用工具
+
+  [CoolApk]
+
+  上架 Google Play，8 点 on sale，支持 App Bundle（安装包体积缩减30%）
+
+  API 统计 甜点回归
+
+  优化横屏及平板体验
+
+- **2.5** 19091019
+
+  [en-US]
+
+  A bundle of tools to improve your smartphone experience
+
+  [zh-CN]
+
+  一些增强体验的实用工具
+
+  [P.S.]
+  Removed TextSharing: download APK from shared link
+
+- **2.4** 19090622
+
+  体验优化
+
+- **2.3** 19082421
+
+  Hello, Android 10
+
+  应用 API：不再显示甜点
+
+  私图隐藏：Android 10 上取消此功能
+
+  主题动态壁纸：支持横屏 支持滚动，请重新设置亮暗壁纸
+
+  应用背景：更改了策略，请重新设置背景
+
+- **2.2**
+
+  新增 **主题动态壁纸** 设置亮色调和暗色调壁纸，壁纸随黑暗模式变化
+
+  增加一种暗色主题
+
+  为亮色和暗色主题分别设置背景，背景随主题变化
+
+  修复自定义背景后应用启动卡顿
+
+- **2.1.1**
+
+  修复和优化
+
+* **2.1 19072403**
+
+  界面优化
+
+  增加部分功能使用说明
+
+* **2.0 19070222**
+
+  黑暗模式支持设置启动时间
+
+  增强了圆形图标转换
+
+  新增 **私图隐藏**

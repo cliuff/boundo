@@ -1,9 +1,10 @@
 # Boundo
 
 **Requirements**
-- Android Studio Chipmunk Patch 2
-- Gradle 7.3.3
+- Android Studio Dolphin Patch 1 (AGP 7.3.1)
+- Gradle Wrapper 7.5.1
 - Java 11
+- Kotlin 1.7.10
 
 **After Git check-out**
 - Clone project `Apk Parser` from (https://github.com/cliuff/apk-parser.git) into `subproject`, 

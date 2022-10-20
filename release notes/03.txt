@@ -1,0 +1,297 @@
+
+
+- **3.9.4** 22102021
+<en-US>
+• View recently used apps in home page
+• View alternate app icons from the revamped Adaptive Icons page
+• Join our Telegram group and follow our Twitter account from the revamped About page
+• New languages: Bengali, Persian, Hindi, Indonesian, Marathi, Punjabi, Polish
+• This is the final version for Android 5.1 users
+</en-US>
+<zh-CN>
+• 新支持在主页查看最近使用的app
+• 重新设计的自适应图标页面：支持查看多个自定义应用图标
+• 打开全新的关于页面：关注我们的Twitter账户、加入Telegram讨论群
+• 新语言支持：孟加拉语、波斯语、印地语、印度尼西亚语、马拉地语、旁遮普语、波兰语
+• 这是最后一个支持安卓5.1的版本
+</zh-CN>
+
+
+- **3.9.3** 22082613
+<en-US>
+• Redirect to view app info in LibChecker or AppManager
+• Check monochrome icon for adaptive icons on Android 13
+• Per app language setting and predictive back gesture for Android 13
+</en-US>
+<zh-CN>
+• 自适应图标：查看安卓13的单色图标
+• 安卓13：单个应用语言设置、支持返回手势预测
+• 跳转第三方应用查看应用详情：LibChecker、AppManager
+</zh-CN>
+
+
+- **3.9.0** 22061323
+<en-US>
+• Themed app icon on Android 13
+• Animated splash screen on Android 12
+• Brand new app details page in App API
+• Revamped home page with great simplicity
+• Revamped settings page with Material You dynamic colors
+</en-US>
+<zh-CN>
+• 安卓12启动动画
+• 安卓13桌面主题图标
+• 全新的应用详情页面
+• 化繁为简的全新主页
+• 动态取色的全新设置页面
+</zh-CN>
+
+
+- **3.8.1** 22022701
+<en-US>
+• Support Ukrainian
+• Improved navigation experience
+• Enhanced experience for screen rotation and split screen
+</en-US>
+<zh-CN>
+• 支持乌克兰语
+• 提升了导航、转屏、分屏体验
+</zh-CN>
+
+
+- **3.7.9** 21110823
+<en-US>
+Support changing in-app display language.
+Minor updates to Arabic and Spanish translation.
+</en-US>
+<zh-CN>
+支持更改应用内显示语言，更新了几处阿拉伯语和西班牙语翻译。
+</zh-CN>
+
+
+- **3.7.6** 21081315
+<en-US>
+App API:
+• New tag: Jetpack Compose.
+• Added tag icons in "tag filter" dialog.
+• New "version update" and "package update" sections in "updates" page.
+App:
+• Enable app to run on TVs.
+• Redesigned "Unit Manager".
+• Removed features: "WeChat Shortcut", "Private Pics", "CoolApk App Info" and "QQ Contact Shortcut".
+• Removed Android 10 requirement to follow system dark theme.
+</en-US>
+<zh-CN>
+应用 API：
+• 新标签：Jetpack Compose
+• 在“标签过滤”对话框中显示图标
+• “更新”页面新增“版本更新”和“包更新”
+App：
+• 支持在 Android TV 上运行
+• 重新设计了“模块管理”
+• 移除功能：“微信 Shortcut”、“私图隐藏”、“酷安软件详情”和“QQ 好友 Shortcut”
+• 跟随系统暗色模式不再要求 Android 10
+</zh-CN>
+
+
+- **3.7.4** 21050217
+<en-US>
+Tweak a few UI elements and fix bugs.
+</en-US>
+<zh-CN>
+优化一些界面元素并修复错误。
+</zh-CN>
+
+
+- **3.7.1** 21022814
+<en-US>
+Add API level of Android 12
+</en-US>
+<zh-CN>
+添加安卓12的API级别
+</zh-CN>
+
+- **3.7.0** 21021422
+<en-US>
+• Accelerate app list loading significantly
+• Check app API upgrade in updates page
+</en-US>
+<zh-CN>
+• 显著加快应用列表加载速度
+• 动态页面现可查看应用 API 升级
+</zh-CN>
+
+
+- **3.6.8** 21012600
+<en-US>
+• You can now check device API
+• Added various app push service tags
+</en-US>
+<zh-CN>
+• 现支持查看设备 API
+• 新增各种推送服务标签
+</zh-CN>
+
+
+- **3.6.7** 21010113
+<en-US>
+A brand new app icon and optimized the experience after screen rotation
+</en-US>
+<zh-CN>
+全新应用图标，优化屏幕旋转后的体验
+</zh-CN>
+
+
+- **3.6.4** 20120320
+<en-US>
+• New feature: "Device Manager", to help you quickly connect/disconnect Bluetooth devices right from the power menu of Android 11
+• Unit Manager: now you can disable units at will
+• App API: now you can check app's launcher Activity and launcher icon resources
+• Various optimizations and available on more devices
+</en-US>
+<zh-CN>
+• 全新功能：“设备管理”，在安卓11的电源菜单里快速连接和断开蓝牙设备
+• 组件管理：现支持禁用组件
+• 应用 API：现支持查看应用的“入口Activity”、启动图标的资源信息
+• 一些优化，支持更多设备
+</zh-CN>
+<coolapk>
+• 全新功能：“设备管理”，在安卓11的电源菜单里快速连接和断开蓝牙设备
+• 组件管理：现支持禁用组件
+• 应用 API：现支持查看应用的“入口Activity”、启动图标的资源信息
+• 一些优化，支持更多设备，以前Play商店显示不支持该设备的可以重新试试
+• 斑朵x86版本同步上传到云盘，在应用详情内获取链接
+</coolapk>
+
+
+- **3.6.3** 20092514
+<en-US>
+App API
+• New tags: Kotlin and 64-bit
+• Long-press an app and press open to launch it
+• View app in Boundo directly from other stores (Google, Coolapk, Huawei and Samsung)
+  Just find the share button and share it to Boundo
+
+Other
+• Now support Android 11 power menu device controls
+• Added translation program link in about page
+• Now use decimal units (1000) instead of binary ones (1024)
+• Fixed shortcut redirecting
+• The animation when changing wallpaper is now removed
+</en-US>
+<zh-CN>
+应用 API
+• 新标签：“Kotlin”、“64位”
+• 长按然后点击“打开”以打开应用
+• 支持从其它应用商店直接跳转到斑朵
+  谷歌、酷安、华为、三星
+  找到分享按钮然后分享到斑朵即可
+
+其它
+• 现支持安卓11的电源菜单“设备管理中心”
+• 关于页面新增“翻译计划”链接
+• 文件大小和流量多少现使用十进制单位（1000）而非二进制（1024）
+• 修复了快捷方式的跳转
+• 移除了更换壁纸时的动画效果
+</zh-CN>
+
+
+- **3.6.1** 20072913
+<en-US>
+• Now it is possible to filter app list by tag
+• Now you can export app list as CSV sheets
+• New tag: Hidden, find out who hides in the dark
+• Now display colorful icon for package installers and cross-platform frameworks
+</en-US>
+<zh-CN>
+• 按标签过滤应用列表
+• 将应用列表导出为CSV表格
+• 新标签：隐藏，找出不显示桌面图标的应用
+• 软件包安装程序和跨平台框架的标签现在显示图标
+</zh-CN>
+
+- **3.5.2** 20071212
+<en-US>
+Bug fixes and improvements
+</en-US>
+<zh-CN>
+错误修复和改进
+</zh-CN>
+
+- **3.5** 20070612
+<en-US>
+• Added support for Traditional Chinese, German, Greek, Japanese, Korean and Turkish with the help of Google Translate
+• Made some improvements
+</en-US>
+<zh-CN>
+• 在谷歌翻译的帮助下增加了对繁体中文、德语、希腊语、日语、韩语和土耳其语的支持
+• 做了些许改进
+</zh-CN>
+
+
+
+- **3.3** 20050313
+<en-US>
+App API
+    • Two new tags added: Adaptive icon, Split APK
+    • Native library detection supports apps with Split APK
+    • Added pie chart on statistics page
+
+Other
+    • Optimized layout of some pages on tablet
+    • Optimized image processing to reduce crashes when processing large images
+    • Source code available at https://github.com/cliuff/boundo
+</en-US>
+
+<zh-CN>
+应用 API
+    • 新增两个标签：自适应图标、Split APK
+    • 原生库检测支持含 Split APK 的应用
+    • 统计页面新增饼图
+
+其它
+    • 优化平板上某些页面的布局
+    • 优化图片处理，减少处理大图片时崩溃的情况发生
+    • 源代码地址：https://github.com/cliuff/boundo
+</zh-CN>
+
+
+
+
+- **3.1.1** 20030201
+
+  <en-US>
+  Added Arabic, Italian, Portuguese, Thai and Vietnamese with the help of Google Translate
+  </en-US>
+
+  <zh-CN>
+  通过谷歌翻译添加了阿拉伯语，意大利语，葡萄牙语，泰语和越南语
+  </zh-CN>
+
+- **3.1**
+
+  <en-US>
+  • This release should help reduce crashes in App API
+  • Added Spanish and Russian with the help of Google Translate
+  • Some other improvements
+  </en-US>
+
+  <zh-CN>
+  • 应该会减少在应用 API 内崩溃的发生
+  • 借助谷歌翻译添加了西班牙语和俄语
+  • 一些其它的优化
+  </zh-CN>
+
+- **3.0** 20012222
+
+  <en-US>
+   • Get updates directly in app main screen
+   • Uninstall any feature you do not like
+   • Themed Wallpaper: added animation when wallpaper changes
+  </en-US>
+
+  <zh-CN>
+   • 全新动态页面
+   • 支持卸载任何不需要的功能
+   • 主题动态壁纸：切换壁纸时添加了动画
+  </zh-CN>

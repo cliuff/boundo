@@ -35,8 +35,7 @@ buildscript {
 //        val dokkaAndroidGradlePlugin = "0.9.18" // dokka android gradle plugin
         val gglHiltGradlePlugin = "2.38.1"  // 2.40.2 fails the build
         val googlePlayServicesOSSLicensesPlugin = "0.10.4"
-        // Associated (the same) with Android Studio version
-        val androidGradlePlugin = "7.2.2"
+        val androidGradlePlugin = "7.3.1"  // 7.3.1-Dolphin Patch 1
     }
     dependencies {
         classpath("com.android.tools.build:gradle:${versions.androidGradlePlugin}")

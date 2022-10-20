@@ -80,10 +80,10 @@ android {
         // below: manifest placeholders
         manifestPlaceholders["buildPackage"] = buildPackage
         applicationId = "com.madness.collision"
-        minSdk = 22
+        minSdk = 23
         targetSdk = 33
-        versionCode = 22082123
-        versionName = "3.9.3"
+        versionCode = 22102021
+        versionName = "3.9.4"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testApplicationId = "${applicationId}.test"
         renderscriptSupportModeEnabled = true
