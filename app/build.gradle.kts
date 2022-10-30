@@ -82,7 +82,7 @@ android {
         applicationId = "com.madness.collision"
         minSdk = 23
         targetSdk = 33
-        versionCode = 22102021
+        versionCode = 22103122
         versionName = "3.9.4"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testApplicationId = "${applicationId}.test"
@@ -191,7 +191,7 @@ android {
         // Jetpack Compose compiler version
         kotlinCompilerExtensionVersion = Versions.androidxComposeCompiler
     }
-    dynamicFeatures.addAll(arrayOf(":school_timetable", ":api_viewing"))
+    dynamicFeatures.add(":api_viewing")
     bundle {
         // disable split apks for languages to better support in-app language switching,
         // for language resources occupy a little space and implementing on-demand language downloads is tedious

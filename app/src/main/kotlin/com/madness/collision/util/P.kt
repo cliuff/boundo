@@ -18,8 +18,6 @@ package com.madness.collision.util
 
 import android.content.res.TypedArray
 import androidx.core.content.res.use
-import com.madness.collision.BuildConfig
-import java.util.*
 
 object P {
     const val APP_MARGIN_BOTTOM_MIN = 50f
@@ -51,7 +49,6 @@ object P {
 //    const val AD_BUILD_TEST = "CC60137A04D550C74DDD54C3966FE20F"
 
     const val PREF_SETTINGS = "SettingsPreferences"
-    const val PREF_TIMETABLE = "iCalendarPreferences"
 
     const val APPLICATION_INITIATE = "initiateApp" // boolean
     const val APPLICATION_V = "v" // int
@@ -62,38 +59,6 @@ object P {
     const val SETTINGS_UPDATE_NOTIFY = "updateNotify"
     const val SETTINGS_UPDATE_VIA_SETTINGS = "updateViaSettings"
     const val SETTINGS_LANGUAGE = "language"
-    const val TT_MANUAL = "icsInstructor"
-    const val TT_CAL_DEFAULT_GOOGLE = "googleCalendarDefault"
-    const val TT_APP_MODE = "iCalendarAppMode"
-    const val TT_PATH_ICS = "icsFilePath"
-
-    const val TT_DATE_START = "originalDateStart"
-    val TT_DATE_START_DEFAULT: String
-    get() {
-        val cal = Calendar.getInstance()
-        val year = cal.get(Calendar.YEAR)
-        // after the end of the former half semester(December) and before the start of summer holiday (July)
-        return if ((cal.get(Calendar.MONTH) + 1) in 1 until 7) "${year}0101"
-        else "${year}0901"
-    }
-    const val TT_TIME_MORNING = "morningTime"
-    const val TT_TIME_MORNING_DEFAULT = "0830"
-    const val TT_TIME_AFTERNOON = "afternoonTime"
-    const val TT_TIME_AFTERNOON_DEFAULT = "1420"
-    const val TT_TIME_EVENING = "eveningTime"
-    const val TT_TIME_EVENING_DEFAULT = "1900"
-    const val TT_TIME_CLASS = "classTime"
-    const val TT_TIME_CLASS_DEFAULT = 45
-    const val TT_TIME_BREAK_SUPERIOR = "superiorBreakTime"
-    const val TT_TIME_BREAK_SUPERIOR_DEFAULT = 20
-    const val TT_TIME_BREAK_INFERIOR = "inferiorBreakTime"
-    const val TT_TIME_BREAK_INFERIOR_DEFAULT = 10
-    const val TT_TIME_BREAK_MORNING_SUPERIOR = "morningBreakTimeSuperior"
-    const val TT_TIME_BREAK_MORNING_INFERIOR = "morningBreakTimeInferior"
-    const val TT_TIME_BREAK_AFTERNOON_SUPERIOR = "afternoonBreakTimeSuperior"
-    const val TT_TIME_BREAK_AFTERNOON_INFERIOR = "afternoonBreakTimeInferior"
-    const val TT_TIME_BREAK_EVENING_SUPERIOR = "eveningBreakTimeSuperior"
-    const val TT_TIME_BREAK_EVENING_INFERIOR = "eveningBreakTimeInferior"
 
     const val SC_ID_API_VIEWER = "instant_sdk" // SC => shortcut
     const val SC_ID_IMMORTAL = "immortal"

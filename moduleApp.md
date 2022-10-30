@@ -6,8 +6,6 @@ Activities...
 Android app Shortcuts and QuickSettings Tile management
 # Package com.madness.collision.settings
 App preferences
-# Package com.madness.collision.unit.school_timetable
-School Timetable
 # Package com.madness.collision.tools
 More useful tools
 ## API Viewer

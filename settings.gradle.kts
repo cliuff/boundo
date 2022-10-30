@@ -16,7 +16,7 @@
 
 
 includeBuild("dependencyPlugin")
-include(":app", ":school_timetable", ":api_viewing", ":wearable", ":apk-parser")
+include(":app", ":api_viewing", ":wearable", ":apk-parser")
 project(":apk-parser").projectDir = File("subproject/apk-parser")
 /*
 

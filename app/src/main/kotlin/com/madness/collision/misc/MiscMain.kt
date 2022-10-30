@@ -27,7 +27,6 @@ import com.madness.collision.BuildConfig
 import com.madness.collision.instant.Instant
 import com.madness.collision.settings.LanguageMan
 import com.madness.collision.unit.Unit
-import com.madness.collision.unit.UnitManager
 import com.madness.collision.unit.api_viewing.AccessAV
 import com.madness.collision.util.*
 import com.madness.collision.util.config.LocaleUtils
@@ -64,9 +63,6 @@ internal object MiscMain {
             initPinnedUnits(prefSettings)
             // init tags
             AccessAV.initTagSettings(context, prefSettings)
-            // disable school timetable unit
-            val desc = Unit.getDescription(Unit.UNIT_NAME_SCHOOL_TIMETABLE)
-            if (desc != null) UnitManager(context).disableUnit(desc)
             return
         }
         // below: app in update process to the newest
@@ -131,11 +127,8 @@ internal object MiscMain {
             AccessAV.updateTagSettings(context)
         }
         if (verOri in 0 until 22041320) {
-            // disable school timetable unit
-            val desc = Unit.getDescription(Unit.UNIT_NAME_SCHOOL_TIMETABLE)
-            if (desc != null) UnitManager(context).disableUnit(desc)
-            // remove unit config of removed unit
-            Unit.UNIT_NAME_SCHOOL_TIMETABLE.let {
+            // remove unit config of school timetable
+            "school_timetable".let {
                 Unit.unpinUnit(context, it, prefSettings)
                 Unit.removeFrequency(context, it, prefSettings)
             }
@@ -152,6 +145,27 @@ internal object MiscMain {
         if (verOri in 0 until 22082119 && OsUtils.satisfy(OsUtils.T)) {
             val locale = LanguageMan(context).getLocaleOrNull()
             if (locale != null) LocaleUtils.set(locale)
+        }
+        if (verOri in 0 until 22103122) {
+            // remove unit config of school timetable
+            "school_timetable".let {
+                Unit.unpinUnit(context, it, prefSettings)
+                Unit.removeFrequency(context, it, prefSettings)
+            }
+            // delete files of school timetable unit
+            deleteDirs(
+                F.createPath(F.filePublicPath(context), "TT"),
+                F.createPath(F.cachePublicPath(context), "TT"),
+            )
+            // remove preferences
+            if (OsUtils.satisfy(OsUtils.N)) {
+                context.deleteSharedPreferences("iCalendarPreferences")
+            } else {
+                context.getSharedPreferences("iCalendarPreferences", Context.MODE_PRIVATE)
+                    .edit { clear() }
+            }
+            val keys = listOf("icsInstructor", "googleCalendarDefault", "iCalendarAppMode", "icsFilePath")
+            prefSettings.edit { keys.forEach { remove(it) } }
         }
     }
 
