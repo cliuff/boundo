@@ -17,14 +17,12 @@
 <resources>
     <string name="app_name">Boundo</string>
     <string name="appDesc">Un ensemble d\'outils destinés à faire certaines choses pour vous</string>
-    <string name="ttExportCal">Vers le calendrier</string>
     <string name="Main_ToolBar_title_Settings">Paramètres</string>
     <string name="Settings_Button_SwitchLanguage">Langue</string>
     <string name="Settings_Button_CheckUpdate">Mise à jour de l\'application</string>
     <string name="Settings_LanguagePicker_Auto">Suivre les paramètres système</string>
     <string name="Settings_Language_Button_Cancel">Annuler</string>
     <string name="Settings_Language_Dialog_Title">Langue</string>
-    <string name="ttExportICalFile">Fichier iCalendar</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">Nouvelle version disponible</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">Nouvelle version</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart2">Modifications</string>
@@ -44,7 +42,6 @@
     <string name="Settings_ImageView_Update">Mise à jour de l\'application</string>
     <string name="Settings_ImageView_Language">Langue</string>
     <string name="Launcher_QQContacts_Toast_Avatar_PermissionDenied">Veuillez accorder l\'autorisation pour que nous puissions lire l\'image</string>
-    <string name="text_add_new">Ajout d\'un nouveau</string>
     <string name="developertools_cropimage">Modification d\'image</string>
     <string name="toast_permission_storage_denied">Veuillez accorder l\'autorisation afin que nous puissions lire/écrire les données</string>
     <string name="apiViewer">API d\'application</string>
@@ -54,21 +51,12 @@
     <string name="text_done">Terminer</string>
     <string name="text_no_content">Aucun contenu</string>
     <string name="settings_exterior">Style</string>
-    <string name="text_reset">Réinitialisation</string>
     <string name="exterior_dark_staus">Icône de la barre d\'état foncée</string>
     <string name="exterior_dark_navigation">Icône de la barre navigation foncée</string>
     <string name="text_remove">Supprimer</string>
     <string name="sdk_dialog_details">Détails</string>
     <string name="app_info_name">Nom du paquet de l\'application</string>
-    <string name="text_parse_fails">Erreur d\'analyse des données</string>
     <string name="text_app_not_installed">Application correspondante non installée</string>
-    <string name="text_mon">Lun.</string>
-    <string name="text_tue">Mar.</string>
-    <string name="text_wed">Mer.</string>
-    <string name="text_thu">Jeu.</string>
-    <string name="text_fri">Ven.</string>
-    <string name="text_sat">Sam.</string>
-    <string name="text_sun">Dim.</string>
     <string name="text_error">Une erreur est survenue</string>
     <string name="exterior_blur_degree">Degré de flou</string>
     <string name="text_loading">Chargement</string>
@@ -114,7 +102,6 @@
     <string name="res_invalid_input">Entrée invalide</string>
     <string name="text_sort">Trier</string>
     <string name="text_refresh">Rafraîchir</string>
-    <string name="ttTimeTextClassDuration">Durée du cours</string>
     <string name="textShareApk">Partagez l\'APK de cette application</string>
     <string name="textShareImage">Partager le logo de cette application</string>
     <string name="tileBarCodeScanner">Scanner un code barre</string>
@@ -127,10 +114,6 @@
     <string name="textRounded">Rectangle arrondi</string>
     <string name="textSquircle">Arrondi</string>
     <string name="textSelectFromGallery">Sélectionnez manuellement une image dans la galerie</string>
-    <string name="textWeekNum">Semaine %d</string>
-    <string name="ttWeekIndicator">Indicateur hebdomadaire</string>
-    <string name="ttWeekIndicatorHint">Saisir la fin de semaine</string>
-    <string name="ttWeekIndicatorUndo">Annuler les importations dans Google Calendar</string>
     <string name="textQuality">Qualité</string>
     <string name="tileDataUsageAccess">Permettez-nous d\'accéder au données d\'utilisation</string>
     <string name="tileData">Utilisation mensuelle des données</string>
@@ -168,7 +151,6 @@
     <string name="instantTileScannerMmManual">Cliquez sur la tuile pour capturer l\'écran et ouvrez le scanner WeChat pour sélectionner manuellement la capture d\'écran à scanner.</string>
     <string name="instantTileScannerAlipayManual">Cliquez sur la tuile pour capturer l\'écran et invoquez le scanner Alipay pour scanner la capture d\'écran.</string>
     <string name="instantTileMDUManual">Cliquez sur la tuile pour rafraîchir les données et vous serez invité à accorder l\'autorisation d\'accès lors de l\'ajout de la tuile.</string>
-    <string name="textDuplicate">Dupliquer</string>
     <string name="avAdapterActionsDetails">Détails</string>
     <string name="avAdapterActionsIcon">Partager l\'icône</string>
     <string name="avAdapterActionsApk">Partager l\'apk</string>
@@ -193,7 +175,6 @@
     <string name="av_details_native_libs">"Bibliothèques natives: "</string>
     <string name="twService">Thème animé comme fond d\'écran</string>
     <string name="twLiveWallpaperDesc">Passer automatiquement au fond d\'écran sombre lorsque le thème sombre est activé</string>
-    <string name="unit_school_timetable">Emploi du temps scolaire</string>
     <string name="activity_av_search">API d\'application</string>
     <string name="main_updates">mises à jour</string>
     <string name="main_more">Plus</string>
@@ -205,7 +186,6 @@
     <string name="unit_desc_install">Installation</string>
     <string name="unit_desc_uninstall">Désinstallation</string>
     <string name="unit_desc_av">• Vérifier le niveau de l\'API Android de toutes les applications et apks sur l\'appareil\n• Vérifier le support des icônes adaptatives de toutes les applications\n• Statistiques de l\'API de l\'application\n• Extraction d\'apk et d\'icônes\n• Détails du paquet et détails de la signature de chaque application</string>
-    <string name="unit_desc_st">Pour les utilisateurs chinois\n• Ajouter un cours manuellement\n• Analysez l\'emploi du temps scolaire à partir du site web du système éducatif de l\'école (uniquement pour une partie du système éducatif ZFSoft)\n• Générer un fichier iCalendar (.ics)\n• Exportation vers Google Agenda, etc.</string>
     <string name="unit_desc_im">• Modifier la résolution\n• Modifier le format : png, jpg, webp, heif\n• Image floue</string>
     <string name="unit_desc_tw">• Faites en sorte que votre papier peint soit conforme au thème sombre d\'Android 10 en appliquant automatiquement un papier peint de couleur sombre</string>
     <string name="unit_desc_at">• Arrêter la lecture audio</string>

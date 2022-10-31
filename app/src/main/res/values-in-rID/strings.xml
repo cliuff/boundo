@@ -17,14 +17,12 @@
 <resources>
     <string name="app_name">Boundo</string>
     <string name="appDesc">Sekumpulan alat yang terikat untuk melakukan beberapa hal untuk Anda</string>
-    <string name="ttExportCal">Ke kalender</string>
     <string name="Main_ToolBar_title_Settings">Pengaturan</string>
     <string name="Settings_Button_SwitchLanguage">Bahasa</string>
     <string name="Settings_Button_CheckUpdate">Pembaruan aplikasi</string>
     <string name="Settings_LanguagePicker_Auto">Ikuti sistem</string>
     <string name="Settings_Language_Button_Cancel">Membatalkan</string>
     <string name="Settings_Language_Dialog_Title">Bahasa</string>
-    <string name="ttExportICalFile">file iCalendar</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">Versi baru ditemukan</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">Versi baru</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart2">Perubahan</string>
@@ -44,7 +42,6 @@
     <string name="Settings_ImageView_Update">Pembaruan aplikasi</string>
     <string name="Settings_ImageView_Language">Bahasa</string>
     <string name="Launcher_QQContacts_Toast_Avatar_PermissionDenied">Tolong beri izin agar kami dapat membaca gambarnya</string>
-    <string name="text_add_new">Tambah baru</string>
     <string name="developertools_cropimage">Memodifikasi Gambar</string>
     <string name="toast_permission_storage_denied">Mohon izin agar kami dapat membaca/menulis data</string>
     <string name="apiViewer">API Aplikasi</string>
@@ -54,21 +51,12 @@
     <string name="text_done">Menyelesaikan</string>
     <string name="text_no_content">Tidak ada isi</string>
     <string name="settings_exterior">Gaya</string>
-    <string name="text_reset">Mengatur ulang</string>
     <string name="exterior_dark_staus">Ikon bilah status gelap</string>
     <string name="exterior_dark_navigation">Ikon bilah navigasi gelap</string>
     <string name="text_remove">Menghapus</string>
     <string name="sdk_dialog_details">rincian</string>
     <string name="app_info_name">Nama paket aplikasi</string>
-    <string name="text_parse_fails">Kesalahan saat menguraikan data</string>
     <string name="text_app_not_installed">Aplikasi yang sesuai tidak diinstal</string>
-    <string name="text_mon">Senin</string>
-    <string name="text_tue">Sel.</string>
-    <string name="text_wed">Menikahi.</string>
-    <string name="text_thu">Kam.</string>
-    <string name="text_fri">Jumat</string>
-    <string name="text_sat">Duduk.</string>
-    <string name="text_sun">Matahari.</string>
     <string name="text_error">Terjadi kesalahan</string>
     <string name="exterior_blur_degree">derajat kabur</string>
     <string name="text_loading">Memuat</string>
@@ -114,7 +102,6 @@
     <string name="res_invalid_input">Masukan tidak valid</string>
     <string name="text_sort">Menyortir</string>
     <string name="text_refresh">Menyegarkan</string>
-    <string name="ttTimeTextClassDuration">Durasi kelas</string>
     <string name="textShareApk">Bagikan APK aplikasi ini dengan orang lain</string>
     <string name="textShareImage">Bagikan logo aplikasi ini dengan orang lain</string>
     <string name="tileBarCodeScanner">Pindai kode batang</string>
@@ -127,10 +114,6 @@
     <string name="textRounded">Persegi panjang bulat</string>
     <string name="textSquircle">tupai</string>
     <string name="textSelectFromGallery">Pilih gambar dari galeri secara manual</string>
-    <string name="textWeekNum">Minggu %d</string>
-    <string name="ttWeekIndicator">Indikator Minggu</string>
-    <string name="ttWeekIndicatorHint">Masuk akhir minggu</string>
-    <string name="ttWeekIndicatorUndo">Urungkan impor di Google Kalender</string>
     <string name="textQuality">Kualitas</string>
     <string name="tileDataUsageAccess">Izinkan kami mengakses penggunaan</string>
     <string name="tileData">Penggunaan data bulan</string>
@@ -168,7 +151,6 @@
     <string name="instantTileScannerMmManual">Klik ubin untuk mengambil layar dan buka pemindai WeChat untuk memilih tangkapan layar secara manual untuk dipindai.</string>
     <string name="instantTileScannerAlipayManual">Klik ubin untuk mengambil layar dan aktifkan pemindai Alipay untuk memindai tangkapan layar.</string>
     <string name="instantTileMDUManual">Klik ubin untuk menyegarkan data. Anda akan diminta untuk memberikan izin Akses Penggunaan saat menambahkan ubin.</string>
-    <string name="textDuplicate">Duplikat</string>
     <string name="avAdapterActionsDetails">rincian</string>
     <string name="avAdapterActionsIcon">Bagikan ikon</string>
     <string name="avAdapterActionsApk">Bagikan apk</string>
@@ -193,8 +175,6 @@
     <string name="av_details_native_libs">"Perpustakaan asli: "</string>
     <string name="twService">Bertema Gambar Animasi</string>
     <string name="twLiveWallpaperDesc">Beralih ke wallpaper gelap secara otomatis saat tema gelap diaktifkan</string>
-    <string name="title_school_timetable" translatable="false">School Timetable</string>
-    <string name="unit_school_timetable">Jadwal sekolah</string>
     <string name="activity_av_search">API Aplikasi</string>
     <string name="title_api_viewing" translatable="false">App API</string>
     <string name="main_updates">Pembaruan</string>
@@ -207,7 +187,6 @@
     <string name="unit_desc_install">Install</string>
     <string name="unit_desc_uninstall">Copot pemasangan</string>
     <string name="unit_desc_av">• Periksa level API Android dari semua aplikasi dan apk di perangkat\n• Periksa dukungan Ikon Adaptif dari semua aplikasi\n• Statistik API Aplikasi\n• APK dan ekstraksi ikon\n• Detail paket dan detail tanda tangan</string>
-    <string name="unit_desc_st">! Untuk pengguna China\n• Tambahkan kursus secara manual\n• Uraikan jadwal sekolah dari situs web sistem pendidikan sekolah (hanya beberapa sistem pendidikan ZFSoft)\n• Buat file iCalendar (.ics)\n• Ekspor ke Google Kalender dll .</string>
     <string name="unit_desc_im">• Ubah resolusi\n• Ubah format: png jpg webp heif\n• Gambar buram</string>
     <string name="unit_desc_tw">• Jadikan wallpaper Anda sesuai dengan tema gelap Android 10 dengan menerapkan wallpaper berwarna gelap secara otomatis</string>
     <string name="unit_desc_at">• Hentikan audio agar tidak diputar</string>

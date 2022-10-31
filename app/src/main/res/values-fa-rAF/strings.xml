@@ -17,14 +17,12 @@
 <resources>
     <string name="app_name">&#8207;Boundo</string>
     <string name="appDesc">بسته‌ای از ابزارها برای انجام برخی کارها برای شما</string>
-    <string name="ttExportCal">به تقویم</string>
     <string name="Main_ToolBar_title_Settings">تنظیمات</string>
     <string name="Settings_Button_SwitchLanguage">زبان ها</string>
     <string name="Settings_Button_CheckUpdate">آپدیت اپلیکیشن</string>
     <string name="Settings_LanguagePicker_Auto">سیستم را دنبال کنید</string>
     <string name="Settings_Language_Button_Cancel">لغو کنید</string>
     <string name="Settings_Language_Dialog_Title">زبان ها</string>
-    <string name="ttExportICalFile">فایل iCalendar</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">نسخه جدید پیدا شد</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">نسخه جدید</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart2">تغییرات</string>
@@ -44,7 +42,6 @@
     <string name="Settings_ImageView_Update">آپدیت اپلیکیشن</string>
     <string name="Settings_ImageView_Language">زبان ها</string>
     <string name="Launcher_QQContacts_Toast_Avatar_PermissionDenied">لطفا اجازه بدهید تا بتوانیم تصویر را بخوانیم</string>
-    <string name="text_add_new">جدید اضافه کن</string>
     <string name="developertools_cropimage">اصلاح تصویر</string>
     <string name="toast_permission_storage_denied">لطفاً اجازه بدهید تا بتوانیم داده‌ها را بخوانیم/بنویسیم</string>
     <string name="apiViewer">برنامه API</string>
@@ -54,21 +51,12 @@
     <string name="text_done">پایان</string>
     <string name="text_no_content">بی محتوا</string>
     <string name="settings_exterior">سبک</string>
-    <string name="text_reset">بازنشانی کنید</string>
     <string name="exterior_dark_staus">نماد نوار وضعیت تاریک</string>
     <string name="exterior_dark_navigation">نماد نوار پیمایش تاریک</string>
     <string name="text_remove">برداشتن</string>
     <string name="sdk_dialog_details">جزئیات</string>
     <string name="app_info_name">نام بسته برنامه</string>
-    <string name="text_parse_fails">خطا در تجزیه داده ها</string>
     <string name="text_app_not_installed">برنامه مربوطه نصب نشده است</string>
-    <string name="text_mon">دوشنبه</string>
-    <string name="text_tue">سه شنبه</string>
-    <string name="text_wed">چهارشنبه</string>
-    <string name="text_thu">پنج شنبه</string>
-    <string name="text_fri">جمعه</string>
-    <string name="text_sat">نشست</string>
-    <string name="text_sun">آفتاب.</string>
     <string name="text_error">خطایی رخ داد</string>
     <string name="exterior_blur_degree">درجه تاری</string>
     <string name="text_loading">بارگذاری</string>
@@ -114,7 +102,6 @@
     <string name="res_invalid_input">ورودی نامعتبر</string>
     <string name="text_sort">مرتب سازی</string>
     <string name="text_refresh">تازه کردن</string>
-    <string name="ttTimeTextClassDuration">مدت کلاس</string>
     <string name="textShareApk">APK این برنامه را با دیگران به اشتراک بگذارید</string>
     <string name="textShareImage">لوگوی این برنامه را با دیگران به اشتراک بگذارید</string>
     <string name="tileBarCodeScanner">اسکن بارکد</string>
@@ -127,10 +114,6 @@
     <string name="textRounded">مستطیل گرد</string>
     <string name="textSquircle">سنجاب</string>
     <string name="textSelectFromGallery">تصویر را از گالری به صورت دستی انتخاب کنید</string>
-    <string name="textWeekNum">هفته %d</string>
-    <string name="ttWeekIndicator">شاخص هفته</string>
-    <string name="ttWeekIndicatorHint">وارد هفته پایانی شوید</string>
-    <string name="ttWeekIndicatorUndo">واگرد واردات در Google Calendar</string>
     <string name="textQuality">کیفیت</string>
     <string name="tileDataUsageAccess">به ما اجازه دسترسی به استفاده را بدهید</string>
     <string name="tileData">مصرف داده ماهانه</string>
@@ -168,7 +151,6 @@
     <string name="instantTileScannerMmManual">روی کاشی کلیک کنید تا از صفحه عکس بگیرید و اسکنر WeChat را باز کنید تا به صورت دستی اسکرین شات را برای اسکن انتخاب کنید.</string>
     <string name="instantTileScannerAlipayManual">برای تصویربرداری از صفحه، روی کاشی کلیک کنید و برای اسکن اسکرین شات، اسکنر Alipay را فراخوانی کنید.</string>
     <string name="instantTileMDUManual">برای بازخوانی داده ها، روی کاشی کلیک کنید. هنگام افزودن کاشی، از شما خواسته می شود که مجوز دسترسی به استفاده را بدهید.</string>
-    <string name="textDuplicate">تکراری</string>
     <string name="avAdapterActionsDetails">جزئیات</string>
     <string name="avAdapterActionsIcon">نماد اشتراک گذاری</string>
     <string name="avAdapterActionsApk">apk را به اشتراک بگذارید</string>
@@ -193,8 +175,6 @@
     <string name="av_details_native_libs">"کتابخانه های بومی: "</string>
     <string name="twService">تصویر زمینه زنده مضمون</string>
     <string name="twLiveWallpaperDesc">وقتی تم تیره فعال است، به طور خودکار به کاغذدیواری تیره بروید</string>
-    <string name="title_school_timetable" translatable="false">School Timetable</string>
-    <string name="unit_school_timetable">جدول زمانی مدرسه</string>
     <string name="activity_av_search">برنامه API</string>
     <string name="title_api_viewing" translatable="false">App API</string>
     <string name="main_updates">به روز رسانی ها</string>
@@ -207,7 +187,6 @@
     <string name="unit_desc_install">نصب</string>
     <string name="unit_desc_uninstall">حذف نصب کنید</string>
     <string name="unit_desc_av">• سطح Android API همه برنامه‌ها و apk‌های موجود در دستگاه را بررسی کنید\n• پشتیبانی از نماد تطبیقی از همه برنامه‌ها را بررسی کنید\n• آمار API برنامه\n• استخراج APK و نماد\n• جزئیات بسته و جزئیات امضا</string>
-    <string name="unit_desc_st">! برای کاربران چینی\n• افزودن دوره به صورت دستی\n• تجزیه و تحلیل جدول زمانی مدرسه از وب سایت سیستم آموزشی مدرسه (فقط برخی از سیستم آموزشی ZFSoft)\n• ایجاد فایل iCalendar (.ics)\n• صادرات به تقویم Google و غیره .</string>
     <string name="unit_desc_im">• تغییر وضوح\n• تغییر قالب: png jpg webp heif\n• تار کردن تصویر</string>
     <string name="unit_desc_tw">• با اعمال خودکار کاغذدیواری تیره رنگ، کاغذدیواری خود را مطابق با تم تیره Android 10 کنید.</string>
     <string name="unit_desc_at">• پخش صدا را متوقف کنید</string>

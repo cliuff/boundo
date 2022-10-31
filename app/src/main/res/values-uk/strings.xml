@@ -18,14 +18,12 @@
 <resources>
     <string name="app_name">Boundo</string>
     <string name="appDesc">Набір інструментів, який зробить деякі речі за вас</string>
-    <string name="ttExportCal">До календаря</string>
     <string name="Main_ToolBar_title_Settings">Налаштування</string>
     <string name="Settings_Button_SwitchLanguage">Мови</string>
     <string name="Settings_Button_CheckUpdate">Оновлення програми</string>
     <string name="Settings_LanguagePicker_Auto">Слідкуйте за системою</string>
     <string name="Settings_Language_Button_Cancel">Скасувати</string>
     <string name="Settings_Language_Dialog_Title">Мови</string>
-    <string name="ttExportICalFile">файл iCalendar</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">Нова версія знайдена</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">Нова версія</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart2">Зміни</string>
@@ -45,7 +43,6 @@
     <string name="Settings_ImageView_Update">Оновлення програми</string>
     <string name="Settings_ImageView_Language">Мови</string>
     <string name="Launcher_QQContacts_Toast_Avatar_PermissionDenied">Будь ласка, надайте дозвіл, щоб ми могли прочитати зображення</string>
-    <string name="text_add_new">Додати новий</string>
     <string name="developertools_cropimage">Зміна зображення</string>
     <string name="toast_permission_storage_denied">Будь ласка, надайте дозвіл, щоб ми могли читати/записувати дані</string>
     <string name="apiViewer">API програми</string>
@@ -55,21 +52,12 @@
     <string name="text_done">Закінчити</string>
     <string name="text_no_content">Немає вмісту</string>
     <string name="settings_exterior">Стиль</string>
-    <string name="text_reset">Скинути</string>
     <string name="exterior_dark_staus">Темний значок рядка стану</string>
     <string name="exterior_dark_navigation">Темний значок навігаційної панелі</string>
     <string name="text_remove">Видалити</string>
     <string name="sdk_dialog_details">Деталі</string>
     <string name="app_info_name">Назва пакета програми</string>
-    <string name="text_parse_fails">Помилка аналізу даних</string>
     <string name="text_app_not_installed">Відповідна програма не встановлена</string>
-    <string name="text_mon">пн.</string>
-    <string name="text_tue">вт.</string>
-    <string name="text_wed">ср.</string>
-    <string name="text_thu">чт</string>
-    <string name="text_fri">пт.</string>
-    <string name="text_sat">сб.</string>
-    <string name="text_sun">сонце.</string>
     <string name="text_error">Сталась помилка</string>
     <string name="exterior_blur_degree">Ступінь розмиття</string>
     <string name="text_loading">Завантаження</string>
@@ -115,7 +103,6 @@
     <string name="res_invalid_input">Неправильні дані</string>
     <string name="text_sort">Сортувати</string>
     <string name="text_refresh">Оновити</string>
-    <string name="ttTimeTextClassDuration">Тривалість заняття</string>
     <string name="textShareApk">Поділіться APK цієї програми з іншими</string>
     <string name="textShareImage">Поділіться логотипом цієї програми з іншими</string>
     <string name="tileBarCodeScanner">Сканувати штрих-код</string>
@@ -128,10 +115,6 @@
     <string name="textRounded">Закруглений прямокутник</string>
     <string name="textSquircle">Сквиркл</string>
     <string name="textSelectFromGallery">Виберіть зображення з галереї вручну</string>
-    <string name="textWeekNum">Тиждень %d</string>
-    <string name="ttWeekIndicator">Індикатор тижня</string>
-    <string name="ttWeekIndicatorHint">Введіть кінець тижня</string>
-    <string name="ttWeekIndicatorUndo">Скасувати імпорт у Google Календарі</string>
     <string name="textQuality">Якість</string>
     <string name="tileDataUsageAccess">Дозвольте нам отримати доступ до використання</string>
     <string name="tileData">Місячне використання даних</string>
@@ -169,7 +152,6 @@
     <string name="instantTileScannerMmManual">Натисніть плитку, щоб зробити знімок екрана, і відкрийте сканер WeChat, щоб вручну вибрати знімок екрана для сканування.</string>
     <string name="instantTileScannerAlipayManual">Натисніть плитку, щоб зробити знімок екрана, і запустіть сканер Alipay, щоб відсканувати знімок екрана.</string>
     <string name="instantTileMDUManual">Клацніть плитку, щоб оновити дані. Під час додавання плитки вам буде запропоновано надати дозвіл на доступ до використання.</string>
-    <string name="textDuplicate">Дублікат</string>
     <string name="avAdapterActionsDetails">Деталі</string>
     <string name="avAdapterActionsIcon">Поділитися значок</string>
     <string name="avAdapterActionsApk">Поділіться apk</string>
@@ -194,7 +176,6 @@
     <string name="av_details_native_libs">"Рідні бібліотеки: "</string>
     <string name="twService">Тематичні живі шпалери</string>
     <string name="twLiveWallpaperDesc">Автоматично перемикайтеся на темні шпалери, коли ввімкнено темну тему</string>
-    <string name="unit_school_timetable">Розклад школи</string>
     <string name="activity_av_search">API програми</string>
     <string name="main_updates">Оновлення</string>
     <string name="main_more">Більше</string>
@@ -206,7 +187,6 @@
     <string name="unit_desc_install">Встановити</string>
     <string name="unit_desc_uninstall">Видалити</string>
     <string name="unit_desc_av">• Перевірте рівень Android API для всіх програм і apk на пристрої\n• Перевірте підтримку адаптивних значків у всіх програмах\n• Статистика API додатків\n• Вилучення APK та значків\n• Деталі пакету та деталі підпису</string>
-    <string name="unit_desc_st">! Для китайських користувачів\n• Додати курс вручну\n• Проаналізувати шкільний розклад із веб-сайту шкільної системи освіти (лише деякі освітні системи ZFSoft)\n• Створити файл iCalendar (.ics)\n• Експортувати до Google Календаря тощо .</string>
     <string name="unit_desc_im">• Змінити роздільну здатність\n• Змінити формат: png jpg webp heif\n• Розмити зображення</string>
     <string name="unit_desc_tw">• Зробіть фоновий малюнок відповідним темній темі Android 10, автоматично застосувавши шпалери темного кольору</string>
     <string name="unit_desc_at">• Зупинити відтворення звуку</string>

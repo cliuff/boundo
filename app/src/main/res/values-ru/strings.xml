@@ -17,13 +17,11 @@
 
 <resources>
     <string name="app_name">Boundo</string>
-    <string name="ttExportCal">в календарь</string>
     <string name="Main_ToolBar_title_Settings">Настройки</string>
     <string name="Settings_Button_SwitchLanguage">Сменить язык</string>
     <string name="Settings_Button_CheckUpdate">Обновление программы</string>
     <string name="Settings_Language_Button_Cancel">Отмена</string>
     <string name="Settings_Language_Dialog_Title">Язык</string>
-    <string name="ttExportICalFile">Файл iCalendar</string>
     <string name="text_alright">ОК</string>
     <string name="text_allset">Готово</string>
     <string name="Main_TextView_Advice_Text">О нас</string>
@@ -31,16 +29,8 @@
     <string name="text_cancel">Отмена</string>
     <string name="text_done">Готово</string>
     <string name="settings_exterior">Стиль</string>
-    <string name="text_reset">Сброс</string>
     <string name="exterior_dark_navigation">Тёмные значки панели навигации</string>
     <string name="sdk_dialog_details">Подробнее</string>
-    <string name="text_mon">Пн.</string>
-    <string name="text_tue">Вт.</string>
-    <string name="text_wed">Ср.</string>
-    <string name="text_thu">Чт.</string>
-    <string name="text_fri">Пт.</string>
-    <string name="text_sat">Сб.</string>
-    <string name="text_sun">Вс.</string>
     <string name="text_copy_link">Ссылка скопирована</string>
     <string name="text_copy">Копировать</string>
     <string name="text_apply_background">Сделать фоном</string>
@@ -109,7 +99,6 @@
     <string name="instantTileScannerMmManual">Нажмите на плитку для захвата экрана и откройте сканер WeChat, чтобы вручную выбрать скриншот для сканирования.</string>
     <string name="instantTileScannerWechat">WeChat сканер штрих-кода</string>
     <string name="instant_manager_intro">Ярлыки приложений</string>
-    <string name="text_add_new">Добавить новое</string>
     <string name="main_more">Больше</string>
     <string name="main_updates">Обновления</string>
     <string name="menuApiSortApiTime">Недавно обновленный</string>
@@ -154,7 +143,6 @@
     <string name="textBugLog">Ошибка поймана в журнале</string>
     <string name="textCapturingScreen">Захват экрана</string>
     <string name="textColon">": "</string>
-    <string name="textDuplicate">Дублированный</string>
     <string name="textEmail">Эл. адрес</string>
     <string name="textFormat">Формат</string>
     <string name="textGrantPermission">Предоставить разрешение</string>
@@ -170,7 +158,6 @@
     <string name="textShareImage">Поделиться логотипом этого приложения с другими</string>
     <string name="textSquircle">Squircle</string>
     <string name="textWaitASecond">Загрузка, пожалуйста, подождите секунду</string>
-    <string name="textWeekNum">Неделя %d</string>
     <string name="text_OK">Ok</string>
     <string name="text_app_not_installed">Соответствующее приложение не установлено</string>
     <string name="text_copy_content">Контент скопирован</string>
@@ -179,7 +166,6 @@
     <string name="text_loading">загрузка</string>
     <string name="text_new">новый</string>
     <string name="text_no_content">Без содержания</string>
-    <string name="text_parse_fails">Ошибка разбора данных</string>
     <string name="text_refresh">обновление</string>
     <string name="text_remove">удалять</string>
     <string name="text_sort">Сортировать</string>
@@ -188,19 +174,13 @@
     <string name="tileData">Использование данных за месяц</string>
     <string name="tileDataUsageAccess">Allow us to access usage</string>
     <string name="toast_permission_storage_denied">Пожалуйста, дайте разрешение, чтобы мы могли читать / писать данные</string>
-    <string name="ttTimeTextClassDuration">Продолжительность занятия</string>
-    <string name="ttWeekIndicator">Индикатор недели</string>
-    <string name="ttWeekIndicatorHint">Введите конец недели</string>
-    <string name="ttWeekIndicatorUndo">Отменить импорт в Календарь Google</string>
     <string name="twLiveWallpaperDesc">Переключаться на темные обои автоматически при включении темной темы</string>
     <string name="twService">Тематические Живые Обои</string>
-    <string name="unit_school_timetable">Школьное расписание</string>
     <string name="units">Модули</string>
     <string name="unitsManager">Диспетчер модулей</string>
     <string name="updateDownload">Скачать</string>
     <string name="unit_audio_timer">Аудио Таймер</string>
     <string name="unit_desc_av">• Проверьте уровень Android API всех приложений и приложений на устройстве\n• Проверьте поддержку Adaptive Icon всех приложений\n• Статистика API приложения\n• APK и значок извлечения\n• Детали пакета и подпись</string>
-    <string name="unit_desc_st">для китайских пользователей\n• Добавить курс вручную\n• Парсинг школьного расписания с веб-сайта школьной системы образования (только некоторые из образовательной системы ZFSoft)\n• Создать файл iCalendar (.ics)\n• Экспорт в Календарь Google и т. Д.</string>
     <string name="unit_desc_im">• Изменить разрешение\n• Изменить формат: png jpg webp heif\n• Размытие изображения</string>
     <string name="unit_desc_tw">• Заставьте свои обои соответствовать темной теме Android 10, автоматически применяя темные обои</string>
     <string name="unit_desc_at">• остановить воспроизведение звука</string>

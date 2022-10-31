@@ -17,14 +17,12 @@
 
 <resources>
     <string name="app_name">斑朵</string>
-    <string name="ttExportCal">导出至日历</string>
     <string name="Main_ToolBar_title_Settings">设置</string>
     <string name="Settings_Button_SwitchLanguage">语言</string>
     <string name="Settings_Button_CheckUpdate">应用更新</string>
     <string name="Settings_LanguagePicker_Auto">跟随系统</string>
     <string name="Settings_Language_Button_Cancel">算了吧</string>
     <string name="Settings_Language_Dialog_Title">语言</string>
-    <string name="ttExportICalFile">iCalendar 文件</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">发现新版本</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">新版</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart2">变化</string>
@@ -44,7 +42,6 @@
     <string name="Settings_ImageView_Update">应用更新</string>
     <string name="Settings_ImageView_Language">语言</string>
     <string name="Launcher_QQContacts_Toast_Avatar_PermissionDenied">请授权以读取图片</string>
-    <string name="text_add_new">添加</string>
     <string name="developertools_cropimage">图片调整</string>
     <string name="toast_permission_storage_denied">请授予存储访问权限以读写数据</string>
     <string name="apiViewer">应用 API</string>
@@ -53,21 +50,12 @@
     <string name="text_cancel">取消</string>
     <string name="text_done">完成</string>
     <string name="text_no_content">空空如也</string>
-    <string name="text_reset">恢复默认</string>
     <string name="exterior_dark_staus">暗色状态栏图标</string>
     <string name="exterior_dark_navigation">暗色虚拟键图标</string>
     <string name="text_remove">移除</string>
     <string name="sdk_dialog_details">详情</string>
     <string name="app_info_name">包名</string>
-    <string name="text_parse_fails">数据解析失败</string>
     <string name="text_app_not_installed">未安装所需应用</string>
-    <string name="text_mon">一</string>
-    <string name="text_tue">二</string>
-    <string name="text_wed">三</string>
-    <string name="text_thu">四</string>
-    <string name="text_fri">五</string>
-    <string name="text_sat">六</string>
-    <string name="text_sun">日</string>
     <string name="text_error">出错了</string>
     <string name="exterior_blur_degree">模糊程度</string>
     <string name="text_loading">加载中</string>
@@ -112,7 +100,6 @@
     <string name="settingsApiRetrieveRoundIcon">当应用提供了圆形图标资源时加载它</string>
     <string name="activityTextProcessingApp">查看斑朵应用</string>
     <string name="res_invalid_input">无效的输入</string>
-    <string name="ttTimeTextClassDuration">课程时长</string>
     <string name="text_refresh">刷新</string>
     <string name="text_sort">排序</string>
     <string name="textShareApk">与他人分享该应用的安装包</string>
@@ -127,10 +114,6 @@
     <string name="textRounded">圆角矩形</string>
     <string name="textSquircle">方圆形</string>
     <string name="textSelectFromGallery">手动从相册选取图片</string>
-    <string name="textWeekNum">第%d周</string>
-    <string name="ttWeekIndicator">当周指示</string>
-    <string name="ttWeekIndicatorHint">输入终止周</string>
-    <string name="ttWeekIndicatorUndo">撤销谷歌日历的导入</string>
     <string name="textQuality">品质</string>
     <string name="tileDataUsageAccess">允许我们对使用情况数据进行访问</string>
     <string name="tileData">本月已用流量统计</string>
@@ -167,7 +150,6 @@
     <string name="instantTileScannerAlipayManual">点击磁贴以截屏并调用支付宝扫一扫扫描屏幕截图。</string>
     <string name="instantTileScannerMmManual">点击磁贴以截屏并打开微信扫一扫手动选取屏幕截图扫描。</string>
     <string name="instantManual">在桌面上长按应用图标以调出“应用 Shortcuts”。\n下拉通知栏，通知区域上面的那些设置开关便是“快捷设置磁贴”。</string>
-    <string name="textDuplicate">复制</string>
     <string name="avAdapterActionsApk">分享安装包</string>
     <string name="avAdapterActionsDetails">详情</string>
     <string name="avAdapterActionsIcon">分享图标</string>
@@ -194,13 +176,11 @@
     <string name="av_details_native_libs">原生库：</string>
     <string name="twService">主题动态壁纸</string>
     <string name="twLiveWallpaperDesc">开启黑暗模式时自动更换暗色调壁纸</string>
-    <string name="unit_school_timetable">课表</string>
     <string name="activity_av_search">应用 API</string>
     <string name="main_more">更多</string>
     <string name="main_updates">动态</string>
     <string name="unit_audio_timer">音乐，停</string>
     <string name="unit_desc_av">• 查看设备上所有应用及安装包的目标 SDK 版本和最低 SDK 版本\n• 查看应用是否支持自适应图标\n• 应用 API 统计\n• 安装包提取、图标提取\n• 包详细信息查看、签名信息查看</string>
-    <string name="unit_desc_st">！中国用户使用\n• 手动输入课程\n• 自动解析教务系统课表（只支持部分正方教务系统）\n• 生成 iCalendar 文件 (.ics)\n• 导入至谷歌日历等</string>
     <string name="unit_desc_im">• 修改分辨率\n• 修改格式 png jpg webp heif\n• 模糊图片</string>
     <string name="unit_desc_tw">• 设置亮色调和暗色调壁纸，壁纸随安卓10的黑暗模式而变化</string>
     <string name="unit_desc_at">• 停止音频播放</string>

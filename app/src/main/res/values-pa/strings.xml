@@ -17,14 +17,12 @@
 <resources>
     <string name="app_name">Boundo</string>
     <string name="appDesc">ਔਜ਼ਾਰਾਂ ਦਾ ਇੱਕ ਬੰਡਲ ਤੁਹਾਡੇ ਲਈ ਕੁਝ ਕੰਮ ਕਰਨ ਲਈ ਪਾਬੰਦ ਹੈ</string>
-    <string name="ttExportCal">ਕੈਲੰਡਰ ਨੂੰ</string>
     <string name="Main_ToolBar_title_Settings">ਸੈਟਿੰਗਾਂ</string>
     <string name="Settings_Button_SwitchLanguage">ਭਾਸ਼ਾਵਾਂ</string>
     <string name="Settings_Button_CheckUpdate">ਐਪ ਅੱਪਡੇਟ</string>
     <string name="Settings_LanguagePicker_Auto">ਸਿਸਟਮ ਦੀ ਪਾਲਣਾ ਕਰੋ</string>
     <string name="Settings_Language_Button_Cancel">ਰੱਦ ਕਰੋ</string>
     <string name="Settings_Language_Dialog_Title">ਭਾਸ਼ਾਵਾਂ</string>
-    <string name="ttExportICalFile">iCalendar ਫਾਈਲ</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">ਨਵਾਂ ਸੰਸਕਰਣ ਮਿਲਿਆ</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">ਨਵਾਂ ਸੰਸਕਰਣ</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart2">ਤਬਦੀਲੀਆਂ</string>
@@ -44,7 +42,6 @@
     <string name="Settings_ImageView_Update">ਐਪ ਅੱਪਡੇਟ</string>
     <string name="Settings_ImageView_Language">ਭਾਸ਼ਾਵਾਂ</string>
     <string name="Launcher_QQContacts_Toast_Avatar_PermissionDenied">ਕਿਰਪਾ ਕਰਕੇ ਇਜਾਜ਼ਤ ਦਿਓ ਤਾਂ ਜੋ ਅਸੀਂ ਚਿੱਤਰ ਨੂੰ ਪੜ੍ਹ ਸਕੀਏ</string>
-    <string name="text_add_new">ਨਵਾਂ ਸ਼ਾਮਲ ਕਰੋ</string>
     <string name="developertools_cropimage">ਚਿੱਤਰ ਸੋਧਿਆ ਜਾ ਰਿਹਾ ਹੈ</string>
     <string name="toast_permission_storage_denied">ਕਿਰਪਾ ਕਰਕੇ ਇਜਾਜ਼ਤ ਦਿਓ ਤਾਂ ਜੋ ਅਸੀਂ ਡਾਟਾ ਪੜ੍ਹ/ਲਿਖ ਸਕੀਏ</string>
     <string name="apiViewer">ਐਪ API</string>
@@ -54,21 +51,12 @@
     <string name="text_done">ਸਮਾਪਤ</string>
     <string name="text_no_content">ਕੋਈ ਸਮੱਗਰੀ ਨਹੀਂ</string>
     <string name="settings_exterior">ਸ਼ੈਲੀ</string>
-    <string name="text_reset">ਰੀਸੈਟ ਕਰੋ</string>
     <string name="exterior_dark_staus">ਗੂੜ੍ਹਾ ਸਥਿਤੀ ਪੱਟੀ ਪ੍ਰਤੀਕ</string>
     <string name="exterior_dark_navigation">ਗੂੜ੍ਹਾ ਨੈਵੀਗੇਸ਼ਨ ਪੱਟੀ ਪ੍ਰਤੀਕ</string>
     <string name="text_remove">ਹਟਾਓ</string>
     <string name="sdk_dialog_details">ਵੇਰਵੇ</string>
     <string name="app_info_name">ਐਪ ਪੈਕੇਜ ਦਾ ਨਾਮ</string>
-    <string name="text_parse_fails">ਡਾਟਾ ਪਾਰਸ ਕਰਨ ਵਿੱਚ ਤਰੁੱਟੀ</string>
     <string name="text_app_not_installed">ਸੰਬੰਧਿਤ ਐਪਲੀਕੇਸ਼ਨ ਸਥਾਪਤ ਨਹੀਂ ਕੀਤੀ ਗਈ</string>
-    <string name="text_mon">ਸੋਮ</string>
-    <string name="text_tue">ਮੰਗਲਵਾਰ।</string>
-    <string name="text_wed">ਬੁੱਧ.</string>
-    <string name="text_thu">ਥੁ.</string>
-    <string name="text_fri">ਸ਼ੁਕਰਵਾਰ.</string>
-    <string name="text_sat">ਸਤਿ.</string>
-    <string name="text_sun">ਸੂਰਜ।</string>
     <string name="text_error">ਇੱਕ ਗਲਤੀ ਆਈ ਹੈ</string>
     <string name="exterior_blur_degree">ਬਲਰ ਡਿਗਰੀ</string>
     <string name="text_loading">ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ</string>
@@ -114,7 +102,6 @@
     <string name="res_invalid_input">ਅਵੈਧ ਇਨਪੁਟ</string>
     <string name="text_sort">ਲੜੀਬੱਧ</string>
     <string name="text_refresh">ਤਾਜ਼ਾ ਕਰੋ</string>
-    <string name="ttTimeTextClassDuration">ਕਲਾਸ ਦੀ ਮਿਆਦ</string>
     <string name="textShareApk">ਇਸ ਐਪ ਦੇ ਏਪੀਕੇ ਨੂੰ ਦੂਜਿਆਂ ਨਾਲ ਸਾਂਝਾ ਕਰੋ</string>
     <string name="textShareImage">ਇਸ ਐਪ ਦਾ ਲੋਗੋ ਦੂਜਿਆਂ ਨਾਲ ਸਾਂਝਾ ਕਰੋ</string>
     <string name="tileBarCodeScanner">ਬਾਰਕੋਡ ਸਕੈਨ ਕਰੋ</string>
@@ -127,10 +114,6 @@
     <string name="textRounded">ਗੋਲ ਆਇਤਕਾਰ</string>
     <string name="textSquircle">ਸਕਰਕਲ</string>
     <string name="textSelectFromGallery">ਗੈਲਰੀ ਤੋਂ ਹੱਥੀਂ ਚਿੱਤਰ ਚੁਣੋ</string>
-    <string name="textWeekNum">ਹਫ਼ਤਾ %d</string>
-    <string name="ttWeekIndicator">ਹਫ਼ਤੇ ਦਾ ਸੂਚਕ</string>
-    <string name="ttWeekIndicatorHint">ਅੰਤ ਹਫ਼ਤਾ ਦਾਖਲ ਕਰੋ</string>
-    <string name="ttWeekIndicatorUndo">ਗੂਗਲ ਕੈਲੰਡਰ ਵਿੱਚ ਆਯਾਤ ਨੂੰ ਅਣਡੂ ਕਰੋ</string>
     <string name="textQuality">ਗੁਣਵੱਤਾ</string>
     <string name="tileDataUsageAccess">ਸਾਨੂੰ ਵਰਤੋਂ ਤੱਕ ਪਹੁੰਚ ਕਰਨ ਦਿਓ</string>
     <string name="tileData">ਮਹੀਨਾ ਡਾਟਾ ਵਰਤੋਂ</string>
@@ -168,7 +151,6 @@
     <string name="instantTileScannerMmManual">ਸਕ੍ਰੀਨ ਕੈਪਚਰ ਕਰਨ ਲਈ ਟਾਈਲ \'ਤੇ ਕਲਿੱਕ ਕਰੋ ਅਤੇ ਸਕੈਨ ਕਰਨ ਲਈ ਸਕ੍ਰੀਨਸ਼ਾਟ ਨੂੰ ਹੱਥੀਂ ਚੁਣਨ ਲਈ WeChat ਸਕੈਨਰ ਖੋਲ੍ਹੋ।</string>
     <string name="instantTileScannerAlipayManual">ਸਕ੍ਰੀਨ ਨੂੰ ਕੈਪਚਰ ਕਰਨ ਲਈ ਟਾਈਲ \'ਤੇ ਕਲਿੱਕ ਕਰੋ ਅਤੇ ਸਕ੍ਰੀਨਸ਼ਾਟ ਨੂੰ ਸਕੈਨ ਕਰਨ ਲਈ ਅਲੀਪੇ ਸਕੈਨਰ ਦੀ ਵਰਤੋਂ ਕਰੋ।</string>
     <string name="instantTileMDUManual">ਡਾਟਾ ਰਿਫ੍ਰੈਸ਼ ਕਰਨ ਲਈ ਟਾਇਲ \'ਤੇ ਕਲਿੱਕ ਕਰੋ। ਟਾਇਲ ਨੂੰ ਜੋੜਦੇ ਸਮੇਂ ਤੁਹਾਨੂੰ ਵਰਤੋਂ ਪਹੁੰਚ ਅਨੁਮਤੀ ਦੇਣ ਲਈ ਕਿਹਾ ਜਾਵੇਗਾ।</string>
-    <string name="textDuplicate">ਡੁਪਲੀਕੇਟ</string>
     <string name="avAdapterActionsDetails">ਵੇਰਵੇ</string>
     <string name="avAdapterActionsIcon">ਸਾਂਝਾ ਕਰੋ ਆਈਕਨ</string>
     <string name="avAdapterActionsApk">ਏਪੀਕੇ ਸਾਂਝਾ ਕਰੋ</string>
@@ -193,8 +175,6 @@
     <string name="av_details_native_libs">"ਨੇਟਿਵ ਲਾਇਬ੍ਰੇਰੀਆਂ: "</string>
     <string name="twService">ਥੀਮ ਵਾਲਾ ਲਾਈਵ ਵਾਲਪੇਪਰ</string>
     <string name="twLiveWallpaperDesc">ਗੂੜ੍ਹਾ ਥੀਮ ਚਾਲੂ ਹੋਣ \'ਤੇ ਆਪਣੇ ਆਪ ਗੂੜ੍ਹੇ ਵਾਲਪੇਪਰ \'ਤੇ ਸਵਿਚ ਕਰੋ</string>
-    <string name="title_school_timetable" translatable="false">School Timetable</string>
-    <string name="unit_school_timetable">ਸਕੂਲ ਸਮਾਂ ਸਾਰਣੀ</string>
     <string name="activity_av_search">ਐਪ API</string>
     <string name="title_api_viewing" translatable="false">App API</string>
     <string name="main_updates">ਅੱਪਡੇਟ</string>
@@ -207,7 +187,6 @@
     <string name="unit_desc_install">ਇੰਸਟਾਲ ਕਰੋ</string>
     <string name="unit_desc_uninstall">ਅਣਇੰਸਟੌਲ ਕਰੋ</string>
     <string name="unit_desc_av">• ਡੀਵਾਈਸ \'ਤੇ ਸਾਰੀਆਂ ਐਪਾਂ ਅਤੇ apks ਦੇ Android API ਪੱਧਰ ਦੀ ਜਾਂਚ ਕਰੋ\n• ਸਾਰੀਆਂ ਐਪਾਂ ਦੇ ਅਨੁਕੂਲਿਤ ਆਈਕਨ ਸਮਰਥਨ ਦੀ ਜਾਂਚ ਕਰੋ\n• ਐਪ API ਅੰਕੜੇ\n• APK ਅਤੇ ਆਈਕਨ ਐਕਸਟਰੈਕਸ਼ਨ\n• ਪੈਕੇਜ ਵੇਰਵੇ ਅਤੇ ਦਸਤਖਤ ਵੇਰਵੇ</string>
-    <string name="unit_desc_st">! ਚੀਨੀ ਉਪਭੋਗਤਾਵਾਂ ਲਈ\n• ਕੋਰਸ ਮੈਨੂਅਲੀ ਸ਼ਾਮਲ ਕਰੋ\n• ਸਕੂਲ ਦੀ ਸਿੱਖਿਆ ਪ੍ਰਣਾਲੀ ਦੀ ਵੈੱਬਸਾਈਟ ਤੋਂ ਸਕੂਲ ਦੀ ਸਮਾਂ-ਸਾਰਣੀ ਪਾਰਸ ਕਰੋ (ਕੇਵਲ ZFSoft ਸਿੱਖਿਆ ਪ੍ਰਣਾਲੀ ਵਿੱਚੋਂ ਕੁਝ)\n• iCalendar ਫਾਈਲ (.ics) ਤਿਆਰ ਕਰੋ\n• Google ਕੈਲੰਡਰ ਆਦਿ ਵਿੱਚ ਨਿਰਯਾਤ ਕਰੋ .</string>
     <string name="unit_desc_im">• ਰੈਜ਼ੋਲਿਊਸ਼ਨ ਸੋਧੋ\n• ਫਾਰਮੈਟ ਸੋਧੋ: png jpg webp heif\n• ਬਲਰ ਚਿੱਤਰ</string>
     <string name="unit_desc_tw">• ਗੂੜ੍ਹੇ ਰੰਗ ਦੇ ਵਾਲਪੇਪਰ ਨੂੰ ਸਵੈਚਲਿਤ ਤੌਰ \'ਤੇ ਲਾਗੂ ਕਰਕੇ ਆਪਣੇ ਵਾਲਪੇਪਰ ਨੂੰ Android 10 ਡਾਰਕ ਥੀਮ ਦੇ ਅਨੁਕੂਲ ਬਣਾਓ</string>
     <string name="unit_desc_at">• ਆਡੀਓ ਚਲਾਉਣ ਤੋਂ ਰੋਕੋ</string>

@@ -18,14 +18,12 @@
 <resources>
     <string name="app_name">Boundo</string>
     <string name="appDesc">Ein Bündel von Werkzeugen, die einige Dinge für Sie erledigen müssen</string>
-    <string name="ttExportCal">Zum Kalender</string>
     <string name="Main_ToolBar_title_Settings">die Einstellungen</string>
     <string name="Settings_Button_SwitchLanguage">Sprachen</string>
     <string name="Settings_Button_CheckUpdate">App-Update</string>
     <string name="Settings_LanguagePicker_Auto">Folgen Sie dem System</string>
     <string name="Settings_Language_Button_Cancel">Stornieren</string>
     <string name="Settings_Language_Dialog_Title">Sprachen</string>
-    <string name="ttExportICalFile">iCalendar-Datei</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">Neue Version gefunden</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">Neue Version</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart2">Änderungen</string>
@@ -45,7 +43,6 @@
     <string name="Settings_ImageView_Update">App-Update</string>
     <string name="Settings_ImageView_Language">Sprachen</string>
     <string name="Launcher_QQContacts_Toast_Avatar_PermissionDenied">Bitte erteilen Sie die Erlaubnis, damit wir das Bild lesen können</string>
-    <string name="text_add_new">Neue hinzufügen</string>
     <string name="developertools_cropimage">Bildänderung</string>
     <string name="toast_permission_storage_denied">Bitte erteilen Sie die Erlaubnis, damit wir Daten lesen / schreiben können</string>
     <string name="apiViewer">App API</string>
@@ -55,21 +52,12 @@
     <string name="text_done">Fertig</string>
     <string name="text_no_content">Kein Inhalt</string>
     <string name="settings_exterior">Stil</string>
-    <string name="text_reset">Zurücksetzen</string>
     <string name="exterior_dark_staus">Dunkles Statusleistensymbol</string>
     <string name="exterior_dark_navigation">Dunkles Navigationsleistensymbol</string>
     <string name="text_remove">Entfernen</string>
     <string name="sdk_dialog_details">Einzelheiten</string>
     <string name="app_info_name">Name des App-Pakets</string>
-    <string name="text_parse_fails">Fehler beim Parsen von Daten</string>
     <string name="text_app_not_installed">Entsprechende Anwendung nicht installiert</string>
-    <string name="text_mon">Mo.</string>
-    <string name="text_tue">Di.</string>
-    <string name="text_wed">Mi.</string>
-    <string name="text_thu">Do.</string>
-    <string name="text_fri">Fr.</string>
-    <string name="text_sat">Sa.</string>
-    <string name="text_sun">Sonne.</string>
     <string name="text_error">Ein Fehler ist aufgetreten</string>
     <string name="exterior_blur_degree">Unschärfegrad</string>
     <string name="text_loading">Wird geladen</string>
@@ -112,7 +100,6 @@
     <string name="res_invalid_input">Ungültige Eingabe</string>
     <string name="text_sort">Sortieren</string>
     <string name="text_refresh">Aktualisierung</string>
-    <string name="ttTimeTextClassDuration">Unterrichtsdauer</string>
     <string name="textShareApk">Teile die APK dieser App mit anderen</string>
     <string name="textShareImage">Teilen Sie das Logo dieser App mit anderen</string>
     <string name="tileBarCodeScanner">Barcode scannen</string>
@@ -123,9 +110,6 @@
     <string name="textRounded">Rechteck mit abgerundeten Ecken</string>
     <string name="textSquircle">Squircle</string>
     <string name="textSelectFromGallery">Wählen Sie das Bild manuell aus der Galerie aus</string>
-    <string name="ttWeekIndicator">Wochenindikator</string>
-    <string name="ttWeekIndicatorHint">Geben Sie die Endwoche ein</string>
-    <string name="ttWeekIndicatorUndo">Importe in Google Kalender rückgängig machen</string>
     <string name="textQuality">Qualität</string>
     <string name="tileDataUsageAccess">Erlauben Sie uns, auf die Nutzung zuzugreifen</string>
     <string name="tileData">Monatliche Datennutzung</string>
@@ -162,7 +146,6 @@
     <string name="instantTileScannerMmManual">Klicken Sie auf die Kachel, um den Bildschirm aufzunehmen, und öffnen Sie den WeChat-Scanner, um den zu scannenden Screenshot manuell auszuwählen.</string>
     <string name="instantTileScannerAlipayManual">Klicken Sie auf die Kachel, um den Bildschirm aufzunehmen, und rufen Sie den Alipay-Scanner auf, um den Screenshot zu scannen.</string>
     <string name="instantTileMDUManual">Klicken Sie auf die Kachel, um die Daten zu aktualisieren. Sie werden aufgefordert, beim Hinzufügen der Kachel die Berechtigung zum Zugriff auf die Verwendung zu erteilen.</string>
-    <string name="textDuplicate">Duplikat</string>
     <string name="avAdapterActionsDetails">Einzelheiten</string>
     <string name="avAdapterActionsIcon">Symbol teilen</string>
     <string name="avAdapterActionsApk">Teilen apk</string>
@@ -184,7 +167,6 @@
     <string name="units">Einheiten</string>
     <string name="twService">Themed Live Wallpaper</string>
     <string name="twLiveWallpaperDesc">Wechseln Sie automatisch zum dunklen Hintergrund, wenn das dunkle Thema aktiviert ist</string>
-    <string name="unit_school_timetable">Stundenplan</string>
     <string name="activity_av_search">App API</string>
     <string name="main_updates">Aktualisierung</string>
     <string name="main_more">Mehr</string>
@@ -209,7 +191,6 @@
     <string name="apiDetailsPackageName">"Paketnamen: "</string>
     <string name="textParentheses">" (%s)"</string>
     <string name="textColon">": "</string>
-    <string name="textWeekNum">Woche %d</string>
     <string name="sdk_search_hint"><font size="12">Name, Paket, API-Ebene, Android-Version</font></string>
     <string name="settings_fun_update_via_browser">Download über den Browser\n(berühren und halten, um den Link zu kopieren)</string>
     <string name="immortalMessage">Ach nein!\nWir sind irritiert von einem Fehler.\nKeine Sorge, es ist in unserer Tasche gefangen!\nLiefern Sie uns das Protokoll, um Nachforschungen anzustellen!</string>
@@ -218,7 +199,6 @@
     <string name="unit_desc_tw">• Stellen Sie sicher, dass Ihr Hintergrundbild dem dunklen Thema von Android 10 entspricht, indem Sie automatisch ein dunkles Hintergrundbild anwenden</string>
     <string name="unit_desc_at">• Stoppen Sie die Audiowiedergabe</string>
     <string name="unit_desc_av">• Überprüfen Sie die Android-API-Ebene aller Apps und Apks auf dem Gerät.\n• Überprüfen Sie die Unterstützung für adaptive Symbole aller Apps.\n• App-API-Statistiken.\n• Extraktion von APKs und Symbolen.\n• Paketdetails und Signaturdetails</string>
-    <string name="unit_desc_st">! Für chinesische Benutzer\n• Kurs manuell hinzufügen\n• Schulstundenplan von der Website des Schulbildungssystems analysieren (nur einige der ZFSoft-Bildungssysteme)\n• iCalendar-Datei (.ics) erstellen\n• In Google Kalender exportieren usw.</string>
     <string name="unit_desc_im">• Ändern Sie die Auflösung.\n• Ändern Sie das Format: png jpg webp heif.\n• Bild verwischen</string>
     <string name="text_access_denied">Zugriff abgelehnt</string>
     <string name="versatile_device_controls_at_hint_on">Wischen Sie zum Anpassen</string>

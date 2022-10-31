@@ -18,14 +18,12 @@
 <resources>
     <string name="app_name">Boundo</string>
     <string name="appDesc">ชุดเครื่องมือที่ผูกไว้เพื่อทำบางสิ่งสำหรับคุณ</string>
-    <string name="ttExportCal">ไปที่ปฏิทิน</string>
     <string name="Main_ToolBar_title_Settings">การตั้งค่า</string>
     <string name="Settings_Button_SwitchLanguage">ภาษา</string>
     <string name="Settings_Button_CheckUpdate">อัปเดตแอป</string>
     <string name="Settings_LanguagePicker_Auto">ติดตามระบบ</string>
     <string name="Settings_Language_Button_Cancel">ยกเลิก</string>
     <string name="Settings_Language_Dialog_Title">ภาษา</string>
-    <string name="ttExportICalFile">ไฟล์ iCalendar</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">พบเวอร์ชันใหม่</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">เวอร์ชั่นใหม่</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart2">การเปลี่ยนแปลง</string>
@@ -45,7 +43,6 @@
     <string name="Settings_ImageView_Update">อัปเดตแอป</string>
     <string name="Settings_ImageView_Language">ภาษา</string>
     <string name="Launcher_QQContacts_Toast_Avatar_PermissionDenied">โปรดให้อนุญาตเพื่อให้เราสามารถอ่านภาพได้</string>
-    <string name="text_add_new">เพิ่มใหม่</string>
     <string name="developertools_cropimage">การแก้ไขรูปภาพ</string>
     <string name="toast_permission_storage_denied">กรุณาให้อนุญาตเพื่อให้เราสามารถอ่าน / เขียนข้อมูล</string>
     <string name="apiViewer">แอป API</string>
@@ -55,21 +52,12 @@
     <string name="text_done">เสร็จสิ้น</string>
     <string name="text_no_content">ไม่มีเนื้อหา</string>
     <string name="settings_exterior">สไตล์</string>
-    <string name="text_reset">ตั้งค่าใหม่</string>
     <string name="exterior_dark_staus">ไอคอนแถบสถานะมืด</string>
     <string name="exterior_dark_navigation">ไอคอนแถบการนำทางมืด</string>
     <string name="text_remove">ลบ</string>
     <string name="sdk_dialog_details">รายละเอียด</string>
     <string name="app_info_name">ชื่อแพ็คเกจแอป</string>
-    <string name="text_parse_fails">เกิดข้อผิดพลาดในการแยกวิเคราะห์ข้อมูล</string>
     <string name="text_app_not_installed">แอปพลิเคชันที่เกี่ยวข้องไม่ได้ติดตั้ง</string>
-    <string name="text_mon">จันทร์</string>
-    <string name="text_tue">อังคาร</string>
-    <string name="text_wed">พุธ.</string>
-    <string name="text_thu">พฤหัสบดี</string>
-    <string name="text_fri">ศุกร์</string>
-    <string name="text_sat">วันเสาร์</string>
-    <string name="text_sun">ดวงอาทิตย์</string>
     <string name="text_error">เกิดข้อผิดพลาด</string>
     <string name="exterior_blur_degree">ระดับการเบลอ</string>
     <string name="text_loading">กำลังโหลด</string>
@@ -83,7 +71,6 @@
     <string name="main_more">มากกว่า</string>
     <string name="main_updates">อัพเดท</string>
     <string name="activity_av_search">แอป API</string>
-    <string name="unit_school_timetable">ตารางเรียนของโรงเรียน</string>
     <string name="twLiveWallpaperDesc">เปลี่ยนเป็นวอลเปเปอร์สีเข้มโดยอัตโนมัติเมื่อเปิดใช้งานธีมสีเข้ม</string>
     <string name="twService">วอลล์เปเปอร์สดสวนสนุก</string>
     <string name="units">หน่วย</string>
@@ -132,7 +119,6 @@
     <string name="res_invalid_input">อินพุตไม่ถูกต้อง</string>
     <string name="text_sort">ประเภท</string>
     <string name="text_refresh">รีเฟรช</string>
-    <string name="ttTimeTextClassDuration">ระยะเวลาเรียน</string>
     <string name="textShareApk">แชร์ APK ของแอพนี้กับคนอื่น ๆ</string>
     <string name="textShareImage">แชร์โลโก้ของแอพนี้กับคนอื่น ๆ</string>
     <string name="tileBarCodeScanner">สแกนบาร์โค้ด</string>
@@ -142,9 +128,6 @@
     <string name="textRounded">สี่เหลี่ยมผืนผ้าโค้งมน</string>
     <string name="textSquircle">Squircle</string>
     <string name="textSelectFromGallery">เลือกภาพจากแกลเลอรี่ด้วยตนเอง</string>
-    <string name="ttWeekIndicator">ตัวบ่งชี้รายสัปดาห์</string>
-    <string name="ttWeekIndicatorHint">เข้าสู่ปลายสัปดาห์</string>
-    <string name="ttWeekIndicatorUndo">เลิกนำเข้าใน Google ปฏิทิน</string>
     <string name="textQuality">คุณภาพ</string>
     <string name="tileDataUsageAccess">อนุญาตให้เราเข้าถึงการใช้งาน</string>
     <string name="tileData">การใช้ข้อมูลเดือน</string>
@@ -178,7 +161,6 @@
     <string name="prefExteriorDarkPlanScheduleEnd">เวลาสิ้นสุด</string>
     <string name="prefSettingsTrim2Round">ตัดแต่งไอคอนที่ไม่ปรับตัวเพื่อปัดเศษตามความเหมาะสม</string>
     <string name="textManual">คู่มือ</string>
-    <string name="textDuplicate">ซ้ำ</string>
     <string name="avAdapterActionsDetails">รายละเอียด</string>
     <string name="avAdapterActionsIcon">ไอคอนแบ่งปัน</string>
     <string name="avAdapterActionsApk">แชร์ apk</string>
@@ -191,7 +173,6 @@
     <string name="instantTileScannerMmManual">คลิกที่ไทล์เพื่อจับภาพหน้าจอและเปิดเครื่องสแกน WeChat เพื่อเลือกภาพหน้าจอที่ต้องการสแกนด้วยตนเอง</string>
     <string name="instantTileScannerAlipayManual">คลิกที่ไทล์เพื่อจับภาพหน้าจอและเรียกใช้สแกนเนอร์ Alipay เพื่อสแกนภาพหน้าจอ</string>
     <string name="instantTileMDUManual">คลิกที่ไทล์เพื่อรีเฟรชข้อมูลคุณจะได้รับแจ้งให้อนุญาตสิทธิ์การเข้าถึงการใช้งานเมื่อเพิ่มไทล์</string>
-    <string name="textWeekNum">สัปดาห์ที่ %d</string>
     <string name="textColon">": "</string>
     <string name="textParentheses">" (%s)"</string>
     <string name="settings_fun_update_via_browser">ดาวน์โหลดผ่านเบราว์เซอร์\n(แตะค้างเพื่อคัดลอกลิงก์)</string>
@@ -200,7 +181,6 @@
     <string name="instantManual">กดที่ไอคอนแอพในตัวเรียกใช้เพื่อแสดงทางลัดแอพ\nดึงเฉดสีการแจ้งเตือนลงมาการตั้งค่าสลับข้างบนพื้นที่แจ้งเตือนคือไทล์การตั้งค่าด่วนที่คุณกำลังค้นหา</string>
     <string name="immortalMessage">ไม่นะ!\nเรารู้สึกหงุดหงิดกับบั๊ก\nไม่ต้องกังวลมันถูกจับ!\nส่งบันทึกให้เราทำการวิจัย!</string>
     <string name="unit_desc_av">•ตรวจสอบระดับ Android API ของแอพและ apks ทั้งหมดในอุปกรณ์\n•ตรวจสอบการสนับสนุนไอคอน Adaptive ของแอพทั้งหมด\n•สถิติแอป API\n•การแยก APK และไอคอน\n•รายละเอียดแพ็คเกจและรายละเอียดลายเซ็นต์</string>
-    <string name="unit_desc_st">สำหรับผู้ใช้ภาษาจีน\n•เพิ่มหลักสูตรด้วยตนเอง\n•ตารางเวลาของโรงเรียนแยกวิเคราะห์จากเว็บไซต์ระบบการศึกษาของโรงเรียน (บางระบบ ZFSoft เท่านั้น)\n•สร้างไฟล์ iCalendar (.ics)\n•ส่งออกไปยัง Google Calendar เป็นต้น</string>
     <string name="unit_desc_im">•แก้ไขความละเอียด\n•ปรับเปลี่ยนรูปแบบ: png jpg webp heif\n•ภาพเบลอ</string>
     <string name="unit_desc_tw">•ทำให้วอลล์เปเปอร์ของคุณสอดคล้องกับ Android 10 ธีมมืดโดยการใช้วอลล์เปเปอร์สีเข้มโดยอัตโนมัติ</string>
     <string name="unit_desc_at">•หยุดเสียงจากการเล่น</string>

@@ -18,14 +18,12 @@
 <resources>
     <string name="app_name">Boundo</string>
     <string name="appDesc">Μια δέσμη εργαλείων που θα κάνουν κάποια πράγματα για εσάς</string>
-    <string name="ttExportCal">Στο ημερολόγιο</string>
     <string name="Main_ToolBar_title_Settings">Ρυθμίσεις</string>
     <string name="Settings_Button_SwitchLanguage">Γλώσσες</string>
     <string name="Settings_Button_CheckUpdate">Ενημέρωση εφαρμογής</string>
     <string name="Settings_LanguagePicker_Auto">Ακολουθήστε το σύστημα</string>
     <string name="Settings_Language_Button_Cancel">Ματαίωση</string>
     <string name="Settings_Language_Dialog_Title">Γλώσσες</string>
-    <string name="ttExportICalFile">Αρχείο iCalendar</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">Βρέθηκε νέα έκδοση</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">Νέα έκδοση</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart2">Αλλαγές</string>
@@ -45,7 +43,6 @@
     <string name="Settings_ImageView_Update">Ενημέρωση εφαρμογής</string>
     <string name="Settings_ImageView_Language">Γλώσσες</string>
     <string name="Launcher_QQContacts_Toast_Avatar_PermissionDenied">Εκχωρήστε την άδεια για να μπορέσουμε να διαβάσουμε την εικόνα</string>
-    <string name="text_add_new">Προσθεσε νεο</string>
     <string name="developertools_cropimage">Τροποποίηση εικόνας</string>
     <string name="toast_permission_storage_denied">Παραχωρήστε την άδεια για να μπορούμε να διαβάζουμε / γράφουμε δεδομένα</string>
     <string name="apiViewer">API εφαρμογής</string>
@@ -55,7 +52,6 @@
     <string name="text_done">Φινίρισμα</string>
     <string name="text_no_content">Χωρίς περιεχόμενο</string>
     <string name="settings_exterior">Στυλ</string>
-    <string name="text_reset">Επαναφορά</string>
     <string name="exterior_dark_staus">Σκούρο εικονίδιο γραμμής κατάστασης</string>
     <string name="exterior_dark_navigation">Σκούρο εικονίδιο γραμμής πλοήγησης</string>
     <string name="text_remove">Αφαιρώ</string>
@@ -95,7 +91,6 @@
     <string name="unitsManager">Διευθυντής μονάδας</string>
     <string name="units">Μονάδες</string>
     <string name="twService">Ζωντανή ταπετσαρία με θέμα</string>
-    <string name="unit_school_timetable">Σχολικό χρονοδιάγραμμα</string>
     <string name="activity_av_search">API εφαρμογής</string>
     <string name="main_updates">Ενημερώσεις</string>
     <string name="main_more">Περισσότερο</string>
@@ -115,15 +110,7 @@
     <string name="apiSdkTarget">Στόχευση SDK</string>
     <string name="apiSdkMin">Ελάχιστο SDK</string>
     <string name="app_info_name">Όνομα πακέτου εφαρμογής</string>
-    <string name="text_parse_fails">Σφάλμα ανάλυσης δεδομένων</string>
     <string name="text_app_not_installed">Δεν έχει εγκατασταθεί αντίστοιχη εφαρμογή</string>
-    <string name="text_mon">Δευτ.</string>
-    <string name="text_tue">Τρί.</string>
-    <string name="text_wed">Παντρεύομαι.</string>
-    <string name="text_thu">Πέμ.</string>
-    <string name="text_fri">Παρ.</string>
-    <string name="text_sat">Σαβ.</string>
-    <string name="text_sun">Ήλιος.</string>
     <string name="text_error">Παρουσιάστηκε σφάλμα</string>
     <string name="exterior_blur_degree">Βαθμός θαμπώματος</string>
     <string name="text_loading">Φόρτωση</string>
@@ -142,7 +129,6 @@
     <string name="activityTextProcessingApp">Προβολή εφαρμογών Bnd</string>
     <string name="res_invalid_input">Μη έγκυρη εισαγωγή</string>
     <string name="text_sort">Είδος</string>
-    <string name="ttTimeTextClassDuration">Διάρκεια τάξης</string>
     <string name="textShareApk">Μοιραστείτε το APK αυτής της εφαρμογής με άλλους</string>
     <string name="textShareImage">Μοιραστείτε το λογότυπο αυτής της εφαρμογής με άλλους</string>
     <string name="tileBarCodeScanner">Σάρωση γραμμωτού κώδικα</string>
@@ -152,9 +138,6 @@
     <string name="textRounded">Στρογγυλεμένο ορθογώνιο</string>
     <string name="textSquircle">Κύκλος</string>
     <string name="textSelectFromGallery">Επιλέξτε χειροκίνητα την εικόνα από τη συλλογή</string>
-    <string name="ttWeekIndicator">Δείκτης εβδομάδας</string>
-    <string name="ttWeekIndicatorHint">Εισαγάγετε το τέλος της εβδομάδας</string>
-    <string name="ttWeekIndicatorUndo">Αναίρεση εισαγωγών στο Ημερολόγιο Google</string>
     <string name="textQuality">Ποιότητα</string>
     <string name="tileDataUsageAccess">Επιτρέψτε μας να αποκτήσουμε πρόσβαση στη χρήση</string>
     <string name="apiDisplayVolume">Επιλέξτε φάκελο αρχείου</string>
@@ -183,7 +166,6 @@
     <string name="instantTileScannerMmManual">Κάντε κλικ στο πλακίδιο για να τραβήξετε την οθόνη και ανοίξτε το σαρωτή WeChat για να επιλέξετε μη αυτόματα το στιγμιότυπο οθόνης για σάρωση.</string>
     <string name="instantTileScannerAlipayManual">Κάντε κλικ στο πλακίδιο για να τραβήξετε την οθόνη και καλέστε τον σαρωτή Alipay για να σαρώσετε το στιγμιότυπο οθόνης.</string>
     <string name="instantTileMDUManual">Κάντε κλικ στο πλακίδιο για ανανέωση δεδομένων. Θα σας ζητηθεί να εκχωρήσετε το δικαίωμα πρόσβασης χρήσης κατά την προσθήκη του πλακιδίου.</string>
-    <string name="textDuplicate">Αντίγραφο</string>
     <string name="avAdapterActionsDetails">Λεπτομέριες</string>
     <string name="avAdapterActionsIcon">Κοινή χρήση εικονιδίου</string>
     <string name="avAdapterActionsApk">Κοινή χρήση apk</string>
@@ -209,7 +191,6 @@
     <string name="unit_desc_install_notice">Προσπάθεια εγκατάστασης</string>
     <string name="unit_desc_pin">Καρφίτσα</string>
     <string name="sdk_search_hint"><font size="12">όνομα, πακέτο, επίπεδο API, έκδοση Android</font></string>
-    <string name="textWeekNum">Εβδομάδα %d</string>
     <string name="apiDetailsPackageName">"Ονομα πακέτου: "</string>
     <string name="av_details_native_libs">"Εγγενείς βιβλιοθήκες: "</string>
     <string name="unit_desc_im">• Τροποποίηση ανάλυσης\n• Τροποποίηση μορφής: png jpg webp heif\n• Θαμπάδα εικόνας</string>
@@ -218,7 +199,6 @@
     <string name="textAsk4Notification">Δώστε μας την άδεια να εμφανίζουμε ειδοποιήσεις, εξαρτάται από τις ειδοποιήσεις Toast για να σας προσφέρουμε την καλύτερη εμπειρία. Χρησιμοποιείται για να σας ειδοποιεί οδηγίες, συμβουλές, προτάσεις, επιτυχημένα μηνύματα λειτουργίας και μερικές φορές μηνύματα σφάλματος. Ενδέχεται να αντιμετωπίσετε σύγχυση στην εφαρμογή μας εάν επιλέξετε να μην μας χορηγήσετε την άδεια ειδοποίησης.</string>
     <string name="instantManual">Πατήστε παρατεταμένα το εικονίδιο της εφαρμογής στο πρόγραμμα εκκίνησης για να εμφανίσετε συντομεύσεις εφαρμογών.\nΤραβήξτε προς τα κάτω τη σκιά ειδοποιήσεων, οι ρυθμίσεις εναλλαγής πάνω από την περιοχή ειδοποιήσεων είναι τα πλακίδια γρήγορων ρυθμίσεων που αναζητάτε.</string>
     <string name="unit_desc_av">• Ελέγξτε το επίπεδο API Android όλων των εφαρμογών και των εφαρμογών στη συσκευή\n• Ελέγξτε την υποστήριξη προσαρμοστικών εικονιδίων όλων των εφαρμογών\n• Στατιστικά API εφαρμογών\n• Εξαγωγή APK και εικονιδίων\n• Λεπτομέρειες πακέτου και λεπτομέρειες υπογραφής</string>
-    <string name="unit_desc_st">! Για Κινέζους χρήστες\n• Μη αυτόματη προσθήκη μαθημάτων\n• Ανάλυση χρονοδιαγράμματος σχολείου από τον ιστότοπο του σχολικού εκπαιδευτικού συστήματος (μόνο από το εκπαιδευτικό σύστημα ZFSoft)\n• Δημιουργία αρχείου iCalendar (.ics)\n• Εξαγωγή στο Ημερολόγιο Google κ.λπ.</string>
     <string name="prefExteriorForceDarkDescDetail">Το Force Dark είναι μια δυνατότητα για προγραμματιστές να εφαρμόζουν γρήγορα ένα σκοτεινό θέμα Με τη ρύθμιση forceDarkAllowed σε αληθινή, μια εφαρμογή λαμβάνει αυτόματα ένα σκοτεινό θέμα. Και ο προγραμματιστής θα τροποποιήσει περαιτέρω ορισμένα τμήματα της διεπαφής που δεν είναι ιδανικά και θα ορίσει forceDarkAllowed σε false σε αυτά τα τμήματα. Η ενεργοποίηση της παράκαμψης Force-dark θα κάνει το σύστημα να αγνοήσει την τιμή forceDarkAllowed, προκαλώντας μια καλή εφαρμογή σκοτεινού θέματος σε δυσλειτουργία.</string>
     <string name="text_access_denied">Δεν επιτρέπεται η πρόσβαση</string>
     <string name="versatile_device_controls_at_hint_on">Σύρετε για προσαρμογή</string>

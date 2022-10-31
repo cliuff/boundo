@@ -18,14 +18,12 @@
 <resources>
     <string name="app_name">Boundo</string>
     <string name="appDesc">Sizin için bazı şeyler yapmaya bağlı bir araç seti</string>
-    <string name="ttExportCal">Takvime</string>
     <string name="Main_ToolBar_title_Settings">Ayarlar</string>
     <string name="Settings_Button_SwitchLanguage">Diller</string>
     <string name="Settings_Button_CheckUpdate">Uygulama güncellemesi</string>
     <string name="Settings_LanguagePicker_Auto">Sistemi takip et</string>
     <string name="Settings_Language_Button_Cancel">İptal etmek</string>
     <string name="Settings_Language_Dialog_Title">Diller</string>
-    <string name="ttExportICalFile">iCalendar dosyası</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">Yeni sürüm bulundu</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">Yeni sürüm</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart2">değişiklikler</string>
@@ -45,7 +43,6 @@
     <string name="Settings_ImageView_Update">Uygulama güncellemesi</string>
     <string name="Settings_ImageView_Language">Diller</string>
     <string name="Launcher_QQContacts_Toast_Avatar_PermissionDenied">Resmi okuyabilmek için lütfen izin verin</string>
-    <string name="text_add_new">Yeni ekle</string>
     <string name="developertools_cropimage">Görüntü Değiştirme</string>
     <string name="toast_permission_storage_denied">Verileri okuyabilmemiz / yazabilmemiz için lütfen izin verin</string>
     <string name="apiViewer">Uygulama API\'sı</string>
@@ -55,7 +52,6 @@
     <string name="text_done">Bitiş</string>
     <string name="text_no_content">İçerik yok</string>
     <string name="settings_exterior">stil</string>
-    <string name="text_reset">Sıfırla</string>
     <string name="exterior_dark_staus">Karanlık durum çubuğu simgesi</string>
     <string name="exterior_dark_navigation">Karanlık gezinti çubuğu simgesi</string>
     <string name="text_remove">Kaldırmak</string>
@@ -95,7 +91,6 @@
     <string name="unitsManager">Birim yöneticisi</string>
     <string name="units">Birimler</string>
     <string name="twService">Temalı Canlı Duvar Kağıdı</string>
-    <string name="unit_school_timetable">Okul Seferleri</string>
     <string name="activity_av_search">Uygulama API\'sı</string>
     <string name="main_updates">Güncellemeler</string>
     <string name="main_more">Daha</string>
@@ -115,15 +110,7 @@
     <string name="apiSdkTarget">Hedef SDK</string>
     <string name="apiSdkMin">Minimum SDK</string>
     <string name="app_info_name">Uygulama paketi adı</string>
-    <string name="text_parse_fails">Veri ayrıştırılırken hata oluştu</string>
     <string name="text_app_not_installed">Karşılık gelen uygulama yüklü değil</string>
-    <string name="text_mon">Pzt</string>
-    <string name="text_tue">Sal</string>
-    <string name="text_wed">Evlenmek.</string>
-    <string name="text_thu">Per</string>
-    <string name="text_fri">Cum</string>
-    <string name="text_sat">Oturdu.</string>
-    <string name="text_sun">Güneş.</string>
     <string name="text_error">Bir hata oluştu</string>
     <string name="exterior_blur_degree">Bulanıklık derecesi</string>
     <string name="text_loading">Yükleniyor</string>
@@ -142,7 +129,6 @@
     <string name="activityTextProcessingApp">Bnd uygulamalarını görüntüleme</string>
     <string name="res_invalid_input">Geçersiz Giriş</string>
     <string name="text_sort">Çeşit</string>
-    <string name="ttTimeTextClassDuration">Sınıf süresi</string>
     <string name="textShareApk">Bu uygulamanın APK\'sını başkalarıyla paylaşın</string>
     <string name="textShareImage">Bu uygulamanın logosunu başkalarıyla paylaşın</string>
     <string name="tileBarCodeScanner">Barkodu tara</string>
@@ -152,9 +138,6 @@
     <string name="textRounded">Yuvarlarılmış dikdörtgen</string>
     <string name="textSquircle">Squircle</string>
     <string name="textSelectFromGallery">Galeriden manuel olarak resim seçin</string>
-    <string name="ttWeekIndicator">Hafta Göstergesi</string>
-    <string name="ttWeekIndicatorHint">Bitiş haftasını girin</string>
-    <string name="ttWeekIndicatorUndo">Google Takvim\'deki içe aktarma işlemlerini geri alma</string>
     <string name="textQuality">Kalite</string>
     <string name="tileDataUsageAccess">Kullanıma erişmemize izin ver</string>
     <string name="apiDisplayVolume">Dosya klasörünü seçin</string>
@@ -183,7 +166,6 @@
     <string name="instantTileScannerMmManual">Ekranı yakalamak için döşemeye tıklayın ve taranacak ekran görüntüsünü manuel olarak seçmek için WeChat tarayıcısını açın.</string>
     <string name="instantTileScannerAlipayManual">Ekranı yakalamak için döşemeye tıklayın ve ekran görüntüsünü taramak için Alipay tarayıcıyı çağırın.</string>
     <string name="instantTileMDUManual">Verileri yenilemek için kutucuğa tıklayın. Kutucuğu eklerken Kullanım Erişimi izni vermeniz istenir.</string>
-    <string name="textDuplicate">Çiftleme</string>
     <string name="avAdapterActionsDetails">ayrıntılar</string>
     <string name="avAdapterActionsIcon">Paylaş simgesi</string>
     <string name="avAdapterActionsApk">Apk paylaş</string>
@@ -209,7 +191,6 @@
     <string name="unit_desc_install_notice">Yüklemeye çalışıyor</string>
     <string name="unit_desc_pin">Toplu iğne</string>
     <string name="sdk_search_hint"><font size="12">ad, paket, API düzeyi, Android sürümü</font></string>
-    <string name="textWeekNum">Hafta %d</string>
     <string name="apiDetailsPackageName">"Paket ismi: "</string>
     <string name="av_details_native_libs">"Yerel kütüphaneler: "</string>
     <string name="unit_desc_im">• Çözünürlüğü değiştir\n• Biçimi değiştir: png jpg webp heif\n• Görüntüyü bulanıklaştır</string>
@@ -218,7 +199,6 @@
     <string name="textAsk4Notification">Lütfen bize bildirimleri gösterme izni verin, size en iyi deneyimi sunmak için Tost Bildirimlerine güveniyoruz. Talimatları, ipuçlarını, önerileri, başarılı işlem mesajlarını ve bazen hata mesajlarını bildirmek için kullanılır. Bize bildirim izni vermemeyi seçerseniz uygulamamızda karışıklıkla karşılaşabilirsiniz.</string>
     <string name="instantManual">Uygulama Kısayollarını göstermek için başlatıcıdaki uygulama simgesine uzun basın.\nBildirim gölgesini aşağı çekin, bildirim alanının üstündeki ayarlar arasında aradığınız Hızlı Ayarlar Döşemeleri bulunur.</string>
     <string name="unit_desc_av">• Cihazdaki tüm uygulamaların ve uygulamaların Android API seviyesini kontrol edin\n• Tüm uygulamaların Uyarlanabilir Simge desteğini kontrol edin\n• Uygulama API\'sı istatistikleri\n• APK ve simge çıkarma\n• Paket ayrıntıları ve imza ayrıntıları</string>
-    <string name="unit_desc_st">! Çinli kullanıcılar için\n• Kursu manuel olarak ekleyin\n• Okul zaman çizelgesini okulun eğitim sistemi web sitesinden ayrıştırın (yalnızca bazı ZFSoft eğitim sistemlerinden bazıları)\n• iCalendar dosyası (.ics) oluşturun\n• Google Takvim\'e aktarın vb.</string>
     <string name="prefExteriorForceDarkDescDetail">Force Dark, geliştiricilerin karanlık bir temayı hızla uygulamalarını sağlayan bir özelliktir. ForceDarkAllowed değerini true olarak ayarlayarak bir uygulama otomatik olarak karanlık bir tema alır. Ve geliştirici ayrıca arabirimin ideal olmayan bazı bölümlerini değiştirecek ve forceDarkAllowed\'i bu bölümlerde false olarak ayarlayacaktır. Geçersiz Kılmayı Zorla seçeneğinin etkinleştirilmesi, sistemin forceDarkAllowed değerini yoksaymasına neden olarak iyi uygulanmış bir karanlık temanın arızalanmasına neden olur.</string>
     <string name="text_access_denied">Erişim reddedildi</string>
     <string name="versatile_device_controls_at_hint_on">Ayarlamak için kaydırın</string>

@@ -17,14 +17,12 @@
 <resources>
     <string name="app_name">Boundo</string>
     <string name="appDesc">तुमच्यासाठी काही गोष्टी करण्यासाठी बांधील असलेल्या साधनांचा समूह</string>
-    <string name="ttExportCal">कॅलेंडरला</string>
     <string name="Main_ToolBar_title_Settings">सेटिंग्ज</string>
     <string name="Settings_Button_SwitchLanguage">भाषा</string>
     <string name="Settings_Button_CheckUpdate">अॅप अपडेट</string>
     <string name="Settings_LanguagePicker_Auto">प्रणालीचे अनुसरण करा</string>
     <string name="Settings_Language_Button_Cancel">रद्द करा</string>
     <string name="Settings_Language_Dialog_Title">भाषा</string>
-    <string name="ttExportICalFile">iCalendar फाइल</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">नवीन आवृत्ती सापडली</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">नवीन आवृत्ती</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart2">बदल</string>
@@ -44,7 +42,6 @@
     <string name="Settings_ImageView_Update">अॅप अपडेट</string>
     <string name="Settings_ImageView_Language">भाषा</string>
     <string name="Launcher_QQContacts_Toast_Avatar_PermissionDenied">कृपया परवानगी द्या जेणेकरून आम्ही प्रतिमा वाचू शकू</string>
-    <string name="text_add_new">नवीन जोडा</string>
     <string name="developertools_cropimage">प्रतिमा सुधारित करणे</string>
     <string name="toast_permission_storage_denied">कृपया परवानगी द्या जेणेकरून आम्ही डेटा वाचू/लिहू शकू</string>
     <string name="apiViewer">अॅप API</string>
@@ -54,21 +51,12 @@
     <string name="text_done">समाप्त करा</string>
     <string name="text_no_content">सामग्री नाही</string>
     <string name="settings_exterior">शैली</string>
-    <string name="text_reset">रीसेट करा</string>
     <string name="exterior_dark_staus">गडद स्थिती बार चिन्ह</string>
     <string name="exterior_dark_navigation">गडद नेव्हिगेशन बार चिन्ह</string>
     <string name="text_remove">काढा</string>
     <string name="sdk_dialog_details">तपशील</string>
     <string name="app_info_name">अॅप पॅकेजचे नाव</string>
-    <string name="text_parse_fails">डेटा पार्स करताना त्रुटी</string>
     <string name="text_app_not_installed">संबंधित अनुप्रयोग स्थापित केलेला नाही</string>
-    <string name="text_mon">सोम.</string>
-    <string name="text_tue">मंगळ.</string>
-    <string name="text_wed">बुध.</string>
-    <string name="text_thu">गुरु.</string>
-    <string name="text_fri">शुक्र.</string>
-    <string name="text_sat">शनि.</string>
-    <string name="text_sun">रवि.</string>
     <string name="text_error">एक त्रुटी आली</string>
     <string name="exterior_blur_degree">अस्पष्ट पदवी</string>
     <string name="text_loading">लोड करत आहे</string>
@@ -114,7 +102,6 @@
     <string name="res_invalid_input">अवैध इनपुट</string>
     <string name="text_sort">क्रमवारी लावा</string>
     <string name="text_refresh">रिफ्रेश करा</string>
-    <string name="ttTimeTextClassDuration">वर्ग कालावधी</string>
     <string name="textShareApk">या अॅपचे APK इतरांसोबत शेअर करा</string>
     <string name="textShareImage">या अॅपचा लोगो इतरांसोबत शेअर करा</string>
     <string name="tileBarCodeScanner">बारकोड स्कॅन करा</string>
@@ -127,10 +114,6 @@
     <string name="textRounded">गोलाकार आयत</string>
     <string name="textSquircle">गिलहरी</string>
     <string name="textSelectFromGallery">गॅलरीमधून व्यक्तिचलितपणे प्रतिमा निवडा</string>
-    <string name="textWeekNum">आठवडा %d</string>
-    <string name="ttWeekIndicator">आठवड्याचे सूचक</string>
-    <string name="ttWeekIndicatorHint">शेवटचा आठवडा प्रविष्ट करा</string>
-    <string name="ttWeekIndicatorUndo">Google Calendar मधील आयात पूर्ववत करा</string>
     <string name="textQuality">गुणवत्ता</string>
     <string name="tileDataUsageAccess">आम्हाला वापरात प्रवेश करण्याची परवानगी द्या</string>
     <string name="tileData">महिन्याचा डेटा वापर</string>
@@ -168,7 +151,6 @@
     <string name="instantTileScannerMmManual">स्क्रीन कॅप्चर करण्यासाठी टाइलवर क्लिक करा आणि स्कॅन करण्यासाठी स्क्रीनशॉट मॅन्युअली निवडण्यासाठी WeChat स्कॅनर उघडा.</string>
     <string name="instantTileScannerAlipayManual">स्क्रीन कॅप्चर करण्यासाठी टाइलवर क्लिक करा आणि स्क्रीनशॉट स्कॅन करण्यासाठी Alipay स्कॅनरचा वापर करा.</string>
     <string name="instantTileMDUManual">डेटा रिफ्रेश करण्यासाठी टाइलवर क्लिक करा. टाइल जोडताना तुम्हाला वापर प्रवेश परवानगी देण्यास सूचित केले जाईल.</string>
-    <string name="textDuplicate">नक्कल</string>
     <string name="avAdapterActionsDetails">तपशील</string>
     <string name="avAdapterActionsIcon">शेअर चिन्ह</string>
     <string name="avAdapterActionsApk">apk शेअर करा</string>
@@ -193,8 +175,6 @@
     <string name="av_details_native_libs">"नेटिव्ह लायब्ररी: "</string>
     <string name="twService">थीम असलेली लाइव्ह वॉलपेपर</string>
     <string name="twLiveWallpaperDesc">गडद थीम सक्षम केल्यावर गडद वॉलपेपरवर स्वयंचलितपणे स्विच करा</string>
-    <string name="title_school_timetable" translatable="false">School Timetable</string>
-    <string name="unit_school_timetable">शाळेचे वेळापत्रक</string>
     <string name="activity_av_search">अॅप API</string>
     <string name="title_api_viewing" translatable="false">App API</string>
     <string name="main_updates">अपडेट्स</string>
@@ -207,7 +187,6 @@
     <string name="unit_desc_install">स्थापित करा</string>
     <string name="unit_desc_uninstall">विस्थापित करा</string>
     <string name="unit_desc_av">• डिव्हाइसवरील सर्व अॅप्स आणि apks ची Android API पातळी तपासा\n• सर्व अॅप्ससाठी अनुकूली चिन्ह समर्थन तपासा\n• अॅप API आकडेवारी\n• APK आणि चिन्ह काढणे\n• पॅकेज तपशील आणि स्वाक्षरी तपशील</string>
-    <string name="unit_desc_st">! चीनी वापरकर्त्यांसाठी\n• कोर्स मॅन्युअली जोडा\n• शाळेच्या शिक्षण प्रणाली वेबसाइटवरून शाळेचे वेळापत्रक पार्स करा (केवळ ZFSoft शिक्षण प्रणालीपैकी काही)\n• iCalendar फाइल (.ics) व्युत्पन्न करा\n• Google Calendar इ. वर निर्यात करा .</string>
     <string name="unit_desc_im">• रिझोल्यूशन सुधारित करा\n• स्वरूप सुधारित करा: png jpg webp heif\n• अस्पष्ट प्रतिमा</string>
     <string name="unit_desc_tw">• गडद रंगाचा वॉलपेपर आपोआप लागू करून तुमचा वॉलपेपर Android 10 गडद थीमला अनुसरून बनवा</string>
     <string name="unit_desc_at">• ऑडिओ प्ले करणे थांबवा</string>

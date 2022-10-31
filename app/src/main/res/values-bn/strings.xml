@@ -17,14 +17,12 @@
 <resources>
     <string name="app_name">Boundo</string>
     <string name="appDesc">আপনার জন্য কিছু জিনিস করতে আবদ্ধ সরঞ্জামগুলির একটি বান্ডিল</string>
-    <string name="ttExportCal">ক্যালেন্ডারে</string>
     <string name="Main_ToolBar_title_Settings">সেটিংস</string>
     <string name="Settings_Button_SwitchLanguage">ভাষা</string>
     <string name="Settings_Button_CheckUpdate">অ্যাপ আপডেট</string>
     <string name="Settings_LanguagePicker_Auto">সিস্টেম অনুসরণ করুন</string>
     <string name="Settings_Language_Button_Cancel">বাতিল করুন</string>
     <string name="Settings_Language_Dialog_Title">ভাষা</string>
-    <string name="ttExportICalFile">iCalendar ফাইল</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">নতুন সংস্করণ পাওয়া গেছে</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">নতুন সংস্করণ</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart2">পরিবর্তন</string>
@@ -44,7 +42,6 @@
     <string name="Settings_ImageView_Update">অ্যাপ আপডেট</string>
     <string name="Settings_ImageView_Language">ভাষা</string>
     <string name="Launcher_QQContacts_Toast_Avatar_PermissionDenied">অনুগ্রহ করে অনুমতি দিন যাতে আমরা ছবিটি পড়তে পারি</string>
-    <string name="text_add_new">নতুন যোগ করুন</string>
     <string name="developertools_cropimage">ইমেজ পরিবর্তন</string>
     <string name="toast_permission_storage_denied">অনুগ্রহ করে অনুমতি দিন যাতে আমরা ডেটা পড়তে/লিখতে পারি</string>
     <string name="apiViewer">অ্যাপ API</string>
@@ -54,21 +51,12 @@
     <string name="text_done">শেষ করুন</string>
     <string name="text_no_content">কোন উপাদান নেই</string>
     <string name="settings_exterior">শৈলী</string>
-    <string name="text_reset">রিসেট</string>
     <string name="exterior_dark_staus">গাঢ় স্ট্যাটাস বার আইকন</string>
     <string name="exterior_dark_navigation">গাঢ় নেভিগেশন বার আইকন</string>
     <string name="text_remove">অপসারণ</string>
     <string name="sdk_dialog_details">বিস্তারিত</string>
     <string name="app_info_name">অ্যাপ প্যাকেজের নাম</string>
-    <string name="text_parse_fails">ডেটা পার্স করার সময় ত্রুটি৷</string>
     <string name="text_app_not_installed">সংশ্লিষ্ট অ্যাপ্লিকেশন ইনস্টল করা হয়নি</string>
-    <string name="text_mon">সোম।</string>
-    <string name="text_tue">মঙ্গল।</string>
-    <string name="text_wed">বুধ.</string>
-    <string name="text_thu">বৃহ.</string>
-    <string name="text_fri">শুক্র</string>
-    <string name="text_sat">শনি.</string>
-    <string name="text_sun">সূর্য</string>
     <string name="text_error">একটি ত্রুটি ঘটেছে</string>
     <string name="exterior_blur_degree">ব্লার ডিগ্রী</string>
     <string name="text_loading">লোড হচ্ছে</string>
@@ -114,7 +102,6 @@
     <string name="res_invalid_input">ভুল ইনপুট</string>
     <string name="text_sort">সাজান</string>
     <string name="text_refresh">রিফ্রেশ</string>
-    <string name="ttTimeTextClassDuration">ক্লাসের সময়কাল</string>
     <string name="textShareApk">এই অ্যাপের APK অন্যদের সাথে শেয়ার করুন</string>
     <string name="textShareImage">এই অ্যাপটির লোগো অন্যদের সাথে শেয়ার করুন</string>
     <string name="tileBarCodeScanner">বারকোড স্ক্যান করুন</string>
@@ -127,10 +114,6 @@
     <string name="textRounded">বৃত্তাকার আয়তক্ষেত্র</string>
     <string name="textSquircle">কাঠবিড়ালি</string>
     <string name="textSelectFromGallery">ম্যানুয়ালি গ্যালারি থেকে ছবি নির্বাচন করুন</string>
-    <string name="textWeekNum">সপ্তাহ %d</string>
-    <string name="ttWeekIndicator">সপ্তাহের সূচক</string>
-    <string name="ttWeekIndicatorHint">শেষ সপ্তাহে প্রবেশ করুন</string>
-    <string name="ttWeekIndicatorUndo">Google ক্যালেন্ডারে আমদানি পূর্বাবস্থায় ফেরান৷</string>
     <string name="textQuality">গুণমান</string>
     <string name="tileDataUsageAccess">আমাদের ব্যবহার অ্যাক্সেস করার অনুমতি দিন</string>
     <string name="tileData">মাসের ডেটা ব্যবহার</string>
@@ -168,7 +151,6 @@
     <string name="instantTileScannerMmManual">স্ক্রীন ক্যাপচার করতে টাইলটিতে ক্লিক করুন এবং স্ক্যান করার জন্য স্ক্রিনশটটি ম্যানুয়ালি নির্বাচন করতে WeChat স্ক্যানার খুলুন।</string>
     <string name="instantTileScannerAlipayManual">স্ক্রীন ক্যাপচার করতে টাইলে ক্লিক করুন এবং স্ক্রিনশট স্ক্যান করতে Alipay স্ক্যানার চালু করুন।</string>
     <string name="instantTileMDUManual">ডেটা রিফ্রেশ করতে টাইলটিতে ক্লিক করুন৷ টাইল যোগ করার সময় আপনাকে ব্যবহারের অ্যাক্সেসের অনুমতি দেওয়ার জন্য অনুরোধ করা হবে৷</string>
-    <string name="textDuplicate">নকল</string>
     <string name="avAdapterActionsDetails">বিস্তারিত</string>
     <string name="avAdapterActionsIcon">শেয়ার আইকন</string>
     <string name="avAdapterActionsApk">apk শেয়ার করুন</string>
@@ -193,8 +175,6 @@
     <string name="av_details_native_libs">"নেটিভ লাইব্রেরি: "</string>
     <string name="twService">থিমযুক্ত লাইভ ওয়ালপেপার</string>
     <string name="twLiveWallpaperDesc">অন্ধকার থিম সক্ষম হলে স্বয়ংক্রিয়ভাবে অন্ধকার ওয়ালপেপারে স্যুইচ করুন</string>
-    <string name="title_school_timetable" translatable="false">School Timetable</string>
-    <string name="unit_school_timetable">স্কুল সময়নিরুপণতালিকা</string>
     <string name="activity_av_search">অ্যাপ API</string>
     <string name="title_api_viewing" translatable="false">App API</string>
     <string name="main_updates">আপডেট</string>
@@ -207,7 +187,6 @@
     <string name="unit_desc_install">ইনস্টল করুন</string>
     <string name="unit_desc_uninstall">আনইনস্টল করুন</string>
     <string name="unit_desc_av">• ডিভাইসে থাকা সমস্ত অ্যাপ এবং apks-এর Android API স্তর পরীক্ষা করুন\n• সমস্ত অ্যাপের অভিযোজিত আইকন সমর্থন পরীক্ষা করুন\n• অ্যাপ API পরিসংখ্যান\n• APK এবং আইকন নিষ্কাশন\n• প্যাকেজের বিবরণ এবং স্বাক্ষরের বিবরণ</string>
-    <string name="unit_desc_st">! চাইনিজ ব্যবহারকারীদের জন্য\n• ম্যানুয়ালি কোর্স যোগ করুন\n• স্কুলের শিক্ষা ব্যবস্থা ওয়েবসাইট থেকে স্কুলের সময়সূচী পার্স করুন (শুধুমাত্র ZFSoft শিক্ষা ব্যবস্থার কিছু)\n• iCalendar ফাইল তৈরি করুন (.ics)\n• Google ক্যালেন্ডার ইত্যাদিতে রপ্তানি করুন .</string>
     <string name="unit_desc_im">• রেজোলিউশন পরিবর্তন করুন\n• বিন্যাস পরিবর্তন করুন: png jpg webp heif\n• অস্পষ্ট ছবি</string>
     <string name="unit_desc_tw">• স্বয়ংক্রিয়ভাবে একটি গাঢ় রঙের ওয়ালপেপার প্রয়োগ করে আপনার ওয়ালপেপারকে অ্যান্ড্রয়েড 10 গাঢ় থিমের সাথে সঙ্গতিপূর্ণ করুন</string>
     <string name="unit_desc_at">• অডিও বাজানো বন্ধ করুন</string>

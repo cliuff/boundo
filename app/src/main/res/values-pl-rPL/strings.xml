@@ -17,14 +17,12 @@
 <resources>
     <string name="app_name">Boundo</string>
     <string name="appDesc">Zestaw narzędzi, które zrobią dla Ciebie kilka rzeczy</string>
-    <string name="ttExportCal">Do kalendarza</string>
     <string name="Main_ToolBar_title_Settings">Ustawienia</string>
     <string name="Settings_Button_SwitchLanguage">Języki</string>
     <string name="Settings_Button_CheckUpdate">Aktualizacja aplikacji</string>
     <string name="Settings_LanguagePicker_Auto">Śledź system</string>
     <string name="Settings_Language_Button_Cancel">Anulować</string>
     <string name="Settings_Language_Dialog_Title">Języki</string>
-    <string name="ttExportICalFile">Plik iCalendar</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">Znaleziono nową wersję</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">Nowa wersja</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart2">Zmiany</string>
@@ -44,7 +42,6 @@
     <string name="Settings_ImageView_Update">Aktualizacja aplikacji</string>
     <string name="Settings_ImageView_Language">Języki</string>
     <string name="Launcher_QQContacts_Toast_Avatar_PermissionDenied">Proszę o pozwolenie, abyśmy mogli przeczytać obraz</string>
-    <string name="text_add_new">Dodaj nowe</string>
     <string name="developertools_cropimage">Modyfikowanie obrazu</string>
     <string name="toast_permission_storage_denied">Proszę o pozwolenie, abyśmy mogli odczytywać/zapisywać dane</string>
     <string name="apiViewer">Interfejs API aplikacji</string>
@@ -54,21 +51,12 @@
     <string name="text_done">Skończyć</string>
     <string name="text_no_content">Brak zawartości</string>
     <string name="settings_exterior">Styl</string>
-    <string name="text_reset">Resetowanie</string>
     <string name="exterior_dark_staus">Ikona ciemnego paska stanu</string>
     <string name="exterior_dark_navigation">Ciemna ikona paska nawigacyjnego</string>
     <string name="text_remove">Usunąć</string>
     <string name="sdk_dialog_details">Detale</string>
     <string name="app_info_name">Nazwa pakietu aplikacji</string>
-    <string name="text_parse_fails">Błąd analizowania danych</string>
     <string name="text_app_not_installed">Nie zainstalowano odpowiedniej aplikacji</string>
-    <string name="text_mon">pon.</string>
-    <string name="text_tue">wt.</string>
-    <string name="text_wed">Poślubić.</string>
-    <string name="text_thu">czw.</string>
-    <string name="text_fri">pt.</string>
-    <string name="text_sat">sob.</string>
-    <string name="text_sun">Słońce.</string>
     <string name="text_error">Wystąpił błąd</string>
     <string name="exterior_blur_degree">Stopień rozmycia</string>
     <string name="text_loading">Ładowanie</string>
@@ -114,7 +102,6 @@
     <string name="res_invalid_input">Nieprawidłowe dane wejściowe</string>
     <string name="text_sort">Sortować</string>
     <string name="text_refresh">Odświeżać</string>
-    <string name="ttTimeTextClassDuration">Czas trwania zajęć</string>
     <string name="textShareApk">Udostępnij pakiet APK tej aplikacji innym</string>
     <string name="textShareImage">Udostępnij logo tej aplikacji innym</string>
     <string name="tileBarCodeScanner">Zeskanuj kod kreskowy</string>
@@ -127,10 +114,6 @@
     <string name="textRounded">Zaokrąglony prostokąt</string>
     <string name="textSquircle">Wiewiórka</string>
     <string name="textSelectFromGallery">Wybierz obraz z galerii ręcznie</string>
-    <string name="textWeekNum">Tydzień %d</string>
-    <string name="ttWeekIndicator">Wskaźnik tygodnia</string>
-    <string name="ttWeekIndicatorHint">Wpisz koniec tygodnia</string>
-    <string name="ttWeekIndicatorUndo">Cofnij importy w Kalendarzu Google</string>
     <string name="textQuality">Jakość</string>
     <string name="tileDataUsageAccess">Pozwól nam uzyskać dostęp do użycia</string>
     <string name="tileData">Miesięczne wykorzystanie danych</string>
@@ -168,7 +151,6 @@
     <string name="instantTileScannerMmManual">Kliknij kafelek, aby przechwycić ekran i otwórz skaner WeChat, aby ręcznie wybrać zrzut ekranu do skanowania.</string>
     <string name="instantTileScannerAlipayManual">Kliknij kafelek, aby przechwycić ekran i wywołaj skaner Alipay, aby zeskanować zrzut ekranu.</string>
     <string name="instantTileMDUManual">Kliknij kafelek, aby odświeżyć dane. Podczas dodawania kafelka pojawi się monit o przyznanie uprawnień dostępu do użycia.</string>
-    <string name="textDuplicate">Duplikować</string>
     <string name="avAdapterActionsDetails">Detale</string>
     <string name="avAdapterActionsIcon">Ikona udostępniania</string>
     <string name="avAdapterActionsApk">Udostępnij apk</string>
@@ -193,8 +175,6 @@
     <string name="av_details_native_libs">"Biblioteki natywne: "</string>
     <string name="twService">Tematyczne tapety na żywo</string>
     <string name="twLiveWallpaperDesc">Przełącz się na ciemną tapetę automatycznie po włączeniu ciemnego motywu</string>
-    <string name="title_school_timetable" translatable="false">School Timetable</string>
-    <string name="unit_school_timetable">Plan lekcji</string>
     <string name="activity_av_search">Interfejs API aplikacji</string>
     <string name="title_api_viewing" translatable="false">App API</string>
     <string name="main_updates">Aktualizacje</string>
@@ -207,7 +187,6 @@
     <string name="unit_desc_install">zainstalować</string>
     <string name="unit_desc_uninstall">Odinstaluj</string>
     <string name="unit_desc_av">• Sprawdź poziom interfejsu API Androida wszystkich aplikacji i apków na urządzeniu\n• Sprawdź obsługę ikon Adaptive Icon we wszystkich aplikacjach\n• Statystyki interfejsu API aplikacji\n• Wyodrębnianie plików APK i ikon\n• Szczegóły pakietu i szczegóły podpisu</string>
-    <string name="unit_desc_st">! Dla chińskich użytkowników\n• Ręczne dodawanie kursu\n• Analiza planu lekcji ze strony internetowej systemu edukacyjnego szkoły (tylko niektóre systemy edukacyjne ZFSoft)\n• Generowanie pliku iCalendar (.ics)\n• Eksportowanie do Kalendarza Google itp. .</string>
     <string name="unit_desc_im">• Zmień rozdzielczość\n• Zmień format: png jpg webp heif\n• Rozmyj obraz</string>
     <string name="unit_desc_tw">• Dostosuj tapetę do ciemnego motywu Androida 10, automatycznie stosując ciemną tapetę</string>
     <string name="unit_desc_at">• Zatrzymaj odtwarzanie dźwięku</string>

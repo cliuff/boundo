@@ -18,14 +18,12 @@
 <resources>
     <string name="app_name">斑朵</string>
     <string name="appDesc">辦許多的事</string>
-    <string name="ttExportCal">導出至日曆</string>
     <string name="Main_ToolBar_title_Settings">設置</string>
     <string name="Settings_Button_SwitchLanguage">語言</string>
     <string name="Settings_Button_CheckUpdate">應用更新</string>
     <string name="Settings_LanguagePicker_Auto">跟隨系統</string>
     <string name="Settings_Language_Button_Cancel">取消</string>
     <string name="Settings_Language_Dialog_Title">語言</string>
-    <string name="ttExportICalFile">iCalendar 文件</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">檢測到新版本</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">新版</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart2">變化</string>
@@ -45,7 +43,6 @@
     <string name="Settings_ImageView_Update">應用更新</string>
     <string name="Settings_ImageView_Language">語言</string>
     <string name="Launcher_QQContacts_Toast_Avatar_PermissionDenied">請授權以讀取圖片</string>
-    <string name="text_add_new">添加</string>
     <string name="developertools_cropimage">圖片調整</string>
     <string name="toast_permission_storage_denied">請授予存儲訪問權限以讀寫數據</string>
     <string name="apiViewer">應用 API</string>
@@ -55,7 +52,6 @@
     <string name="text_done">完成</string>
     <string name="text_no_content">空空如也</string>
     <string name="settings_exterior">風格</string>
-    <string name="text_reset">恢復默認</string>
     <string name="exterior_dark_staus">暗色狀態欄圖標</string>
     <string name="exterior_dark_navigation">暗色虛擬鍵圖標</string>
     <string name="text_remove">移除</string>
@@ -101,7 +97,6 @@
     <string name="unitsManager">組件管理</string>
     <string name="units">組件</string>
     <string name="twService">主題動態壁紙</string>
-    <string name="unit_school_timetable">課表</string>
     <string name="activity_av_search">應用 API</string>
     <string name="main_updates">動態</string>
     <string name="main_more">更多</string>
@@ -115,15 +110,7 @@
     <string name="mainSecFrequents">常用</string>
     <string name="mainSecStarred">收藏</string>
     <string name="app_info_name">包名</string>
-    <string name="text_parse_fails">數據解析失敗</string>
     <string name="text_app_not_installed">未安裝所需應用</string>
-    <string name="text_mon">一</string>
-    <string name="text_tue">二</string>
-    <string name="text_wed">三</string>
-    <string name="text_thu">四</string>
-    <string name="text_fri">五</string>
-    <string name="text_sat">六</string>
-    <string name="text_sun">日</string>
     <string name="text_error">出現錯誤</string>
     <string name="exterior_blur_degree">模糊程度</string>
     <string name="text_loading">加載中</string>
@@ -143,7 +130,6 @@
     <string name="activityTextProcessingApp">查看斑朵應用</string>
     <string name="res_invalid_input">無效的輸入</string>
     <string name="text_sort">排序</string>
-    <string name="ttTimeTextClassDuration">課程時長</string>
     <string name="textShareApk">與他人分享該應用的安裝包</string>
     <string name="textShareImage">與他人分享該應用的圖標</string>
     <string name="tileBarCodeScanner">掃碼</string>
@@ -153,9 +139,6 @@
     <string name="textRounded">圓角矩形</string>
     <string name="textSquircle">方圓形</string>
     <string name="textSelectFromGallery">手動從相冊選取圖片</string>
-    <string name="ttWeekIndicator">當週指示</string>
-    <string name="ttWeekIndicatorHint">輸入終止週</string>
-    <string name="ttWeekIndicatorUndo">撤銷谷歌日曆的導入</string>
     <string name="textQuality">品質</string>
     <string name="tileDataUsageAccess">允許我們對使用情況數據進行訪問</string>
     <string name="apiDisplayVolume">選取文件夾</string>
@@ -184,7 +167,6 @@
     <string name="instantTileScannerMmManual">點擊磁貼以截屏並打開微信掃一掃手動選取屏幕截圖掃描。</string>
     <string name="instantTileScannerAlipayManual">點擊磁貼以截屏並調用支付寶掃一掃掃描屏幕截圖。</string>
     <string name="instantTileMDUManual">點擊磁貼以刷新數據。添加該磁貼時會提示授予使用統計權限。</string>
-    <string name="textDuplicate">複製</string>
     <string name="avAdapterActionsDetails">詳情</string>
     <string name="avAdapterActionsIcon">分享圖標</string>
     <string name="avAdapterActionsApk">分享安裝包</string>
@@ -212,13 +194,11 @@
     <string name="unit_desc_install_notice">正在嘗試安裝</string>
     <string name="unit_desc_pin">固定</string>
     <string name="sdk_search_hint"><font size="12">應用名 包名 API等級 安卓版本</font></string>
-    <string name="textWeekNum">第%d週</string>
     <string name="unit_desc_im">• 修改分辨率\n• 修改格式 png jpg webp heif\n• 模糊圖片</string>
     <string name="immortalMessage">噢！\n出現了一點兒小問題。\n不過罪魁禍首已經被捉住啦！\n將日誌發給我們做進一步分析吧！</string>
     <string name="textAsk4Notification">請授予我們展示通知的權限，我們需要展示吐司通知以為您提供最優質的體驗。我們使用它來向您展示一些操作指示、提示信息、建議信息、操作成功提醒和偶爾的錯誤信息提醒。如果拒絕通知權限的授予，您很可能在App中感到困惑。</string>
     <string name="instantManual">在桌面上長按應用圖標以調出“應用 Shortcuts”。\n下拉通知欄，通知區域上面的那些設置開關便是“快捷設置磁貼”。</string>
     <string name="unit_desc_av">• 查看設備上所有應用及安裝包的目標 SDK 版本和最低 SDK 版本\n• 查看應用是否支持自適應圖標\n• 應用 API 統計\n• 安裝包提取、圖標提取\n• 包詳細信息查看、簽名信息查看</string>
-    <string name="unit_desc_st">！中國用戶使用\n• 手動輸入課程\n• 自動解析教務系統課表（只支持部分正方教務系統）\n• 生成 iCalendar 文件 (.ics)\n• 導入至谷歌日曆等</string>
     <string name="prefExteriorForceDarkDescDetail">Force Dark 是專為開發者設計的功能，能夠使開發者快速地實現黑暗模式。將應用的 forceDarkAllowed 值設為 true，應用便能自動實現黑暗模式。開發者仍需進一步調整部分界面以完善黑暗模式，並將這部分界面的 forceDarkAllowed 值設為 false。開啟 Override force-dark 會使系統忽視 forceDarkAllowed 值，致使本來完善的黑暗模式變得破爛。</string>
     <string name="versatile_device_controls_at_hint_on">滑動調整</string>
     <string name="text_access_denied">訪問被拒</string>

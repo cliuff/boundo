@@ -17,14 +17,12 @@
 <resources>
     <string name="app_name">Boundo</string>
     <string name="appDesc">A bundle of tools bound to do some things for you</string>
-    <string name="ttExportCal">To calendar</string>
     <string name="Main_ToolBar_title_Settings">Settings</string>
     <string name="Settings_Button_SwitchLanguage">Languages</string>
     <string name="Settings_Button_CheckUpdate">App update</string>
     <string name="Settings_LanguagePicker_Auto">Follow system</string>
     <string name="Settings_Language_Button_Cancel">Cancel</string>
     <string name="Settings_Language_Dialog_Title">Languages</string>
-    <string name="ttExportICalFile">iCalendar file</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">New version found</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">New version</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart2">Changes</string>
@@ -44,7 +42,6 @@
     <string name="Settings_ImageView_Update">App update</string>
     <string name="Settings_ImageView_Language">Languages</string>
     <string name="Launcher_QQContacts_Toast_Avatar_PermissionDenied">Please grant the permission so we can read the image</string>
-    <string name="text_add_new">Add new</string>
     <string name="developertools_cropimage">Image Modifying</string>
     <string name="toast_permission_storage_denied">Please grant the permission so we can read/write data</string>
     <string name="apiViewer">App API</string>
@@ -54,21 +51,12 @@
     <string name="text_done">Finish</string>
     <string name="text_no_content">No content</string>
     <string name="settings_exterior">Style</string>
-    <string name="text_reset">Reset</string>
     <string name="exterior_dark_staus">Dark status bar icon</string>
     <string name="exterior_dark_navigation">Dark navigation bar icon</string>
     <string name="text_remove">Remove</string>
     <string name="sdk_dialog_details">Details</string>
     <string name="app_info_name">App package name</string>
-    <string name="text_parse_fails">Error parsing data</string>
     <string name="text_app_not_installed">Corresponding application not installed</string>
-    <string name="text_mon">Mon.</string>
-    <string name="text_tue">Tue.</string>
-    <string name="text_wed">Wed.</string>
-    <string name="text_thu">Thu.</string>
-    <string name="text_fri">Fri.</string>
-    <string name="text_sat">Sat.</string>
-    <string name="text_sun">Sun.</string>
     <string name="text_error">An error occurred</string>
     <string name="exterior_blur_degree">Blur degree</string>
     <string name="text_loading">Loading</string>
@@ -114,7 +102,6 @@
     <string name="res_invalid_input">Invalid input</string>
     <string name="text_sort">Sort</string>
     <string name="text_refresh">Refresh</string>
-    <string name="ttTimeTextClassDuration">Class duration</string>
     <string name="textShareApk">Share the APK of this app with others</string>
     <string name="textShareImage">Share the logo of this app with others</string>
     <string name="tileBarCodeScanner">Scan barcode</string>
@@ -127,10 +114,6 @@
     <string name="textRounded">Rounded rectangle</string>
     <string name="textSquircle">Squircle</string>
     <string name="textSelectFromGallery">Select image from gallery manually</string>
-    <string name="textWeekNum">Week %d</string>
-    <string name="ttWeekIndicator">Week Indicator</string>
-    <string name="ttWeekIndicatorHint">Enter end week</string>
-    <string name="ttWeekIndicatorUndo">Undo imports in Google Calendar</string>
     <string name="textQuality">Quality</string>
     <string name="tileDataUsageAccess">Allow us to access usage</string>
     <string name="tileData">Month data usage</string>
@@ -168,7 +151,6 @@
     <string name="instantTileScannerMmManual">Click the tile to capture screen and open WeChat scanner to manually select the screenshot to scan.</string>
     <string name="instantTileScannerAlipayManual">Click the tile to capture screen and invoke Alipay scanner to scan the screenshot.</string>
     <string name="instantTileMDUManual">Click the tile to refresh data.You are to be prompted to grant the Usage Access permission when adding the tile.</string>
-    <string name="textDuplicate">Duplicate</string>
     <string name="avAdapterActionsDetails">Details</string>
     <string name="avAdapterActionsIcon">Share icon</string>
     <string name="avAdapterActionsApk">Share apk</string>
@@ -193,8 +175,6 @@
     <string name="av_details_native_libs">"Native libraries: "</string>
     <string name="twService">Themed Live Wallpaper</string>
     <string name="twLiveWallpaperDesc">Switch to dark wallpaper automatically when dark theme is enabled</string>
-    <string name="title_school_timetable" translatable="false">School Timetable</string>
-    <string name="unit_school_timetable">School Timetable</string>
     <string name="activity_av_search">App API</string>
     <string name="title_api_viewing" translatable="false">App API</string>
     <string name="main_updates">Updates</string>
@@ -207,7 +187,6 @@
     <string name="unit_desc_install">Install</string>
     <string name="unit_desc_uninstall">Uninstall</string>
     <string name="unit_desc_av">• Check Android API level of all apps and apks on device\n• Check Adaptive Icon support of all apps\n• App API stats\n• APK and icon extraction\n• Package details and signature details</string>
-    <string name="unit_desc_st">! For Chinese users\n• Add course manually\n• Parse school timetable from school\'s education system website (some of the ZFSoft education system only)\n• Generate iCalendar file (.ics)\n• Export to Google Calendar etc.</string>
     <string name="unit_desc_im">• Modify resolution\n• Modify format: png jpg webp heif\n• Blur image</string>
     <string name="unit_desc_tw">• Make your wallpaper comply to Android 10 dark theme by applying a dark-color wallpaper automatically</string>
     <string name="unit_desc_at">• Stop audio from playing</string>

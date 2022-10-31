@@ -18,14 +18,12 @@
 <resources>
     <string name="app_name">Boundo</string>
     <string name="appDesc">Un insieme di strumenti destinati a fare alcune cose per te</string>
-    <string name="ttExportCal">Al calendario</string>
     <string name="Main_ToolBar_title_Settings">impostazioni</string>
     <string name="Settings_Button_SwitchLanguage">Le lingue</string>
     <string name="Settings_Button_CheckUpdate">Aggiornamento dell\'app</string>
     <string name="Settings_LanguagePicker_Auto">Segui il sistema</string>
     <string name="Settings_Language_Button_Cancel">Annulla</string>
     <string name="Settings_Language_Dialog_Title">Le lingue</string>
-    <string name="ttExportICalFile">file iCalendar</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">Nuova versione trovata</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">Nuova versione</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart2">I cambiamenti</string>
@@ -45,7 +43,6 @@
     <string name="Settings_ImageView_Update">Aggiornamento dell\'app</string>
     <string name="Settings_ImageView_Language">Le lingue</string>
     <string name="Launcher_QQContacts_Toast_Avatar_PermissionDenied">Concedi l\'autorizzazione per consentirci di leggere l\'immagine</string>
-    <string name="text_add_new">Aggiungere nuova</string>
     <string name="developertools_cropimage">Modifica dell\'immagine</string>
     <string name="toast_permission_storage_denied">Concedi l\'autorizzazione per consentirci di leggere / scrivere i dati</string>
     <string name="apiViewer">API dell\'app</string>
@@ -55,21 +52,12 @@
     <string name="text_done">finire</string>
     <string name="text_no_content">Nessun contenuto</string>
     <string name="settings_exterior">Stile</string>
-    <string name="text_reset">Ripristina</string>
     <string name="exterior_dark_staus">Icona barra di stato scura</string>
     <string name="exterior_dark_navigation">Icona barra di navigazione scura</string>
     <string name="text_remove">Rimuovere</string>
     <string name="sdk_dialog_details">Dettagli</string>
     <string name="app_info_name">Nome del pacchetto dell\'app</string>
-    <string name="text_parse_fails">Errore durante l\'analisi dei dati</string>
     <string name="text_app_not_installed">Applicazione corrispondente non installata</string>
-    <string name="text_mon">Mon.</string>
-    <string name="text_tue">Mar.</string>
-    <string name="text_wed">Mer</string>
-    <string name="text_thu">Gio</string>
-    <string name="text_fri">Ven</string>
-    <string name="text_sat">Sat.</string>
-    <string name="text_sun">Sole.</string>
     <string name="text_error">Si è verificato un errore</string>
     <string name="exterior_blur_degree">Grado di sfocatura</string>
     <string name="text_loading">Caricamento in corso</string>
@@ -83,7 +71,6 @@
     <string name="main_more">Di Più</string>
     <string name="main_updates">aggiornamenti</string>
     <string name="activity_av_search">API dell\'app</string>
-    <string name="unit_school_timetable">Orario scolastico</string>
     <string name="twLiveWallpaperDesc">Passa automaticamente allo sfondo scuro quando il tema scuro è abilitato</string>
     <string name="twService">Live Wallpaper a tema</string>
     <string name="units">unità</string>
@@ -132,7 +119,6 @@
     <string name="res_invalid_input">Inserimento non valido</string>
     <string name="text_sort">Ordinare</string>
     <string name="text_refresh">ricaricare</string>
-    <string name="ttTimeTextClassDuration">Durata della lezione</string>
     <string name="textShareApk">Condividi l\'APK di questa app con altri</string>
     <string name="textShareImage">Condividi il logo di questa app con gli altri</string>
     <string name="tileBarCodeScanner">Scansione codice a barre</string>
@@ -142,9 +128,6 @@
     <string name="textRounded">Rettangolo arrotondato</string>
     <string name="textSquircle">squircle</string>
     <string name="textSelectFromGallery">Seleziona l\'immagine dalla galleria manualmente</string>
-    <string name="ttWeekIndicator">Indicatore della settimana</string>
-    <string name="ttWeekIndicatorHint">Inserisci la settimana di fine</string>
-    <string name="ttWeekIndicatorUndo">Annulla le importazioni in Google Calendar</string>
     <string name="textQuality">Qualità</string>
     <string name="tileDataUsageAccess">Consentici di accedere all\'uso</string>
     <string name="tileData">Utilizzo dei dati del mese</string>
@@ -178,7 +161,6 @@
     <string name="prefExteriorDarkPlanScheduleEnd">Tempo scaduto</string>
     <string name="prefSettingsTrim2Round">Tagliare le icone non adattive per arrotondarle quando necessario</string>
     <string name="textManual">Manuale</string>
-    <string name="textDuplicate">Duplicare</string>
     <string name="avAdapterActionsDetails">Dettagli</string>
     <string name="avAdapterActionsIcon">Icona Condividi</string>
     <string name="avAdapterActionsApk">Condividi apk</string>
@@ -191,7 +173,6 @@
     <string name="instantTileScannerMmManual">Fare clic sul riquadro per acquisire la schermata e aprire lo scanner WeChat per selezionare manualmente lo screenshot da scansionare.</string>
     <string name="instantTileScannerAlipayManual">Fare clic sul riquadro per acquisire la schermata e richiamare lo scanner Alipay per eseguire la scansione dello screenshot.</string>
     <string name="instantTileMDUManual">Fare clic sul riquadro per aggiornare i dati. Quando si aggiunge il riquadro, viene richiesto di concedere l\'autorizzazione Accesso utilizzo.</string>
-    <string name="textWeekNum">Settimana %d</string>
     <string name="textColon">": "</string>
     <string name="textParentheses">" (%s)"</string>
     <string name="settings_fun_update_via_browser">Scarica tramite browser\n(tocca e tieni premuto per copiare il link)</string>
@@ -200,7 +181,6 @@
     <string name="instantManual">Premi a lungo sull\'icona dell\'app nel programma di avvio per mostrare le scorciatoie dell\'app.\nAbbassa l\'area notifiche, le impostazioni si spostano sopra l\'area di notifica sono le tessere Impostazioni rapide che stai cercando.</string>
     <string name="immortalMessage">Oh no!\nSiamo irritati da un bug.\nNon ti preoccupare, è catturato!\nConsegnaci il log per fare ricerche!</string>
     <string name="unit_desc_av">• Controlla il livello API Android di tutte le app e gli apk sul dispositivo\n• Controlla il supporto dell\'icona adattiva di tutte le app\n• Statistiche API app\n• Estrazione di APK e icone\n• Dettagli del pacchetto e dettagli della firma</string>
-    <string name="unit_desc_st">Per utenti cinesi\n• Aggiungi corso manualmente\n• Orario scolastico scarso dal sito web del sistema educativo della scuola (solo alcuni dei sistemi educativi ZFSoft)\n• Genera file iCalendar (.ics)\n• Esporta in Google Calendar ecc.</string>
     <string name="unit_desc_im">• Modifica risoluzione\n• Modifica formato: png jpg webp heif\n• Sfocatura immagine</string>
     <string name="unit_desc_tw">• Rendi il tuo sfondo conforme al tema scuro di Android 10 applicando automaticamente uno sfondo di colore scuro</string>
     <string name="unit_desc_at">• Interrompere la riproduzione dell\'audio</string>

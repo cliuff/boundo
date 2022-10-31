@@ -18,14 +18,12 @@
 <resources>
     <string name="app_name">&#1564;Boundo</string>
     <string name="appDesc">مجموعة أدوات ملزمة للقيام ببعض الأشياء نيابة عنك</string>
-    <string name="ttExportCal">إلى التقويم</string>
     <string name="Main_ToolBar_title_Settings">الإعدادات</string>
     <string name="Settings_Button_SwitchLanguage">اللغات</string>
     <string name="Settings_Button_CheckUpdate">تحديث التطبيق</string>
     <string name="Settings_LanguagePicker_Auto">اتبع النظام</string>
     <string name="Settings_Language_Button_Cancel">إلغاء</string>
     <string name="Settings_Language_Dialog_Title">اللغات</string>
-    <string name="ttExportICalFile">ملف iCalendar</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">تم العثور على نسخة جديدة</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">نسخة جديدة</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart2">التغييرات</string>
@@ -45,7 +43,6 @@
     <string name="Settings_ImageView_Update">تحديث التطبيق</string>
     <string name="Settings_ImageView_Language">اللغات</string>
     <string name="Launcher_QQContacts_Toast_Avatar_PermissionDenied">يرجى منح الإذن حتى نتمكن من قراءة الصورة</string>
-    <string name="text_add_new">اضف جديد</string>
     <string name="developertools_cropimage">تعديل الصورة</string>
     <string name="toast_permission_storage_denied">يرجى منح الإذن حتى نتمكن من قراءة / كتابة البيانات</string>
     <string name="apiViewer">&#1564;API التطبيق</string>
@@ -55,21 +52,12 @@
     <string name="text_done">إنهاء</string>
     <string name="text_no_content">لا يوجد محتوى</string>
     <string name="settings_exterior">أسلوب</string>
-    <string name="text_reset">إعادة تعيين</string>
     <string name="exterior_dark_staus">أيقونة شريط الحالة المظلمة</string>
     <string name="exterior_dark_navigation">أيقونة شريط التنقل الظلام</string>
     <string name="text_remove">إزالة</string>
     <string name="sdk_dialog_details">تفاصيل</string>
     <string name="app_info_name">اسم حزمة التطبيق</string>
-    <string name="text_parse_fails">خطأ في تحليل البيانات</string>
     <string name="text_app_not_installed">تطبيق المقابلة غير مثبت</string>
-    <string name="text_mon">اثنين</string>
-    <string name="text_tue">ثلاثاء</string>
-    <string name="text_wed">الأربعاء.</string>
-    <string name="text_thu">خميس</string>
-    <string name="text_fri">جمعة</string>
-    <string name="text_sat">جلس.</string>
-    <string name="text_sun">شمس.</string>
     <string name="text_error">حدث خطأ</string>
     <string name="exterior_blur_degree">درجة طمس</string>
     <string name="text_loading">جار التحميل</string>
@@ -83,7 +71,6 @@
     <string name="main_more">أكثر</string>
     <string name="main_updates">التحديثات</string>
     <string name="activity_av_search">API التطبيق</string>
-    <string name="unit_school_timetable">الجدول الدراسي</string>
     <string name="twLiveWallpaperDesc">قم بالتبديل إلى خلفية مظلمة تلقائيًا عند تمكين سمة مظلمة</string>
     <string name="twService">تحت عنوان لايف للجدران</string>
     <string name="units">وحدات</string>
@@ -132,7 +119,6 @@
     <string name="res_invalid_input">مدخل غير صالح</string>
     <string name="text_sort">فرز</string>
     <string name="text_refresh">تحديث</string>
-    <string name="ttTimeTextClassDuration">مدة الفصل</string>
     <string name="textShareApk">مشاركة APK لهذا التطبيق مع الآخرين</string>
     <string name="textShareImage">مشاركة شعار هذا التطبيق مع الآخرين</string>
     <string name="tileBarCodeScanner">مسح الرمز الشريطى</string>
@@ -142,9 +128,6 @@
     <string name="textRounded">مستطيل مستدير الزوايا</string>
     <string name="textSquircle">Squircle</string>
     <string name="textSelectFromGallery">حدد صورة من المعرض يدويا</string>
-    <string name="ttWeekIndicator">مؤشر الأسبوع</string>
-    <string name="ttWeekIndicatorHint">أدخل نهاية الأسبوع</string>
-    <string name="ttWeekIndicatorUndo">التراجع عن الاستيراد في تقويم Google</string>
     <string name="textQuality">جودة</string>
     <string name="tileDataUsageAccess">اسمح لنا بالوصول إلى الاستخدام</string>
     <string name="tileData">شهر استخدام البيانات</string>
@@ -178,7 +161,6 @@
     <string name="prefExteriorDarkPlanScheduleEnd">وقت النهاية</string>
     <string name="prefSettingsTrim2Round">قم بقص الرموز غير القابلة للتكيف لتقريبها عند الاقتضاء</string>
     <string name="textManual">كتيب</string>
-    <string name="textDuplicate">مكرر</string>
     <string name="avAdapterActionsDetails">تفاصيل</string>
     <string name="avAdapterActionsIcon">أيقونة المشاركة</string>
     <string name="avAdapterActionsApk">مشاركة apk</string>
@@ -191,7 +173,6 @@
     <string name="instantTileScannerMmManual">انقر على البلاط لالتقاط الشاشة وفتح الماسح الضوئي WeChat لتحديد لقطة الشاشة يدويًا للمسح الضوئي.</string>
     <string name="instantTileScannerAlipayManual">انقر على البلاط لالتقاط الشاشة واستدعاء الماسح الضوئي Alipay لمسح الصورة.</string>
     <string name="instantTileMDUManual">انقر فوق التجانب لتحديث البيانات. ستتم مطالبتك بمنح إذن \"وصول الاستخدام\" عند إضافة التجانب.</string>
-    <string name="textWeekNum">الأسبوع %d</string>
     <string name="textColon">"&#1564;: "</string>
     <string name="textParentheses">" (%s)"</string>
     <string name="settings_fun_update_via_browser">تنزيل عبر المتصفح\n(المس مع الاستمرار لنسخ الرابط)</string>
@@ -200,7 +181,6 @@
     <string name="instantManual">الضغط لفترة طويلة على أيقونة التطبيق في المشغّل لإظهار اختصارات التطبيقات.\nاسحب ظل الإشعار إلى أسفل ، والإعدادات التي يتم تبديلها أعلى منطقة الإشعارات هي بلاط الإعدادات السريعة الذي تبحث عنه.</string>
     <string name="immortalMessage">لا لا!\nنحن غاضبون من خطأ.\nلا تقلق ، لقد تم التقاطها!\nتسليم السجل إلينا لإجراء البحوث على!</string>
     <string name="unit_desc_av">• التحقق من مستوى Android API لجميع التطبيقات والتطبيقات على الجهاز\n• التحقق من دعم أيقونة التكيف من جميع التطبيقات\n• احصائيات API التطبيق\n• &#1564;APK واستخراج الرمز\n• تفاصيل الحزمة وتفاصيل التوقيع</string>
-    <string name="unit_desc_st">للمستخدمين الصينيين\n• إضافة بالطبع يدويا\n• تحليل الجدول الزمني للمدرسة من موقع النظام التعليمي للمدرسة (بعض من نظام التعليم ZFSoft فقط)\n• إنشاء ملف iCalendar (.ics)\n• تصدير إلى تقويم Google إلخ.</string>
     <string name="unit_desc_im">• تعديل القرار• تعديل الشكل: png jpg webp heif• طمس الصورة</string>
     <string name="unit_desc_tw">• اجعل ورق الحائط الخاص بك يتوافق مع السمة المظلم لنظام Android 10 من خلال تطبيق ورق الحائط الداكن تلقائيًا</string>
     <string name="unit_desc_at">• إيقاف الصوت من اللعب</string>

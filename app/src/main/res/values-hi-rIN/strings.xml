@@ -17,14 +17,12 @@
 <resources>
     <string name="app_name">Boundo</string>
     <string name="appDesc">आपके लिए कुछ काम करने के लिए बाध्य उपकरणों का एक बंडल</string>
-    <string name="ttExportCal">कैलेंडर के लिए</string>
     <string name="Main_ToolBar_title_Settings">समायोजन</string>
     <string name="Settings_Button_SwitchLanguage">बोली</string>
     <string name="Settings_Button_CheckUpdate">ऐप अपडेट</string>
     <string name="Settings_LanguagePicker_Auto">सिस्टम का पालन करें</string>
     <string name="Settings_Language_Button_Cancel">रद्द करना</string>
     <string name="Settings_Language_Dialog_Title">बोली</string>
-    <string name="ttExportICalFile">आईकैलेंडर फ़ाइल</string>
     <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">नया संस्करण मिला</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart1">नया संस्करण</string>
     <string name="SettingsSync_Update_AlertDialog_MessagePart2">परिवर्तन</string>
@@ -44,7 +42,6 @@
     <string name="Settings_ImageView_Update">ऐप अपडेट</string>
     <string name="Settings_ImageView_Language">बोली</string>
     <string name="Launcher_QQContacts_Toast_Avatar_PermissionDenied">कृपया अनुमति दें ताकि हम छवि को पढ़ सकें</string>
-    <string name="text_add_new">नया जोड़ें</string>
     <string name="developertools_cropimage">छवि संशोधन</string>
     <string name="toast_permission_storage_denied">कृपया अनुमति दें ताकि हम डेटा पढ़/लिख सकें</string>
     <string name="apiViewer">ऐप एपीआई</string>
@@ -54,21 +51,12 @@
     <string name="text_done">खत्म करना</string>
     <string name="text_no_content">कोई सामग्री नहीं है</string>
     <string name="settings_exterior">शैली</string>
-    <string name="text_reset">रीसेट</string>
     <string name="exterior_dark_staus">डार्क स्टेटस बार आइकन</string>
     <string name="exterior_dark_navigation">डार्क नेविगेशन बार आइकन</string>
     <string name="text_remove">हटाना</string>
     <string name="sdk_dialog_details">विवरण</string>
     <string name="app_info_name">ऐप पैकेज का नाम</string>
-    <string name="text_parse_fails">डेटा पार्स करने में त्रुटि</string>
     <string name="text_app_not_installed">संबंधित एप्लिकेशन इंस्टॉल नहीं किया गया</string>
-    <string name="text_mon">सोमवार।</string>
-    <string name="text_tue">मंगल</string>
-    <string name="text_wed">बुध।</string>
-    <string name="text_thu">बृहस्पति</string>
-    <string name="text_fri">शुक्र</string>
-    <string name="text_sat">बैठा।</string>
-    <string name="text_sun">रवि।</string>
     <string name="text_error">एक त्रुटि पाई गई</string>
     <string name="exterior_blur_degree">धुंधला डिग्री</string>
     <string name="text_loading">लोड हो रहा है</string>
@@ -114,7 +102,6 @@
     <string name="res_invalid_input">अमान्य निवेश</string>
     <string name="text_sort">क्रम से लगाना</string>
     <string name="text_refresh">ताज़ा करना</string>
-    <string name="ttTimeTextClassDuration">कक्षा अवधि</string>
     <string name="textShareApk">इस ऐप के एपीके को दूसरों के साथ साझा करें</string>
     <string name="textShareImage">इस ऐप का लोगो दूसरों के साथ साझा करें</string>
     <string name="tileBarCodeScanner">बारकोड स्कैन करें</string>
@@ -127,10 +114,6 @@
     <string name="textRounded">गोलाकार आयत</string>
     <string name="textSquircle">स्क्वरक्ल</string>
     <string name="textSelectFromGallery">मैन्युअल रूप से गैलरी से छवि का चयन करें</string>
-    <string name="textWeekNum">सप्ताह %d</string>
-    <string name="ttWeekIndicator">सप्ताह संकेतक</string>
-    <string name="ttWeekIndicatorHint">अंतिम सप्ताह दर्ज करें</string>
-    <string name="ttWeekIndicatorUndo">Google कैलेंडर में आयात पूर्ववत करें</string>
     <string name="textQuality">गुणवत्ता</string>
     <string name="tileDataUsageAccess">हमें उपयोग करने की अनुमति दें</string>
     <string name="tileData">माह डेटा उपयोग</string>
@@ -168,7 +151,6 @@
     <string name="instantTileScannerMmManual">स्क्रीन पर कब्जा करने के लिए टाइल पर क्लिक करें और स्कैन करने के लिए स्क्रीनशॉट को मैन्युअल रूप से चुनने के लिए WeChat स्कैनर खोलें।</string>
     <string name="instantTileScannerAlipayManual">स्क्रीन कैप्चर करने के लिए टाइल पर क्लिक करें और स्क्रीनशॉट को स्कैन करने के लिए Alipay स्कैनर को इनवाइट करें।</string>
     <string name="instantTileMDUManual">डेटा रीफ्रेश करने के लिए टाइल पर क्लिक करें। टाइल जोड़ते समय आपको उपयोग एक्सेस अनुमति देने के लिए कहा जाएगा।</string>
-    <string name="textDuplicate">डुप्लिकेट</string>
     <string name="avAdapterActionsDetails">विवरण</string>
     <string name="avAdapterActionsIcon">शेयर आइकन</string>
     <string name="avAdapterActionsApk">शेयर एपीके</string>
@@ -193,8 +175,6 @@
     <string name="av_details_native_libs">"मूल पुस्तकालय: "</string>
     <string name="twService">थीम्ड लाइव वॉलपेपर</string>
     <string name="twLiveWallpaperDesc">गहरे रंग वाली थीम के सक्षम होने पर स्वचालित रूप से गहरे रंग के वॉलपेपर पर स्विच करें</string>
-    <string name="title_school_timetable" translatable="false">School Timetable</string>
-    <string name="unit_school_timetable">विद्यालय की समय सारिणी</string>
     <string name="activity_av_search">ऐप एपीआई</string>
     <string name="title_api_viewing" translatable="false">App API</string>
     <string name="main_updates">अपडेट</string>
@@ -207,7 +187,6 @@
     <string name="unit_desc_install">स्थापित करना</string>
     <string name="unit_desc_uninstall">स्थापना रद्द करें</string>
     <string name="unit_desc_av">• डिवाइस पर सभी ऐप्लिकेशन और ऐप्लिकेशन के Android API स्तर की जांच करें\n• सभी ऐप्लिकेशन के अनुकूली आइकन समर्थन की जांच करें\n• ऐप्लिकेशन API आंकड़े\n• APK और आइकन निष्कर्षण\n• पैकेज विवरण और हस्ताक्षर विवरण</string>
-    <string name="unit_desc_st">! चीनी उपयोगकर्ताओं के लिए\n• मैन्युअल रूप से पाठ्यक्रम जोड़ें\n• स्कूल की शिक्षा प्रणाली वेबसाइट (केवल ZFSoft शिक्षा प्रणाली में से कुछ) से स्कूल समय सारिणी पार्स करें\n• iCalendar फ़ाइल (.ics) उत्पन्न करें\n• Google कैलेंडर आदि में निर्यात करें .</string>
     <string name="unit_desc_im">• रिज़ॉल्यूशन संशोधित करें\n• प्रारूप संशोधित करें: png jpg webp heif\n• धुंधली छवि</string>
     <string name="unit_desc_tw">• गहरे रंग का वॉलपेपर अपने आप लागू करके अपने वॉलपेपर को Android 10 डार्क थीम के अनुरूप बनाएं</string>
     <string name="unit_desc_at">• ऑडियो को चलने से रोकें</string>
