@@ -135,6 +135,7 @@ class SystemUiScope(private val configInfo: SystemBarConfigInfo) {
 interface SystemBarMaintainer {
     val context: Context?
     val window: Window?
+    // todo Layer
     val configStack: ArrayDeque<SystemBarConfigInfo>
     // Configs in effect
     val activeConfigs: Array<SystemUiBarConfig?>

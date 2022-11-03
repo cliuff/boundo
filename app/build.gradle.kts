@@ -222,6 +222,7 @@ dependencies {
             androidxActivity,
             androidxAppcompat,
             androidxFragment,
+            androidxWindow,
             androidxDrawerLayout,
             androidxSwipeRefreshLayout,
             androidxConstraintLayout,

@@ -32,6 +32,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -56,6 +57,8 @@ import com.madness.collision.util.P
 import com.madness.collision.util.ThemeUtil
 import com.madness.collision.util.mainApplication
 import com.madness.collision.util.os.OsUtils
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class UnitBarFragment : Fragment() {
     private val mainViewModel: MainViewModel by activityViewModels()
@@ -97,7 +100,13 @@ fun UnitBarPage(mainViewModel: MainViewModel) {
         val (pinned, frequent) = getFrequentUnits(context).partition { it.unitName in pinnedUnits }
         pinned + frequent
     }
-    Updates(descriptions) { mainViewModel.displayUnit(it) }
+    val scope = rememberCoroutineScope()
+    Updates(descriptions) {
+        mainViewModel.displayUnit(it)
+        scope.launch(Dispatchers.Default) {
+            Unit.increaseFrequency(context, it)
+        }
+    }
 }
 
 private fun getFrequentUnits(context: Context): List<Description> {
