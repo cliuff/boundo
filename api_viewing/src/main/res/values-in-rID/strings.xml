@@ -17,8 +17,6 @@
 
 <resources>
     <string name="av_updates_recents">Baru-baru ini diperbarui</string>
-    <string name="sdkcheck_dialog_targetsdktext">Target</string>
-    <string name="sdkcheck_dialog_minsdktext">min.</string>
     <string name="sdkcheck_sortspinner_sortbyname">Dengan nama</string>
     <string name="sdkcheck_sortspinner_sortbyhighersdk">API tertinggi</string>
     <string name="sdkcheck_sortspinner_sortbylowersdk">API Terendah</string>
@@ -73,8 +71,6 @@
     <string name="apiInfoAiOverallDes">Ada dua set ikon peluncur yang dapat dimanifestasikan dalam apk, yang satu adalah ikon aplikasi normal dan yang lainnya adalah ikon aplikasi bulat.\nKedua set dapat berisi Ikon Adaptif, yang diperkenalkan dengan Android 8.0. Ikon aplikasi bulat diperkenalkan dengan Android 7.1.</string>
     <string name="avTBViewingTarget">Lihat target/mnt. API</string>
     <string name="avManual">Antarmuka pemrograman aplikasi (API), secara umum, adalah seperangkat metode komunikasi yang didefinisikan dengan jelas di antara berbagai komponen.\n\nKit pengembangan perangkat lunak (SDK) biasanya adalah seperangkat alat pengembangan perangkat lunak yang memungkinkan pembuatan aplikasi untuk platform pengembangan tertentu.\n\nAkibatnya, SDK platform berisi API yang sesuai dari platform tersebut.\n\nVersi API rilis Android disebut sebagai API Level.\n\nDengan setiap rilis Android baru datang banyak perubahan API, menghadirkan akses fitur baru, pembatasan akses privasi, peningkatan keamanan, dan peningkatan kinerja sambil menghentikan API yang tidak aman dan tidak efisien.\n\nTerkadang rilis Android hanya berisi perbaikan bug dan sebagainya tetapi tidak ada perubahan API sehingga API-nya Level tetap sama.\n\nTarget SDK Version menentukan API Level target yang dirancang aplikasi untuk digunakan.\n\nVersi SDK Minimum menentukan API Level minimum yang diperlukan aplikasi.\n\nBeberapa batasan dan penyempurnaan rilis Android baru akan berlaku untuk aplikasi hanya jika API Level targetnya cocok atau melebihi sistem Android perangkat.</string>
-    <string name="av_share_full">Penuh</string>
-    <string name="av_share_stroked">Dibelai</string>
     <string name="av_updates_view_more">Lihat lebih banyak</string>
     <string name="av_settings_tags">Tag</string>
     <string name="av_settings_tags_system">Aplikasi sistem</string>

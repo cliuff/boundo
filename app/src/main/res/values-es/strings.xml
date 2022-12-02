@@ -58,9 +58,7 @@
     <string name="appDesc">Un conjunto de herramientas destinadas a hacer algunas cosas por ti</string>
     <string name="app_info_name">Nombre del paquete de la aplicación</string>
     <string name="avAdapterActionsApk">Compartir apk</string>
-    <string name="avAdapterActionsDetails">Detalles</string>
     <string name="avAdapterActionsIcon">Compartir icono</string>
-    <string name="avStoreLink">Enlace a la tienda de aplicaciones</string>
     <string name="developertools_cropimage">Modificación de imagen</string>
     <string name="exterior_blur_degree">Grado de desenfoque</string>
     <string name="exterior_dark_navigation">Icono de barra de navegación oscura</string>

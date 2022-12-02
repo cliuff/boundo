@@ -17,8 +17,6 @@
 
 <resources>
     <string name="av_updates_recents">সম্প্রতি আপডেট করা হয়েছে</string>
-    <string name="sdkcheck_dialog_targetsdktext">টার্গেট</string>
-    <string name="sdkcheck_dialog_minsdktext">মিন.</string>
     <string name="sdkcheck_sortspinner_sortbyname">নামে</string>
     <string name="sdkcheck_sortspinner_sortbyhighersdk">সর্বোচ্চ API</string>
     <string name="sdkcheck_sortspinner_sortbylowersdk">সর্বনিম্ন API</string>
@@ -73,8 +71,6 @@
     <string name="apiInfoAiOverallDes">দুটি সেট লঞ্চার আইকন রয়েছে যা একটি apk-এ প্রকাশ করা যেতে পারে, যার মধ্যে একটি সাধারণ অ্যাপ আইকন এবং অন্যটি গোলাকার অ্যাপ আইকন।\nউভয় সেটেই অ্যাডাপ্টিভ আইকন থাকতে পারে, যেটি Android 8.0 এর সাথে চালু করা হয়েছিল। রাউন্ড অ্যাপ আইকন Android 7.1 এর সাথে চালু করা হয়েছিল।</string>
     <string name="avTBViewingTarget">লক্ষ্য/মিনিট দেখুন। API</string>
     <string name="avManual">একটি অ্যাপ্লিকেশন প্রোগ্রামিং ইন্টারফেস (API), সাধারণ পরিভাষায়, বিভিন্ন উপাদানের মধ্যে যোগাযোগের সুস্পষ্টভাবে সংজ্ঞায়িত পদ্ধতির একটি সেট৷\n\nএকটি সফ্টওয়্যার ডেভেলপমেন্ট কিট (SDK) সাধারণত সফ্টওয়্যার ডেভেলপমেন্ট টুলগুলির একটি সেট যা অ্যাপ্লিকেশন তৈরি করতে দেয় একটি নির্দিষ্ট ডেভেলপমেন্ট প্ল্যাটফর্ম।\n\nফলে একটি প্ল্যাটফর্মের SDK-তে সেই প্ল্যাটফর্মের সংশ্লিষ্ট API থাকে।\n\nAndroid রিলিজের API-এর সংস্করণকে API স্তর হিসেবে উল্লেখ করা হয়।\n\nপ্রতিটি নতুন অ্যান্ড্রয়েড রিলিজের সাথে অনিরাপদ এবং অদক্ষ APIগুলিকে অবমূল্যায়ন করার সময় নতুন বৈশিষ্ট্যগুলির অ্যাক্সেস, গোপনীয়তা অ্যাক্সেসের বিধিনিষেধ, নিরাপত্তা বর্ধন এবং কর্মক্ষমতার উন্নতি নিয়ে আসে অনেকগুলি API পরিবর্তন। লেভেল একই থাকে।\n\nটার্গেট SDK ভার্সন একটি অ্যাপ ব্যবহার করার জন্য ডিজাইন করা টার্গেট API লেভেলকে সংজ্ঞায়িত করে।\n\nসর্বনিম্ন SDK ভার্সন একটি অ্যাপের প্রয়োজন ন্যূনতম API লেভেলকে সংজ্ঞায়িত করে।\n\nকিছু সীমাবদ্ধতা এবং উন্নতি নতুন অ্যান্ড্রয়েড রিলিজগুলি শুধুমাত্র তখনই অ্যাপগুলিতে প্রযোজ্য হবে যখন তাদের লক্ষ্য API স্তরটি ডিভাইসের অ্যান্ড্রয়েড সিস্টেমের সাথে মেলে বা অতিক্রম করে৷</string>
-    <string name="av_share_full">সম্পূর্ণ</string>
-    <string name="av_share_stroked">স্ট্রোকড</string>
     <string name="av_updates_view_more">আরো দেখুন</string>
     <string name="av_settings_tags">ট্যাগ</string>
     <string name="av_settings_tags_system">সিস্টেম অ্যাপ</string>

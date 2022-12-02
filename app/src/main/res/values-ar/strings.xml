@@ -111,7 +111,6 @@
     <string name="tileColorful">البقاء الملونة</string>
     <string name="apiViewerShort">API التطبيق</string>
     <string name="menuApiSortApiTime">تم تحديثه مؤخرا</string>
-    <string name="avStoreLink">رابط إلى متجر التطبيقات</string>
     <string name="apiSdkTarget">الهدف SDK</string>
     <string name="apiSdkMin">الحد الأدنى من SDK</string>
     <string name="settingsApiRetrieveRoundIcon">استرجع الأيقونة المستديرة من المورد عند توفرها</string>
@@ -161,7 +160,6 @@
     <string name="prefExteriorDarkPlanScheduleEnd">وقت النهاية</string>
     <string name="prefSettingsTrim2Round">قم بقص الرموز غير القابلة للتكيف لتقريبها عند الاقتضاء</string>
     <string name="textManual">كتيب</string>
-    <string name="avAdapterActionsDetails">تفاصيل</string>
     <string name="avAdapterActionsIcon">أيقونة المشاركة</string>
     <string name="avAdapterActionsApk">مشاركة apk</string>
     <string name="textFormat">شكل</string>

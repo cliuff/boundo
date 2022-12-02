@@ -102,7 +102,6 @@
         <item name="colorStroke">@color/strokeAWhite</item>
         <item name="colorText">@color/textSubAWhite</item>
         <item name="colorTextSub">@color/textSubAWhite</item>
-        <item name="colorApiPopItemBack">@color/apiPopItemBackAWhite</item>
         <item name="colorApiLegacyBack">@color/apiLegacyBackAWhite</item>
         <item name="android:textColor">@color/textAWhite</item>
         <item name="android:textColorHint">@color/hintAWhite</item>
@@ -139,7 +138,6 @@
         <item name="colorStroke">@color/strokeACnRed</item>
         <item name="colorText">@color/textSubACnRed</item>
         <item name="colorTextSub">@color/textSubACnRed</item>
-        <item name="colorApiPopItemBack">@color/apiPopItemBackACnRed</item>
         <item name="colorApiLegacyBack">@color/apiLegacyBackACnRed</item>
         <item name="android:textColor">@color/textACnRed</item>
         <item name="android:textColorHint">@color/hintACnRed</item>
@@ -176,7 +174,6 @@
         <item name="colorStroke">@color/strokeABlack</item>
         <item name="colorText">@color/textSubABlack</item>
         <item name="colorTextSub">@color/textSubABlack</item>
-        <item name="colorApiPopItemBack">@color/apiPopItemBackABlack</item>
         <item name="colorApiLegacyBack">@color/apiLegacyBackABlack</item>
         <item name="android:textColor">@color/textABlack</item>
         <item name="android:textColorHint">@color/hintABlack</item>
@@ -213,7 +210,6 @@
         <item name="colorStroke">@color/strokeABlackGray</item>
         <item name="colorText">@color/textSubABlackGray</item>
         <item name="colorTextSub">@color/textSubABlackGray</item>
-        <item name="colorApiPopItemBack">@color/apiPopItemBackABlackGray</item>
         <item name="colorApiLegacyBack">@color/apiLegacyBackABlackGray</item>
         <item name="android:textColor">@color/textABlackGray</item>
         <item name="android:textColorHint">@color/hintABlackGray</item>
@@ -285,22 +281,6 @@
         <item name="android:layout_marginTop">5dp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-    </style>
-
-    <style name="apiDecentChipAPI" parent="Widget.MaterialComponents.Chip.Action">
-        <item name="chipIconSize">30dp</item>
-        <item name="android:clickable">false</item>
-        <item name="chipSurfaceColor">#60F0F0F0</item>
-        <item name="chipBackgroundColor">@android:color/transparent</item>
-        <item name="chipCornerRadius">20dp</item>
-        <item name="chipStartPadding">7dp</item>
-        <item name="chipEndPadding">10dp</item>
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:layout_marginStart">3dp</item>
-        <item name="android:layout_marginEnd">3dp</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="chipMinHeight">40dp</item>
     </style>
 
     <style name="AppTheme.PopUp">
@@ -524,43 +504,6 @@
         <item name="android:layout_marginTop">3dp</item>
         <item name="android:textSize">12sp</item>
         <item name="android:maxWidth">104dp</item>
-        <item name="android:gravity">center_horizontal</item>
-    </style>
-
-    <style name="VerIconActionContainer">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:orientation">horizontal</item>
-        <item name="android:paddingTop">14dp</item>
-        <item name="android:paddingBottom">14dp</item>
-        <item name="android:paddingStart">12dp</item>
-        <item name="android:paddingEnd">12dp</item>
-        <item name="android:minWidth">250dp</item>
-        <item name="android:background">?android:attr/selectableItemBackground</item>
-    </style>
-
-    <style name="VerIconActionCard" parent="MainCard">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_gravity">center_horizontal</item>
-        <item name="android:layout_marginTop">0dp</item>
-        <item name="android:layout_marginStart">10dp</item>
-        <item name="android:layout_marginEnd">18dp</item>
-        <item name="cardCornerRadius">27dp</item>
-    </style>
-
-    <style name="VerIconActionIcon">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_gravity">center</item>
-        <item name="android:padding">15dp</item>
-        <item name="android:tint">?colorAOnItem</item>
-    </style>
-
-    <style name="VerIconActionText" parent="Widget.MaterialComponents.TextView">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_gravity">center_vertical</item>
-        <item name="android:textSize">18sp</item>
         <item name="android:gravity">center_horizontal</item>
     </style>
 

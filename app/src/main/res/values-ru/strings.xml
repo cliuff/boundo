@@ -76,9 +76,7 @@
     <string name="appDesc">Набор инструментов, которые обязательно сделают что-то для вас</string>
     <string name="app_info_name">Название пакета приложения</string>
     <string name="avAdapterActionsApk">Поделиться apk</string>
-    <string name="avAdapterActionsDetails">Детали</string>
     <string name="avAdapterActionsIcon">Поделиться значком</string>
-    <string name="avStoreLink">Ссылка на магазин приложений</string>
     <string name="av_details_native_libs">"Родные библиотеки: "</string>
     <string name="developertools_cropimage">Изменение изображения</string>
     <string name="exterior_blur_degree">Степень размытия</string>

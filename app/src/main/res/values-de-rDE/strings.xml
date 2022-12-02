@@ -92,7 +92,6 @@
     <string name="tileColorful">Bleib bunt</string>
     <string name="apiViewerShort">App API</string>
     <string name="menuApiSortApiTime">Kürzlich aktualisiert</string>
-    <string name="avStoreLink">Link zum App Store</string>
     <string name="apiSdkTarget">Ziel-SDK</string>
     <string name="apiSdkMin">Minimales SDK</string>
     <string name="settingsApiRetrieveRoundIcon">Ruft das runde Symbol von der Ressource ab, wenn es bereitgestellt wird</string>
@@ -146,7 +145,6 @@
     <string name="instantTileScannerMmManual">Klicken Sie auf die Kachel, um den Bildschirm aufzunehmen, und öffnen Sie den WeChat-Scanner, um den zu scannenden Screenshot manuell auszuwählen.</string>
     <string name="instantTileScannerAlipayManual">Klicken Sie auf die Kachel, um den Bildschirm aufzunehmen, und rufen Sie den Alipay-Scanner auf, um den Screenshot zu scannen.</string>
     <string name="instantTileMDUManual">Klicken Sie auf die Kachel, um die Daten zu aktualisieren. Sie werden aufgefordert, beim Hinzufügen der Kachel die Berechtigung zum Zugriff auf die Verwendung zu erteilen.</string>
-    <string name="avAdapterActionsDetails">Einzelheiten</string>
     <string name="avAdapterActionsIcon">Symbol teilen</string>
     <string name="avAdapterActionsApk">Teilen apk</string>
     <string name="textFormat">Format</string>

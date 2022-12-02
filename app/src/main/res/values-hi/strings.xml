@@ -94,7 +94,6 @@
     <string name="tileColorful">रंगीन रहें</string>
     <string name="apiViewerShort">ऐप एपीआई</string>
     <string name="menuApiSortApiTime">हाल ही में अद्यतित</string>
-    <string name="avStoreLink">ऐप स्टोर से लिंक करें</string>
     <string name="apiSdkTarget">लक्ष्य एसडीके</string>
     <string name="apiSdkMin">न्यूनतम एसडीके</string>
     <string name="settingsApiRetrieveRoundIcon">प्रदान किए जाने पर संसाधन से गोल चिह्न प्राप्त करें</string>
@@ -151,7 +150,6 @@
     <string name="instantTileScannerMmManual">स्क्रीन पर कब्जा करने के लिए टाइल पर क्लिक करें और स्कैन करने के लिए स्क्रीनशॉट को मैन्युअल रूप से चुनने के लिए WeChat स्कैनर खोलें।</string>
     <string name="instantTileScannerAlipayManual">स्क्रीन कैप्चर करने के लिए टाइल पर क्लिक करें और स्क्रीनशॉट को स्कैन करने के लिए Alipay स्कैनर को इनवाइट करें।</string>
     <string name="instantTileMDUManual">डेटा रीफ्रेश करने के लिए टाइल पर क्लिक करें। टाइल जोड़ते समय आपको उपयोग एक्सेस अनुमति देने के लिए कहा जाएगा।</string>
-    <string name="avAdapterActionsDetails">विवरण</string>
     <string name="avAdapterActionsIcon">शेयर आइकन</string>
     <string name="avAdapterActionsApk">शेयर एपीके</string>
     <string name="textFormat">प्रारूप</string>

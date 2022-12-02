@@ -94,7 +94,6 @@
     <string name="tileColorful">Restez coloré</string>
     <string name="apiViewerShort">API d\'app</string>
     <string name="menuApiSortApiTime">Récemment mis à jour</string>
-    <string name="avStoreLink">Lien vers l\'app store</string>
     <string name="apiSdkTarget">SDK cible</string>
     <string name="apiSdkMin">SDK minimum</string>
     <string name="settingsApiRetrieveRoundIcon">Récupérer l\'icône ronde de la ressource lorsqu\'elle est disponible</string>
@@ -151,7 +150,6 @@
     <string name="instantTileScannerMmManual">Cliquez sur la tuile pour capturer l\'écran et ouvrez le scanner WeChat pour sélectionner manuellement la capture d\'écran à scanner.</string>
     <string name="instantTileScannerAlipayManual">Cliquez sur la tuile pour capturer l\'écran et invoquez le scanner Alipay pour scanner la capture d\'écran.</string>
     <string name="instantTileMDUManual">Cliquez sur la tuile pour rafraîchir les données et vous serez invité à accorder l\'autorisation d\'accès lors de l\'ajout de la tuile.</string>
-    <string name="avAdapterActionsDetails">Détails</string>
     <string name="avAdapterActionsIcon">Partager l\'icône</string>
     <string name="avAdapterActionsApk">Partager l\'apk</string>
     <string name="textFormat">Format</string>

@@ -94,7 +94,6 @@
     <string name="tileColorful">Pozostań kolorowy</string>
     <string name="apiViewerShort">Interfejs API aplikacji</string>
     <string name="menuApiSortApiTime">Ostatnio zaktualizowane</string>
-    <string name="avStoreLink">Link do sklepu z aplikacjami</string>
     <string name="apiSdkTarget">Docelowy pakiet SDK</string>
     <string name="apiSdkMin">Minimalny pakiet SDK</string>
     <string name="settingsApiRetrieveRoundIcon">Odzyskaj okrągłą ikonę z zasobu, gdy zostanie on dostarczony</string>
@@ -151,7 +150,6 @@
     <string name="instantTileScannerMmManual">Kliknij kafelek, aby przechwycić ekran i otwórz skaner WeChat, aby ręcznie wybrać zrzut ekranu do skanowania.</string>
     <string name="instantTileScannerAlipayManual">Kliknij kafelek, aby przechwycić ekran i wywołaj skaner Alipay, aby zeskanować zrzut ekranu.</string>
     <string name="instantTileMDUManual">Kliknij kafelek, aby odświeżyć dane. Podczas dodawania kafelka pojawi się monit o przyznanie uprawnień dostępu do użycia.</string>
-    <string name="avAdapterActionsDetails">Detale</string>
     <string name="avAdapterActionsIcon">Ikona udostępniania</string>
     <string name="avAdapterActionsApk">Udostępnij apk</string>
     <string name="textFormat">Format</string>

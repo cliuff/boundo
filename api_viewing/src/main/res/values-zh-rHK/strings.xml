@@ -17,8 +17,6 @@
 
 <resources>
     <string name="av_updates_recents">最近更新</string>
-    <string name="sdkcheck_dialog_targetsdktext">目標</string>
-    <string name="sdkcheck_dialog_minsdktext">最低</string>
     <string name="sdkcheck_sortspinner_sortbyname">按名稱</string>
     <string name="sdkcheck_sortspinner_sortbyhighersdk">高API</string>
     <string name="sdkcheck_sortspinner_sortbylowersdk">低 API</string>
@@ -73,8 +71,6 @@
     <string name="apiInfoAiOverallDes">安裝包可以聲明兩套圖標。\n一套是一般圖標，一套是圓圖標。\n兩套圖標都可包含安卓8.0引入的自適應圖標。\n圓圖標是在安卓7.1時引入的。</string>
     <string name="avTBViewingTarget">查看目標/最低 API</string>
     <string name="avManual">程序編程接口 (API)，籠統地來說是一個明確定義好的用於各種元件相互通信的方法集。\n\n軟件開發工具包 (SDK) 一般是一個用於特定開發平台應用開發的軟件開發工具集。\n\n因此，一個開發平台的SDK包含了該平台相應的API。\n\n安卓API的版本被稱作API級別。\n\n每個安卓新版本的發布都會有巨大的API變更，帶來新功能支持、隱私獲取限制、安全性提升、性能增強，並棄用不安全和低效率的API。\n\n有時安卓版本更新只有錯誤修復等而沒有任何API變更所以API級別保持不變。\n\n目標SDK版本聲明一個應用程序所計劃使用的API級別。\n\n最低SDK版本聲明一個應用程序所要求的最低API級別。\n\n安卓新版本的某些限制和增強只有當應用程序的目標API級別達到設備上安卓系統的API級別時才生效。</string>
-    <string name="av_share_full">全景</string>
-    <string name="av_share_stroked">描邊</string>
     <string name="av_updates_view_more">查看更多</string>
     <string name="av_settings_tags">標籤</string>
     <string name="av_settings_tags_system">系統應用</string>

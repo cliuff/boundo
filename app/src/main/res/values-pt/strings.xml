@@ -111,7 +111,6 @@
     <string name="tileColorful">Fique colorido</string>
     <string name="apiViewerShort">API do aplicativo</string>
     <string name="menuApiSortApiTime">Atualizado recentemente</string>
-    <string name="avStoreLink">Link para a loja de aplicativos</string>
     <string name="apiSdkTarget">SDK de destino</string>
     <string name="apiSdkMin">SDK mínimo</string>
     <string name="settingsApiRetrieveRoundIcon">Recuperar ícone redondo do recurso quando fornecido</string>
@@ -161,7 +160,6 @@
     <string name="prefExteriorDarkPlanScheduleEnd">Fim do tempo</string>
     <string name="prefSettingsTrim2Round">Apare ícones não adaptáveis para arredondar quando apropriado</string>
     <string name="textManual">Manual</string>
-    <string name="avAdapterActionsDetails">Detalhes</string>
     <string name="avAdapterActionsIcon">Compartilhar ícone</string>
     <string name="avAdapterActionsApk">Compartilhar apk</string>
     <string name="textFormat">Formato</string>

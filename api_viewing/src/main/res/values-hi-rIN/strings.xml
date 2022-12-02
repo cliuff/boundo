@@ -17,8 +17,6 @@
 
 <resources>
     <string name="av_updates_recents">हाल ही में अद्यतित</string>
-    <string name="sdkcheck_dialog_targetsdktext">लक्ष्य</string>
-    <string name="sdkcheck_dialog_minsdktext">न्यूनतम।</string>
     <string name="sdkcheck_sortspinner_sortbyname">नाम से</string>
     <string name="sdkcheck_sortspinner_sortbyhighersdk">उच्चतम एपीआई</string>
     <string name="sdkcheck_sortspinner_sortbylowersdk">सबसे कम एपीआई</string>
@@ -73,8 +71,6 @@
     <string name="apiInfoAiOverallDes">लॉन्चर आइकॉन के दो सेट होते हैं जिन्हें एपीके में दिखाया जा सकता है, जिसमें एक सामान्य ऐप आइकॉन होता है और दूसरा राउंड ऐप आइकॉन होता है।\nदोनों सेट में एडेप्टिव आइकॉन हो सकता है, जिसे एंड्रॉइड 8.0 के साथ पेश किया गया था। Android 7.1 के साथ राउंड ऐप आइकन पेश किया गया था।</string>
     <string name="avTBViewingTarget">लक्ष्य/मिनट देखें। एपीआई</string>
     <string name="avManual">एक एप्लीकेशन प्रोग्रामिंग इंटरफेस (एपीआई), सामान्य शब्दों में, विभिन्न घटकों के बीच संचार के स्पष्ट रूप से परिभाषित तरीकों का एक सेट है। एक निश्चित विकास मंच।\n\nपरिणामस्वरूप किसी प्लेटफॉर्म के एसडीके में उस प्लेटफॉर्म का संबंधित एपीआई होता है।\n\nएंड्रॉइड रिलीज के एपीआई के संस्करण को एपीआई स्तर कहा जाता है।\n\nप्रत्येक नए एंड्रॉइड रिलीज के साथ असुरक्षित और अक्षम एपीआई को हटाते हुए नई सुविधाओं तक पहुंच, गोपनीयता पहुंच प्रतिबंध, सुरक्षा संवर्द्धन और प्रदर्शन में सुधार लाने, एपीआई परिवर्तनों का एक बड़ा सौदा आता है। स्तर वही रहता है।\n\nलक्ष्य एसडीके संस्करण लक्ष्य एपीआई स्तर को परिभाषित करता है जिसे एक ऐप का उपयोग करने के लिए डिज़ाइन किया गया है।\n\nन्यूनतम एसडीके संस्करण न्यूनतम एपीआई स्तर को परिभाषित करता है जिसकी एक ऐप को आवश्यकता होती है। नए Android रिलीज़ की संख्या केवल उन ऐप्स पर लागू होगी, जब उनका लक्ष्य API स्तर डिवाइस के Android सिस्टम से मेल खाता है या उससे अधिक है।</string>
-    <string name="av_share_full">भरा हुआ</string>
-    <string name="av_share_stroked">stroked</string>
     <string name="av_updates_view_more">और देखें</string>
     <string name="av_settings_tags">टैग</string>
     <string name="av_settings_tags_system">सिस्टम ऐप</string>

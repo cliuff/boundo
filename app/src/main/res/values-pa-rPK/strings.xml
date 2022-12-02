@@ -94,7 +94,6 @@
     <string name="tileColorful">ਰੰਗੀਨ ਰਹੋ</string>
     <string name="apiViewerShort">ਐਪ API</string>
     <string name="menuApiSortApiTime">ਹਾਲ ਹੀ ਵਿੱਚ ਅੱਪਡੇਟ ਕੀਤਾ ਗਿਆ</string>
-    <string name="avStoreLink">ਐਪ ਸਟੋਰ ਨਾਲ ਲਿੰਕ ਕਰੋ</string>
     <string name="apiSdkTarget">ਟੀਚਾ SDK</string>
     <string name="apiSdkMin">ਨਿਊਨਤਮ SDK</string>
     <string name="settingsApiRetrieveRoundIcon">ਪ੍ਰਦਾਨ ਕੀਤੇ ਜਾਣ \'ਤੇ ਸਰੋਤ ਤੋਂ ਗੋਲ ਆਈਕਨ ਮੁੜ ਪ੍ਰਾਪਤ ਕਰੋ</string>
@@ -151,7 +150,6 @@
     <string name="instantTileScannerMmManual">ਸਕ੍ਰੀਨ ਕੈਪਚਰ ਕਰਨ ਲਈ ਟਾਈਲ \'ਤੇ ਕਲਿੱਕ ਕਰੋ ਅਤੇ ਸਕੈਨ ਕਰਨ ਲਈ ਸਕ੍ਰੀਨਸ਼ਾਟ ਨੂੰ ਹੱਥੀਂ ਚੁਣਨ ਲਈ WeChat ਸਕੈਨਰ ਖੋਲ੍ਹੋ।</string>
     <string name="instantTileScannerAlipayManual">ਸਕ੍ਰੀਨ ਨੂੰ ਕੈਪਚਰ ਕਰਨ ਲਈ ਟਾਈਲ \'ਤੇ ਕਲਿੱਕ ਕਰੋ ਅਤੇ ਸਕ੍ਰੀਨਸ਼ਾਟ ਨੂੰ ਸਕੈਨ ਕਰਨ ਲਈ ਅਲੀਪੇ ਸਕੈਨਰ ਦੀ ਵਰਤੋਂ ਕਰੋ।</string>
     <string name="instantTileMDUManual">ਡਾਟਾ ਰਿਫ੍ਰੈਸ਼ ਕਰਨ ਲਈ ਟਾਇਲ \'ਤੇ ਕਲਿੱਕ ਕਰੋ। ਟਾਇਲ ਨੂੰ ਜੋੜਦੇ ਸਮੇਂ ਤੁਹਾਨੂੰ ਵਰਤੋਂ ਪਹੁੰਚ ਅਨੁਮਤੀ ਦੇਣ ਲਈ ਕਿਹਾ ਜਾਵੇਗਾ।</string>
-    <string name="avAdapterActionsDetails">ਵੇਰਵੇ</string>
     <string name="avAdapterActionsIcon">ਸਾਂਝਾ ਕਰੋ ਆਈਕਨ</string>
     <string name="avAdapterActionsApk">ਏਪੀਕੇ ਸਾਂਝਾ ਕਰੋ</string>
     <string name="textFormat">ਫਾਰਮੈਟ</string>

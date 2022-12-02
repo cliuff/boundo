@@ -94,7 +94,6 @@
     <string name="tileColorful">Stay Colorful</string>
     <string name="apiViewerShort">App API</string>
     <string name="menuApiSortApiTime">Recently updated</string>
-    <string name="avStoreLink">Link to app store</string>
     <string name="apiSdkTarget">Target SDK</string>
     <string name="apiSdkMin">Minimum SDK</string>
     <string name="settingsApiRetrieveRoundIcon">Retrieve round icon from resource when provided</string>
@@ -151,7 +150,6 @@
     <string name="instantTileScannerMmManual">Click the tile to capture screen and open WeChat scanner to manually select the screenshot to scan.</string>
     <string name="instantTileScannerAlipayManual">Click the tile to capture screen and invoke Alipay scanner to scan the screenshot.</string>
     <string name="instantTileMDUManual">Click the tile to refresh data.You are to be prompted to grant the Usage Access permission when adding the tile.</string>
-    <string name="avAdapterActionsDetails">Details</string>
     <string name="avAdapterActionsIcon">Share icon</string>
     <string name="avAdapterActionsApk">Share apk</string>
     <string name="textFormat">Format</string>

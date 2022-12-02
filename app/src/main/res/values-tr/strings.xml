@@ -124,7 +124,6 @@
     <string name="settingsApiApkPreload">APK\'ları önceden arka planda tarayın</string>
     <string name="textBugLog">Günlükte yakalanan hata</string>
     <string name="tileColorful">Renkli Kalın</string>
-    <string name="avStoreLink">Uygulama mağazasına bağlantı</string>
     <string name="settingsApiRetrieveRoundIcon">Sağlandığında yuvarlak simgeyi kaynaktan al</string>
     <string name="activityTextProcessingApp">Bnd uygulamalarını görüntüleme</string>
     <string name="res_invalid_input">Geçersiz Giriş</string>
@@ -166,7 +165,6 @@
     <string name="instantTileScannerMmManual">Ekranı yakalamak için döşemeye tıklayın ve taranacak ekran görüntüsünü manuel olarak seçmek için WeChat tarayıcısını açın.</string>
     <string name="instantTileScannerAlipayManual">Ekranı yakalamak için döşemeye tıklayın ve ekran görüntüsünü taramak için Alipay tarayıcıyı çağırın.</string>
     <string name="instantTileMDUManual">Verileri yenilemek için kutucuğa tıklayın. Kutucuğu eklerken Kullanım Erişimi izni vermeniz istenir.</string>
-    <string name="avAdapterActionsDetails">ayrıntılar</string>
     <string name="avAdapterActionsIcon">Paylaş simgesi</string>
     <string name="avAdapterActionsApk">Apk paylaş</string>
     <string name="textFormat">Biçim</string>

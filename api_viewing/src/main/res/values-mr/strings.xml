@@ -17,8 +17,6 @@
 
 <resources>
     <string name="av_updates_recents">अलीकडे अद्यतनित</string>
-    <string name="sdkcheck_dialog_targetsdktext">लक्ष्य</string>
-    <string name="sdkcheck_dialog_minsdktext">मि.</string>
     <string name="sdkcheck_sortspinner_sortbyname">नावाने</string>
     <string name="sdkcheck_sortspinner_sortbyhighersdk">सर्वोच्च API</string>
     <string name="sdkcheck_sortspinner_sortbylowersdk">सर्वात कमी API</string>
@@ -73,8 +71,6 @@
     <string name="apiInfoAiOverallDes">लाँचर आयकॉनचे दोन संच आहेत जे apk मध्ये प्रकट केले जाऊ शकतात, ज्यामध्ये एक सामान्य अॅप चिन्ह आहे आणि दुसरा गोल अॅप चिन्ह आहे.\nदोन्ही संचांमध्ये अॅडॉप्टिव्ह चिन्ह असू शकतात, जे Android 8.0 सह सादर केले गेले होते. Android 7.1 सह राउंड अॅप आयकॉन सादर करण्यात आला.</string>
     <string name="avTBViewingTarget">लक्ष्य/मिनिट पहा. API</string>
     <string name="avManual">अॅप्लिकेशन प्रोग्रामिंग इंटरफेस (API), सर्वसाधारण शब्दात, विविध घटकांमधील संवादाच्या स्पष्टपणे परिभाषित पद्धतींचा एक संच आहे.\n\nसॉफ्टवेअर डेव्हलपमेंट किट (SDK) हा सामान्यत: सॉफ्टवेअर डेव्हलपमेंट टूल्सचा एक संच आहे जो अनुप्रयोग तयार करण्यास अनुमती देतो ठराविक डेव्हलपमेंट प्लॅटफॉर्म.\n\nपरिणामी प्लॅटफॉर्मच्या SDK मध्ये त्या प्लॅटफॉर्मचे संबंधित API असते.\n\nAndroid रिलीजच्या API च्या आवृत्तीला API स्तर असे संबोधले जाते.\n\nप्रत्येक नवीन Android रिलीझसह असुरक्षित आणि अकार्यक्षम API नापसंत करताना नवीन वैशिष्ट्यांमध्ये प्रवेश, गोपनीयता प्रवेश निर्बंध, सुरक्षा सुधारणा आणि कार्यप्रदर्शन सुधारणा आणून मोठ्या प्रमाणात API बदल होतात.\n\nकधीकधी Android रीलिझमध्ये फक्त बग फिक्सेस असतात आणि त्यामुळे पुढे कोणतेही API बदलत नाहीत. पातळी तीच राहते.\n\nलक्ष्य SDK आवृत्ती अॅप वापरण्यासाठी डिझाइन केलेले लक्ष्य API स्तर परिभाषित करते.\n\nकिमान SDK आवृत्ती अॅपला आवश्यक असलेली किमान API पातळी परिभाषित करते.\n\nकाही निर्बंध आणि सुधारणा नवीन Android रिलीझ फक्त अॅप्सना लागू होतील जेव्हा त्यांची लक्ष्य API पातळी डिव्हाइसच्या Android सिस्टमशी जुळते किंवा ओलांडते.</string>
-    <string name="av_share_full">पूर्ण</string>
-    <string name="av_share_stroked">स्ट्रोक</string>
     <string name="av_updates_view_more">अधिक प i हा</string>
     <string name="av_settings_tags">टॅग्ज</string>
     <string name="av_settings_tags_system">सिस्टम अॅप</string>

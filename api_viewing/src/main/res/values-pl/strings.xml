@@ -17,8 +17,6 @@
 
 <resources>
     <string name="av_updates_recents">Ostatnio zaktualizowane</string>
-    <string name="sdkcheck_dialog_targetsdktext">Cel</string>
-    <string name="sdkcheck_dialog_minsdktext">Min.</string>
     <string name="sdkcheck_sortspinner_sortbyname">Wg nazwy</string>
     <string name="sdkcheck_sortspinner_sortbyhighersdk">Najwyższy interfejs API</string>
     <string name="sdkcheck_sortspinner_sortbylowersdk">Najniższy interfejs API</string>
@@ -73,8 +71,6 @@
     <string name="apiInfoAiOverallDes">Istnieją dwa zestawy ikon programu uruchamiającego, które mogą być wyświetlane w apk, z których jedna to normalna ikona aplikacji, a druga to okrągła ikona aplikacji.\nOba zestawy mogą zawierać ikonę adaptacyjną, która została wprowadzona w systemie Android 8.0. Okrągła ikona aplikacji została wprowadzona w systemie Android 7.1.</string>
     <string name="avTBViewingTarget">Zobacz cel/min. API</string>
     <string name="avManual">Interfejs programowania aplikacji (API), ogólnie rzecz biorąc, to zestaw jasno określonych metod komunikacji między różnymi komponentami.\n\nZestaw programistyczny (SDK) to zazwyczaj zestaw narzędzi programistycznych, który umożliwia tworzenie aplikacji dla określoną platformę programistyczną.\n\nW konsekwencji pakiet SDK platformy zawiera odpowiedni interfejs API tej platformy.\n\nWersja interfejsu API wersji Androida jest określana jako API Level.\n\nW każdej nowej wersji Androida wprowadza wiele zmian API, wprowadzając nowe funkcje, ograniczenia dostępu do prywatności, ulepszenia bezpieczeństwa i ulepszenia wydajności przy jednoczesnym wycofywaniu niezabezpieczonych i nieefektywnych interfejsów API.\n\nCzasami wersja Androida zawiera tylko poprawki błędów itp., ale bez zmian API, więc jego API Poziom pozostaje taki sam.\n\nWersja docelowego pakietu SDK określa docelowy poziom interfejsu API, z którego ma korzystać aplikacja.\n\nMinimalna wersja pakietu SDK określa minimalny poziom interfejsu API wymagany przez aplikację.\n\nNiektóre ograniczenia i ulepszenia nowych wersji Androida będzie dotyczyć aplikacji tylko wtedy, gdy ich docelowy poziom interfejsu API jest zgodny lub wyższy niż poziom systemu Android urządzenia.</string>
-    <string name="av_share_full">Pełny</string>
-    <string name="av_share_stroked">Głaskany</string>
     <string name="av_updates_view_more">Zobacz więcej</string>
     <string name="av_settings_tags">Tagi</string>
     <string name="av_settings_tags_system">Aplikacja systemowa</string>

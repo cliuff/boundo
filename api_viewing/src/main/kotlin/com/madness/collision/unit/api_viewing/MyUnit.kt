@@ -42,7 +42,6 @@ import com.madness.collision.unit.api_viewing.database.DataMaintainer
 import com.madness.collision.unit.api_viewing.database.RecordMaintainer
 import com.madness.collision.unit.api_viewing.databinding.FragmentApiBinding
 import com.madness.collision.unit.api_viewing.list.APIAdapter
-import com.madness.collision.unit.api_viewing.list.AppInfoService
 import com.madness.collision.unit.api_viewing.list.AppListFragment
 import com.madness.collision.unit.api_viewing.main.*
 import com.madness.collision.unit.api_viewing.util.ApkRetriever
@@ -439,7 +438,6 @@ class MyUnit: com.madness.collision.unit.Unit() {
      * Reload app list completely
      */
     fun reloadList() = lifecycleScope.launch(Dispatchers.Default) {
-        AppInfoService.clearStores()
         viewModel.screenOut(loadItem)
 //        viewModel.updateApps4Display()
         loadedItems.unLoad(loadItem)

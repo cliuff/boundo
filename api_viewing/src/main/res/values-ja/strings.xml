@@ -17,8 +17,6 @@
 
 <resources>
     <string name="av_updates_recents">最新のアップデート</string>
-    <string name="sdkcheck_dialog_targetsdktext">ねらい</string>
-    <string name="sdkcheck_dialog_minsdktext">最低</string>
     <string name="sdkcheck_sortspinner_sortbyname">名前で</string>
     <string name="sdkcheck_sortspinner_sortbyhighersdk">高API</string>
     <string name="sdkcheck_sortspinner_sortbylowersdk">低API</string>
@@ -73,8 +71,6 @@
     <string name="apiInfoAiOverallDes">インストールパッケージでは、2組のアイコンを宣言できます。\n1つのセットは一般的なアイコンで、もう1つのセットは丸いアイコンです。\nどちらのアイコンセットにも、Android 8.0で導入されたアダプティブアイコンを含めることができます。\n丸いアイコンはAndroid 7.1で導入されました。</string>
     <string name="avTBViewingTarget">目標/最小APIを表示</string>
     <string name="avManual">プログラミングインターフェイス（API）は、一般的に言えば、さまざまなコンポーネントが互いに通信するための明確に定義されたメソッドのセットです。\n\nソフトウェア開発キット（SDK）は、通常、特定の開発プラットフォームでのアプリケーション開発用のソフトウェア開発ツールのセットです。\n\nしたがって、開発プラットフォームのSDKには、プラットフォームの対応するAPIが含まれています。\n\nAndroid APIのバージョンは、APIレベルと呼ばれます。\n\nAndroidのすべての新しいリリースでは、APIが大幅に変更され、新機能のサポート、プライバシーアクセスの制限、セキュリティの強化、パフォーマンスの強化、安全でない非効率的なAPIの破棄が行われます。\n\nAndroidバージョンアップデートにはバグ修正のみが含まれ、APIの変更がない場合があるため、APIレベルは同じままです。\n\nターゲットSDKバージョンは、アプリケーションが使用する予定のAPIレベルを宣言します。\n\n最小SDKバージョンは、アプリケーションに必要な最小APIレベルを宣言します。\n\n新しいバージョンのAndroidの一部の制限と拡張機能は、アプリケーションのターゲットAPIレベルがデバイスのAndroidシステムのAPIレベルに達した場合にのみ有効になります。</string>
-    <string name="av_share_full">パノラマ</string>
-    <string name="av_share_stroked">脳卒中</string>
     <string name="av_updates_view_more">続きを見る</string>
     <string name="av_settings_tags">ラベル</string>
     <string name="av_settings_tags_system">システムアプリケーション</string>

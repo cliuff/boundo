@@ -17,8 +17,6 @@
 
 <resources>
     <string name="av_updates_recents">ਹਾਲ ਹੀ ਵਿੱਚ ਅੱਪਡੇਟ ਕੀਤਾ ਗਿਆ</string>
-    <string name="sdkcheck_dialog_targetsdktext">ਨਿਸ਼ਾਨਾ</string>
-    <string name="sdkcheck_dialog_minsdktext">ਘੱਟੋ-ਘੱਟ</string>
     <string name="sdkcheck_sortspinner_sortbyname">ਨਾਮ ਦੁਆਰਾ</string>
     <string name="sdkcheck_sortspinner_sortbyhighersdk">ਉੱਚਤਮ API</string>
     <string name="sdkcheck_sortspinner_sortbylowersdk">ਸਭ ਤੋਂ ਘੱਟ API</string>
@@ -73,8 +71,6 @@
     <string name="apiInfoAiOverallDes">ਲਾਂਚਰ ਆਈਕਨਾਂ ਦੇ ਦੋ ਸੈੱਟ ਹਨ ਜੋ ਇੱਕ apk ਵਿੱਚ ਪ੍ਰਗਟ ਕੀਤੇ ਜਾ ਸਕਦੇ ਹਨ, ਜਿਸ ਵਿੱਚ ਇੱਕ ਸਧਾਰਨ ਐਪ ਆਈਕਨ ਹੈ ਅਤੇ ਦੂਜਾ ਗੋਲ ਐਪ ਆਈਕਨ ਹੈ।\nਦੋਵਾਂ ਸੈੱਟਾਂ ਵਿੱਚ ਅਡੈਪਟਿਵ ਆਈਕਨ ਹੋ ਸਕਦਾ ਹੈ, ਜੋ ਕਿ Android 8.0 ਨਾਲ ਪੇਸ਼ ਕੀਤਾ ਗਿਆ ਸੀ। ਰਾਊਂਡ ਐਪ ਆਈਕਨ ਨੂੰ ਐਂਡ੍ਰਾਇਡ 7.1 ਦੇ ਨਾਲ ਪੇਸ਼ ਕੀਤਾ ਗਿਆ ਸੀ।</string>
     <string name="avTBViewingTarget">ਟੀਚਾ/ਮਿੰਟ ਦੇਖੋ। API</string>
     <string name="avManual">ਇੱਕ ਐਪਲੀਕੇਸ਼ਨ ਪ੍ਰੋਗ੍ਰਾਮਿੰਗ ਇੰਟਰਫੇਸ (API), ਆਮ ਸ਼ਬਦਾਂ ਵਿੱਚ, ਵੱਖ-ਵੱਖ ਹਿੱਸਿਆਂ ਵਿੱਚ ਸੰਚਾਰ ਦੇ ਸਪਸ਼ਟ ਤੌਰ \'ਤੇ ਪਰਿਭਾਸ਼ਿਤ ਤਰੀਕਿਆਂ ਦਾ ਇੱਕ ਸਮੂਹ ਹੈ।\n\nਇੱਕ ਸਾਫਟਵੇਅਰ ਡਿਵੈਲਪਮੈਂਟ ਕਿੱਟ (SDK) ਆਮ ਤੌਰ \'ਤੇ ਸਾਫਟਵੇਅਰ ਡਿਵੈਲਪਮੈਂਟ ਟੂਲਸ ਦਾ ਇੱਕ ਸਮੂਹ ਹੈ ਜੋ ਐਪਲੀਕੇਸ਼ਨਾਂ ਨੂੰ ਬਣਾਉਣ ਦੀ ਇਜਾਜ਼ਤ ਦਿੰਦਾ ਹੈ ਇੱਕ ਖਾਸ ਵਿਕਾਸ ਪਲੇਟਫਾਰਮ।\n\nਨਤੀਜੇ ਵਜੋਂ ਇੱਕ ਪਲੇਟਫਾਰਮ ਦੇ SDK ਵਿੱਚ ਉਸ ਪਲੇਟਫਾਰਮ ਦੇ ਅਨੁਸਾਰੀ API ਸ਼ਾਮਲ ਹੁੰਦੇ ਹਨ।\n\nAndroid ਰੀਲੀਜ਼ ਦੇ API ਦੇ ਸੰਸਕਰਣ ਨੂੰ API ਪੱਧਰ ਕਿਹਾ ਜਾਂਦਾ ਹੈ।\n\nਹਰ ਨਵੀਂ Android ਰੀਲੀਜ਼ ਦੇ ਨਾਲ ਅਸੁਰੱਖਿਅਤ ਅਤੇ ਅਕੁਸ਼ਲ API ਨੂੰ ਬਰਤਰਫ਼ ਕਰਦੇ ਹੋਏ, ਨਵੀਆਂ ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਦੀ ਪਹੁੰਚ, ਗੋਪਨੀਯਤਾ ਪਹੁੰਚ ਪਾਬੰਦੀਆਂ, ਸੁਰੱਖਿਆ ਸੁਧਾਰਾਂ ਅਤੇ ਪ੍ਰਦਰਸ਼ਨ ਵਿੱਚ ਸੁਧਾਰ ਲਿਆਉਣ ਦੇ ਨਾਲ ਬਹੁਤ ਸਾਰੇ API ਬਦਲਾਅ ਆਉਂਦੇ ਹਨ।\n\nਕਈ ਵਾਰ ਇੱਕ ਐਂਡਰੌਇਡ ਰੀਲੀਜ਼ ਵਿੱਚ ਸਿਰਫ ਬੱਗ ਫਿਕਸ ਆਦਿ ਸ਼ਾਮਲ ਹੁੰਦੇ ਹਨ ਪਰ ਕੋਈ API ਨਹੀਂ ਬਦਲਦਾ ਹੈ ਇਸ ਤਰ੍ਹਾਂ ਇਸਦੇ API ਪੱਧਰ ਉਹੀ ਰਹਿੰਦਾ ਹੈ।\n\nਨਿਸ਼ਾਨਾ SDK ਸੰਸਕਰਣ ਟੀਚਾ API ਪੱਧਰ ਨੂੰ ਪਰਿਭਾਸ਼ਿਤ ਕਰਦਾ ਹੈ ਜਿਸਨੂੰ ਇੱਕ ਐਪ ਵਰਤਣ ਲਈ ਤਿਆਰ ਕੀਤਾ ਗਿਆ ਹੈ।\n\nਨਿਊਨਤਮ SDK ਸੰਸਕਰਣ ਇੱਕ ਐਪ ਲਈ ਲੋੜੀਂਦੇ ਘੱਟੋ-ਘੱਟ API ਪੱਧਰ ਨੂੰ ਪਰਿਭਾਸ਼ਿਤ ਕਰਦਾ ਹੈ।\n\nਕੁਝ ਪਾਬੰਦੀਆਂ ਅਤੇ ਸੁਧਾਰ ਨਵੇਂ ਐਂਡਰੌਇਡ ਰੀਲੀਜ਼ਾਂ ਵਿੱਚੋਂ ਸਿਰਫ਼ ਐਪਸ \'ਤੇ ਲਾਗੂ ਹੋਣਗੇ ਜਦੋਂ ਉਹਨਾਂ ਦਾ ਟੀਚਾ API ਪੱਧਰ ਡਿਵਾਈਸ ਦੇ ਐਂਡਰੌਇਡ ਸਿਸਟਮ ਨਾਲ ਮੇਲ ਖਾਂਦਾ ਹੈ ਜਾਂ ਇਸ ਤੋਂ ਵੱਧ ਜਾਂਦਾ ਹੈ।</string>
-    <string name="av_share_full">ਪੂਰਾ</string>
-    <string name="av_share_stroked">ਸਟਰੋਕ ਕੀਤਾ</string>
     <string name="av_updates_view_more">ਹੋਰ ਵੇਖੋ</string>
     <string name="av_settings_tags">ਟੈਗਸ</string>
     <string name="av_settings_tags_system">ਸਿਸਟਮ ਐਪ</string>

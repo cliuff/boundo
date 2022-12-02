@@ -17,8 +17,6 @@
 
 <resources>
     <string name="av_updates_recents">Kürzlich aktualisiert</string>
-    <string name="sdkcheck_dialog_targetsdktext">Ziel</string>
-    <string name="sdkcheck_dialog_minsdktext">Mindest.</string>
     <string name="sdkcheck_sortspinner_sortbyname">Namentlich</string>
     <string name="sdkcheck_sortspinner_sortbyhighersdk">Höchste API</string>
     <string name="sdkcheck_sortspinner_sortbylowersdk">Niedrigste API</string>
@@ -56,8 +54,6 @@
     <string name="apiInfoAiIconDesSys">Symbol (System)</string>
     <string name="apiInfoAiOverallDes">Es gibt zwei Sätze von Launcher-Symbolen, die sich in einer apk manifestieren können, wobei das eine das normale App-Symbol und das andere das runde App-Symbol ist.\nBeide Sets können Adaptive Icon enthalten, das mit Android 8.0 eingeführt wurde. Das runde App-Symbol wurde mit Android 7.1 eingeführt.</string>
     <string name="avTBViewingTarget">Ziel anzeigen / min. API</string>
-    <string name="av_share_full">Voll</string>
-    <string name="av_share_stroked">Streichelte</string>
     <string name="av_updates_view_more">Mehr sehen</string>
     <string name="av_settings_tags">Stichworte</string>
     <string name="av_settings_tags_system">System App</string>

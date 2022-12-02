@@ -16,9 +16,7 @@
   -->
 
 <resources>
-    <string name="sdkcheck_dialog_targetsdktext">استهداف</string>
     <string name="av_updates_recents">تم تحديثه مؤخرا</string>
-    <string name="sdkcheck_dialog_minsdktext">دقيقة.</string>
     <string name="sdkcheck_sortspinner_sortbyname">بالاسم</string>
     <string name="sdkcheck_sortspinner_sortbyhighersdk">أعلى API</string>
     <string name="sdkcheck_sortspinner_sortbylowersdk">أدنى API</string>
@@ -73,8 +71,6 @@
     <string name="apiDetailsProviders">"مقدمي: "</string>
     <string name="apiInfoAiOverallDes">هناك مجموعتان من أيقونات المشغِّل يمكن إظهارهما في ملف apk ، يكون فيه رمز التطبيق عادي والآخر رمز تطبيق مستدير.\nيمكن أن تحتوي كلا المجموعتين على Adaptive Icon ، والذي تم تقديمه مع Android 8.0. تم تقديم رمز التطبيق الدائري مع Android 7.1.</string>
     <string name="avManual">واجهة برمجة التطبيقات (API) ، بعبارات عامة ، هي مجموعة من وسائل الاتصال المحددة بوضوح بين المكونات المختلفة.\n\nمجموعة تطوير البرامج (SDK) هي عادة مجموعة من أدوات تطوير البرمجيات التي تتيح إنشاء تطبيقات لمنصة تطوير معينة.\n\nوبالتالي فإن SDK للنظام الأساسي يحتوي على واجهة برمجة التطبيقات المقابلة لذلك النظام الأساسي.\n\nيشار إلى إصدار API لإصدار Android باسم مستوى API.\n\nمع كل إصدار جديد من Android ، يأتي الكثير من تغييرات واجهة برمجة التطبيقات ، مما يتيح الوصول إلى الميزات الجديدة ، والقيود المفروضة على الوصول إلى الخصوصية ، وتحسينات الأمان وتحسينات الأداء مع إلغاء واجهات برمجة التطبيقات غير الآمنة وغير الفعالة.\n\nفي بعض الأحيان ، لا يحتوي إصدار Android إلا على إصلاحات الأخطاء وما إلى ذلك ، لكن لا توجد تغييرات على واجهة برمجة التطبيقات ، وبالتالي يظل مستوى API هو نفسه.\n\nيحدد إصدار SDK الهدف مستوى API المستهدف الذي تم تصميم التطبيق لاستخدامه.\n\nالحد الأدنى من إصدار SDK يحدد الحد الأدنى لمستوى API الذي يتطلبه التطبيق.\n\nتنطبق بعض القيود والتحسينات على إصدارات Android الجديدة على التطبيقات فقط عندما يطابق مستوى API المستهدف أو يتجاوز نظام Android في الجهاز.</string>
-    <string name="av_share_full">خلفية كاملة</string>
-    <string name="av_share_stroked">السكتة الدماغية</string>
     <string name="av_updates_view_more">عرض المزيد</string>
     <string name="av_settings_tags">العلامات</string>
     <string name="av_settings_tags_system">تطبيق النظام</string>

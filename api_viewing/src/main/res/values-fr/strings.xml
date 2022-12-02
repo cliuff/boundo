@@ -17,8 +17,6 @@
 
 <resources>
     <string name="av_updates_recents">Récemment mis à jour</string>
-    <string name="sdkcheck_dialog_targetsdktext">Cible</string>
-    <string name="sdkcheck_dialog_minsdktext">Min.</string>
     <string name="sdkcheck_sortspinner_sortbyname">Par nom</string>
     <string name="sdkcheck_sortspinner_sortbyhighersdk">Par niveau d\'API descendantes</string>
     <string name="sdkcheck_sortspinner_sortbylowersdk">Par niveau d\'API ascendantes</string>
@@ -73,8 +71,6 @@
     <string name="apiInfoAiOverallDes">Il y a deux ensembles d\'icônes de lancement qui peuvent se manifester dans une apk, dans lequel l\'un est l\'icône normale et l\'autre est l\'icône d\'application ronde. Les deux ensembles peuvent contenir l\'icône adaptative, qui a été introduite avec Android 8.0. L\'icône ronde a été introduite avec Android 7.1.</string>
     <string name="avTBViewingTarget">Afficher le niveau d\'API cible/min.</string>
     <string name="avManual">Une interface de programmation d\'applications (API), en termes généraux, est un ensemble de méthodes de communication clairement définies entre divers composants. \n\nUn kit de développement logiciel (SDK) est généralement un ensemble d\'outils de développement logiciel qui permet la création d\'applications pour une plate-forme défini. \n\nEn conséquence, le SDK d\'une plate-forme contient l\'API correspondante à cette plate-forme. \n\nLa version d\'une API d\'Android est appelée Niveau d\'API. \n\nAvec chaque nouvelle version d\'Android, de nombreuses modifications de l\'API sont apportées, apportant de nouvelles fonctionnalités, des restrictions d\'accès à la confidentialité, des améliorations de sécurité et de performances tout en dépréciant les API non sécurisées et inefficaces. \n\nParfois, une version d\'Android ne contient que des corrections de bogues, etc., mais aucune modification de l\'API, donc son niveau d\'API reste le même. le niveau d\'API cible qu\'une application est conçue pour utiliser. \n\nLa version minimale du SDK définit le niveau d\'API minimum qu\'une application requiert. \n\nCertaines restrictions et améliorations de nouvelles versions d\'Android ne s\'appliqueraient aux applications que lorsque leur niveau d\'API cible correspond ou dépasse celui du système Android de l\'appareil.</string>
-    <string name="av_share_full">Complet</string>
-    <string name="av_share_stroked">arrondi</string>
     <string name="av_updates_view_more">Plus d\'informations</string>
     <string name="av_settings_tags">Mots clés</string>
     <string name="av_settings_tags_system">Application système</string>

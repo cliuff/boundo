@@ -16,9 +16,7 @@
   -->
 
 <resources>
-    <string name="sdkcheck_dialog_targetsdktext">เป้า</string>
     <string name="av_updates_recents">อัปเดตล่าสุด</string>
-    <string name="sdkcheck_dialog_minsdktext">นาที.</string>
     <string name="sdkcheck_sortspinner_sortbyname">โดยชื่อ</string>
     <string name="sdkcheck_sortspinner_sortbyhighersdk">API ที่สูงที่สุด</string>
     <string name="sdkcheck_sortspinner_sortbylowersdk">API ต่ำสุด</string>
@@ -73,8 +71,6 @@
     <string name="apiDetailsProviders">"ผู้ให้บริการ: "</string>
     <string name="apiInfoAiOverallDes">มีไอคอนตัวเปิดสองชุดที่สามารถแสดงใน apk ซึ่งหนึ่งในนั้นเป็นไอคอนแอปปกติและอีกชุดหนึ่งคือไอคอนรอบแอป\nทั้งสองชุดสามารถมีไอคอน Adaptive ซึ่งเปิดตัวพร้อมกับ Android 8.0 มีการแนะนำไอคอนแอปรอบด้วย Android 7.1</string>
     <string name="avManual">Application Programming Interface (API) ในแง่ทั่วไปเป็นชุดของวิธีการสื่อสารที่กำหนดไว้อย่างชัดเจนในส่วนประกอบต่างๆ\n\nโดยทั่วไปชุดพัฒนาซอฟต์แวร์ (SDK) เป็นชุดเครื่องมือพัฒนาซอฟต์แวร์ที่อนุญาตให้สร้างแอปพลิเคชันสำหรับแพลตฟอร์มการพัฒนาที่แน่นอน\n\nดังนั้น SDK ของแพลตฟอร์มจึงมี API ที่สอดคล้องกันของแพลตฟอร์มนั้น\n\nเวอร์ชันของ API ที่วางจำหน่ายใน Android นั้นเรียกว่าระดับ API\n\nด้วยการเปิดตัว Android ใหม่แต่ละรุ่นจะมีการเปลี่ยนแปลง API อย่างมากทำให้มีการเข้าถึงฟีเจอร์ใหม่ข้อ จำกัด การเข้าถึงข้อมูลส่วนบุคคลการปรับปรุงความปลอดภัยและการปรับปรุงประสิทธิภาพ\n\nบางครั้งรุ่น Android มีการแก้ไขข้อบกพร่องเท่านั้นและอื่น ๆ แต่ไม่มีการเปลี่ยนแปลง API ดังนั้นระดับ API ของมันจะยังคงเหมือนเดิม\n\nTarget SDK Version กำหนดระดับ API เป้าหมายที่แอพออกแบบมาให้ใช้\n\nเวอร์ชัน SDK ขั้นต่ำกำหนดระดับ API ขั้นต่ำที่แอพต้องการ\n\nข้อ จำกัด และการปรับปรุงของ Android รุ่นใหม่จะมีผลกับแอพเมื่อระดับ API เป้าหมายตรงกับหรือสูงกว่าระบบ Android ของอุปกรณ์</string>
-    <string name="av_share_full">พื้นหลังแบบเต็ม</string>
-    <string name="av_share_stroked">ลากเส้น</string>
     <string name="av_updates_view_more">ดูเพิ่มเติม</string>
     <string name="av_settings_tags">แท็ก</string>
     <string name="av_settings_tags_system">แอประบบ</string>

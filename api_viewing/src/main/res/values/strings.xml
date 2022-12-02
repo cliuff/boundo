@@ -17,8 +17,6 @@
 
 <resources>
     <string name="av_updates_recents">Recently updated</string>
-    <string name="sdkcheck_dialog_targetsdktext">Target</string>
-    <string name="sdkcheck_dialog_minsdktext">Min.</string>
     <string name="sdkcheck_sortspinner_sortbyname">By name</string>
     <string name="sdkcheck_sortspinner_sortbyhighersdk">Highest API</string>
     <string name="sdkcheck_sortspinner_sortbylowersdk">Lowest API</string>
@@ -73,8 +71,6 @@
     <string name="apiInfoAiOverallDes">There are two sets of launcher icons that can be manifested in an apk, in which the one is normal app icon and the other is round app icon.\nBoth sets can contain Adaptive Icon, which was introduced with Android 8.0. Round app icon was introduced with Android 7.1.</string>
     <string name="avTBViewingTarget">View target/min. API</string>
     <string name="avManual">An application programming interface (API), in general terms, is a set of clearly defined methods of communication among various components.\n\nA software development kit (SDK) is typically a set of software development tools that allows the creation of applications for a certain development platform.\n\nConsequently the SDK of a platform contains the corresponding API of that platform.\n\nThe version of an Android release\'s API is referred to as API Level.\n\nWith each new Android release comes a great deal of API changes, bringing new features access, privacy access restrictions, security enhancements and performance improvements while deprecating insecure and inefficient APIs.\n\nSometimes an Android release contains only bug fixes and so forth but no API changes thus its API Level remains the same.\n\nTarget SDK Version defines the target API Level an app is designed to use.\n\nMinimum SDK Version defines the minimum API Level an app requires.\n\nSome restrictions and enhancements of new Android releases would apply to apps only when their target API Level matches or exceeds that of the device\'s Android system.</string>
-    <string name="av_share_full">Full</string>
-    <string name="av_share_stroked">Stroked</string>
     <string name="av_updates_view_more">View more</string>
     <string name="av_settings_tags">Tags</string>
     <string name="av_settings_tags_system">System app</string>

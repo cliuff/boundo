@@ -17,17 +17,9 @@
 package com.madness.collision.unit.api_viewing.list
 
 import android.content.Context
-import android.content.Intent
 import android.content.pm.*
-import android.graphics.Typeface
 import android.net.Uri
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.SpannableStringBuilder
-import android.text.style.StyleSpan
 import android.util.Log
-import android.view.View
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
@@ -39,8 +31,6 @@ import com.madness.collision.unit.api_viewing.Utils
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
-import com.madness.collision.unit.api_viewing.database.AppRoom
-import com.madness.collision.unit.api_viewing.util.ApkUtil
 import com.madness.collision.util.*
 import com.madness.collision.util.os.OsUtils
 import com.madness.collision.util.ui.appContext
@@ -55,23 +45,10 @@ import java.text.DateFormat
 import java.util.*
 import javax.security.cert.CertificateException
 import javax.security.cert.X509Certificate
-import kotlin.math.roundToInt
 import com.madness.collision.unit.api_viewing.R as RAv
 
 internal class AppListService(private val serviceContext: Context? = null) {
     private var regexFields: MutableMap<String, String> = HashMap()
-
-    fun getAppDetails(context: Context, appInfo: ApiViewingApp): CharSequence {
-        val builder = SpannableStringBuilder()
-        val spanFlags = Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-        getAppDetailsSequence(context, appInfo).forEach { item ->
-            when (item) {
-                is AppInfoItem.Normal -> builder.append(item.text)
-                is AppInfoItem.Bold -> builder.append(item.text, StyleSpan(Typeface.BOLD), spanFlags)
-            }
-        }
-        return SpannableString.valueOf(builder)
-    }
 
     sealed class AppInfoItem(val text: String) {
         class Normal(text: String) : AppInfoItem(text)
@@ -406,10 +383,6 @@ internal class AppListService(private val serviceContext: Context? = null) {
         }
     }
 
-    fun getLaunchIntent(context: Context, app: ApiViewingApp): Intent? {
-        return context.packageManager.getLaunchIntentForPackage(app.packageName)
-    }
-
     fun loadAppIcons(fragment: Fragment, appList: AppList, refreshLayout: SwipeRefreshLayout? = null)
     = fragment.lifecycleScope.launch(Dispatchers.Default) {
         val adapter = appList.getAdapter()
@@ -436,125 +409,6 @@ internal class AppListService(private val serviceContext: Context? = null) {
             }
         } catch (e: Exception) {
             e.printStackTrace()
-        }
-    }
-
-    fun showOptions(context: Context, app: ApiViewingApp, fragment: Fragment) {
-        val popActions = CollisionDialog(context, R.string.text_cancel).apply {
-            setTitleCollision(0, 0, 0)
-            setContent(0)
-            setCustomContent(RAv.layout.av_adapter_actions)
-            setListener { dismiss() }
-            show()
-        }
-        val vDetails = popActions.findViewById<View>(RAv.id.avAdapterActionsDetails)
-        vDetails.setOnClickListener {
-            popActions.dismiss()
-            actionDetails(context, app, fragment.lifecycleScope)
-        }
-        // for debug use
-        vDetails.setOnLongClickListener {
-            popActions.dismiss()
-            fragment.lifecycleScope.launch(Dispatchers.Default) {
-                val content = actionThirdPartyPkg(app)
-                withContext(Dispatchers.Main) {
-                    dialogThirdPartyPkg(context, content)
-                }
-            }
-            true
-        }
-        val vActionOpen = popActions.findViewById<View>(RAv.id.avAdapterActionsOpen)
-        if (app.isLaunchable) {
-            val launchIntent = getLaunchIntent(context, app)
-            val activityName = launchIntent?.component?.className ?: ""
-            val vOpenActivity = popActions.findViewById<TextView>(RAv.id.avAdapterActionsOpenActivity)
-            vOpenActivity.text = activityName
-            vActionOpen.setOnClickListener {
-                popActions.dismiss()
-                if (launchIntent == null) {
-                    fragment.notifyBriefly(R.string.text_error)
-                } else {
-                    fragment.startActivity(launchIntent)
-                }
-            }
-            vActionOpen.setOnLongClickListener {
-                X.copyText2Clipboard(context, activityName, R.string.text_copy_content)
-                true
-            }
-        } else {
-            vActionOpen.visibility = View.GONE
-        }
-        val vActionIcon = popActions.findViewById<View>(RAv.id.avAdapterActionsIcon)
-        vActionIcon.setOnClickListener {
-            popActions.dismiss()
-            actionIcon(context, app, fragment.childFragmentManager)
-        }
-        // for debug use
-        vActionIcon.setOnLongClickListener {
-            popActions.dismiss()
-            fragment.lifecycleScope.launch(Dispatchers.Default) {
-                val re = actionCheckPkg(app, "androidx.compose")
-                withContext(Dispatchers.Main) {
-                    dialogThirdPartyPkg(context, (if (!re) "Not " else "") + "Jetpack Composed")
-                }
-                // update record
-                app.jetpackComposed = if (re) 1 else 0
-                AppRoom.getDatabase(context).appDao().insert(app)
-            }
-            true
-        }
-        popActions.findViewById<View>(RAv.id.avAdapterActionsApk).setOnClickListener {
-            popActions.dismiss()
-            actionApk(context, app, fragment.lifecycleScope, fragment.childFragmentManager)
-        }
-    }
-
-    private fun actionThirdPartyPkg(app: ApiViewingApp): CharSequence {
-        return app.appPackage.apkPaths.flatMap {
-            ApkUtil.getThirdPartyPkg(it, app.packageName)
-        }.joinToString(separator = "\n")
-    }
-
-    private fun actionCheckPkg(app: ApiViewingApp, pkg: String): Boolean {
-        return app.appPackage.apkPaths.any { ApkUtil.checkPkg(it, pkg) }
-    }
-
-    private fun dialogThirdPartyPkg(context: Context, content: CharSequence) {
-        val view = TextView(context).apply {
-            text = content
-            textSize = 8f
-            val padding = X.size(context, 6f, X.DP).roundToInt()
-            alterPadding(start = padding, top = padding * 3, end = padding)
-        }
-        CollisionDialog(context, R.string.text_OK).apply {
-            setContent(0)
-            setTitleCollision(0, 0, 0)
-            setCustomContent(view)
-            decentHeight()
-            setListener { dismiss() }
-        }.show()
-    }
-
-    private fun actionDetails(context: Context, appInfo: ApiViewingApp, scope: CoroutineScope)
-    = scope.launch(Dispatchers.Default) {
-        val details = getAppDetails(context, appInfo)
-        if (details.isEmpty()) return@launch
-        val contentView = TextView(context).apply {
-            text = details
-            textSize = 10f
-            textDirection = View.TEXT_DIRECTION_LOCALE
-            val padding = X.size(context, 20f, X.DP).toInt()
-            setPadding(padding, padding, padding, 0)
-        }
-        withContext(Dispatchers.Main) {
-            CollisionDialog(context, R.string.text_alright).run {
-                setContent(0)
-                setTitleCollision(appInfo.name, 0, 0)
-                setCustomContent(contentView)
-                decentHeight()
-                setListener { dismiss() }
-                show()
-            }
         }
     }
 

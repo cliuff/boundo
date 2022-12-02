@@ -17,8 +17,6 @@
 
 <resources>
     <string name="av_updates_recents">최근 업데이트</string>
-    <string name="sdkcheck_dialog_targetsdktext">목표</string>
-    <string name="sdkcheck_dialog_minsdktext">최저</string>
     <string name="sdkcheck_sortspinner_sortbyname">이름으로</string>
     <string name="sdkcheck_sortspinner_sortbyhighersdk">높은 API</string>
     <string name="sdkcheck_sortspinner_sortbylowersdk">낮은 API</string>
@@ -73,8 +71,6 @@
     <string name="apiInfoAiOverallDes">설치 패키지는 두 개의 아이콘 세트를 선언 할 수 있습니다.\n한 세트는 일반 아이콘이고 다른 세트는 원형 아이콘입니다.\n두 아이콘 세트 모두 Android 8.0에 도입 된 적응 형 아이콘을 포함 할 수 있습니다.\n원형 아이콘은 Android 7.1에서 도입되었습니다.</string>
     <string name="avTBViewingTarget">목표 / 최소 API보기</string>
     <string name="avManual">프로그래밍 인터페이스 (API)는 일반적으로 다양한 구성 요소가 서로 통신 할 수 있도록 잘 정의 된 메소드 세트입니다.\n\n소프트웨어 개발 키트 (SDK)는 일반적으로 특정 개발 플랫폼에서의 응용 프로그램 개발을위한 일련의 소프트웨어 개발 도구입니다.\n\n따라서 개발 플랫폼의 SDK에는 해당 플랫폼의 해당 API가 포함됩니다.\n\nAndroid API 버전을 API 레벨이라고합니다.\n\n모든 새로운 Android 릴리스에는 API가 크게 변경되어 새로운 기능 지원, 개인 정보 액세스 제한, 보안 향상, 성능 향상 및 안전하지 않고 비효율적 인 API를 포기하게됩니다.\n\n때때로 Android 버전 업데이트에는 버그 수정 만 있고 API 변경이 없으므로 API 레벨은 동일하게 유지됩니다.\n\n대상 SDK 버전은 응용 프로그램에서 사용할 API 수준을 선언합니다.\n\n최소 SDK 버전은 응용 프로그램에 필요한 최소 API 수준을 선언합니다.\n\n새로운 버전의 Android에 대한 일부 제한 사항 및 개선 사항은 응용 프로그램의 대상 API 수준이 장치에서 Android 시스템의 API 수준에 도달 할 때만 적용됩니다.</string>
-    <string name="av_share_full">파노라마</string>
-    <string name="av_share_stroked">뇌졸중</string>
     <string name="av_updates_view_more">더보기</string>
     <string name="av_settings_tags">상표</string>
     <string name="av_settings_tags_system">시스템 응용</string>

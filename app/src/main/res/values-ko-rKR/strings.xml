@@ -123,7 +123,6 @@
     <string name="settingsApiApkPreload">배경 사전 스캔 APK</string>
     <string name="textBugLog">오류 기록</string>
     <string name="tileColorful">모 블랙 스크린</string>
-    <string name="avStoreLink">앱 스토어 페이지 링크</string>
     <string name="settingsApiRetrieveRoundIcon">앱이 둥근 아이콘 리소스를 제공 할 때 아이콘로드</string>
     <string name="res_invalid_input">잘못된 입력</string>
     <string name="text_sort">종류</string>
@@ -164,7 +163,6 @@
     <string name="instantTileScannerMmManual">타일을 클릭하여 스크린 샷을 만들고 WeChat Scan을 열어 스캔 할 스크린 샷을 수동으로 선택하십시오.</string>
     <string name="instantTileScannerAlipayManual">타일을 클릭하여 스크린 샷을 만들고 Alipay에 전화하여 스캔 한 스크린 샷을 스캔하십시오.</string>
     <string name="instantTileMDUManual">타일을 클릭하여 데이터를 새로 고칩니다. 이 타일을 추가하면 사용 통계 권한을 부여하라는 메시지가 표시됩니다.</string>
-    <string name="avAdapterActionsDetails">세부</string>
     <string name="avAdapterActionsIcon">공유 아이콘</string>
     <string name="avAdapterActionsApk">설치 패키지 공유</string>
     <string name="textFormat">체재</string>

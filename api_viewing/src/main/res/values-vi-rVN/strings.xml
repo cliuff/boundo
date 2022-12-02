@@ -16,9 +16,7 @@
   -->
 
 <resources>
-    <string name="sdkcheck_dialog_targetsdktext">Mục tiêu</string>
     <string name="av_updates_recents">Cập nhật gần đây</string>
-    <string name="sdkcheck_dialog_minsdktext">Tối thiểu</string>
     <string name="sdkcheck_sortspinner_sortbyname">Bằng tên</string>
     <string name="sdkcheck_sortspinner_sortbyhighersdk">API cao nhất</string>
     <string name="sdkcheck_sortspinner_sortbylowersdk">API thấp nhất</string>
@@ -73,8 +71,6 @@
     <string name="apiDetailsProviders">"Nhà cung cấp: "</string>
     <string name="apiInfoAiOverallDes">Có hai bộ biểu tượng trình khởi chạy có thể được hiển thị trong apk, trong đó một biểu tượng là ứng dụng bình thường và biểu tượng kia là biểu tượng ứng dụng tròn.\nCả hai bộ đều có thể chứa Biểu tượng thích ứng, được giới thiệu với Android 8.0. Biểu tượng ứng dụng tròn đã được giới thiệu với Android 7.1.</string>
     <string name="avManual">Giao diện lập trình ứng dụng (API), nói chung, là một tập hợp các phương thức giao tiếp được xác định rõ ràng giữa các thành phần khác nhau.\n\nBộ công cụ phát triển phần mềm (SDK) thường là một bộ công cụ phát triển phần mềm cho phép tạo các ứng dụng cho một nền tảng phát triển nhất định.\n\nDo đó, SDK của một nền tảng chứa API tương ứng của nền tảng đó.\n\nPhiên bản API của bản phát hành Android được gọi là Cấp API.\n\nVới mỗi bản phát hành Android mới có rất nhiều thay đổi API, mang lại quyền truy cập tính năng mới, hạn chế quyền truy cập quyền riêng tư, cải tiến bảo mật và cải thiện hiệu suất trong khi không dùng API không an toàn và không hiệu quả.\n\nĐôi khi một bản phát hành Android chỉ chứa các bản sửa lỗi và vv nhưng không có thay đổi API nào do đó Cấp API của nó vẫn giữ nguyên.\n\nPhiên bản SDK mục tiêu xác định Cấp API mục tiêu mà ứng dụng được thiết kế để sử dụng.\n\nPhiên bản SDK tối thiểu xác định Cấp API tối thiểu mà ứng dụng yêu cầu.\n\nMột số hạn chế và cải tiến của các bản phát hành Android mới sẽ chỉ áp dụng cho các ứng dụng khi Cấp API mục tiêu của chúng khớp hoặc vượt quá hệ thống Android của thiết bị.</string>
-    <string name="av_share_full">Toàn nền</string>
-    <string name="av_share_stroked">Đột quỵ</string>
     <string name="av_updates_view_more">Xem thêm</string>
     <string name="av_settings_tags">Thẻ</string>
     <string name="av_settings_tags_system">Ứng dụng hệ thống</string>

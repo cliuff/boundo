@@ -111,7 +111,6 @@
     <string name="tileColorful">Vẫn đầy màu sắc</string>
     <string name="apiViewerShort">API ứng dụng</string>
     <string name="menuApiSortApiTime">Cập nhật gần đây</string>
-    <string name="avStoreLink">Liên kết với cửa hàng ứng dụng</string>
     <string name="apiSdkTarget">SDK mục tiêu</string>
     <string name="apiSdkMin">SDK tối thiểu</string>
     <string name="settingsApiRetrieveRoundIcon">Lấy biểu tượng tròn từ tài nguyên khi được cung cấp</string>
@@ -161,7 +160,6 @@
     <string name="prefExteriorDarkPlanScheduleEnd">Thời gian kết thúc</string>
     <string name="prefSettingsTrim2Round">Cắt các biểu tượng không thích ứng thành tròn khi thích hợp</string>
     <string name="textManual">Hướng dẫn sử dụng</string>
-    <string name="avAdapterActionsDetails">Chi tiết</string>
     <string name="avAdapterActionsIcon">Chia sẻ biểu tượng</string>
     <string name="avAdapterActionsApk">Chia sẻ apk</string>
     <string name="textFormat">định dạng</string>

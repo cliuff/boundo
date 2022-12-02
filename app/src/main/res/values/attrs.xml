@@ -24,7 +24,6 @@
     <attr name="colorTb" format="color"/>
     <attr name="colorStroke" format="color"/>
     <attr name="colorTextSub" format="color"/>
-    <attr name="colorApiPopItemBack" format="color"/>
     <attr name="colorApiLegacyBack" format="color"/>
     <attr name="colorTtAm" format="color"/>
     <attr name="colorTtPm" format="color"/>

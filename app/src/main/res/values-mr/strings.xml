@@ -94,7 +94,6 @@
     <string name="tileColorful">रंगीत राहा</string>
     <string name="apiViewerShort">अॅप API</string>
     <string name="menuApiSortApiTime">अलीकडे अद्यतनित</string>
-    <string name="avStoreLink">अॅप स्टोअरशी दुवा</string>
     <string name="apiSdkTarget">लक्ष्य SDK</string>
     <string name="apiSdkMin">किमान SDK</string>
     <string name="settingsApiRetrieveRoundIcon">प्रदान केल्यावर रिसोर्समधून गोल चिन्ह पुनर्प्राप्त करा</string>
@@ -151,7 +150,6 @@
     <string name="instantTileScannerMmManual">स्क्रीन कॅप्चर करण्यासाठी टाइलवर क्लिक करा आणि स्कॅन करण्यासाठी स्क्रीनशॉट मॅन्युअली निवडण्यासाठी WeChat स्कॅनर उघडा.</string>
     <string name="instantTileScannerAlipayManual">स्क्रीन कॅप्चर करण्यासाठी टाइलवर क्लिक करा आणि स्क्रीनशॉट स्कॅन करण्यासाठी Alipay स्कॅनरचा वापर करा.</string>
     <string name="instantTileMDUManual">डेटा रिफ्रेश करण्यासाठी टाइलवर क्लिक करा. टाइल जोडताना तुम्हाला वापर प्रवेश परवानगी देण्यास सूचित केले जाईल.</string>
-    <string name="avAdapterActionsDetails">तपशील</string>
     <string name="avAdapterActionsIcon">शेअर चिन्ह</string>
     <string name="avAdapterActionsApk">apk शेअर करा</string>
     <string name="textFormat">स्वरूप</string>

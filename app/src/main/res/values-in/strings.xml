@@ -94,7 +94,6 @@
     <string name="tileColorful">Tetap Berwarna</string>
     <string name="apiViewerShort">API Aplikasi</string>
     <string name="menuApiSortApiTime">Baru-baru ini diperbarui</string>
-    <string name="avStoreLink">Tautan ke toko aplikasi</string>
     <string name="apiSdkTarget">SDK Target</string>
     <string name="apiSdkMin">SDK Minimum</string>
     <string name="settingsApiRetrieveRoundIcon">Ambil ikon bulat dari sumber daya saat disediakan</string>
@@ -151,7 +150,6 @@
     <string name="instantTileScannerMmManual">Klik ubin untuk mengambil layar dan buka pemindai WeChat untuk memilih tangkapan layar secara manual untuk dipindai.</string>
     <string name="instantTileScannerAlipayManual">Klik ubin untuk mengambil layar dan aktifkan pemindai Alipay untuk memindai tangkapan layar.</string>
     <string name="instantTileMDUManual">Klik ubin untuk menyegarkan data. Anda akan diminta untuk memberikan izin Akses Penggunaan saat menambahkan ubin.</string>
-    <string name="avAdapterActionsDetails">rincian</string>
     <string name="avAdapterActionsIcon">Bagikan ikon</string>
     <string name="avAdapterActionsApk">Bagikan apk</string>
     <string name="textFormat">Format</string>

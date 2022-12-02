@@ -125,7 +125,6 @@
     <string name="settingsApiApkPreload">後台預掃描APK</string>
     <string name="textBugLog">已記錄下錯誤</string>
     <string name="tileColorful">莫黑屏</string>
-    <string name="avStoreLink">應用商店頁面鏈接</string>
     <string name="settingsApiRetrieveRoundIcon">當應用提供了圓形圖標資源時加載它</string>
     <string name="activityTextProcessingApp">查看斑朵應用</string>
     <string name="res_invalid_input">無效的輸入</string>
@@ -167,7 +166,6 @@
     <string name="instantTileScannerMmManual">點擊磁貼以截屏並打開微信掃一掃手動選取屏幕截圖掃描。</string>
     <string name="instantTileScannerAlipayManual">點擊磁貼以截屏並調用支付寶掃一掃掃描屏幕截圖。</string>
     <string name="instantTileMDUManual">點擊磁貼以刷新數據。添加該磁貼時會提示授予使用統計權限。</string>
-    <string name="avAdapterActionsDetails">詳情</string>
     <string name="avAdapterActionsIcon">分享圖標</string>
     <string name="avAdapterActionsApk">分享安裝包</string>
     <string name="textFormat">格式</string>

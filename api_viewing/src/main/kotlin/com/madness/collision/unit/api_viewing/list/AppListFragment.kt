@@ -97,10 +97,6 @@ internal class AppListFragment : TaggedFragment(), AppList, Filterable {
         return viewBinding.root
     }
 
-    override fun showAppOptions(app: ApiViewingApp) {
-        service.showOptions(mContext, app, this)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         mRecyclerView = viewBinding.avListRecyclerView
 

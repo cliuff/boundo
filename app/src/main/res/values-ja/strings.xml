@@ -123,7 +123,6 @@
     <string name="settingsApiApkPreload">バックグラウンドプレスキャンAPK</string>
     <string name="textBugLog">ログに記録されたエラー</string>
     <string name="tileColorful">Mo黒画面</string>
-    <string name="avStoreLink">アプリストアページへのリンク</string>
     <string name="settingsApiRetrieveRoundIcon">アプリが丸いアイコンリソースを提供するときにアイコンを読み込みます</string>
     <string name="res_invalid_input">無効入力</string>
     <string name="text_sort">ソート</string>
@@ -164,7 +163,6 @@
     <string name="instantTileScannerMmManual">タイルをクリックしてスクリーンショットを撮り、WeChatスキャンを開いてスキャンするスクリーンショットを手動で選択します。</string>
     <string name="instantTileScannerAlipayManual">タイルをクリックしてスクリーンショットを撮り、スキャンしたスクリーンショットをスキャンするためにAlipayを呼び出します。</string>
     <string name="instantTileMDUManual">タイルをクリックしてデータを更新します。 このタイルを追加すると、使用統計情報の許可を付与するように求められます。</string>
-    <string name="avAdapterActionsDetails">細部</string>
     <string name="avAdapterActionsIcon">共有アイコン</string>
     <string name="avAdapterActionsApk">インストールパッケージの共有</string>
     <string name="textFormat">フォーマット</string>

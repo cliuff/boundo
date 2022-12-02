@@ -95,7 +95,6 @@
     <string name="tileColorful">Залишайтеся кольоровими</string>
     <string name="apiViewerShort">API програми</string>
     <string name="menuApiSortApiTime">Нещодавно оновлено</string>
-    <string name="avStoreLink">Посилання на магазин додатків</string>
     <string name="apiSdkTarget">Цільовий SDK</string>
     <string name="apiSdkMin">Мінімальний пакет SDK</string>
     <string name="settingsApiRetrieveRoundIcon">Отримати круглу піктограму з ресурсу, якщо надано</string>
@@ -152,7 +151,6 @@
     <string name="instantTileScannerMmManual">Натисніть плитку, щоб зробити знімок екрана, і відкрийте сканер WeChat, щоб вручну вибрати знімок екрана для сканування.</string>
     <string name="instantTileScannerAlipayManual">Натисніть плитку, щоб зробити знімок екрана, і запустіть сканер Alipay, щоб відсканувати знімок екрана.</string>
     <string name="instantTileMDUManual">Клацніть плитку, щоб оновити дані. Під час додавання плитки вам буде запропоновано надати дозвіл на доступ до використання.</string>
-    <string name="avAdapterActionsDetails">Деталі</string>
     <string name="avAdapterActionsIcon">Поділитися значок</string>
     <string name="avAdapterActionsApk">Поділіться apk</string>
     <string name="textFormat">Формат</string>

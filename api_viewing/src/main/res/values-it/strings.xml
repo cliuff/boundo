@@ -16,9 +16,7 @@
   -->
 
 <resources>
-    <string name="sdkcheck_dialog_targetsdktext">Bersaglio</string>
     <string name="av_updates_recents">Aggiornato di recente</string>
-    <string name="sdkcheck_dialog_minsdktext">Min.</string>
     <string name="sdkcheck_sortspinner_sortbyname">Per nome</string>
     <string name="sdkcheck_sortspinner_sortbyhighersdk">API più alta</string>
     <string name="sdkcheck_sortspinner_sortbylowersdk">API più bassa</string>
@@ -73,8 +71,6 @@
     <string name="apiDetailsProviders">"provider: "</string>
     <string name="apiInfoAiOverallDes">Esistono due set di icone di avvio che possono essere manifestate in un apk, in cui una è un\'icona normale dell\'app e l\'altra è un\'icona rotonda dell\'app.\nEntrambi i set possono contenere un\'icona adattiva, introdotta con Android 8.0. L\'icona dell\'app rotonda è stata introdotta con Android 7.1.</string>
     <string name="avManual">Un\'interfaccia di programmazione dell\'applicazione (API), in termini generali, è un insieme di metodi di comunicazione chiaramente definiti tra i vari componenti.\n\nUn kit di sviluppo software (SDK) è in genere un insieme di strumenti di sviluppo software che consente la creazione di applicazioni per una determinata piattaforma di sviluppo.\n\nDi conseguenza l\'SDK di una piattaforma contiene l\'API corrispondente di quella piattaforma.\n\nLa versione dell\'API di una versione di Android è denominata Livello API.\n\nCon ogni nuova versione di Android vengono apportate numerose modifiche alle API, che portano accesso a nuove funzionalità, restrizioni di accesso alla privacy, miglioramenti della sicurezza e miglioramenti delle prestazioni, deprecando le API non sicure e inefficienti.\n\nA volte una versione di Android contiene solo correzioni di bug e così via, ma nessuna API cambia, quindi il suo livello API rimane lo stesso.\n\nLa versione dell\'SDK di destinazione definisce il livello API di destinazione che un\'app è progettata per l\'uso.\n\nLa versione SDK minima definisce il livello API minimo richiesto da un\'app.\n\nAlcune restrizioni e miglioramenti delle nuove versioni di Android si applicherebbero alle app solo quando il loro livello API di destinazione corrisponde o supera quello del sistema Android del dispositivo.</string>
-    <string name="av_share_full">Sfondo completo</string>
-    <string name="av_share_stroked">corsa</string>
     <string name="av_updates_view_more">Vedi di più</string>
     <string name="av_settings_tags">tag</string>
     <string name="av_settings_tags_system">App di sistema</string>

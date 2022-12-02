@@ -17,8 +17,6 @@
 
 <resources>
     <string name="av_updates_recents">به تازگی به روز شده است</string>
-    <string name="sdkcheck_dialog_targetsdktext">هدف</string>
-    <string name="sdkcheck_dialog_minsdktext">حداقل</string>
     <string name="sdkcheck_sortspinner_sortbyname">بر اساس اسم</string>
     <string name="sdkcheck_sortspinner_sortbyhighersdk">بالاترین API</string>
     <string name="sdkcheck_sortspinner_sortbylowersdk">پایین ترین API</string>
@@ -73,8 +71,6 @@
     <string name="apiInfoAiOverallDes">دو مجموعه از نمادهای راه‌انداز وجود دارد که می‌توانند در یک apk نمایش داده شوند، که در آن یکی نماد برنامه عادی و دیگری نماد برنامه گرد است.\nهر دو مجموعه می‌توانند دارای نماد تطبیقی باشند که با Android 8.0 معرفی شده است. آیکون برنامه گرد با اندروید 7.1 معرفی شد.</string>
     <string name="avTBViewingTarget">مشاهده هدف/دقیقه API</string>
     <string name="avManual">یک رابط برنامه‌نویسی کاربردی (API)، به‌طور کلی، مجموعه‌ای از روش‌های ارتباطی کاملاً تعریف‌شده بین اجزای مختلف است.\n\nکیت توسعه نرم‌افزار (SDK) معمولاً مجموعه‌ای از ابزارهای توسعه نرم‌افزار است که امکان ایجاد برنامه‌های کاربردی را برای یک پلتفرم توسعه خاص.\n\nدر نتیجه SDK یک پلتفرم حاوی API مربوط به آن پلتفرم است.\n\nنسخه API نسخه Android به عنوان سطح API نامیده می‌شود.\n\nبا هر نسخه جدید Android تغییرات زیادی در API ایجاد می‌شود که دسترسی به ویژگی‌های جدید، محدودیت‌های دسترسی به حریم خصوصی، بهبودهای امنیتی و بهبود عملکرد را به همراه می‌آورد و در عین حال API‌های ناامن و ناکارآمد را منسوخ می‌کند.\n\nگاهی اوقات نسخه Android فقط شامل رفع اشکال و غیره است، اما API تغییری نمی‌کند، بنابراین API آن سطح ثابت باقی می ماند.\n\nنسخه SDK هدف، سطح API هدفی را که برنامه برای استفاده از آن طراحی شده است، تعریف می کند.\n\nنسخه حداقل SDK حداقل سطح API مورد نیاز یک برنامه را تعیین می کند.\n\nبرخی محدودیت ها و پیشرفت ها نسخه‌های جدید اندروید فقط زمانی برای برنامه‌ها اعمال می‌شود که سطح API هدف آنها با سیستم Android دستگاه مطابقت داشته باشد یا از آن فراتر رود.</string>
-    <string name="av_share_full">پر شده</string>
-    <string name="av_share_stroked">نوازش کرد</string>
     <string name="av_updates_view_more">بیشتر ببینید</string>
     <string name="av_settings_tags">برچسب ها</string>
     <string name="av_settings_tags_system">برنامه سیستم</string>

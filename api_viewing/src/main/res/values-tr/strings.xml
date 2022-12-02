@@ -17,8 +17,6 @@
 
 <resources>
     <string name="av_updates_recents">Yakın zamanda güncellendi</string>
-    <string name="sdkcheck_dialog_targetsdktext">Hedef</string>
-    <string name="sdkcheck_dialog_minsdktext">Min.</string>
     <string name="sdkcheck_sortspinner_sortbyname">İsimle</string>
     <string name="sdkcheck_sortspinner_sortbyhighersdk">En Yüksek API</string>
     <string name="sdkcheck_sortspinner_sortbylowersdk">En Düşük API</string>
@@ -73,8 +71,6 @@
     <string name="apiInfoAiOverallDes">Birinin normal uygulama simgesi diğerinin yuvarlak uygulama simgesi olduğu bir apk\'de tezahür edebilen iki başlatıcı ikonu seti vardır.\nHer iki set de Android 8.0 ile tanıtılan Adaptive Icon içerebilir. Yuvarlak uygulama simgesi Android 7.1 ile tanıtıldı.</string>
     <string name="avTBViewingTarget">Hedefi / dak. Görüntüle API</string>
     <string name="avManual">Bir uygulama programlama arayüzü (API), genel anlamda, çeşitli bileşenler arasında açıkça tanımlanmış bir iletişim yöntemleri kümesidir.\n\nBir yazılım geliştirme kiti (SDK), genellikle belirli bir geliştirme platformu için uygulama oluşturulmasına izin veren bir yazılım geliştirme araçları setidir.\n\nSonuç olarak, bir platformun SDK\'sı o platformun ilgili API\'sını içerir.\n\nAndroid sürümünün API sürümüne API Düzeyi denir.\n\nHer yeni Android sürümünde, güvenli olmayan ve verimsiz API\'ları kullanımdan kaldırırken yeni özelliklere erişim, gizlilik erişim kısıtlamaları, güvenlik geliştirmeleri ve performans iyileştirmeleri getiren çok sayıda API değişikliği geliyor.\n\nBazen bir Android sürümü yalnızca hata düzeltmeleri içerir ve böylece API değişiklikleri olmaz, bu nedenle API Düzeyi aynı kalır.\n\nHedef SDK Sürümü, bir uygulamanın kullanmak için tasarlandığı hedef API Düzeyini tanımlar.\n\nMinimum SDK Sürümü, bir uygulamanın gerektirdiği minimum API Düzeyi\'ni tanımlar.\n\nYeni Android sürümlerinin bazı kısıtlamaları ve geliştirmeleri, yalnızca hedef API Düzeyi cihazın Android sistemindekilerle eşleştiğinde veya onu aştığında uygulamalar için geçerli olacaktır.</string>
-    <string name="av_share_full">Tam</string>
-    <string name="av_share_stroked">okşadı</string>
     <string name="av_updates_view_more">Daha fazla göster</string>
     <string name="av_settings_tags">Etiketler</string>
     <string name="av_settings_tags_system">Sistem uygulaması</string>

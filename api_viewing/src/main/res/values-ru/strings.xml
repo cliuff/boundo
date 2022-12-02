@@ -67,14 +67,10 @@
     <string name="res_api_code_names_n">нуга</string>
     <string name="res_api_code_names_o">Oreo</string>
     <string name="res_api_code_names_p">пирог</string>
-    <string name="sdkcheck_dialog_minsdktext">Минимум</string>
-    <string name="sdkcheck_dialog_targetsdktext">цель</string>
     <string name="sdkcheck_displayspinner_user">Мои приложения</string>
     <string name="sdkcheck_sortspinner_sortbyhighersdk">Самый высокий API</string>
     <string name="sdkcheck_sortspinner_sortbylowersdk">Самый низкий API</string>
     <string name="sdkcheck_sortspinner_sortbyname">По имени</string>
-    <string name="av_share_full">Полный фон</string>
-    <string name="av_share_stroked">мазок</string>
     <string name="av_updates_view_more">Посмотреть больше</string>
     <string name="av_settings_tags">Теги</string>
     <string name="av_settings_tags_system">Системное приложение</string>

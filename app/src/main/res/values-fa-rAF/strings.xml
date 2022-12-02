@@ -94,7 +94,6 @@
     <string name="tileColorful">رنگارنگ بمان</string>
     <string name="apiViewerShort">برنامه API</string>
     <string name="menuApiSortApiTime">به تازگی به روز شده است</string>
-    <string name="avStoreLink">لینک به اپ استور</string>
     <string name="apiSdkTarget">هدف SDK&#8207;</string>
     <string name="apiSdkMin">حداقل SDK&#8207;</string>
     <string name="settingsApiRetrieveRoundIcon">در صورت ارائه، نماد گرد را از منبع بازیابی کنید</string>
@@ -151,7 +150,6 @@
     <string name="instantTileScannerMmManual">روی کاشی کلیک کنید تا از صفحه عکس بگیرید و اسکنر WeChat را باز کنید تا به صورت دستی اسکرین شات را برای اسکن انتخاب کنید.</string>
     <string name="instantTileScannerAlipayManual">برای تصویربرداری از صفحه، روی کاشی کلیک کنید و برای اسکن اسکرین شات، اسکنر Alipay را فراخوانی کنید.</string>
     <string name="instantTileMDUManual">برای بازخوانی داده ها، روی کاشی کلیک کنید. هنگام افزودن کاشی، از شما خواسته می شود که مجوز دسترسی به استفاده را بدهید.</string>
-    <string name="avAdapterActionsDetails">جزئیات</string>
     <string name="avAdapterActionsIcon">نماد اشتراک گذاری</string>
     <string name="avAdapterActionsApk">apk را به اشتراک بگذارید</string>
     <string name="textFormat">قالب</string>

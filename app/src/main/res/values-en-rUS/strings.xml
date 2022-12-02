@@ -92,7 +92,6 @@
     <string name="tileColorful">Stay Colorful</string>
     <string name="apiViewerShort">App API</string>
     <string name="menuApiSortApiTime">Recently updated</string>
-    <string name="avStoreLink">Link to app store</string>
     <string name="apiSdkTarget">Target SDK</string>
     <string name="apiSdkMin">Minimum SDK</string>
     <string name="apiDisplayAPK">Device APKs</string>
@@ -150,7 +149,6 @@
     <string name="instantTileScannerAlipayManual">Click the tile to capture screen and invoke Alipay scanner to scan the screenshot.</string>
     <string name="instantTileScannerMmManual">Click the tile to capture screen and open WeChat scanner to manually select the screenshot to scan.</string>
     <string name="instantManual">Long-press on app icon in launcher to show App Shortcuts.\nPull down the notification shade, the settings toggles above the notification area are the Quick Settings Tiles you are looking for.</string>
-    <string name="avAdapterActionsDetails">Details</string>
     <string name="avAdapterActionsIcon">Share icon</string>
     <string name="avAdapterActionsApk">Share apk</string>
     <string name="prefSettingsThemeBlackGray">Material Design dark</string>

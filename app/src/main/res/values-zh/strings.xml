@@ -93,7 +93,6 @@
     <string name="tileColorful">莫黑屏</string>
     <string name="apiViewerShort">应用 API</string>
     <string name="menuApiSortApiTime">最近更新</string>
-    <string name="avStoreLink">应用商店页面链接</string>
     <string name="apiSdkTarget">目标 SDK</string>
     <string name="apiSdkMin">最低 SDK</string>
     <string name="apiDisplayAPK">设备安装包</string>
@@ -151,7 +150,6 @@
     <string name="instantTileScannerMmManual">点击磁贴以截屏并打开微信扫一扫手动选取屏幕截图扫描。</string>
     <string name="instantManual">在桌面上长按应用图标以调出“应用 Shortcuts”。\n下拉通知栏，通知区域上面的那些设置开关便是“快捷设置磁贴”。</string>
     <string name="avAdapterActionsApk">分享安装包</string>
-    <string name="avAdapterActionsDetails">详情</string>
     <string name="avAdapterActionsIcon">分享图标</string>
     <string name="prefSettingsThemeBlackGray">Material Design 黑</string>
     <string name="textFormat">格式</string>

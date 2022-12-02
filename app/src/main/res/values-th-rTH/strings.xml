@@ -111,7 +111,6 @@
     <string name="tileColorful">สีสันสดใส</string>
     <string name="apiViewerShort">แอป API</string>
     <string name="menuApiSortApiTime">อัพเดทล่าสุด</string>
-    <string name="avStoreLink">ลิงก์ไปยัง app store</string>
     <string name="apiSdkTarget">SDK เป้าหมาย</string>
     <string name="apiSdkMin">SDK ขั้นต่ำ</string>
     <string name="settingsApiRetrieveRoundIcon">ดึงไอคอนรอบจากทรัพยากรเมื่อมีการจัด</string>
@@ -161,7 +160,6 @@
     <string name="prefExteriorDarkPlanScheduleEnd">เวลาสิ้นสุด</string>
     <string name="prefSettingsTrim2Round">ตัดแต่งไอคอนที่ไม่ปรับตัวเพื่อปัดเศษตามความเหมาะสม</string>
     <string name="textManual">คู่มือ</string>
-    <string name="avAdapterActionsDetails">รายละเอียด</string>
     <string name="avAdapterActionsIcon">ไอคอนแบ่งปัน</string>
     <string name="avAdapterActionsApk">แชร์ apk</string>
     <string name="textFormat">รูปแบบ</string>

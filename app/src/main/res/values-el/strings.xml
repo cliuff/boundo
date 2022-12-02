@@ -124,7 +124,6 @@
     <string name="settingsApiApkPreload">Σάρωση για APK εκ των προτέρων στο παρασκήνιο</string>
     <string name="textBugLog">Το σφάλμα εντοπίστηκε στο αρχείο καταγραφής</string>
     <string name="tileColorful">Μείνετε πολύχρωμοι</string>
-    <string name="avStoreLink">Σύνδεσμος στο κατάστημα εφαρμογών</string>
     <string name="settingsApiRetrieveRoundIcon">Ανάκτηση στρογγυλού εικονιδίου από τον πόρο όταν παρέχεται</string>
     <string name="activityTextProcessingApp">Προβολή εφαρμογών Bnd</string>
     <string name="res_invalid_input">Μη έγκυρη εισαγωγή</string>
@@ -166,7 +165,6 @@
     <string name="instantTileScannerMmManual">Κάντε κλικ στο πλακίδιο για να τραβήξετε την οθόνη και ανοίξτε το σαρωτή WeChat για να επιλέξετε μη αυτόματα το στιγμιότυπο οθόνης για σάρωση.</string>
     <string name="instantTileScannerAlipayManual">Κάντε κλικ στο πλακίδιο για να τραβήξετε την οθόνη και καλέστε τον σαρωτή Alipay για να σαρώσετε το στιγμιότυπο οθόνης.</string>
     <string name="instantTileMDUManual">Κάντε κλικ στο πλακίδιο για ανανέωση δεδομένων. Θα σας ζητηθεί να εκχωρήσετε το δικαίωμα πρόσβασης χρήσης κατά την προσθήκη του πλακιδίου.</string>
-    <string name="avAdapterActionsDetails">Λεπτομέριες</string>
     <string name="avAdapterActionsIcon">Κοινή χρήση εικονιδίου</string>
     <string name="avAdapterActionsApk">Κοινή χρήση apk</string>
     <string name="textFormat">Μορφή</string>

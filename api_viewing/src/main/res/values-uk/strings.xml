@@ -16,8 +16,6 @@
 
 <resources>
     <string name="av_updates_recents">Нещодавно оновлено</string>
-    <string name="sdkcheck_dialog_targetsdktext">Ціль</string>
-    <string name="sdkcheck_dialog_minsdktext">Хв.</string>
     <string name="sdkcheck_sortspinner_sortbyname">По імені</string>
     <string name="sdkcheck_sortspinner_sortbyhighersdk">Найвищий API</string>
     <string name="sdkcheck_sortspinner_sortbylowersdk">Найнижчий API</string>
@@ -72,8 +70,6 @@
     <string name="apiInfoAiOverallDes">Існують два набори значків програми запуску, які можна відобразити в файлі .apk, один із яких є звичайним значком програми, а інший — круглим значком програми.\nОбидва набори можуть містити адаптивну піктограму, яка була представлена ​​в Android 8.0. Круглий значок програми з’явився в Android 7.1.</string>
     <string name="avTBViewingTarget">Переглянути ціль/хв. API</string>
     <string name="avManual">Інтерфейс прикладного програмування (API), загалом, це набір чітко визначених методів зв’язку між різними компонентами.\n\nНабір програмного забезпечення (SDK), як правило, є набір інструментів розробки програмного забезпечення, який дозволяє створювати програми для певну платформу розробки.\n\nОтже, SDK платформи містить відповідний API цієї платформи.\n\nВерсія API випуску Android називається Рівнем API.\n\nЗ кожним новим випуском Android внесено багато змін API, що забезпечують доступ до нових функцій, обмеження доступу до конфіденційності, покращення безпеки та покращення продуктивності, одночасно відмовляючись від небезпечних та неефективних API.\n\nІноді випуск Android містить лише виправлення помилок тощо, але не змінює API, тому його API Рівень залишається незмінним.\n\nЦільова версія SDK визначає цільовий рівень API, призначений для використання в додатку.\n\nМінімальна версія SDK визначає мінімальний рівень API, необхідний для програми.\n\nДеякі обмеження та покращення нових випусків Android застосовуватиметься до програм, лише якщо їх цільовий рівень API відповідає або перевищує рівень системи Android пристрою.</string>
-    <string name="av_share_full">Повний</string>
-    <string name="av_share_stroked">Погладжував</string>
     <string name="av_updates_view_more">Дивитись більше</string>
     <string name="av_settings_tags">Мітки</string>
     <string name="av_settings_tags_system">Системний додаток</string>
