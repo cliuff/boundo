@@ -27,7 +27,6 @@ object MemoryManager {
     }
 
     fun clearSpace(activity: ComponentActivity? = null) {
-        AccessAV.clearSeals()
         AccessAV.clearTags()
         if (activity == null) return
         AccessAV.clearApps(activity)

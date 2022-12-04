@@ -17,18 +17,22 @@
 package com.madness.collision.unit.api_viewing.upgrade
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.text.format.DateUtils
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.view.isVisible
+import coil.load
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.databinding.AvUpdUpgItemBinding
 import com.madness.collision.unit.api_viewing.list.APIAdapter
+import com.madness.collision.unit.api_viewing.seal.SealMaker
 import com.madness.collision.unit.api_viewing.seal.SealManager
-import com.madness.collision.util.X
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 
 internal class UpgradeAdapter(context: Context, listener: Listener, scope: CoroutineScope)
     : APIAdapter(context, listener, scope) {
@@ -44,6 +48,8 @@ internal class UpgradeAdapter(context: Context, listener: Listener, scope: Corou
         set(value) {
             upgrades = if (value.isNotEmpty() && value[0] is Upgrade) value as List<Upgrade> else emptyList()
         }
+
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
     class Holder(binding: AvUpdUpgItemBinding) : APIAdapter.Holder(binding.root) {
         val preVer: AppCompatTextView = binding.avUpdUpgItemPreVer as AppCompatTextView
@@ -92,18 +98,16 @@ internal class UpgradeAdapter(context: Context, listener: Listener, scope: Corou
         val verInfo = VerInfo(upgrade.targetApi.first)
         holder.preApi.text = verInfo.displaySdk
 
-        SealManager.populate4Seal(context, verInfo.letter, itemLength)
         if (loadPref.shouldShowDesserts) {
             holder.preApi.setTextColor(SealManager.getItemColorAccent(context, verInfo.api))
-            val seal: Bitmap? = SealManager.seals[verInfo.letter]
-            if (seal == null) {
-                holder.preSeal.visibility = View.GONE
-            } else {
-                holder.preSeal.visibility = View.VISIBLE
-                holder.preSeal.setImageBitmap(X.toMin(seal, itemLength))
-            }
             val itemBack = SealManager.getItemColorBack(context, verInfo.api)
             holder.preBack.setBackgroundColor(itemBack)
+
+            scope.launch(Dispatchers.Main) {
+                val seal = SealMaker.getSealFile(context, verInfo.letter, itemLength)
+                holder.preSeal.isVisible = seal != null
+                seal?.let { holder.preSeal.load(it) }
+            }
         } else {
             holder.preApi.setTextColor(holder.name.textColors)
             holder.preSeal.visibility = View.GONE

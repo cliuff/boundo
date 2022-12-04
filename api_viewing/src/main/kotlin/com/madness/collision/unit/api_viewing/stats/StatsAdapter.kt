@@ -17,24 +17,30 @@
 package com.madness.collision.unit.api_viewing.stats
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.util.SparseIntArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.google.android.material.card.MaterialCardView
 import com.madness.collision.diy.SandwichAdapter
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.databinding.AdapterAvStatsBinding
+import com.madness.collision.unit.api_viewing.seal.SealMaker
 import com.madness.collision.unit.api_viewing.seal.SealManager
 import com.madness.collision.util.X
 import com.madness.collision.util.adapted
 import com.madness.collision.util.alterMargin
 import com.madness.collision.util.os.OsUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 internal class StatsAdapter(context: Context) : SandwichAdapter<StatsAdapter.Holder>(context) {
@@ -76,6 +82,7 @@ internal class StatsAdapter(context: Context) : SandwichAdapter<StatsAdapter.Hol
     private val innerMargin: Float
         get() = if (EasyAccess.shouldShowDesserts) 5f else 2f
     private val itemLength: Int = X.size(context, 45f, X.DP).roundToInt()
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
     private val inflater = LayoutInflater.from(context)
 
@@ -106,21 +113,21 @@ internal class StatsAdapter(context: Context) : SandwichAdapter<StatsAdapter.Hol
             val colorText = SealManager.getItemColorText(verInfo.api)
             holder.logoText.setTextColor(colorText)
         }
-        val bitmap: Bitmap = SealManager.disposeSealBack(context, verInfo.letter, itemLength)
-        holder.logoBack.setImageBitmap(X.circularBitmap(bitmap))
+        scope.launch(Dispatchers.Main) {
+            val seal = SealMaker.getBlurredFile(context, verInfo.letter, itemLength)
+            seal?.let { holder.logoBack.load(it) }
+        }
 
-        SealManager.populate4Seal(context, verInfo.letter, itemLength)
         if (shouldShowDesserts){
             holder.count.setTextColor(SealManager.getItemColorAccent(context, verInfo.api))
-            val seal: Bitmap? = SealManager.seals[verInfo.letter]
-            if (seal == null) {
-                holder.seal.visibility = View.GONE
-            } else {
-                holder.seal.visibility = View.VISIBLE
-                holder.seal.setImageBitmap(X.toMin(seal, itemLength))
-            }
             val itemBack = SealManager.getItemColorBack(context, verInfo.api)
             holder.card.setCardBackgroundColor(itemBack)
+
+            scope.launch(Dispatchers.Main) {
+                val seal = SealMaker.getSealFile(context, verInfo.letter, itemLength)
+                holder.seal.isVisible = seal != null
+                seal?.let { holder.seal.load(it) }
+            }
         }
 
         if (isSweet && verInfo.codeName(context) != verInfo.sdk) {

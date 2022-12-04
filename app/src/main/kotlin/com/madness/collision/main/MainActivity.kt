@@ -248,7 +248,6 @@ class MainActivity : BaseActivity(), SystemBarMaintainerOwner {
         val context = mContext
         AccessAV.clearContext()
         AccessAV.clearTags()
-        AccessAV.clearSeals()
         MiscMain.clearCache(context)
         super.onDestroy()
     }

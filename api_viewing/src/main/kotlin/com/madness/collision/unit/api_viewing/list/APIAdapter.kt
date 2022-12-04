@@ -17,13 +17,13 @@
 package com.madness.collision.unit.api_viewing.list
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.google.android.material.card.MaterialCardView
@@ -38,6 +38,7 @@ import com.madness.collision.unit.api_viewing.data.AppPackageInfo
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.databinding.AdapterAvBinding
+import com.madness.collision.unit.api_viewing.seal.SealMaker
 import com.madness.collision.unit.api_viewing.seal.SealManager
 import com.madness.collision.util.*
 import kotlinx.coroutines.*
@@ -233,18 +234,16 @@ internal open class APIAdapter(context: Context, private val listener: Listener,
         else VerInfo.minDisplay(appInfo)
         holder.api.text = verInfo.displaySdk
 
-        SealManager.populate4Seal(context, verInfo.letter, itemLength)
         if (loadPref.shouldShowDesserts) {
             holder.api.setTextColor(SealManager.getItemColorAccent(context, verInfo.api))
-            val seal: Bitmap? = SealManager.seals[verInfo.letter]
-            if (seal == null) {
-                holder.seal.visibility = View.GONE
-            } else {
-                holder.seal.visibility = View.VISIBLE
-                holder.seal.setImageBitmap(X.toMin(seal, itemLength))
-            }
             val itemBack = SealManager.getItemColorBack(context, verInfo.api)
             holder.card.setCardBackgroundColor(itemBack)
+
+            scope.launch(Dispatchers.Main) {
+                val seal = SealMaker.getSealFile(context, verInfo.letter, itemLength)
+                holder.seal.isVisible = seal != null
+                seal?.let { holder.seal.load(it) }
+            }
         } else {
             holder.api.setTextColor(holder.name.textColors)
             holder.seal.visibility = View.GONE

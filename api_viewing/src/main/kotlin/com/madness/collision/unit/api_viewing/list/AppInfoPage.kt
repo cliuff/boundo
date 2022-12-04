@@ -59,6 +59,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -67,11 +68,10 @@ import com.google.android.material.shape.MaterialShapeDrawable
 import com.madness.collision.R
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.api_viewing.AppTag
-import com.madness.collision.unit.api_viewing.data.ApiViewingApp
-import com.madness.collision.unit.api_viewing.data.AppPackage
-import com.madness.collision.unit.api_viewing.data.AppPackageInfo
+import com.madness.collision.unit.api_viewing.data.*
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.database.DataMaintainer
+import com.madness.collision.unit.api_viewing.seal.SealMaker
 import com.madness.collision.unit.api_viewing.R as AvR
 import com.madness.collision.unit.api_viewing.seal.SealManager
 import com.madness.collision.unit.api_viewing.tag.app.AppTagInfo
@@ -79,6 +79,7 @@ import com.madness.collision.unit.api_viewing.tag.app.AppTagManager
 import com.madness.collision.unit.api_viewing.tag.app.get
 import com.madness.collision.unit.api_viewing.tag.app.toExpressible
 import com.madness.collision.unit.api_viewing.tag.inflater.AppTagInflater
+import com.madness.collision.util.ThemeUtil
 import com.madness.collision.util.configure
 import com.madness.collision.util.mainApplication
 import com.madness.collision.util.os.*
@@ -174,7 +175,11 @@ class AppInfoFragment(private val appPkgName: String) : BottomSheetDialogFragmen
         MaterialTheme(colorScheme = colorScheme) {
             app?.let { a ->
                 SideEffect {
-                    val color = SealManager.getItemColorBack(context, a.targetAPI)
+                    val color = when {
+                        EasyAccess.isSweet -> SealMaker.getItemColorBack(context, a.targetAPI)
+                        mainApplication.isPaleTheme -> 0xFFF7FFE9.toInt()
+                        else -> ThemeUtil.getColor(context, R.attr.colorASurface)
+                    }
                     setBackgroundColor(color)
                 }
                 // use parent instead of child fragment manager to show dialog after dismiss()
@@ -257,10 +262,12 @@ fun AppInfoPage(
     val app = LocalApp.current
     val context = LocalContext.current
     val verInfo = remember { listOf(VerInfo.minDisplay(app), VerInfo.targetDisplay(app), VerInfo(app.compileAPI)) }
-    val itemColor = remember { SealManager.getItemColorBack(context, app.targetAPI) }
-    val itemWidth = with(LocalDensity.current) { 45.dp.roundToPx() }
-    val bitmaps = remember {
-        verInfo.map { SealManager.disposeSealBack(context, it.letter, itemWidth) }
+    val itemColor = remember {
+        when {
+            EasyAccess.isSweet -> SealMaker.getItemColorBack(context, app.targetAPI)
+            mainApplication.isPaleTheme -> 0xFFF7FFE9.toInt()
+            else -> ThemeUtil.getColor(context, R.attr.colorASurface)
+        }
     }
     val updateTime = remember {
         run {
@@ -289,7 +296,7 @@ fun AppInfoPage(
         }
     }
     val isDark = mainApplication.isDarkTheme
-    AppInfo(Color(itemColor), isDark, verInfo, bitmaps, updateTime, shareIcon, shareApk, getClick)
+    AppInfo(Color(itemColor), isDark, verInfo, updateTime, shareIcon, shareApk, getClick)
 }
 
 @Composable
@@ -297,7 +304,6 @@ private fun AppInfo(
     itemBackColor: Color,
     isDarkTheme: Boolean,
     verInfoList: List<VerInfo>,
-    bitmaps: List<Bitmap?>,
     updateTime: String?,
     shareIcon: () -> Unit,
     shareApk: () -> Unit,
@@ -319,7 +325,7 @@ private fun AppInfo(
                 exit = fadeOut(),
             ) {
                 val scope = rememberCoroutineScope()
-                FrontAppInfo(cardColor, margin, verInfoList, bitmaps, updateTime,
+                FrontAppInfo(cardColor, margin, verInfoList, updateTime,
                     { scope.launch { pageIndex = 1 } }, getClick)
             }
             AnimatedVisibility(
@@ -421,7 +427,6 @@ private fun FrontAppInfo(
     cardColor: Color,
     horizontalMargin: Dp,
     verInfoList: List<VerInfo>,
-    bitmaps: List<Bitmap?>,
     updateTime: String?,
     clickDetails: () -> Unit,
     getClick: (AppTagInfo) -> (() -> Unit)?,
@@ -436,7 +441,7 @@ private fun FrontAppInfo(
             shape = AbsoluteSmoothCornerShape(20.dp, 100),
             colors = CardDefaults.elevatedCardColors(containerColor = cardColor),
         ) {
-            AppDetailsContent(verInfoList, bitmaps, splitApks[0].second, updateTime, clickDetails)
+            AppDetailsContent(verInfoList, splitApks[0].second, updateTime, clickDetails)
         }
         Spacer(modifier = Modifier.height(18.dp))
         Card(
@@ -479,10 +484,20 @@ fun NestedScrollContent(content: @Composable () -> Unit) {
 @Composable
 private fun AppHeaderContent(cardColor: Color, modifier: Modifier = Modifier) {
     val app = LocalApp.current
-    val seal = remember { SealManager.seals[app.targetSDKLetter] }
+    var seal: File? by remember {
+        // load initial value
+        val file = if (EasyAccess.isSweet) SealMaker.getSealCacheFile(app.targetSDKLetter) else null
+        mutableStateOf(file)
+    }
+    val context = LocalContext.current
+    if (seal == null && EasyAccess.isSweet) {
+        val itemWidth = with(LocalDensity.current) { 45.dp.roundToPx() }
+        LaunchedEffect(Unit) {
+            seal = SealMaker.getSealFile(context, app.targetSDKLetter, itemWidth)
+        }
+    }
     Column(modifier = modifier.fillMaxWidth()) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            val context = LocalContext.current
             val pkgInfo = remember { AppPackageInfo(context, app) }
             if (pkgInfo.uid > 0 || app.isArchive) {
                 Image(
@@ -509,9 +524,9 @@ private fun AppHeaderContent(cardColor: Color, modifier: Modifier = Modifier) {
             )
             if (seal != null) {
                 Spacer(modifier = Modifier.width(6.dp))
-                Image(
+                AsyncImage(
+                    model = seal,
                     modifier = Modifier.size(40.dp),
-                    bitmap = remember { seal.asImageBitmap() },
                     contentDescription = null,
                 )
             }
@@ -522,7 +537,6 @@ private fun AppHeaderContent(cardColor: Color, modifier: Modifier = Modifier) {
 @Composable
 private fun AppDetailsContent(
     verInfoList: List<VerInfo>,
-    bitmaps: List<Bitmap?>,
     totalSize: String?,
     updateTime: String?,
     clickDetails: () -> Unit,
@@ -548,7 +562,10 @@ private fun AppDetailsContent(
             val apis = remember {
                 verInfoList.zip(sdkTitles) { ver, titleId ->
                     if (ver.api < OsUtils.A) return@zip null
-                    val color = SealManager.getItemColorText(ver.api)
+                    val color = when {
+                        EasyAccess.isSweet -> SealManager.getItemColorText(ver.api)
+                        else -> 0xFFF5F5F5.toInt()
+                    }
                     val title = context.getString(titleId)
                     val displayApi = if (isInspected) ver.api.toString() else ver.apiText
                     Triple("$title $displayApi", ver.displaySdk, Color(color))
@@ -564,7 +581,7 @@ private fun AppDetailsContent(
                     label = label,
                     ver = sdk,
                     color = color,
-                    bitmap = bitmaps[index]
+                    verInfoList[index].letter,
                 )
             }
         }
@@ -602,18 +619,30 @@ private fun AppDetailsContent(
 }
 
 @Composable
-private fun AppSdkItem(modifier: Modifier = Modifier, label: String, ver: String, color: Color, bitmap: Bitmap?) {
+private fun AppSdkItem(modifier: Modifier = Modifier, label: String, ver: String, color: Color, sealIndex: Char) {
+    var sealFile: File? by remember(sealIndex) {
+        // load initial value
+        val file = SealMaker.getBlurredCacheFile(sealIndex)
+        mutableStateOf(file)
+    }
+    if (sealFile == null) {
+        val context = LocalContext.current
+        val itemWidth = with(LocalDensity.current) { 45.dp.roundToPx() }
+        LaunchedEffect(sealIndex) {
+            sealFile = SealMaker.getBlurredFile(context, sealIndex, itemWidth)
+        }
+    }
     Column(
         modifier = modifier.padding(horizontal = 3.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Box(contentAlignment = Alignment.Center) {
-            if (bitmap != null) {
-                Image(
+            if (sealFile != null) {
+                AsyncImage(
+                    model = sealFile,
                     modifier = Modifier
                         .clip(CircleShape)
                         .size(30.dp),
-                    bitmap = remember { bitmap.asImageBitmap() },
                     contentDescription = null,
                 )
             } else {
@@ -948,18 +977,16 @@ private fun TagItemIcon(icon: Bitmap?, activated: Boolean) {
         }
         Image(
             modifier = Modifier.size(16.dp),
-            bitmap = remember { icon.asImageBitmap() },
+            bitmap = icon.asImageBitmap(),
             contentDescription = null,
             colorFilter = colorFilter,
         )
     } else {
-        val colorScheme = MaterialTheme.colorScheme
-        val tint = remember { colorScheme.onSurface.copy(alpha = if (activated) 0.75f else 0.4f) }
         Icon(
             modifier = Modifier.size(16.dp),
             imageVector = Icons.Outlined.Label,
             contentDescription = null,
-            tint = tint,
+            tint = MaterialTheme.colorScheme.onSurface.copy(alpha = if (activated) 0.75f else 0.4f),
         )
     }
 }
@@ -1052,7 +1079,7 @@ private fun AppInfoPreview() {
         val verInfo = remember {
             listOf(VerInfo.minDisplay(app), VerInfo.targetDisplay(app), VerInfo(app.compileAPI))
         }
-        AppInfo(color, isSystemInDarkTheme(), verInfo, List(3) { null },
+        AppInfo(color, isSystemInDarkTheme(), verInfo,
             "6 days ago", shareIcon = { }, shareApk = { }, getClick = { null })
     }
 }

@@ -28,15 +28,22 @@ import com.madness.collision.R
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.util.*
 import com.madness.collision.util.os.OsUtils
+import com.madness.collision.util.ui.appContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import java.io.File
 import com.madness.collision.unit.api_viewing.R as MyR
 
+typealias SealManager = SealMaker
+
 object SealMaker {
-    var sealBack = HashMap<Char, Bitmap>().toMutableMap()
 
     fun getAndroidCodenameImageRes(letter: Char): Int {
         if (!EasyAccess.isSweet) return 0
         return when (letter) {
+            't' -> MyR.drawable.seal_t
             's' -> MyR.drawable.seal_s
             'r' -> MyR.drawable.seal_r_vector
             'q' -> MyR.drawable.seal_q_vector
@@ -76,6 +83,7 @@ object SealMaker {
             return ThemeUtil.getColor(context, attrRes)
         }
         when (apiLevel) {
+            OsUtils.T -> if (isAccent) "a3d5c1" else "d7fbf0"
             OsUtils.S, OsUtils.S_V2 -> if (isAccent) "acdcb2" else "defbde"
             X.R -> if (isAccent) "acd5c1" else "defbf0"
             X.Q -> if (isAccent) "c1d5ac" else "f0fbde"
@@ -100,12 +108,54 @@ object SealMaker {
         }
     }
 
+    private fun readImage(file: File): Bitmap? {
+        try {
+            return ImageUtil.getBitmap(file)
+        } catch (e: OutOfMemoryError) {
+            e.printStackTrace()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return null
+    }
+
+    private fun getSealPath(index: Char): String {
+        val seal = F.valCachePubAvSeal(appContext)
+        return F.createPath(seal, "seal-$index.png")
+    }
+
+    fun getSealCacheFile(index: Char): File? {
+        return File(getSealPath(index)).takeIf { it.exists() }
+    }
+
+    private val sealMutex = Mutex()
+
+    suspend fun getSealFile(context: Context, index: Char, itemLength: Int): File? {
+        return withContext(Dispatchers.IO) {
+            // avoid making seal concurrently
+            sealMutex.withLock { makeSeal(context, index, itemLength) }
+            getSealCacheFile(index)
+        }
+    }
+
+    // get storage cache or make one
+    private fun getSealBitmap(context: Context, index: Char, itemLength: Int): Bitmap? {
+        // return storage cache
+        getSealCacheFile(index)?.let { return readImage(it) }
+        // make storage cache
+        return makeSealCache(context, index, itemLength)
+    }
+
     /**
-     * Make seal and cache to storage
+     * @return [Unit] for success, null for failure
      */
-    fun getSeal(context: Context, index: Char, itemLength: Int): Pair<String, Bitmap?>? {
-        val path = F.createPath(F.valCachePubAvSeal(context), "seal-$index.png")
-        if (File(path).exists()) return path to null
+    fun makeSeal(context: Context, index: Char, itemLength: Int): Unit? {
+        getSealCacheFile(index)?.let { return Unit }
+        makeSealCache(context, index, itemLength) ?: return null
+        return Unit
+    }
+
+    private fun makeSealCache(context: Context, index: Char, itemLength: Int): Bitmap? {
         val res = getAndroidCodenameImageRes(index)
         if (res == 0) return null
         val drawable: Drawable
@@ -118,52 +168,91 @@ object SealMaker {
         val bitmap = Bitmap.createBitmap(itemLength, itemLength, Bitmap.Config.ARGB_8888)
         drawable.setBounds(0, 0, itemLength, itemLength)
         drawable.draw(Canvas(bitmap))
+        val path = getSealPath(index)
         if (F.prepare4(path)) X.savePNG(bitmap, path)
-        return path to bitmap
+        return bitmap
     }
 
-    fun getSealBack(context: Context, letter: Char, itemLength: Int): Bitmap? {
-        if (sealBack.containsKey(letter)) return sealBack[letter]!!
-        //final int INITIAL_colorPlain = -1;//color #00000000 has the value of 0
-        val colorPlain: Int
-        val blurWidth: Int
-        var bitmap: Bitmap
-        val resImageID = getAndroidCodenameImageRes(letter)
-        // draw color
-        if (resImageID == 0) {
-            val index4SealBack: Char
-            if (letter == 'k' && EasyAccess.isSweet) {
-                index4SealBack = letter
-                colorPlain = Color.parseColor("#753500")
-            } else {
-                index4SealBack = '?'
-                if (sealBack.containsKey(index4SealBack)) return sealBack[index4SealBack]!!
-                colorPlain = X.getColor(context, R.color.androidRobotGreen)
-            }
-            blurWidth = X.size(context, 60f, X.DP).toInt() * 2
-            bitmap = Bitmap.createBitmap(blurWidth, blurWidth, Bitmap.Config.ARGB_8888)
-            Canvas(bitmap).drawColor(colorPlain)
-            sealBack[index4SealBack] = bitmap
-            val path = F.createPath(F.valCachePubAvSeal(context), "back-$index4SealBack.png")
-            if (F.prepare4(path)) X.savePNG(bitmap, path)
-            return bitmap
+    @JvmInline
+    private value class BlurredIndex(val value: Char)
+
+    private fun mapToBlurredIndex(index: Char): BlurredIndex {
+        val value = when {
+            !EasyAccess.isSweet -> '?'
+            getAndroidCodenameImageRes(index) != 0 -> index
+            else -> '?'
         }
-        // draw image res
-        var seal: Bitmap = getSeal(context, letter, itemLength)?.second?.collisionBitmap ?: return null
+        return BlurredIndex(value)
+    }
+
+    private fun getBlurredPath(index: BlurredIndex): String {
+        val seal = F.valCachePubAvSeal(appContext)
+        return F.createPath(seal, "back-${index.value}.png")
+    }
+
+    private fun getBlurredCacheFile(index: BlurredIndex): File? {
+        return File(getBlurredPath(index)).takeIf { it.exists() }
+    }
+
+    fun getBlurredCacheFile(index: Char): File? {
+        return getBlurredCacheFile(mapToBlurredIndex(index))
+    }
+
+    private val blurredMutex = Mutex()
+
+    suspend fun getBlurredFile(context: Context, index: Char, itemLength: Int): File? {
+        return withContext(Dispatchers.IO) {
+            // avoid making blurred seal concurrently
+            blurredMutex.withLock { makeBlurred(context, index, itemLength) }
+            getBlurredCacheFile(index)
+        }
+    }
+
+    /**
+     * @return [Unit] for success, null for failure
+     */
+    fun makeBlurred(context: Context, index: Char, itemLength: Int): Unit? {
+        val bIndex = mapToBlurredIndex(index)
+        getBlurredCacheFile(bIndex)?.let { return Unit }
+        makeBlurredCache(context, bIndex, itemLength) ?: return null
+        return Unit
+    }
+
+    private fun makeBlurredCache(context: Context, index: BlurredIndex, itemLength: Int): Bitmap? {
+        val bitmap = if (getAndroidCodenameImageRes(index.value) == 0) {
+            drawBlurredColor(context, index)
+        } else {
+            val seal = getSealBitmap(context, index.value, itemLength) ?: return null
+            drawBlurredImage(context, seal)
+        }
+        val path = getBlurredPath(index)
+        if (F.prepare4(path)) X.savePNG(bitmap, path)
+        return bitmap
+    }
+
+    private fun drawBlurredColor(context: Context, index: BlurredIndex): Bitmap {
+        val color = when (index.value) {
+            'k' -> Color.parseColor("#753500")
+            else -> X.getColor(context, R.color.androidRobotGreen)
+        }
+        val blurWidth = X.size(context, 60f, X.DP).toInt() * 2
+        val bitmap = Bitmap.createBitmap(blurWidth, blurWidth, Bitmap.Config.ARGB_8888)
+        Canvas(bitmap).drawColor(color)
+        return bitmap
+    }
+
+    private fun drawBlurredImage(context: Context, sealBitmap: Bitmap): Bitmap {
+        var seal: Bitmap = sealBitmap.collisionBitmap
         val targetLength = seal.width / 10
         val bitmapWidth = targetLength * 2
         val sealOffsetX = targetLength * 4
         val sealOffsetY = targetLength * 2
-        bitmap = Bitmap.createBitmap(bitmapWidth, bitmapWidth, Bitmap.Config.ARGB_8888)
+        val bitmap = Bitmap.createBitmap(bitmapWidth, bitmapWidth, Bitmap.Config.ARGB_8888)
         seal = Bitmap.createBitmap(seal, sealOffsetX, sealOffsetY, bitmap.width, bitmap.height)
         val canvas2Draw = Canvas(bitmap)
         canvas2Draw.drawColor(Color.parseColor("#fff5f5f5"))
         canvas2Draw.drawBitmap(seal, 0f, 0f, Paint(Paint.ANTI_ALIAS_FLAG))
-        blurWidth = X.size(context, 60f, X.DP).toInt() * 2
-        bitmap = X.blurBitmap(context, bitmap, blurWidth, blurWidth)
-        sealBack[letter] = bitmap
-        val path = F.createPath(F.valCachePubAvSeal(context), "back-$letter.png")
-        if (F.prepare4(path)) X.savePNG(bitmap, path)
-        return bitmap
+        val blurWidth = X.size(context, 60f, X.DP).toInt() * 2
+        return X.blurBitmap(context, bitmap, blurWidth, blurWidth)
     }
 }

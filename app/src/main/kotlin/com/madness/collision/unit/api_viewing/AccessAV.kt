@@ -34,10 +34,6 @@ object AccessAV: UnitAccess(Unit.UNIT_NAME_API_VIEWING) {
      */
     const val LAUNCH_MODE_LINK: Int  = 2
 
-    fun clearSeals() {
-        invokeWithoutArg("clearSeals")
-    }
-
     fun clearApps(activity: ComponentActivity) {
         getMethod("clearApps", ComponentActivity::class).invoke(activity)
     }

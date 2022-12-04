@@ -36,7 +36,6 @@ import com.madness.collision.unit.Unit
 import com.madness.collision.unit.UpdatesProvider
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.database.AppRoom
-import com.madness.collision.unit.api_viewing.seal.SealManager
 import com.madness.collision.unit.api_viewing.tag.app.AppTagInfo
 import com.madness.collision.unit.api_viewing.util.ApkRetriever
 import com.madness.collision.unit.api_viewing.util.PrefUtil
@@ -62,12 +61,6 @@ object MyBridge: Bridge() {
 
     override fun getSettings(): Fragment {
         return Page<PrefAv>(MainR.string.apiViewer)
-    }
-
-    @Suppress("unused")
-    fun clearSeals() {
-        SealManager.seals.clear()
-        SealManager.sealBack.clear()
     }
 
     @Suppress("unused")

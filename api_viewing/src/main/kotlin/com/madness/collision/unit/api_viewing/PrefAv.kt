@@ -69,7 +69,6 @@ internal class PrefAv: PreferenceFragmentCompat() {
     private fun updatePrefSweet(newValue: Boolean) {
         if (!newValue) {
             val context = context ?: return
-            AccessAV.clearSeals()
             X.deleteFolder(F.createFile(F.valCachePubAvSeal(context)))
         }
     }

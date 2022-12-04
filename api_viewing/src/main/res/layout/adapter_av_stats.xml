@@ -65,12 +65,13 @@
             android:layout_gravity="center"
             android:layout_weight="3">
 
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/avStatsAdapterLogoBack"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/avListAdapterLogoHeight"
                 android:layout_height="@dimen/avListAdapterLogoHeight"
                 android:padding="2dp"
-                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:shapeAppearance="@style/ShapeAppearance.Circle"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

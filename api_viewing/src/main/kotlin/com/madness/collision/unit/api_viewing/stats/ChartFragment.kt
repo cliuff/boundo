@@ -33,12 +33,10 @@ import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.databinding.FragmentChartBinding
+import com.madness.collision.unit.api_viewing.seal.SealMaker
 import com.madness.collision.unit.api_viewing.seal.SealManager
-import com.madness.collision.util.TaggedFragment
-import com.madness.collision.util.ThemeUtil
-import com.madness.collision.util.X
+import com.madness.collision.util.*
 import com.madness.collision.util.os.OsUtils
-import com.madness.collision.util.toAdapted
 import kotlin.math.roundToInt
 
 internal class ChartFragment: TaggedFragment(){
@@ -83,6 +81,7 @@ internal class ChartFragment: TaggedFragment(){
         val chartEntries = ArrayList<PieEntry>(stats.size())
         val chartEntryColors = ArrayList<Int>(stats.size())
         val iconSize = X.size(context, if (isSmallScreen) 16f else 20f, X.DP).roundToInt()
+        val itemLength = X.size(context, 45f, X.DP).roundToInt()
         stats.forEach { key, value ->
             val apiVer = VerInfo(key, isExact = true, isCompact = true)
 //            val apiName = Utils.getAndroidCodenameByAPI(context, key)
@@ -95,9 +94,15 @@ internal class ChartFragment: TaggedFragment(){
             }
             chartEntries.add(PieEntry(value.toFloat(), label).apply {
                 if (!EasyAccess.isSweet) return@apply
-                val seal = SealManager.getSealForIllustration(context, apiVer.letter, iconSize)
-                if (seal != null) {
-                    icon = BitmapDrawable(context.resources, X.toMax(seal, iconSize))
+                SealMaker.makeSeal(context, apiVer.letter, itemLength) ?: return@apply
+                val file = SealMaker.getSealCacheFile(apiVer.letter) ?: return@apply
+                try {
+                    val bitmap = ImageUtil.getSampledBitmap(file, iconSize, iconSize) ?: return@apply
+                    icon = BitmapDrawable(context.resources, X.toMax(bitmap, iconSize))
+                } catch (e: OutOfMemoryError) {
+                    e.printStackTrace()
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
             })
             chartEntryColors.add(SealManager.getItemColorForIllustration(context, key))
