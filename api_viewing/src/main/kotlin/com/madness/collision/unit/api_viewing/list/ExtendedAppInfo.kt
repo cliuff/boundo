@@ -18,7 +18,6 @@ package com.madness.collision.unit.api_viewing.list
 
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -51,6 +50,7 @@ import com.madness.collision.BuildConfig
 import com.madness.collision.R
 import com.madness.collision.misc.MiscApp
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
+import com.madness.collision.unit.api_viewing.info.AppInfo
 import com.madness.collision.util.CollisionDialog
 import com.madness.collision.util.X
 import com.madness.collision.util.os.OsUtils
@@ -110,26 +110,19 @@ private fun InfoDivider() {
     )
 }
 
-private const val packageSettings = "com.android.settings"
+private var pkgDefaultSettings: String? = null
+private val packageSettings: String
+    get() = pkgDefaultSettings ?: packageAndroidSettings
+
+private const val packageAndroidSettings = "com.android.settings"
 private const val packageAppManager = "io.github.muntashirakon.AppManager"
 private const val infoAppManager = "io.github.muntashirakon.AppManager.details.AppDetailsActivity"
-
-@Suppress("deprecation")
-private fun PackageManager.queryIntentLegacy(intent: Intent) = queryIntentActivities(intent, 0)
 
 @Composable
 private fun ExternalActions() {
     val context = LocalContext.current
-    val appInfoOwners = remember {
-        val intent = Intent(actionShowAppInfo)
-        val activities = run a@{
-            val pkgMan = context.packageManager
-            if (OsUtils.dissatisfy(OsUtils.T)) return@a pkgMan.queryIntentLegacy(intent)
-            val flags = PackageManager.ResolveInfoFlags.of(0)
-            pkgMan.queryIntentActivities(intent, flags)
-        }
-        activities.mapTo(LinkedHashSet(activities.size)) { it.activityInfo.packageName }
-    }
+    pkgDefaultSettings = remember { pkgDefaultSettings ?: AppInfo.getDefaultSettings(context) }
+    val appInfoOwners = remember { AppInfo.getAppInfoOwnerSet(context) }
     val storePkgNames = remember {
         val extras = arrayOf(ApiViewingApp.packagePlayStore, ApiViewingApp.packageCoolApk)
         buildSet(extras.size + appInfoOwners.size + 2) {
@@ -175,20 +168,12 @@ private fun ExternalActions() {
     }
 }
 
-private val actionShowAppInfo: String
-    get() = if (OsUtils.satisfy(OsUtils.N)) Intent.ACTION_SHOW_APP_INFO
-    else "android.intent.action.SHOW_APP_INFO"
-
-private val extraPackageName: String
-    get() = if (OsUtils.satisfy(OsUtils.N)) Intent.EXTRA_PACKAGE_NAME
-    else "android.intent.extra.PACKAGE_NAME"
-
 private fun launchOwner(isStandard: Boolean, pkgName: String, app: ApiViewingApp, context: Context) {
     when {
         isStandard -> {
-            val intent = Intent(actionShowAppInfo)
+            val intent = Intent(AppInfo.actionShowAppInfo)
                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                .putExtra(extraPackageName, app.packageName)
+                .putExtra(AppInfo.extraPackageName, app.packageName)
                 .setPackage(pkgName)
             safely { context.startActivity(intent) }
         }
