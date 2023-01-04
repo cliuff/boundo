@@ -21,6 +21,7 @@ import coil.ImageLoader
 import coil.ImageLoaderFactory
 import com.google.android.play.core.splitcompat.SplitCompatApplication
 import com.madness.collision.BuildConfig
+import com.madness.collision.unit.api_viewing.AccessAV
 import com.madness.collision.util.X
 import com.madness.collision.util.ui.AppIconFetcher
 import com.madness.collision.util.ui.AppIconKeyer
@@ -81,6 +82,7 @@ class MainApplication : SplitCompatApplication(), Thread.UncaughtExceptionHandle
         super.onCreate()
         // Setup handler for uncaught exceptions
         Thread.setDefaultUncaughtExceptionHandler (this)
+        AccessAV.initUnit(this)
     }
 
     // Configure Coil

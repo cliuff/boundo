@@ -77,6 +77,19 @@ object ApkUtil {
         )
     }
 
+    fun getNativeLibs(file: File): List<Triple<String, Long, Long>> {
+        val libDirs = listOf("lib/armeabi-v7a/", "lib/armeabi/", "lib/arm64-v8a/", "lib/x86/", "lib/x86_64/")
+        val libList = arrayListOf<Triple<String, Long, Long>>()
+        iterateFile(file) { entry ->
+            if (entry.isDirectory.not() && libDirs.any { entry.name.startsWith(it) }) {
+                val item = Triple(entry.name, entry.compressedSize, entry.size)
+                libList.add(item)
+            }
+            true
+        }
+        return libList
+    }
+
     fun getResourceEntries(resources: Resources, resId: Int, path: String): Pair<String, List<String>> {
         return getResourceEntries(resources, resId, File(path))
     }
@@ -144,47 +157,111 @@ object ApkUtil {
         }
     }
 
-    fun getThirdPartyPkg(path: String, ownPkg: String): List<CharSequence> {
+    fun getThirdPartyPkg(path: String, ownPkg: String): List<String> {
         return getThirdPartyPkg(File(path), ownPkg)
     }
 
-    fun getThirdPartyPkg(file: File, ownPkg: String, removeInternals: Boolean = true): List<CharSequence> {
+    fun getThirdPartyPkg(file: File, ownPkg: String, removeInternals: Boolean = true): List<String> {
+        return loadThirdPartyPkg(file, ownPkg) { pkgList ->
+            val pkgFilter = ThirdPartyPkgFilter(ownPkg, removeInternals)
+            val rewriteReverser = R8RewriteReverser()
+            sequence { pkgList.forEach { yieldAll(it.iterator()) } }
+                .filterNotNull().mapNotNull(pkgFilter::map).map(rewriteReverser::map)
+                .toMutableSet().toList()  // Sequence.distinct() seems inefficient
+        } ?: emptyList()
+    }
+
+    data class PkgPartitions(val filtered: List<String>, val self: List<String>, val minimized: List<String>)
+
+    fun getThirdPartyPkgPartitions(path: String, ownPkg: String): PkgPartitions {
+        return getThirdPartyPkgPartitions(File(path), ownPkg)
+    }
+
+    fun getThirdPartyPkgPartitions(file: File, ownPkg: String, removeInternals: Boolean = true): PkgPartitions {
+        return loadThirdPartyPkg(file, ownPkg) { pkgList ->
+            val pkgFilter = ThirdPartyPkgFilter(ownPkg, removeInternals)
+            val rewriteReverser = R8RewriteReverser()
+            val transforms = mutableSetOf<String>()
+            val pkgSequence = sequence { pkgList.forEach { yieldAll(it.iterator()) } }
+                .filterNotNull().map(rewriteReverser::map)
+            val filtered = ArrayList<String>()
+            val self = ArrayList<String>()
+            val out = ArrayList<String>()
+            pkgSequence.forEach { pkg ->
+                val fOwn = pkgFilter.mapOwnPkg(pkg)
+                if (fOwn != pkg) {
+                    self.add(pkg)
+                } else {
+                    val f = pkgFilter.mapObfuscated(pkg)
+                    if (f != null && f != pkg) transforms.add(f)
+                    (if (f == pkg) filtered else out).add(pkg)
+                }
+            }
+            val first = if (transforms.isNotEmpty()) filtered + transforms else filtered
+            PkgPartitions(first.distinct(), self.distinct(), out.distinct())
+        } ?: PkgPartitions(emptyList(), emptyList(), emptyList())
+    }
+
+    private fun <T> loadThirdPartyPkg(file: File, ownPkg: String, block: (List<List<String?>>) -> T): T? {
         return try {
             ApkFile(file).use { apk ->
-                apk.dexClasses.asSequence().filter { it.isPublic }.map { it.packageName }
-                    .thirdPartyPkg(ownPkg, removeInternals).toList()
+                val dexPackageList = mutableListOf<List<String?>>()
+                ApkTraverse.transformDexFiles(apk,
+                    { dexClass -> if (dexClass.isPublic) dexClass.packageName else null },
+                    { classList -> dexPackageList.add(classList) })
+                block(dexPackageList)
             }
         } catch (e: Throwable) { // may produce OutOfMemoryError
             val eMsg = e::class.simpleName + ": " + e.message
             val cause = e.cause?.message?.let { " BY $it" } ?: ""
             val fileName = file.path.decentApkFileName
             Log.w("av.util.ApkUtils", "$eMsg$cause ($ownPkg, $fileName)")
-            emptyList()
+            null
         }
     }
 
-    fun Sequence<CharSequence>.thirdPartyPkg(ownPkg: String, removeInternals: Boolean): Sequence<CharSequence> {
+    class ThirdPartyPkgFilter(private val ownPkg: String, private val removeInternals: Boolean) {
+        private val regexOwnPkg = """$ownPkg\..+""".toRegex()
         // more than one section: end with one character or plus a digit
-        val regexObfuscated = """.*\.\w\d?""".toRegex()
+        private val regexObfuscatedEnding = """.*\.\w\d?""".toRegex()
         // only one section: no more than two characters, or one character plus a digit
-        val regexObfuscated1 = """\w[\w\d]?""".toRegex()
-        val regexR8Rewrite = """(j\$)((?:\..+)*)""".toRegex()
-        return filterNot { it.startsWith(ownPkg) } // packages of its own
-            .filterNot { it.matches(regexObfuscated) } // the obfuscated
-            .filterNot { it.matches(regexObfuscated1) } // the obfuscated
-            .run {
-                if (removeInternals) {
-                    val pKReflect = "kotlin.reflect.jvm.internal"
-                    map { if (it.startsWith(pKReflect)) pKReflect else it }
-                } else this
-            }
-            .distinct() // stateful
-            .map r8c@{
-                // return self if starts with j
-                if (it.firstOrNull() != 'j') return@r8c it
-                // convert R8 prefix rewrite of Java 8 APIs
-                it.replace(regexR8Rewrite) { s -> "java" + s.groupValues[2] }
-            }
+//        private val regexObfuscated1 = """\w[\w\d]?""".toRegex()
+        // only one section: without any dot
+        private val regexObfuscatedSingleSection = """[^.]+""".toRegex()
+        private val pKReflect = "kotlin.reflect.jvm.internal"
+
+        fun map(target: String): String? {
+            val mapOwn = mapOwnPkg(target)
+            if (mapOwn != target) return mapOwn
+            val mapObfuscated = mapObfuscated(target)
+            if (mapObfuscated != target) return mapObfuscated
+            return target
+        }
+
+        fun mapOwnPkg(target: String): String? {
+            if (target == ownPkg) return null // packages of its own
+            if (target.matches(regexOwnPkg)) return null // packages of its own
+            return target
+        }
+
+        fun mapObfuscated(target: String): String? {
+            if (target.matches(regexObfuscatedSingleSection)) return null // the obfuscated
+//            if (target.matches(regexObfuscated1)) return null // the obfuscated
+            if (target.matches(regexObfuscatedEnding)) return null // the obfuscated
+            if (removeInternals && target.startsWith(pKReflect)) return pKReflect
+            return target
+        }
+    }
+
+    class R8RewriteReverser {
+        private val regexR8Rewrite = """(j\$)((?:\..+)*)""".toRegex()
+
+        fun map(target: String): String {
+            // return self if starts with j
+            if (target.firstOrNull() != 'j') return target
+            // convert R8 prefix rewrite of Java 8 APIs
+            return target.replace(regexR8Rewrite) { s -> "java" + s.groupValues[2] }
+        }
     }
 
     fun checkPkg(path: String, packageName: String): Boolean {

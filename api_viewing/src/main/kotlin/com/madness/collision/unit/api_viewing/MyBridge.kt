@@ -30,6 +30,7 @@ import androidx.core.database.getIntOrNull
 import androidx.core.database.getStringOrNull
 import androidx.fragment.app.Fragment
 import androidx.sqlite.db.SupportSQLiteQueryBuilder
+import com.absinthe.rulesbundle.LCRules
 import com.madness.collision.misc.MiscApp
 import com.madness.collision.unit.Bridge
 import com.madness.collision.unit.Unit
@@ -61,6 +62,11 @@ object MyBridge: Bridge() {
 
     override fun getSettings(): Fragment {
         return Page<PrefAv>(MainR.string.apiViewer)
+    }
+
+    @Suppress("unused")
+    fun initUnit(context: Context) {
+        LCRules.init(context.applicationContext)
     }
 
     @Suppress("unused")

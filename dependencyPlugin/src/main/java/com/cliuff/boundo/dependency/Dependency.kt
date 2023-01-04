@@ -41,6 +41,7 @@ object Versions {
     const val androidxDrawerLayout = "1.1.1"
     const val androidxSwipeRefreshLayout = "1.1.0"
     const val androidxConstraintLayout = "2.1.4"
+    const val androidxConstraintLayoutCompose = "1.0.1"
     const val androidxPalette = "1.0.0"
     const val androidxCardView = "1.0.0"
     const val androidxRecyclerView = "1.2.1"
@@ -88,6 +89,7 @@ object Versions {
     const val appIconLoader = "1.4.0"
     // Superellipse shape for Compose
     const val smoothCornerCompose = "v1.0.0"
+    const val libCheckerRules = "30.2"
 }
 
 class Dependencies : Plugin<Project> {
@@ -128,6 +130,7 @@ class Dependencies : Plugin<Project> {
         const val androidxDrawerLayout = "androidx.drawerlayout:drawerlayout:${Versions.androidxDrawerLayout}"
         const val androidxSwipeRefreshLayout = "androidx.swiperefreshlayout:swiperefreshlayout:${Versions.androidxSwipeRefreshLayout}"
         const val androidxConstraintLayout = "androidx.constraintlayout:constraintlayout:${Versions.androidxConstraintLayout}"
+        const val androidxConstraintLayoutCompose = "androidx.constraintlayout:constraintlayout-compose:${Versions.androidxConstraintLayoutCompose}"
         const val androidxPalette = "androidx.palette:palette:${Versions.androidxPalette}"
         const val androidxCardView = "androidx.cardview:cardview:${Versions.androidxCardView}"
         const val androidxRecyclerView = "androidx.recyclerview:recyclerview:${Versions.androidxRecyclerView}"
@@ -187,6 +190,7 @@ class Dependencies : Plugin<Project> {
         const val apkParser = "net.dongliu:apk-parser:${Versions.apkParser}"
         const val appIconLoader = "me.zhanghai.android.appiconloader:appiconloader-iconloaderlib:${Versions.appIconLoader}"
         const val smoothCornerCompose = "com.github.racra:smooth-corner-rect-android-compose:${Versions.smoothCornerCompose}"
+        const val libCheckerRules = "com.github.LibChecker:LibChecker-Rules-Bundle:${Versions.libCheckerRules}"
 
         // wear
         const val androidxPercentLayout = "androidx.percentlayout:percentlayout:${Versions.androidxPercentLayout}"

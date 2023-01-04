@@ -30,18 +30,18 @@ import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.*
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.*
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.DialogFragment
 import coil.compose.AsyncImage
@@ -263,12 +263,10 @@ private fun FrontAppInfo(
             colors = CardDefaults.elevatedCardColors(containerColor = cardColor),
         ) {
             BoxWithConstraints(modifier = Modifier.weight(1f)) {
-                val extraHeight = remember { maxHeight / 2 }
-                NestedScrollContent {
-                    Column {
-                        TagDetailsContent(getClick, splitApks)
-                        Spacer(Modifier.height(extraHeight))
-                    }
+                // ensure enough space for tab to scroll to
+                val extraHeight = remember { max(maxHeight - 10.dp, 40.dp) }
+                NestedScrollParent {
+                    TagDetailsContent(getClick, splitApks, PaddingValues(bottom = extraHeight))
                 }
             }
         }
@@ -287,6 +285,26 @@ fun NestedScrollContent(content: @Composable () -> Unit) {
                 }
             }
             NestedScrollView(context).apply { addView(composeView) }
+        },
+    )
+}
+
+/**
+ * Wrap [content] in a [CoordinatorLayout],
+ * which is a [NestedScrollingParent3][androidx.core.view.NestedScrollingParent3]
+ */
+@Composable
+fun NestedScrollParent(content: @Composable () -> Unit) {
+    val colorScheme = MaterialTheme.colorScheme
+    AndroidView(
+        factory = { context ->
+            val composeView = ComposeView(context).apply {
+                setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+                setContent {
+                    MaterialTheme(colorScheme = colorScheme, content = content)
+                }
+            }
+            CoordinatorLayout(context).apply { addView(composeView) }
         },
     )
 }
@@ -344,10 +362,12 @@ private fun AppHeaderContent(cardColor: Color, modifier: Modifier = Modifier) {
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun TagDetailsContent(
     getClick: (AppTagInfo) -> (() -> Unit)?,
     splitApks: List<Pair<String, String?>>,
+    contentPadding: PaddingValues,
 ) {
     val app = LocalApp.current
     val context = LocalContext.current
@@ -357,8 +377,16 @@ private fun TagDetailsContent(
     }
     val list = lists
     if (list != null) {
-        Column {
-            TagDetailsContent(list, getClick, splitApks)
+        LibPage(
+            modifier = Modifier.nestedScroll(rememberNestedScrollInteropConnection()),
+            app = app,
+            contentPadding = contentPadding,
+        ) {
+            item {
+                Column {
+                    TagDetailsList(list, getClick, splitApks)
+                }
+            }
         }
     } else {
         Box(Modifier)

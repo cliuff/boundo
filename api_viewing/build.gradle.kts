@@ -15,7 +15,6 @@
  */
 
 
-import java.net.URI
 import com.cliuff.boundo.dependency.Dependencies
 import com.cliuff.boundo.dependency.Versions
 
@@ -85,7 +84,8 @@ android {
 }
 
 repositories {
-    maven { url = URI("https://jitpack.io") }
+    // required by LibChecker-Rules-Bundle
+    maven { url = uri("https://jitpack.io") }
 }
 
 dependencies {
@@ -104,6 +104,8 @@ dependencies {
             openCsv,
             androidDeviceNames,
             smoothCornerCompose,
+            androidxConstraintLayoutCompose,
+            libCheckerRules,
             project(":apk-parser"),
         ).forEach { implementation(it) }
         dynamicFeatureBasics.forEach { implementation(it) }
