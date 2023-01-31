@@ -17,7 +17,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 object Versions {
-    const val kotlin = "1.7.10"
+    const val kotlin = "1.8.0"
 }
 
 buildscript {
@@ -25,7 +25,7 @@ buildscript {
         mavenCentral()
     }
     val versions = object {
-        val kotlin = "1.7.10"
+        val kotlin = "1.8.0"
     }
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}")
@@ -34,7 +34,7 @@ buildscript {
 
 plugins {
     val versions = object {
-        val kotlin = "1.7.10"
+        val kotlin = "1.8.0"
     }
     kotlin("jvm") version versions.kotlin
     id("java-gradle-plugin")
@@ -46,7 +46,7 @@ repositories {
 
 dependencies {
     implementation(gradleApi())
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Versions.kotlin}")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:${Versions.kotlin}")
 }
 
 //compileKotlin {

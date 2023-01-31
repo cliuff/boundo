@@ -211,6 +211,7 @@ dependencies {
             androidxCore,
             androidxCoreKtx,
             androidxComposeRuntimeLiveData,
+            androidxComposeFoundation,
             androidxComposeActivity,
             androidxComposeMaterial3,
             androidxComposeMaterialIcons,

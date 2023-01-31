@@ -4,7 +4,8 @@
 - Android Studio Dolphin Patch 1 (AGP 7.3.1)
 - Gradle Wrapper 7.5.1
 - Java 11
-- Kotlin 1.7.10
+- Kotlin 1.8.0
+- Jetpack Compose Compiler 1.4.0 (requires Kotlin <= 1.8.0)
 
 **After Git check-out**
 - Clone project `Apk Parser` from (https://github.com/cliuff/apk-parser.git) into `subproject`, 

@@ -26,10 +26,13 @@ object Versions {
     const val androidxTestEspresso = "3.2.0"
 
     const val androidxCore = "1.9.0"
-    const val androidxCompose = "1.2.1"
-    const val androidxComposeCompiler = "1.3.1"
-    // 1.0.0-beta03 breaks nested scrolling in compose
-    const val androidxComposeMaterial3 = "1.0.0-beta02"
+    const val androidxComposeCompiler = "1.4.0"
+    const val androidxComposeRuntime = "1.3.3"
+    const val androidxComposeFoundation = "1.3.1"
+    const val androidxComposeUi = "1.3.3"
+    const val androidxComposeAnimation = "1.3.3"
+    const val androidxComposeMaterial = "1.3.1"
+    const val androidxComposeMaterial3 = "1.0.1"
     const val androidxActivity = "1.6.0"
     const val androidxAppcompat = "1.5.1"
     const val androidxLifecycle = "2.5.1"
@@ -73,7 +76,7 @@ object Versions {
     const val jsoup = "1.14.3"
     const val junit4 = "4.13.2"
     const val junitJupiter = "5.8.1"
-    const val kotlin = "1.7.10"
+    const val kotlin = "1.8.0"
     const val kotlinCoroutines = "1.6.4"
     const val mpChart = "v3.1.0"
     const val openCsv = "5.5.2"
@@ -108,21 +111,20 @@ class Dependencies : Plugin<Project> {
 
         const val androidxCore = "androidx.core:core:${Versions.androidxCore}"
         const val androidxCoreKtx = "androidx.core:core-ktx:${Versions.androidxCore}"
-        const val androidxComposeRuntimeLiveData = "androidx.compose.runtime:runtime-livedata:${Versions.androidxCompose}"
+        const val androidxComposeRuntimeLiveData = "androidx.compose.runtime:runtime-livedata:${Versions.androidxComposeRuntime}"
+        const val androidxComposeFoundation = "androidx.compose.foundation:foundation:${Versions.androidxComposeFoundation}"
         // Integration with activities
         const val androidxComposeActivity = "androidx.activity:activity-compose:${Versions.androidxActivity}"
         // Compose Material Design
         const val androidxComposeMaterial3 = "androidx.compose.material3:material3:${Versions.androidxComposeMaterial3}"
-        const val androidxComposeMaterialIcons = "androidx.compose.material:material:${Versions.androidxCompose}"
-        const val androidxComposeMaterialIconsExtended = "androidx.compose.material:material-icons-extended:${Versions.androidxCompose}"
-        // Animations
-        const val androidxComposeAnimation = "androidx.compose.animation:animation:${Versions.androidxCompose}"
-        // Toolingsupport (Previews, etc.)
-        const val androidxComposeUiTooling = "androidx.compose.ui:ui-tooling:${Versions.androidxCompose}"
+        const val androidxComposeMaterialIcons = "androidx.compose.material:material:${Versions.androidxComposeMaterial}"
+        const val androidxComposeMaterialIconsExtended = "androidx.compose.material:material-icons-extended:${Versions.androidxComposeMaterial}"
+        const val androidxComposeAnimation = "androidx.compose.animation:animation:${Versions.androidxComposeAnimation}"
+        // Tooling support (Previews, etc.)
+        const val androidxComposeUiTooling = "androidx.compose.ui:ui-tooling:${Versions.androidxComposeUi}"
         // Integration with ViewModels
         const val androidxComposeViewModel = "androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.androidxLifecycle}"
-        // UI Tests
-        const val androidxComposeUiTest = "androidx.compose.ui:ui-test-junit4:${Versions.androidxCompose}"
+        const val androidxComposeUiTest = "androidx.compose.ui:ui-test-junit4:${Versions.androidxComposeUi}"
         const val androidxActivity = "androidx.activity:activity-ktx:${Versions.androidxActivity}"
         const val androidxAppcompat = "androidx.appcompat:appcompat:${Versions.androidxAppcompat}"
         const val androidxFragment = "androidx.fragment:fragment-ktx:${Versions.androidxFragment}"
@@ -165,7 +167,7 @@ class Dependencies : Plugin<Project> {
         const val coil = "io.coil-kt:coil:${Versions.coil}"
         const val coilCompose = "io.coil-kt:coil-compose:${Versions.coil}"
         const val jsoup = "org.jsoup:jsoup:${Versions.jsoup}"
-        const val kotlinStdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Versions.kotlin}"
+        const val kotlinStdlib = "org.jetbrains.kotlin:kotlin-stdlib:${Versions.kotlin}"
         const val kotlinReflect = "org.jetbrains.kotlin:kotlin-reflect:${Versions.kotlin}"
         const val androidDesugaring = "com.android.tools:desugar_jdk_libs:${Versions.androidDesugaring}"
 
@@ -203,6 +205,7 @@ class Dependencies : Plugin<Project> {
                 androidxCore,
                 androidxCoreKtx,
                 androidxComposeRuntimeLiveData,
+                androidxComposeFoundation,
                 androidxComposeActivity,
                 androidxComposeMaterial3,
                 androidxComposeMaterialIcons,
