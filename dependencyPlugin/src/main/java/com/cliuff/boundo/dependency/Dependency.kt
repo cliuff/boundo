@@ -36,7 +36,7 @@ object Versions {
     const val androidxActivity = "1.6.0"
     const val androidxAppcompat = "1.5.1"
     const val androidxLifecycle = "2.5.1"
-    const val androidxRoom = "2.4.3"
+    const val androidxRoom = "2.5.0"
     const val androidxNavigation = "2.5.2"
     const val androidxCoreTesting = "2.1.0"
     const val androidxFragment = "1.5.3"

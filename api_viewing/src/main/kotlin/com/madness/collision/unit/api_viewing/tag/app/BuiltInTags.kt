@@ -333,7 +333,7 @@ private fun xiaomiMsgExpressing() = expressing { res ->
     val context = res.context
     val app = res.app
     // "com.xiaomi.mipush.sdk.ManifestChecker" to "checkServices"
-    val method = "com.xiaomi.mipush.sdk.u" to "d"
+    val method = "com.xiaomi.mipush.sdk.v" to "d"
     val args = Context.CONTEXT_INCLUDE_CODE or Context.CONTEXT_IGNORE_SECURITY
     val loaderContext = context.createPackageContext(context.packageName, args)
     val checkerMethod = try {

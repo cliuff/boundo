@@ -54,7 +54,7 @@
 -keep class kotlin.reflect.jvm.internal.** { *; }
 
 # Xiaomi push detection
--keep class com.xiaomi.mipush.sdk.u {
+-keep class com.xiaomi.mipush.sdk.v {
  void d(...);
 }
 # keep the class and specified members from being renamed only

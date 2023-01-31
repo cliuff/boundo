@@ -144,7 +144,7 @@ object MyBridge: Bridge() {
             val records = query.readAll().joinToString(separator = "\n\n")
             val iIntegrity = if (isDatabaseIntegrityOk) "OK" else "not OK"
             val title = "$iName v$version (integrity $iIntegrity)"
-            val iDbs = attachedDbs.joinToString { "${it.first}(${it.second})" }
+            val iDbs = attachedDbs?.joinToString { "${it.first}(${it.second})" } ?: "none"
             return "$title\nPath: $path\nDatabases: $iDbs\nColumns: $columns\n\n$records"
         }
     }
