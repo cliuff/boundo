@@ -18,6 +18,7 @@ package com.madness.collision.unit.api_viewing.origin
 
 import android.content.Context
 import android.content.pm.PackageInfo
+import com.madness.collision.misc.PackageCompat
 
 /**
  * Retrieve packages from user's device
@@ -25,8 +26,7 @@ import android.content.pm.PackageInfo
 internal class PackageRetriever(private val context: Context) : OriginRetriever<PackageInfo> {
 
     override fun get(predicate: ((PackageInfo) -> Boolean)?): List<PackageInfo> {
-        return context.packageManager.getInstalledPackages(0).let {
-            if (predicate == null) it else it.filter(predicate)
-        }
+        val list = PackageCompat.getAllPackages(context.packageManager)
+        return if (predicate != null) list.filter(predicate) else list
     }
 }

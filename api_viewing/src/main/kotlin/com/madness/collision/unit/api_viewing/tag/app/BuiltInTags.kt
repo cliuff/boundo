@@ -22,6 +22,7 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.util.Log
+import com.madness.collision.misc.PackageCompat
 import com.madness.collision.unit.api_viewing.R
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
@@ -401,8 +402,10 @@ private fun pkgServicesRequisite(): AppTagInfo.Requisite = AppTagInfo.Requisite(
         else flagGetDisabledLegacy()
         val extraFlags = PackageManager.GET_SERVICES or PackageManager.GET_RECEIVERS or flagGetDisabled
         res.pkgInfo = try {
-            if (app.isArchive) pm.getPackageArchiveInfo(app.appPackage.basePath, extraFlags)
-            else pm.getPackageInfo(app.packageName, extraFlags)
+            when {
+                app.isArchive -> PackageCompat.getArchivePackage(pm, app.appPackage.basePath, extraFlags)
+                else -> PackageCompat.getInstalledPackage(pm, app.packageName, extraFlags)
+            }
         } catch (e: Exception) {
             e.printStackTrace()
             null

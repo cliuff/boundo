@@ -19,7 +19,6 @@ package com.madness.collision.misc
 import android.content.ComponentName
 import android.content.Context
 import android.content.pm.ComponentInfo
-import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import com.madness.collision.util.os.OsUtils
 
@@ -44,17 +43,17 @@ object MiscApplication {
         else flagGetDisabledLegacy
         val flags = PackageManager.GET_ACTIVITIES or PackageManager.GET_RECEIVERS or
                 PackageManager.GET_SERVICES or PackageManager.GET_PROVIDERS or flagGetDisabled
-        try {
-            val packageInfo: PackageInfo = pm.getPackageInfo(pkgName!!, flags)
-            val components: MutableList<ComponentInfo> = mutableListOf()
-            packageInfo.activities?.let { components.addAll(it) }
-            packageInfo.services?.let { components.addAll(it) }
-            packageInfo.providers?.let { components.addAll(it) }
-            return components
+        val packageInfo = try {
+            PackageCompat.getInstalledPackage(pm, pkgName, flags)
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
+            null
         }
-        return emptyList()
+        packageInfo ?: return emptyList()
+        val components = mutableListOf<ComponentInfo>()
+        listOfNotNull(packageInfo.activities, packageInfo.services, packageInfo.providers)
+            .forEach { components.addAll(it) }
+        return components
     }
 
     @Suppress("deprecation")

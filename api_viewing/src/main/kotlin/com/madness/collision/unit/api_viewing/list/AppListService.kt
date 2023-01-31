@@ -27,6 +27,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.madness.collision.R
 import com.madness.collision.misc.MiscApp
+import com.madness.collision.misc.PackageCompat
 import com.madness.collision.unit.api_viewing.Utils
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
@@ -374,8 +375,10 @@ internal class AppListService(private val serviceContext: Context? = null) {
     private fun retrieveOn(context: Context, appInfo: ApiViewingApp, extraFlags: Int, subject: String): PackageInfo? {
         return try {
             val pm = context.packageManager
-            if (appInfo.isArchive) pm.getPackageArchiveInfo(appInfo.appPackage.basePath, extraFlags)
-            else pm.getPackageInfo(appInfo.packageName, extraFlags)
+            when {
+                appInfo.isArchive -> PackageCompat.getArchivePackage(pm, appInfo.appPackage.basePath, extraFlags)
+                else -> PackageCompat.getInstalledPackage(pm, appInfo.packageName, extraFlags)
+            }
         } catch (e: Exception) {
             e.printStackTrace()
             Log.e("APIAdapter", String.format("failed to retrieve %s of %s", subject, appInfo.packageName))

@@ -28,7 +28,7 @@ object MiscApp {
         return when {
             packageName.isNotEmpty() -> {
                 try {
-                    context.packageManager.getPackageInfo(packageName, 0)
+                    PackageCompat.getInstalledPackage(context.packageManager, packageName)
                 } catch (e: PackageManager.NameNotFoundException) {
                     if (errorMsg != null) Log.w(errorMsg.first, errorMsg.second)
                     else e.printStackTrace()
@@ -45,7 +45,7 @@ object MiscApp {
         return when {
             packageName.isNotEmpty() -> {
                 try {
-                    context.packageManager.getApplicationInfo(packageName, 0)
+                    PackageCompat.getApplication(context.packageManager, packageName)
                 } catch (e: PackageManager.NameNotFoundException) {
                     if (errorMsg != null) Log.w(errorMsg.first, errorMsg.second)
                     else e.printStackTrace()
@@ -58,7 +58,7 @@ object MiscApp {
     }
 
     fun getPackageArchiveInfo(context: Context, path: String): PackageInfo? {
-        return context.packageManager.getPackageArchiveInfo(path, 0)?.apply {
+        return PackageCompat.getArchivePackage(context.packageManager, path)?.apply {
             applicationInfo.sourceDir = path
             applicationInfo.publicSourceDir = path
         }
