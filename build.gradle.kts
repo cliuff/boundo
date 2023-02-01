@@ -34,7 +34,7 @@ buildscript {
 //        val dokka = "0.10.1" // dokka and dokka gradle plugin
 //        val dokkaAndroidGradlePlugin = "0.9.18" // dokka android gradle plugin
         val gglHiltGradlePlugin = "2.38.1"  // 2.40.2 fails the build
-        val googlePlayServicesOSSLicensesPlugin = "0.10.4"
+        val googlePlayServicesOSSLicensesPlugin = "0.10.6"
         val androidGradlePlugin = "7.3.1"  // 7.3.1-Dolphin Patch 1
     }
     dependencies {

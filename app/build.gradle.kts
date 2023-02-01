@@ -61,7 +61,7 @@ val signingKeyPassword: String = prop("signingKeyPassword", "")
 //}
 
 android {
-    buildToolsVersion = "33.0.0"
+    buildToolsVersion = "33.0.1"
     sourceSets {
         getByName("main").java.srcDir("src/main/kotlin")
     }
