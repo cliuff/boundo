@@ -121,4 +121,10 @@
     <string name="av_ic_info_preview_rect">Podgląd zaokrąglonego prostokąta</string>
     <string name="av_ic_info_preview_squircle">Podgląd superelipsy</string>
     <string name="av_ic_info_preview_round">Podgląd rundy</string>
+    <string name="av_info_lib_native_lib">Biblioteka rodzima</string>
+    <string name="av_info_lib_no_data">Brak dostępnych danych</string>
+    <string name="av_info_lib_sec_marked">Wyraźny</string>
+    <string name="av_info_lib_sec_normal">Normalna</string>
+    <string name="av_info_lib_sec_minimized_self">Zminimalizowany-ja</string>
+    <string name="av_info_lib_sec_minimized">Zminimalizowane-inne</string>
 </resources>

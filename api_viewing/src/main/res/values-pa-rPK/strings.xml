@@ -121,4 +121,10 @@
     <string name="av_ic_info_preview_rect">ਗੋਲ ਆਇਤਕਾਰ ਝਲਕ</string>
     <string name="av_ic_info_preview_squircle">Superellipse ਪੂਰਵ-ਝਲਕ</string>
     <string name="av_ic_info_preview_round">ਗੋਲ ਝਲਕ</string>
+    <string name="av_info_lib_native_lib">ਨੇਟਿਵ ਲਾਇਬ੍ਰੇਰੀ</string>
+    <string name="av_info_lib_no_data">ਕੋਈ ਡਾਟਾ ਉਪਲਬਧ ਨਹੀਂ ਹੈ</string>
+    <string name="av_info_lib_sec_marked">ਨਿਸ਼ਾਨਬੱਧ</string>
+    <string name="av_info_lib_sec_normal">ਸਧਾਰਣ</string>
+    <string name="av_info_lib_sec_minimized_self">ਘਟਿ—ਆਪਣੇ ਆਪ ਨੂੰ</string>
+    <string name="av_info_lib_sec_minimized">ਘਟਾਇਆ—ਹੋਰ</string>
 </resources>

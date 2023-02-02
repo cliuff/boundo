@@ -121,4 +121,10 @@
     <string name="av_ic_info_preview_rect">Pratinjau persegi panjang bulat</string>
     <string name="av_ic_info_preview_squircle">Pratinjau superelips</string>
     <string name="av_ic_info_preview_round">Pratinjau bulat</string>
+    <string name="av_info_lib_native_lib">Perpustakaan Pribumi</string>
+    <string name="av_info_lib_no_data">Tidak ada data yang tersedia</string>
+    <string name="av_info_lib_sec_marked">Ditandai</string>
+    <string name="av_info_lib_sec_normal">Normal</string>
+    <string name="av_info_lib_sec_minimized_self">Meminimalkan diri</string>
+    <string name="av_info_lib_sec_minimized">Diminimalkan-lainnya</string>
 </resources>

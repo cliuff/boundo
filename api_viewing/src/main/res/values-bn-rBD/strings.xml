@@ -121,4 +121,10 @@
     <string name="av_ic_info_preview_rect">বৃত্তাকার আয়তক্ষেত্রের পূর্বরূপ</string>
     <string name="av_ic_info_preview_squircle">Superellipse পূর্বরূপ</string>
     <string name="av_ic_info_preview_round">বৃত্তাকার পূর্বরূপ</string>
+    <string name="av_info_lib_native_lib">নেটিভ লাইব্রেরি</string>
+    <string name="av_info_lib_no_data">কোন তথ্য নেই</string>
+    <string name="av_info_lib_sec_marked">চিহ্নিত</string>
+    <string name="av_info_lib_sec_normal">স্বাভাবিক</string>
+    <string name="av_info_lib_sec_minimized_self">মিনিমাইজড-স্ব</string>
+    <string name="av_info_lib_sec_minimized">মিনিমাইজড-অন্য</string>
 </resources>

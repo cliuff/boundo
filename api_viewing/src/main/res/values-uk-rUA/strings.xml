@@ -120,4 +120,10 @@
     <string name="av_ic_info_preview_rect">Попередній перегляд заокругленого прямокутника</string>
     <string name="av_ic_info_preview_squircle">Попередній перегляд супереліпса</string>
     <string name="av_ic_info_preview_round">Попередній перегляд раунду</string>
+    <string name="av_info_lib_native_lib">Рідна бібліотека</string>
+    <string name="av_info_lib_no_data">Немає даних</string>
+    <string name="av_info_lib_sec_marked">Позначений</string>
+    <string name="av_info_lib_sec_normal">нормальний</string>
+    <string name="av_info_lib_sec_minimized_self">Мінімізований-само</string>
+    <string name="av_info_lib_sec_minimized">Мінімізований-інший</string>
 </resources>

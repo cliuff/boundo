@@ -39,11 +39,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.madness.collision.unit.api_viewing.R
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.info.*
 import com.madness.collision.util.mainApplication
@@ -113,7 +115,8 @@ fun LibPage(
         ) {
             for (tabIndex in 0 until compTypeList.size + nonCompItemCount) {
                 if (tabIndex < nonCompItemCount) {
-                    CompTab("Tags", selected = tabIndex == selTabIndex, loading = false, onClick = click@{
+                    val label = stringResource(R.string.av_settings_tags)
+                    CompTab(label, selected = tabIndex == selTabIndex, loading = false, onClick = click@{
                         if (selTabIndex == tabIndex) return@click
                         selTabIndex = tabIndex
                         scope.launch { libListState.scrollToItem(0) }
@@ -121,14 +124,7 @@ fun LibPage(
                 } else {
                     val compType = compTypeList[tabIndex - 1]
                     val lastCompType = compTypeList.getOrNull(tabIndex - 2)
-                    val typeLabel = when (compType) {
-                        PackCompType.Activity -> "Activity"
-                        PackCompType.Service -> "Service"
-                        PackCompType.Receiver -> "Receiver"
-                        PackCompType.Provider -> "Provider"
-                        PackCompType.DexPackage -> "DexPackage"
-                        PackCompType.NativeLibrary -> "NativeLibrary"
-                    }
+                    val typeLabel = getTypeLabel(compType)
                     CompTab(typeLabel, selected = tabIndex == selTabIndex, loading = loadingTypes[compType] == true, onClick = click@{
                         if (selTabIndex == tabIndex) return@click
                         selTabIndex = tabIndex
@@ -209,6 +205,16 @@ class LibListState(
             }
         }
     }
+}
+
+@Composable
+private fun getTypeLabel(compType: PackCompType) = when (compType) {
+    PackCompType.Activity -> "Activity"
+    PackCompType.Service -> "Service"
+    PackCompType.Receiver -> "Receiver"
+    PackCompType.Provider -> "Provider"
+    PackCompType.DexPackage -> "Dex"
+    PackCompType.NativeLibrary -> stringResource(R.string.av_info_lib_native_lib)
 }
 
 @Composable
@@ -341,14 +347,6 @@ private fun ComponentList(
         listContent()
         for ((typeIndex, compType) in compTypeList.withIndex()) {
             val typeCollection = itemCollection[compType].firstOrNull()
-            val typeLabel = when (compType) {
-                PackCompType.Activity -> "Activity"
-                PackCompType.Service -> "Service"
-                PackCompType.Receiver -> "Receiver"
-                PackCompType.Provider -> "Provider"
-                PackCompType.DexPackage -> "DexPackage"
-                PackCompType.NativeLibrary -> "NativeLibrary"
-            }
             if (typeIndex > 0) {
                 item {
                     Divider(
@@ -367,7 +365,7 @@ private fun ComponentList(
                 }
                 Text(
                     modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
-                    text = typeLabel,
+                    text = getTypeLabel(compType),
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.85f),
                     fontWeight = FontWeight.Medium,
                     fontSize = 13.sp,
@@ -381,7 +379,7 @@ private fun ComponentList(
                     item {
                         Text(
                             modifier = Modifier.padding(horizontal = 20.dp).padding(bottom = 5.dp),
-                            text = "No data available",
+                            text = stringResource(R.string.av_info_lib_no_data),
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
                             fontSize = 10.sp,
                             lineHeight = 11.sp,
@@ -403,16 +401,16 @@ private fun ComponentList(
                         }
                     }
                     if (itemList.isNotEmpty()) {
-                        val sectionType = when (compSection) {
-                            CompSection.Marked -> "Marked"
-                            CompSection.Normal -> "Normal"
-                            CompSection.MinimizedSelf -> "Self"
-                            CompSection.Minimized -> "Minimized"
-                        }
                         item {
+                            val sectionType = when (compSection) {
+                                CompSection.Marked -> R.string.av_info_lib_sec_marked
+                                CompSection.Normal -> R.string.av_info_lib_sec_normal
+                                CompSection.MinimizedSelf -> R.string.av_info_lib_sec_minimized_self
+                                CompSection.Minimized -> R.string.av_info_lib_sec_minimized
+                            }
                             Text(
                                 modifier = Modifier.padding(horizontal = 20.dp).padding(bottom = 5.dp),
-                                text = "$sectionType ${itemList.size}",
+                                text = "${stringResource(sectionType)} ${itemList.size}",
                                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f),
                                 fontWeight = FontWeight.Medium,
                                 fontSize = 10.sp,

@@ -121,4 +121,10 @@
     <string name="av_ic_info_preview_rect">Anteprima rettangolo arrotondato</string>
     <string name="av_ic_info_preview_squircle">Anteprima superellisse</string>
     <string name="av_ic_info_preview_round">Anteprima rotonda</string>
+    <string name="av_info_lib_native_lib">Biblioteca nativa</string>
+    <string name="av_info_lib_no_data">Nessun dato disponibile</string>
+    <string name="av_info_lib_sec_marked">Segnato</string>
+    <string name="av_info_lib_sec_normal">Normale</string>
+    <string name="av_info_lib_sec_minimized_self">Sé minimizzato</string>
+    <string name="av_info_lib_sec_minimized">Minimizzato-altro</string>
 </resources>

@@ -121,4 +121,10 @@
     <string name="av_ic_info_preview_rect">Aperçu du rectangle arrondi</string>
     <string name="av_ic_info_preview_squircle">Aperçu de la superellipse</string>
     <string name="av_ic_info_preview_round">Aperçu de la ronde</string>
+    <string name="av_info_lib_native_lib">Bibliothèque native</string>
+    <string name="av_info_lib_no_data">Pas de données disponibles</string>
+    <string name="av_info_lib_sec_marked">Marqué</string>
+    <string name="av_info_lib_sec_normal">Normal</string>
+    <string name="av_info_lib_sec_minimized_self">Moi minimisé</string>
+    <string name="av_info_lib_sec_minimized">Minimisé-autre</string>
 </resources>

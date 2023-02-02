@@ -141,4 +141,10 @@
     <string name="av_ic_info_preview_rect">圓角矩形預覽</string>
     <string name="av_ic_info_preview_squircle">方圓形預覽</string>
     <string name="av_ic_info_preview_round">圓形預覽</string>
+    <string name="av_info_lib_native_lib">原生庫</string>
+    <string name="av_info_lib_no_data">數據為空</string>
+    <string name="av_info_lib_sec_marked">已標記</string>
+    <string name="av_info_lib_sec_normal">普通</string>
+    <string name="av_info_lib_sec_minimized_self">已收起-自身</string>
+    <string name="av_info_lib_sec_minimized">已收起-其他</string>
 </resources>

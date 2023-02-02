@@ -141,4 +141,10 @@
     <string name="av_ic_info_preview_rect">معاينة مستطيل مستدير الزوايا</string>
     <string name="av_ic_info_preview_squircle">معاينة Superellipse</string>
     <string name="av_ic_info_preview_round">معاينة مستديرة</string>
+    <string name="av_info_lib_native_lib">المكتبة الأصلية</string>
+    <string name="av_info_lib_no_data">لا تتوافر بيانات</string>
+    <string name="av_info_lib_sec_marked">ملحوظ</string>
+    <string name="av_info_lib_sec_normal">طبيعي</string>
+    <string name="av_info_lib_sec_minimized_self">تصغير الذات</string>
+    <string name="av_info_lib_sec_minimized">مصغرة أخرى</string>
 </resources>

@@ -121,4 +121,10 @@
     <string name="av_ic_info_preview_rect">Yuvarlatılmış dikdörtgen önizleme</string>
     <string name="av_ic_info_preview_squircle">Süperelips önizlemesi</string>
     <string name="av_ic_info_preview_round">Yuvarlak önizleme</string>
+    <string name="av_info_lib_native_lib">Yerel Kitaplık</string>
+    <string name="av_info_lib_no_data">Veri yok</string>
+    <string name="av_info_lib_sec_marked">İşaretlenmiş</string>
+    <string name="av_info_lib_sec_normal">Normal</string>
+    <string name="av_info_lib_sec_minimized_self">Küçültülmüş öz</string>
+    <string name="av_info_lib_sec_minimized">Küçültülmüş-diğer</string>
 </resources>

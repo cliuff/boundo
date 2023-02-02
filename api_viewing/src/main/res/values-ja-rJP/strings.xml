@@ -121,4 +121,10 @@
     <string name="av_ic_info_preview_rect">角丸長方形のプレビュー</string>
     <string name="av_ic_info_preview_squircle">超楕円のプレビュー</string>
     <string name="av_ic_info_preview_round">ラウンドプレビュー</string>
+    <string name="av_info_lib_native_lib">ネイティブ ライブラリ</string>
+    <string name="av_info_lib_no_data">データなし</string>
+    <string name="av_info_lib_sec_marked">マークされた</string>
+    <string name="av_info_lib_sec_normal">普通</string>
+    <string name="av_info_lib_sec_minimized_self">最小化された自己</string>
+    <string name="av_info_lib_sec_minimized">最小化されたその他</string>
 </resources>

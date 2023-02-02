@@ -121,4 +121,10 @@
     <string name="av_ic_info_preview_rect">गोलाकार आयत पूर्वावलोकन</string>
     <string name="av_ic_info_preview_squircle">सुपरएलिप्स पूर्वावलोकन</string>
     <string name="av_ic_info_preview_round">गोल पूर्वावलोकन</string>
+    <string name="av_info_lib_native_lib">नेटिव्ह लायब्ररी</string>
+    <string name="av_info_lib_no_data">माहिती उपलब्ध नाही</string>
+    <string name="av_info_lib_sec_marked">चिन्हांकित</string>
+    <string name="av_info_lib_sec_normal">सामान्य</string>
+    <string name="av_info_lib_sec_minimized_self">लहान-स्व</string>
+    <string name="av_info_lib_sec_minimized">लहान केले-इतर</string>
 </resources>

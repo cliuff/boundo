@@ -121,4 +121,10 @@
     <string name="av_ic_info_preview_rect">둥근 사각형 미리보기</string>
     <string name="av_ic_info_preview_squircle">초타원 미리보기</string>
     <string name="av_ic_info_preview_round">라운드 미리보기</string>
+    <string name="av_info_lib_native_lib">네이티브 라이브러리</string>
+    <string name="av_info_lib_no_data">자료 없음</string>
+    <string name="av_info_lib_sec_marked">두드러진</string>
+    <string name="av_info_lib_sec_normal">정상</string>
+    <string name="av_info_lib_sec_minimized_self">최소화된 자아</string>
+    <string name="av_info_lib_sec_minimized">최소화 기타</string>
 </resources>

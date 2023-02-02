@@ -121,4 +121,10 @@
     <string name="av_ic_info_preview_rect">Предварительный просмотр прямоугольника со скругленными углами</string>
     <string name="av_ic_info_preview_squircle">Предварительный просмотр суперэллипса</string>
     <string name="av_ic_info_preview_round">Предварительный просмотр раунда</string>
+    <string name="av_info_lib_native_lib">Родная библиотека</string>
+    <string name="av_info_lib_no_data">Данные недоступны</string>
+    <string name="av_info_lib_sec_marked">Отмечено</string>
+    <string name="av_info_lib_sec_normal">Обычный</string>
+    <string name="av_info_lib_sec_minimized_self">Свернутое я</string>
+    <string name="av_info_lib_sec_minimized">Свернутое другое</string>
 </resources>

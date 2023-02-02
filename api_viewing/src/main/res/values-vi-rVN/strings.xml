@@ -121,4 +121,10 @@
     <string name="av_ic_info_preview_rect">Bản xem trước hình chữ nhật tròn</string>
     <string name="av_ic_info_preview_squircle">Bản xem trước Superellipse</string>
     <string name="av_ic_info_preview_round">Xem trước vòng</string>
+    <string name="av_info_lib_native_lib">Thư viện gốc</string>
+    <string name="av_info_lib_no_data">Không có dữ liệu</string>
+    <string name="av_info_lib_sec_marked">đánh dấu</string>
+    <string name="av_info_lib_sec_normal">Bình thường</string>
+    <string name="av_info_lib_sec_minimized_self">tự thu nhỏ</string>
+    <string name="av_info_lib_sec_minimized">thu nhỏ-khác</string>
 </resources>

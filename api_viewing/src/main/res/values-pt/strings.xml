@@ -121,4 +121,10 @@
     <string name="av_ic_info_preview_rect">Visualização do retângulo arredondado</string>
     <string name="av_ic_info_preview_squircle">Visualização da superelipse</string>
     <string name="av_ic_info_preview_round">Pré-visualização da rodada</string>
+    <string name="av_info_lib_native_lib">Biblioteca nativa</string>
+    <string name="av_info_lib_no_data">Nenhum dado disponível</string>
+    <string name="av_info_lib_sec_marked">marcado</string>
+    <string name="av_info_lib_sec_normal">Normal</string>
+    <string name="av_info_lib_sec_minimized_self">auto-minimizado</string>
+    <string name="av_info_lib_sec_minimized">Minimizado-outro</string>
 </resources>

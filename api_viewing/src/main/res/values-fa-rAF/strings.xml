@@ -141,4 +141,10 @@
     <string name="av_ic_info_preview_rect">پیش نمایش مستطیل گرد</string>
     <string name="av_ic_info_preview_squircle">پیش نمایش Superellipse</string>
     <string name="av_ic_info_preview_round">پیش نمایش دور</string>
+    <string name="av_info_lib_native_lib">کتابخانه بومی</string>
+    <string name="av_info_lib_no_data">اطلاعاتی موجود نیست</string>
+    <string name="av_info_lib_sec_marked">علامت گذاری شده است</string>
+    <string name="av_info_lib_sec_normal">طبیعی</string>
+    <string name="av_info_lib_sec_minimized_self">خود را به حداقل رساند</string>
+    <string name="av_info_lib_sec_minimized">به حداقل رساندن - دیگر</string>
 </resources>

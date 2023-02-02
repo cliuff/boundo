@@ -121,4 +121,10 @@
     <string name="av_ic_info_preview_rect">Προεπισκόπηση στρογγυλεμένου ορθογωνίου</string>
     <string name="av_ic_info_preview_squircle">Προεπισκόπηση Superellipse</string>
     <string name="av_ic_info_preview_round">Στρογγυλή προεπισκόπηση</string>
+    <string name="av_info_lib_native_lib">Εγγενής Βιβλιοθήκη</string>
+    <string name="av_info_lib_no_data">Δεν υπάρχουν διαθέσιμα δεδομένα</string>
+    <string name="av_info_lib_sec_marked">Μαρκαρισμένος</string>
+    <string name="av_info_lib_sec_normal">Κανονικός</string>
+    <string name="av_info_lib_sec_minimized_self">Ελαχιστοποιημένος εαυτός</string>
+    <string name="av_info_lib_sec_minimized">Ελαχιστοποιημένο-άλλο</string>
 </resources>

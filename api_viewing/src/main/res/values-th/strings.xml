@@ -121,4 +121,10 @@
     <string name="av_ic_info_preview_rect">ตัวอย่างสี่เหลี่ยมผืนผ้าโค้งมน</string>
     <string name="av_ic_info_preview_squircle">ตัวอย่าง Superellipse</string>
     <string name="av_ic_info_preview_round">ตัวอย่างรอบ</string>
+    <string name="av_info_lib_native_lib">ห้องสมุดพื้นเมือง</string>
+    <string name="av_info_lib_no_data">ไม่มีข้อมูลที่สามารถใช้ได้</string>
+    <string name="av_info_lib_sec_marked">ทำเครื่องหมาย</string>
+    <string name="av_info_lib_sec_normal">ปกติ</string>
+    <string name="av_info_lib_sec_minimized_self">ลดขนาดตัวเอง</string>
+    <string name="av_info_lib_sec_minimized">ย่อส่วนอื่น ๆ</string>
 </resources>
