@@ -104,8 +104,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/LaunchScreen"
-        android:enableOnBackInvokedCallback="true"
+        android:enableOnBackInvokedCallback="false"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
+        <!-- disable OnBackInvokedCallback before official support is out -->
+        <!-- for it causes flickering right now on Android 13 -->
 
         <!-- Activities -->
         <activity

@@ -16,9 +16,13 @@
 
 package com.madness.collision.unit.api_viewing.origin
 
+import android.Manifest
 import android.content.Context
 import android.content.pm.PackageInfo
+import android.util.Log
 import com.madness.collision.misc.PackageCompat
+import com.madness.collision.util.PermissionUtils
+import com.madness.collision.util.os.OsUtils
 
 /**
  * Retrieve packages from user's device
@@ -26,6 +30,11 @@ import com.madness.collision.misc.PackageCompat
 internal class PackageRetriever(private val context: Context) : OriginRetriever<PackageInfo> {
 
     override fun get(predicate: ((PackageInfo) -> Boolean)?): List<PackageInfo> {
+        if (OsUtils.satisfy(OsUtils.R)) {
+            val permission = Manifest.permission.QUERY_ALL_PACKAGES
+            val isGranted = PermissionUtils.check(context, arrayOf(permission)).isEmpty()
+            if (!isGranted) Log.d("av.origin.pack", "$permission not granted")
+        }
         val list = PackageCompat.getAllPackages(context.packageManager)
         return if (predicate != null) list.filter(predicate) else list
     }

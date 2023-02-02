@@ -188,38 +188,23 @@ internal class AppListService(private val serviceContext: Context? = null) {
     fun getAppExtendedDetailsSequence(context: Context, appInfo: ApiViewingApp, pkgInfo: PackageInfo) = sequence<AppInfoItem> {
         var pi = pkgInfo
         var permissions: Array<String> = emptyArray()
-        var activities: Array<ActivityInfo> = emptyArray()
-        var receivers: Array<ActivityInfo> = emptyArray()
-        var services: Array<ServiceInfo> = emptyArray()
-        var providers: Array<ProviderInfo> = emptyArray()
 
-        val flagGetDisabled = if (OsUtils.satisfy(OsUtils.N)) PackageManager.MATCH_DISABLED_COMPONENTS
-        else flagGetDisabledLegacy
-        val flagSignature = if (X.aboveOn(X.P)) PackageManager.GET_SIGNING_CERTIFICATES
-        else getSigFlagLegacy
-        val flags = PackageManager.GET_PERMISSIONS or PackageManager.GET_ACTIVITIES or
-                PackageManager.GET_RECEIVERS or PackageManager.GET_SERVICES or
-                PackageManager.GET_PROVIDERS or flagGetDisabled or flagSignature
+        val flagGetDisabled = when {
+            OsUtils.satisfy(OsUtils.N) -> PackageManager.MATCH_DISABLED_COMPONENTS
+            else -> flagGetDisabledLegacy
+        }
+        val flagSignature = when {
+            OsUtils.satisfy(OsUtils.P) -> PackageManager.GET_SIGNING_CERTIFICATES
+            else -> getSigFlagLegacy
+        }
+        val flags = PackageManager.GET_PERMISSIONS or flagGetDisabled or flagSignature
         val reDetails = retrieveOn(context, appInfo, flags, "details")
         if (reDetails != null) {
             pi = reDetails
             permissions = pi.requestedPermissions ?: emptyArray()
-            activities = pi.activities ?: emptyArray()
-            receivers = pi.receivers ?: emptyArray()
-            services = pi.services ?: emptyArray()
-            providers = pi.providers ?: emptyArray()
         } else {
             retrieveOn(context, appInfo, PackageManager.GET_PERMISSIONS, "permissions")?.let {
                 permissions = it.requestedPermissions ?: emptyArray()
-            }
-            retrieveOn(context, appInfo, PackageManager.GET_ACTIVITIES or flagGetDisabled, "activities")?.let {
-                activities = it.activities ?: emptyArray()
-            }
-            retrieveOn(context, appInfo, PackageManager.GET_RECEIVERS or flagGetDisabled, "receivers")?.let {
-                receivers = it.receivers ?: emptyArray()
-            }
-            retrieveOn(context, appInfo, PackageManager.GET_SERVICES or flagGetDisabled, "services")?.let {
-                services = it.services ?: emptyArray()
             }
             retrieveOn(context, appInfo, flagSignature, "signing")?.let {
                 pi = it
@@ -297,11 +282,6 @@ internal class AppListService(private val serviceContext: Context? = null) {
             yield(R.string.text_no_content)
             yieldLineBreak()
         }
-
-        appendCompSection(context, RAv.string.apiDetailsActivities, activities)
-        appendCompSection(context, RAv.string.apiDetailsReceivers, receivers)
-        appendCompSection(context, RAv.string.apiDetailsServices, services)
-        appendCompSection(context, RAv.string.apiDetailsProviders, providers)
     }
 
     fun getInstallerName(context: Context, installer: String?): String {
@@ -331,25 +311,6 @@ internal class AppListService(private val serviceContext: Context? = null) {
         yieldLineBreak()
         yield(titleId.boldItem)
         yieldLineBreak()
-    }
-
-    private suspend fun SequenceScope<AppInfoItem>.appendComp(context: Context, components: Array<out ComponentInfo>) {
-        if (components.isNotEmpty()) {
-            Arrays.sort(components) { o1, o2 -> o1.name.compareTo(o2.name) }
-            for (p in components) {
-                yield(p.name)
-                yieldLineBreak()
-            }
-        } else {
-            yield(R.string.text_no_content)
-            yieldLineBreak()
-        }
-    }
-
-    private suspend fun SequenceScope<AppInfoItem>.appendCompSection(
-            context: Context, titleId: Int, components: Array<out ComponentInfo>) {
-        appendSection(context, titleId)
-        appendComp(context, components)
     }
 
     @Suppress("deprecation")

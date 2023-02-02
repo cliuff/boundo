@@ -169,7 +169,7 @@
     <string name="toast_permission_storage_denied">Por favor otorgue el permiso para que podamos leer / escribir datos</string>
     <string name="twLiveWallpaperDesc">Cambie al fondo de pantalla oscuro automáticamente cuando el tema oscuro esté habilitado</string>
     <string name="twService">Fondo animado temático</string>
-    <string name="unit_audio_timer">Temporizador de audio</string>
+    <string name="unit_audio_timer">Temporiz. de audio</string>
     <string name="units">Modulos</string>
     <string name="unitsManager">Gestor del módulo</string>
     <string name="updateDownload">Descargar</string>

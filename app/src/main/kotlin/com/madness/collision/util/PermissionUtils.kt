@@ -25,7 +25,7 @@ import androidx.core.content.getSystemService
 import com.madness.collision.BuildConfig
 import com.madness.collision.util.os.OsUtils
 
-internal object PermissionUtils {
+object PermissionUtils {
 
     fun check(context: Context, permissions: Array<String>): List<String> {
         return permissions.filter {

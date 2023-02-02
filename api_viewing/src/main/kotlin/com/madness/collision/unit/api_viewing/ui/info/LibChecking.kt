@@ -16,6 +16,7 @@
 
 package com.madness.collision.unit.api_viewing.ui.info
 
+import android.content.Context
 import android.util.Log
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
@@ -50,6 +51,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
 @Composable
@@ -76,6 +80,7 @@ fun LibPage(
     var scrollNotifier by remember(pkgName) { mutableStateOf(-1 to PackCompType.Activity) }
     val scope = rememberCoroutineScope()
     val listState = rememberLazyListState()
+    val libListState = remember(itemCollection, listState) { LibListState(itemCollection, listState, context) }
     var lastListTypeIndex = remember { 0 }
     val listIndexNotifier by remember(listTypeIndexMap) {
         derivedStateOf {
@@ -111,7 +116,7 @@ fun LibPage(
                     CompTab("Tags", selected = tabIndex == selTabIndex, loading = false, onClick = click@{
                         if (selTabIndex == tabIndex) return@click
                         selTabIndex = tabIndex
-                        scope.launch { listState.scrollToItem(0) }
+                        scope.launch { libListState.scrollToItem(0) }
                     })
                 } else {
                     val compType = compTypeList[tabIndex - 1]
@@ -132,17 +137,15 @@ fun LibPage(
                                 loadingTypes[compType] = true
                                 withContext(Dispatchers.IO) {
                                     // load the last type as well since it is preloaded by lazy column
-                                    lastCompType?.let { type ->
-                                        launch { itemCollection.loadType(context, app, type) }
-                                    }
-                                    itemCollection.loadType(context, app, compType)
+                                    val types = listOfNotNull(lastCompType, compType)
+                                    libListState.loadType(app, *types.toTypedArray())
                                 }
                                 loadingTypes[compType] = false
                                 val nextValue = itemCollectionNotifier + 1
                                 scrollNotifier = nextValue to compType
                                 itemCollectionNotifier = nextValue
                             } else {
-                                listState.scrollToItem(itemCollection.getTypeIndex(compType))
+                                libListState.scrollToItem(itemCollection.getTypeIndex(compType))
                             }
                         }
                     })
@@ -151,7 +154,7 @@ fun LibPage(
         }
         ComponentList(modifier, notifierCollection, listState, contentPadding, loadCompType = { type ->
             scope.launch(Dispatchers.IO) {
-                itemCollection.loadType(context, app, type)
+                libListState.loadType(app, type)
                 withContext(Dispatchers.Main) { itemCollectionNotifier++ }
             }
         }, listContent)
@@ -167,9 +170,42 @@ fun LibPage(
                 scrollNotifier = scrollN - 1 to compType
                 scope.launch {
                     val itemIndex = itemCollection.getTypeIndex(compType)
-                    listState.scrollToItem(itemIndex)
+                    libListState.scrollToItem(itemIndex)
                     Log.d("LIB-TYPE", "$scrollN/index:$itemIndex")
                 }
+            }
+        }
+    }
+}
+
+class LibListState(
+    private val compCollection: PackCompCollection,
+    private val state: LazyListState,
+    private val context: Context
+) {
+    private val loadMutex = Mutex()
+    private val scrollMutex = Mutex()
+
+    suspend fun loadType(app: ApiViewingApp, vararg type: PackCompType) {
+        // use loadMutex to forbid parallel loading
+        loadMutex.withLock {
+            when (type.size) {
+                0 -> Unit
+                1 -> compCollection.loadType(context, app, type[0])
+                else -> supervisorScope {
+                    type.forEach { t ->
+                        launch { compCollection.loadType(context, app, t) }
+                    }
+                }
+            }
+        }
+    }
+
+    suspend fun scrollToItem(index: Int) {
+        // use loadMutex to forbid scrolling when loading
+        loadMutex.withLock {
+            scrollMutex.withLock {
+                state.scrollToItem(index)
             }
         }
     }
@@ -356,7 +392,8 @@ private fun ComponentList(
                     val compSection = sections[sectionIndex].key
                     val itemList = sections[sectionIndex].value
             //                Log.d("LIB", "$typeIndex, $sectionIndex")
-                    if (sectionIndex > 0 && itemList.isNotEmpty() && sections[sectionIndex - 1].value.isNotEmpty()) {
+                    if (sectionIndex > 0 && itemList.isNotEmpty() &&
+                        (0 until sectionIndex).any { sections[it].value.isNotEmpty() }) {
                         item {
                             Divider(
                                 modifier = Modifier.padding(vertical = 5.dp).padding(start = 20.dp),
