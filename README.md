@@ -1,17 +1,16 @@
 # Boundo
 
 **Requirements**
-- Android Studio Dolphin Patch 1 (AGP 7.3.1)
-- Gradle Wrapper 7.5.1
-- Java 11
-- Kotlin 1.8.0
-- Jetpack Compose Compiler 1.4.0 (requires Kotlin <= 1.8.0)
+- Android Studio `Electric Eel Patch 1` (AGP `7.4.1`)
+- Gradle Wrapper `7.5.1`
+- Java `11`
+- Kotlin `1.8.0`
+- Jetpack Compose Compiler `1.4.0` (requires Kotlin <= `1.8.0`)
 
 **After Git check-out**
-- Clone project `Apk Parser` from (https://github.com/cliuff/apk-parser.git) into `subproject`, 
-  resulting in `ROOT_DIR/subproject/apk-parser`
-- Copy the file named `custom.properties.template` in project root directory and rename it to `custom.properties`
-- Make necessary changes to `custom.properties`
+- Clone project [**Apk Parser**](https://github.com/cliuff/apk-parser.git) into `subproject`, resulting in `ROOT_DIR/subproject/apk-parser`
+- **Copy** the file named `custom.properties.template` in project root directory,
+  **rename** it to `custom.properties` and make necessary **change**s to it
 
 **After Gradle sync**
 - Adjust **Run/Debug Configurations** settings
