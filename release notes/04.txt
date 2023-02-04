@@ -1,0 +1,14 @@
+
+
+- **4.0.0** 23020415
+<en-US>
+Boundo 4.0.0 update:
+• Check app's libraries used, powered by LibChecker
+• Remove School Timetable feature
+• Drop Android 5.x support
+</en-US>
+<zh-CN>
+斑朵4.0.0更新：
+• LibChecker规则集成：查看app所使用的库
+• 移除课程表功能和安卓5.x版本支持
+</zh-CN>

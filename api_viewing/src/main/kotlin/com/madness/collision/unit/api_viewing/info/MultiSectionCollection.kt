@@ -29,9 +29,11 @@ interface MultiSectionCollection<Section, out Item> {
 
 open class SectionMapCollection<Section, Item> : MultiSectionCollection<Section, Item> {
     private val sectionMap: MutableMap<Section, List<Item>> = mutableMapOf()
-    override val size: Int get() = sectionMap.values.sumOf { it.size }
+    // use copy to avoid ConcurrentModificationException during iteration
+    private val sectionsCopy: Map<Section, List<Item>> get() = sectionMap.toMap()
+    override val size: Int get() = sectionsCopy.values.sumOf { it.size }
     override val sectionSize: Int get() = sectionMap.size
-    override val sectionItems: List<List<Item>> get() = sectionMap.values.toList()
+    override val sectionItems: List<List<Item>> get() = sectionsCopy.values.toList()
 
     override fun get(section: Section): List<Item> {
         return sectionMap[section].orEmpty()
@@ -41,6 +43,6 @@ open class SectionMapCollection<Section, Item> : MultiSectionCollection<Section,
         sectionMap[section] = items
     }
 
-    override fun entryIterator(): Iterator<Map.Entry<Section, List<Item>>> = sectionMap.entries.iterator()
-    override fun sectionIterator(): Iterator<List<Item>> = sectionMap.values.iterator()
+    override fun entryIterator(): Iterator<Map.Entry<Section, List<Item>>> = sectionsCopy.entries.iterator()
+    override fun sectionIterator(): Iterator<List<Item>> = sectionsCopy.values.iterator()
 }

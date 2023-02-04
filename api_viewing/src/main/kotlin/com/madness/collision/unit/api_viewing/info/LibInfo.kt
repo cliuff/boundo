@@ -22,10 +22,12 @@ import android.content.pm.PackageManager
 import android.util.Log
 import com.absinthe.rulesbundle.*
 import com.madness.collision.misc.PackageCompat
+import com.madness.collision.unit.api_viewing.R
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.util.ApkUtil
 import com.madness.collision.util.StringUtils
 import com.madness.collision.util.os.OsUtils
+import com.madness.collision.util.ui.appContext
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.io.File
@@ -208,11 +210,17 @@ object LibInfoRetriever {
             null
         }
         rule ?: return ValueComponent.Simple(compName)
-        val label = rule.label
+        val label = mapLocalizedLabelId(rule)?.let { appContext.getString(it) } ?: rule.label
         val iconId = IconResMap.getIconRes(rule.iconIndex)
         val isIconMono = IconResMap.isSingleColorIcon(rule.iconIndex)
         val mark = LibMarkImpl(label, iconId, isIconMono)
         return MarkedValueComp(mark, ValueComponent.Simple(compName))
+    }
+
+    private fun mapLocalizedLabelId(rule: RuleEntity) = when (rule.id) {
+        102, 104 -> R.string.av_lib_rule_cpp_shared
+        247, 297, 302, 303, 305, 307, 320, 329, 362, 366, 556, 723 -> R.string.av_lib_rule_alipay
+        else -> null
     }
 
     private fun getComponents(context: Context, app: ApiViewingApp): Map<PackCompType, Collection<ValueOwnerComp>> {

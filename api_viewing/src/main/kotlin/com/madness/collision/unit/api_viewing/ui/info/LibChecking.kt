@@ -50,8 +50,6 @@ import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.info.*
 import com.madness.collision.util.mainApplication
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.sync.Mutex
@@ -89,16 +87,15 @@ fun LibPage(
             val index = listState.firstVisibleItemIndex
             val i = TwoDimenPositions.getCurrentIndex(index, listTypeIndexMap, lastListTypeIndex)
             lastListTypeIndex = i
-            Log.d("LIB-TYPE", "lastListTypeIndex/index=$index/type=$i")
             if (index < nonCompItemCount) return@derivedStateOf -1
             i
         }
     }
-    LaunchedEffect(Unit) {
-        snapshotFlow { listState.firstVisibleItemIndex }
-            .onEach { Log.d("LIB-TYPE", "listState/firstVisibleItemIndex:$it") }
-            .launchIn(this)
-    }
+//    LaunchedEffect(Unit) {
+//        snapshotFlow { listState.firstVisibleItemIndex }
+//            .onEach { Log.d("LIB-TYPE", "listState/firstVisibleItemIndex:$it") }
+//            .launchIn(this)
+//    }
     val loadingTypes = remember { mutableStateMapOf<PackCompType, Boolean>() }
     val isDark = mainApplication.isDarkTheme
     val backGreenColor = if (isDark) Color(0xFF11293C) else Color(0xFFC3EED6)
@@ -107,8 +104,8 @@ fun LibPage(
             modifier = Modifier
                 .fillMaxWidth()
                 .animateContentSize()
-                .horizontalScroll(rememberScrollState())
                 .background(backGreenColor.copy(alpha = 0.45f))
+                .horizontalScroll(rememberScrollState())
                 .padding(horizontal = 20.dp, vertical = 2.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,

@@ -147,4 +147,6 @@
     <string name="av_info_lib_sec_normal">Normal</string>
     <string name="av_info_lib_sec_minimized_self">Minimized-self</string>
     <string name="av_info_lib_sec_minimized">Minimized-other</string>
+    <string name="av_lib_rule_cpp_shared">C++ shared library</string>
+    <string name="av_lib_rule_alipay">Alipay SDK</string>
 </resources>
