@@ -26,7 +26,7 @@ object Versions {
     const val androidxTestEspresso = "3.5.1"
 
     const val androidxCore = "1.9.0"
-    const val androidxComposeCompiler = "1.4.0"
+    const val androidxComposeCompiler = "1.4.2"
     const val androidxComposeRuntime = "1.3.3"
     const val androidxComposeFoundation = "1.3.1"
     const val androidxComposeUi = "1.3.3"
@@ -76,7 +76,7 @@ object Versions {
     const val jsoup = "1.15.3"
     const val junit4 = "4.13.2"
     const val junitJupiter = "5.8.1"
-    const val kotlin = "1.8.0"
+    const val kotlin = "1.8.10"
     const val kotlinCoroutines = "1.6.4"
     const val mpChart = "v3.1.0"
     const val openCsv = "5.7.1"

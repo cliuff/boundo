@@ -17,7 +17,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 object Versions {
-    const val kotlin = "1.8.0"
+    const val kotlin = "1.8.10"
 }
 
 buildscript {
@@ -25,7 +25,7 @@ buildscript {
         mavenCentral()
     }
     val versions = object {
-        val kotlin = "1.8.0"
+        val kotlin = "1.8.10"
     }
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}")
@@ -34,7 +34,7 @@ buildscript {
 
 plugins {
     val versions = object {
-        val kotlin = "1.8.0"
+        val kotlin = "1.8.10"
     }
     kotlin("jvm") version versions.kotlin
     id("java-gradle-plugin")

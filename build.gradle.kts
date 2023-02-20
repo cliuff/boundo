@@ -30,7 +30,7 @@ buildscript {
         }
     }
     val versions = object {
-        val kotlin = "1.8.0"  // Compose Compiler 1.4.0 requires Kotlin <= 1.8.0
+        val kotlin = "1.8.10"  // Compose Compiler 1.4.2 requires Kotlin <= 1.8.10
 //        val dokka = "0.10.1" // dokka and dokka gradle plugin
 //        val dokkaAndroidGradlePlugin = "0.9.18" // dokka android gradle plugin
         val gglHiltGradlePlugin = "2.38.1"  // 2.40.2 fails the build

@@ -4,8 +4,8 @@
 - Android Studio `Electric Eel Patch 1` (AGP `7.4.1`)
 - Gradle Wrapper `7.5.1`
 - Java `11`
-- Kotlin `1.8.0`
-- Jetpack Compose Compiler `1.4.0` (requires Kotlin <= `1.8.0`)
+- Kotlin `1.8.10`
+- Jetpack Compose Compiler `1.4.2` (requires Kotlin <= `1.8.10`)
 
 **After Git check-out**
 - Clone project [**Apk Parser**](https://github.com/cliuff/apk-parser.git) into `subproject`, resulting in `ROOT_DIR/subproject/apk-parser`
