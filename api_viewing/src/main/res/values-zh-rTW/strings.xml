@@ -109,7 +109,7 @@
     <string name="av_tag_ali_push_normal">阿里雲行動推送</string>
     <string name="av_tag_full_64bit">全 64 位元</string>
     <string name="av_tag_full_64bit_normal">全 64 位元</string>
-    <string name="av_tag_full_64bit_full">全 64 位元（ARM 64 位元、x86 64 位元）</string>
+    <string name="av_tag_full_64bit_full">全 64 位元 (ARM 64 位元、x86 64 位元)</string>
     <string name="av_tag_arm_32bit">ARM 32 位元</string>
     <string name="av_tag_arm_64bit">ARM 64 位元</string>
     <string name="av_tag_result_service">在這個應用程式中找到了 %s</string>
