@@ -1,7 +1,7 @@
 # Boundo
 
 **Requirements**
-- Android Studio `Electric Eel Patch 1` (AGP `7.4.1`)
+- Android Studio `Electric Eel Patch 2` (AGP `7.4.2`)
 - Gradle Wrapper `7.5.1`
 - Java `11`
 - Kotlin `1.8.10`

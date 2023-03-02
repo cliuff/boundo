@@ -35,7 +35,7 @@ buildscript {
 //        val dokkaAndroidGradlePlugin = "0.9.18" // dokka android gradle plugin
         val gglHiltGradlePlugin = "2.38.1"  // 2.40.2 fails the build
         val googlePlayServicesOSSLicensesPlugin = "0.10.6"
-        val androidGradlePlugin = "7.4.1"  // 7.4.1-Electric Eel Patch 1
+        val androidGradlePlugin = "7.4.2"  // 7.4.2-Electric Eel Patch 2
     }
     dependencies {
         classpath("com.android.tools.build:gradle:${versions.androidGradlePlugin}")
