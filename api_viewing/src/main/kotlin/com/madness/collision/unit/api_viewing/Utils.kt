@@ -128,7 +128,7 @@ internal object Utils {
             context?.getString(it) ?: " "
         }
         return when (apiLevel) {
-            OsUtils.T -> if (fullName) "13" else "t"
+            OsUtils.T -> if (fullName) "Tiramisu" else "t"
             OsUtils.S_V2 -> if (fullName) "12L" else "s"
             OsUtils.S -> if (fullName) "12" else "s"
             X.R -> if (fullName) "11" else "r"

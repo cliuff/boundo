@@ -17,6 +17,7 @@
 package com.madness.collision.unit.api_viewing.stats
 
 import android.content.Context
+import android.os.Build
 import android.util.SparseIntArray
 import android.view.LayoutInflater
 import android.view.View
@@ -97,13 +98,11 @@ internal class StatsAdapter(context: Context) : SandwichAdapter<StatsAdapter.Hol
 
         optimizeSideMargin(index, 15f, innerMargin, holder.card)
 
-        val ver = when {
-            verInfo.api == OsUtils.DEV -> "Developer Preview"
-            verInfo.sdk.isEmpty() -> "API ${verInfo.api}"
-            else -> verInfo.sdk
+        holder.version.text = when {
+            verInfo.api == OsUtils.DEV -> "Android Preview"
+            verInfo.sdk.isEmpty() -> "Android API ${verInfo.api}"
+            else -> "Android ${verInfo.sdk}"
         }
-        val versionText = "Android $ver"
-        holder.version.text = versionText
         holder.count.text = statsCount.adapted
 
         // display a dot when API bigger than 99 (longer than 2 digits)
@@ -130,11 +129,18 @@ internal class StatsAdapter(context: Context) : SandwichAdapter<StatsAdapter.Hol
             }
         }
 
-        if (isSweet && verInfo.codeName(context) != verInfo.sdk) {
-            holder.codeName.text = verInfo.codeName(context)
-            holder.codeName.visibility = View.VISIBLE
-        } else {
-            holder.codeName.visibility = View.GONE
+        when {
+            verInfo.api == OsUtils.DEV && Build.VERSION.CODENAME != "REL" -> {
+                holder.codeName.text = Build.VERSION.CODENAME
+                holder.codeName.visibility = View.VISIBLE
+            }
+            isSweet && verInfo.codeName(context) != verInfo.sdk -> {
+                holder.codeName.text = verInfo.codeName(context)
+                holder.codeName.visibility = View.VISIBLE
+            }
+            else -> {
+                holder.codeName.visibility = View.GONE
+            }
         }
     }
 }

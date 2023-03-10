@@ -95,11 +95,16 @@ internal class AppListService(private val serviceContext: Context? = null) {
         yieldLineBreak()
 
         val sdkInfo = sdkInfo@ { ver: VerInfo ->
-            val androidVer = if (ver.api == OsUtils.DEV) "Developer Preview" else ver.sdk
-            if (androidVer.isEmpty()) return@sdkInfo ver.apiText
-            val sdk = "Android $androidVer"
-            val codeName = ver.codeName(context)
-            val sdkDetails = if (codeName != ver.sdk) "$sdk, $codeName" else sdk
+            val sdkDetails = when (ver.api) {
+                OsUtils.DEV -> "Android Preview"
+                else -> when (val androidVer = ver.sdk) {
+                    "" -> return@sdkInfo ver.apiText
+                    else -> when (val codeName = ver.codeName(context)) {
+                        androidVer -> "Android $androidVer"
+                        else -> "Android $androidVer, $codeName"
+                    }
+                }
+            }
             ver.apiText + context.getString(R.string.textParentheses, sdkDetails)
         }
 
