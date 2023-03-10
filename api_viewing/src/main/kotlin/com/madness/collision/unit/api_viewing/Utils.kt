@@ -112,6 +112,16 @@ internal object Utils {
         return androidCodenameInfo(context, api, true)
     }
 
+    fun getDevCodenameLetter(): Char? {
+        return when (Build.VERSION.CODENAME) {
+            "UpsideDownCake" -> 'u'
+            "TiramisuPrivacySandbox" -> 't'
+            "Tiramisu" -> 't'
+            "REL" -> null
+            else -> null
+        }
+    }
+
     private fun androidCodenameInfo(context: Context?, apiLevel: Int, fullName: Boolean): String {
         if (fullName) context ?: return " "
         val getString: (id: Int) -> String = {

@@ -65,6 +65,9 @@ internal class VerInfo(val api: Int, sdk: String, val letter: Char) {
     val displaySdk: String
         get() = if (api == X.DEV) "X" else sdk
 
+    val letterOrDev: Char
+        get() = if (api == X.DEV) Utils.getDevCodenameLetter() ?: letter else letter
+
     constructor(api: Int, isExact: Boolean = false, isCompact: Boolean = false)
             : this(api, Utils.getAndroidVersionByAPI(api, isExact, isCompact), Utils.getAndroidLetterByAPI(api))
 

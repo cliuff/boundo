@@ -114,7 +114,7 @@ internal class StatsAdapter(context: Context) : SandwichAdapter<StatsAdapter.Hol
             holder.logoText.setTextColor(colorText)
         }
         scope.launch(Dispatchers.Main) {
-            val seal = SealMaker.getBlurredFile(context, verInfo.letter, itemLength)
+            val seal = SealMaker.getBlurredFile(context, verInfo.letterOrDev, itemLength)
             seal?.let { holder.logoBack.load(it) }
         }
 
@@ -124,7 +124,7 @@ internal class StatsAdapter(context: Context) : SandwichAdapter<StatsAdapter.Hol
             holder.card.setCardBackgroundColor(itemBack)
 
             scope.launch(Dispatchers.Main) {
-                val seal = SealMaker.getSealFile(context, verInfo.letter, itemLength)
+                val seal = SealMaker.getSealFile(context, verInfo.letterOrDev, itemLength)
                 holder.seal.isVisible = seal != null
                 seal?.let { holder.seal.load(it) }
             }

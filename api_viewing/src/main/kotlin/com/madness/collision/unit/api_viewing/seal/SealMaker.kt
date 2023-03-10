@@ -25,6 +25,7 @@ import android.graphics.Paint
 import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 import com.madness.collision.R
+import com.madness.collision.unit.api_viewing.Utils
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.util.*
 import com.madness.collision.util.os.OsUtils
@@ -43,6 +44,7 @@ object SealMaker {
     fun getAndroidCodenameImageRes(letter: Char): Int {
         if (!EasyAccess.isSweet) return 0
         return when (letter) {
+            'u' -> MyR.drawable.seal_u
             't' -> MyR.drawable.seal_t
             's' -> MyR.drawable.seal_s
             'r' -> MyR.drawable.seal_r_vector
@@ -82,7 +84,18 @@ object SealMaker {
             val attrRes = if (isAccent) android.R.attr.textColor else R.attr.colorASurface
             return ThemeUtil.getColor(context, attrRes)
         }
-        when (apiLevel) {
+        val level = when (apiLevel) {
+            OsUtils.DEV -> when (Utils.getDevCodenameLetter()) {
+                't' -> OsUtils.T
+                else -> apiLevel
+            }
+            else -> apiLevel
+        }
+        when (level) {
+            OsUtils.DEV -> when (Utils.getDevCodenameLetter()) {
+                'u' -> if (isAccent) "a3c1d5" else "d7f0fb"
+                else -> if (isAccent) "c5e8b0" else X.getColorHex(context, R.color.androidRobotGreenBack)
+            }
             OsUtils.T -> if (isAccent) "a3d5c1" else "d7fbf0"
             OsUtils.S, OsUtils.S_V2 -> if (isAccent) "acdcb2" else "defbde"
             X.R -> if (isAccent) "acd5c1" else "defbf0"

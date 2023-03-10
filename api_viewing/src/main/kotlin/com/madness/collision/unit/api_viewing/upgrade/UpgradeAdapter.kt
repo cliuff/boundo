@@ -104,7 +104,7 @@ internal class UpgradeAdapter(context: Context, listener: Listener, scope: Corou
             holder.preBack.setBackgroundColor(itemBack)
 
             scope.launch(Dispatchers.Main) {
-                val seal = SealMaker.getSealFile(context, verInfo.letter, itemLength)
+                val seal = SealMaker.getSealFile(context, verInfo.letterOrDev, itemLength)
                 holder.preSeal.isVisible = seal != null
                 seal?.let { holder.preSeal.load(it) }
             }

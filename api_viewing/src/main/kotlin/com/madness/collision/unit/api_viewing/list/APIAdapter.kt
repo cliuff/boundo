@@ -240,7 +240,7 @@ internal open class APIAdapter(context: Context, private val listener: Listener,
             holder.card.setCardBackgroundColor(itemBack)
 
             scope.launch(Dispatchers.Main) {
-                val seal = SealMaker.getSealFile(context, verInfo.letter, itemLength)
+                val seal = SealMaker.getSealFile(context, verInfo.letterOrDev, itemLength)
                 holder.seal.isVisible = seal != null
                 seal?.let { holder.seal.load(it) }
             }

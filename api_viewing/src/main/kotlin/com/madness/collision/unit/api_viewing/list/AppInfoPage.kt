@@ -312,16 +312,17 @@ fun NestedScrollParent(content: @Composable () -> Unit) {
 @Composable
 private fun AppHeaderContent(cardColor: Color, modifier: Modifier = Modifier) {
     val app = LocalApp.current
+    val sealVerInfo = remember { VerInfo.targetDisplay(app) }
     var seal: File? by remember {
         // load initial value
-        val file = if (EasyAccess.isSweet) SealMaker.getSealCacheFile(app.targetSDKLetter) else null
+        val file = if (EasyAccess.isSweet) SealMaker.getSealCacheFile(sealVerInfo.letterOrDev) else null
         mutableStateOf(file)
     }
     val context = LocalContext.current
     if (seal == null && EasyAccess.isSweet) {
         val itemWidth = with(LocalDensity.current) { 45.dp.roundToPx() }
         LaunchedEffect(Unit) {
-            seal = SealMaker.getSealFile(context, app.targetSDKLetter, itemWidth)
+            seal = SealMaker.getSealFile(context, sealVerInfo.letterOrDev, itemWidth)
         }
     }
     Column(modifier = modifier.fillMaxWidth()) {
