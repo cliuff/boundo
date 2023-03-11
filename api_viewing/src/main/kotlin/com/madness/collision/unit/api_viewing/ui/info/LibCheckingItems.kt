@@ -122,10 +122,16 @@ private fun MarkedSimpleLibItem(item: MarkedComponent, enabled: Boolean = true, 
                 fontSize = 8.sp,
                 lineHeight = 8.sp,
             )
+            if (!enabled) {
+                Spacer(modifier = Modifier.width(4.dp))
+                CompLabelEnabledTag(
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f * textAlpha),
+                )
+            }
         }
         Text(
             text = item.comp.value,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.9f),
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.9f * textAlpha),
             fontSize = 9.sp,
             lineHeight = 9.sp,
         )
@@ -246,7 +252,8 @@ private fun MarkedAppCompItem(item: MarkedComponent, compUiType: MarkedCompUiTyp
 @Composable
 private fun MarkedSimpleItem(item: MarkedComponent, compUiType: MarkedCompUiType, enabled: Boolean = true) {
     var showFullValues by remember { mutableStateOf(false) }
-    var itemValues: String? by remember { mutableStateOf(null) }
+    var itemValues: List<ValueComponent.AppComp>? by remember { mutableStateOf(null) }
+    var itemValuesString: String? by remember { mutableStateOf(null) }
     // constrain visibility and animate content size of ConstraintLayout instead of using AnimatedVisibility,
     // which does not work with ConstraintLayout (size change does not get recomposed)
     val constraints = remember(showFullValues) {
@@ -285,9 +292,18 @@ private fun MarkedSimpleItem(item: MarkedComponent, compUiType: MarkedCompUiType
                 if (item !is MarkedMergingComp<*>) return@click modifier
                 modifier.clickable {
                     showFullValues = !showFullValues
-                    if (itemValues != null) return@clickable
+                    if (itemValues != null || itemValuesString != null) return@clickable
                     coroutineScope.launch(Dispatchers.Default) {
-                        itemValues = item.components.drop(1).joinToString(separator = "\n") { it.value }
+                        when (compUiType) {
+                            is MarkedCompUiType.MergingSimple -> {
+                                itemValuesString = compUiType.comp.components.drop(1)
+                                    .joinToString(separator = "\n") { it.value }
+                            }
+                            is MarkedCompUiType.MergingAppComp -> {
+                                itemValues = compUiType.comp.components.drop(1)
+                            }
+                            else -> Unit
+                        }
                     }
                 }
             }
@@ -305,16 +321,42 @@ private fun MarkedSimpleItem(item: MarkedComponent, compUiType: MarkedCompUiType
                 alpha = if (enabled) 1f else 0.4f,
             )
         }
+        val (isDescEnabled, showDescEnabledTag, showFullDescEnabledTag) = when (compUiType) {
+            is MarkedCompUiType.MergingAppComp -> {
+                val compList = compUiType.comp.components
+                val isDescEnabled = compList[0].isEnabled
+                val showDescEnabledTag = enabled && compList[0].isEnabled.not()
+                val showFullDescEnabledTag = enabled && compList.distinctBy { it.isEnabled }.size > 1
+                Triple(isDescEnabled, showDescEnabledTag, showFullDescEnabledTag)
+            }
+            else -> Triple(enabled, false, false)
+        }
         val compNameColor = MaterialTheme.colorScheme.onSurface.copy(alpha = if (enabled) 0.8f else 0.5f)
-        val compItemColor = MaterialTheme.colorScheme.onSurface.copy(alpha = if (enabled) 0.9f else 0.65f)
-        CompLabel(
-            modifier = Modifier.layoutId("label"),
-            label = item.markedLabel,
-            labelColor = compNameColor,
-            descColor = compItemColor,
-            desc = item.comp.value,
-            descMaxLines = 2,
-        )
+        val compItemColor = MaterialTheme.colorScheme.onSurface.copy(alpha = if (isDescEnabled) 0.9f else 0.65f)
+        when (compUiType) {
+            is MarkedCompUiType.AppComp, is MarkedCompUiType.MergingAppComp -> {
+                AppCompLabel(
+                    modifier = Modifier.layoutId("label"),
+                    label = item.markedLabel,
+                    labelColor = compNameColor,
+                    descColor = compItemColor,
+                    desc = item.comp as ValueComponent.AppComp,
+                    descMaxLines = 2,
+                    enabled = enabled,
+                    showDescEnabledTag = showDescEnabledTag,
+                )
+            }
+            else -> {
+                CompLabel(
+                    modifier = Modifier.layoutId("label"),
+                    label = item.markedLabel,
+                    labelColor = compNameColor,
+                    descColor = compItemColor,
+                    desc = item.comp.value,
+                    descMaxLines = 2,
+                )
+            }
+        }
         val mergingSize = when (compUiType) {
             is MarkedCompUiType.MergingSimple -> compUiType.comp.components.size
             is MarkedCompUiType.MergingAppComp -> compUiType.comp.components.size
@@ -328,13 +370,27 @@ private fun MarkedSimpleItem(item: MarkedComponent, compUiType: MarkedCompUiType
                 icon = if (showFullValues) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore,
                 alpha = if (enabled) 1f else 0.5f,
             )
-            Text(
-                modifier = Modifier.layoutId("fullValues"),
-                text = itemValues.orEmpty(),
-                color = compItemColor,
-                fontSize = 7.sp,
-                lineHeight = 10.sp,
-            )
+            when (compUiType) {
+                is MarkedCompUiType.MergingSimple -> {
+                    Text(
+                        modifier = Modifier.layoutId("fullValues"),
+                        text = itemValuesString.orEmpty(),
+                        color = compItemColor,
+                        fontSize = 7.sp,
+                        lineHeight = 10.sp,
+                    )
+                }
+                is MarkedCompUiType.MergingAppComp -> {
+                    CompFullDesc(
+                        modifier = Modifier.layoutId("fullValues"),
+                        desc = itemValues.orEmpty(),
+                        normalColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.9f),
+                        disabledColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f),
+                        showDescEnabledTag = showFullDescEnabledTag,
+                    )
+                }
+                else -> Unit
+            }
         }
     }
 }
@@ -436,8 +492,9 @@ private fun CompIcon(modifier: Modifier = Modifier, iconId: Int, isMono: Boolean
 }
 
 @Composable
-private fun CompLabel(label: String, color: Color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)) {
+fun CompLabel(modifier: Modifier = Modifier, label: String, color: Color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)) {
     Text(
+        modifier = modifier,
         text = label,
         color = color,
         fontWeight = FontWeight.Medium,
