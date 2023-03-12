@@ -53,6 +53,9 @@ import androidx.compose.ui.window.Popup
 import androidx.core.graphics.drawable.toDrawable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
+import com.google.accompanist.flowlayout.FlowRow
+import com.google.accompanist.flowlayout.SizeMode
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.api_viewing.R
 import com.madness.collision.util.dev.DarkPreview
@@ -130,9 +133,9 @@ private fun IconInfoSection(i: Int, iconInfo: IconInfo) {
     val (_, icon, resName) = iconInfo
     if (i > 0) Spacer(modifier = Modifier.height(24.dp))
     Column(modifier = Modifier.padding(LocalContentMargin.current)) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.horizontalScroll(rememberScrollState()),
+        FlowRow(
+            mainAxisSize = SizeMode.Expand,
+            crossAxisAlignment = FlowCrossAxisAlignment.Center,
         ) {
             val items = remember { iconInfo.entry.all }
             items.forEachIndexed { index, item ->

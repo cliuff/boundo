@@ -72,6 +72,7 @@ object Versions {
     const val gglHilt = "2.40.2"
     // This dependency is set to compile only
     const val googleWearable = "2.8.1"
+    const val googleAccompanistFlowLayout = "0.28.0"
     const val coil = "2.2.2"
     const val jsoup = "1.15.3"
     const val junit4 = "4.13.2"
@@ -164,6 +165,7 @@ class Dependencies : Plugin<Project> {
         const val googleMaterialComponents = "com.google.android.material:material:${Versions.googleMaterialComponents}"
         const val googlePlayServicesOSSLicenses = "com.google.android.gms:play-services-oss-licenses:${Versions.googlePlayServicesOSSLicenses}"
         const val googlePlayServicesBasement = "com.google.android.gms:play-services-basement:${Versions.googlePlayServicesBasement}"
+        const val googleAccompanistFlowLayout = "com.google.accompanist:accompanist-flowlayout:${Versions.googleAccompanistFlowLayout}"
         const val coil = "io.coil-kt:coil:${Versions.coil}"
         const val coilCompose = "io.coil-kt:coil-compose:${Versions.coil}"
         const val jsoup = "org.jsoup:jsoup:${Versions.jsoup}"

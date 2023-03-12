@@ -63,7 +63,7 @@ fun PlainLibItem(item: PackComponent, horizontalPadding: Dp = 20.dp) {
         text = item.comp.value,
         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.9f),
         fontSize = 9.sp,
-        lineHeight = 10.sp,
+        lineHeight = 11.sp,
     )
 }
 
@@ -120,7 +120,7 @@ private fun MarkedSimpleLibItem(item: MarkedComponent, enabled: Boolean = true, 
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f * textAlpha),
                 fontWeight = FontWeight.Medium,
                 fontSize = 8.sp,
-                lineHeight = 8.sp,
+                lineHeight = 10.sp,
             )
             if (!enabled) {
                 Spacer(modifier = Modifier.width(4.dp))
@@ -133,7 +133,7 @@ private fun MarkedSimpleLibItem(item: MarkedComponent, enabled: Boolean = true, 
             text = item.comp.value,
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.9f * textAlpha),
             fontSize = 9.sp,
-            lineHeight = 9.sp,
+            lineHeight = 11.sp,
         )
     }
 }
@@ -499,7 +499,7 @@ fun CompLabel(modifier: Modifier = Modifier, label: String, color: Color = Mater
         color = color,
         fontWeight = FontWeight.Medium,
         fontSize = 9.sp,
-        lineHeight = 9.sp,
+        lineHeight = 11.sp,
     )
 }
 

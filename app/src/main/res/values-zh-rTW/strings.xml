@@ -80,7 +80,7 @@
     <string name="apiSdkTarget">目標 SDK</string>
     <string name="apiSdkMin">最低 SDK</string>
     <string name="text_refresh">重新整理</string>
-    <string name="textParentheses"> (%s)</string>
+    <string name="textParentheses">" (%s)"</string>
     <string name="textColon">：</string>
     <string name="tileData">本月數據用量</string>
     <string name="prefSettingsThemeDefault">淺色</string>

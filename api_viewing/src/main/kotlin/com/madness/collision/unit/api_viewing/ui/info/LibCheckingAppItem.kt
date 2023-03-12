@@ -31,10 +31,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Constraints
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.*
 import com.madness.collision.unit.api_viewing.R
 import com.madness.collision.unit.api_viewing.info.ValueComponent
 
@@ -65,16 +62,20 @@ fun AppCompLabel(
         }
         if (!showDescEnabledTag) {
             Text(
+                modifier = Modifier.padding(vertical = 0.5.dp),
                 text = desc.comp.value,
                 color = descColor,
                 fontSize = 7.sp,
-                lineHeight = 10.sp,
+                lineHeight = 8.sp,
                 maxLines = descMaxLines,
                 overflow = TextOverflow.Ellipsis,
             )
         } else {
             InlineEnabledDesc(
+                modifier = Modifier.padding(vertical = 0.5.dp),
                 desc = listOf(desc),
+                fontSize = 7.sp,
+                lineHeight = 8.sp,
                 normalColor = descColor,
                 disabledColor = descColor,
                 maxLines = descMaxLines,
@@ -120,21 +121,31 @@ fun CompFullDesc(
 ) {
     if (desc.isEmpty()) {
         Box(modifier = modifier)
-    } else if (!showDescEnabledTag) {
-        Text(
-            modifier = modifier,
-            text = desc.joinToString(separator = "\n") { it.value },
-            color = if (desc[0].isEnabled) normalColor else disabledColor,
-            fontSize = 7.sp,
-            lineHeight = 10.sp,
-        )
     } else {
-        InlineEnabledDesc(
-            modifier = modifier,
-            desc = desc,
-            normalColor = normalColor,
-            disabledColor = disabledColor
-        )
+        // use multiple items to have different line spacing
+        // between a. wrapping a line into two and b. two normal lines
+        Column(modifier = modifier) {
+            for (descItem in desc) {
+                if (!showDescEnabledTag) {
+                    Text(
+                        modifier = Modifier.padding(vertical = 0.5.dp),
+                        text = descItem.value,
+                        color = if (desc[0].isEnabled) normalColor else disabledColor,
+                        fontSize = 7.sp,
+                        lineHeight = 8.sp,
+                    )
+                } else {
+                    InlineEnabledDesc(
+                        modifier = Modifier.padding(vertical = 0.5.dp),
+                        desc = listOf(descItem),
+                        fontSize = 7.sp,
+                        lineHeight = 8.sp,
+                        normalColor = normalColor,
+                        disabledColor = disabledColor
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -142,6 +153,8 @@ fun CompFullDesc(
 private fun InlineEnabledDesc(
     modifier: Modifier = Modifier,
     desc: List<ValueComponent.AppComp>,
+    fontSize: TextUnit = TextUnit.Unspecified,
+    lineHeight: TextUnit = TextUnit.Unspecified,
     normalColor: Color,
     disabledColor: Color,
     maxLines: Int = Int.MAX_VALUE,
@@ -172,8 +185,8 @@ private fun InlineEnabledDesc(
             Text(
                 text = annotatedDesc,
                 color = normalColor,
-                fontSize = 7.sp,
-                lineHeight = 10.sp,
+                fontSize = fontSize,
+                lineHeight = lineHeight,
                 maxLines = maxLines,
                 overflow = TextOverflow.Ellipsis,
                 inlineContent = mapOf("disabledTag" to disabledTagTextContent),
