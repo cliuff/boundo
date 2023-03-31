@@ -67,6 +67,7 @@ internal object Utils {
 
     fun getAndroidVersionByAPI(api: Int, exact: Boolean, isCompact: Boolean = false): String {
         return when (api) {
+            OsUtils.U -> "14"
             OsUtils.T -> "13"
             OsUtils.S_V2 -> if (exact) "12L" else "12"
             OsUtils.S -> "12"
@@ -128,6 +129,7 @@ internal object Utils {
             context?.getString(it) ?: " "
         }
         return when (apiLevel) {
+            OsUtils.U -> if (fullName) "Upside Down Cake" else "u"
             OsUtils.T -> if (fullName) "Tiramisu" else "t"
             OsUtils.S_V2 -> if (fullName) "12L" else "s"
             OsUtils.S -> if (fullName) "12" else "s"

@@ -86,6 +86,7 @@ object SealMaker {
         }
         val level = when (apiLevel) {
             OsUtils.DEV -> when (Utils.getDevCodenameLetter()) {
+                'u' -> OsUtils.U
                 't' -> OsUtils.T
                 else -> apiLevel
             }
@@ -93,9 +94,9 @@ object SealMaker {
         }
         when (level) {
             OsUtils.DEV -> when (Utils.getDevCodenameLetter()) {
-                'u' -> if (isAccent) "a3c1d5" else "d7f0fb"
                 else -> if (isAccent) "c5e8b0" else X.getColorHex(context, R.color.androidRobotGreenBack)
             }
+            OsUtils.U -> if (isAccent) "a3c1d5" else "d7f0fb"
             OsUtils.T -> if (isAccent) "a3d5c1" else "d7fbf0"
             OsUtils.S, OsUtils.S_V2 -> if (isAccent) "acdcb2" else "defbde"
             X.R -> if (isAccent) "acd5c1" else "defbf0"
@@ -236,7 +237,11 @@ object SealMaker {
             drawBlurredColor(context, index)
         } else {
             val seal = getSealBitmap(context, index.value, itemLength) ?: return null
-            drawBlurredImage(context, seal)
+            val (offsetPointX, offsetPointY) = when (index.value) {
+                'u' -> 3 to 3
+                else -> 4 to 2
+            }
+            drawBlurredImage(context, seal, offsetPointX, offsetPointY)
         }
         val path = getBlurredPath(index)
         if (F.prepare4(path)) X.savePNG(bitmap, path)
@@ -254,12 +259,12 @@ object SealMaker {
         return bitmap
     }
 
-    private fun drawBlurredImage(context: Context, sealBitmap: Bitmap): Bitmap {
+    private fun drawBlurredImage(context: Context, sealBitmap: Bitmap, offsetPointX: Int, offsetPointY: Int): Bitmap {
         var seal: Bitmap = sealBitmap.collisionBitmap
         val targetLength = seal.width / 10
         val bitmapWidth = targetLength * 2
-        val sealOffsetX = targetLength * 4
-        val sealOffsetY = targetLength * 2
+        val sealOffsetX = targetLength * offsetPointX
+        val sealOffsetY = targetLength * offsetPointY
         val bitmap = Bitmap.createBitmap(bitmapWidth, bitmapWidth, Bitmap.Config.ARGB_8888)
         seal = Bitmap.createBitmap(seal, sealOffsetX, sealOffsetY, bitmap.width, bitmap.height)
         val canvas2Draw = Canvas(bitmap)
