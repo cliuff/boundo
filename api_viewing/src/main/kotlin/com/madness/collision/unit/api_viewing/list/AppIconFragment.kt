@@ -172,8 +172,15 @@ internal class AppIconFragment : TaggedFragment(), Democratic {
             else MiscApp.getApplicationInfo(context, packageName = packageName)
             appInfo ?: return@launch
 
+            val apkFile = File(if (isArchive) apkPath else appInfo.sourceDir)
+            if (apkFile.exists().not() || apkFile.canRead().not()) return@launch
             val pkgMan = context.packageManager
-            val res = pkgMan.getResourcesForApplication(appInfo)
+            val res = try {
+                pkgMan.getResourcesForApplication(appInfo)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                return@launch
+            }
             apkRes = res
             val iconJobs = listOf(
                 async {

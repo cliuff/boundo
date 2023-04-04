@@ -38,6 +38,8 @@ object ManifestUtil {
 
     fun getManifestAttr(file: File, attr: Array<String> = emptyArray()): String {
         return try {
+            if (file.exists().not()) throw Exception("File does not exist: ${file.path}")
+            if (file.canRead().not()) throw Exception("File can not be read: ${file.path}")
             ZipFile(file).use { zip ->
                 val entry = zip.getEntry("AndroidManifest.xml") ?: return@use ""
                 zip.getInputStream(entry).use {
@@ -52,7 +54,10 @@ object ManifestUtil {
 
     fun <R> mapAttrs(sourceDir: String, attrSet: Array<Array<String>>, block: (Int, String?) -> R): List<R>? {
         try {
-            val values = ZipFile(File(sourceDir)).use zip@{ zip ->
+            val file = File(sourceDir)
+            if (file.exists().not()) throw Exception("File does not exist: ${file.path}")
+            if (file.canRead().not()) throw Exception("File can not be read: ${file.path}")
+            val values = ZipFile(file).use zip@{ zip ->
                 val entry = zip.getEntry("AndroidManifest.xml") ?: return@zip null
                 attrSet.mapIndexed icon@{ index, attr ->
                     try {

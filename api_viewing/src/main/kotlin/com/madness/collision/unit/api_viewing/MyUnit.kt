@@ -428,12 +428,6 @@ class MyUnit: com.madness.collision.unit.Unit() {
         AppTag.loadTagSettings(context, settingsPreferences, false)
     }
 
-    override fun onLowMemory() {
-        super.onLowMemory()
-        val context = context ?: return
-        X.toast(context, "Out of memory", Toast.LENGTH_LONG)
-    }
-
     /**
      * Reload app list completely
      */

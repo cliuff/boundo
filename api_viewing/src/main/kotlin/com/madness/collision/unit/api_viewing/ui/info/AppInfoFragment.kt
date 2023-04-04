@@ -50,15 +50,23 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class AppInfoFragment(private val appPkgName: String) : BottomSheetDialogFragment(), SystemBarMaintainerOwner {
+class AppInfoFragment() : BottomSheetDialogFragment(), SystemBarMaintainerOwner {
     private val mainViewModel: MainViewModel by activityViewModels()
     private var infoApp: ApiViewingApp? = null
     private var _composeView: ComposeView? = null
     private val composeView: ComposeView get() = _composeView!!
     override val systemBarMaintainer: SystemBarMaintainer = DialogFragmentSystemBarMaintainer(this)
+    private val appPkgName: String get() = arguments?.getString(ARG_PKG_NAME) ?: ""
 
     companion object {
         const val TAG = "AppInfoFragment"
+        private const val ARG_PKG_NAME = "argPkgName"
+    }
+
+    constructor(pkgName: String) : this() {
+        arguments = (arguments ?: Bundle()).apply {
+            putString(ARG_PKG_NAME, pkgName)
+        }
     }
 
     constructor(app: ApiViewingApp) : this(app.packageName) {

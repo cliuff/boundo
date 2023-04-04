@@ -71,7 +71,7 @@ internal object AppInfo {
         return info?.activityInfo?.packageName
     }
 
-    fun getAppInfoOwnerSet(context: Context): Set<String> {
+    fun getAppInfoOwners(context: Context): Map<String, String> {
         val intent = Intent(actionShowAppInfo)
         val activities = run a@{
             val pkgMan = context.packageManager
@@ -79,7 +79,12 @@ internal object AppInfo {
             val flags = PackageManager.ResolveInfoFlags.of(0)
             pkgMan.queryIntentActivities(intent, flags)
         }
-        return activities.mapTo(LinkedHashSet(activities.size)) { it.activityInfo.packageName }
+        return buildMap(activities.size) {
+            for (activity in activities) {
+                val info = activity.activityInfo ?: continue
+                put(info.packageName, info.name)
+            }
+        }
     }
 
     private fun getTagViewInfo(tag: AppTagInfo, res: AppTagInfo.Resources, context: Context) = run m@{

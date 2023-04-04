@@ -16,6 +16,7 @@
 
 package com.madness.collision.unit.api_viewing.list
 
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import androidx.compose.foundation.*
@@ -130,12 +131,12 @@ private const val infoAppManager = "io.github.muntashirakon.AppManager.details.A
 private fun ExternalActions() {
     val context = LocalContext.current
     pkgDefaultSettings = remember { pkgDefaultSettings ?: AppInfo.getDefaultSettings(context) }
-    val appInfoOwners = remember { AppInfo.getAppInfoOwnerSet(context) }
+    val appInfoOwners = remember { AppInfo.getAppInfoOwners(context) }
     val storePkgNames = remember {
         val extras = arrayOf(ApiViewingApp.packagePlayStore, ApiViewingApp.packageCoolApk)
         buildSet(extras.size + appInfoOwners.size + 2) {
             addAll(extras)
-            addAll(appInfoOwners)
+            addAll(appInfoOwners.keys)
             add(packageAppManager)
             add(packageSettings)
             remove(BuildConfig.APPLICATION_ID)
@@ -170,19 +171,24 @@ private fun ExternalActions() {
             if (i > 0) Spacer(modifier = Modifier.width(10.dp))
             val (pkgName, p) = activeStores[i]
             ExternalActionItem(p) {
-                launchOwner(pkgName in appInfoOwners, pkgName, app, context)
+                val owner = pkgName to appInfoOwners[pkgName]
+                launchOwner(pkgName in appInfoOwners, owner, app, context)
             }
         }
     }
 }
 
-private fun launchOwner(isStandard: Boolean, pkgName: String, app: ApiViewingApp, context: Context) {
+private fun launchOwner(isStandard: Boolean, owner: Pair<String, String?>, app: ApiViewingApp, context: Context) {
+    val (pkgName, ownerActivity) = owner
     when {
         isStandard -> {
             val intent = Intent(AppInfo.actionShowAppInfo)
                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 .putExtra(AppInfo.extraPackageName, app.packageName)
-                .setPackage(pkgName)
+            when (ownerActivity) {
+                null -> intent.setPackage(pkgName)
+                else -> intent.component = ComponentName(pkgName, ownerActivity)
+            }
             safely { context.startActivity(intent) }
         }
         pkgName == packageSettings -> {
