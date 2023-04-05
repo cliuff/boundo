@@ -127,4 +127,5 @@
     <string name="av_info_lib_sec_normal">सामान्य</string>
     <string name="av_info_lib_sec_minimized_self">लहान-स्व</string>
     <string name="av_info_lib_sec_minimized">लहान केले-इतर</string>
+    <string name="av_info_lib_comp_disabled">अक्षम</string>
 </resources>

@@ -127,4 +127,5 @@
     <string name="av_info_lib_sec_normal">Обычный</string>
     <string name="av_info_lib_sec_minimized_self">Свернутое я</string>
     <string name="av_info_lib_sec_minimized">Свернутое другое</string>
+    <string name="av_info_lib_comp_disabled">НЕПОЛНОЦЕННЫЙ</string>
 </resources>

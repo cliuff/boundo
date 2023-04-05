@@ -127,4 +127,5 @@
     <string name="av_info_lib_sec_normal">ਸਧਾਰਣ</string>
     <string name="av_info_lib_sec_minimized_self">ਘਟਿ—ਆਪਣੇ ਆਪ ਨੂੰ</string>
     <string name="av_info_lib_sec_minimized">ਘਟਾਇਆ—ਹੋਰ</string>
+    <string name="av_info_lib_comp_disabled">ਅਯੋਗ</string>
 </resources>

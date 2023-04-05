@@ -127,4 +127,5 @@
     <string name="av_info_lib_sec_normal">স্বাভাবিক</string>
     <string name="av_info_lib_sec_minimized_self">মিনিমাইজড-স্ব</string>
     <string name="av_info_lib_sec_minimized">মিনিমাইজড-অন্য</string>
+    <string name="av_info_lib_comp_disabled">অক্ষম</string>
 </resources>

@@ -127,4 +127,5 @@
     <string name="av_info_lib_sec_normal">Normal</string>
     <string name="av_info_lib_sec_minimized_self">Moi minimisé</string>
     <string name="av_info_lib_sec_minimized">Minimisé-autre</string>
+    <string name="av_info_lib_comp_disabled">DÉSACTIVÉ</string>
 </resources>

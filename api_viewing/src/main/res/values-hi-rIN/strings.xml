@@ -127,4 +127,5 @@
     <string name="av_info_lib_sec_normal">सामान्य</string>
     <string name="av_info_lib_sec_minimized_self">न्यूनतम-स्व</string>
     <string name="av_info_lib_sec_minimized">न्यूनतम-अन्य</string>
+    <string name="av_info_lib_comp_disabled">अक्षम</string>
 </resources>

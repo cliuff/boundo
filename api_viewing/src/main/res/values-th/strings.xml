@@ -127,4 +127,5 @@
     <string name="av_info_lib_sec_normal">ปกติ</string>
     <string name="av_info_lib_sec_minimized_self">ลดขนาดตัวเอง</string>
     <string name="av_info_lib_sec_minimized">ย่อส่วนอื่น ๆ</string>
+    <string name="av_info_lib_comp_disabled">พิการ</string>
 </resources>

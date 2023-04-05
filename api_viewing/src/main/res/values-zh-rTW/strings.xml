@@ -147,4 +147,5 @@
     <string name="av_info_lib_sec_normal">一般</string>
     <string name="av_info_lib_sec_minimized_self">最小化 - 自身</string>
     <string name="av_info_lib_sec_minimized">最小化 - 其他</string>
+    <string name="av_info_lib_comp_disabled">未啟用</string>
 </resources>

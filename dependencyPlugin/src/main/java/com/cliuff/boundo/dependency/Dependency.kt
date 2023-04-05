@@ -93,7 +93,7 @@ object Versions {
     const val appIconLoader = "1.4.0"
     // Superellipse shape for Compose
     const val smoothCornerCompose = "v1.0.0"
-    const val libCheckerRules = "30.2"
+    const val libCheckerRules = "31"
 }
 
 class Dependencies : Plugin<Project> {

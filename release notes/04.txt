@@ -1,5 +1,24 @@
 
 
+- **4.0.1** 23040514
+<en-US>
+1. App API feature:
+  - Add Android 14 API level support
+  - Revamp app component enabled state UI (activity/service/...)
+  - Fix app store redirect for Samsung Galaxy Store
+2. Application:
+  - Update zh-TW translation, thanks @Kaitul
+</en-US>
+<zh-CN>
+1. 应用 API：
+  - 新的API级别支持：安卓14
+  - 优化应用组件的启用状态标识 (activity/service/...)
+  - 修复三星应用商店跳转
+2. 其他:
+  - 感谢由@Kaitul提供的zh-TW翻译
+</zh-CN>
+
+
 - **4.0.0** 23020415
 <en-US>
 Boundo 4.0.0 update:

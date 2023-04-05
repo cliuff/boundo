@@ -127,4 +127,5 @@
     <string name="av_info_lib_sec_normal">Bình thường</string>
     <string name="av_info_lib_sec_minimized_self">tự thu nhỏ</string>
     <string name="av_info_lib_sec_minimized">thu nhỏ-khác</string>
+    <string name="av_info_lib_comp_disabled">TÀN TẬT</string>
 </resources>

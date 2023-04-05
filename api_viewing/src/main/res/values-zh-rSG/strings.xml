@@ -147,4 +147,5 @@
     <string name="av_info_lib_sec_normal">普通</string>
     <string name="av_info_lib_sec_minimized_self">已收起-自身</string>
     <string name="av_info_lib_sec_minimized">已收起-其他</string>
+    <string name="av_info_lib_comp_disabled">未启用</string>
 </resources>

@@ -147,4 +147,5 @@
     <string name="av_info_lib_sec_normal">طبيعي</string>
     <string name="av_info_lib_sec_minimized_self">تصغير الذات</string>
     <string name="av_info_lib_sec_minimized">مصغرة أخرى</string>
+    <string name="av_info_lib_comp_disabled">عاجز</string>
 </resources>

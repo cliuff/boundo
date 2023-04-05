@@ -126,4 +126,5 @@
     <string name="av_info_lib_sec_normal">нормальний</string>
     <string name="av_info_lib_sec_minimized_self">Мінімізований-само</string>
     <string name="av_info_lib_sec_minimized">Мінімізований-інший</string>
+    <string name="av_info_lib_comp_disabled">ВИМКНЕНО</string>
 </resources>

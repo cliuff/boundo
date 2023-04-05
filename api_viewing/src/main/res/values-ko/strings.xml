@@ -127,4 +127,5 @@
     <string name="av_info_lib_sec_normal">정상</string>
     <string name="av_info_lib_sec_minimized_self">최소화된 자아</string>
     <string name="av_info_lib_sec_minimized">최소화 기타</string>
+    <string name="av_info_lib_comp_disabled">장애가 있는</string>
 </resources>

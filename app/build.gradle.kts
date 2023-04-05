@@ -82,8 +82,8 @@ android {
         applicationId = "com.madness.collision"
         minSdk = 23
         targetSdk = 33
-        versionCode = 23020415
-        versionName = "4.0.0"
+        versionCode = 23040514
+        versionName = "4.0.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testApplicationId = "${applicationId}.test"
         renderscriptSupportModeEnabled = true
