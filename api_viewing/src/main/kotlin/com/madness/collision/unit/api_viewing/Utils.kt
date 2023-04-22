@@ -265,6 +265,7 @@ internal object Utils {
                 regexOf("coolapk\\.com/apk/"), // Coolapk
                 regexOf("appgallery\\.cloud\\.huawei\\.com/.*shareTo="), // Huawei
                 regexOf("apps\\.galaxyappstore\\.com/detail/"), // Samsung
+                regexOf("""apps\.samsung\.com/appquery/appDetail\.as\?appId="""),
         )
         for (link in links) {
             val realLink = "$prefix$link($packageRegex).*"

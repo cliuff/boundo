@@ -23,6 +23,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -45,11 +46,15 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import com.madness.collision.BuildConfig
 import com.madness.collision.R
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.util.ThemeUtil
@@ -100,10 +105,45 @@ private fun Settings(options: List<AboutOption>, itemColor: Color) {
                 end = 10.dp,
             ),
         ) {
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                Box(modifier = Modifier.padding(top = 14.dp, bottom = 15.dp)) {
+                    BuildDetails()
+                }
+            }
             items(options) { option ->
                 SettingsItem(option = option, itemColor = itemColor)
             }
         }
+    }
+}
+
+@Composable
+private fun BuildDetails() {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        AsyncImage(
+            model = R.mipmap.ic_launcher,
+            contentDescription = null,
+            modifier = Modifier.size(100.dp),
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        val verText = "${BuildConfig.VERSION_NAME}/${BuildConfig.VERSION_CODE}"
+        Text(
+            text = stringResource(R.string.app_name),
+            fontSize = 13.sp,
+            lineHeight = 15.sp,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
+            textAlign = TextAlign.Center,
+        )
+        Text(
+            text = verText,
+            fontSize = 10.sp,
+            lineHeight = 11.sp,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.55f),
+            textAlign = TextAlign.Center,
+        )
     }
 }
 

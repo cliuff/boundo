@@ -56,7 +56,9 @@ import com.madness.collision.misc.MiscApp
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.info.AppInfo
 import com.madness.collision.util.CollisionDialog
+import com.madness.collision.util.F
 import com.madness.collision.util.X
+import com.madness.collision.util.getProviderUri
 import com.madness.collision.util.os.OsUtils
 import com.madness.collision.util.ui.AppIconPackageInfo
 
@@ -125,7 +127,8 @@ private val packageSettings: String
 
 private const val packageAndroidSettings = "com.android.settings"
 private const val packageAppManager = "io.github.muntashirakon.AppManager"
-private const val infoAppManager = "io.github.muntashirakon.AppManager.details.AppDetailsActivity"
+private const val infoAppManager = "io.github.muntashirakon.AppManager.details.AppInfoActivity"
+private const val infoAppManagerLegacy = "io.github.muntashirakon.AppManager.details.AppDetailsActivity"
 
 @Composable
 private fun ExternalActions() {
@@ -200,10 +203,17 @@ private fun launchOwner(isStandard: Boolean, owner: Pair<String, String?>, app: 
                 ?: CollisionDialog.infoCopyable(context, app.appPackage.basePath).show()
         }
         pkgName == packageAppManager -> {
-            val intent = Intent()
+            val intent = Intent(Intent.ACTION_VIEW)
+                .addCategory(Intent.CATEGORY_DEFAULT)
+                .addCategory(Intent.CATEGORY_BROWSABLE)
+                .setData(F.createFile(F.valCachePubAvApk(context), "fake.apk").getProviderUri(context))
                 .setClassName(packageAppManager, infoAppManager)
                 .putExtra("pkg", app.packageName)
             safely { context.startActivity(intent) }
+                .fallback {
+                    intent.setClassName(packageAppManager, infoAppManagerLegacy)
+                    safely { context.startActivity(intent) }
+                }
         }
         else -> {
             safely { context.startActivity(app.storePage(pkgName, direct = true)) }
@@ -220,6 +230,10 @@ inline fun safely(block: () -> Unit): Unit? {
         return null
     }
     return Unit
+}
+
+fun Unit?.fallback(block: () -> Unit?): Unit? {
+    return this ?: block()
 }
 
 @Composable

@@ -28,11 +28,13 @@ internal class UtilsTest {
                 "https://coolapk.com/apk/com.tencent.mobileqq",
                 "http://apps.galaxyappstore.com/detail/com.happyelements.AndroidAnimal?session_id=W_dfb0db3059259b399e1d869f4200bd93",
                 "demommmmm hhh",
+                "https://apps.samsung.com/appquery/appDetail.as?appId=com.google.ar.core",
         )
         val re = links.map { Utils.checkStoreLink(it) }
         Truth.assertThat(re[0]).isEqualTo("com.madness.collision")
         Truth.assertThat(re[1]).isEqualTo("com.tencent.mobileqq")
         Truth.assertThat(re[2]).isEqualTo("com.happyelements.AndroidAnimal")
         Truth.assertThat(re[3]).isNull()
+        Truth.assertThat(re[4]).isEqualTo("com.google.ar.core")
     }
 }
