@@ -1,0 +1,199 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 6,
+    "identityHash": "c275b3567b16a40116eb7627673013e4",
+    "entities": [
+      {
+        "tableName": "app",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`packageName` TEXT NOT NULL, `verName` TEXT NOT NULL, `verCode` INTEGER NOT NULL, `targetAPI` INTEGER NOT NULL, `minAPI` INTEGER NOT NULL, `apiUnit` INTEGER NOT NULL, `updateTime` INTEGER NOT NULL, `isNativeLibrariesRetrieved` INTEGER NOT NULL, `nativeLibraries` TEXT NOT NULL, `isLaunchable` INTEGER NOT NULL, `appPackage` TEXT NOT NULL, `jetpackComposed` INTEGER NOT NULL DEFAULT -1, `icS_isDefined` INTEGER, `icS_isAdaptive` INTEGER, `icN_isDefined` INTEGER, `icN_isAdaptive` INTEGER, `icR_isDefined` INTEGER, `icR_isAdaptive` INTEGER, PRIMARY KEY(`packageName`))",
+        "fields": [
+          {
+            "fieldPath": "packageName",
+            "columnName": "packageName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "verName",
+            "columnName": "verName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "verCode",
+            "columnName": "verCode",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "targetAPI",
+            "columnName": "targetAPI",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "minAPI",
+            "columnName": "minAPI",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "apiUnit",
+            "columnName": "apiUnit",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updateTime",
+            "columnName": "updateTime",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isNativeLibrariesRetrieved",
+            "columnName": "isNativeLibrariesRetrieved",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nativeLibraries",
+            "columnName": "nativeLibraries",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isLaunchable",
+            "columnName": "isLaunchable",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "appPackage",
+            "columnName": "appPackage",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "jetpackComposed",
+            "columnName": "jetpackComposed",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "-1"
+          },
+          {
+            "fieldPath": "iconInfo.system.isDefined",
+            "columnName": "icS_isDefined",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "iconInfo.system.isAdaptive",
+            "columnName": "icS_isAdaptive",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "iconInfo.normal.isDefined",
+            "columnName": "icN_isDefined",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "iconInfo.normal.isAdaptive",
+            "columnName": "icN_isAdaptive",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "iconInfo.round.isDefined",
+            "columnName": "icR_isDefined",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "iconInfo.round.isAdaptive",
+            "columnName": "icR_isAdaptive",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "packageName"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "diff_change",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `type` INTEGER NOT NULL, `col_name` TEXT NOT NULL, `old_val` TEXT NOT NULL, `new_val` TEXT NOT NULL, `diff_id` TEXT NOT NULL, `diff_time` INTEGER NOT NULL, `diff_pkg_name` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "columnName",
+            "columnName": "col_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "oldValue",
+            "columnName": "old_val",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "newValue",
+            "columnName": "new_val",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "diff.id",
+            "columnName": "diff_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "diff.time",
+            "columnName": "diff_time",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "diff.packageName",
+            "columnName": "diff_pkg_name",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "_id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c275b3567b16a40116eb7627673013e4')"
+    ]
+  }
+}

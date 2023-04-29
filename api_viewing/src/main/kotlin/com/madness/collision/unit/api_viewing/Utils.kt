@@ -26,6 +26,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.database.DataMaintainer
 import com.madness.collision.unit.api_viewing.database.RecordMaintainer
+import com.madness.collision.unit.api_viewing.database.maintainer.RecordMtn
 import com.madness.collision.unit.api_viewing.origin.PackageRetriever
 import com.madness.collision.util.X
 import com.madness.collision.util.X.A
@@ -59,6 +60,9 @@ import com.madness.collision.util.X.P
 import com.madness.collision.util.X.Q
 import com.madness.collision.util.os.OsUtils
 import com.madness.collision.util.regexOf
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.security.Principal
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -239,6 +243,14 @@ internal object Utils {
         RecordMaintainer(context, retriever, lifecycleOwner, dao).run {
             update(allPackages)
             checkRemoval(allPackages)
+        }
+        // Maintainer diff
+        if (RecordMtn.shouldDiff(context)) {
+            // run asynchronously
+            CoroutineScope(Dispatchers.Default).launch {
+                val dataDiff = RecordMtn.diff(context, allPackages, dao.selectAllApps())
+                RecordMtn.apply(context, dataDiff, allPackages, dao)
+            }
         }
 
         if (!shouldOverride) prefSettings!!.edit {

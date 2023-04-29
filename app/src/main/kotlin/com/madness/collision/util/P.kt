@@ -32,6 +32,7 @@ object P {
     const val PACKAGE_CHANGED_BOOT_COUNT = "changedPkgBootCount"
     const val PACKAGE_CHANGED_SEQUENCE_NO = "changedPkgSequenceNo"
     const val PACKAGE_CHANGED_TIMESTAMP = "changedPkgTimestamp"
+    const val PACKAGE_CHANGED_DIFF_TIME = "changedPkgDiffTime"
 
     const val NOTIFICATION_CHANNELS_NO = "notificationChannelsNo"
 
