@@ -67,6 +67,8 @@ android {
             }
         }
     }
+    // namespace is used by R and BuildConfig classes
+    namespace = "com.madness.collision.wearable"
     compileSdk = 33
     defaultConfig {
         // below: manifest placeholders
@@ -146,6 +148,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
         sourceCompatibility = JavaVersion.VERSION_11
     }
+    kotlin.jvmToolchain(11)
     packagingOptions {
         // The kotlinx-coroutines-core artifact contains a resource file
         // that is not required for the coroutines to operate normally
@@ -158,8 +161,8 @@ android {
         // but continue the build even when errors are found:
         abortOnError = false
     }
-    kotlinOptions.jvmTarget = JavaVersion.VERSION_11.toString()
     buildFeatures {
+        buildConfig = true
         dataBinding = true
         viewBinding = true
     }

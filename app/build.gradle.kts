@@ -78,6 +78,8 @@ android {
             }
         }
     }
+    // namespace is used by R and BuildConfig classes
+    namespace = "com.madness.collision"
     compileSdk = 33
     defaultConfig {
         // below: manifest placeholders
@@ -164,6 +166,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
         sourceCompatibility = JavaVersion.VERSION_11
     }
+    kotlin.jvmToolchain(11)
     packagingOptions {
         // The kotlinx-coroutines-core artifact contains a resource file
         // that is not required for the coroutines to operate normally
@@ -179,8 +182,8 @@ android {
     testOptions {
         unitTests.isIncludeAndroidResources = true
     }
-    kotlinOptions.jvmTarget = JavaVersion.VERSION_11.toString()
     buildFeatures {
+        buildConfig = true
         dataBinding = true
         viewBinding = true
         compose = true

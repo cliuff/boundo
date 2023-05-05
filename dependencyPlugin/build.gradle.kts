@@ -49,15 +49,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib:${Versions.kotlin}")
 }
 
-//compileKotlin {
-//kotlinOptions.jvmTarget = JavaVersion.VERSION_1_8.toString()
-//}
-//compileTestKotlin {
-//kotlinOptions.jvmTarget = JavaVersion.VERSION_1_8.toString()
-//}
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = JavaVersion.VERSION_11.toString()
-}
+kotlin.jvmToolchain(11)
 
 gradlePlugin {
     plugins {

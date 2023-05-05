@@ -35,6 +35,8 @@ android {
     sourceSets {
         getByName("main").java.srcDir("src/main/kotlin")
     }
+    // namespace is used by R and BuildConfig classes
+    namespace = "com.madness.collision.unit.api_viewing"
     compileSdk = 33
 
     flavorDimensions.add("arch")
@@ -73,7 +75,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
         sourceCompatibility = JavaVersion.VERSION_11
     }
-    kotlinOptions.jvmTarget = JavaVersion.VERSION_11.toString()
+    kotlin.jvmToolchain(11)
     buildFeatures.viewBinding = true
     buildFeatures.compose = true
     composeOptions {
