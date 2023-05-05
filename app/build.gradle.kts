@@ -22,7 +22,7 @@ import com.cliuff.boundo.dependency.Versions
 plugins {
     id("com.android.application")
     kotlin("android")
-    id("kotlin-kapt")
+    id("com.google.devtools.ksp") version "1.8.10-1.0.9"
     // implement parcelable interface by using annotation
     id("kotlin-parcelize")
 //    id("org.jetbrains.dokka")
@@ -59,6 +59,10 @@ val signingKeyPassword: String = prop("signingKeyPassword", "")
 //    }
 //}
 
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
+
 android {
     buildToolsVersion = "33.0.1"
     sourceSets {
@@ -88,11 +92,6 @@ android {
         renderscriptSupportModeEnabled = true
         if (configSigning) {
             signingConfig = signingConfigs.getByName("Sign4Release")
-        }
-        kapt {
-            arguments {
-                arg("room.schemaLocation", "$projectDir/schemas")
-            }
         }
         // below: inject the desired values into BuildConfig and Res
         // the string values have to be wrapped in quotes because the value in local.properties does not have quotes

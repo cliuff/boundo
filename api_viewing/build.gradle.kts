@@ -21,10 +21,14 @@ import com.cliuff.boundo.dependency.Versions
 plugins {
     id("com.android.dynamic-feature")
     kotlin("android")
-    id("kotlin-kapt")
+    id("com.google.devtools.ksp") version "1.8.10-1.0.9"
     // implement parcelable interface by using annotation
     id("kotlin-parcelize")
     id("com.cliuff.boundo.dependencies")
+}
+
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
 }
 
 android {
@@ -49,11 +53,6 @@ android {
     defaultConfig {
         minSdk = 23
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        kapt {
-            arguments {
-                arg("room.schemaLocation", "$projectDir/schemas")
-            }
-        }
     }
     buildTypes {
         getByName("debug") {
@@ -126,6 +125,6 @@ dependencies {
             junit4
         ).forEach { androidTestImplementation(it) }
 
-        kapt(androidxRoomCompiler)
+        ksp(androidxRoomCompiler)
     }
 }
