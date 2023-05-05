@@ -8,7 +8,7 @@
 
 **Requirements**
 - Android Studio `Electric Eel Patch 2` (AGP `7.4.2`)
-- Gradle Wrapper `7.5.1`
+- Gradle Wrapper `8.1.1`
 - Java `11`
 - Kotlin `1.8.10`
 - Jetpack Compose Compiler `1.4.2` (requires Kotlin <= `1.8.10`)
