@@ -25,7 +25,6 @@ import com.madness.collision.unit.api_viewing.AccessAV
 import com.madness.collision.util.X
 import com.madness.collision.util.ui.AppIconFetcher
 import com.madness.collision.util.ui.AppIconKeyer
-import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -35,7 +34,6 @@ import kotlin.system.exitProcess
 
 typealias AppAction = Pair<String, Any?>
 
-@HiltAndroidApp
 class MainApplication : SplitCompatApplication(), Thread.UncaughtExceptionHandler, ImageLoaderFactory {
     companion object {
         lateinit var INSTANCE: MainApplication

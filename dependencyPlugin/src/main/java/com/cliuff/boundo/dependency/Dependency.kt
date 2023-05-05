@@ -69,7 +69,6 @@ object Versions {
     const val googlePlayCore = "1.10.2"
     const val googlePlayCoreKtx = "1.8.1"
     const val gglGuava = "31.0.1-android"
-    const val gglHilt = "2.40.2"
     // This dependency is set to compile only
     const val googleWearable = "2.8.1"
     const val googleAccompanistFlowLayout = "0.28.0"
@@ -188,8 +187,6 @@ class Dependencies : Plugin<Project> {
         const val jbAnnotations = "org.jetbrains:annotations:${Versions.jbAnnotations}"
         const val androidDeviceNames = "com.jaredrummler:android-device-names:${Versions.androidDeviceNames}"
         const val byteBuddy = "net.bytebuddy:byte-buddy-android:${Versions.byteBuddy}"
-        const val gglHilt = "com.google.dagger:hilt-android:${Versions.gglHilt}"
-        const val gglHiltCompiler = "com.google.dagger:hilt-compiler:${Versions.gglHilt}"
         const val mockito = "org.mockito:mockito-android:${Versions.mockito}"
         const val apkParser = "net.dongliu:apk-parser:${Versions.apkParser}"
         const val appIconLoader = "me.zhanghai.android.appiconloader:appiconloader-iconloaderlib:${Versions.appIconLoader}"

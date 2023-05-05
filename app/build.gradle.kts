@@ -22,7 +22,6 @@ import com.cliuff.boundo.dependency.Versions
 plugins {
     id("com.android.application")
     kotlin("android")
-    id("dagger.hilt.android.plugin")
     id("kotlin-kapt")
     // implement parcelable interface by using annotation
     id("kotlin-parcelize")
@@ -241,7 +240,6 @@ dependencies {
             androidxNavigationUI,
             androidxDocumentFile,
             androidxHeifWriter,
-            gglHilt,
             googleMaterialComponents,
             googlePlayServicesOSSLicenses,
             googleGson,
@@ -258,8 +256,6 @@ dependencies {
             androidDeviceNames,
             appIconLoader,
         ).forEach { implementation(it) }
-
-        kapt(gglHiltCompiler)
 
         listOf(mockito, googleTruth, googleTruthExtensions, junit4).forEach { testImplementation(it) }
 
