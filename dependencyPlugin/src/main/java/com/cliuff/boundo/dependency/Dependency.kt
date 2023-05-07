@@ -35,8 +35,8 @@ object Versions {
     const val androidxComposeMaterial3 = "1.0.1"
     const val androidxActivity = "1.6.1"
     const val androidxAppcompat = "1.6.0"
-    const val androidxLifecycle = "2.5.1"
-    const val androidxRoom = "2.5.0"
+    const val androidxLifecycle = "2.6.1"
+    const val androidxRoom = "2.5.1"
     const val androidxNavigation = "2.5.3"
     const val androidxCoreTesting = "2.1.0"
     const val androidxFragment = "1.5.5"
@@ -72,7 +72,8 @@ object Versions {
     // This dependency is set to compile only
     const val googleWearable = "2.8.1"
     const val googleAccompanistFlowLayout = "0.28.0"
-    const val coil = "2.2.2"
+    const val okhttp = "4.11.0"
+    const val coil = "2.3.0"
     const val jsoup = "1.15.3"
     const val junit4 = "4.13.2"
     const val junitJupiter = "5.8.1"
@@ -165,6 +166,7 @@ class Dependencies : Plugin<Project> {
         const val googlePlayServicesOSSLicenses = "com.google.android.gms:play-services-oss-licenses:${Versions.googlePlayServicesOSSLicenses}"
         const val googlePlayServicesBasement = "com.google.android.gms:play-services-basement:${Versions.googlePlayServicesBasement}"
         const val googleAccompanistFlowLayout = "com.google.accompanist:accompanist-flowlayout:${Versions.googleAccompanistFlowLayout}"
+        const val okhttp = "com.squareup.okhttp3:okhttp:${Versions.okhttp}"
         const val coil = "io.coil-kt:coil:${Versions.coil}"
         const val coilCompose = "io.coil-kt:coil-compose:${Versions.coil}"
         const val jsoup = "org.jsoup:jsoup:${Versions.jsoup}"
@@ -226,6 +228,7 @@ class Dependencies : Plugin<Project> {
                 googlePlayCoreKtx,
                 gglGuava,
                 jbAnnotations,
+                okhttp,
                 coil,
                 coilCompose,
         )

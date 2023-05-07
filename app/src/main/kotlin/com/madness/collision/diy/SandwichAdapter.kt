@@ -29,9 +29,9 @@ abstract class SandwichAdapter<VH : RecyclerView.ViewHolder>(override val contex
     : RecyclerView.Adapter<RecyclerView.ViewHolder>(), SpanAdapter {
 
     companion object {
-        const val TYPE_TOP_COVER = R.bool.diySandwichTopCover
-        const val TYPE_BOTTOM_COVER = R.bool.diySandwichBottomCover
-        const val TYPE_FILL_IN = R.bool.diySandwichFillIn
+        private val TYPE_TOP_COVER = R.bool.diySandwichTopCover
+        private val TYPE_BOTTOM_COVER = R.bool.diySandwichBottomCover
+        private val TYPE_FILL_IN = R.bool.diySandwichFillIn
     }
 
     abstract val listCount: Int

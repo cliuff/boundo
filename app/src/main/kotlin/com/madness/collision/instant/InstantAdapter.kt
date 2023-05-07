@@ -48,9 +48,9 @@ internal class InstantAdapter<T: InstantItem>(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), SpanAdapter {
 
     companion object {
-        private const val ITEM_TYPE_SIMPLE = R.layout.instant_item_simple
-        private const val ITEM_TYPE_COMPLEX = R.layout.instant_item_complex
-        private const val ITEM_TYPE_SHORTCUT = R.layout.instant_item_shortcut
+        private val ITEM_TYPE_SIMPLE = R.layout.instant_item_simple
+        private val ITEM_TYPE_COMPLEX = R.layout.instant_item_complex
+        private val ITEM_TYPE_SHORTCUT = R.layout.instant_item_shortcut
         const val TYPE_SHORTCUT = 0
         const val TYPE_TILE = 1
         const val TYPE_OTHER = 2

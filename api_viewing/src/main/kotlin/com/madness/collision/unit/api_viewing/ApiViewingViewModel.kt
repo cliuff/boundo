@@ -82,7 +82,7 @@ internal class ApiViewingViewModel(application: Application): AndroidViewModel(a
         val lifecycleRegistry: LifecycleRegistry
         lifecycleOwner = object : LifecycleOwner {
             init { lifecycleRegistry = LifecycleRegistry(this) }
-            override fun getLifecycle(): Lifecycle = lifecycleRegistry
+            override val lifecycle: Lifecycle = lifecycleRegistry
         }
         viewModelScope.launch(Dispatchers.Main) {
             lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_CREATE)

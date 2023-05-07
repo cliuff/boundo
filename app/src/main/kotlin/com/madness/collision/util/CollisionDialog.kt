@@ -321,7 +321,7 @@ class CollisionDialog private constructor(private val mContext: Context, private
 
     private fun initializeColor(button: Button) {
         val colorRes = TypedValue()
-        mContext.theme.resolveAttribute(R.attr.colorAccent, colorRes, true)
+        mContext.theme.resolveAttribute(android.R.attr.colorAccent, colorRes, true)
         button.setTextColor(colorRes.data)
         mContext.theme.resolveAttribute(R.attr.colorAccentBack, colorRes, true)
         button selectBackColor colorRes.data

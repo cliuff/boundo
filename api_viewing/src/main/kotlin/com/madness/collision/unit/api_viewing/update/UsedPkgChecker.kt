@@ -19,7 +19,7 @@ package com.madness.collision.unit.api_viewing.update
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import com.madness.collision.unit.api_viewing.BuildConfig
+import com.madness.collision.BuildConfig
 import com.madness.collision.unit.api_viewing.util.AppUsage
 import com.madness.collision.util.os.OsUtils
 

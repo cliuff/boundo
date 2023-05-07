@@ -253,6 +253,7 @@ dependencies {
             kotlinReflect,
             rxJava,
             jbAnnotations,
+            okhttp,
             coil,
             coilCompose,
             androidDeviceNames,
