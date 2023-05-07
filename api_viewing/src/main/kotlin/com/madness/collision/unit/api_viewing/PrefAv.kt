@@ -21,10 +21,17 @@ import androidx.core.content.edit
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
+import com.madness.collision.main.showPage
 import com.madness.collision.unit.api_viewing.tag.app.AppTagManager
 import com.madness.collision.unit.api_viewing.tag.app.getFullLabel
+import com.madness.collision.unit.api_viewing.ui.pref.DiffHistoryFragment
 import com.madness.collision.unit.api_viewing.util.PrefUtil
-import com.madness.collision.util.*
+import com.madness.collision.util.F
+import com.madness.collision.util.P
+import com.madness.collision.util.PopupUtil
+import com.madness.collision.util.X
+import com.madness.collision.util.findPref
+import com.madness.collision.util.os.OsUtils
 
 internal class PrefAv: PreferenceFragmentCompat() {
     companion object {
@@ -37,12 +44,8 @@ internal class PrefAv: PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         preferenceManager.sharedPreferencesName = P.PREF_SETTINGS
         setPreferencesFromResource(R.xml.pref_settings_av, rootKey)
-        if (X.aboveOn(X.Q)) {
-            findPref<SwitchPreference>(PrefUtil.API_APK_PRELOAD)?.run {
-                isVisible = false
-                // category preference
-                parent?.isVisible = false
-            }
+        if (OsUtils.satisfy(OsUtils.Q)) {
+            findPref<SwitchPreference>(PrefUtil.API_APK_PRELOAD)?.isVisible = false
         }
 
         findPref<SwitchPreference>(PrefUtil.API_CIRCULAR_ICON)?.apply {
@@ -91,6 +94,9 @@ internal class PrefAv: PreferenceFragmentCompat() {
                 val resultSet = indexes.mapTo(mutableSetOf()) { rankedTags[it].id }
                 pref?.edit { putStringSet(prefKeyTags, resultSet) }
             }.show()
+            return true
+        } else if (preference.key == context.getString(R.string.avDiffHistory)) {
+            context.showPage<DiffHistoryFragment>()
             return true
         }
         return super.onPreferenceTreeClick(preference)

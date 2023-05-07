@@ -23,7 +23,7 @@ import androidx.room.Query
 
 @Dao
 interface DiffDao {
-    @Query("SELECT * FROM diff_change")
+    @Query("SELECT * FROM diff_change ORDER BY diff_time DESC")
     suspend fun selectAll(): List<DiffChange>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

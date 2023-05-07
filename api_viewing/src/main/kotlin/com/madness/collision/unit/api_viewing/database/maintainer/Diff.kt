@@ -49,6 +49,15 @@ open class DiffType(val code: Int) {
     object Add : DiffType(1)
     object Remove : DiffType(2)
     object Change : DiffType(3)
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is DiffType) return false
+        if (code != other.code) return false
+        return true
+    }
+
+    override fun hashCode(): Int = code
 }
 
 class DiffConverters {

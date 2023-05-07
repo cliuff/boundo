@@ -32,5 +32,6 @@
     <string name="avClipRound" translatable="false">AVClip2Round</string>
     <bool name="avClipRoundDefault">true</bool>
     <string name="avTags" translatable="false">AvTags</string>
+    <string name="avDiffHistory" translatable="false">AvDiffHistory</string>
     <!-- preference keys -->
 </resources>

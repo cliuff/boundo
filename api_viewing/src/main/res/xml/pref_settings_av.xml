@@ -65,5 +65,9 @@
             android:defaultValue="@bool/API_APK_PRELOAD_DEFAULT"
             android:key="@string/API_APK_PRELOAD"
             android:title="@string/settingsApiApkPreload" />
+
+        <androidx.preference.Preference
+            android:key="@string/avDiffHistory"
+            android:title="Diff history" />
     </androidx.preference.PreferenceCategory>
 </androidx.preference.PreferenceScreen>
