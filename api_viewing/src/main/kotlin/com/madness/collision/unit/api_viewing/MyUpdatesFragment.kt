@@ -44,6 +44,7 @@ import com.madness.collision.unit.api_viewing.databinding.AvUpdatesBinding
 import com.madness.collision.unit.api_viewing.list.*
 import com.madness.collision.unit.api_viewing.list.APIAdapter
 import com.madness.collision.unit.api_viewing.origin.AppRetriever
+import com.madness.collision.unit.api_viewing.ui.info.AppInfoFragment
 import com.madness.collision.unit.api_viewing.update.UpdateLists
 import com.madness.collision.unit.api_viewing.upgrade.Upgrade
 import com.madness.collision.unit.api_viewing.upgrade.UpgradeAdapter
@@ -60,7 +61,7 @@ import kotlin.math.min
 import kotlin.math.roundToInt
 import kotlin.time.Duration.Companion.seconds
 
-internal class MyUpdatesFragment : TaggedFragment(), Updatable {
+internal class MyUpdatesFragment : TaggedFragment(), Updatable, AppInfoFragment.Callback {
 
     override val category: String = "AV"
     override val id: String = "MyUpdates"
@@ -176,6 +177,20 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
     private val sections: MutableMap<Int, List<*>> = LinkedHashMap()
     private lateinit var concatAdapter: ConcatAdapter
     private val popOwner = AppPopOwner()
+
+    override fun getAppOwner(): AppInfoFragment.AppOwner {
+        return object : AppInfoFragment.AppOwner {
+            override val size: Int get() = secAppList.size
+
+            override fun get(index: Int): ApiViewingApp? {
+                return secAppList.getOrNull(index)
+            }
+
+            override fun getIndex(app: ApiViewingApp): Int {
+                return secAppList.indexOf(app)
+            }
+        }
+    }
 
     @Suppress("UNCHECKED_CAST")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -364,7 +379,21 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
         }
     }
 
+    private var secAppList: List<ApiViewingApp> = emptyList()
     private var sectionList: List<Pair<Int, List<*>>> = emptyList()
+        set(value) {
+            field = value
+            secAppList = value.flatMap apps@{ (_, list) ->
+                if (list.isEmpty()) return@apps emptyList()
+                list.mapNotNull { item ->
+                    when (item) {
+                        is ApiViewingApp -> item
+                        is Upgrade -> item.new
+                        else -> null
+                    }
+                }
+            }
+        }
 
     private suspend fun updateDiff() {
         val oldList = sectionList

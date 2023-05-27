@@ -40,6 +40,7 @@ import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.database.DataMaintainer
 import com.madness.collision.unit.api_viewing.list.AppInfoPage
 import com.madness.collision.unit.api_viewing.list.AppListService
+import com.madness.collision.unit.api_viewing.list.LocalAppSwitcherHandler
 import com.madness.collision.unit.api_viewing.seal.SealMaker
 import com.madness.collision.util.ThemeUtil
 import com.madness.collision.util.configure
@@ -51,12 +52,23 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class AppInfoFragment() : BottomSheetDialogFragment(), SystemBarMaintainerOwner {
+    interface Callback {
+        fun getAppOwner(): AppOwner
+    }
+
+    interface AppOwner {
+        val size: Int
+        operator fun get(index: Int): ApiViewingApp?
+        fun getIndex(app: ApiViewingApp): Int
+    }
+
     private val mainViewModel: MainViewModel by activityViewModels()
     private var infoApp: ApiViewingApp? = null
     private var _composeView: ComposeView? = null
     private val composeView: ComposeView get() = _composeView!!
     override val systemBarMaintainer: SystemBarMaintainer = DialogFragmentSystemBarMaintainer(this)
     private val appPkgName: String get() = arguments?.getString(ARG_PKG_NAME) ?: ""
+    private val commCallback: Callback? get() = (parentFragment ?: activity) as? Callback
 
     companion object {
         const val TAG = "AppInfoFragment"
@@ -128,6 +140,42 @@ class AppInfoFragment() : BottomSheetDialogFragment(), SystemBarMaintainerOwner 
         }
     }
 
+    private fun createHandler(getApp: () -> ApiViewingApp?, setApp: (ApiViewingApp?) -> Unit)
+    : AppSwitcherHandler {
+        return object : AppSwitcherHandler {
+            private val ownerIndex: Pair<AppOwner, Int>? get() {
+                val appOwner = commCallback?.getAppOwner() ?: return null
+                val currentIndex = getApp()?.let { appOwner.getIndex(it) } ?: return null
+                if (currentIndex < 0) return null
+                return appOwner to currentIndex
+            }
+
+            override fun getPreviousPreview(): ApiViewingApp? {
+                val (appOwner, currentIndex) = ownerIndex ?: return null
+                val targetIndex = (currentIndex - 1).takeIf { it >= 0 }
+                return targetIndex?.let { appOwner[it] }
+            }
+
+            override fun getNextPreview(): ApiViewingApp? {
+                val (appOwner, currentIndex) = ownerIndex ?: return null
+                val targetIndex = (currentIndex + 1).takeIf { it < appOwner.size }
+                return targetIndex?.let { appOwner[it] }
+            }
+
+            override fun loadPrevious() {
+                val (appOwner, currentIndex) = ownerIndex ?: return
+                val targetIndex = (currentIndex - 1).takeIf { it >= 0 }
+                if (targetIndex != null) setApp(appOwner[targetIndex])
+            }
+
+            override fun loadNext() {
+                val (appOwner, currentIndex) = ownerIndex ?: return
+                val targetIndex = (currentIndex + 1).takeIf { it < appOwner.size }
+                if (targetIndex != null) setApp(appOwner[targetIndex])
+            }
+        }
+    }
+
     @Composable
     private fun AppInfoPageContent(colorScheme: ColorScheme) {
         var app: ApiViewingApp? by remember { mutableStateOf(infoApp) }
@@ -140,6 +188,9 @@ class AppInfoFragment() : BottomSheetDialogFragment(), SystemBarMaintainerOwner 
                     app = DataMaintainer.get(context, lifecycleOwner).selectApp(appPkgName)
                 }
             }
+        }
+        val switcherHandler = remember(Unit) {
+            createHandler({ app }, { app = it })
         }
         MaterialTheme(colorScheme = colorScheme) {
             app?.let { a ->
@@ -159,7 +210,9 @@ class AppInfoFragment() : BottomSheetDialogFragment(), SystemBarMaintainerOwner 
                     if (dia !is ComponentDialog) return@dis null
                     LocalOnBackPressedDispatcherOwner provides dia
                 }
-                val providedValues = arrayOf(providedBackDispatcher).filterNotNull().toTypedArray()
+                val providedSwitcherHandler = LocalAppSwitcherHandler provides switcherHandler
+                val providedValues = arrayOf(providedBackDispatcher, providedSwitcherHandler)
+                    .filterNotNull().toTypedArray()
                 CompositionLocalProvider(*providedValues) {
                     AppInfoPage(a, mainViewModel, this, {
                         dismiss()

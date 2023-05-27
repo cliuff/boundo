@@ -57,6 +57,8 @@ import com.madness.collision.unit.api_viewing.tag.app.AppTagInfo
 import com.madness.collision.unit.api_viewing.tag.app.AppTagManager
 import com.madness.collision.unit.api_viewing.tag.inflater.AppTagInflater
 import com.madness.collision.unit.api_viewing.ui.info.AppDetailsContent
+import com.madness.collision.unit.api_viewing.ui.info.AppSwitcher
+import com.madness.collision.unit.api_viewing.ui.info.AppSwitcherHandler
 import com.madness.collision.unit.api_viewing.ui.info.LibPage
 import com.madness.collision.unit.api_viewing.ui.info.TagDetailsList
 import com.madness.collision.util.ThemeUtil
@@ -309,6 +311,10 @@ fun NestedScrollParent(content: @Composable () -> Unit) {
     )
 }
 
+val LocalAppSwitcherHandler = staticCompositionLocalOf<AppSwitcherHandler> {
+    error("Handler not provided")
+}
+
 @Composable
 private fun AppHeaderContent(cardColor: Color, modifier: Modifier = Modifier) {
     val app = LocalApp.current
@@ -325,8 +331,10 @@ private fun AppHeaderContent(cardColor: Color, modifier: Modifier = Modifier) {
             seal = SealMaker.getSealFile(context, sealVerInfo.letterOrDev, itemWidth)
         }
     }
-    Column(modifier = modifier.fillMaxWidth()) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
+    val switcherHandler = LocalAppSwitcherHandler.current
+    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterStart) {
+        AppSwitcher(modifier = Modifier.fillMaxWidth(), handler = switcherHandler)
+        Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
             val pkgInfo = remember { AppPackageInfo(context, app) }
             if (pkgInfo.uid > 0 || app.isArchive) {
                 Image(

@@ -38,12 +38,13 @@ import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.databinding.AvListBinding
+import com.madness.collision.unit.api_viewing.ui.info.AppInfoFragment
 import com.madness.collision.util.*
 import com.madness.collision.util.ui.appLocale
 import kotlinx.coroutines.*
 import kotlin.time.Duration.Companion.seconds
 
-internal class AppListFragment : TaggedFragment(), AppList, Filterable {
+internal class AppListFragment : TaggedFragment(), AppList, Filterable, AppInfoFragment.Callback {
 
     override val category: String = "AV"
     override val id: String = "AppList"
@@ -75,6 +76,20 @@ internal class AppListFragment : TaggedFragment(), AppList, Filterable {
     private val service = AppListService()
     private val viewModel: AppListViewModel by viewModels()
     private val popOwner = AppPopOwner()
+
+    override fun getAppOwner(): AppInfoFragment.AppOwner {
+        return object : AppInfoFragment.AppOwner {
+            override val size: Int get() = viewModel.apps4DisplayValue.size
+
+            override fun get(index: Int): ApiViewingApp? {
+                return viewModel.apps4DisplayValue.getOrNull(index)
+            }
+
+            override fun getIndex(app: ApiViewingApp): Int {
+                return viewModel.apps4DisplayValue.indexOf(app)
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
