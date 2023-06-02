@@ -196,7 +196,7 @@ private fun AppInfoWithHeader(
             .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
             .background(brush = backGradient)
     ) {
-        Column(modifier = Modifier) {
+        Column(modifier = Modifier.fillMaxSize()) {
             BoxWithConstraints {
                 val sizeToken = remember { maxWidth > 360.dp }
                 val margin = if (sizeToken) 40.dp else 30.dp
@@ -208,7 +208,9 @@ private fun AppInfoWithHeader(
                         .padding(top = mTop, bottom = mBottom),
                 )
             }
-            content()
+            Box(modifier = Modifier.weight(1f, fill = false)) {
+                content()
+            }
         }
     }
 }
@@ -266,7 +268,7 @@ private fun FrontAppInfo(
         ) {
             BoxWithConstraints(modifier = Modifier.weight(1f)) {
                 // ensure enough space for tab to scroll to
-                val extraHeight = remember { max(maxHeight - 10.dp, 40.dp) }
+                val extraHeight = remember { max(maxHeight - 150.dp, 80.dp) }
                 NestedScrollParent {
                     TagDetailsContent(getClick, splitApks, PaddingValues(bottom = extraHeight))
                 }

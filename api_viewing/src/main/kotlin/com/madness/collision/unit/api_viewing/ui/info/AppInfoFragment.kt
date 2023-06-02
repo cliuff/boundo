@@ -22,8 +22,29 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.ComponentDialog
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
+import androidx.compose.material3.lightColorScheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -45,7 +66,12 @@ import com.madness.collision.unit.api_viewing.seal.SealMaker
 import com.madness.collision.util.ThemeUtil
 import com.madness.collision.util.configure
 import com.madness.collision.util.mainApplication
-import com.madness.collision.util.os.*
+import com.madness.collision.util.os.DialogFragmentSystemBarMaintainer
+import com.madness.collision.util.os.OsUtils
+import com.madness.collision.util.os.SystemBarMaintainer
+import com.madness.collision.util.os.SystemBarMaintainerOwner
+import com.madness.collision.util.os.checkInsets
+import com.madness.collision.util.os.edgeToEdge
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -54,6 +80,7 @@ import kotlinx.coroutines.launch
 class AppInfoFragment() : BottomSheetDialogFragment(), SystemBarMaintainerOwner {
     interface Callback {
         fun getAppOwner(): AppOwner
+        fun onAppChanged(app: ApiViewingApp)
     }
 
     interface AppOwner {
@@ -165,36 +192,47 @@ class AppInfoFragment() : BottomSheetDialogFragment(), SystemBarMaintainerOwner 
             override fun loadPrevious() {
                 val (appOwner, currentIndex) = ownerIndex ?: return
                 val targetIndex = (currentIndex - 1).takeIf { it >= 0 }
-                if (targetIndex != null) setApp(appOwner[targetIndex])
+                if (targetIndex != null) {
+                    val app = appOwner[targetIndex]
+                    setApp(app)
+                    if (app != null) commCallback?.onAppChanged(app)
+                }
             }
 
             override fun loadNext() {
                 val (appOwner, currentIndex) = ownerIndex ?: return
                 val targetIndex = (currentIndex + 1).takeIf { it < appOwner.size }
-                if (targetIndex != null) setApp(appOwner[targetIndex])
+                if (targetIndex != null) {
+                    val app = appOwner[targetIndex]
+                    setApp(app)
+                    if (app != null) commCallback?.onAppChanged(app)
+                }
             }
         }
     }
 
     @Composable
     private fun AppInfoPageContent(colorScheme: ColorScheme) {
-        var app: ApiViewingApp? by remember { mutableStateOf(infoApp) }
+        var switchPair: Pair<ApiViewingApp?, Int> by remember { mutableStateOf(infoApp to 0) }
+        val pkgName = remember(switchPair) { switchPair.first?.packageName }
         val scope = rememberCoroutineScope()
         val context = LocalContext.current
-        if (app == null) {
+        if (switchPair.first == null) {
             val lifecycleOwner = this
             SideEffect {
                 scope.launch(Dispatchers.Default) {
-                    app = DataMaintainer.get(context, lifecycleOwner).selectApp(appPkgName)
+                    val a = DataMaintainer.get(context, lifecycleOwner).selectApp(appPkgName)
+                    switchPair = a to switchPair.second
                 }
             }
         }
         val switcherHandler = remember(Unit) {
-            createHandler({ app }, { app = it })
+            createHandler({ switchPair.first }, { switchPair = it to switchPair.second + 1 })
         }
         MaterialTheme(colorScheme = colorScheme) {
-            app?.let { a ->
-                SideEffect {
+            val a = switchPair.first
+            if (a != null) {
+                LaunchedEffect(pkgName) {
                     val color = when {
                         EasyAccess.isSweet -> SealMaker.getItemColorBack(context, a.targetAPI)
                         mainApplication.isPaleTheme -> 0xFFF7FFE9.toInt()
@@ -214,15 +252,36 @@ class AppInfoFragment() : BottomSheetDialogFragment(), SystemBarMaintainerOwner 
                 val providedValues = arrayOf(providedBackDispatcher, providedSwitcherHandler)
                     .filterNotNull().toTypedArray()
                 CompositionLocalProvider(*providedValues) {
-                    AppInfoPage(a, mainViewModel, this, {
-                        dismiss()
-                        AppListService().actionIcon(context, a, fMan)
-                    }, {
-                        dismiss()
-                        // calling dismiss() cancels composable scope
-                        val apkScope = CoroutineScope(Job())
-                        AppListService().actionApk(context, a, apkScope, fMan)
-                    })
+                    val fragment = this
+                    val pageIds = remember(switchPair.second) {
+                        val count = switchPair.second
+                        if (count <= 0) listOf(count) else listOf(count - 1, count)
+                    }
+                    val vMap = remember { mutableStateMapOf<Int, Boolean>() }
+                    Box() {
+                        for (pId in pageIds) {
+                            key(pId) {
+                                AnimatedVisibility(
+                                    visible = if (pageIds.size <= 1) true else vMap[pId] ?: false,
+                                    enter = fadeIn(animationSpec = spring(stiffness = Spring.StiffnessLow)),
+                                    exit = fadeOut(animationSpec = spring(stiffness = Spring.StiffnessVeryLow)),
+                                ) {
+                                    AppInfoPage(a, mainViewModel, fragment, {
+                                        dismiss()
+                                        AppListService().actionIcon(context, a, fMan)
+                                    }, {
+                                        dismiss()
+                                        // calling dismiss() cancels composable scope
+                                        val apkScope = CoroutineScope(Job())
+                                        AppListService().actionApk(context, a, apkScope, fMan)
+                                    })
+                                }
+                                SideEffect {
+                                    vMap[pId] = pId == switchPair.second
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

@@ -47,6 +47,12 @@ fun AppPopOwner.pop(fragment: Fragment, app: ApiViewingApp) {
     popState = PopUpState.Pop(app)
 }
 
+fun AppPopOwner.updateState(app: ApiViewingApp) {
+    if (popState is PopUpState.Pop) {
+        popState = PopUpState.Pop(app)
+    }
+}
+
 private fun Fragment.observePopUp(popOwner: AppPopOwner) {
     val fragment = this
     lifecycle.addObserver(object : DefaultLifecycleObserver {

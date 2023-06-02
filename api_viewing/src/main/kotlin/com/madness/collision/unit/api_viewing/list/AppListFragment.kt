@@ -91,6 +91,10 @@ internal class AppListFragment : TaggedFragment(), AppList, Filterable, AppInfoF
         }
     }
 
+    override fun onAppChanged(app: ApiViewingApp) {
+        popOwner.updateState(app)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mContext = context ?: return

@@ -192,6 +192,10 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable, AppInfoFragment.
         }
     }
 
+    override fun onAppChanged(app: ApiViewingApp) {
+        popOwner.updateState(app)
+    }
+
     @Suppress("UNCHECKED_CAST")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
