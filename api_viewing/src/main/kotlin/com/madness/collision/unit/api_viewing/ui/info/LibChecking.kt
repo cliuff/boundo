@@ -306,6 +306,13 @@ private fun ComponentList(
     }
 }
 
+@Stable
+class LibPrefs(preferCompressedSizeState: MutableState<Boolean>) {
+    var preferCompressedSize: Boolean by preferCompressedSizeState
+}
+
+val LocalLibPrefs = compositionLocalOf<LibPrefs> { error("LibPrefs not provided") }
+
 @Composable
 private fun ComponentList(
     modifier: Modifier = Modifier,
@@ -336,6 +343,8 @@ private fun ComponentList(
         lastStrategyValues = typeList.zip(list).mapNotNull { (k, v) -> v?.let { k to v } }.toMap()
         list
     }
+    val prefCompressedSize = remember { mutableStateOf(true) }
+    val libPrefs = remember { LibPrefs(prefCompressedSize) }
     LazyColumn(
         modifier = modifier.fillMaxWidth(),
         state = listState,
@@ -360,14 +369,38 @@ private fun ComponentList(
                         loadCompType(compType)
                     }
                 }
-                Text(
-                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
-                    text = getTypeLabel(compType),
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.85f),
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 13.sp,
-                    lineHeight = 14.sp,
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
+                        text = getTypeLabel(compType),
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.85f),
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 13.sp,
+                        lineHeight = 14.sp,
+                    )
+                    if (compType == PackCompType.NativeLibrary) {
+                        val textRes = when {
+                            libPrefs.preferCompressedSize -> R.string.av_info_lib_pref_compressed_size
+                            else -> R.string.av_info_lib_pref_uncompressed_size
+                        }
+                        Text(
+                            modifier = Modifier
+                                .padding(horizontal = 6.dp)
+                                .clip(RoundedCornerShape(50))
+                                .clickable { libPrefs.preferCompressedSize = !libPrefs.preferCompressedSize }
+                                .padding(horizontal = 14.dp, vertical = 8.dp),
+                            text = stringResource(textRes),
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.55f),
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 8.sp,
+                            lineHeight = 9.sp,
+                        )
+                    }
+                }
             }
             if (typeCollection != null) {
                 val sections = typeCollection.entryIterator().asSequence().toList()
@@ -450,14 +483,16 @@ private fun ComponentList(
 //                            Log.d("LIB-K", "$itemCount * ($typeCount * $typeIndex + $sectionIndex) + $i = $k")
                             k
                         }) { _, item ->
-                            if (item is MarkedComponent) {
-                                if (sectionIndex < 1) {
-                                    MarkedLibItem(item = item)
+                            CompositionLocalProvider(LocalLibPrefs provides libPrefs) {
+                                if (item is MarkedComponent) {
+                                    if (sectionIndex < 1) {
+                                        MarkedLibItem(item = item)
+                                    } else {
+                                        MarkedSimpleLibItem(item)
+                                    }
                                 } else {
-                                    MarkedSimpleLibItem(item)
+                                    PlainLibItem(item = item)
                                 }
-                            } else {
-                                PlainLibItem(item = item)
                             }
                         }
                     }

@@ -150,4 +150,6 @@
     <string name="av_lib_rule_cpp_shared">C++ 共享库</string>
     <string name="av_lib_rule_alipay">支付宝 SDK</string>
     <string name="av_info_lib_comp_disabled">未启用</string>
+    <string name="av_info_lib_pref_compressed_size">压缩大小</string>
+    <string name="av_info_lib_pref_uncompressed_size">原始大小</string>
 </resources>

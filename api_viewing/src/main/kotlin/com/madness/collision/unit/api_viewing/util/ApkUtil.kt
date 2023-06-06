@@ -229,6 +229,14 @@ object ApkUtil {
         // only one section: without any dot
         private val regexObfuscatedSingleSection = """[^.]+""".toRegex()
         private val pKReflect = "kotlin.reflect.jvm.internal"
+        private val obfuscatedExceptions = hashSetOf(
+            "androidx.legacy.v4",
+            "java.com.android.tools.r8",
+            "kotlin",
+            "okhttp3",
+            "okio",
+            "retrofit2",
+        )
 
         fun map(target: String): String? {
             val mapOwn = mapOwnPkg(target)
@@ -245,6 +253,7 @@ object ApkUtil {
         }
 
         fun mapObfuscated(target: String): String? {
+            if (target in obfuscatedExceptions) return target
             if (target.matches(regexObfuscatedSingleSection)) return null // the obfuscated
 //            if (target.matches(regexObfuscated1)) return null // the obfuscated
             if (target.matches(regexObfuscatedEnding)) return null // the obfuscated

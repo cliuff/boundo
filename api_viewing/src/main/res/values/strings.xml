@@ -150,4 +150,6 @@
     <string name="av_lib_rule_cpp_shared">C++ shared library</string>
     <string name="av_lib_rule_alipay">Alipay SDK</string>
     <string name="av_info_lib_comp_disabled">DISABLED</string>
+    <string name="av_info_lib_pref_compressed_size">COMPRESSED SIZE</string>
+    <string name="av_info_lib_pref_uncompressed_size">UNCOMPRESSED SIZE</string>
 </resources>

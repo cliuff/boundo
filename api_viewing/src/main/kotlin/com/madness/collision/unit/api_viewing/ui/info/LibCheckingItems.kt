@@ -58,13 +58,23 @@ import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape
 
 @Composable
 fun PlainLibItem(item: PackComponent, horizontalPadding: Dp = 20.dp) {
-    Text(
-        modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 2.dp),
-        text = item.comp.value,
-        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.9f),
-        fontSize = 9.sp,
-        lineHeight = 11.sp,
-    )
+    when (item) {
+        is ValueComponent.NativeLib -> {
+            PlainNativeLibItem(
+                modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 2.dp),
+                comp = item,
+            )
+        }
+        else -> {
+            Text(
+                modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 2.dp),
+                text = item.comp.value,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.9f),
+                fontSize = 9.sp,
+                lineHeight = 11.sp,
+            )
+        }
+    }
 }
 
 @Composable
@@ -75,7 +85,7 @@ fun MarkedSimpleLibItem(item: MarkedComponent, horizontalPadding: Dp = 20.dp) {
         is MarkedCompUiType.AppComp ->
             MarkedSimpleLibItem(item = item, enabled = compUiType.comp.comp.isEnabled, horizontalPadding = horizontalPadding)
         is MarkedCompUiType.NativeLib ->
-            MarkedSimpleLibItem(item = item, enabled = true, horizontalPadding = horizontalPadding)
+            MarkedSimpleNativeLibItem(item = compUiType.comp, horizontalPadding = horizontalPadding)
         else -> Unit
     }
 }
@@ -91,7 +101,8 @@ fun MarkedLibItem(item: MarkedComponent) {
 }
 
 @Composable
-private fun MarkedSimpleLibItem(item: MarkedComponent, enabled: Boolean = true, horizontalPadding: Dp = 20.dp) {
+private fun MarkedSimpleLibItem(item: MarkedComponent, enabled: Boolean = true, horizontalPadding: Dp = 20.dp,
+                                itemContent: @Composable () -> Unit) {
     val iconAlpha = if (enabled) 1f else 0.7f
     val textAlpha = if (enabled) 1f else 0.7f
     Column(modifier = Modifier.padding(horizontalPadding, vertical = 2.dp)) {
@@ -129,6 +140,14 @@ private fun MarkedSimpleLibItem(item: MarkedComponent, enabled: Boolean = true, 
                 )
             }
         }
+        itemContent()
+    }
+}
+
+@Composable
+private fun MarkedSimpleLibItem(item: MarkedComponent, enabled: Boolean = true, horizontalPadding: Dp = 20.dp) {
+    MarkedSimpleLibItem(item = item, enabled = enabled, horizontalPadding = horizontalPadding) {
+        val textAlpha = if (enabled) 1f else 0.7f
         Text(
             text = item.comp.value,
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.9f * textAlpha),
@@ -139,14 +158,35 @@ private fun MarkedSimpleLibItem(item: MarkedComponent, enabled: Boolean = true, 
 }
 
 @Composable
-private fun MarkedNativeLibItem(item: MarkedComponent, compUiType: MarkedCompUiType) {
-    var showFullValues by remember { mutableStateOf(false) }
+private fun MarkedSimpleNativeLibItem(
+    item: MarkedValueComp<ValueComponent.NativeLib>,
+    horizontalPadding: Dp = 20.dp,
+) {
+    MarkedSimpleLibItem(item = item, enabled = true, horizontalPadding = horizontalPadding) {
+        PlainNativeLibItem(comp = item.comp)
+    }
+}
+
+@Composable
+private fun PlainNativeLibItem(modifier: Modifier = Modifier, comp: ValueComponent.NativeLib) {
     val context = LocalContext.current
+    val libPrefs = LocalLibPrefs.current
+    val nativeLibValue = remember(libPrefs.preferCompressedSize) {
+        comp.getDesc(context, libPrefs.preferCompressedSize)
+    }
+    NativeLibNormalCompEntry(modifier = modifier, label = comp.value, desc = nativeLibValue)
+}
+
+@Composable
+private fun MarkedNativeLibItem(item: MarkedComponent, compUiType: MarkedCompUiType) {
+    val context = LocalContext.current
+    val libPrefs = LocalLibPrefs.current
     when (compUiType) {
         is MarkedCompUiType.MergingNativeLib -> {
             val compList = compUiType.comp.components
-            val descList = remember(showFullValues) {
-                compList.map { if (showFullValues) it.getDetailedDesc(context) else it.getDesc(context) }
+            var showFullValues by remember { mutableStateOf(false) }
+            val descList = remember(libPrefs.preferCompressedSize) {
+                compList.map { it.getDesc(context, libPrefs.preferCompressedSize) }
             }
             Box(
                 modifier = Modifier
@@ -210,13 +250,11 @@ private fun MarkedNativeLibItem(item: MarkedComponent, compUiType: MarkedCompUiT
         }
         is MarkedCompUiType.NativeLib -> {
             val markedComp = compUiType.comp
-            val nativeLibValue = remember(showFullValues) {
-                if (showFullValues) markedComp.comp.getDetailedDesc(context)
-                else markedComp.comp.getDesc(context)
+            val nativeLibValue = remember(libPrefs.preferCompressedSize) {
+                markedComp.comp.getDesc(context, libPrefs.preferCompressedSize)
             }
             Row(
                 modifier = Modifier
-                    .clickable { showFullValues = !showFullValues }
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp, vertical = 4.dp)
             ) {
@@ -444,21 +482,13 @@ private fun MarkedComponent.getUiType(): MarkedCompUiType {
     }
 }
 
-private fun ValueComponent.NativeLib.getDesc(context: Context): String {
-    return entries.joinToString(separator = "\n") { (libName, values) ->
-        val (entry, compressedSize, _) = values
-        val variant = entry.replace("""/?\Q$libName\E""".toRegex(), "")
-        val s = Formatter.formatFileSize(context, compressedSize)
-        "$variant • $s"
-    }
-}
-
-private fun ValueComponent.NativeLib.getDetailedDesc(context: Context): String {
+private fun ValueComponent.NativeLib.getDesc(context: Context, isCompressedSize: Boolean): String {
     return entries.joinToString(separator = "\n") { (libName, values) ->
         val (entry, compressedSize, size) = values
         val variant = entry.replace("""/?\Q$libName\E""".toRegex(), "")
-        val s = listOf(compressedSize, size).map { Formatter.formatFileSize(context, it) }
-        "$variant • COMPRESSED ${s[0]} • UN-COMPRESSED ${s[1]}"
+        val preferredSize = if (isCompressedSize) compressedSize else size
+        val s = Formatter.formatFileSize(context, preferredSize)
+        "$variant • $s"
     }
 }
 
@@ -526,6 +556,25 @@ private fun NativeLibCompEntry(modifier: Modifier = Modifier, label: String, des
             .background(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.04f))
             .padding(horizontal = 3.dp, vertical = 1.dp),
     ) {
+        Text(
+            text = label,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
+            fontWeight = FontWeight.Medium,
+            fontSize = 7.sp,
+            lineHeight = 7.sp,
+        )
+        Text(
+            text = desc,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.9f),
+            fontSize = 7.sp,
+            lineHeight = 8.sp,
+        )
+    }
+}
+
+@Composable
+private fun NativeLibNormalCompEntry(modifier: Modifier = Modifier, label: String, desc: String) {
+    Column(modifier = modifier.padding(vertical = 1.dp)) {
         Text(
             text = label,
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
