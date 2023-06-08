@@ -7,7 +7,7 @@
 # Boundo: App API Checker
 
 **Requirements**
-- Android Studio `Flamingo Patch 1` (AGP `8.0.1`)
+- Android Studio `Flamingo Patch 2` (AGP `8.0.2`)
 - Gradle Wrapper `8.1.1`
 - Java `11`
 - Kotlin `1.8.10`
