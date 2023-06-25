@@ -26,13 +26,13 @@ object Versions {
     const val androidxTestEspresso = "3.5.1"
 
     const val androidxCore = "1.9.0"
-    const val androidxComposeCompiler = "1.4.2"
-    const val androidxComposeRuntime = "1.3.3"
-    const val androidxComposeFoundation = "1.3.1"
-    const val androidxComposeUi = "1.3.3"
-    const val androidxComposeAnimation = "1.3.3"
-    const val androidxComposeMaterial = "1.3.1"
-    const val androidxComposeMaterial3 = "1.0.1"
+    const val androidxComposeCompiler = "1.4.7"
+    const val androidxComposeRuntime = "1.4.3"
+    const val androidxComposeFoundation = "1.4.3"
+    const val androidxComposeUi = "1.4.3"
+    const val androidxComposeAnimation = "1.4.3"
+    const val androidxComposeMaterial = "1.4.3"
+    const val androidxComposeMaterial3 = "1.1.1"
     const val androidxActivity = "1.6.1"
     const val androidxAppcompat = "1.6.0"
     const val androidxLifecycle = "2.6.1"
@@ -77,7 +77,7 @@ object Versions {
     const val jsoup = "1.15.3"
     const val junit4 = "4.13.2"
     const val junitJupiter = "5.8.1"
-    const val kotlin = "1.8.10"
+    const val kotlin = "1.8.21"
     const val kotlinCoroutines = "1.6.4"
     const val mpChart = "v3.1.0"
     const val openCsv = "5.7.1"
@@ -114,6 +114,7 @@ class Dependencies : Plugin<Project> {
         const val androidxCoreKtx = "androidx.core:core-ktx:${Versions.androidxCore}"
         const val androidxComposeRuntimeLiveData = "androidx.compose.runtime:runtime-livedata:${Versions.androidxComposeRuntime}"
         const val androidxComposeFoundation = "androidx.compose.foundation:foundation:${Versions.androidxComposeFoundation}"
+        const val androidxComposeUi = "androidx.compose.ui:ui:${Versions.androidxComposeUi}"
         // Integration with activities
         const val androidxComposeActivity = "androidx.activity:activity-compose:${Versions.androidxActivity}"
         // Compose Material Design
@@ -207,6 +208,7 @@ class Dependencies : Plugin<Project> {
                 androidxCoreKtx,
                 androidxComposeRuntimeLiveData,
                 androidxComposeFoundation,
+                androidxComposeUi,
                 androidxComposeActivity,
                 androidxComposeMaterial3,
                 androidxComposeMaterialIcons,
