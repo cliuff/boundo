@@ -200,6 +200,11 @@ android {
     }
 }
 
+repositories {
+    // required by SmoothCornerShape
+    maven { url = uri("https://jitpack.io") }
+}
+
 dependencies {
 
     Dependencies.run {
@@ -259,6 +264,7 @@ dependencies {
             coilCompose,
             androidDeviceNames,
             appIconLoader,
+            smoothCornerCompose,
         ).forEach { implementation(it) }
 
         listOf(mockito, googleTruth, googleTruthExtensions, junit4).forEach { testImplementation(it) }

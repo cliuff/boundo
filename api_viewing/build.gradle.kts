@@ -85,7 +85,7 @@ android {
 }
 
 repositories {
-    // required by LibChecker-Rules-Bundle
+    // required by LibChecker-Rules-Bundle, SmoothCornerShape
     maven { url = uri("https://jitpack.io") }
 }
 

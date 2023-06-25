@@ -18,37 +18,34 @@ package com.madness.collision.unit.audio_timer
 
 import android.Manifest
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
+import androidx.compose.material3.lightColorScheme
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.edit
+import androidx.fragment.app.viewModels
 import com.madness.collision.R
-import com.madness.collision.databinding.UnitAudioTimerBinding
 import com.madness.collision.unit.Unit
-import com.madness.collision.util.MathUtils.boundMin
-import com.madness.collision.util.P
-import com.madness.collision.util.X
-import com.madness.collision.util.alterMargin
-import com.madness.collision.util.alterPadding
+import com.madness.collision.util.mainApplication
 import com.madness.collision.util.os.OsUtils
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlin.math.roundToInt
 
 class MyUnit : Unit() {
 
     override val id: String = "AT"
 
-    private var _viewBinding: UnitAudioTimerBinding? = null
-    private val viewBinding: UnitAudioTimerBinding
-        get() = _viewBinding!!
+    private val viewModel: AtUnitViewModel by viewModels()
+    private var mutComposeView: ComposeView? = null
+    private val composeView: ComposeView get() = mutComposeView!!
+    private lateinit var timerController: AudioTimerController
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
         configNavigation(toolbar, iconColor)
@@ -56,101 +53,59 @@ class MyUnit : Unit() {
         return true
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        timerController = AudioTimerController(requireContext())
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _viewBinding = UnitAudioTimerBinding.inflate(inflater, container, false)
-        return viewBinding.root
+        val composeView = ComposeView(inflater.context).apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+        }
+        mutComposeView = composeView
+        return composeView
     }
 
     override fun onDestroyView() {
-        _viewBinding = null
+        mutComposeView = null
         super.onDestroyView()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        democratize()
         val context = context ?: return
-        val pref = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
-        val timeHour = pref.getInt(P.AT_TIME_HOUR, 0)
-        val timeMinute = pref.getInt(P.AT_TIME_MINUTE, 0)
-        if (timeHour != 0) viewBinding.atHour.setText(timeHour.toString())
-        if (timeMinute != 0) viewBinding.atMinute.setText(timeMinute.toString())
-        updateStatus()
-        viewBinding.atStart.setOnClickListener {
-            // stop if running already
-            if (AudioTimerService.isRunning) {
-                val intent = Intent(context, AudioTimerService::class.java)
-                context.stopService(intent)
-                GlobalScope.launch {
-                    delay(100)
-                    launch(Dispatchers.Main) {
-                        updateStatus()
-                    }
-                }
-                return@setOnClickListener
+        val colorScheme = if (OsUtils.satisfy(OsUtils.S)) {
+            val isDark = mainApplication.isDarkTheme
+            if (isDark) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+        } else {
+            if (mainApplication.isDarkTheme) darkColorScheme() else lightColorScheme()
+        }
+        composeView.setContent {
+            MaterialTheme(colorScheme = colorScheme) {
+                AudioTimerPage(
+                    mainViewModel = mainViewModel,
+                    onStartTimer = { requestTimer(context) },
+                )
             }
-            kotlin.run p@{
-                // request runtime permission on Android 13
-                if (OsUtils.dissatisfy(OsUtils.T)) return@p
-                if (NotificationManagerCompat.from(context).areNotificationsEnabled()) return@p
-                postNotificationsLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-                return@setOnClickListener
-            }
-            startTimer(context)
+        }
+    }
+
+    private fun requestTimer(context: Context) {
+        when {
+            // request runtime permission on Android 13
+            OsUtils.dissatisfy(OsUtils.T) -> startTimer()
+            NotificationManagerCompat.from(context).areNotificationsEnabled() -> startTimer()
+            else -> postNotificationsLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
     }
 
     private val postNotificationsLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()) register@{ granted ->
         if (!granted) return@register
-        val context = context ?: return@register
-        startTimer(context)
+        startTimer()
     }
 
-    private fun startTimer(context: Context) {
-        val hourInput = viewBinding.atHour.text?.toString() ?: ""
-        val targetHour = if (hourInput.isEmpty()) 0 else hourInput.toInt()
-        val minuteInput = viewBinding.atMinute.text?.toString() ?: ""
-        val targetMinute = if (minuteInput.isEmpty()) 0 else minuteInput.toInt()
-        val targetDuration = (targetHour * 60 + targetMinute) * 60000L
-        val intent = Intent(context, AudioTimerService::class.java)
-        context.stopService(intent)
-        intent.putExtra(AudioTimerService.ARG_DURATION, targetDuration)
-        context.startService(intent)
-        GlobalScope.launch {
-            delay(100)
-            launch(Dispatchers.Main) {
-                updateStatus()
-            }
-        }
-        val shouldUpdateHour = hourInput.isNotEmpty()
-        val shouldUpdateMinute = minuteInput.isNotEmpty()
-        val pref = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
-        pref.edit {
-            if (shouldUpdateHour) putInt(P.AT_TIME_HOUR, targetHour)
-            else remove(P.AT_TIME_HOUR)
-            if (shouldUpdateMinute) putInt(P.AT_TIME_MINUTE, targetMinute)
-            else remove(P.AT_TIME_MINUTE)
-        }
-    }
-
-    private fun updateStatus() {
-        val icon = if (AudioTimerService.isRunning) R.drawable.ic_clear_24 else R.drawable.ic_arrow_forward_24
-        viewBinding.atStart.setImageResource(icon)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        democratize()
-        val context = context ?: return
-        val minMargin = X.size(context, 80f, X.DP).roundToInt()
-        val gapMargin = X.size(context, 30f, X.DP).roundToInt()
-        mainViewModel.contentWidthBottom.observe(viewLifecycleOwner) {
-            val margin = it + gapMargin
-            viewBinding.atStart.alterMargin(bottom = margin.boundMin(minMargin))
-            // update view
-            viewBinding.atStart.requestLayout()
-        }
-        mainViewModel.contentWidthTop.observe(viewLifecycleOwner) {
-            viewBinding.atContainer.alterPadding(top = it)
-        }
+    private fun startTimer() {
+        timerController.startTimer(viewModel.uiState.value)
     }
 }
