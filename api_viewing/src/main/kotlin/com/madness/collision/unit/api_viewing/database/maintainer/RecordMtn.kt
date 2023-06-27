@@ -104,6 +104,7 @@ private fun detectDiff(context: Context, packList: List<PackageInfo>, oldList: L
         "verCode" to ApiViewingApp::verCode,
         "verName" to ApiViewingApp::verName,
         "updateTime" to ApiViewingApp::updateTime,
+        "appPackage" to ApiViewingApp::appPackage,
     )
     val changedPacks = oldList.mapNotNull diff@{ oldApp ->
         val index = newPacks.indexOf(oldApp.packageName)

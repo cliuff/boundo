@@ -152,4 +152,7 @@
     <string name="av_info_lib_comp_disabled">DISABLED</string>
     <string name="av_info_lib_pref_compressed_size">COMPRESSED SIZE</string>
     <string name="av_info_lib_pref_uncompressed_size">UNCOMPRESSED SIZE</string>
+    <string name="av_settings_diff">App record diff history</string>
+    <string name="av_settings_diff_title">Diff History</string>
+    <string name="av_settings_diff_minimized">%d empty records minimized, tap to show them</string>
 </resources>

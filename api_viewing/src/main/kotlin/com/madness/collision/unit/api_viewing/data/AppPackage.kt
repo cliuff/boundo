@@ -19,6 +19,7 @@ package com.madness.collision.unit.api_viewing.data
 import android.content.pm.ApplicationInfo
 import android.os.Parcel
 import android.os.Parcelable
+import com.madness.collision.util.simpleToJson
 
 class AppPackage private constructor(val basePath: String, val splitPaths: List<String>): Parcelable {
 
@@ -40,6 +41,21 @@ class AppPackage private constructor(val basePath: String, val splitPaths: List<
         paths.add(basePath)
         paths.addAll(splitPaths)
         return paths
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is AppPackage) return false
+        if (apkPaths != other.apkPaths) return false
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return apkPaths.hashCode()
+    }
+
+    override fun toString(): String {
+        return apkPaths.simpleToJson()
     }
 
     constructor(parcel: Parcel) : this(

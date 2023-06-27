@@ -68,6 +68,6 @@
 
         <androidx.preference.Preference
             android:key="@string/avDiffHistory"
-            android:title="Diff history" />
+            android:title="@string/av_settings_diff" />
     </androidx.preference.PreferenceCategory>
 </androidx.preference.PreferenceScreen>

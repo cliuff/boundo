@@ -152,4 +152,7 @@
     <string name="av_info_lib_comp_disabled">未启用</string>
     <string name="av_info_lib_pref_compressed_size">压缩大小</string>
     <string name="av_info_lib_pref_uncompressed_size">原始大小</string>
+    <string name="av_settings_diff">应用列表维护记录</string>
+    <string name="av_settings_diff_title">维护记录</string>
+    <string name="av_settings_diff_minimized">%d条空记录已收起，点击展示</string>
 </resources>

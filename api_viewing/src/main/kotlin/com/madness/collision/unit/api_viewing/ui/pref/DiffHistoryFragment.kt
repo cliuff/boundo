@@ -32,6 +32,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.activityViewModels
 import com.madness.collision.Democratic
 import com.madness.collision.main.MainViewModel
+import com.madness.collision.unit.api_viewing.R
 import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.mainApplication
 import com.madness.collision.util.os.OsUtils
@@ -59,7 +60,7 @@ class DiffHistoryFragment : TaggedFragment(), Democratic {
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
         mainViewModel.configNavigation(toolbar, iconColor)
-        toolbar.setTitle("Diff History")
+        toolbar.setTitle(R.string.av_settings_diff_title)
         return true
     }
 
@@ -73,7 +74,7 @@ class DiffHistoryFragment : TaggedFragment(), Democratic {
         }
         composeView.setContent {
             MaterialTheme(colorScheme = colorScheme) {
-                DiffHistoryPage()
+                DiffHistoryPage(mainViewModel = mainViewModel)
             }
         }
     }

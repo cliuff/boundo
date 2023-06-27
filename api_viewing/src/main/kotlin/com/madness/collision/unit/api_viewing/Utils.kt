@@ -22,8 +22,10 @@ import android.os.Build
 import android.provider.Settings
 import androidx.annotation.RequiresApi
 import androidx.core.content.edit
+import androidx.core.content.pm.PackageInfoCompat
 import androidx.lifecycle.LifecycleOwner
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
+import com.madness.collision.unit.api_viewing.database.AppDao
 import com.madness.collision.unit.api_viewing.database.DataMaintainer
 import com.madness.collision.unit.api_viewing.database.RecordMaintainer
 import com.madness.collision.unit.api_viewing.database.maintainer.RecordMtn
@@ -231,8 +233,8 @@ internal object Utils {
         // get latest installed packages
         val allPackages = retriever.all
         // get changed packages
-        val re = allPackages.filter { it.lastUpdateTime >= finalTimestamp }
         val dao = DataMaintainer.get(context, lifecycleOwner)
+        val re = getUpdatedPackages(allPackages, finalTimestamp, dao)
         // get past records
         val previous = when (dao.selectCount()) {
             null -> null
@@ -263,6 +265,36 @@ internal object Utils {
         return changedPackages.filter {
             it.lastUpdateTime == it.firstInstallTime
         }
+    }
+
+    private fun getUpdatedPackages(allPackages: List<PackageInfo>, timestamp: Long, dao: AppDao): List<PackageInfo> {
+        val preinstalledPackages = ArrayList<PackageInfo>()
+        val updatedPackages = ArrayList<PackageInfo>()
+        for (info in allPackages) {
+            when {
+                // 0->1970.01.01, 1230768000000->2009.01.01
+                info.lastUpdateTime <= 1230768000000L -> preinstalledPackages.add(info)
+                info.lastUpdateTime >= timestamp -> updatedPackages.add(info)
+                else -> Unit
+            }
+        }
+        if (preinstalledPackages.isNotEmpty()) {
+            val preinstalledRecords = dao.selectApps(preinstalledPackages.map { it.packageName })
+                .associateBy { it.packageName }
+            for (info in preinstalledPackages) {
+                val record = preinstalledRecords[info.packageName] ?: continue
+                val app = info.applicationInfo
+                val isChanged = when {
+                    PackageInfoCompat.getLongVersionCode(info) != record.verCode -> true
+                    info.versionName != record.verName -> true
+                    // apex has version in path
+                    app.publicSourceDir.orEmpty() != record.appPackage.basePath -> true
+                    else -> false
+                }
+                if (isChanged) updatedPackages.add(info)
+            }
+        }
+        return updatedPackages
     }
 
     /**

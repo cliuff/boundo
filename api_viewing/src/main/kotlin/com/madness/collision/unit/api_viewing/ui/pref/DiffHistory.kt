@@ -18,55 +18,90 @@ package com.madness.collision.unit.api_viewing.ui.pref
 
 import android.text.format.DateUtils
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.produceState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.madness.collision.unit.api_viewing.database.AppRoom
+import com.madness.collision.main.MainViewModel
+import com.madness.collision.unit.api_viewing.R
 import com.madness.collision.unit.api_viewing.database.maintainer.DiffChange
 import com.madness.collision.unit.api_viewing.database.maintainer.DiffType
 import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape
 
 @Composable
-fun DiffHistoryPage() {
-    var diffRecords: Map<String, List<DiffChange>> by remember { mutableStateOf(emptyMap()) }
+fun DiffHistoryPage(mainViewModel: MainViewModel) {
     val context = LocalContext.current
-    LaunchedEffect(Unit) {
-        val changes = AppRoom.getDatabase(context).diffDao().selectAll()
-        val comparator = compareByDescending<DiffChange> { it.diff.timeMills }
-            .thenBy { it.diff.packageName }
-        diffRecords = changes.sortedWith(comparator).groupBy { it.diff.id }
-    }
-    Column(
-        modifier = Modifier
-            .verticalScroll(rememberScrollState())
-            .fillMaxWidth()
-            .padding(vertical = 100.dp),
+    val diffRecords by produceState(mutableListOf<DiffUi>()) { value = DiffUiData.retrieve(context) }
+    val contentInsetTop by mainViewModel.contentWidthTop.observeAsState(0)
+    val contentInsetBottom by mainViewModel.contentWidthBottom.observeAsState(0)
+    LazyColumn(
+        modifier = Modifier.fillMaxWidth(),
+        contentPadding = PaddingValues(
+            top = contentInsetTop.toDp() + 12.dp,
+            bottom = contentInsetBottom.toDp() + 50.dp,
+        ),
     ) {
-        for ((_, changeList) in diffRecords) {
-            DiffRecord(changeList)
+        itemsIndexed(
+            items = diffRecords,
+            key = { i, item ->
+                when (item) {
+                    is DiffUi.Empty -> "$i.${item.record[0].id}"
+                    is DiffUi.Change -> "$i.${item.record[0].id}"
+                    is DiffUi.ExpandAction -> i.toString()
+                }
+            },
+        ) { i, item ->
+            when (item) {
+                is DiffUi.Empty -> DiffRecord(item.record)
+                is DiffUi.Change -> DiffRecord(item.record)
+                is DiffUi.ExpandAction -> {
+                    ExpandAction(
+                        modifier = Modifier.clickable { DiffUiData.expand(diffRecords, i) },
+                        action = item,
+                    )
+                }
+            }
         }
     }
+}
+
+@Composable
+private fun Int.toDp() = with(LocalDensity.current) { toDp() }
+
+@Composable
+private fun ExpandAction(modifier: Modifier = Modifier, action: DiffUi.ExpandAction) {
+    Text(
+        modifier = modifier
+            .padding(horizontal = 20.dp, vertical = 3.dp)
+            .padding(bottom = 10.dp),
+        text = stringResource(R.string.av_settings_diff_minimized, action.list.size),
+        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.65f),
+        fontSize = 13.sp,
+        lineHeight = 15.sp,
+    )
 }
 
 @Composable
@@ -89,7 +124,7 @@ private fun DiffRecord(changeList: List<DiffChange>) {
                     fontWeight = FontWeight.Medium,
                 )
             }
-            if (idChange.type != DiffType.None) {
+            if (idChange.isNotNone) {
                 val pkgChanges = changeList.groupBy { it.diff.packageName }
                 for ((_, list) in pkgChanges) {
                     ChangeItem(list)
@@ -116,6 +151,7 @@ private fun ChangeItem(changeList: List<DiffChange>) {
             message,
             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.85f),
             fontSize = 12.sp,
+            lineHeight = 13.sp,
         )
         Row(modifier = Modifier.horizontalScroll(rememberScrollState()).fillMaxWidth()) {
             for (i in changeList.indices) {
@@ -141,12 +177,14 @@ private fun ColumnValueChange(change: DiffChange) {
             text = change.columnName,
             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.75f),
             fontSize = 10.sp,
+            lineHeight = 12.sp,
             fontWeight = FontWeight.Normal,
         )
         Text(
             text = change.run { "$oldValue -> $newValue" },
             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.95f),
             fontSize = 12.sp,
+            lineHeight = 14.sp,
             fontWeight = FontWeight.Normal,
         )
     }

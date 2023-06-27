@@ -33,7 +33,10 @@ class DiffChange(
     val oldValue: String,
     @ColumnInfo(name = "new_val")
     val newValue: String,
-)
+) {
+    val isNone: Boolean get() = type == DiffType.None
+    val isNotNone: Boolean get() = !isNone
+}
 
 class DiffInfo(
     @ColumnInfo(name = "id")
