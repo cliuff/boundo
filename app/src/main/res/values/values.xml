@@ -16,6 +16,9 @@
   -->
 
 <resources>
+    <!-- disable OnBackInvokedCallback for Android 13 and below -->
+    <!-- for it causes flickering even with the developer option turned off (i.e. common user xp) -->
+    <bool name="appOnBackInvokedCallbackEnabled">false</bool>
     <bool name="spanLittleMore">false</bool>
     <bool name="spanJustMore">false</bool>
     <integer name="slideDuration">100</integer>

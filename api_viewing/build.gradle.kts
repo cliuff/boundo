@@ -37,7 +37,7 @@ android {
     }
     // namespace is used by R and BuildConfig classes
     namespace = "com.madness.collision.unit.api_viewing"
-    compileSdk = 33
+    compileSdk = 34
 
     flavorDimensions.add("arch")
     productFlavors {

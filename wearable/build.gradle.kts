@@ -53,7 +53,7 @@ val signingKeyPassword: String = prop("signingKeyPassword", "")
 //}
 
 android {
-    buildToolsVersion = "33.0.1"
+    buildToolsVersion = "34.0.0"
     sourceSets {
         getByName("main").java.srcDir("src/main/kotlin")
     }
@@ -69,7 +69,7 @@ android {
     }
     // namespace is used by R and BuildConfig classes
     namespace = "com.madness.collision.wearable"
-    compileSdk = 33
+    compileSdk = 34
     defaultConfig {
         // below: manifest placeholders
         manifestPlaceholders["buildPackage"] = buildPackage

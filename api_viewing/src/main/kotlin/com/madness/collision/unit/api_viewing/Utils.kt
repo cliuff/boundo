@@ -121,9 +121,8 @@ internal object Utils {
 
     fun getDevCodenameLetter(): Char? {
         return when (Build.VERSION.CODENAME) {
-            "UpsideDownCake" -> 'u'
-            "TiramisuPrivacySandbox" -> 't'
-            "Tiramisu" -> 't'
+            "UpsideDownCake", "UpsideDownCakePrivacySandbox" -> 'u'
+            "Tiramisu", "TiramisuPrivacySandbox" -> 't'
             "REL" -> null
             else -> null
         }

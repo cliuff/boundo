@@ -20,6 +20,7 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ServiceInfo
 import android.media.AudioAttributes
 import android.media.AudioFocusRequest
 import android.media.AudioManager
@@ -140,7 +141,12 @@ internal class AudioTimerService: Service() {
                 .setAutoCancel(true)
                 .setContentIntent(clickPendingIntent)
                 .addAction(R.drawable.ic_clear_24, localeContext.getString(R.string.text_cancel), cancelPendingIntent)
-        startForeground(notificationId, notificationBuilder.build())
+        if (OsUtils.satisfy(OsUtils.U)) {
+            val type = ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE
+            startForeground(notificationId, notificationBuilder.build(), type)
+        } else {
+            startForeground(notificationId, notificationBuilder.build())
+        }
         start()
         return super.onStartCommand(intent, flags, startId)
     }

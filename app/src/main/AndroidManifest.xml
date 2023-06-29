@@ -55,6 +55,8 @@
         android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <!-- required by AudioTimerService -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
     <!-- <uses-permission android:name="android.permission.READ_CALENDAR" /> -->
     <!-- <uses-permission android:name="android.permission.WRITE_CALENDAR" /> -->
     <!--<uses-permission android:name="android.permission.WAKE_LOCK" />-->
@@ -104,10 +106,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/LaunchScreen"
-        android:enableOnBackInvokedCallback="false"
+        android:enableOnBackInvokedCallback="@bool/appOnBackInvokedCallbackEnabled"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
-        <!-- disable OnBackInvokedCallback before official support is out -->
-        <!-- for it causes flickering right now on Android 13 -->
 
         <!-- Activities -->
         <activity
@@ -306,7 +306,11 @@
         <service
             android:name=".unit.audio_timer.AudioTimerService"
             android:exported="false"
-            android:enabled="true"/>
+            android:enabled="true"
+            android:foregroundServiceType="specialUse">
+            <!-- PackageManager.PROPERTY_SPECIAL_USE_FGS_SUBTYPE, used by Google Play app review -->
+            <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE" android:value="sleepTimer" />
+        </service>
         <service
             android:name=".unit.audio_timer.NotificationActions"
             android:exported="false"

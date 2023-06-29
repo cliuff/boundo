@@ -103,6 +103,8 @@ class MainApplication : SplitCompatApplication(), Thread.UncaughtExceptionHandle
         val intent = Intent ()
         intent.action = BuildConfig.APPLICATION_ID + ".IMMORTALITY"
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        // start non-exported internal activity explicitly, required by Android 14
+        intent.`package` = packageName
         startActivity (intent)
 
         exitProcess(-1) // kill off the crashed app

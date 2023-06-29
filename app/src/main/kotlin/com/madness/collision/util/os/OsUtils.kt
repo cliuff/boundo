@@ -20,7 +20,7 @@ import android.os.Build
 
 object OsUtils {
     const val DEV = Build.VERSION_CODES.CUR_DEVELOPMENT
-    const val U = 34
+    const val U = Build.VERSION_CODES.UPSIDE_DOWN_CAKE
     const val T = Build.VERSION_CODES.TIRAMISU
     const val S_V2 = Build.VERSION_CODES.S_V2
     const val S = Build.VERSION_CODES.S

@@ -64,7 +64,7 @@ ksp {
 }
 
 android {
-    buildToolsVersion = "33.0.1"
+    buildToolsVersion = "34.0.0"
     sourceSets {
         getByName("main").java.srcDir("src/main/kotlin")
     }
@@ -80,13 +80,13 @@ android {
     }
     // namespace is used by R and BuildConfig classes
     namespace = "com.madness.collision"
-    compileSdk = 33
+    compileSdk = 34
     defaultConfig {
         // below: manifest placeholders
         manifestPlaceholders["buildPackage"] = buildPackage
         applicationId = "com.madness.collision"
         minSdk = 23
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 23040514
         versionName = "4.0.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
