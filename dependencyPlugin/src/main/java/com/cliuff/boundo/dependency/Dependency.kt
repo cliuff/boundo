@@ -25,7 +25,7 @@ object Versions {
     const val androidxTestExtJunit = "1.1.5"
     const val androidxTestEspresso = "3.5.1"
 
-    const val androidxCore = "1.9.0"
+    const val androidxCore = "1.11.0-beta02"
     const val androidxComposeCompiler = "1.4.7"
     const val androidxComposeRuntime = "1.4.3"
     const val androidxComposeFoundation = "1.4.3"
@@ -33,13 +33,13 @@ object Versions {
     const val androidxComposeAnimation = "1.4.3"
     const val androidxComposeMaterial = "1.4.3"
     const val androidxComposeMaterial3 = "1.1.1"
-    const val androidxActivity = "1.6.1"
-    const val androidxAppcompat = "1.6.0"
+    const val androidxActivity = "1.7.2"
+    const val androidxAppcompat = "1.6.1"
     const val androidxLifecycle = "2.6.1"
     const val androidxRoom = "2.5.1"
     const val androidxNavigation = "2.5.3"
     const val androidxCoreTesting = "2.1.0"
-    const val androidxFragment = "1.5.5"
+    const val androidxFragment = "1.6.0"
     const val androidxWindow = "1.0.0"
     const val androidxDrawerLayout = "1.1.1"
     const val androidxSwipeRefreshLayout = "1.1.0"
@@ -66,8 +66,8 @@ object Versions {
     const val googlePlayServicesOSSLicenses = "17.0.0"
     const val googlePlayServicesBasement = "17.6.0"
     const val googleGson = "2.8.9"
-    const val googlePlayCore = "1.10.2"
-    const val googlePlayCoreKtx = "1.8.1"
+    const val googlePlayFeatureDelivery = "2.1.0"
+    const val googlePlayFeatureDeliveryKtx = "2.1.0"
     const val gglGuava = "31.0.1-android"
     // This dependency is set to compile only
     const val googleWearable = "2.8.1"
@@ -178,8 +178,8 @@ class Dependencies : Plugin<Project> {
         const val googleTruth = "com.google.truth:truth:${Versions.googleTruth}"
         const val googleTruthExtensions = "com.google.truth.extensions:truth-java8-extension:${Versions.googleTruth}"
         const val googleGson = "com.google.code.gson:gson:${Versions.googleGson}"
-        const val googlePlayCore = "com.google.android.play:core:${Versions.googlePlayCore}"
-        const val googlePlayCoreKtx = "com.google.android.play:core-ktx:${Versions.googlePlayCoreKtx}"
+        const val googlePlayFeatureDelivery = "com.google.android.play:feature-delivery:${Versions.googlePlayFeatureDelivery}"
+        const val googlePlayFeatureDeliveryKtx = "com.google.android.play:feature-delivery-ktx:${Versions.googlePlayFeatureDeliveryKtx}"
         const val gglGuava = "com.google.guava:guava:${Versions.gglGuava}"
         const val junit4 = "junit:junit:${Versions.junit4}"
         const val junitJupiter = "org.junit.jupiter:junit-jupiter-api:${Versions.junitJupiter}"
@@ -226,8 +226,8 @@ class Dependencies : Plugin<Project> {
                 androidxLifecycleViewModel,
                 androidxLifecycleLiveData,
                 googleMaterialComponents,
-                googlePlayCore,
-                googlePlayCoreKtx,
+                googlePlayFeatureDelivery,
+                googlePlayFeatureDeliveryKtx,
                 gglGuava,
                 jbAnnotations,
                 okhttp,
