@@ -22,7 +22,7 @@ import com.cliuff.boundo.dependency.Versions
 plugins {
     id("com.android.application")
     kotlin("android")
-    id("com.google.devtools.ksp") version "1.8.21-1.0.11"
+    id("com.google.devtools.ksp") version "1.8.22-1.0.11"
     // implement parcelable interface by using annotation
     id("kotlin-parcelize")
 //    id("org.jetbrains.dokka")

@@ -10,8 +10,8 @@
 - Android Studio `Flamingo Patch 2` (AGP `8.0.2`)
 - Gradle Wrapper `8.1.1`
 - Java `11`
-- Kotlin `1.8.21`
-- Jetpack Compose Compiler `1.4.7` (requires Kotlin `1.8.21`)
+- Kotlin `1.8.22`
+- Jetpack Compose Compiler `1.4.8` (requires Kotlin `1.8.22`)
 
 **After Git check-out**
 - Clone project [**Apk Parser**](https://github.com/cliuff/apk-parser.git) into `subproject`, resulting in `ROOT_DIR/subproject/apk-parser`
