@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Clifford Liu
+ * Copyright 2023 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package com.madness.collision.versatile.controls
+package com.madness.collision.versatile.ctrl
 
-import android.service.controls.Control
-import com.madness.collision.versatile.ctrl.ControlCreator
+import android.content.Context
+import android.service.controls.actions.ControlAction
+import kotlinx.coroutines.flow.Flow
 
-interface ControlsProvider : ControlCreator<Control> {
-    val controlIdRegex: String
-    fun onCreate() { }
-    fun onDestroy() { }
-    suspend fun getDeviceIds(): List<String>
+typealias ControlActionRequest = Pair<String, ControlAction>
+
+interface ControlCreator<Control> {
+    suspend fun create(context: Context, id: String): Control?
+    fun create(context: Context, id: String, actionFlow: Flow<ControlActionRequest>): Flow<Control & Any>
 }

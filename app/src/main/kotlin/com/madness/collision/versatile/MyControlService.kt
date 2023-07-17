@@ -21,12 +21,13 @@ import android.os.Build
 import android.service.controls.Control
 import android.service.controls.ControlsProviderService
 import android.service.controls.actions.ControlAction
-import com.madness.collision.versatile.controls.AudioTimerControlProvider
-import com.madness.collision.versatile.controls.ControlProvider
-import com.madness.collision.versatile.controls.DeviceManControlProvider
-import com.madness.collision.versatile.controls.MonthDataUsageControlProvider
+import com.madness.collision.versatile.controls.*
+import com.madness.collision.versatile.ctrl.ControlActionRequest
 import io.reactivex.rxjava3.processors.ReplayProcessor
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.SendChannel
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.*
 import org.reactivestreams.FlowAdapters
 import java.util.concurrent.Flow
 import java.util.function.Consumer
@@ -34,25 +35,40 @@ import java.util.function.Consumer
 @TargetApi(Build.VERSION_CODES.R)
 class MyControlService : ControlsProviderService() {
     private val coroutineScope = CoroutineScope(Dispatchers.Default + Job())
-    private var updatePublisher: ReplayProcessor<Control>? = null
+    // many ids to one publisher
+    private val publishers: MutableMap<String, Pair<ReplayProcessor<Control>, Job>> = hashMapOf()
+    private var actionChannel: SendChannel<ControlActionRequest>? = null
+    private lateinit var actionFlow: kotlinx.coroutines.flow.Flow<ControlActionRequest>
     private val providers = arrayOf(
-        AudioTimerControlProvider(this),
-        MonthDataUsageControlProvider(this),
-        DeviceManControlProvider(this),
+        AtControlsProvider(),
+        MduControlsProvider(),
+        DevManControlsProvider(this),
     )
 
     override fun onCreate() {
         super.onCreate()
+        val flow = channelFlow {
+            actionChannel = channel
+            awaitClose { actionChannel = null }
+        }
+        // SharedFlow/hot flow required for multiple subscribers to be allowed
+        actionFlow = flow.shareIn(coroutineScope, SharingStarted.WhileSubscribed())
         providers.forEach { it.onCreate() }
     }
 
     override fun createPublisherForAllAvailable(): Flow.Publisher<Control> {
+        val context = this
         val updatePublisher = ReplayProcessor.create<Control>()
         coroutineScope.launch {
             val ids = providers.flatMap { it.getDeviceIds() }
-            ids.forEach {
-                val control = getStatelessControl(it) ?: return@forEach  // continue
-                updatePublisher.onNext(control)
+            for (id in ids) {
+                if (!isActive) break
+                try {
+                    val control = getProvider(id)?.create(context, id) ?: continue
+                    updatePublisher.onNext(control)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
             updatePublisher.onComplete()
         }
@@ -60,37 +76,43 @@ class MyControlService : ControlsProviderService() {
     }
 
     override fun createPublisherFor(controlIds: MutableList<String>): Flow.Publisher<Control> {
-        val updatePublisher = ReplayProcessor.create<Control>().also {
-            updatePublisher = it
+        val updatePublisher = ReplayProcessor.create<Control>(controlIds.size)
+        for (id in controlIds) {
+            publishers[id]?.let { (_, oldJob) ->
+                // update publisher to be the new value
+                publishers[id] = updatePublisher to oldJob
+                // cancel the old statusJob
+                oldJob.cancel()
+            }
+            val provider = getProvider(id) ?: continue
+            val flow = actionFlow.filter { (i, _) -> i == id && publishers[i] != null }
+            val statusJob = provider.create(this, id, flow)
+                .onEach { control ->
+                    publishers[control.controlId]?.let { (pub, _) -> pub.onNext(control) }
+                }
+                .launchIn(coroutineScope)
+            publishers[id] = updatePublisher to statusJob
         }
-        controlIds.forEach { getControl(updatePublisher, it) }
         return FlowAdapters.toFlowPublisher(updatePublisher)
     }
 
     override fun performControlAction(controlId: String, action: ControlAction, consumer: Consumer<Int>) {
-        // actions can only be performed on stateful controls
-        val updatePublisher = updatePublisher ?: return
-        // Inform SystemUI that the action has been received and is being processed
-        consumer.accept(ControlAction.RESPONSE_OK)
-        getControl(updatePublisher, controlId, action)
+        if (publishers[controlId] != null) {
+            coroutineScope.launch { actionChannel?.send(controlId to action) }
+            consumer.accept(ControlAction.RESPONSE_OK)
+        } else {
+            consumer.accept(ControlAction.RESPONSE_FAIL)
+        }
     }
 
     override fun onDestroy() {
-        coroutineScope.cancel()
+        actionChannel?.close()
+        coroutineScope.coroutineContext.cancelChildren()
         super.onDestroy()
         providers.forEach { it.onDestroy() }
     }
 
-    private fun getProvider(controlId: String): ControlProvider? {
+    private fun getProvider(controlId: String): ControlsProvider? {
         return providers.find { controlId.matches(it.controlIdRegex.toRegex()) }
     }
-
-    private suspend fun getStatelessControl(controlId: String): Control? {
-        return getProvider(controlId)?.getStatelessControl(controlId)
-    }
-
-    private fun getControl(updatePublisher: ReplayProcessor<Control>, controlId: String, action: ControlAction? = null) {
-        getProvider(controlId)?.getStatefulControl(updatePublisher, controlId, action)
-    }
-
 }

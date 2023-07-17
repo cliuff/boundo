@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Clifford Liu
+ * Copyright 2023 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,29 +14,18 @@
  * limitations under the License.
  */
 
-package com.madness.collision.versatile.controls
+package com.madness.collision.versatile.ctrl
 
 import android.Manifest
-import android.annotation.TargetApi
-import android.app.PendingIntent
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothProfile
 import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Intent
 import android.os.Build
-import android.service.controls.Control
-import android.service.controls.DeviceTypes
 import android.service.controls.actions.BooleanAction
 import android.service.controls.actions.ControlAction
-import android.service.controls.templates.ControlButton
-import android.service.controls.templates.ToggleTemplate
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.toBitmap
-import androidx.core.graphics.drawable.toIcon
+import androidx.annotation.RequiresApi
 import com.madness.collision.R
-import com.madness.collision.main.MainActivity
-import com.madness.collision.unit.Unit
 import com.madness.collision.unit.device_manager.list.DeviceItem
 import com.madness.collision.unit.device_manager.list.StateObservable
 import com.madness.collision.unit.device_manager.list.StateUpdateRegulation
@@ -46,22 +35,36 @@ import com.madness.collision.util.PermissionUtils
 import com.madness.collision.util.SystemUtil
 import com.madness.collision.util.os.OsUtils
 import com.madness.collision.util.regexOf
-import io.reactivex.rxjava3.processors.ReplayProcessor
-import kotlinx.coroutines.*
+import com.madness.collision.versatile.controls.CommonControl
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.SendChannel
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.launch
 
-@TargetApi(Build.VERSION_CODES.R)
-class DeviceManControlProvider(private val context: Context) : ControlProvider, StateObservable {
-    override val controlIdRegex: String = regexOf("${DEV_PREFIX_DM}_.+")
+typealias ControlStateChange = Pair<BluetoothDevice, Int>
+
+@RequiresApi(Build.VERSION_CODES.R)
+class DevManControlCreator : ControlCreator<ControlInfo>, StateObservable {
+    companion object {
+        const val DEV_PREFIX_DM = "dev_dm"
+        val IdRegex = regexOf("${DEV_PREFIX_DM}_.+")
+    }
+
     private val coroutineScope = CoroutineScope(Dispatchers.Default + Job())
     private val devManLazy = lazy { DeviceManager() }
     private val devMan by devManLazy
-    private val devManValue: DeviceManager? get() = if (devManLazy.isInitialized()) devManLazy.value else null
     private val dmRegulator: StateUpdateRegulator by lazy { StateUpdateRegulator() }
-    private var updatePublisher: ReplayProcessor<Control>? = null
-
-    companion object {
-        const val DEV_PREFIX_DM = "dev_dm"
-    }
+    private var stateChannel: SendChannel<ControlStateChange>? = null
+    private lateinit var stateFlow: Flow<ControlStateChange>
 
     override val stateReceiver: BroadcastReceiver = stateReceiverImp
 
@@ -69,80 +72,92 @@ class DeviceManControlProvider(private val context: Context) : ControlProvider, 
     }
 
     override fun onDeviceStateChanged(device: BluetoothDevice, state: Int) {
-        val updatePublisher = updatePublisher ?: return
-        // manager not used yet and no device added
-        if (devMan.hasProxy.not()) return
-        prepareDmManager(context) ?: return
-        val id = getDmDeviceIds().find { getDmMacByDeviceId(it) == device.address } ?: return
-        val deviceItem = DeviceItem(device).apply { this.state = state }
-        val regulation = StateUpdateRegulation(600, deviceItem) {
-            withContext(Dispatchers.Default) {
-                val control = getStatefulControl(context, id, deviceItem)
-                updatePublisher.onNext(control)
-            }
-        }
-        coroutineScope.launch { dmRegulator.regulate(regulation) }
+        coroutineScope.launch { stateChannel?.send(device to state) }
     }
 
-    override fun onCreate() {
+    fun onCreate(context: Context) {
+        val flow = channelFlow {
+            stateChannel = channel
+            awaitClose { stateChannel = null }
+        }
+        // SharedFlow/hot flow required for multiple subscribers to be allowed
+        stateFlow = flow.shareIn(coroutineScope, SharingStarted.WhileSubscribed())
         registerStateReceiver(context)
     }
 
-    override fun onDestroy() {
-        coroutineScope.cancel()
-        devManValue?.close()
+    fun close(context: Context) {
+        if (devManLazy.isInitialized()) devMan.close()
+        stateChannel?.close()
         unregisterStateReceiver(context)
     }
 
-    override suspend fun getDeviceIds(): List<String> {
+    suspend fun getDeviceIds(context: Context): List<String> {
         prepareDevMan(context) ?: return emptyList()
         return getDmDeviceIds()
     }
 
-    override suspend fun getStatelessControl(controlId: String): Control? {
+    override suspend fun create(context: Context, id: String): ControlInfo? {
         val devMan = prepareDevMan(context) ?: return null
-        val deviceItem = getDeviceItem(devMan, controlId, null)
-        return getStatelessControl(context, controlId, deviceItem)
+        val deviceItem = getDeviceItem(devMan, id, null)
+        return getDeviceDetails(context, deviceItem)
     }
 
-    override fun getStatefulControl(updatePublisher: ReplayProcessor<Control>, controlId: String, action: ControlAction?) {
-        this.updatePublisher = updatePublisher
-        coroutineScope.launch {
-            val devMan = prepareDevMan(context)
-            val deviceItem = devMan?.let { getDeviceItem(it, controlId, action) }
-            val control = getStatefulControl(context, controlId, deviceItem)
-            updatePublisher.onNext(control)
+    override fun create(context: Context, id: String, actionFlow: Flow<ControlActionRequest>): Flow<ControlInfo> {
+        return channelFlow {
+            prepareDevMan(context)?.let { devMan ->
+                val deviceItem = getDeviceItem(devMan, id, null)
+                send(getStatus(context, deviceItem))
+            }
+            actionFlow
+                .onEach { (_, action) ->
+                    val devMan = prepareDevMan(context)
+                    val deviceItem = devMan?.let { getDeviceItem(it, id, action) }
+                    send(getStatus(context, deviceItem))
+                }
+                .launchIn(this)
+            val producerScope = this
+            stateFlow
+                .filter { (device, _) ->
+                    getDmDeviceIds().find { getDmMacByDeviceId(it) == device.address } == id
+                }
+                .onEach state@{ (device, state) ->
+                    // manager not used yet and no device added
+                    if (devMan.hasProxy.not()) return@state
+                    prepareDmManager(context) ?: return@state
+                    val deviceItem = DeviceItem(device).apply { this.state = state }
+                    val regulation = StateUpdateRegulation(600, deviceItem) {
+                        send(getStatus(context, deviceItem))
+                    }
+                    // launch asynchronously to avoid blocking flow item processing
+                    producerScope.launch { dmRegulator.regulate(regulation) }
+                }
+                .launchIn(this)
         }
     }
 
-    private fun getStatelessControl(context: Context, controlId: String, deviceItem: DeviceItem?): Control {
-        val localeContext = SystemUtil.getLocaleContextSys(context)
-        val intent = Intent(context, MainActivity::class.java).apply {
-            putExtras(MainActivity.forItem(Unit.UNIT_NAME_DEVICE_MANAGER))
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+    private fun getDeviceDetails(context: Context, deviceItem: DeviceItem?): ControlDetails =
+        CommonControl(context) {
+            val localeContext = SystemUtil.getLocaleContextSys(context)
+            if (deviceItem != null) {
+                val subRes = when (deviceItem.state) {
+                    BluetoothProfile.STATE_CONNECTED -> R.string.versatile_device_controls_dm_hint_on
+                    else -> R.string.versatile_device_controls_dm_hint_off
+                }
+                ControlDetails(
+                    title = deviceItem.name,
+                    subtitle = localeContext.getString(subRes),
+                    icon = drawableIcon(deviceItem.iconRes),
+                )
+            } else {
+                ControlDetails(
+                    title = localeContext.getString(R.string.versatile_device_controls_dm_title_unknown),
+                    subtitle = localeContext.getString(R.string.versatile_device_controls_dm_hint_off),
+                    icon = drawableIcon(R.drawable.ic_devices_other_24),
+                )
+            }
         }
-        val piMutabilityFlag = if (OsUtils.satisfy(OsUtils.M)) PendingIntent.FLAG_IMMUTABLE else 0
-        val pi = PendingIntent.getActivity(context, 0, intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or piMutabilityFlag)
-        val iconRes = deviceItem?.iconRes ?: R.drawable.ic_devices_other_24
-        val iconDrawable = ContextCompat.getDrawable(context, iconRes)
-        val color = context.getColor(R.color.primaryAWhite)
-        iconDrawable?.setTint(color)
-        val icon = iconDrawable?.toBitmap()?.toIcon()
-        val title = deviceItem?.name ?: localeContext.getString(R.string.versatile_device_controls_dm_title_unknown)
-        val isConnected = deviceItem?.state == BluetoothProfile.STATE_CONNECTED
-        val subRes = if (isConnected) R.string.versatile_device_controls_dm_hint_on
-        else R.string.versatile_device_controls_dm_hint_off
-        val sub = localeContext.getString(subRes)
-        return Control.StatelessBuilder(controlId, pi)
-            .setCustomIcon(icon)
-            .setTitle(title)
-            .setSubtitle(sub)
-            .setDeviceType(DeviceTypes.TYPE_GENERIC_ON_OFF)
-            .build()
-    }
 
-    private fun getStatefulControl(context: Context, controlId: String, deviceItem: DeviceItem?): Control {
+    private fun getStatus(context: Context, deviceItem: DeviceItem?): ControlInfo.ButtonStatus {
         val localeContext = SystemUtil.getLocaleContextSys(context)
         val isConnected = deviceItem?.state == BluetoothProfile.STATE_CONNECTED
         val status = when (deviceItem?.state) {
@@ -154,14 +169,8 @@ class DeviceManControlProvider(private val context: Context) : ControlProvider, 
         val actionDescRes = if (isConnected) R.string.versatile_device_controls_dm_ctrl_desc_on
         else R.string.versatile_device_controls_dm_ctrl_desc_off
         val actionDesc = localeContext.getString(actionDescRes)
-        val controlButton = ControlButton(isConnected, actionDesc)
-        val toggleTemplate = ToggleTemplate(controlId, controlButton)
-        val stateless = getStatelessControl(context, controlId, deviceItem)
-        return Control.StatefulBuilder(stateless)
-            .setStatus(Control.STATUS_OK)
-            .setStatusText(status)
-            .setControlTemplate(toggleTemplate)
-            .build()
+        val details = getDeviceDetails(context, deviceItem)
+        return ControlInfo.ButtonStatus(details, status, isConnected, actionDesc)
     }
 
     private fun getDmDeviceIds(): List<String> {
