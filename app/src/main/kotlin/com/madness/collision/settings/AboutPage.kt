@@ -17,6 +17,7 @@
 package com.madness.collision.settings
 
 import android.content.res.Configuration
+import android.text.format.DateUtils
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -142,6 +143,16 @@ private fun BuildDetails() {
             fontSize = 10.sp,
             lineHeight = 11.sp,
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.55f),
+            textAlign = TextAlign.Center,
+        )
+        val buildMillis = BuildConfig.BUILD_TIMESTAMP
+        val timeSpan = DateUtils.getRelativeTimeSpanString(buildMillis,
+            System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS)
+        Text(
+            text = timeSpan.toString(),
+            fontSize = 9.sp,
+            lineHeight = 10.sp,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
             textAlign = TextAlign.Center,
         )
     }

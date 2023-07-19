@@ -273,6 +273,11 @@ internal object Utils {
             when {
                 // 0->1970.01.01, 1230768000000->2009.01.01
                 info.lastUpdateTime <= 1230768000000L -> preinstalledPackages.add(info)
+                // 1293840000000->2011.01.01, before OS 4.0 was released, to accommodate potential cases
+                // with minSDK 23, it is impossible to find an app actually installed by this date
+                info.lastUpdateTime <= 1293840000000L -> preinstalledPackages.add(info)
+                // case observed on a Xiaomi device, view as preinstalled case to further examine it
+                info.lastUpdateTime < info.firstInstallTime -> preinstalledPackages.add(info)
                 info.lastUpdateTime >= timestamp -> updatedPackages.add(info)
                 else -> Unit
             }

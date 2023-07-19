@@ -41,6 +41,8 @@ object RecordMtn {
         if (lastDiffTime <= 0) return true
         val checkTimeMills = System.currentTimeMillis()
         val elapsedTime = (checkTimeMills - lastDiffTime).milliseconds
+        // already checked within 3 days
+        if (elapsedTime <= 3.days) return false
         // not checked for 7 days
         if (elapsedTime >= 7.days) return true
         // 1/10 probability
@@ -55,7 +57,11 @@ object RecordMtn {
 
             val insertJob = launch(Dispatchers.IO) {
                 val changes = mapDiffChanges(dataDiff)
-                AppRoom.getDatabase(context).diffDao().insertAll(changes)
+                val dao = AppRoom.getDatabase(context).diffDao()
+                // delete old empty records more than 60 days ago
+                val oldMillis = diffTimeMills - 60.days.inWholeMilliseconds
+                dao.deleteEmptyRecordsBy(oldMillis)
+                dao.insertAll(changes)
             }
             val logJob = launch(Dispatchers.Default) { logDiff(dataDiff, oldList) }
             // wait for jobs to finish before updating diff time

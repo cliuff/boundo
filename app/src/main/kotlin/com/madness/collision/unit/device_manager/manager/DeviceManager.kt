@@ -22,11 +22,12 @@ import android.util.SparseArray
 import androidx.core.util.size
 import com.madness.collision.util.os.OsUtils
 import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.lang.reflect.Method
 import kotlin.collections.set
 import kotlin.coroutines.resume
 import kotlin.time.Duration.Companion.seconds
-import kotlin.time.ExperimentalTime
 
 /**
  * No need to invoke [close] if [useProxy] is false
@@ -56,7 +57,7 @@ class DeviceManager(useProxy: Boolean = true): AutoCloseable {
     fun operate(device: BluetoothDevice, operation: String): Boolean {
         var isSuccess: Boolean? = null
         for (profile in profiles) {
-            val proxy = proxies[profile]
+            val proxy = proxies[profile] ?: continue
             // check whether to skip the operation
             when(operation) {
                 OP_CONNECT -> if (device in proxy.connectedDevices) continue
@@ -84,21 +85,30 @@ class DeviceManager(useProxy: Boolean = true): AutoCloseable {
         return profiles.map { proxies[it]?.connectedDevices ?: emptyList() }.flatten()
     }
 
-    @OptIn(ExperimentalTime::class)  // use Duration
+    private val initMutex = Mutex()
+
     suspend fun initProxy(context: Context) {
         if (!doUseProxy || hasProxy) return
-        initMethods()
-        // wait for proxies to be ready
-        withTimeoutOrNull(6.seconds) { connectProfileProxy(context) }
+        initMutex.withLock {
+            // double check
+            if (hasProxy) return
+            initMethods()
+            // wait for proxies to be ready
+            withTimeoutOrNull(6.seconds) { connectProfileProxy(context) }
+        }
     }
 
     fun initProxySync(context: Context) {
         if (!doUseProxy || hasProxy) return
-        initMethods()
-        val profileListener = getProfileListener { }
-        // Establish connection to the proxy.
-        profiles.filter { proxies[it] == null }
-            .forEach { adapter?.getProfileProxy(context, profileListener, it) }
+        synchronized(this) {
+            // double check
+            if (hasProxy) return
+            initMethods()
+            val profileListener = getProfileListener { }
+            // Establish connection to the proxy.
+            profiles.filter { proxies[it] == null }
+                .forEach { adapter?.getProfileProxy(context, profileListener, it) }
+        }
     }
 
     private fun initMethods() {

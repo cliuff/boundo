@@ -98,6 +98,8 @@ android {
         // below: inject the desired values into BuildConfig and Res
         // the string values have to be wrapped in quotes because the value in local.properties does not have quotes
         buildConfigField("String", "BUILD_PACKAGE", "\"$buildPackage\"")
+        // override with current time in release builds to increase performance during debugging
+        buildConfigField("long", "BUILD_TIMESTAMP", "0")
         resValue("string", "buildPackage", buildPackage)
         // below: fix multi-locale support
         resourceConfigurations.addAll(arrayOf(
@@ -158,6 +160,8 @@ android {
             isMinifyEnabled = true
             isShrinkResources = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            // override field with current time in release builds only
+            buildConfigField("long", "BUILD_TIMESTAMP", System.currentTimeMillis().toString())
         }
     }
     compileOptions {

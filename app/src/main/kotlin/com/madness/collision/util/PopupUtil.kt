@@ -73,7 +73,9 @@ object PopupUtil {
         setTitleCollision(titleId, 0, 0)
         setContent(0)
         val radioGroup: ViewGroup = findViewById(R.id.popupSelectMultiContainer)
-        val checkedIndexes = indexes.toMutableSet()
+        // filter out negative ones from input indexes
+        val initIndexes = indexes.filterTo(HashSet(indexes.size)) { it >= 0 }
+        val checkedIndexes = HashSet(initIndexes)
         val checkedChangeListener: (CompoundButton, Boolean) -> Unit = { checkBox, isChecked ->
             val checkedIndex = checkBox.tag as Int
             if (isChecked) checkedIndexes.add(checkedIndex)
@@ -103,7 +105,7 @@ object PopupUtil {
                 context.imageLoader.enqueue(req)
             }
             item.tag = i
-            item.isChecked = i in indexes
+            item.isChecked = i in initIndexes
             item.setOnCheckedChangeListener(checkedChangeListener)
         }
         setListener({ dismiss() }, {

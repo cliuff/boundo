@@ -28,4 +28,7 @@ interface DiffDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(changes: List<DiffChange>)
+
+    @Query("DELETE FROM diff_change WHERE type = 0 AND diff_time < :timeMills")
+    suspend fun deleteEmptyRecordsBy(timeMills: Long)
 }

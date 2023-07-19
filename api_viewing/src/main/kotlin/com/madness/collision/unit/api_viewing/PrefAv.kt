@@ -85,7 +85,7 @@ internal class PrefAv: PreferenceFragmentCompat() {
             val tags = AppTagManager.tags
             val rankedTags = tags.values.sortedBy { it.rank }
             val checkedIndexes = prefValue.mapNotNullTo(mutableSetOf()) { id ->
-                rankedTags.indexOfFirst { it.id == id }
+                rankedTags.indexOfFirst { it.id == id }.takeIf { it >= 0 }
             }
             val filterTags = rankedTags.map { it.getFullLabel(context)?.toString() ?: "" }
             val tagIcons = rankedTags.map { it.icon.drawableResId }
