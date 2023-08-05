@@ -26,6 +26,7 @@ import com.madness.collision.misc.PackageCompat
 import com.madness.collision.unit.api_viewing.R
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
+import com.madness.collision.unit.api_viewing.info.AppType
 import com.madness.collision.unit.api_viewing.list.AppListService
 import com.madness.collision.unit.api_viewing.tag.inflater.AppTagInflater
 import com.madness.collision.unit.api_viewing.util.ManifestUtil
@@ -108,11 +109,47 @@ internal fun builtInTags(): Map<String, AppTagInfo> = listOf(
         expressing = commonExpressing { it.apiUnit == ApiUnit.SYS }
     ).apply { iconKey = "sys" },
     AppTagInfo(
+        id = AppTagInfo.ID_APP_SYSTEM_CORE, category = 0.cat, icon = "CORE".icon,
+        label = "System core app".labels, rank = -6,
+        desc = "This app is included when the device is booted into a minimal state".resultDesc,
+        expressing = commonExpressing { it.isCoreApp == true }
+    ),
+    AppTagInfo(
+        id = AppTagInfo.ID_APP_SYSTEM_MODULE, category = 0.cat, icon = "MODULE".icon,
+        label = "Modular system component".labels, rank = -5,
+        desc = "Project Mainline modules are distributed by Google Play System updates".resultDesc,
+        expressing = commonExpressing { it.moduleInfo != null }
+    ),
+    AppTagInfo(
+        id = AppTagInfo.ID_TYPE_OVERLAY, category = 0.cat, icon = "RRO".icon,
+        label = "Runtime resource overlay (RRO)".labels, rank = -4,
+        desc = "An RRO changes the resource values of a target package at runtime".resultDesc,
+        expressing = commonExpressing { it.appType is AppType.Overlay }
+    ),
+    AppTagInfo(
+        id = AppTagInfo.ID_TYPE_INSTANT, category = 0.cat, icon = "INSTANT".icon,
+        label = "Instant app".labels, rank = -3,
+        desc = "This app runs without being installed".resultDesc,
+        expressing = commonExpressing { it.appType == AppType.InstantApp }
+    ),
+    AppTagInfo(
+        id = AppTagInfo.ID_TYPE_WEB_APK, category = 0.cat, icon = R.drawable.ic_pwa_72.icon,
+        label = "Chromium WebAPK".labels, rank = -2,
+        desc = "This is a Progressive Web App (PWA)".resultDesc,
+        expressing = commonExpressing { it.appType == AppType.WebApk }
+    ).apply { iconKey = "pwa" },
+    AppTagInfo(
         id = AppTagInfo.ID_APP_HIDDEN, category = 0.cat, icon = R.drawable.ic_hidden_72.icon,
         label = (R.string.av_adapter_tag_hidden to R.string.av_settings_tag_hidden).resLabels, rank = 10,
         desc = R.string.av_tag_result_hidden.resultDesc,
         expressing = commonExpressing { it.isNotArchive && !it.isLaunchable }
     ).apply { iconKey = "hid" },
+    AppTagInfo(
+        id = AppTagInfo.ID_APP_PREDICTIVE_BACK, category = 0.cat, icon = "PRE-BACK".icon,
+        label = "Predictive back".labels, rank = -1,
+        desc = "This app supports predictive back animations on this device".resultDesc,
+        expressing = commonExpressing { it.isBackCallbackEnabled == true }
+    ),
 
     AppTagInfo(
         id = AppTagInfo.ID_PKG_64BIT, category = 0.cat, icon = R.string.av_tag_full_64bit.label.icon,

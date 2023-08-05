@@ -109,8 +109,14 @@ internal class AppTagInfo(
         const val ID_PKG_X64 = "avTagsValPkgX64"
         const val ID_APP_HIDDEN = "avTagsValueHidden"
         const val ID_APP_SYSTEM = "avTagsValPriSys"
+        const val ID_APP_SYSTEM_CORE = "avTagsValSysCore"
+        const val ID_APP_SYSTEM_MODULE = "avTagsValSysMod"
+        const val ID_TYPE_OVERLAY = "avTagsValTypeOverlay"
+        const val ID_TYPE_INSTANT = "avTagsValTypeInstant"
+        const val ID_TYPE_WEB_APK = "avTagsValTypeWebApk"
         const val ID_PKG_AAB = "avTagsValHasSplits"
         const val ID_APP_ADAPTIVE_ICON = "avTagsValIconAda"
+        const val ID_APP_PREDICTIVE_BACK = "avTagsValPreBack"
         const val ID_MSG_FCM = "avTagsValPushFcm"
         const val ID_MSG_HUAWEI = "avTagsValPushHw"
         const val ID_MSG_XIAOMI = "avTagsValPushMi"
@@ -141,8 +147,14 @@ internal class AppTagInfo(
             ID_PKG_X64,
             ID_APP_HIDDEN,
             ID_APP_SYSTEM,
+            ID_APP_SYSTEM_CORE,
+            ID_APP_SYSTEM_MODULE,
+            ID_TYPE_OVERLAY,
+            ID_TYPE_INSTANT,
+            ID_TYPE_WEB_APK,
             ID_PKG_AAB,
             ID_APP_ADAPTIVE_ICON,
+            ID_APP_PREDICTIVE_BACK,
             ID_MSG_FCM,
             ID_MSG_HUAWEI,
             ID_MSG_XIAOMI,
@@ -165,6 +177,7 @@ internal class AppTagInfo(
             ID_PKG_64BIT,
             ID_APP_HIDDEN,
             ID_APP_SYSTEM,
+            ID_TYPE_WEB_APK,
             ID_PKG_AAB,
             ID_APP_ADAPTIVE_ICON,
             ID_MSG_FCM,

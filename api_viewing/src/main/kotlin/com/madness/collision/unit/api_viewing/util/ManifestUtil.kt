@@ -144,4 +144,15 @@ object ManifestUtil {
         }
         return ""
     }
+
+    fun getOnBackInvokedCallbackEnabled(sourceDir: String): String {
+        try {
+            val res = getManifestAttr(sourceDir, arrayOf("application", "enableOnBackInvokedCallback"))
+            if (res.isEmpty()) return ""
+            return res
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return ""
+    }
 }

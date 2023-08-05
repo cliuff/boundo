@@ -155,7 +155,7 @@ class ApkRetriever(private val context: Context) {
     fun resolvePackage(info: PackageInfo, block: (ApiViewingApp?) -> Unit) {
         val ai = info.applicationInfo
         val app = ApiViewingApp(context, info, preloadProcess = true, archive = true)
-                .initArchive(context, ai).load(context, ai)
+                .initArchive(context, info).load(context, ai)
         block.invoke(app)
     }
 

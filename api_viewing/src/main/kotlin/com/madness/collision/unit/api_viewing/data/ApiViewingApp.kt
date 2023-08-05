@@ -20,6 +20,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
+import android.content.pm.ModuleInfo
 import android.content.pm.PackageInfo
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -34,6 +35,10 @@ import androidx.core.content.pm.PackageInfoCompat
 import androidx.room.*
 import com.madness.collision.misc.MiscApp
 import com.madness.collision.unit.api_viewing.Utils
+import com.madness.collision.unit.api_viewing.info.AppType
+import com.madness.collision.unit.api_viewing.info.PkgInfo
+import com.madness.collision.unit.api_viewing.info.getAppType
+import com.madness.collision.unit.api_viewing.info.isOnBackInvokedCallbackEnabled
 import com.madness.collision.unit.api_viewing.util.ApkUtil
 import com.madness.collision.unit.api_viewing.util.ManifestUtil
 import com.madness.collision.util.GraphicsUtil
@@ -133,6 +138,14 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
         private set
     @Ignore
     var iconRetrievingDetails: IconRetrievingDetails? = null
+    @Ignore
+    var appType: AppType = AppType.Common
+    @Ignore
+    var moduleInfo: ModuleInfo? = null
+    @Ignore
+    var isCoreApp: Boolean? = null
+    @Ignore
+    var isBackCallbackEnabled: Boolean? = null
 
     val isJetpackComposed: Boolean
         get() = jetpackComposed == 1
@@ -161,10 +174,10 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
         }
     }
 
-    fun initIgnored(context: Context, info: ApplicationInfo? = getApplicationInfo(context)) {
+    fun initIgnored(context: Context, pkgInfo: PackageInfo? = getPackageInfo(context)) {
         initIgnored()
-        info ?: return
-        initExtraIgnored(context, info)
+        pkgInfo ?: return
+        initExtraIgnored(context, pkgInfo)
     }
 
     /**
@@ -180,12 +193,18 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
         type = TYPE_APP
         isLoadingIcon = false
         iconRetrievingDetails = null
+        appType = AppType.Common
+        moduleInfo = null
+        isCoreApp = null
+        isBackCallbackEnabled = null
     }
 
-    fun initExtraIgnored(context: Context, info: ApplicationInfo) {
+    fun initExtraIgnored(context: Context, pkgInfo: PackageInfo) {
+        val info = pkgInfo.applicationInfo
         uid = info.uid
         loadCompileSdk(info)
         loadName(context, info)
+        loadFreshProperties(pkgInfo, context)
     }
 
     fun init(context: Context, info: PackageInfo, preloadProcess: Boolean, archive: Boolean) {
@@ -206,6 +225,7 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
                 appPackage = AppPackage(info.applicationInfo)
                 loadCompileSdk(info.applicationInfo)
                 loadName(context, info.applicationInfo)
+                loadFreshProperties(info, context)
                 //name = manager.getApplicationLabel(pi.applicationInfo).toString();
             }
 
@@ -270,7 +290,16 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
         minSDKLetter = Utils.getAndroidLetterByAPI(minAPI)
     }
 
-    fun initArchive(context: Context, applicationInfo: ApplicationInfo): ApiViewingApp {
+    private fun loadFreshProperties(pkgInfo: PackageInfo, context: Context) {
+        appType = getAppType(pkgInfo)
+        // todo enhance module and isOnBackInvokedCallbackEnabled checking performance
+        moduleInfo = PkgInfo.getModuleInfo(packageName, context)
+        isCoreApp = PkgInfo.getIsCoreApp(pkgInfo)
+        isBackCallbackEnabled = isOnBackInvokedCallbackEnabled(pkgInfo.applicationInfo, context)
+    }
+
+    fun initArchive(context: Context, pkgInfo: PackageInfo): ApiViewingApp {
+        val applicationInfo = pkgInfo.applicationInfo
         appPackage = AppPackage(applicationInfo)
         loadCompileSdk(applicationInfo)
 
@@ -281,6 +310,7 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
         }
 
         loadName(context, applicationInfo)
+        loadFreshProperties(pkgInfo, context)
         //name = manager.getApplicationLabel(pi.applicationInfo).toString();
         return this
         //this.name = file.getName() + "\n" + file.getParent();
