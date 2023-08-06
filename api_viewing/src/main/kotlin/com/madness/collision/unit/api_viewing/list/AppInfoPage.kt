@@ -418,7 +418,7 @@ private fun AppInfoPreview() {
         val names = arrayOf(
             "Google Play", "Adaptive icon", "Jetpack Compose", "Flutter", "Android App Bundle")
         val infoList = names.map {
-            AppTagInflater.TagInfo(name = it, icon = AppTagInflater.TagInfo.Icon(), rank = 0)
+            AppTagInflater.TagInfo(name = it, icon = AppTagInflater.TagInfo.Icon(), rank = "0")
         }
         infoList.mapIndexed { i, info ->
             val label = infoList[i].name ?: "Unknown"

@@ -111,7 +111,7 @@ internal object AppTagInflater {
         return if (iconDrawable != null) ensureTagIcon(context, pkgName, iconDrawable) else null
     }
 
-    class TagInfo(val nameResId: Int? = null, val name: String? = null, val icon: Icon? = null, val rank: Int) {
+    class TagInfo(val nameResId: Int? = null, val name: String? = null, val icon: Icon? = null, val rank: String) {
         class Icon(
             val bitmap: Bitmap? = null,
             val text: CharSequence? = null,
@@ -119,7 +119,7 @@ internal object AppTagInflater {
         )
     }
 
-    class TagRank(val name: String?, val rank: Int)
+    class TagRank(val name: String?, val rank: String)
 
     fun inflateTag(context: Context, parent: ViewGroup, tagInfo: TagInfo) {
         val name = tagInfo.name ?: tagInfo.nameResId?.let { context.getString(it) }

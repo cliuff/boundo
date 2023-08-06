@@ -28,7 +28,8 @@ internal class AppTagInfo(
     val label: Labels,
     val category: Category,
     val desc: Description? = null,
-    val rank: Int = RANK_UNSPECIFIED, // starts from 0
+    // digits only (0-9), follow comparison rules of strings
+    val rank: String = RANK_UNSPECIFIED,
     val requisites: List<Requisite>? = null,
     val expressing: Expressing,
 ) : Expression {
@@ -93,7 +94,7 @@ internal class AppTagInfo(
     fun interface Expressing : (ExpressibleTag, Resources) -> Boolean
 
     companion object {
-        const val RANK_UNSPECIFIED = -1
+        const val RANK_UNSPECIFIED = "\u0000"  // NULL
 
         const val ID_APP_INSTALLER_PLAY = "avTagsValPiGp"
         const val ID_APP_INSTALLER = "avTagsValPiPi"

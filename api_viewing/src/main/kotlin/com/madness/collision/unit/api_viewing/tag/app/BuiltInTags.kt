@@ -37,14 +37,14 @@ import kotlinx.coroutines.delay
 internal fun builtInTags(): Map<String, AppTagInfo> = listOf(
     AppTagInfo(
         id = AppTagInfo.ID_APP_INSTALLER_PLAY, category = 0.cat, icon = ApiViewingApp.packagePlayStore.appIcon,
-        label = R.string.apiDetailsInstallGP.labels, rank = 0,  // todo dynamic label
+        label = R.string.apiDetailsInstallGP.labels, rank = "10",  // todo dynamic label
         desc = installerResultDesc,
         requisites = pkgInstallerRequisite().list,
         expressing = expressing { res -> res.pkgInstaller == ApiViewingApp.packagePlayStore }
     ).apply { iconKey = ApiViewingApp.packagePlayStore },
     AppTagInfo(
         id = AppTagInfo.ID_APP_INSTALLER, category = 0.cat, icon = AppTagInfo.Icon(isDynamic = true),
-        label = AppTagInfo.Labels(full = R.string.apiDetailsInstallPI.label, isDynamic = true), rank = 1,
+        label = AppTagInfo.Labels(full = R.string.apiDetailsInstallPI.label, isDynamic = true), rank = "11",
         desc = installerResultDesc,
         requisites = pkgInstallerRequisite().list,
         expressing = expressing { res ->
@@ -55,35 +55,35 @@ internal fun builtInTags(): Map<String, AppTagInfo> = listOf(
 
     AppTagInfo(
         id = AppTagInfo.ID_TECH_KOTLIN, category = 0.cat, icon = R.drawable.ic_kotlin_72.icon,
-        label = "Kotlin".labels, rank = 2,
+        label = "Kotlin".labels, rank = "12",
         desc = "kotlin.kotlin_builtins".fileResultDesc,
         requisites = nativeLibrariesRequisite().list,
         expressing = commonExpressing { it.nativeLibraries[7] }
     ).apply { iconKey = "kot" },
     AppTagInfo(
         id = AppTagInfo.ID_TECH_X_COMPOSE, category = 0.cat, icon = R.drawable.ic_cmp_72.icon,
-        label = "Jetpack Compose".labels, rank = 3,
+        label = "Jetpack Compose".labels, rank = "13",
         desc = "androidx.compose".packageResultDesc,
         requisites = thirdPartyPkgRequisite().list,
         expressing = commonExpressing { it.isJetpackComposed }
     ).apply { iconKey = "xcm" },
     AppTagInfo(
         id = AppTagInfo.ID_TECH_FLUTTER, category = 0.cat, icon = R.drawable.ic_flutter_72.icon,
-        label = "Flutter".labels, rank = 4,
+        label = "Flutter".labels, rank = "14",
         desc = "libflutter.so".fileResultDesc,
         requisites = nativeLibrariesRequisite().list,
         expressing = commonExpressing { it.nativeLibraries[4] }
     ).apply { iconKey = "flu" },
     AppTagInfo(
         id = AppTagInfo.ID_TECH_REACT_NATIVE, category = 0.cat, icon = R.drawable.ic_react_72.icon,
-        label = "React Native".labels, rank = 5,
+        label = "React Native".labels, rank = "15",
         desc = "libreactnativejni.so".fileResultDesc,
         requisites = nativeLibrariesRequisite().list,
         expressing = commonExpressing { it.nativeLibraries[5] }
     ).apply { iconKey = "rn" },
     AppTagInfo(
         id = AppTagInfo.ID_TECH_XAMARIN, category = 0.cat, icon = R.drawable.ic_xamarin_72.icon,
-        label = "Xamarin".labels, rank = 6,
+        label = "Xamarin".labels, rank = "16",
         desc = "libxamarin-app.so".fileResultDesc,
         requisites = nativeLibrariesRequisite().list,
         expressing = commonExpressing { it.nativeLibraries[6] }
@@ -91,69 +91,69 @@ internal fun builtInTags(): Map<String, AppTagInfo> = listOf(
 
     AppTagInfo(
         id = AppTagInfo.ID_APP_ADAPTIVE_ICON, category = 0.cat, icon = R.drawable.ic_ai_72.icon,
-        label = R.string.av_ai.labels, rank = 7,
+        label = R.string.av_ai.labels, rank = "17",
         desc = R.string.av_tag_result_ai.resultDesc,
         requisites = appIconRequisite().list,
         expressing = commonExpressing { it.adaptiveIcon }
     ).apply { iconKey = "ai" },
     AppTagInfo(
         id = AppTagInfo.ID_PKG_AAB, category = 0.cat, icon = R.drawable.ic_aab_72.icon,
-        label = R.string.av_tag_has_splits.labels, rank = 8,
+        label = R.string.av_tag_has_splits.labels, rank = "18",
         desc = R.string.av_tag_result_aab.resultDesc,
         expressing = commonExpressing { it.appPackage.hasSplits }
     ).apply { iconKey = "aab" },
     AppTagInfo(
         id = AppTagInfo.ID_APP_SYSTEM, category = 0.cat, icon = R.drawable.ic_system_72.icon,
-        label = (R.string.av_adapter_tag_system to R.string.av_settings_tags_system).resLabels, rank = 9,
+        label = (R.string.av_adapter_tag_system to R.string.av_settings_tags_system).resLabels, rank = "19",
         desc = R.string.av_tag_result_sys.resultDesc,
         expressing = commonExpressing { it.apiUnit == ApiUnit.SYS }
     ).apply { iconKey = "sys" },
     AppTagInfo(
         id = AppTagInfo.ID_APP_SYSTEM_CORE, category = 0.cat, icon = "CORE".icon,
-        label = "System core app".labels, rank = -6,
+        label = "System core app".labels, rank = "20",
         desc = "This app is included when the device is booted into a minimal state".resultDesc,
         expressing = commonExpressing { it.isCoreApp == true }
     ),
     AppTagInfo(
         id = AppTagInfo.ID_APP_SYSTEM_MODULE, category = 0.cat, icon = "MODULE".icon,
-        label = "Modular system component".labels, rank = -5,
+        label = "Modular system component".labels, rank = "21",
         desc = "Project Mainline modules are distributed by Google Play System updates".resultDesc,
         expressing = commonExpressing { it.moduleInfo != null }
     ),
     AppTagInfo(
         id = AppTagInfo.ID_TYPE_OVERLAY, category = 0.cat, icon = "RRO".icon,
-        label = "Runtime resource overlay (RRO)".labels, rank = -4,
+        label = "Runtime resource overlay (RRO)".labels, rank = "22",
         desc = "An RRO changes the resource values of a target package at runtime".resultDesc,
         expressing = commonExpressing { it.appType is AppType.Overlay }
     ),
     AppTagInfo(
         id = AppTagInfo.ID_TYPE_INSTANT, category = 0.cat, icon = "INSTANT".icon,
-        label = "Instant app".labels, rank = -3,
+        label = "Instant app".labels, rank = "23",
         desc = "This app runs without being installed".resultDesc,
         expressing = commonExpressing { it.appType == AppType.InstantApp }
     ),
     AppTagInfo(
         id = AppTagInfo.ID_TYPE_WEB_APK, category = 0.cat, icon = R.drawable.ic_pwa_72.icon,
-        label = "Chromium WebAPK".labels, rank = -2,
+        label = "Chromium WebAPK".labels, rank = "24",
         desc = "This is a Progressive Web App (PWA)".resultDesc,
         expressing = commonExpressing { it.appType == AppType.WebApk }
     ).apply { iconKey = "pwa" },
     AppTagInfo(
         id = AppTagInfo.ID_APP_HIDDEN, category = 0.cat, icon = R.drawable.ic_hidden_72.icon,
-        label = (R.string.av_adapter_tag_hidden to R.string.av_settings_tag_hidden).resLabels, rank = 10,
+        label = (R.string.av_adapter_tag_hidden to R.string.av_settings_tag_hidden).resLabels, rank = "25",
         desc = R.string.av_tag_result_hidden.resultDesc,
         expressing = commonExpressing { it.isNotArchive && !it.isLaunchable }
     ).apply { iconKey = "hid" },
     AppTagInfo(
         id = AppTagInfo.ID_APP_PREDICTIVE_BACK, category = 0.cat, icon = "PRE-BACK".icon,
-        label = "Predictive back".labels, rank = -1,
+        label = "Predictive back".labels, rank = "26",
         desc = "This app supports predictive back animations on this device".resultDesc,
         expressing = commonExpressing { it.isBackCallbackEnabled == true }
     ),
 
     AppTagInfo(
         id = AppTagInfo.ID_PKG_64BIT, category = 0.cat, icon = R.string.av_tag_full_64bit.label.icon,
-        label = (R.string.av_tag_full_64bit_normal to R.string.av_tag_full_64bit_full).resLabels, rank = 11,
+        label = (R.string.av_tag_full_64bit_normal to R.string.av_tag_full_64bit_full).resLabels, rank = "27",
         desc = R.string.av_tag_result_full_64bit.resultDesc,
         requisites = nativeLibrariesRequisite().list,
         expressing = commonExpressing { it.nativeLibraries.let { n -> (!n[0] || n[1]) && (!n[2] || n[3]) } }
@@ -161,28 +161,28 @@ internal fun builtInTags(): Map<String, AppTagInfo> = listOf(
 
     AppTagInfo(
         id = AppTagInfo.ID_PKG_ARM32, category = 0.cat, icon = "ARM 32".icon,
-        label = R.string.av_tag_arm_32bit.labels, rank = 12,
+        label = R.string.av_tag_arm_32bit.labels, rank = "28",
         desc = dirArm32ResultDesc,
         requisites = nativeLibrariesRequisite().list,
         expressing = commonExpressing { it.nativeLibraries[0] }
     ),
     AppTagInfo(
         id = AppTagInfo.ID_PKG_ARM64, category = 0.cat, icon = "ARM 64".icon,
-        label = R.string.av_tag_arm_64bit.labels, rank = 13,
+        label = R.string.av_tag_arm_64bit.labels, rank = "29",
         desc = "lib/arm64-v8a".dirResultDesc,
         requisites = nativeLibrariesRequisite().list,
         expressing = commonExpressing { it.nativeLibraries[1] }
     ),
     AppTagInfo(
         id = AppTagInfo.ID_PKG_X86, category = 0.cat, icon = "x86".icon,
-        label = "x86".labels, rank = 14,
+        label = "x86".labels, rank = "30",
         desc = "lib/x86".dirResultDesc,
         requisites = nativeLibrariesRequisite().list,
         expressing = commonExpressing { it.nativeLibraries[2] }
     ),
     AppTagInfo(
         id = AppTagInfo.ID_PKG_X64, category = 0.cat, icon = "x64".icon,
-        label = ("x64" to "x86-64 (x64)").strLabels, rank = 15,
+        label = ("x64" to "x86-64 (x64)").strLabels, rank = "31",
         desc = "lib/x86_64".dirResultDesc,
         requisites = nativeLibrariesRequisite().list,
         expressing = commonExpressing { it.nativeLibraries[3] }
@@ -190,84 +190,84 @@ internal fun builtInTags(): Map<String, AppTagInfo> = listOf(
 
     AppTagInfo(
         id = AppTagInfo.ID_MSG_FCM, category = 0.cat, icon = R.drawable.ic_firebase_72.icon,
-        label = ("FCM" to "Firebase Cloud Messaging (FCM)").strLabels, rank = 16,
+        label = ("FCM" to "Firebase Cloud Messaging (FCM)").strLabels, rank = "32",
         desc = "com.google.firebase.messaging.FirebaseMessagingService".serviceResultDesc,
         requisites = pkgServicesRequisite().list,
         expressing = serviceExpressing("com.google.firebase.messaging.FirebaseMessagingService")
     ).apply { iconKey = "fcm" },
     AppTagInfo(
         id = AppTagInfo.ID_MSG_HUAWEI, category = 0.cat, icon = R.drawable.ic_huawei_72.icon,
-        label = R.string.av_settings_tag_huawei_push.labels, rank = 17,
+        label = R.string.av_settings_tag_huawei_push.labels, rank = "33",
         desc = "com.huawei.hms.support.api.push.service.HmsMsgService".serviceResultDesc,
         requisites = pkgServicesRequisite().list,
         expressing = serviceExpressing("com.huawei.hms.support.api.push.service.HmsMsgService")
     ).apply { iconKey = "hwp" },
     AppTagInfo(
         id = AppTagInfo.ID_MSG_XIAOMI, category = 0.cat, icon = R.drawable.ic_xiaomi_72.icon,
-        label = R.string.av_settings_tag_xiaomi_push.labels, rank = 18,
+        label = R.string.av_settings_tag_xiaomi_push.labels, rank = "34",
         desc = "com.xiaomi.mipush.sdk.MessageHandleService".mipushServiceResultDesc,
         requisites = pkgServicesRequisite().list,
         expressing = xiaomiMsgExpressing()
     ).apply { iconKey = "mip" },
     AppTagInfo(
         id = AppTagInfo.ID_MSG_MEIZU, category = 0.cat, icon = R.drawable.ic_meizu_72.icon,
-        label = R.string.av_settings_tag_meizu_push.labels, rank = 19,
+        label = R.string.av_settings_tag_meizu_push.labels, rank = "35",
         desc = "com.meizu.cloud.pushsdk.NotificationService".serviceResultDesc,
         requisites = pkgServicesRequisite().list,
         expressing = serviceExpressing("com.meizu.cloud.pushsdk.NotificationService")
     ).apply { iconKey = "mzp" },
     AppTagInfo(
         id = AppTagInfo.ID_MSG_OPPO, category = 0.cat, icon = R.drawable.ic_oppo_72.icon,
-        label = R.string.av_settings_tag_oppo_push.labels, rank = 20,
+        label = R.string.av_settings_tag_oppo_push.labels, rank = "36",
         desc = "com.heytap.mcssdk.AppPushService".serviceResultDesc,
         requisites = pkgServicesRequisite().list,
         expressing = serviceExpressing("com.heytap.mcssdk.AppPushService")
     ).apply { iconKey = "oop" },
     AppTagInfo(
         id = AppTagInfo.ID_MSG_VIVO, category = 0.cat, icon = R.drawable.ic_vivo_72.icon,
-        label = R.string.av_settings_tag_vivo_push.labels, rank = 21,
+        label = R.string.av_settings_tag_vivo_push.labels, rank = "37",
         desc = "com.vivo.push.sdk.service.CommandClientService".serviceResultDesc,
         requisites = pkgServicesRequisite().list,
         expressing = serviceExpressing("com.vivo.push.sdk.service.CommandClientService")
     ).apply { iconKey = "vvp" },
     AppTagInfo(
         id = AppTagInfo.ID_MSG_JPUSH, category = 0.cat, icon = R.drawable.ic_aurora_72.icon,
-        label = (R.string.av_tag_jpush_normal to R.string.av_settings_tag_jpush).resLabels, rank = 22,
+        label = (R.string.av_tag_jpush_normal to R.string.av_settings_tag_jpush).resLabels, rank = "38",
         desc = "cn.jpush.android.service.PushService".serviceResultDesc,
         requisites = pkgServicesRequisite().list,
         expressing = serviceExpressing("cn.jpush.android.service.PushService")
     ).apply { iconKey = "j-p" },
     AppTagInfo(
         id = AppTagInfo.ID_MSG_UPUSH, category = 0.cat, icon = R.drawable.ic_umeng_72.icon,
-        label = (R.string.av_tag_upush_normal to R.string.av_settings_tag_upush).resLabels, rank = 23,
+        label = (R.string.av_tag_upush_normal to R.string.av_settings_tag_upush).resLabels, rank = "39",
         desc = "com.umeng.message.UmengIntentService".serviceResultDesc,
         requisites = pkgServicesRequisite().list,
         expressing = serviceExpressing("com.umeng.message.UmengIntentService")
     ).apply { iconKey = "u-p" },
     AppTagInfo(
         id = AppTagInfo.ID_MSG_TPNS, category = 0.cat, icon = R.drawable.ic_tpns_72.icon,
-        label = (R.string.av_tag_tpns_normal to R.string.av_settings_tag_tpns).resLabels, rank = 24,
+        label = (R.string.av_tag_tpns_normal to R.string.av_settings_tag_tpns).resLabels, rank = "40",
         desc = "com.tencent.android.tpush.service.XGVipPushService".serviceResultDesc,
         requisites = pkgServicesRequisite().list,
         expressing = serviceExpressing("com.tencent.android.tpush.service.XGVipPushService")
     ).apply { iconKey = "tpn" },
     AppTagInfo(
         id = AppTagInfo.ID_MSG_ALI, category = 0.cat, icon = R.drawable.ic_emas_72.icon,
-        label = (R.string.av_tag_ali_push_normal to R.string.av_settings_tag_ali_push).resLabels, rank = 25,
+        label = (R.string.av_tag_ali_push_normal to R.string.av_settings_tag_ali_push).resLabels, rank = "41",
         desc = "org.android.agoo.accs.AgooService".serviceResultDesc,
         requisites = pkgServicesRequisite().list,
         expressing = serviceExpressing("org.android.agoo.accs.AgooService")
     ).apply { iconKey = "alp" },
     AppTagInfo(
         id = AppTagInfo.ID_MSG_BAIDU, category = 0.cat, icon = R.drawable.ic_baidu_push_72.icon,
-        label = R.string.av_settings_tag_baidu_push.labels, rank = 26,
+        label = R.string.av_settings_tag_baidu_push.labels, rank = "42",
         desc = "com.baidu.android.pushservice.PushService".serviceResultDesc,
         requisites = pkgServicesRequisite().list,
         expressing = serviceExpressing("com.baidu.android.pushservice.PushService")
     ).apply { iconKey = "dup" },
     AppTagInfo(
         id = AppTagInfo.ID_MSG_GETUI, category = 0.cat, icon = R.drawable.ic_getui_72.icon,
-        label = R.string.av_settings_tag_getui.labels, rank = 27,
+        label = R.string.av_settings_tag_getui.labels, rank = "43",
         desc = "com.igexin.sdk.PushService".serviceResultDesc,
         requisites = pkgServicesRequisite().list,
         expressing = serviceExpressing("com.igexin.sdk.PushService")
