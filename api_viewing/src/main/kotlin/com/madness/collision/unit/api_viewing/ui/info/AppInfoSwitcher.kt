@@ -50,6 +50,10 @@ interface AppSwitcherHandler {
     fun getNextPreview(): ApiViewingApp?
     fun loadPrevious()
     fun loadNext()
+
+    // used for overlay target
+    fun getApp(pkgName: String): ApiViewingApp?
+    fun loadApp(app: ApiViewingApp)
 }
 
 @Composable

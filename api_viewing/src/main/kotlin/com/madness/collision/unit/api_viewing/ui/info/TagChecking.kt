@@ -19,6 +19,7 @@ package com.madness.collision.unit.api_viewing.ui.info
 import android.graphics.Bitmap
 import androidx.compose.animation.*
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -30,11 +31,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -42,12 +45,22 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.madness.collision.unit.api_viewing.R
+import com.madness.collision.unit.api_viewing.data.ApiViewingApp
+import com.madness.collision.unit.api_viewing.data.AppPackageInfo
+import com.madness.collision.unit.api_viewing.data.ModuleInfo
+import com.madness.collision.unit.api_viewing.info.AppType
 import com.madness.collision.unit.api_viewing.info.ExpressedTag
+import com.madness.collision.unit.api_viewing.list.LocalAppSwitcherHandler
 import com.madness.collision.unit.api_viewing.tag.app.AppTagInfo
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape
 
 @Composable
 internal fun TagDetailsList(
+    app: ApiViewingApp,
     tags: List<ExpressedTag>,
     getClick: (AppTagInfo) -> (() -> Unit)?,
     splitApks: List<Pair<String, String?>>,
@@ -74,10 +87,13 @@ internal fun TagDetailsList(
                 thickness = 0.5.dp,
             )
             if (activated || isAi) {
-                var showAabDetails by remember { mutableStateOf(false) }
-                val isAab = expressed.intrinsic.id == AppTagInfo.ID_PKG_AAB
+                var showTagDetails by remember(app.packageName) { mutableStateOf(false) }
+                val hasTagDetails = when (expressed.intrinsic.id) {
+                    AppTagInfo.ID_PKG_AAB, AppTagInfo.ID_APP_SYSTEM_MODULE, AppTagInfo.ID_TYPE_OVERLAY -> true
+                    else -> false
+                }
                 val direction = LocalLayoutDirection.current
-                val chevron by remember(showAabDetails) {
+                val chevron by remember(showTagDetails) {
                     derivedStateOf {
                         when (expressed.intrinsic.id) {
                             AppTagInfo.ID_APP_INSTALLER_PLAY -> Icons.Outlined.Launch
@@ -85,8 +101,8 @@ internal fun TagDetailsList(
                                 if (direction == LayoutDirection.Rtl) Icons.Outlined.ChevronLeft
                                 else Icons.Outlined.ChevronRight
                             }
-                            AppTagInfo.ID_PKG_AAB -> {
-                                if (showAabDetails) Icons.Outlined.ExpandLess
+                            AppTagInfo.ID_PKG_AAB, AppTagInfo.ID_APP_SYSTEM_MODULE, AppTagInfo.ID_TYPE_OVERLAY -> {
+                                if (showTagDetails) Icons.Outlined.ExpandLess
                                 else Icons.Outlined.ExpandMore
                             }
                             else -> null
@@ -96,8 +112,8 @@ internal fun TagDetailsList(
                 val itemColor = MaterialTheme.colorScheme.onSurface
                     .copy(alpha = if (activated) 0.75f else 0.35f)
                 val onClick = run {
-                    if (!isAab) return@run expressed.intrinsic.let(getClick);
-                    { showAabDetails = !showAabDetails }
+                    if (!hasTagDetails) return@run expressed.intrinsic.let(getClick);
+                    { showTagDetails = !showTagDetails }
                 }
                 val shrinkTop = index > 0 && !showDivider
                 TagItem(
@@ -113,13 +129,27 @@ internal fun TagDetailsList(
                         .let { if (index == tags.lastIndex) it.padding(bottom = 8.dp) else it }
                         .padding(top = if (shrinkTop) 0.dp else 12.dp, bottom = 12.dp),
                 )
-                if (isAab) {
+                if (hasTagDetails) {
                     AnimatedVisibility(
-                        visible = showAabDetails,
+                        visible = showTagDetails,
                         enter = fadeIn() + expandVertically(),
                         exit = shrinkVertically() + fadeOut(),
                     ) {
-                        AppBundleDetails(splitApks)
+                        when (expressed.intrinsic.id) {
+                            AppTagInfo.ID_PKG_AAB -> AppBundleDetails(splitApks)
+                            AppTagInfo.ID_APP_SYSTEM_MODULE -> {
+                                val module = app.moduleInfo
+                                if (module != null) {
+                                    ModuleDetails(moduleInfo = module)
+                                }
+                            }
+                            AppTagInfo.ID_TYPE_OVERLAY -> {
+                                val overlay = app.appType as? AppType.Overlay
+                                if (overlay != null) {
+                                    OverlayDetails(overlay.target)
+                                }
+                            }
+                        }
                     }
                 }
             } else {
@@ -240,6 +270,96 @@ private fun TagItemIcon(icon: Bitmap?, activated: Boolean) {
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurface.copy(alpha = if (activated) 0.75f else 0.4f),
         )
+    }
+}
+
+@Composable
+private fun ModuleDetails(moduleInfo: ModuleInfo) {
+    Row(
+        modifier = Modifier
+            .padding(horizontal = 20.dp)
+            .padding(start = 3.dp, bottom = 12.dp)
+            .clip(AbsoluteSmoothCornerShape(cornerRadius = 8.dp, smoothnessAsPercent = 60))
+            .background(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.04f))
+            .padding(horizontal = 12.dp, vertical = 3.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Column() {
+            Text(
+                text = moduleInfo.name.orEmpty(),
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
+                fontSize = 10.sp,
+                fontWeight = FontWeight.Medium,
+                lineHeight = 10.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+            Text(
+                text = moduleInfo.pkgName.orEmpty(),
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
+                fontSize = 9.sp,
+                fontWeight = FontWeight.Normal,
+                lineHeight = 9.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
+    }
+}
+
+@Composable
+private fun OverlayDetails(target: String) {
+    val context = LocalContext.current
+    val switcherHandler = LocalAppSwitcherHandler.current
+    val targetApp by produceState(null as ApiViewingApp?) {
+        value = withContext(Dispatchers.IO) { switcherHandler.getApp(target) }
+    }
+    val app = targetApp
+    Row(
+        modifier = Modifier
+            .padding(horizontal = 20.dp)
+            .padding(start = 3.dp, bottom = 12.dp)
+            .clip(AbsoluteSmoothCornerShape(cornerRadius = 8.dp, smoothnessAsPercent = 60))
+            .background(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.04f))
+            .clickable(enabled = app != null) clc@{ if (app != null) switcherHandler.loadApp(app) }
+            .padding(horizontal = 9.dp, vertical = 3.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        if (app != null) {
+            AsyncImage(
+                modifier = Modifier.height(24.dp).widthIn(max = 24.dp),
+                model = remember { AppPackageInfo(context, app) },
+                contentDescription = null,
+            )
+        } else {
+            Spacer(modifier = Modifier.size(24.dp))
+        }
+        Spacer(modifier = Modifier.width(6.dp))
+        Column() {
+            if (app != null) {
+                Text(
+                    text = app.name,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
+                    fontSize = 10.sp,
+                    fontWeight = FontWeight.Medium,
+                    lineHeight = 10.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            } else {
+                Spacer(modifier = Modifier.height(10.dp))
+            }
+            Text(
+                text = target,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
+                fontSize = 9.sp,
+                fontWeight = FontWeight.Normal,
+                lineHeight = 9.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
+        Spacer(modifier = Modifier.width(6.dp))
     }
 }
 

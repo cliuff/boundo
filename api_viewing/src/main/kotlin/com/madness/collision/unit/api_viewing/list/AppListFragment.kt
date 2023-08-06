@@ -37,6 +37,7 @@ import com.madness.collision.unit.api_viewing.Utils
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
+import com.madness.collision.unit.api_viewing.database.DataMaintainer
 import com.madness.collision.unit.api_viewing.databinding.AvListBinding
 import com.madness.collision.unit.api_viewing.ui.info.AppInfoFragment
 import com.madness.collision.util.*
@@ -87,6 +88,11 @@ internal class AppListFragment : TaggedFragment(), AppList, Filterable, AppInfoF
 
             override fun getIndex(app: ApiViewingApp): Int {
                 return viewModel.apps4DisplayValue.indexOf(app)
+            }
+
+            override fun findInAll(pkgName: String): ApiViewingApp? {
+                return viewModel.apps4DisplayValue.find { it.packageName == pkgName }
+                    ?: DataMaintainer.get(mContext, viewLifecycleOwner).selectApp(pkgName)
             }
         }
     }

@@ -87,6 +87,12 @@ class AppInfoFragment() : BottomSheetDialogFragment(), SystemBarMaintainerOwner 
         val size: Int
         operator fun get(index: Int): ApiViewingApp?
         fun getIndex(app: ApiViewingApp): Int
+
+        /**
+         * In updates page and list filter, only a subset of apps are accessible.
+         * This method should find [pkgName] in all apps available.
+         */
+        fun findInAll(pkgName: String): ApiViewingApp?
     }
 
     private val mainViewModel: MainViewModel by activityViewModels()
@@ -207,6 +213,16 @@ class AppInfoFragment() : BottomSheetDialogFragment(), SystemBarMaintainerOwner 
                     setApp(app)
                     if (app != null) commCallback?.onAppChanged(app)
                 }
+            }
+
+            override fun getApp(pkgName: String): ApiViewingApp? {
+                val appOwner = commCallback?.getAppOwner() ?: return null
+                return appOwner.findInAll(pkgName)
+            }
+
+            override fun loadApp(app: ApiViewingApp) {
+                setApp(app)
+                commCallback?.onAppChanged(app)
             }
         }
     }

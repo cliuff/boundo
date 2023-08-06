@@ -395,7 +395,7 @@ private fun TagDetailsContent(
         ) {
             item {
                 Column {
-                    TagDetailsList(list, getClick, splitApks)
+                    TagDetailsList(app, list, getClick, splitApks)
                 }
             }
         }

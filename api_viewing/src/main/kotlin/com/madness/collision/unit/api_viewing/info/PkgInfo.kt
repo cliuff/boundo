@@ -19,12 +19,14 @@ package com.madness.collision.unit.api_viewing.info
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.ApplicationInfo
-import android.content.pm.ModuleInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.madness.collision.misc.PackageCompat
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
+import com.madness.collision.unit.api_viewing.data.ModuleInfo
 import com.madness.collision.unit.api_viewing.util.ManifestUtil
 import com.madness.collision.util.os.OsUtils
 
@@ -81,16 +83,18 @@ private fun PackageInfo.isCoreApp(): Boolean? {
     }
 }
 
-private fun getPkgSystemModules(context: Context): List<ModuleInfo> {
-    if (OsUtils.dissatisfy(OsUtils.Q)) return emptyList()
+typealias PkgModuleInfo = android.content.pm.ModuleInfo
+
+@RequiresApi(Build.VERSION_CODES.Q)
+private fun getPkgSystemModules(context: Context): List<PkgModuleInfo> {
     val modules = context.packageManager.getInstalledModules(0)
     val pkgNames = PackageCompat.getAllPackages(context.packageManager)
         .mapTo(HashSet()) { it.packageName }
     return modules.filter { it.packageName in pkgNames }
 }
 
-private fun getSystemModule(pkgName: String, context: Context): ModuleInfo? {
-    if (OsUtils.dissatisfy(OsUtils.Q)) return null
+@RequiresApi(Build.VERSION_CODES.Q)
+private fun getSystemModule(pkgName: String, context: Context): PkgModuleInfo? {
     try {
         return context.packageManager.getModuleInfo(pkgName, 0)
     } catch (_: PackageManager.NameNotFoundException) {
@@ -153,10 +157,17 @@ object PkgInfo {
     }
 
     fun getPkgModules(context: Context): List<ModuleInfo> {
-        return getPkgSystemModules(context)
+        if (OsUtils.dissatisfy(OsUtils.Q)) return emptyList()
+        return getPkgSystemModules(context).map(PkgModuleInfo::toModuleInfo)
     }
 
     fun getModuleInfo(pkgName: String, context: Context): ModuleInfo? {
-        return getSystemModule(pkgName, context)
+        if (OsUtils.dissatisfy(OsUtils.Q)) return null
+        return getSystemModule(pkgName, context)?.toModuleInfo()
     }
+}
+
+@RequiresApi(Build.VERSION_CODES.Q)
+private fun PkgModuleInfo.toModuleInfo(): ModuleInfo {
+    return ModuleInfo(name = name?.toString(), pkgName = packageName, isVisible = !isHidden)
 }

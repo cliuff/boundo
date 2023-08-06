@@ -20,7 +20,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
-import android.content.pm.ModuleInfo
 import android.content.pm.PackageInfo
 import android.graphics.Bitmap
 import android.graphics.Color
