@@ -155,4 +155,20 @@
     <string name="av_settings_diff">应用列表维护记录</string>
     <string name="av_settings_diff_title">维护记录</string>
     <string name="av_settings_diff_minimized">%d条空记录已收起，点击展示</string>
+    <string name="av_tag_system_core">系统核心应用</string>
+    <string name="av_tag_system_module">模块化系统组件</string>
+    <string name="av_tag_type_overlay">运行时资源叠加层 (RRO)</string>
+    <string name="av_tag_type_instant">免安装应用</string>
+    <string name="av_tag_type_web_apk">渐进式 Web 应用 (PWA)</string>
+    <string name="av_tag_predictive_back">预测性返回</string>
+    <string name="av_tag_ic_system_core">核心</string>
+    <string name="av_tag_ic_system_module">模块</string>
+    <string name="av_tag_ic_type_instant">免安装</string>
+    <string name="av_tag_ic_predictive_back">预测返回</string>
+    <string name="av_tag_result_system_core">当此设备以最小化状态启动时，该应用被加载</string>
+    <string name="av_tag_result_system_module">“Project Mainline 模块”，通过“Google Play 系统更新”或厂商OTA更新</string>
+    <string name="av_tag_result_type_overlay">RRO会在运行时覆盖目标应用的资源</string>
+    <string name="av_tag_result_type_instant">该应用可免安装运行</string>
+    <string name="av_tag_result_type_web_apk">该应用是 Chromium WebAPK</string>
+    <string name="av_tag_result_predictive_back">该应用在此设备上支持预测性返回手势动画</string>
 </resources>

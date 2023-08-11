@@ -155,4 +155,20 @@
     <string name="av_settings_diff">App record diff history</string>
     <string name="av_settings_diff_title">Diff History</string>
     <string name="av_settings_diff_minimized">%d empty records minimized, tap to show them</string>
+    <string name="av_tag_system_core">System core app</string>
+    <string name="av_tag_system_module">Modular system component</string>
+    <string name="av_tag_type_overlay">Runtime resource overlay (RRO)</string>
+    <string name="av_tag_type_instant">Instant app</string>
+    <string name="av_tag_type_web_apk">Progressive Web App (PWA)</string>
+    <string name="av_tag_predictive_back">Predictive back</string>
+    <string name="av_tag_ic_system_core">CORE</string>
+    <string name="av_tag_ic_system_module">MODULE</string>
+    <string name="av_tag_ic_type_instant">INSTANT</string>
+    <string name="av_tag_ic_predictive_back">PRED-BACK</string>
+    <string name="av_tag_result_system_core">This app is included when the device is booted into a minimal state</string>
+    <string name="av_tag_result_system_module">Project Mainline modules are distributed by Google Play System updates or manufacturer OTA</string>
+    <string name="av_tag_result_type_overlay">An RRO changes the resource values of a target package at runtime</string>
+    <string name="av_tag_result_type_instant">This app runs without being installed</string>
+    <string name="av_tag_result_type_web_apk">This is a Chromium WebAPK</string>
+    <string name="av_tag_result_predictive_back">This app supports predictive back animations on this device</string>
 </resources>

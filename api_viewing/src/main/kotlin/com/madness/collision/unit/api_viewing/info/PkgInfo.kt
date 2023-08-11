@@ -119,6 +119,7 @@ private fun PackageInfo.getOverlayTarget(): Result<String?> {
 }
 
 @SuppressLint("PrivateApi")
+@RequiresApi(Build.VERSION_CODES.O)
 private fun ApplicationInfo.isInstantApp(): Result<Boolean> {
     val pkg = this
     return try {
@@ -147,7 +148,9 @@ sealed interface AppType {
 fun ApiViewingApp.getAppType(pkgInfo: PackageInfo): AppType {
     if (isWebApk()) return AppType.WebApk
     pkgInfo.getOverlayTarget().onSuccess { t -> if (t != null) return AppType.Overlay(t) }
-    pkgInfo.applicationInfo.isInstantApp().onSuccess { i -> if (i) return AppType.InstantApp }
+    if (OsUtils.satisfy(OsUtils.O)) {
+        pkgInfo.applicationInfo.isInstantApp().onSuccess { i -> if (i) return AppType.InstantApp }
+    }
     return AppType.Common
 }
 

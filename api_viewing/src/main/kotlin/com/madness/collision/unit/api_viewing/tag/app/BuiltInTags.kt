@@ -109,33 +109,35 @@ internal fun builtInTags(): Map<String, AppTagInfo> = listOf(
         expressing = commonExpressing { it.apiUnit == ApiUnit.SYS }
     ).apply { iconKey = "sys" },
     AppTagInfo(
-        id = AppTagInfo.ID_APP_SYSTEM_CORE, category = 0.cat, icon = "CORE".icon,
-        label = "System core app".labels, rank = "20",
-        desc = "This app is included when the device is booted into a minimal state".resultDesc,
+        id = AppTagInfo.ID_APP_SYSTEM_CORE, category = 0.cat, icon = R.string.av_tag_ic_system_core.label.icon,
+        label = R.string.av_tag_system_core.labels, rank = "20",
+        desc = R.string.av_tag_result_system_core.resultDesc,
         expressing = commonExpressing { it.isCoreApp == true }
     ),
     AppTagInfo(
-        id = AppTagInfo.ID_APP_SYSTEM_MODULE, category = 0.cat, icon = "MODULE".icon,
-        label = "Modular system component".labels, rank = "21",
-        desc = "Project Mainline modules are distributed by Google Play System updates".resultDesc,
+        id = AppTagInfo.ID_APP_SYSTEM_MODULE, category = 0.cat, icon = R.string.av_tag_ic_system_module.label.icon,
+        label = R.string.av_tag_system_module.labels, rank = "21",
+        desc = R.string.av_tag_result_system_module.resultDesc,
+        availability = sdkAvailable(OsUtils.Q),
         expressing = commonExpressing { it.moduleInfo != null }
     ),
     AppTagInfo(
         id = AppTagInfo.ID_TYPE_OVERLAY, category = 0.cat, icon = "RRO".icon,
-        label = "Runtime resource overlay (RRO)".labels, rank = "22",
-        desc = "An RRO changes the resource values of a target package at runtime".resultDesc,
+        label = R.string.av_tag_type_overlay.labels, rank = "22",
+        desc = R.string.av_tag_result_type_overlay.resultDesc,
         expressing = commonExpressing { it.appType is AppType.Overlay }
     ),
     AppTagInfo(
-        id = AppTagInfo.ID_TYPE_INSTANT, category = 0.cat, icon = "INSTANT".icon,
-        label = "Instant app".labels, rank = "23",
-        desc = "This app runs without being installed".resultDesc,
+        id = AppTagInfo.ID_TYPE_INSTANT, category = 0.cat, icon = R.string.av_tag_ic_type_instant.label.icon,
+        label = R.string.av_tag_type_instant.labels, rank = "23",
+        desc = R.string.av_tag_result_type_instant.resultDesc,
+        availability = sdkAvailable(OsUtils.O),
         expressing = commonExpressing { it.appType == AppType.InstantApp }
     ),
     AppTagInfo(
         id = AppTagInfo.ID_TYPE_WEB_APK, category = 0.cat, icon = R.drawable.ic_pwa_72.icon,
-        label = "Chromium WebAPK".labels, rank = "24",
-        desc = "This is a Progressive Web App (PWA)".resultDesc,
+        label = R.string.av_tag_type_web_apk.labels, rank = "24",
+        desc = R.string.av_tag_result_type_web_apk.resultDesc,
         expressing = commonExpressing { it.appType == AppType.WebApk }
     ).apply { iconKey = "pwa" },
     AppTagInfo(
@@ -145,9 +147,10 @@ internal fun builtInTags(): Map<String, AppTagInfo> = listOf(
         expressing = commonExpressing { it.isNotArchive && !it.isLaunchable }
     ).apply { iconKey = "hid" },
     AppTagInfo(
-        id = AppTagInfo.ID_APP_PREDICTIVE_BACK, category = 0.cat, icon = "PRE-BACK".icon,
-        label = "Predictive back".labels, rank = "26",
-        desc = "This app supports predictive back animations on this device".resultDesc,
+        id = AppTagInfo.ID_APP_PREDICTIVE_BACK, category = 0.cat, icon = R.string.av_tag_ic_predictive_back.label.icon,
+        label = R.string.av_tag_predictive_back.labels, rank = "26",
+        desc = R.string.av_tag_result_predictive_back.resultDesc,
+        availability = sdkAvailable(OsUtils.T),
         expressing = commonExpressing { it.isBackCallbackEnabled == true }
     ),
 
@@ -345,6 +348,10 @@ private val dirArm32ResultDesc: AppTagInfo.Description
 
 private val Any.cat: AppTagInfo.Category
     get() = AppTagInfo.Category()
+
+private fun sdkAvailable(int: Int): AppTagInfo.Availability {
+    return AppTagInfo.Availability { OsUtils.satisfy(int) }
+}
 
 private fun expressing(block: ExpressibleTag.(AppTagInfo.Resources) -> Boolean): AppTagInfo.Expressing {
     return AppTagInfo.Expressing(block)

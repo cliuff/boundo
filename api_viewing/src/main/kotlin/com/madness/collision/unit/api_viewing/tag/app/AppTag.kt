@@ -21,6 +21,7 @@ import android.content.pm.PackageInfo
 import android.graphics.drawable.Drawable
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.tag.Expression
+import com.madness.collision.util.ui.appContext
 
 internal class AppTagInfo(
     val id: String,
@@ -30,6 +31,8 @@ internal class AppTagInfo(
     val desc: Description? = null,
     // digits only (0-9), follow comparison rules of strings
     val rank: String = RANK_UNSPECIFIED,
+    val availability: Availability = Available,
+    // requisites will be prepared if isAvailable is true
     val requisites: List<Requisite>? = null,
     val expressing: Expressing,
 ) : Expression {
@@ -84,6 +87,12 @@ internal class AppTagInfo(
         val dynamicRequisiteIconKeys: MutableMap<String, String> = hashMapOf(),
         val dynamicRequisiteLabels: MutableMap<String, String> = hashMapOf(),
     )
+
+    fun interface Availability : (Context) -> Boolean
+
+    object Available : Availability {
+        override fun invoke(p1: Context): Boolean = true
+    }
 
     class Requisite(
         val id: String,
@@ -212,6 +221,8 @@ internal fun AppTagInfo.getFullLabel(context: Context) = label.getFullLabel(cont
 
 internal fun AppTagInfo.getNormalLabel(context: Context) = label.getNormalLabel(context)
 
+internal fun AppTagInfo.isAvailable(context: Context) = availability(context)
+
 internal class ExpressibleTag(private val tagInfo: AppTagInfo, var isAnti: Boolean = false) : Expression {
     var res: AppTagInfo.Resources? = null
 
@@ -237,5 +248,8 @@ internal fun AppTagInfo.toExpressible(): ExpressibleTag {
 }
 
 internal object AppTagManager {
-    val tags: Map<String, AppTagInfo> by lazy { builtInTags() }
+    val tags: Map<String, AppTagInfo> by lazy {
+        val context = appContext
+        builtInTags().filterValues { it.isAvailable(context) }
+    }
 }
