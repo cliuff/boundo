@@ -22,6 +22,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -67,6 +68,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -203,6 +205,8 @@ private fun SetTimer(timerController: AudioTimerController, onStart: () -> Unit)
                         modifier = Modifier.fillMaxWidth(),
                         text = stringResource(R.string.at_hour_hint),
                         textAlign = TextAlign.End,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                     )
                 },
             )
@@ -213,7 +217,10 @@ private fun SetTimer(timerController: AudioTimerController, onStart: () -> Unit)
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Medium,
             )
-            Spacer(modifier = Modifier.width(20.dp))
+            BoxWithConstraints {
+                val space = remember { if (maxWidth > 360.dp) 20.dp else 8.dp }
+                Spacer(modifier = Modifier.width(space))
+            }
             TextField(
                 value = minuteInput,
                 onValueChange = { v ->
@@ -236,6 +243,8 @@ private fun SetTimer(timerController: AudioTimerController, onStart: () -> Unit)
                         modifier = Modifier.fillMaxWidth(),
                         text = stringResource(R.string.at_minute_hint),
                         textAlign = TextAlign.End,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                     )
                 },
             )

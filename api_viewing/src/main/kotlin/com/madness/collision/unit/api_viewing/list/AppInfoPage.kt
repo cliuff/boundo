@@ -384,7 +384,9 @@ private fun TagDetailsContent(
     val context = LocalContext.current
     var lists: List<ExpressedTag>? by remember { mutableStateOf(null) }
     LaunchedEffect(Unit) {
-        AppInfo.expressTags(app, context) { lists = it }
+        withContext(Dispatchers.IO) {
+            AppInfo.expressTags(app, context) { lists = it }
+        }
     }
     val list = lists
     if (list != null) {

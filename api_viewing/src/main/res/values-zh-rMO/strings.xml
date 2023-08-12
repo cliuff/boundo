@@ -43,7 +43,7 @@
     <string name="apiDetailsLastUpdate">上次更新：</string>
     <string name="apiDetailsInsatllFrom">安裝程序：</string>
     <string name="apiDetailsInstallUnknown">未知</string>
-    <string name="apiDetailsInstallGP">谷歌 Play 商店</string>
+    <string name="apiDetailsInstallGP">Google Play 商店</string>
     <string name="apiDetailsInstallPI">應用安裝程序</string>
     <string name="apiDetailsCert">證書</string>
     <string name="apiDetailsValiSince">有效期起始時間：</string>

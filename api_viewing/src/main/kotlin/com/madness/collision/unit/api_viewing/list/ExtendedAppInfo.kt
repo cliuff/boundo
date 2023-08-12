@@ -61,6 +61,8 @@ import com.madness.collision.util.X
 import com.madness.collision.util.getProviderUri
 import com.madness.collision.util.os.OsUtils
 import com.madness.collision.util.ui.AppIconPackageInfo
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @Composable
 fun ExtendedAppInfo(app: ApiViewingApp, shareIcon: () -> Unit, shareApk: () -> Unit) {
@@ -245,7 +247,9 @@ private fun AppDetails() {
     var detailsContent by remember { mutableStateOf(AnnotatedString("")) }
     if (pkgInfo != null) {
         LaunchedEffect(app) {
-            detailsContent = service.getAppInfoDetailsSequence(context, app, pkgInfo).annotated()
+            detailsContent = withContext(Dispatchers.IO) {
+                service.getAppInfoDetailsSequence(context, app, pkgInfo).annotated()
+            }
         }
     }
     var showExtended by remember { mutableStateOf(false) }
@@ -264,7 +268,9 @@ private fun AppDetails() {
             var extendedContent by remember { mutableStateOf(AnnotatedString("")) }
             if (pkgInfo != null) {
                 LaunchedEffect(app) {
-                    extendedContent = service.getAppExtendedDetailsSequence(context, app, pkgInfo).annotated()
+                    extendedContent = withContext(Dispatchers.IO) {
+                        service.getAppExtendedDetailsSequence(context, app, pkgInfo).annotated()
+                    }
                 }
             }
             Spacer(Modifier.height(16.dp))

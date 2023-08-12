@@ -32,6 +32,7 @@ class UsedPkgChecker {
             // self usually appears at the top, unless other apps are used on top of this one
             BuildConfig.APPLICATION_ID,
             "android",
+            "android.instant_app",  // instant apps share this package name
             "com.google.android.permissioncontroller",  // Google permission dialog
         )
         val launcher = getDefaultLauncher(context)

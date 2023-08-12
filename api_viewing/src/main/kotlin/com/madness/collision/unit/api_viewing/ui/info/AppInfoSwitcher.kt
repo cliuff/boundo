@@ -44,6 +44,8 @@ import coil.compose.AsyncImage
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.AppPackageInfo
 import com.madness.collision.util.ui.autoMirrored
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 interface AppSwitcherHandler {
     fun getPreviousPreview(): ApiViewingApp?
@@ -62,8 +64,10 @@ fun AppSwitcher(modifier: Modifier = Modifier, handler: AppSwitcherHandler) {
     var previousApp: ApiViewingApp? by remember { mutableStateOf(null) }
     var nextApp: ApiViewingApp? by remember { mutableStateOf(null) }
     LaunchedEffect(Unit) {
-        previousApp = handler.getPreviousPreview()
-        nextApp = handler.getNextPreview()
+        withContext(Dispatchers.IO) {
+            previousApp = handler.getPreviousPreview()
+            nextApp = handler.getNextPreview()
+        }
     }
     Row(
         modifier = modifier,

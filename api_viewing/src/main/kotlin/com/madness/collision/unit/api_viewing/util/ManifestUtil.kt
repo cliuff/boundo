@@ -81,18 +81,21 @@ object ManifestUtil {
     fun getIconSet(context: Context, info: ApplicationInfo, sourceDir: String): List<Drawable?> {
         val apkIconAttr = arrayOf(arrayOf("application", "icon"), arrayOf("application", "roundIcon"))
         try {
-            val res = context.packageManager.getResourcesForApplication(info)
             val apkIcons = mapAttrs(sourceDir, apkIconAttr) icon@{ _, value ->
-                if (value.isNullOrBlank()) return@icon null
-                val id = value.toIntOrNull() ?: return@icon null
-                try {
-                    ResourcesCompat.getDrawable(res, id, null)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    null
+                if (value.isNullOrBlank()) null else value.toIntOrNull()
+            }
+            if (apkIcons != null && apkIcons.any { it != null }) {
+                val res = context.packageManager.getResourcesForApplication(info)
+                return apkIcons.map { id ->
+                    id ?: return@map null
+                    try {
+                        ResourcesCompat.getDrawable(res, id, null)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        null
+                    }
                 }
             }
-            apkIcons?.let { return it }
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -101,9 +104,9 @@ object ManifestUtil {
 
     fun getIcon(context: Context, applicationInfo: ApplicationInfo, sourceDir: String): Drawable? {
         try {
-            val res = context.packageManager.getResourcesForApplication(applicationInfo)
             val resID = getManifestAttr(sourceDir, arrayOf("application", "icon"))
             if (resID.isEmpty()) return null
+            val res = context.packageManager.getResourcesForApplication(applicationInfo)
             return ResourcesCompat.getDrawable(res, resID.toInt(), null)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -113,9 +116,9 @@ object ManifestUtil {
 
     fun getRoundIcon(context: Context, applicationInfo: ApplicationInfo, sourceDir: String): Drawable? {
         try {
-            val res = context.packageManager.getResourcesForApplication(applicationInfo)
             val resID = getManifestAttr(sourceDir, arrayOf("application", "roundIcon"))
             if (resID.isEmpty()) return null
+            val res = context.packageManager.getResourcesForApplication(applicationInfo)
             return ResourcesCompat.getDrawable(res,resID.toInt(), null)
         } catch (e: Exception) {
             e.printStackTrace()

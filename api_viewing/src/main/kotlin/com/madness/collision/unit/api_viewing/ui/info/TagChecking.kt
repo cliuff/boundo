@@ -55,6 +55,7 @@ import com.madness.collision.unit.api_viewing.info.ExpressedTag
 import com.madness.collision.unit.api_viewing.list.LocalAppSwitcherHandler
 import com.madness.collision.unit.api_viewing.tag.app.AppTagInfo
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape
 
@@ -311,10 +312,14 @@ private fun ModuleDetails(moduleInfo: ModuleInfo) {
 private fun OverlayDetails(target: String) {
     val context = LocalContext.current
     val switcherHandler = LocalAppSwitcherHandler.current
-    val targetApp by produceState(null as ApiViewingApp?) {
-        value = withContext(Dispatchers.IO) { switcherHandler.getApp(target) }
+    val appData by produceState(null as ApiViewingApp? to false) {
+        val app = withContext(Dispatchers.IO) { switcherHandler.getApp(target) }
+        // offer result after some delay for visibility animation to finish
+        delay(50)
+        value = app to true
     }
-    val app = targetApp
+    val app = remember(appData) { appData.first }
+    val isRetrieved = remember(appData) { appData.second }
     Row(
         modifier = Modifier
             .padding(horizontal = 20.dp)
@@ -331,7 +336,9 @@ private fun OverlayDetails(target: String) {
                 model = remember { AppPackageInfo(context, app) },
                 contentDescription = null,
             )
-        } else {
+        } else if (!isRetrieved) {
+            // leave space for icon unconditionally when app is not retrieved yet,
+            // this space will be removed afterwards if app is retrieved unsuccessfully (low probability)
             Spacer(modifier = Modifier.size(24.dp))
         }
         Spacer(modifier = Modifier.width(6.dp))
@@ -346,7 +353,7 @@ private fun OverlayDetails(target: String) {
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
-            } else {
+            } else if (!isRetrieved) {
                 Spacer(modifier = Modifier.height(10.dp))
             }
             Text(

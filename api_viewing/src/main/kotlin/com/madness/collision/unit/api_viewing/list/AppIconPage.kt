@@ -60,12 +60,12 @@ import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.api_viewing.R
 import com.madness.collision.util.dev.DarkPreview
 import com.madness.collision.util.dev.LayoutDirectionPreviews
-import kotlinx.coroutines.async
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape
 import kotlin.math.pow
 
@@ -431,16 +431,17 @@ private fun AiPreview(iconInfo: IconInfo, icon: IconInfo.AdaptiveIcon) {
     val notifierMutex = remember { Mutex() }
     LaunchedEffect(iconInfo) {
         val ic = icon.previews
-        listOf(async { ic.bitmap }, async { ic.rounded }, async { ic.squircle }, async { ic.round })
-            .forEachIndexed { index, deferred ->
-                launch {
-                    val item = index to deferred.await().toDrawable(context)
+        withContext(Dispatchers.IO) {
+            // access sequentially to avoid bitmap not correctly loaded issue
+            listOf(ic.bitmap, ic.rounded, ic.squircle, ic.round)
+                .forEachIndexed { index, deferred ->
+                    val item = index to deferred.toDrawable(context)
                     notifierMutex.withLock {
                         previewDeque.addLast(item)
                         previewNotifier++
                     }
                 }
-            }
+        }
     }
     var previews: List<Drawable?> by remember { mutableStateOf(List(4) { null }) }
     val previewItems = remember { arrayOfNulls<Drawable?>(4) }
