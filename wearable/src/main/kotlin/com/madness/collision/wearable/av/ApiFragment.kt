@@ -121,7 +121,7 @@ internal class ApiFragment: Fragment(), AdapterView.OnItemSelectedListener, Menu
                         applicationInfo ?: continue
                         app.load(context, applicationInfo)
                         ApiTaskManager.now(Dispatchers.Main) {
-                            adapter.notifyItemChanged(index + adapter.indexOffset)
+                            adapter.notifyListItemChanged(index + adapter.indexOffset)
                         }
                     }
                 }
@@ -172,8 +172,19 @@ internal class ApiFragment: Fragment(), AdapterView.OnItemSelectedListener, Menu
             it.layoutManager = manager
             it.isNestedScrollingEnabled = false
             it.adapter = adapter
-            // Circular
-            it.isEdgeItemsCenteringEnabled = true
+            // this adds extra padding to make 1st and last items center vertically of the screen,
+            // unfortunately it (setting recycler padding too) disables scrollbar for unknown reason,
+            // so we manually add padding in sandwich adapter instead
+//            it.isEdgeItemsCenteringEnabled = true
+        }
+        mViews.root.post {
+            val listPadding = when {
+                resources.configuration.isScreenRound ->
+                    (mViews.root.height / 2) - X.size(context, 30f, X.DP).toInt()
+                else -> X.size(context, 12f, X.DP).toInt()
+            }
+            adapter.topCover = listPadding
+            adapter.bottomCover = listPadding
         }
         viewModel.apps4Display.observe(viewLifecycleOwner){
             adapter.apps = it
@@ -224,7 +235,7 @@ internal class ApiFragment: Fragment(), AdapterView.OnItemSelectedListener, Menu
         val last = (manager.findLastVisibleItemPosition() + 4).run {
             if (this > adapter.itemCount - 1) adapter.itemCount - 1 else this
         }
-        adapter.notifyItemRangeChanged(first, last - first + 1)
+        adapter.notifyListItemRangeChanged(first, last - first + 1)
     }
 
     override fun onResume() {

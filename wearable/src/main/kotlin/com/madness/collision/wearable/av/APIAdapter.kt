@@ -23,8 +23,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.Space
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.madness.collision.wearable.av.data.ApiViewingApp
@@ -40,6 +38,7 @@ internal class APIAdapter(private val context: Context) : SandwichAdapter<APIAda
     companion object {
         fun getItemColorAccent(apiLevel: Int): Int {
             when (apiLevel) {
+                X.U -> "a3c1d5"
                 X.T -> "a3d5c1"
                 X.S, X.S_V2 -> "acdcb2"
                 X.R -> "acd5c1"
@@ -65,8 +64,6 @@ internal class APIAdapter(private val context: Context) : SandwichAdapter<APIAda
         val name: AppCompatTextView = binding.avAdapterInfoName as AppCompatTextView
         val updateTime: AppCompatTextView = binding.avAdapterInfoTime as AppCompatTextView
         val api: AppCompatTextView = binding.avAdapterInfoAPI as AppCompatTextView
-        val info: LinearLayout = binding.avAdapterInfo
-        val space: Space = binding.avAdapterSpace
     }
 
     var apps: List<ApiViewingApp> = emptyList()
@@ -100,32 +97,11 @@ internal class APIAdapter(private val context: Context) : SandwichAdapter<APIAda
         rv = recyclerView
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
+    override fun onCreateBodyItemViewHolder(parent: ViewGroup, viewType: Int): Holder {
         return Holder(AdapterAvBinding.inflate(inflater, parent, false))
     }
 
-    private fun makeSpace(holder: Holder, height: Int){
-        holder.space.visibility = View.VISIBLE
-        holder.info.visibility = View.GONE
-        holder.space.minimumHeight = height
-    }
-
-    override fun onMakeTopCover(holder: Holder) {
-        makeSpace(holder, 0)
-    }
-
-    override fun onMakeFillIn(holder: Holder) {
-        makeSpace(holder, 0)
-    }
-
-    override fun onMakeBottomCover(holder: Holder) {
-        makeSpace(holder, 0)
-    }
-
     override fun onMakeBody(holder: Holder, index: Int) {
-        holder.space.visibility = View.GONE
-        holder.info.visibility = View.VISIBLE
-
         holder.logo.visibility = if (EasyAccess.isInAmbientMode) View.INVISIBLE else View.VISIBLE
 
         val appInfo = apps[index]

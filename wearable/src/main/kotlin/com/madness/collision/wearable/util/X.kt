@@ -101,6 +101,7 @@ internal object X {
     fun getAndroidVersionByAPI(api: Int, exact: Boolean): String{
         return when (api){
             DEV -> if (exact) "DEV" else ""
+            U -> "14"
             T -> "13"
             S_V2 -> if (exact) "12L" else "12"
             S -> "12"
@@ -139,6 +140,7 @@ internal object X {
     }
 
     const val DEV = Build.VERSION_CODES.CUR_DEVELOPMENT
+    const val U = Build.VERSION_CODES.UPSIDE_DOWN_CAKE
     const val T = Build.VERSION_CODES.TIRAMISU
     const val S_V2 = Build.VERSION_CODES.S_V2
     const val S = Build.VERSION_CODES.S
