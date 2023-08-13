@@ -56,10 +56,9 @@ object Versions {
     const val androidxWork = "2.7.1"
     const val androidxDocumentFile = "1.0.1"
 
-    const val androidxPercentLayout = "1.0.0"
     // This dependency is for the Wear UI Library,
     // which has classes that exemplify best practices
-    const val androidxWear = "1.2.0"
+    const val androidxWear = "1.3.0"
 
     const val googleTruth = "1.1.3"
     const val googleMaterialComponents = "1.4.0"
@@ -70,7 +69,7 @@ object Versions {
     const val googlePlayFeatureDeliveryKtx = "2.1.0"
     const val gglGuava = "31.0.1-android"
     // This dependency is set to compile only
-    const val googleWearable = "2.8.1"
+    const val googleWearable = "2.9.0"
     const val googleAccompanistFlowLayout = "0.28.0"
     const val okhttp = "4.11.0"
     const val coil = "2.3.0"
@@ -197,8 +196,8 @@ class Dependencies : Plugin<Project> {
         const val libCheckerRules = "com.github.LibChecker:LibChecker-Rules-Bundle:${Versions.libCheckerRules}"
 
         // wear
-        const val androidxPercentLayout = "androidx.percentlayout:percentlayout:${Versions.androidxPercentLayout}"
         const val androidxWear = "androidx.wear:wear:${Versions.androidxWear}"
+        // Ambient mode support is provided by this dependency
         const val googleWearable = "com.google.android.wearable:wearable:${Versions.googleWearable}"
 
         val fileTreeValue = mapOf("dir" to "libs", "include" to listOf("*.jar"))

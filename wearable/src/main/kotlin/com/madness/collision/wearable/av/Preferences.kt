@@ -5,7 +5,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
-import androidx.wear.ambient.AmbientModeSupport
+import androidx.wear.ambient.AmbientLifecycleObserver
 import com.madness.collision.wearable.R
 import com.madness.collision.wearable.av.data.ApiUnit
 import com.madness.collision.wearable.av.data.EasyAccess
@@ -18,7 +18,7 @@ internal class Preferences: PreferenceFragmentCompat() {
         fun newInstance() = Preferences()
     }
 
-    private lateinit var mAmbient: AmbientModeSupport.AmbientCallback
+    private lateinit var ambientCallback: AmbientLifecycleObserver.AmbientLifecycleCallback
     private val mainViewModel: MainViewModel by activityViewModels()
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -42,15 +42,14 @@ internal class Preferences: PreferenceFragmentCompat() {
         }
 
 //        val prefCategory: PreferenceCategory? by lazy { preferenceManager.findPreference<PreferenceCategory>(getString(R.string.avCategoryAPI)) }
-        mAmbient = object : AmbientModeSupport.AmbientCallback(){
-            override fun onEnterAmbient(ambientDetails: Bundle?) {
-                super.onEnterAmbient(ambientDetails)
+
+        ambientCallback = object : AmbientLifecycleObserver.AmbientLifecycleCallback {
+            override fun onEnterAmbient(ambientDetails: AmbientLifecycleObserver.AmbientDetails) {
                 prefSweet?.isEnabled = false
                 prefIncludeDisabled?.isEnabled = false
             }
 
             override fun onExitAmbient() {
-                super.onExitAmbient()
                 prefSweet?.isEnabled = true
                 prefIncludeDisabled?.isEnabled = true
             }
@@ -59,7 +58,7 @@ internal class Preferences: PreferenceFragmentCompat() {
 
     override fun onResume() {
         super.onResume()
-        mainViewModel.ambient = mAmbient
+        mainViewModel.ambientCallbackDelegate = ambientCallback
     }
 
     private fun updatePrefSweet(newValue: Boolean){

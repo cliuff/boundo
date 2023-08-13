@@ -21,18 +21,28 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationManagerCompat
-import androidx.wear.ambient.AmbientModeSupport
+import androidx.lifecycle.lifecycleScope
+import androidx.wear.ambient.AmbientLifecycleObserver
 import com.madness.collision.wearable.databinding.ActivityMainBinding
 import com.madness.collision.wearable.misc.MiscMain
 import com.madness.collision.wearable.util.P
 import com.madness.collision.wearable.util.mainApplication
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-internal class MainActivity : AppCompatActivity(), AmbientModeSupport.AmbientCallbackProvider {
-
+internal class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModels()
     private lateinit var viewBinding: ActivityMainBinding
+    private val ambientCallback = object : AmbientLifecycleObserver.AmbientLifecycleCallback {
+        private val delegate: AmbientLifecycleObserver.AmbientLifecycleCallback?
+            get() = viewModel.ambientCallbackDelegate
+
+        override fun onEnterAmbient(ambientDetails: AmbientLifecycleObserver.AmbientDetails) =
+            delegate?.onEnterAmbient(ambientDetails) ?: Unit
+
+        override fun onUpdateAmbient() = delegate?.onUpdateAmbient() ?: Unit
+        override fun onExitAmbient() = delegate?.onExitAmbient() ?: Unit
+    }
+    private val ambientObserver = AmbientLifecycleObserver(this, ambientCallback)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,11 +50,10 @@ internal class MainActivity : AppCompatActivity(), AmbientModeSupport.AmbientCal
         setContentView(viewBinding.root)
         applyInsets()
 
-        viewModel.ambient = object : AmbientModeSupport.AmbientCallback(){}
-        // Enables Always-on
-        viewModel.ambientController = AmbientModeSupport.attach(this)
+        viewModel.ambientCallbackDelegate = object : AmbientLifecycleObserver.AmbientLifecycleCallback { }
+        lifecycle.addObserver(ambientObserver)
 
-        GlobalScope.launch {
+        lifecycleScope.launch {
             applyUpdates(this@MainActivity)
         }
     }
@@ -65,26 +74,6 @@ internal class MainActivity : AppCompatActivity(), AmbientModeSupport.AmbientCal
             app.insetBottom = insets.systemWindowInsetBottom
             viewModel.insetBottom.value = app.insetBottom
             insets
-        }
-    }
-
-    override fun getAmbientCallback(): AmbientModeSupport.AmbientCallback {
-        return object : AmbientModeSupport.AmbientCallback(){
-            override fun onAmbientOffloadInvalidated() {
-                viewModel.ambient.onAmbientOffloadInvalidated()
-            }
-
-            override fun onEnterAmbient(ambientDetails: Bundle?) {
-                viewModel.ambient.onEnterAmbient(ambientDetails)
-            }
-
-            override fun onExitAmbient() {
-                viewModel.ambient.onExitAmbient()
-            }
-
-            override fun onUpdateAmbient() {
-                viewModel.ambient.onUpdateAmbient()
-            }
         }
     }
 }

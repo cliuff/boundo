@@ -189,7 +189,6 @@ dependencies {
             androidxPreference,
             googleMaterialComponents,
             kotlinStdlib,
-            androidxPercentLayout,
             androidxWear,
         ).forEach { implementation(it) }
 
