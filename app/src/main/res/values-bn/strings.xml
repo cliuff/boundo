@@ -240,4 +240,6 @@
     <string name="im_toast_finish">গ্যালারিতে সংরক্ষিত</string>
     <string name="unit_man_disabled">অক্ষম</string>
     <string name="unit_man_dynamic_feature">গতিশীল বৈশিষ্ট্য</string>
+    <string name="at_status_running">টাইমার চলছে</string>
+    <string name="at_action_start">টাইমার শুরু করুন</string>
 </resources>

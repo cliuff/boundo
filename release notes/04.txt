@@ -1,5 +1,25 @@
 
 
+- **4.1.0** 23081415
+<en-US>
+- App API details page: conveniently switch between apps
+- Add 6 tags: module, RRO, predictive back, and more
+- Enhance native libs and dex packages checking
+- Enhance app list update checking
+- Redesign Audio Timer page
+- Refactor Quick Access Device Controls support
+- Predictive back for Android 14
+</en-US>
+<zh-CN>
+- 应用API详情页面：方便地在应用之间切换
+- 添加6个新标签：系统模块、RRO、预测返回等
+- 优化原生库和dex文件包名查看
+- 优化应用列表更新检查
+- 全新音乐倒计时页面
+- 重构快捷控制面板支持
+- 支持安卓14的预测性返回
+</zh-CN>
+
 - **4.0.1** 23040514
 <en-US>
 1. App API feature:

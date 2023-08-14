@@ -240,4 +240,6 @@
     <string name="im_toast_finish">Lưu trong bộ sưu tập</string>
     <string name="unit_man_disabled">Tàn tật</string>
     <string name="unit_man_dynamic_feature">Tính năng động</string>
+    <string name="at_status_running">Hẹn giờ đang chạy</string>
+    <string name="at_action_start">bắt đầu hẹn giờ</string>
 </resources>

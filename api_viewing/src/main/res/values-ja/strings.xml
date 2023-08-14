@@ -128,4 +128,21 @@
     <string name="av_info_lib_sec_minimized_self">最小化された自己</string>
     <string name="av_info_lib_sec_minimized">最小化されたその他</string>
     <string name="av_info_lib_comp_disabled">無効</string>
+    <string name="av_info_lib_pref_compressed_size">圧縮サイズ</string>
+    <string name="av_info_lib_pref_uncompressed_size">非圧縮サイズ</string>
+    <string name="av_settings_diff">アプリの差分履歴を記録する</string>
+    <string name="av_settings_diff_title">差分履歴</string>
+    <string name="av_settings_diff_minimized">%d 個の空のレコードが最小化されました。タップして表示します</string>
+    <string name="av_tag_system_core">システムコアアプリ</string>
+    <string name="av_tag_system_module">モジュール式システムコンポーネント</string>
+    <string name="av_tag_type_overlay">ランタイム リソース オーバーレイ (RRO)</string>
+    <string name="av_tag_type_instant">インスタントアプリ</string>
+    <string name="av_tag_type_web_apk">プログレッシブ ウェブ アプリ (PWA)</string>
+    <string name="av_tag_predictive_back">予測バック</string>
+    <string name="av_tag_result_system_core">このアプリは、デバイスが最小状態で起動されるときに含まれます</string>
+    <string name="av_tag_result_system_module">Project Mainline モジュールは、Google Play システム アップデートまたはメーカー OTA によって配布されます。</string>
+    <string name="av_tag_result_type_overlay">RRO は、実行時にターゲット パッケージのリソース値を変更します。</string>
+    <string name="av_tag_result_type_instant">このアプリはインストールしなくても実行されます</string>
+    <string name="av_tag_result_type_web_apk">これは Chromium WebAPK です</string>
+    <string name="av_tag_result_predictive_back">このアプリは、このデバイスでの予測バックアニメーションをサポートしています</string>
 </resources>

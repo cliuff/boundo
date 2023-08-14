@@ -128,4 +128,21 @@
     <string name="av_info_lib_sec_minimized_self">최소화된 자아</string>
     <string name="av_info_lib_sec_minimized">최소화 기타</string>
     <string name="av_info_lib_comp_disabled">장애가 있는</string>
+    <string name="av_info_lib_pref_compressed_size">압축된 크기</string>
+    <string name="av_info_lib_pref_uncompressed_size">압축되지 않은 크기</string>
+    <string name="av_settings_diff">앱 레코드 비교 기록</string>
+    <string name="av_settings_diff_title">비교 기록</string>
+    <string name="av_settings_diff_minimized">%d개의 빈 레코드가 최소화되었습니다. 탭하여 표시하세요.</string>
+    <string name="av_tag_system_core">시스템 코어 앱</string>
+    <string name="av_tag_system_module">모듈식 시스템 구성요소</string>
+    <string name="av_tag_type_overlay">런타임 리소스 오버레이(RRO)</string>
+    <string name="av_tag_type_instant">인스턴트 앱</string>
+    <string name="av_tag_type_web_apk">프로그레시브 웹 앱(PWA)</string>
+    <string name="av_tag_predictive_back">예측 백</string>
+    <string name="av_tag_result_system_core">이 앱은 장치가 최소 상태로 부팅될 때 포함됩니다.</string>
+    <string name="av_tag_result_system_module">프로젝트 메인라인 모듈은 Google Play 시스템 업데이트 또는 제조업체 OTA를 통해 배포됩니다.</string>
+    <string name="av_tag_result_type_overlay">RRO는 런타임 시 대상 패키지의 리소스 값을 변경합니다.</string>
+    <string name="av_tag_result_type_instant">이 앱은 설치 없이 실행됩니다.</string>
+    <string name="av_tag_result_type_web_apk">Chromium WebAPK입니다.</string>
+    <string name="av_tag_result_predictive_back">이 앱은 이 기기에서 예상되는 역방향 애니메이션을 지원합니다.</string>
 </resources>

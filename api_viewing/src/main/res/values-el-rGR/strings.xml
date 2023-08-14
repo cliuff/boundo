@@ -128,4 +128,21 @@
     <string name="av_info_lib_sec_minimized_self">Ελαχιστοποιημένος εαυτός</string>
     <string name="av_info_lib_sec_minimized">Ελαχιστοποιημένο-άλλο</string>
     <string name="av_info_lib_comp_disabled">ΑΤΟΜΑ ΜΕ ΕΙΔΙΚΕΣ ΑΝΑΓΚΕΣ</string>
+    <string name="av_info_lib_pref_compressed_size">ΣΥΜΠΙΕΣΜΕΝΟ ΜΕΓΕΘΟΣ</string>
+    <string name="av_info_lib_pref_uncompressed_size">Ασυμπίεστο ΜΕΓΕΘΟΣ</string>
+    <string name="av_settings_diff">Ιστορικό διαφορών εγγραφής εφαρμογής</string>
+    <string name="av_settings_diff_title">Ιστορία Διαφορών</string>
+    <string name="av_settings_diff_minimized">Ελαχιστοποιήθηκαν %d κενές εγγραφές, πατήστε για να τις εμφανίσετε</string>
+    <string name="av_tag_system_core">Βασική εφαρμογή συστήματος</string>
+    <string name="av_tag_system_module">Αρθρωτό εξάρτημα συστήματος</string>
+    <string name="av_tag_type_overlay">Επικάλυψη πόρων χρόνου εκτέλεσης (RRO)</string>
+    <string name="av_tag_type_instant">Άμεση εφαρμογή</string>
+    <string name="av_tag_type_web_apk">Προοδευτική εφαρμογή Ιστού (PWA)</string>
+    <string name="av_tag_predictive_back">Προγνωστική πλάτη</string>
+    <string name="av_tag_result_system_core">Αυτή η εφαρμογή περιλαμβάνεται όταν η συσκευή εκκινείται σε ελάχιστη κατάσταση</string>
+    <string name="av_tag_result_system_module">Οι λειτουργικές μονάδες Project Mainline διανέμονται από τις ενημερώσεις του συστήματος Google Play ή από τον κατασκευαστή OTA</string>
+    <string name="av_tag_result_type_overlay">Ένα RRO αλλάζει τις τιμές πόρων ενός πακέτου προορισμού κατά το χρόνο εκτέλεσης</string>
+    <string name="av_tag_result_type_instant">Αυτή η εφαρμογή εκτελείται χωρίς να εγκατασταθεί</string>
+    <string name="av_tag_result_type_web_apk">Αυτό είναι ένα Chromium WebAPK</string>
+    <string name="av_tag_result_predictive_back">Αυτή η εφαρμογή υποστηρίζει προγνωστικά κινούμενα σχέδια σε αυτήν τη συσκευή</string>
 </resources>

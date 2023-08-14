@@ -240,4 +240,6 @@
     <string name="im_toast_finish">写真をアルバムに保存しました</string>
     <string name="unit_man_disabled">無効</string>
     <string name="unit_man_dynamic_feature">動的機能</string>
+    <string name="at_status_running">タイマーが作動中です</string>
+    <string name="at_action_start">タイマーを開始します</string>
 </resources>

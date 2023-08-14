@@ -240,4 +240,6 @@
     <string name="im_toast_finish">圖片已儲存至相簿</string>
     <string name="unit_man_disabled">已停用</string>
     <string name="unit_man_dynamic_feature">動態功能</string>
+    <string name="at_status_running">正在倒計時</string>
+    <string name="at_action_start">開始倒計時</string>
 </resources>

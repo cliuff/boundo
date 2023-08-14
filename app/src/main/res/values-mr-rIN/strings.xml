@@ -240,4 +240,6 @@
     <string name="im_toast_finish">गॅलरीत जतन केले</string>
     <string name="unit_man_disabled">अक्षम</string>
     <string name="unit_man_dynamic_feature">डायनॅमिक वैशिष्ट्य</string>
+    <string name="at_status_running">टायमर चालू आहे</string>
+    <string name="at_action_start">टाइमर सुरू करा</string>
 </resources>

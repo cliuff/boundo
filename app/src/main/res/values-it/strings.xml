@@ -240,4 +240,6 @@
     <string name="im_toast_finish">Salvato in galleria</string>
     <string name="unit_man_disabled">Disabilitato</string>
     <string name="unit_man_dynamic_feature">Funzione dinamica</string>
+    <string name="at_status_running">Il timer è in esecuzione</string>
+    <string name="at_action_start">Avvia il cronometro</string>
 </resources>

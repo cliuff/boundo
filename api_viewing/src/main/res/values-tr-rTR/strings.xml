@@ -128,4 +128,21 @@
     <string name="av_info_lib_sec_minimized_self">Küçültülmüş öz</string>
     <string name="av_info_lib_sec_minimized">Küçültülmüş-diğer</string>
     <string name="av_info_lib_comp_disabled">ENGELLİ</string>
+    <string name="av_info_lib_pref_compressed_size">SIKIŞTIRILMIŞ BOYUT</string>
+    <string name="av_info_lib_pref_uncompressed_size">SIKIŞTIRILMAMIŞ BOYUT</string>
+    <string name="av_settings_diff">Uygulama kaydı fark geçmişi</string>
+    <string name="av_settings_diff_title">Fark Geçmişi</string>
+    <string name="av_settings_diff_minimized">%d boş kayıt simge durumuna küçültüldü, onları göstermek için dokunun</string>
+    <string name="av_tag_system_core">Sistem çekirdek uygulaması</string>
+    <string name="av_tag_system_module">Modüler sistem bileşeni</string>
+    <string name="av_tag_type_overlay">Çalışma zamanı kaynak yerleşimi (RRO)</string>
+    <string name="av_tag_type_instant">hazır uygulama</string>
+    <string name="av_tag_type_web_apk">Aşamalı Web Uygulaması (PWA)</string>
+    <string name="av_tag_predictive_back">tahmini geri</string>
+    <string name="av_tag_result_system_core">Bu uygulama, cihaz minimum duruma getirildiğinde dahil edilir</string>
+    <string name="av_tag_result_system_module">Project Mainline modülleri, Google Play Sistem güncellemeleri veya üretici OTA tarafından dağıtılır</string>
+    <string name="av_tag_result_type_overlay">Bir RRO, çalışma zamanında bir hedef paketin kaynak değerlerini değiştirir</string>
+    <string name="av_tag_result_type_instant">Bu uygulama kurulmadan çalışır</string>
+    <string name="av_tag_result_type_web_apk">Bu bir Chromium WebAPK\'sıdır</string>
+    <string name="av_tag_result_predictive_back">Bu uygulama, bu cihazda tahmine dayalı geri animasyonları destekler</string>
 </resources>

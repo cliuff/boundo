@@ -127,4 +127,21 @@
     <string name="av_info_lib_sec_minimized_self">Мінімізований-само</string>
     <string name="av_info_lib_sec_minimized">Мінімізований-інший</string>
     <string name="av_info_lib_comp_disabled">ВИМКНЕНО</string>
+    <string name="av_info_lib_pref_compressed_size">СТИСНИЙ РОЗМІР</string>
+    <string name="av_info_lib_pref_uncompressed_size">НЕКОМПРЕСОВАНИЙ РОЗМІР</string>
+    <string name="av_settings_diff">Історія розбіжностей запису програми</string>
+    <string name="av_settings_diff_title">Історія відмінностей</string>
+    <string name="av_settings_diff_minimized">%d порожніх записів згорнуто, торкніться, щоб показати їх</string>
+    <string name="av_tag_system_core">Основний додаток системи</string>
+    <string name="av_tag_system_module">Модульна складова системи</string>
+    <string name="av_tag_type_overlay">Накладання ресурсів виконання (RRO)</string>
+    <string name="av_tag_type_instant">Миттєвий додаток</string>
+    <string name="av_tag_type_web_apk">Прогресивна веб-програма (PWA)</string>
+    <string name="av_tag_predictive_back">Прогнозна спина</string>
+    <string name="av_tag_result_system_core">Ця програма включається, коли пристрій завантажується в мінімальному стані</string>
+    <string name="av_tag_result_system_module">Модулі Project Mainline розповсюджуються оновленнями системи Google Play або виробником OTA</string>
+    <string name="av_tag_result_type_overlay">RRO змінює значення ресурсів цільового пакета під час виконання</string>
+    <string name="av_tag_result_type_instant">Ця програма працює без встановлення</string>
+    <string name="av_tag_result_type_web_apk">Це Chromium WebAPK</string>
+    <string name="av_tag_result_predictive_back">Ця програма підтримує інтелектуальну анімацію на цьому пристрої</string>
 </resources>

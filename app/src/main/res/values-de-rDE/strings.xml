@@ -240,4 +240,6 @@
     <string name="im_toast_finish">In der Galerie gespeichert</string>
     <string name="unit_man_disabled">Deaktiviert</string>
     <string name="unit_man_dynamic_feature">Dynamische Funktion</string>
+    <string name="at_status_running">Timer läuft</string>
+    <string name="at_action_start">Timer starten</string>
 </resources>

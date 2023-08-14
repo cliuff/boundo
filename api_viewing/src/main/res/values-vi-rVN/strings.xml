@@ -128,4 +128,21 @@
     <string name="av_info_lib_sec_minimized_self">tự thu nhỏ</string>
     <string name="av_info_lib_sec_minimized">thu nhỏ-khác</string>
     <string name="av_info_lib_comp_disabled">TÀN TẬT</string>
+    <string name="av_info_lib_pref_compressed_size">KÍCH THƯỚC NÉN</string>
+    <string name="av_info_lib_pref_uncompressed_size">KÍCH THƯỚC CHƯA NÉN</string>
+    <string name="av_settings_diff">Lịch sử khác của bản ghi ứng dụng</string>
+    <string name="av_settings_diff_title">Lịch sử khác biệt</string>
+    <string name="av_settings_diff_minimized">Đã thu nhỏ %d bản ghi trống, nhấn để hiển thị chúng</string>
+    <string name="av_tag_system_core">Ứng dụng lõi hệ thống</string>
+    <string name="av_tag_system_module">Thành phần hệ thống mô-đun</string>
+    <string name="av_tag_type_overlay">Lớp phủ tài nguyên thời gian chạy (RRO)</string>
+    <string name="av_tag_type_instant">ứng dụng tức thì</string>
+    <string name="av_tag_type_web_apk">Ứng dụng web lũy tiến (PWA)</string>
+    <string name="av_tag_predictive_back">dự đoán trở lại</string>
+    <string name="av_tag_result_system_core">Ứng dụng này được bao gồm khi thiết bị được khởi động ở trạng thái tối thiểu</string>
+    <string name="av_tag_result_system_module">Các mô-đun Project Mainline được phân phối bởi các bản cập nhật Hệ thống của Google Play hoặc OTA của nhà sản xuất</string>
+    <string name="av_tag_result_type_overlay">RRO thay đổi giá trị tài nguyên của gói đích khi chạy</string>
+    <string name="av_tag_result_type_instant">Ứng dụng này chạy mà không cần cài đặt</string>
+    <string name="av_tag_result_type_web_apk">Đây là một Chromium WebAPK</string>
+    <string name="av_tag_result_predictive_back">Ứng dụng này hỗ trợ hoạt ảnh quay lại dự đoán trên thiết bị này</string>
 </resources>

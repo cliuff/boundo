@@ -240,4 +240,6 @@
     <string name="im_toast_finish">गैलरी में सहेजा गया</string>
     <string name="unit_man_disabled">अक्षम</string>
     <string name="unit_man_dynamic_feature">गतिशील सुविधा</string>
+    <string name="at_status_running">टाइमर चल रहा है</string>
+    <string name="at_action_start">टाइमर प्रारंभ करें</string>
 </resources>

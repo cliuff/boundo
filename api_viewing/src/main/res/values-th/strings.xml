@@ -128,4 +128,21 @@
     <string name="av_info_lib_sec_minimized_self">ลดขนาดตัวเอง</string>
     <string name="av_info_lib_sec_minimized">ย่อส่วนอื่น ๆ</string>
     <string name="av_info_lib_comp_disabled">พิการ</string>
+    <string name="av_info_lib_pref_compressed_size">ขนาดบีบอัด</string>
+    <string name="av_info_lib_pref_uncompressed_size">ขนาดที่ไม่บีบอัด</string>
+    <string name="av_settings_diff">ประวัติความแตกต่างของบันทึกแอป</string>
+    <string name="av_settings_diff_title">ประวัติความแตกต่าง</string>
+    <string name="av_settings_diff_minimized">ย่อ %d บันทึกว่าง แตะเพื่อแสดง</string>
+    <string name="av_tag_system_core">แอปหลักของระบบ</string>
+    <string name="av_tag_system_module">ส่วนประกอบของระบบโมดูลาร์</string>
+    <string name="av_tag_type_overlay">การซ้อนทับทรัพยากรรันไทม์ (RRO)</string>
+    <string name="av_tag_type_instant">แอพทันที</string>
+    <string name="av_tag_type_web_apk">แอพเว็บก้าวหน้า (PWA)</string>
+    <string name="av_tag_predictive_back">ทำนายย้อนหลัง</string>
+    <string name="av_tag_result_system_core">แอพนี้รวมอยู่ด้วยเมื่ออุปกรณ์บูตเข้าสู่สถานะขั้นต่ำ</string>
+    <string name="av_tag_result_system_module">โมดูล Project Mainline เผยแพร่โดยการอัปเดตระบบ Google Play หรือ OTA ของผู้ผลิต</string>
+    <string name="av_tag_result_type_overlay">RRO เปลี่ยนค่าทรัพยากรของแพ็กเกจเป้าหมายขณะรันไทม์</string>
+    <string name="av_tag_result_type_instant">แอพนี้ทำงานโดยไม่ต้องติดตั้ง</string>
+    <string name="av_tag_result_type_web_apk">นี่คือ Chromium WebAPK</string>
+    <string name="av_tag_result_predictive_back">แอพนี้รองรับแอนิเมชั่นย้อนกลับแบบคาดคะเนบนอุปกรณ์นี้</string>
 </resources>

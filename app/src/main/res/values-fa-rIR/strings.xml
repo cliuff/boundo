@@ -241,4 +241,6 @@
     <string name="unit_man_disabled">معلول</string>
     <string name="unit_man_dynamic_feature">ویژگی پویا</string>
     <string name="about_twitter_account">&#8206;\@libekliff</string>
+    <string name="at_status_running">تایمر در حال اجرا است</string>
+    <string name="at_action_start">شروع تایمر</string>
 </resources>

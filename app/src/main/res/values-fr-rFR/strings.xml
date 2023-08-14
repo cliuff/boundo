@@ -239,4 +239,6 @@
     <string name="im_toast_finish">Enregistré dans la galerie</string>
     <string name="unit_man_disabled">Désactivée</string>
     <string name="unit_man_dynamic_feature">Fonction dynamique</string>
+    <string name="at_status_running">La minuterie tourne</string>
+    <string name="at_action_start">Démarrer la minuterie</string>
 </resources>

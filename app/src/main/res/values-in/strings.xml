@@ -240,4 +240,6 @@
     <string name="im_toast_finish">Disimpan di galeri</string>
     <string name="unit_man_disabled">Dengan disabilitas</string>
     <string name="unit_man_dynamic_feature">Fitur dinamis</string>
+    <string name="at_status_running">Timer sedang berjalan</string>
+    <string name="at_action_start">Mulai pengatur waktu</string>
 </resources>

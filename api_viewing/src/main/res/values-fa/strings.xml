@@ -148,4 +148,21 @@
     <string name="av_info_lib_sec_minimized_self">خود را به حداقل رساند</string>
     <string name="av_info_lib_sec_minimized">به حداقل رساندن - دیگر</string>
     <string name="av_info_lib_comp_disabled">معلول</string>
+    <string name="av_info_lib_pref_compressed_size">اندازه فشرده</string>
+    <string name="av_info_lib_pref_uncompressed_size">اندازه فشرده نشده</string>
+    <string name="av_settings_diff">سابقه تفاوت رکورد برنامه</string>
+    <string name="av_settings_diff_title">تاریخچه تفاوت</string>
+    <string name="av_settings_diff_minimized">%d رکورد خالی به حداقل رسید، برای نمایش آنها ضربه بزنید</string>
+    <string name="av_tag_system_core">برنامه هسته سیستم</string>
+    <string name="av_tag_system_module">جزء سیستم مدولار</string>
+    <string name="av_tag_type_overlay">پوشش منابع زمان اجرا (RRO)</string>
+    <string name="av_tag_type_instant">برنامه فوری</string>
+    <string name="av_tag_type_web_apk">برنامه وب پیشرو (PWA)</string>
+    <string name="av_tag_predictive_back">بازگشت پیش بینی کننده</string>
+    <string name="av_tag_result_system_core">این برنامه زمانی که دستگاه در حالت حداقل بوت می شود گنجانده می شود</string>
+    <string name="av_tag_result_system_module">ماژول‌های Project Mainline توسط به‌روزرسانی‌های سیستم Google Play یا OTA سازنده توزیع می‌شوند</string>
+    <string name="av_tag_result_type_overlay">یک RRO مقادیر منابع یک بسته هدف را در زمان اجرا تغییر می دهد</string>
+    <string name="av_tag_result_type_instant">این برنامه بدون نصب اجرا می شود</string>
+    <string name="av_tag_result_type_web_apk">این یک WebAPK کرومیوم است</string>
+    <string name="av_tag_result_predictive_back">این برنامه از انیمیشن‌های پیش‌بینی‌کننده برگشت در این دستگاه پشتیبانی می‌کند</string>
 </resources>

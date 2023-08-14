@@ -240,4 +240,6 @@
     <string name="im_toast_finish">Αποθηκεύτηκε στη συλλογή</string>
     <string name="unit_man_disabled">άτομα με ειδικές ανάγκες</string>
     <string name="unit_man_dynamic_feature">Δυναμική λειτουργία</string>
+    <string name="at_status_running">Το χρονόμετρο λειτουργεί</string>
+    <string name="at_action_start">Έναρξη χρονοδιακόπτη</string>
 </resources>

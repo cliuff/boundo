@@ -128,4 +128,21 @@
     <string name="av_info_lib_sec_minimized_self">लहान-स्व</string>
     <string name="av_info_lib_sec_minimized">लहान केले-इतर</string>
     <string name="av_info_lib_comp_disabled">अक्षम</string>
+    <string name="av_info_lib_pref_compressed_size">संकुचित आकार</string>
+    <string name="av_info_lib_pref_uncompressed_size">असंपीडित आकार</string>
+    <string name="av_settings_diff">अॅप रेकॉर्ड भिन्न इतिहास</string>
+    <string name="av_settings_diff_title">भिन्न इतिहास</string>
+    <string name="av_settings_diff_minimized">%d रिकामे रेकॉर्ड कमी केले, ते दाखवण्यासाठी टॅप करा</string>
+    <string name="av_tag_system_core">सिस्टम कोर अॅप</string>
+    <string name="av_tag_system_module">मॉड्यूलर सिस्टम घटक</string>
+    <string name="av_tag_type_overlay">रनटाइम संसाधन आच्छादन (RRO)</string>
+    <string name="av_tag_type_instant">झटपट अॅप</string>
+    <string name="av_tag_type_web_apk">प्रोग्रेसिव्ह वेब अॅप (PWA)</string>
+    <string name="av_tag_predictive_back">परत अंदाज</string>
+    <string name="av_tag_result_system_core">डिव्हाइस किमान स्थितीत बूट झाल्यावर हा अॅप समाविष्ट केला जातो</string>
+    <string name="av_tag_result_system_module">प्रोजेक्ट मेनलाइन मॉड्यूल Google Play सिस्टम अपडेट्स किंवा निर्माता OTA द्वारे वितरित केले जातात</string>
+    <string name="av_tag_result_type_overlay">RRO रनटाइमच्या वेळी लक्ष्य पॅकेजची संसाधन मूल्ये बदलते</string>
+    <string name="av_tag_result_type_instant">हे अॅप इंस्टॉल केल्याशिवाय चालते</string>
+    <string name="av_tag_result_type_web_apk">हे Chromium WebAPK आहे</string>
+    <string name="av_tag_result_predictive_back">हे अॅप या डिव्हाइसवर भविष्य सांगणाऱ्या बॅक अॅनिमेशनला सपोर्ट करते</string>
 </resources>

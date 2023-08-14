@@ -240,4 +240,6 @@
     <string name="im_toast_finish">Galeriye kaydedildi</string>
     <string name="unit_man_disabled">Engelli</string>
     <string name="unit_man_dynamic_feature">Dinamik özellik</string>
+    <string name="at_status_running">Zamanlayıcı çalışıyor</string>
+    <string name="at_action_start">Zamanlayıcıyı başlat</string>
 </resources>

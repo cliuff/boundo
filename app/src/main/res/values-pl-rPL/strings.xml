@@ -240,4 +240,6 @@
     <string name="im_toast_finish">Zapisano w galerii</string>
     <string name="unit_man_disabled">Wyłączone</string>
     <string name="unit_man_dynamic_feature">Funkcja dynamiczna</string>
+    <string name="at_status_running">Minutnik działa</string>
+    <string name="at_action_start">Uruchom minutnik</string>
 </resources>

@@ -128,4 +128,21 @@
     <string name="av_info_lib_sec_minimized_self">মিনিমাইজড-স্ব</string>
     <string name="av_info_lib_sec_minimized">মিনিমাইজড-অন্য</string>
     <string name="av_info_lib_comp_disabled">অক্ষম</string>
+    <string name="av_info_lib_pref_compressed_size">সংকুচিত আকার</string>
+    <string name="av_info_lib_pref_uncompressed_size">কম্প্রেসড সাইজ</string>
+    <string name="av_settings_diff">অ্যাপ রেকর্ডের পার্থক্য ইতিহাস</string>
+    <string name="av_settings_diff_title">ভিন্ন ইতিহাস</string>
+    <string name="av_settings_diff_minimized">%dটি খালি রেকর্ড ছোট করা হয়েছে, সেগুলি দেখানোর জন্য আলতো চাপুন৷</string>
+    <string name="av_tag_system_core">সিস্টেম কোর অ্যাপ</string>
+    <string name="av_tag_system_module">মডুলার সিস্টেম উপাদান</string>
+    <string name="av_tag_type_overlay">রানটাইম রিসোর্স ওভারলে (RRO)</string>
+    <string name="av_tag_type_instant">তাত্ক্ষণিক অ্যাপ</string>
+    <string name="av_tag_type_web_apk">প্রগতিশীল ওয়েব অ্যাপ (PWA)</string>
+    <string name="av_tag_predictive_back">ভবিষ্যদ্বাণীপূর্ণ ফিরে</string>
+    <string name="av_tag_result_system_core">ডিভাইসটি একটি ন্যূনতম অবস্থায় বুট করা হলে এই অ্যাপটি অন্তর্ভুক্ত করা হয়</string>
+    <string name="av_tag_result_system_module">প্রোজেক্ট মেইনলাইন মডিউলগুলি Google Play সিস্টেম আপডেট বা নির্মাতা OTA দ্বারা বিতরণ করা হয়</string>
+    <string name="av_tag_result_type_overlay">একটি RRO রানটাইমে একটি লক্ষ্য প্যাকেজের সম্পদের মান পরিবর্তন করে</string>
+    <string name="av_tag_result_type_instant">এই অ্যাপটি ইনস্টল না করেই চলে</string>
+    <string name="av_tag_result_type_web_apk">এটি একটি Chromium WebAPK</string>
+    <string name="av_tag_result_predictive_back">এই অ্যাপটি এই ডিভাইসে ভবিষ্যদ্বাণীমূলক ব্যাক অ্যানিমেশন সমর্থন করে</string>
 </resources>

@@ -128,4 +128,21 @@
     <string name="av_info_lib_sec_minimized_self">न्यूनतम-स्व</string>
     <string name="av_info_lib_sec_minimized">न्यूनतम-अन्य</string>
     <string name="av_info_lib_comp_disabled">अक्षम</string>
+    <string name="av_info_lib_pref_compressed_size">संपीड़ित आकार</string>
+    <string name="av_info_lib_pref_uncompressed_size">असम्पीडित आकार</string>
+    <string name="av_settings_diff">ऐप रिकॉर्ड भिन्न इतिहास</string>
+    <string name="av_settings_diff_title">अंतर इतिहास</string>
+    <string name="av_settings_diff_minimized">%d खाली रिकॉर्ड न्यूनतम किए गए, उन्हें दिखाने के लिए टैप करें</string>
+    <string name="av_tag_system_core">सिस्टम कोर ऐप</string>
+    <string name="av_tag_system_module">मॉड्यूलर सिस्टम घटक</string>
+    <string name="av_tag_type_overlay">रनटाइम संसाधन ओवरले (आरआरओ)</string>
+    <string name="av_tag_type_instant">तुरंत ऐप</string>
+    <string name="av_tag_type_web_apk">प्रगतिशील वेब ऐप (PWA)</string>
+    <string name="av_tag_predictive_back">पूर्वानुमानित वापस</string>
+    <string name="av_tag_result_system_core">यह ऐप तब शामिल होता है जब डिवाइस को न्यूनतम स्थिति में बूट किया जाता है</string>
+    <string name="av_tag_result_system_module">प्रोजेक्ट मेनलाइन मॉड्यूल Google Play सिस्टम अपडेट या निर्माता OTA द्वारा वितरित किए जाते हैं</string>
+    <string name="av_tag_result_type_overlay">आरआरओ रनटाइम पर लक्ष्य पैकेज के संसाधन मूल्यों को बदलता है</string>
+    <string name="av_tag_result_type_instant">यह ऐप बिना इंस्टॉल किए चलता है</string>
+    <string name="av_tag_result_type_web_apk">यह एक क्रोमियम वेबएपीके है</string>
+    <string name="av_tag_result_predictive_back">यह ऐप इस डिवाइस पर पूर्वानुमानित बैक एनिमेशन का समर्थन करता है</string>
 </resources>

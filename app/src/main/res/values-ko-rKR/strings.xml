@@ -240,4 +240,6 @@
     <string name="im_toast_finish">앨범에 저장된 사진</string>
     <string name="unit_man_disabled">장애가있는</string>
     <string name="unit_man_dynamic_feature">동적 기능</string>
+    <string name="at_status_running">타이머 실행 중</string>
+    <string name="at_action_start">타이머 시작</string>
 </resources>

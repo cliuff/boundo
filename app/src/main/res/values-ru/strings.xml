@@ -240,4 +240,6 @@
     <string name="im_toast_finish">Сохранено в галерее</string>
     <string name="unit_man_disabled">инвалид</string>
     <string name="unit_man_dynamic_feature">Динамическая функция</string>
+    <string name="at_status_running">Таймер работает</string>
+    <string name="at_action_start">Запустить таймер</string>
 </resources>

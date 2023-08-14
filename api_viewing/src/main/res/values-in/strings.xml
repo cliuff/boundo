@@ -128,4 +128,21 @@
     <string name="av_info_lib_sec_minimized_self">Meminimalkan diri</string>
     <string name="av_info_lib_sec_minimized">Diminimalkan-lainnya</string>
     <string name="av_info_lib_comp_disabled">DENGAN DISABILITAS</string>
+    <string name="av_info_lib_pref_compressed_size">UKURAN KOMPRES</string>
+    <string name="av_info_lib_pref_uncompressed_size">UKURAN TANPA KOMPRES</string>
+    <string name="av_settings_diff">Riwayat perbedaan catatan aplikasi</string>
+    <string name="av_settings_diff_title">Sejarah Perbedaan</string>
+    <string name="av_settings_diff_minimized">%d catatan kosong diminimalkan, ketuk untuk menampilkannya</string>
+    <string name="av_tag_system_core">Aplikasi inti sistem</string>
+    <string name="av_tag_system_module">Komponen sistem modular</string>
+    <string name="av_tag_type_overlay">Hamparan sumber daya runtime (RRO)</string>
+    <string name="av_tag_type_instant">Aplikasi instan</string>
+    <string name="av_tag_type_web_apk">Aplikasi Web Progresif (PWA)</string>
+    <string name="av_tag_predictive_back">Prediktif kembali</string>
+    <string name="av_tag_result_system_core">Aplikasi ini disertakan saat perangkat di-boot ke kondisi minimal</string>
+    <string name="av_tag_result_system_module">Modul Project Mainline didistribusikan oleh pembaruan Sistem Google Play atau pabrikan OTA</string>
+    <string name="av_tag_result_type_overlay">RRO mengubah nilai sumber daya dari paket target saat runtime</string>
+    <string name="av_tag_result_type_instant">Aplikasi ini berjalan tanpa diinstal</string>
+    <string name="av_tag_result_type_web_apk">Ini adalah APK Web Chromium</string>
+    <string name="av_tag_result_predictive_back">Aplikasi ini mendukung animasi kembali prediktif pada perangkat ini</string>
 </resources>

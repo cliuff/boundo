@@ -240,4 +240,6 @@
     <string name="im_toast_finish">ਗੈਲਰੀ ਵਿੱਚ ਸੁਰੱਖਿਅਤ ਕੀਤਾ ਗਿਆ</string>
     <string name="unit_man_disabled">ਅਯੋਗ</string>
     <string name="unit_man_dynamic_feature">ਗਤੀਸ਼ੀਲ ਵਿਸ਼ੇਸ਼ਤਾ</string>
+    <string name="at_status_running">ਟਾਈਮਰ ਚੱਲ ਰਿਹਾ ਹੈ</string>
+    <string name="at_action_start">ਟਾਈਮਰ ਸ਼ੁਰੂ ਕਰੋ</string>
 </resources>

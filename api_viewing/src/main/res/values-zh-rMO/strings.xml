@@ -148,4 +148,25 @@
     <string name="av_info_lib_sec_minimized_self">已收起-自身</string>
     <string name="av_info_lib_sec_minimized">已收起-其他</string>
     <string name="av_info_lib_comp_disabled">未啟用</string>
+    <string name="av_info_lib_pref_compressed_size">壓縮大小</string>
+    <string name="av_info_lib_pref_uncompressed_size">原始大小</string>
+    <string name="av_settings_diff">應用列表維護記錄</string>
+    <string name="av_settings_diff_title">維護記錄</string>
+    <string name="av_settings_diff_minimized">%d條空記錄已收起，點擊展示</string>
+    <string name="av_tag_system_core">系統核心應用</string>
+    <string name="av_tag_system_module">模塊化系統組件</string>
+    <string name="av_tag_type_overlay">運行時資源疊加層 (RRO)</string>
+    <string name="av_tag_type_instant">免安裝應用</string>
+    <string name="av_tag_type_web_apk">漸進式 Web 應用 (PWA)</string>
+    <string name="av_tag_predictive_back">預測性返回</string>
+    <string name="av_tag_ic_system_core">核心</string>
+    <string name="av_tag_ic_system_module">模塊</string>
+    <string name="av_tag_ic_type_instant">免安裝</string>
+    <string name="av_tag_ic_predictive_back">預測返回</string>
+    <string name="av_tag_result_system_core">當此設備以最小化狀態啟動時，該應用被加載</string>
+    <string name="av_tag_result_system_module">“Project Mainline 模塊”，通過“Google Play 系統更新”或廠商OTA更新</string>
+    <string name="av_tag_result_type_overlay">RRO會在運行時覆蓋目標應用的資源</string>
+    <string name="av_tag_result_type_instant">該應用可免安裝運行</string>
+    <string name="av_tag_result_type_web_apk">該應用是 Chromium WebAPK</string>
+    <string name="av_tag_result_predictive_back">該應用在此設備上支持預測性返回手勢動畫</string>
 </resources>

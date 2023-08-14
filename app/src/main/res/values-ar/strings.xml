@@ -241,4 +241,6 @@
     <string name="unit_man_disabled">معاق</string>
     <string name="unit_man_dynamic_feature">ميزة ديناميكية</string>
     <string name="about_twitter_account">&#8206;\@libekliff</string>
+    <string name="at_status_running">الموقت قيد التشغيل</string>
+    <string name="at_action_start">بدء الموقت</string>
 </resources>

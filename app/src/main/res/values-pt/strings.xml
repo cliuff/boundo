@@ -240,4 +240,6 @@
     <string name="im_toast_finish">Guardado na galeria</string>
     <string name="unit_man_disabled">Desabilitado</string>
     <string name="unit_man_dynamic_feature">Característica dinâmica</string>
+    <string name="at_status_running">O cronômetro está funcionando</string>
+    <string name="at_action_start">Iniciar cronômetro</string>
 </resources>

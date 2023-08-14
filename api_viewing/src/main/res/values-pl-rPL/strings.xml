@@ -128,4 +128,21 @@
     <string name="av_info_lib_sec_minimized_self">Zminimalizowany-ja</string>
     <string name="av_info_lib_sec_minimized">Zminimalizowane-inne</string>
     <string name="av_info_lib_comp_disabled">WYŁĄCZONY</string>
+    <string name="av_info_lib_pref_compressed_size">ROZMIAR SPRĘŻONY</string>
+    <string name="av_info_lib_pref_uncompressed_size">NIESKOMPRESOWANY ROZMIAR</string>
+    <string name="av_settings_diff">Historia różnic w rekordach aplikacji</string>
+    <string name="av_settings_diff_title">Historia różnic</string>
+    <string name="av_settings_diff_minimized">%d pustych rekordów zostało zminimalizowanych, dotknij, aby je wyświetlić</string>
+    <string name="av_tag_system_core">Podstawowa aplikacja systemu</string>
+    <string name="av_tag_system_module">Modułowy element systemu</string>
+    <string name="av_tag_type_overlay">Nakładka zasobów środowiska uruchomieniowego (RRO)</string>
+    <string name="av_tag_type_instant">Aplikacja błyskawiczna</string>
+    <string name="av_tag_type_web_apk">Progresywna aplikacja internetowa (PWA)</string>
+    <string name="av_tag_predictive_back">Przewidujący powrót</string>
+    <string name="av_tag_result_system_core">Ta aplikacja jest dołączana, gdy urządzenie jest uruchamiane w stanie minimalnym</string>
+    <string name="av_tag_result_system_module">Moduły Project Mainline są dystrybuowane przez aktualizacje systemu Google Play lub OTA producenta</string>
+    <string name="av_tag_result_type_overlay">RRO zmienia wartości zasobów pakietu docelowego w czasie wykonywania</string>
+    <string name="av_tag_result_type_instant">Ta aplikacja działa bez instalacji</string>
+    <string name="av_tag_result_type_web_apk">To jest WebAPK Chromium</string>
+    <string name="av_tag_result_predictive_back">Ta aplikacja obsługuje predykcyjne animacje pleców na tym urządzeniu</string>
 </resources>

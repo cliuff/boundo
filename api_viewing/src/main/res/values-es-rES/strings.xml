@@ -128,4 +128,23 @@
     <string name="av_info_lib_sec_minimized_self">Yo minimizado</string>
     <string name="av_info_lib_sec_minimized">Minimizado-otro</string>
     <string name="av_info_lib_comp_disabled">DESACTIVADO</string>
+    <string name="av_info_lib_pref_compressed_size">TAMAÑO COMPRIMIDO</string>
+    <string name="av_info_lib_pref_uncompressed_size">TAMAÑO SIN COMPRIMIR</string>
+    <string name="av_settings_diff">Historial de diferencias de registros de la aplicación</string>
+    <string name="av_settings_diff_title">Historial de diferencias</string>
+    <string name="av_settings_diff_minimized">%d registros vacíos minimizados, toque para mostrarlos</string>
+    <string name="av_tag_system_core">Aplicación central del sistema</string>
+    <string name="av_tag_system_module">Componente del sistema modular</string>
+    <string name="av_tag_type_overlay">Superposición de recursos de tiempo de ejecución (RRO)</string>
+    <string name="av_tag_type_instant">aplicación instantánea</string>
+    <string name="av_tag_type_web_apk">Aplicación web progresiva (PWA)</string>
+    <string name="av_tag_predictive_back">Espalda predictiva</string>
+    <string name="av_tag_ic_system_core">PRINCIPAL</string>
+    <string name="av_tag_ic_system_module">MÓDULO</string>
+    <string name="av_tag_result_system_core">Esta aplicación se incluye cuando el dispositivo se inicia en un estado mínimo</string>
+    <string name="av_tag_result_system_module">Los módulos de Project Mainline son distribuidos por las actualizaciones del sistema Google Play o el fabricante OTA</string>
+    <string name="av_tag_result_type_overlay">Un RRO cambia los valores de recursos de un paquete de destino en tiempo de ejecución</string>
+    <string name="av_tag_result_type_instant">Esta aplicación se ejecuta sin estar instalada</string>
+    <string name="av_tag_result_type_web_apk">Este es un WebAPK de Chromium</string>
+    <string name="av_tag_result_predictive_back">Esta aplicación admite animaciones de espalda predictivas en este dispositivo</string>
 </resources>

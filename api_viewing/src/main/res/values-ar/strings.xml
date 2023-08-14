@@ -148,4 +148,21 @@
     <string name="av_info_lib_sec_minimized_self">تصغير الذات</string>
     <string name="av_info_lib_sec_minimized">مصغرة أخرى</string>
     <string name="av_info_lib_comp_disabled">عاجز</string>
+    <string name="av_info_lib_pref_compressed_size">الحجم المضغوط</string>
+    <string name="av_info_lib_pref_uncompressed_size">حجم غير مضغوط</string>
+    <string name="av_settings_diff">سجل فرق التطبيق التاريخ</string>
+    <string name="av_settings_diff_title">تاريخ الفرق</string>
+    <string name="av_settings_diff_minimized">تم تصغير٪ d سجل فارغ ، انقر لإظهارها</string>
+    <string name="av_tag_system_core">تطبيق النظام الأساسي</string>
+    <string name="av_tag_system_module">مكون النظام المعياري</string>
+    <string name="av_tag_type_overlay">تراكب موارد وقت التشغيل (RRO)</string>
+    <string name="av_tag_type_instant">التطبيق الفوري</string>
+    <string name="av_tag_type_web_apk">تطبيق الويب التقدمي (PWA)</string>
+    <string name="av_tag_predictive_back">العودة التنبؤية</string>
+    <string name="av_tag_result_system_core">يتم تضمين هذا التطبيق عند تشغيل الجهاز في حالة الحد الأدنى</string>
+    <string name="av_tag_result_system_module">يتم توزيع وحدات Project Mainline بواسطة تحديثات نظام Google Play أو الشركة المصنعة OTA</string>
+    <string name="av_tag_result_type_overlay">يغير RRO قيم الموارد للحزمة المستهدفة في وقت التشغيل</string>
+    <string name="av_tag_result_type_instant">يعمل هذا التطبيق بدون تثبيته</string>
+    <string name="av_tag_result_type_web_apk">هذا هو Chromium WebAPK</string>
+    <string name="av_tag_result_predictive_back">يدعم هذا التطبيق الرسوم المتحركة الخلفية التنبؤية على هذا الجهاز</string>
 </resources>

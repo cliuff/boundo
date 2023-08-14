@@ -128,4 +128,21 @@
     <string name="av_info_lib_sec_minimized_self">ਘਟਿ—ਆਪਣੇ ਆਪ ਨੂੰ</string>
     <string name="av_info_lib_sec_minimized">ਘਟਾਇਆ—ਹੋਰ</string>
     <string name="av_info_lib_comp_disabled">ਅਯੋਗ</string>
+    <string name="av_info_lib_pref_compressed_size">ਸੰਕੁਚਿਤ ਆਕਾਰ</string>
+    <string name="av_info_lib_pref_uncompressed_size">ਅਣਕੰਪਰੈੱਸਡ ਆਕਾਰ</string>
+    <string name="av_settings_diff">ਐਪ ਰਿਕਾਰਡ ਅੰਤਰ ਇਤਿਹਾਸ</string>
+    <string name="av_settings_diff_title">ਵੱਖਰਾ ਇਤਿਹਾਸ</string>
+    <string name="av_settings_diff_minimized">%d ਖਾਲੀ ਰਿਕਾਰਡ ਘੱਟ ਕੀਤੇ ਗਏ, ਉਹਨਾਂ ਨੂੰ ਦਿਖਾਉਣ ਲਈ ਟੈਪ ਕਰੋ</string>
+    <string name="av_tag_system_core">ਸਿਸਟਮ ਕੋਰ ਐਪ</string>
+    <string name="av_tag_system_module">ਮਾਡਿਊਲਰ ਸਿਸਟਮ ਕੰਪੋਨੈਂਟ</string>
+    <string name="av_tag_type_overlay">ਰਨਟਾਈਮ ਸਰੋਤ ਓਵਰਲੇ (RRO)</string>
+    <string name="av_tag_type_instant">ਤਤਕਾਲ ਐਪ</string>
+    <string name="av_tag_type_web_apk">ਪ੍ਰਗਤੀਸ਼ੀਲ ਵੈੱਬ ਐਪ (PWA)</string>
+    <string name="av_tag_predictive_back">ਭਵਿੱਖਬਾਣੀ ਵਾਪਸ</string>
+    <string name="av_tag_result_system_core">ਇਹ ਐਪ ਉਦੋਂ ਸ਼ਾਮਲ ਕੀਤੀ ਜਾਂਦੀ ਹੈ ਜਦੋਂ ਡਿਵਾਈਸ ਨੂੰ ਘੱਟੋ-ਘੱਟ ਸਥਿਤੀ ਵਿੱਚ ਬੂਟ ਕੀਤਾ ਜਾਂਦਾ ਹੈ</string>
+    <string name="av_tag_result_system_module">ਪ੍ਰੋਜੈਕਟ ਮੇਨਲਾਈਨ ਮੋਡੀਊਲ Google Play ਸਿਸਟਮ ਅੱਪਡੇਟ ਜਾਂ ਨਿਰਮਾਤਾ OTA ਦੁਆਰਾ ਵੰਡੇ ਜਾਂਦੇ ਹਨ</string>
+    <string name="av_tag_result_type_overlay">ਇੱਕ RRO ਰਨਟਾਈਮ \'ਤੇ ਇੱਕ ਟੀਚਾ ਪੈਕੇਜ ਦੇ ਸਰੋਤ ਮੁੱਲਾਂ ਨੂੰ ਬਦਲਦਾ ਹੈ</string>
+    <string name="av_tag_result_type_instant">ਇਹ ਐਪ ਇੰਸਟਾਲ ਕੀਤੇ ਬਿਨਾਂ ਚੱਲਦੀ ਹੈ</string>
+    <string name="av_tag_result_type_web_apk">ਇਹ ਇੱਕ Chromium WebAPK ਹੈ</string>
+    <string name="av_tag_result_predictive_back">ਇਹ ਐਪ ਇਸ ਡਿਵਾਈਸ \'ਤੇ ਭਵਿੱਖਬਾਣੀ ਬੈਕ ਐਨੀਮੇਸ਼ਨਾਂ ਦਾ ਸਮਰਥਨ ਕਰਦੀ ਹੈ</string>
 </resources>
