@@ -8,7 +8,7 @@
 
 **Requirements**
 - Android Studio `Flamingo Patch 2` (AGP `8.0.2`)
-- Gradle Wrapper `8.1.1`
+- Gradle Wrapper `8.2.1`
 - Java `11`
 - Kotlin `1.8.22`
 - Jetpack Compose Compiler `1.4.8` (requires Kotlin `1.8.22`)
