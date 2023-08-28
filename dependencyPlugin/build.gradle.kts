@@ -49,7 +49,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib:${Versions.kotlin}")
 }
 
-kotlin.jvmToolchain(11)
+kotlin.jvmToolchain(17)
 
 gradlePlugin {
     plugins {

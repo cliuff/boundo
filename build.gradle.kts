@@ -34,7 +34,7 @@ buildscript {
 //        val dokka = "0.10.1" // dokka and dokka gradle plugin
 //        val dokkaAndroidGradlePlugin = "0.9.18" // dokka android gradle plugin
         val googlePlayServicesOSSLicensesPlugin = "0.10.6"
-        val androidGradlePlugin = "8.0.2"  // 8.0.2-Flamingo Patch 2
+        val androidGradlePlugin = "8.1.1"  // 8.1.1-Giraffe Patch 1
     }
     dependencies {
         classpath("com.android.tools.build:gradle:${versions.androidGradlePlugin}")

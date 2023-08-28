@@ -72,10 +72,10 @@ android {
     compileOptions {
         // Flag to enable support for the new Java 8+ APIs
         isCoreLibraryDesugaringEnabled = true
-        targetCompatibility = JavaVersion.VERSION_11
-        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_17
     }
-    kotlin.jvmToolchain(11)
+    kotlin.jvmToolchain(17)
     buildFeatures.viewBinding = true
     buildFeatures.compose = true
     composeOptions {
