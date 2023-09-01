@@ -15,16 +15,12 @@
  */
 
 
-import com.cliuff.boundo.dependency.Dependencies
-import com.cliuff.boundo.dependency.Versions
-
 plugins {
     id("com.android.dynamic-feature")
     kotlin("android")
-    id("com.google.devtools.ksp") version "1.8.22-1.0.11"
+    alias(libs.plugins.google.ksp)
     // implement parcelable interface by using annotation
     id("kotlin-parcelize")
-    id("com.cliuff.boundo.dependencies")
 }
 
 ksp {
@@ -80,7 +76,7 @@ android {
     buildFeatures.compose = true
     composeOptions {
         // Jetpack Compose compiler version
-        kotlinCompilerExtensionVersion = Versions.androidxComposeCompiler
+        kotlinCompilerExtensionVersion = libs.versions.androidxComposeCompiler.get()
     }
 }
 
@@ -90,43 +86,41 @@ repositories {
 }
 
 dependencies {
-    Dependencies.run {
-        coreLibraryDesugaring(androidDesugaring)
-        listOf(
-            fileTree(fileTreeValue),
-            project(":app"),
-            androidxDocumentFile,
-            androidxSwipeRefreshLayout,
-            androidxRecyclerView,
-            androidxPreference,
-            androidxRoom,
-            androidxRoomRuntime,
-            mpChart,
-            openCsv,
-            androidDeviceNames,
-            smoothCornerCompose,
-            androidxConstraintLayoutCompose,
-            libCheckerRules,
-            googleAccompanistFlowLayout,
-            project(":apk-parser"),
-        ).forEach { implementation(it) }
-        dynamicFeatureBasics.forEach { implementation(it) }
+    coreLibraryDesugaring(libs.androidDesugaring)
+    listOf(
+        fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))),
+        project(":app"),
+        libs.androidxDocumentFile,
+        libs.androidxSwipeRefreshLayout,
+        libs.androidxRecyclerView,
+        libs.androidxPreference,
+        libs.androidxRoom,
+        libs.androidxRoomRuntime,
+        libs.mpChart,
+        libs.openCsv,
+        libs.androidDeviceNames,
+        libs.smoothCornerCompose,
+        libs.androidxConstraintLayoutCompose,
+        libs.libCheckerRules,
+        libs.googleAccompanistFlowLayout,
+        project(":apk-parser"),
+    ).forEach { implementation(it) }
+    implementation(libs.bundles.dynamicFeatureBasics)
 
-        listOf(mockito, googleTruth, googleTruthExtensions, junit4).forEach { testImplementation(it) }
+    listOf(libs.mockito, libs.googleTruth, libs.googleTruthExtensions, libs.junit4).forEach { testImplementation(it) }
 
-        listOf(
-            androidxTestCore,
-            androidxTestRunner,
-            androidxTestExtJunit,
-            androidxTestEspresso,
-            androidxCoreTesting,
-            androidxRoomTesting,
-            mockito,
-            googleTruth,
-            googleTruthExtensions,
-            junit4
-        ).forEach { androidTestImplementation(it) }
+    listOf(
+        libs.androidxTestCore,
+        libs.androidxTestRunner,
+        libs.androidxTestExtJunit,
+        libs.androidxTestEspresso,
+        libs.androidxCoreTesting,
+        libs.androidxRoomTesting,
+        libs.mockito,
+        libs.googleTruth,
+        libs.googleTruthExtensions,
+        libs.junit4,
+    ).forEach { androidTestImplementation(it) }
 
-        ksp(androidxRoomCompiler)
-    }
+    ksp(libs.androidxRoomCompiler)
 }

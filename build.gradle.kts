@@ -29,19 +29,10 @@ buildscript {
             url = uri("https://plugins.gradle.org/m2/")
         }
     }
-    val versions = object {
-        val kotlin = "1.8.22"  // Compose Compiler 1.4.8 requires Kotlin 1.8.22
-//        val dokka = "0.10.1" // dokka and dokka gradle plugin
-//        val dokkaAndroidGradlePlugin = "0.9.18" // dokka android gradle plugin
-        val googlePlayServicesOSSLicensesPlugin = "0.10.6"
-        val androidGradlePlugin = "8.1.1"  // 8.1.1-Giraffe Patch 1
-    }
     dependencies {
-        classpath("com.android.tools.build:gradle:${versions.androidGradlePlugin}")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}")
-//        classpath("org.jetbrains.dokka:dokka-gradle-plugin:${versions.dokka}")
-//        classpath("org.jetbrains.dokka:dokka-android-gradle-plugin:${versions.dokkaAndroidGradlePlugin}")
-        classpath("com.google.android.gms:oss-licenses-plugin:${versions.googlePlayServicesOSSLicensesPlugin}")
+        classpath(libs.androidGradlePlugin)
+        classpath(libs.kotlinGradlePlugin)
+        classpath(libs.googlePlayServicesOSSLicensesPlugin)
     }
 }
 

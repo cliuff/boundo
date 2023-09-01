@@ -16,12 +16,10 @@
 
 
 import java.util.*
-import com.cliuff.boundo.dependency.Dependencies
 
 plugins {
     id("com.android.application")
     kotlin("android")
-    id("com.cliuff.boundo.dependencies")
 }
 
 // below: load the desired values from custom.properties in order to be injected into BuildConfig and Res
@@ -169,31 +167,29 @@ android {
 }
 
 dependencies {
-    Dependencies.run {
-        coreLibraryDesugaring(androidDesugaring)
+    coreLibraryDesugaring(libs.androidDesugaring)
 
-        listOf(
-            fileTree(fileTreeValue),
-            androidxCore,
-            androidxCoreKtx,
-            androidxActivity,
-            androidxAppcompat,
-            androidxFragment,
-            androidxPalette,
-            androidxRecyclerView,
-            androidxViewPager,
-            androidxLifecycleRuntime,
-            androidxLifecycleCommon,
-            androidxLifecycleViewModel,
-            androidxLifecycleLiveData,
-            androidxPreference,
-            googleMaterialComponents,
-            kotlinStdlib,
-            androidxWear,
-        ).forEach { implementation(it) }
+    listOf(
+        fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))),
+        libs.androidxCore,
+        libs.androidxCoreKtx,
+        libs.androidxActivity,
+        libs.androidxAppcompat,
+        libs.androidxFragment,
+        libs.androidxPalette,
+        libs.androidxRecyclerView,
+        libs.androidxViewPager,
+        libs.androidxLifecycleRuntime,
+        libs.androidxLifecycleCommon,
+        libs.androidxLifecycleViewModel,
+        libs.androidxLifecycleLiveData,
+        libs.androidxPreference,
+        libs.googleMaterialComponents,
+        libs.kotlinStdlib,
+        libs.androidxWear,
+    ).forEach { implementation(it) }
 
-        compileOnly(googleWearable)
+    compileOnly(libs.googleWearable)
 
-        api(kotlinCoroutines)
-    }
+    api(libs.kotlinCoroutines)
 }

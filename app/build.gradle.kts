@@ -16,19 +16,16 @@
 
 
 import java.util.*
-import com.cliuff.boundo.dependency.Dependencies
-import com.cliuff.boundo.dependency.Versions
 
 plugins {
     id("com.android.application")
     kotlin("android")
-    id("com.google.devtools.ksp") version "1.8.22-1.0.11"
+    alias(libs.plugins.google.ksp)
     // implement parcelable interface by using annotation
     id("kotlin-parcelize")
 //    id("org.jetbrains.dokka")
 //    id("org.jetbrains.dokka-android")
     id("com.google.android.gms.oss-licenses-plugin")
-    id("com.cliuff.boundo.dependencies")
 }
 
 // below: load the desired values from custom.properties in order to be injected into BuildConfig and Res
@@ -194,7 +191,7 @@ android {
     }
     composeOptions {
         // Jetpack Compose compiler version
-        kotlinCompilerExtensionVersion = Versions.androidxComposeCompiler
+        kotlinCompilerExtensionVersion = libs.versions.androidxComposeCompiler.get()
     }
     dynamicFeatures.add(":api_viewing")
     bundle {
@@ -211,84 +208,82 @@ repositories {
 
 dependencies {
 
-    Dependencies.run {
-        coreLibraryDesugaring(androidDesugaring)
+    coreLibraryDesugaring(libs.androidDesugaring)
 
-        listOf(
-            fileTree(fileTreeValue),
-//            androidxWorkRuntime,
-//            androidxWorkFirebase,
-            androidxCore,
-            androidxCoreKtx,
-            androidxComposeRuntimeLiveData,
-            androidxComposeFoundation,
-            androidxComposeUi,
-            androidxComposeActivity,
-            androidxComposeMaterial3,
-            androidxComposeMaterialIcons,
-            androidxComposeMaterialIconsExtended,
-            androidxComposeAnimation,
-            androidxComposeUiTooling,
-            androidxComposeViewModel,
-            androidxComposeUiTest,
-            androidxActivity,
-            androidxAppcompat,
-            androidxFragment,
-            androidxWindow,
-            androidxDrawerLayout,
-            androidxSwipeRefreshLayout,
-            androidxConstraintLayout,
-            androidxPalette,
-            androidxCardView,
-            androidxRecyclerView,
-            androidxViewPager,
-            androidxLifecycleRuntime,
-            androidxLifecycleCommon,
-            androidxLifecycleViewModel,
-            androidxLifecycleLiveData,
-            androidxPaging,
-            androidxPreference,
-            androidxNavigationFragment,
-            androidxNavigationUI,
-            androidxDocumentFile,
-            androidxHeifWriter,
-            googleMaterialComponents,
-            googlePlayServicesOSSLicenses,
-            googleGson,
-            googlePlayFeatureDelivery,
-            googlePlayFeatureDeliveryKtx,
-            gglGuava,
-            jsoup,
-            kotlinStdlib,
-            kotlinReflect,
-            rxJava,
-            jbAnnotations,
-            okhttp,
-            coil,
-            coilCompose,
-            androidDeviceNames,
-            appIconLoader,
-            smoothCornerCompose,
-        ).forEach { implementation(it) }
+    listOf(
+        fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))),
+//            libs.androidxWorkRuntime,
+//            libs.androidxWorkFirebase,
+        libs.androidxCore,
+        libs.androidxCoreKtx,
+        libs.androidxComposeRuntimeLiveData,
+        libs.androidxComposeFoundation,
+        libs.androidxComposeUi,
+        libs.androidxComposeActivity,
+        libs.androidxComposeMaterial3,
+        libs.androidxComposeMaterialIcons,
+        libs.androidxComposeMaterialIconsExtended,
+        libs.androidxComposeAnimation,
+        libs.androidxComposeUiTooling,
+        libs.androidxComposeViewModel,
+        libs.androidxComposeUiTest,
+        libs.androidxActivity,
+        libs.androidxAppcompat,
+        libs.androidxFragment,
+        libs.androidxWindow,
+        libs.androidxDrawerLayout,
+        libs.androidxSwipeRefreshLayout,
+        libs.androidxConstraintLayout,
+        libs.androidxPalette,
+        libs.androidxCardView,
+        libs.androidxRecyclerView,
+        libs.androidxViewPager,
+        libs.androidxLifecycleRuntime,
+        libs.androidxLifecycleCommon,
+        libs.androidxLifecycleViewModel,
+        libs.androidxLifecycleLiveData,
+        libs.androidxPaging,
+        libs.androidxPreference,
+        libs.androidxNavigationFragment,
+        libs.androidxNavigationUI,
+        libs.androidxDocumentFile,
+        libs.androidxHeifWriter,
+        libs.googleMaterialComponents,
+        libs.googlePlayServicesOSSLicenses,
+        libs.googleGson,
+        libs.googlePlayFeatureDelivery,
+        libs.googlePlayFeatureDeliveryKtx,
+        libs.gglGuava,
+        libs.jsoup,
+        libs.kotlinStdlib,
+        libs.kotlinReflect,
+        libs.rxJava,
+        libs.jbAnnotations,
+        libs.okhttp,
+        libs.coil,
+        libs.coilCompose,
+        libs.androidDeviceNames,
+        libs.appIconLoader,
+        libs.smoothCornerCompose,
+    ).forEach { implementation(it) }
 
-        listOf(mockito, googleTruth, googleTruthExtensions, junit4).forEach { testImplementation(it) }
+    listOf(libs.mockito, libs.googleTruth, libs.googleTruthExtensions, libs.junit4).forEach { testImplementation(it) }
 
-        listOf(
-            androidxTestCore,
-            androidxTestRunner,
-            androidxTestExtJunit,
-            androidxTestEspresso,
-            androidxCoreTesting,
-            androidxRoomTesting,
-//            androidxNavigationTesting,
-//            androidxWorkTesting,
-            mockito,
-            googleTruth,
-            googleTruthExtensions,
-            junit4
-        ).forEach { androidTestImplementation(it) }
+    listOf(
+        libs.androidxTestCore,
+        libs.androidxTestRunner,
+        libs.androidxTestExtJunit,
+        libs.androidxTestEspresso,
+        libs.androidxCoreTesting,
+        libs.androidxRoomTesting,
+//            libs.androidxNavigationTesting,
+//            libs.androidxWorkTesting,
+        libs.mockito,
+        libs.googleTruth,
+        libs.googleTruthExtensions,
+        libs.junit4,
+    ).forEach { androidTestImplementation(it) }
 
-        api(kotlinCoroutines)
-    }
+    api(libs.kotlinCoroutines)
 
 }
