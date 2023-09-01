@@ -1,8 +1,8 @@
 [versions]
 # plugins
 androidGradlePlugin = "8.1.1"  # 8.1.1-Giraffe Patch 1
-kotlin = "1.8.22"  # Compose Compiler 1.4.8 requires Kotlin 1.8.22
-googleKsp = "1.8.22-1.0.11"
+kotlin = "1.9.10"  # Compose Compiler 1.5.3 requires Kotlin 1.9.10
+googleKsp = "1.9.10-1.0.13"
 googlePlayServicesOSSLicensesPlugin = "0.10.6"
 
 androidxTestCore = "1.5.0"
@@ -11,34 +11,33 @@ androidxTestExtJunit = "1.1.5"
 androidxTestEspresso = "3.5.1"
 
 androidxCore = "1.11.0-beta02"
-androidxComposeCompiler = "1.4.8"
-androidxComposeRuntime = "1.4.3"
-androidxComposeFoundation = "1.4.3"
-androidxComposeUi = "1.4.3"
-androidxComposeAnimation = "1.4.3"
-androidxComposeMaterial = "1.4.3"
+androidxComposeCompiler = "1.5.3"
+androidxComposeRuntime = "1.5.0"
+androidxComposeFoundation = "1.5.0"
+androidxComposeUi = "1.5.0"
+androidxComposeAnimation = "1.5.0"
+androidxComposeMaterial = "1.5.0"
 androidxComposeMaterial3 = "1.1.1"
 androidxActivity = "1.7.2"
 androidxAppcompat = "1.6.1"
 androidxLifecycle = "2.6.1"
-androidxRoom = "2.5.1"
+androidxRoom = "2.5.2"
 androidxNavigation = "2.5.3"
-androidxCoreTesting = "2.1.0"
-androidxFragment = "1.6.0"
-androidxWindow = "1.0.0"
-androidxDrawerLayout = "1.1.1"
+androidxCoreTesting = "2.2.0"
+androidxFragment = "1.6.1"
+androidxWindow = "1.1.0"
+androidxDrawerLayout = "1.2.0"
 androidxSwipeRefreshLayout = "1.1.0"
 androidxConstraintLayout = "2.1.4"
 androidxConstraintLayoutCompose = "1.0.1"
 androidxPalette = "1.0.0"
 androidxCardView = "1.0.0"
-androidxRecyclerView = "1.2.1"
+androidxRecyclerView = "1.3.1"
 androidxHeifWriter = "1.0.0"
-androidxDataBinding = "3.5.2"
 androidxViewPager = "1.0.0"
 androidxPaging = "3.1.1"
-androidxPreference = "1.2.0"
-androidxWork = "2.7.1"
+androidxPreference = "1.2.1"
+androidxWork = "2.8.1"
 androidxDocumentFile = "1.0.1"
 
 # This dependency is for the Wear UI Library,
@@ -46,10 +45,10 @@ androidxDocumentFile = "1.0.1"
 androidxWear = "1.3.0"
 
 googleTruth = "1.1.3"
-googleMaterialComponents = "1.4.0"
+googleMaterialComponents = "1.9.0"
 googlePlayServicesOSSLicenses = "17.0.0"
-googlePlayServicesBasement = "17.6.0"
-googleGson = "2.8.9"
+googlePlayServicesBasement = "18.2.0"
+googleGson = "2.10.1"
 googlePlayFeatureDelivery = "2.1.0"
 googlePlayFeatureDeliveryKtx = "2.1.0"
 gglGuava = "31.0.1-android"
@@ -57,11 +56,11 @@ gglGuava = "31.0.1-android"
 googleWearable = "2.9.0"
 googleAccompanistFlowLayout = "0.28.0"
 okhttp = "4.11.0"
-coil = "2.3.0"
+coil = "2.4.0"
 jsoup = "1.15.3"
 junit4 = "4.13.2"
 junitJupiter = "5.8.1"
-kotlinCoroutines = "1.6.4"
+kotlinCoroutines = "1.7.3"
 mpChart = "v3.1.0"
 openCsv = "5.7.1"
 rxJava = "3.1.6"
@@ -69,14 +68,14 @@ rxJava = "3.1.6"
 jbAnnotations = "24.0.0"
 androidDeviceNames = "2.1.1"
 byteBuddy = "1.12.22"
-androidDesugaring = "1.1.8"
+androidDesugaring = "2.0.3"
 mockito = "5.1.1"
 # for checking apk dex, archived since 2019.11
 apkParser = "2.6.10"
-appIconLoader = "1.4.0"
+appIconLoader = "1.5.0"
 # Superellipse shape for Compose
 smoothCornerCompose = "v1.0.0"
-libCheckerRules = "32.1"
+libCheckerRules = "34"
 
 [libraries]
 androidxTestCore = { module = "androidx.test:core", version.ref = "androidxTestCore" }
@@ -113,7 +112,6 @@ androidxPalette = { module = "androidx.palette:palette", version.ref = "androidx
 androidxCardView = { module = "androidx.cardview:cardview", version.ref = "androidxCardView" }
 androidxRecyclerView = { module = "androidx.recyclerview:recyclerview", version.ref = "androidxRecyclerView" }
 androidxHeifWriter = { module = "androidx.heifwriter:heifwriter", version.ref = "androidxHeifWriter" }
-androidxDataBinding = { module = "androidx.databinding:databinding-adapters", version.ref = "androidxDataBinding" }
 androidxViewPager = { module = "androidx.viewpager2:viewpager2", version.ref = "androidxViewPager" }
 androidxDocumentFile = { module = "androidx.documentfile:documentfile", version.ref = "androidxDocumentFile" }
 

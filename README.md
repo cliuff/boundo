@@ -10,8 +10,8 @@
 - Android Studio `Giraffe Patch 1` (AGP `8.1.1`)
 - Gradle Wrapper `8.2.1`
 - Java `11`
-- Kotlin `1.8.22`
-- Jetpack Compose Compiler `1.4.8` (requires Kotlin `1.8.22`)
+- Kotlin `1.9.10`
+- Jetpack Compose Compiler `1.5.3` (requires Kotlin `1.9.10`)
 
 **After Git check-out**
 - Clone project [**Apk Parser**](https://github.com/cliuff/apk-parser.git) into `subproject`, resulting in `ROOT_DIR/subproject/apk-parser`

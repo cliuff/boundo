@@ -15,38 +15,36 @@
   ~ limitations under the License.
   -->
 
-<layout>
-    <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-        style="@style/InstantCard"
-        android:id="@+id/instantItemSimpleCard">
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/InstantCard"
+    android:id="@+id/instantItemSimpleCard">
 
-        <LinearLayout
-            android:id="@+id/instantItemSimpleContainer"
-            android:foreground="?android:attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true"
+    <LinearLayout
+        android:id="@+id/instantItemSimpleContainer"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <FrameLayout
             android:layout_gravity="center_vertical"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_width="0dp"
             android:layout_height="wrap_content">
 
-            <FrameLayout
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/instantItemSimpleTitle"
+                style="@style/InstantSwitchText" />
 
-                <TextView
-                    android:id="@+id/instantItemSimpleTitle"
-                    style="@style/InstantSwitchText" />
+        </FrameLayout>
 
-            </FrameLayout>
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/instantItemSimpleSwitch"
+            style="@style/InstantSwitchAlone"/>
+    </LinearLayout>
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/instantItemSimpleSwitch"
-                style="@style/InstantSwitchAlone"/>
-        </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-</layout>
+</com.google.android.material.card.MaterialCardView>
 

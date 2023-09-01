@@ -15,10 +15,8 @@
   ~ limitations under the License.
   -->
 
-<layout>
-    <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/unitsManagerRecyclerView"
-        android:scrollbars="none"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-</layout>
+<androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/unitsManagerRecyclerView"
+    android:scrollbars="none"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"/>
