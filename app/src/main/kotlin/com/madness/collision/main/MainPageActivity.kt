@@ -69,6 +69,8 @@ class MainPageActivity : BaseActivity(), SystemBarMaintainerOwner {
         private val pages = ArrayDeque<Fragment>()
 
         fun add(fragment: Fragment) = synchronized(pages) { pages.add(fragment) }
+
+        fun peek(): Fragment? = pages.firstOrNull()
     }
 
     private var _viewBinding: ActivityMainPageBinding? = null

@@ -20,7 +20,6 @@ import android.content.Context
 import android.view.ViewGroup
 import android.widget.Space
 import androidx.recyclerview.widget.RecyclerView
-import com.madness.collision.R
 
 /**
  * adapter that allow easy blank space at both the top and the bottom of the list
@@ -29,9 +28,9 @@ abstract class SandwichAdapter<VH : RecyclerView.ViewHolder>(override val contex
     : RecyclerView.Adapter<RecyclerView.ViewHolder>(), SpanAdapter {
 
     companion object {
-        private val TYPE_TOP_COVER = R.bool.diySandwichTopCover
-        private val TYPE_BOTTOM_COVER = R.bool.diySandwichBottomCover
-        private val TYPE_FILL_IN = R.bool.diySandwichFillIn
+        private const val TYPE_TOP_COVER = 10
+        private const val TYPE_BOTTOM_COVER = 11
+        private const val TYPE_FILL_IN = 12
     }
 
     abstract val listCount: Int
@@ -58,6 +57,10 @@ abstract class SandwichAdapter<VH : RecyclerView.ViewHolder>(override val contex
         notifyItemChanged(index + frontCount)
     }
 
+    fun notifyListItemRangeChanged(index: Int, count: Int) {
+        notifyItemRangeChanged(index + frontCount, count)
+    }
+
     override fun getItemViewType(position: Int): Int {
         return when (position) {
             in 0 until indexBodyStart -> TYPE_TOP_COVER
@@ -78,7 +81,7 @@ abstract class SandwichAdapter<VH : RecyclerView.ViewHolder>(override val contex
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            TYPE_TOP_COVER, TYPE_BOTTOM_COVER, TYPE_FILL_IN -> SpaceHolder(Space(context))
+            TYPE_TOP_COVER, TYPE_BOTTOM_COVER, TYPE_FILL_IN -> SpaceHolder(Space(parent.context))
             else -> onCreateBodyItemViewHolder(parent, viewType)
         }
     }
@@ -87,7 +90,7 @@ abstract class SandwichAdapter<VH : RecyclerView.ViewHolder>(override val contex
 
     private fun onMakeTopCover(holder: RecyclerView.ViewHolder) {
         if (holder !is SpaceHolder) return
-        holder.space.minimumHeight = topCover
+        holder.space.minimumHeight = topCover.coerceAtLeast(0)
     }
 
     protected open fun onMakeBody(holder: VH, index: Int) {}
@@ -103,7 +106,7 @@ abstract class SandwichAdapter<VH : RecyclerView.ViewHolder>(override val contex
 
     private fun onMakeBottomCover(holder: RecyclerView.ViewHolder) {
         if (holder !is SpaceHolder) return
-        holder.space.minimumHeight = bottomCover
+        holder.space.minimumHeight = bottomCover.coerceAtLeast(0)
     }
 
     override fun getItemCount(): Int {

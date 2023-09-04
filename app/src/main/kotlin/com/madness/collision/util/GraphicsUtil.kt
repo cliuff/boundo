@@ -26,6 +26,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.palette.graphics.Palette
 import com.madness.collision.R
+import com.madness.collision.util.os.OsUtils
 import java.lang.Math.cbrt
 import kotlin.math.abs
 import kotlin.math.max
@@ -417,7 +418,7 @@ object GraphicsUtil {
      * @return bitmap
      */
     fun convertDrawableToBitmap(drawable: Drawable): Bitmap {
-        if (drawable is BitmapDrawable && drawable.bitmap != null) return drawable.bitmap.collisionBitmap
+        if (drawable is BitmapDrawable && drawable.bitmap != null) return toMutable(drawable.bitmap)
 
         val intrinsicWidth = drawable.intrinsicWidth
         val intrinsicHeight = drawable.intrinsicHeight
@@ -432,5 +433,11 @@ object GraphicsUtil {
         drawable.setBounds(0, 0, canvas.width, canvas.height)
         drawable.draw(canvas)
         return bitmap
+    }
+
+    fun toMutable(bitmap: Bitmap): Bitmap {
+        val isImmutable = !bitmap.isMutable ||
+                OsUtils.satisfy(OsUtils.O) && bitmap.config == Bitmap.Config.HARDWARE
+        return if (isImmutable) bitmap.copy(Bitmap.Config.ARGB_8888, true) else bitmap
     }
 }

@@ -92,7 +92,7 @@ object PopupUtil {
             item.text = entries[i]
             if (icons.isNotEmpty() && icons[i] != null) {
                 item.compoundDrawablePadding = iconPadding
-                val req = ImageRequest.Builder(context).target(object : ViewTarget<MaterialCheckBox> {
+                val viewTarget = object : ViewTarget<MaterialCheckBox> {
                     override val view: MaterialCheckBox = item
                     override fun onStart(placeholder: Drawable?) = setDrawable(placeholder)
                     override fun onSuccess(result: Drawable) = setDrawable(result)
@@ -101,7 +101,10 @@ object PopupUtil {
                         drawable?.setBounds(0, 0, iconBound, iconBound)
                         item.setCompoundDrawablesRelative(drawable, null, null, null)
                     }
-                }).data(icons[i]).build()
+                }
+                val req = ImageRequest.Builder(context)
+                    .apply { if (item.isHardwareAccelerated.not()) allowHardware(false) }
+                    .target(viewTarget).data(icons[i]).build()
                 context.imageLoader.enqueue(req)
             }
             item.tag = i

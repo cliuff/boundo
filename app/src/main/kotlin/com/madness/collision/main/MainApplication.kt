@@ -80,6 +80,7 @@ class MainApplication : SplitCompatApplication(), Thread.UncaughtExceptionHandle
         super.onCreate()
         // Setup handler for uncaught exceptions
         Thread.setDefaultUncaughtExceptionHandler (this)
+        registerActivityLifecycleCallbacks(MainLifecycleCallbacks())
         AccessAV.initUnit(this)
     }
 

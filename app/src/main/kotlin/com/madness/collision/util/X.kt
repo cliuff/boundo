@@ -132,7 +132,7 @@ object X {
         val height = source.height
         val radius = min(width, height) * 0.5f
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-        val bitmap = source.collisionBitmap
+        val bitmap = source.toMutable()
         //画布设置遮罩效果
         paint.shader = BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
         //处理图像数据

@@ -17,9 +17,6 @@
 
 <resources>
     <bool name="avStatsTitlePaddingTop">false</bool>
-    <bool name="diySandwichTopCover">false</bool>
-    <bool name="diySandwichBottomCover">false</bool>
-    <bool name="diySandwichFillIn">false</bool>
     <bool name="tagKeyAvAdapterItemId">false</bool>
     <bool name="tagKeyAvAdapterItemIconId">false</bool>
 </resources>

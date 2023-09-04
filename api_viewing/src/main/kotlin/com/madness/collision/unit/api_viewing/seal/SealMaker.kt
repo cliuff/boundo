@@ -260,7 +260,7 @@ object SealMaker {
     }
 
     private fun drawBlurredImage(context: Context, sealBitmap: Bitmap, offsetPointX: Int, offsetPointY: Int): Bitmap {
-        var seal: Bitmap = sealBitmap.collisionBitmap
+        var seal: Bitmap = sealBitmap.toMutable()
         val targetLength = seal.width / 10
         val bitmapWidth = targetLength * 2
         val sealOffsetX = targetLength * offsetPointX

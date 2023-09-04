@@ -308,7 +308,7 @@ class MyUnit: Unit(){
         image = X.toTarget(image, tX, tH)
         val blurDegree = viewBinding.imageBlur.progress / 4f
         if (blurDegree != 0f) {
-            val blurred = X.toMin(image.collisionBitmap, 100).let {
+            val blurred = X.toMin(image.toMutable(), 100).let {
                 GaussianBlur(context).blurOnce(it, blurDegree)
             }
             image = X.toTarget(blurred, image.width, image.height)

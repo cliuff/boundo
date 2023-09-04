@@ -85,8 +85,7 @@ val Fragment.availableWidth: Int
 
 fun File.getProviderUri(context: Context): Uri = ContentProviderUtils.getUri(context, this)
 
-val Bitmap.collisionBitmap: Bitmap
-        get() = if (!this.isMutable || (X.aboveOn(X.O) && config == Bitmap.Config.HARDWARE)) this.copy(Bitmap.Config.ARGB_8888, true) else this
+fun Bitmap.toMutable(): Bitmap = GraphicsUtil.toMutable(this)
 
 inline fun runnable(crossinline task: Runnable.() -> Unit) = object : Runnable {
     // SAM cannot access *this*
