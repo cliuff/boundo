@@ -16,9 +16,7 @@
 
 package com.madness.collision.unit.api_viewing.data
 
-import android.content.ComponentName
 import android.content.Context
-import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
 import android.graphics.Bitmap
@@ -26,10 +24,8 @@ import android.graphics.Color
 import android.graphics.drawable.AdaptiveIconDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
-import android.net.Uri
 import android.os.Parcel
 import android.os.Parcelable
-import android.provider.Settings
 import androidx.core.content.pm.PackageInfoCompat
 import androidx.room.*
 import com.madness.collision.misc.MiscApp
@@ -45,7 +41,6 @@ import com.madness.collision.util.X
 import com.madness.collision.util.config.LocaleUtils
 import com.madness.collision.util.os.OsUtils
 import kotlinx.parcelize.Parcelize
-import java.io.File
 
 @Parcelize
 data class ApiViewingIconInfo(
@@ -64,11 +59,7 @@ class ApiViewingIconDetails(val isDefined: Boolean, val isAdaptive: Boolean): Pa
 open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parcelable, Cloneable {
 
     companion object {
-        const val packageCoolApk = "com.coolapk.market"
         const val packagePlayStore = "com.android.vending"
-        const val pageSettings = "settings"
-        const val pageApk = "apk"
-
         const val packagePackageInstaller = "com.google.android.packageinstaller"
 
         private const val TYPE_ICON = 2
@@ -499,43 +490,6 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
 
     private fun checkKotlin() {  // todo improve Kotlin detection
         appPackage.apkPaths.any { ApkUtil.checkPkg(it, "kotlin") }
-    }
-
-    fun storePage(name: String, direct: Boolean = true): Intent = when (name) {
-        packageCoolApk -> coolApkPage(direct)
-        packagePlayStore -> playStorePage(direct)
-        pageSettings -> settingsPage()
-        pageApk -> apkPage()
-        else -> throw IllegalArgumentException("no such page")
-    }
-
-    fun playStorePage(direct: Boolean): Intent{
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$packageName"))
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        if (direct) intent.component = ComponentName(packagePlayStore, "com.google.android.finsky.activities.MainActivity")
-        return intent
-    }
-
-    fun coolApkPage(direct: Boolean): Intent{
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.coolapk.com/apk/$packageName"))
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        if (direct) intent.component = ComponentName(packageCoolApk, "com.coolapk.market.view.AppLinkActivity")
-        return intent
-    }
-
-    fun settingsPage(): Intent{
-        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        intent.data = Uri.fromParts("package", packageName, null)
-        return intent
-    }
-
-    fun apkPage(): Intent{
-        val file = File(appPackage.basePath)
-        val intent = Intent(Intent.ACTION_VIEW)
-        intent.setDataAndType(Uri.parse(file.parent), "resource/folder")
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        return intent
     }
 
     fun clearIcons(){

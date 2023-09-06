@@ -44,49 +44,6 @@ internal class ExpressedTag(
 )
 
 internal object AppInfo {
-    val actionShowAppInfo: String
-        get() = if (OsUtils.satisfy(OsUtils.N)) Intent.ACTION_SHOW_APP_INFO
-        else "android.intent.action.SHOW_APP_INFO"
-    val extraPackageName: String
-        get() = if (OsUtils.satisfy(OsUtils.N)) Intent.EXTRA_PACKAGE_NAME
-        else "android.intent.extra.PACKAGE_NAME"
-
-    @Suppress("deprecation")
-    private fun PackageManager.queryIntentLegacy(intent: Intent) =
-        queryIntentActivities(intent, 0)
-
-    @Suppress("deprecation")
-    private fun PackageManager.resolveActivityLegacy(intent: Intent, flags: Int) =
-        resolveActivity(intent, flags)
-
-    fun getDefaultSettings(context: Context): String? {
-        val intent = Intent(Settings.ACTION_SETTINGS)
-        val flag = PackageManager.MATCH_DEFAULT_ONLY
-        val info = if (OsUtils.satisfy(OsUtils.T)) {
-            val flags = PackageManager.ResolveInfoFlags.of(flag.toLong())
-            context.packageManager.resolveActivity(intent, flags)
-        } else {
-            context.packageManager.resolveActivityLegacy(intent, flag)
-        }
-        return info?.activityInfo?.packageName
-    }
-
-    fun getAppInfoOwners(context: Context): Map<String, String> {
-        val intent = Intent(actionShowAppInfo)
-        val activities = run a@{
-            val pkgMan = context.packageManager
-            if (OsUtils.dissatisfy(OsUtils.T)) return@a pkgMan.queryIntentLegacy(intent)
-            val flags = PackageManager.ResolveInfoFlags.of(0)
-            pkgMan.queryIntentActivities(intent, flags)
-        }
-        return buildMap(activities.size) {
-            for (activity in activities) {
-                val info = activity.activityInfo ?: continue
-                put(info.packageName, info.name)
-            }
-        }
-    }
-
     private fun getTagViewInfo(tag: AppTagInfo, res: AppTagInfo.Resources, context: Context) = run m@{
         if (tag.requisites?.all { it.checker(res) } == false) return@m null
         val express = tag.toExpressible().setRes(res).express()

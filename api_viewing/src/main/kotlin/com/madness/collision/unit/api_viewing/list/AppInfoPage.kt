@@ -49,6 +49,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.madness.collision.R
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.api_viewing.data.*
+import com.madness.collision.unit.api_viewing.env.GooglePlayAppInfoOwner
 import com.madness.collision.unit.api_viewing.info.AppInfo
 import com.madness.collision.unit.api_viewing.info.ExpressedTag
 import com.madness.collision.unit.api_viewing.seal.SealMaker
@@ -112,8 +113,7 @@ private fun AppInfoPage(
         when (tag.id) {
             AppTagInfo.ID_APP_INSTALLER_PLAY -> {
                 {
-                    val intent = app.storePage(ApiViewingApp.packagePlayStore, direct = true)
-                    safely { context.startActivity(intent) } ?: Unit
+                    safely { GooglePlayAppInfoOwner.showAppInfo(app.packageName, context) } ?: Unit
                 }
             }
             AppTagInfo.ID_APP_ADAPTIVE_ICON -> {

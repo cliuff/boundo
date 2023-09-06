@@ -144,6 +144,7 @@ internal class AppListService(private val serviceContext: Context? = null) {
 
             var installer: String? = null
             var realInstaller: String? = null
+            var updateOwner: String? = null
             if (OsUtils.satisfy(OsUtils.R)) {
                 val si = try {
                     context.packageManager.getInstallSourceInfo(appInfo.packageName)
@@ -163,6 +164,9 @@ internal class AppListService(private val serviceContext: Context? = null) {
                         yield(originating)
                         yieldLineBreak()
                     }
+                    if (OsUtils.satisfy(OsUtils.U)) {
+                        updateOwner = si.updateOwnerPackageName
+                    }
                 }
             } else {
                 installer = getInstallerLegacy(context, appInfo)
@@ -175,6 +179,12 @@ internal class AppListService(private val serviceContext: Context? = null) {
             if (OsUtils.satisfy(OsUtils.R)) {
                 yield(RAv.string.av_details_real_installer.boldItem)
                 yield(getInstallerName(context, realInstaller))
+                yieldLineBreak()
+            }
+
+            if (OsUtils.satisfy(OsUtils.U)) {
+                yield("Update owner: ".boldItem)
+                yield(if (updateOwner != null) getInstallerName(context, updateOwner) else "none")
                 yieldLineBreak()
             }
         }

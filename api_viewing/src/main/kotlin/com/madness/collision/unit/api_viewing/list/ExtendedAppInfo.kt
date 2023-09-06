@@ -16,9 +16,6 @@
 
 package com.madness.collision.unit.api_viewing.list
 
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -50,16 +47,14 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
-import com.madness.collision.BuildConfig
 import com.madness.collision.R
 import com.madness.collision.misc.MiscApp
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
-import com.madness.collision.unit.api_viewing.info.AppInfo
-import com.madness.collision.util.CollisionDialog
-import com.madness.collision.util.F
+import com.madness.collision.unit.api_viewing.env.AppInfoOwner
+import com.madness.collision.unit.api_viewing.env.EnvPackages
+import com.madness.collision.unit.api_viewing.env.SettingsAppInfoOwner
+import com.madness.collision.util.StringUtils
 import com.madness.collision.util.X
-import com.madness.collision.util.getProviderUri
-import com.madness.collision.util.os.OsUtils
 import com.madness.collision.util.ui.AppIconPackageInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -123,36 +118,24 @@ private fun InfoDivider() {
     )
 }
 
-private var pkgDefaultSettings: String? = null
-private val packageSettings: String
-    get() = pkgDefaultSettings ?: packageAndroidSettings
-
-private const val packageAndroidSettings = "com.android.settings"
-private const val packageAppManager = "io.github.muntashirakon.AppManager"
-private const val infoAppManager = "io.github.muntashirakon.AppManager.details.AppInfoActivity"
-private const val infoAppManagerLegacy = "io.github.muntashirakon.AppManager.details.AppDetailsActivity"
-
 @Composable
 private fun ExternalActions() {
     val context = LocalContext.current
-    pkgDefaultSettings = remember { pkgDefaultSettings ?: AppInfo.getDefaultSettings(context) }
-    val appInfoOwners = remember { AppInfo.getAppInfoOwners(context) }
-    val storePkgNames = remember {
-        val extras = arrayOf(ApiViewingApp.packagePlayStore, ApiViewingApp.packageCoolApk)
-        buildSet(extras.size + appInfoOwners.size + 2) {
-            addAll(extras)
-            addAll(appInfoOwners.keys)
-            add(packageAppManager)
-            add(packageSettings)
-            remove(BuildConfig.APPLICATION_ID)
-        }.toList()
-    }
-    val packs = remember {
-        storePkgNames.map {
+    val (appInfoOwners, packs) = remember {
+        val owners = EnvPackages.getInstalledAppInfoOwners(context)
+        val piList = owners.associateTo(HashMap(owners.size)) { o ->
+            val it = o.packageName
             val msg = "av.info.x" to "External store not found: $it"
-            val info = MiscApp.getPackageInfo(context, packageName = it, errorMsg = msg) ?: return@map null
-            AppIconPackageInfo(info)
+            it to MiscApp.getPackageInfo(context, packageName = it, errorMsg = msg)
         }
+        val pm = context.packageManager
+        val sortedOwners = owners.customSorted sort@{ o ->
+            val pi = piList[o.packageName] ?: return@sort ""
+            pi.applicationInfo.loadLabel(pm).toString()
+        }
+        val ownerMap = sortedOwners.associateByTo(LinkedHashMap()) { it.packageName }
+        val packs = sortedOwners.map { o -> piList[o.packageName]?.let { AppIconPackageInfo(it) } }
+        ownerMap to packs
     }
     Row(
         modifier = Modifier
@@ -163,63 +146,34 @@ private fun ExternalActions() {
         val app = LocalApp.current
         val isInspected = LocalInspectionMode.current
         val activeStores = remember {
-            storePkgNames.mapIndexedNotNull m@{ i, pkgName ->
+            appInfoOwners.values.mapIndexedNotNull m@{ i, owner ->
                 val p = packs[i]
                 if (p == null && !isInspected) return@m null
-                if (pkgName == packageSettings) {
-                    if (app.isArchive && OsUtils.satisfy(OsUtils.Q)) return@m null
-                }
-                pkgName to p
+                // hide settings owner for archives
+                if (app.isArchive && owner is SettingsAppInfoOwner) return@m null
+                owner.packageName to p
             }
         }
         for (i in activeStores.indices) {
             if (i > 0) Spacer(modifier = Modifier.width(10.dp))
             val (pkgName, p) = activeStores[i]
             ExternalActionItem(p) {
-                val owner = pkgName to appInfoOwners[pkgName]
-                launchOwner(pkgName in appInfoOwners, owner, app, context)
+                safely { appInfoOwners[pkgName]?.showAppInfo(app.packageName, context) }
             }
         }
     }
 }
 
-private fun launchOwner(isStandard: Boolean, owner: Pair<String, String?>, app: ApiViewingApp, context: Context) {
-    val (pkgName, ownerActivity) = owner
-    when {
-        isStandard -> {
-            val intent = Intent(AppInfo.actionShowAppInfo)
-                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                .putExtra(AppInfo.extraPackageName, app.packageName)
-            when (ownerActivity) {
-                null -> intent.setPackage(pkgName)
-                else -> intent.component = ComponentName(pkgName, ownerActivity)
-            }
-            safely { context.startActivity(intent) }
-        }
-        pkgName == packageSettings -> {
-            if (app.isNotArchive) {
-                safely { context.startActivity(app.settingsPage()) }
-                return
-            }
-            safely { context.startActivity(app.apkPage()) }
-                ?: CollisionDialog.infoCopyable(context, app.appPackage.basePath).show()
-        }
-        pkgName == packageAppManager -> {
-            val intent = Intent(Intent.ACTION_VIEW)
-                .addCategory(Intent.CATEGORY_DEFAULT)
-                .addCategory(Intent.CATEGORY_BROWSABLE)
-                .setData(F.createFile(F.valCachePubAvApk(context), "fake.apk").getProviderUri(context))
-                .setClassName(packageAppManager, infoAppManager)
-                .putExtra("pkg", app.packageName)
-            safely { context.startActivity(intent) }
-                .fallback {
-                    intent.setClassName(packageAppManager, infoAppManagerLegacy)
-                    safely { context.startActivity(intent) }
-                }
-        }
-        else -> {
-            safely { context.startActivity(app.storePage(pkgName, direct = true)) }
-                ?: safely { context.startActivity(app.storePage(pkgName, direct = false)) }
+private inline fun Iterable<AppInfoOwner>.customSorted(
+    crossinline selector: (AppInfoOwner) -> String
+): List<AppInfoOwner> {
+    // sort settings to the last
+    return sortedWith { a, b ->
+        when {
+            a == b -> 0
+            a is SettingsAppInfoOwner -> 1
+            b is SettingsAppInfoOwner -> -1
+            else -> compareValuesBy(a, b, StringUtils.comparator, selector)
         }
     }
 }
