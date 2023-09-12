@@ -23,11 +23,11 @@
   <group android:name="background">
     <path
         android:name="back0"
-        android:pathData="M0,0h240v240h-240z"
+        android:pathData="M 120 40 C 164.16 40 200 75.84 200 120 C 200 164.16 164.16 200 120 200 C 75.84 200 40 164.16 40 120 C 40 75.84 75.84 40 120 40 Z"
         android:fillColor="#ffffff"/>
     <path
         android:name="back1"
-        android:pathData="M0,0h240v240h-240z"
+        android:pathData="M 120 40 C 164.16 40 200 75.84 200 120 C 200 164.16 164.16 200 120 200 C 75.84 200 40 164.16 40 120 C 40 75.84 75.84 40 120 40 Z"
         android:fillType="evenOdd">
       <aapt:attr name="android:fillColor">
         <gradient
@@ -43,7 +43,7 @@
     </path>
     <path
         android:name="back2"
-        android:pathData="M0,0h240v240h-240z"
+        android:pathData="M 120 40 C 164.16 40 200 75.84 200 120 C 200 164.16 164.16 200 120 200 C 75.84 200 40 164.16 40 120 C 40 75.84 75.84 40 120 40 Z"
         android:fillType="evenOdd">
       <aapt:attr name="android:fillColor">
         <gradient
@@ -59,7 +59,7 @@
     </path>
     <path
         android:name="back3"
-        android:pathData="M0,0h240v240h-240z"
+        android:pathData="M 120 40 C 164.16 40 200 75.84 200 120 C 200 164.16 164.16 200 120 200 C 75.84 200 40 164.16 40 120 C 40 75.84 75.84 40 120 40 Z"
         android:fillType="evenOdd">
       <aapt:attr name="android:fillColor">
         <gradient

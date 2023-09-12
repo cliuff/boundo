@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Clifford Liu
+ * Copyright 2023 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package com.madness.collision.util.ui
+package com.madness.collision.chief
 
 import android.content.Context
-import com.madness.collision.chief.chiefContext
-import com.madness.collision.util.config.LocaleUtils
-import java.util.Locale
+import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
+import com.madness.collision.main.MainApplication
 
-@Deprecated("", ReplaceWith("chiefContext", "com.madness.collision.chief.chiefContext"))
-val appContext: Context get() = chiefContext
-val appLocale: Locale get() = LocaleUtils.getRuntimeFirst()
+val chiefContext: Context get() = MainApplication.INSTANCE
+val chiefAppInfo: ApplicationInfo get() = chiefContext.applicationInfo
+val chiefPkgMan: PackageManager get() = chiefContext.packageManager

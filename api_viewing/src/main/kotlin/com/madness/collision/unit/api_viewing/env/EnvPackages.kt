@@ -19,6 +19,7 @@ package com.madness.collision.unit.api_viewing.env
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.provider.Settings
 import com.madness.collision.BuildConfig
 import com.madness.collision.util.os.OsUtils
@@ -64,18 +65,39 @@ object EnvPackages {
         }
     }
 
+    fun getMarketAppInfoOwners(context: Context): List<MarketAppInfoOwner> {
+        val intent = Intent(Intent.ACTION_VIEW)
+            .addCategory(Intent.CATEGORY_DEFAULT)
+            .setData(Uri.parse("market://details"))
+        val pm = context.packageManager
+        val activities = when {
+            OsUtils.dissatisfy(OsUtils.T) -> pm.queryIntentLegacy(intent)
+            else -> pm.queryIntentActivities(intent, PackageManager.ResolveInfoFlags.of(0))
+        }
+        return activities.mapNotNull owner@{ activity ->
+            val info = activity.activityInfo ?: return@owner null
+            MarketAppInfoOwner(info.packageName, info.name)
+        }
+    }
+
     fun getInstalledAppInfoOwners(context: Context): List<AppInfoOwner> {
         val packageSettings = getDefaultSettings(context) ?: "com.android.settings"
         val standardOwners = getStandardAppInfoOwners(context)
-        val map = HashMap<String, AppInfoOwner>(standardOwners.size + 4).apply {
+        val marketOwners = getMarketAppInfoOwners(context)
+        val map = HashMap<String, AppInfoOwner>(standardOwners.size + marketOwners.size + 5).apply {
             // Google Play Store itself is a standard owner, this serves as a fallback
             put(GooglePlayAppInfoOwner.packageName, GooglePlayAppInfoOwner)
+            // CoolApk itself is a market owner, this serves as a fallback
             put(CoolApkAppInfoOwner.packageName, CoolApkAppInfoOwner)
             put(AppManagerAppInfoOwner.packageName, AppManagerAppInfoOwner)
             put(packageSettings, SettingsAppInfoOwner(packageSettings))
             // put standard owners afterwards to override custom owners, in reversed order
             // (in case one package / multiple activities, to retain the smaller-index one)
+            putAll(marketOwners.asReversed().associateBy { it.packageName })
             putAll(standardOwners.asReversed().associateBy { it.packageName })
+            // Xiaomi app store itself is a market owner that blocks app details intent,
+            // use this custom owner instead as a workaround
+            put(XiaomiAppInfoOwner.packageName, XiaomiAppInfoOwner)
             // remove self owner (though N/A right now)
             remove(BuildConfig.APPLICATION_ID)
         }

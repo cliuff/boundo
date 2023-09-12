@@ -54,12 +54,15 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import coil.compose.AsyncImage
 import com.madness.collision.BuildConfig
 import com.madness.collision.R
+import com.madness.collision.chief.graphics.AdaptiveIcon
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.util.ThemeUtil
 import com.madness.collision.util.ui.autoMirrored
+import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape
 
 class AboutOption(
     val icon: AboutOptionIcon,
@@ -124,10 +127,16 @@ private fun BuildDetails() {
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        val context = LocalContext.current
+        val (appIcon, isRectIcon) = remember {
+            val drawable = ContextCompat.getDrawable(context, R.mipmap.ic_launcher)
+            drawable to (drawable?.let(AdaptiveIcon::hasRectIconMask) == true)
+        }
         AsyncImage(
-            model = R.mipmap.ic_launcher,
+            model = appIcon,
             contentDescription = null,
-            modifier = Modifier.size(100.dp),
+            modifier = Modifier.size(100.dp)
+                .let { if (isRectIcon) it.clip(AbsoluteSmoothCornerShape(12.dp, 80)) else it },
         )
         Spacer(modifier = Modifier.height(10.dp))
         val verText = "${BuildConfig.VERSION_NAME}/${BuildConfig.VERSION_CODE}"

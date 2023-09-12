@@ -265,17 +265,22 @@ private fun Sequence<AppListService.AppInfoItem>.annotated() = buildAnnotatedStr
 @Composable
 private fun ExternalActionItem(packInfo: AppIconPackageInfo?, onClick: () -> Unit) {
     if (packInfo != null) {
-        Image(
-            modifier = Modifier
-                .clickable(
-                    onClick = onClick,
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = rememberRipple(bounded = false),
-                )
-                .size(40.dp),
-            painter = rememberAsyncImagePainter(packInfo),
-            contentDescription = null,
-        )
+        Box(contentAlignment = Alignment.Center) {
+            // add background shape for irregular icons
+            val c = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
+            Box(modifier = Modifier.clip(CircleShape).size(34.dp).background(c))
+            Image(
+                modifier = Modifier
+                    .clickable(
+                        onClick = onClick,
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = rememberRipple(bounded = false),
+                    )
+                    .size(40.dp),
+                painter = rememberAsyncImagePainter(packInfo),
+                contentDescription = null,
+            )
+        }
     } else {
         val c = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.25f)
         Box(modifier = Modifier

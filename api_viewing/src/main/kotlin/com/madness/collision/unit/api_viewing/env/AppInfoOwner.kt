@@ -41,6 +41,16 @@ class StandardAppInfoOwner(override val packageName: String, val activityName: S
     }
 }
 
+class MarketAppInfoOwner(override val packageName: String, val activityName: String) : AppInfoOwner {
+    override fun showAppInfo(appPkgName: String, context: Context) {
+        val uri = Uri.parse("market://details?id=$appPkgName")
+        val intent = Intent(Intent.ACTION_VIEW, uri)
+            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .setComponent(ComponentName(packageName, activityName))
+        context.startActivity(intent)
+    }
+}
+
 class SettingsAppInfoOwner(override val packageName: String) : AppInfoOwner {
     override fun showAppInfo(appPkgName: String, context: Context) {
         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
@@ -74,6 +84,19 @@ object CoolApkAppInfoOwner : AppInfoOwner {
         val intent = Intent(Intent.ACTION_VIEW, uri)
             .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             .setComponent(ComponentName(packageName, infoActivity))
+        context.startActivity(intent)
+    }
+}
+
+object XiaomiAppInfoOwner : AppInfoOwner {
+    private const val packageXiaomiMarket = "com.xiaomi.market"
+    override val packageName: String = packageXiaomiMarket
+
+    override fun showAppInfo(appPkgName: String, context: Context) {
+        val uri = Uri.parse("mimarket://details/detailmini?id=$appPkgName")
+        val intent = Intent(Intent.ACTION_VIEW, uri)
+            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .setPackage(packageName)
         context.startActivity(intent)
     }
 }
