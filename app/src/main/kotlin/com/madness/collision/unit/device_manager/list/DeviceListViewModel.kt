@@ -26,6 +26,7 @@ sealed class DeviceListUiState {
     object None : DeviceListUiState()
     object PermissionGranted : DeviceListUiState()
     object PermissionDenied : DeviceListUiState()
+    object PermissionPermanentlyDenied : DeviceListUiState()
     object BluetoothDisabled : DeviceListUiState()
     object AccessAvailable : DeviceListUiState()
 }
@@ -34,6 +35,8 @@ internal class DeviceListViewModel : ViewModel() {
     val data: MutableLiveData<Pair<List<DeviceItem>, (() -> Unit)?>> = MutableLiveData()
     private val _uiState: MutableStateFlow<DeviceListUiState> = MutableStateFlow(DeviceListUiState.None)
     val uiState: StateFlow<DeviceListUiState> by ::_uiState
+    // the last uiState that is not None
+    var someUiState: DeviceListUiState = DeviceListUiState.None
 
     fun setState(state: DeviceListUiState) {
         _uiState.update { state }

@@ -26,16 +26,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import com.madness.collision.R
 import com.madness.collision.databinding.UnitDeviceManagerBinding
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.device_manager.list.DeviceListFragment
+import com.madness.collision.unit.device_manager.list.DeviceListUiState
 import com.madness.collision.util.alterPadding
 import com.madness.collision.util.controller.getSavedFragment
 import com.madness.collision.util.controller.saveFragment
 import com.madness.collision.util.ensureAdded
 
-class MyUnit : Unit() {
+class MyUnit : Unit(), DeviceListFragment.Listener {
 
     override val id: String = "DM"
 
@@ -76,12 +79,8 @@ class MyUnit : Unit() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        ensureAdded(R.id.dmListContainer, listFragment, true)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
         democratize()
+        ensureAdded(R.id.dmListContainer, listFragment, true)
         mainViewModel.contentWidthTop.observe(viewLifecycleOwner) {
             viewBinding.dmContainer.alterPadding(top = it)
         }
@@ -98,4 +97,38 @@ class MyUnit : Unit() {
         context.unregisterReceiver(receiver)
     }
 
+    override fun onUiState(state: DeviceListUiState) {
+        val controller = listFragment.getController()
+        when (state) {
+            DeviceListUiState.AccessAvailable -> setListTitle()
+            DeviceListUiState.BluetoothDisabled -> {
+                setMessageAndAction("Bluetooth OFF", "Turn on")
+                viewBinding.dmAction.setOnClickListener { controller.requestBluetoothOn() }
+            }
+            DeviceListUiState.PermissionDenied -> {
+                setMessageAndAction("BLUETOOTH_CONNECT permission denied", "Allow")
+                viewBinding.dmAction.setOnClickListener { controller.requestBluetoothConn() }
+            }
+            DeviceListUiState.PermissionPermanentlyDenied -> {
+                setMessageAndAction("BLUETOOTH_CONNECT permission should be granted from app settings", "Change")
+                viewBinding.dmAction.setOnClickListener { controller.requestSettingsChange() }
+            }
+            DeviceListUiState.PermissionGranted -> setListTitle()
+            DeviceListUiState.None -> setListTitle()
+        }
+    }
+
+    private fun setListTitle() = viewBinding.run {
+        dmTitle.isVisible = true
+        dmMessageContainer.isInvisible = true
+    }
+
+    private fun setMessageAndAction(text: String, action: String) = viewBinding.run {
+        dmMessage.text = text
+        dmAction.text = action
+        dmTitle.isInvisible = true
+        dmMessage.isVisible = true
+        dmAction.isVisible = true
+        dmMessageContainer.isVisible = true
+    }
 }

@@ -22,31 +22,48 @@ import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothProfile
 import android.content.BroadcastReceiver
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.launch
 import androidx.annotation.WorkerThread
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import com.madness.collision.BuildConfig
 import com.madness.collision.R
+import com.madness.collision.chief.auth.PermissionHandler
+import com.madness.collision.chief.auth.PermissionState
 import com.madness.collision.databinding.UnitDmDeviceListBinding
 import com.madness.collision.unit.device_manager.manager.DeviceManager
-import com.madness.collision.util.PermissionUtils
+import com.madness.collision.util.ElapsingTime
 import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.notifyBriefly
 import com.madness.collision.util.os.OsUtils
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-internal class DeviceListFragment: TaggedFragment(), StateObservable {
+interface DeviceListController {
+    fun requestBluetoothOn()
+    fun requestBluetoothConn()
+    fun requestSettingsChange()
+}
+
+internal class DeviceListFragment: TaggedFragment(), StateObservable, InterceptedActivityResult {
+    interface Listener {
+        fun onUiState(state: DeviceListUiState)
+    }
 
     override val category: String = "DM"
     override val id: String = "DM-DeviceList"
@@ -58,12 +75,13 @@ internal class DeviceListFragment: TaggedFragment(), StateObservable {
     private lateinit var viewBinding: UnitDmDeviceListBinding
     private val updateRegulator: StateUpdateRegulator by lazy { StateUpdateRegulator() }
 
+    override val registryFragment: Fragment get() = this
     override val stateReceiver: BroadcastReceiver = stateReceiverImp
 
     override fun onBluetoothStateChanged(state: Int) {
-        val uiState = if (state == BluetoothAdapter.STATE_ON) DeviceListUiState.AccessAvailable
-        else DeviceListUiState.BluetoothDisabled
-        viewModel.setState(uiState)
+        // use None state to recheck and get current state,
+        // to ensure bluetooth state is checked after bluetooth connect permission
+        viewModel.setState(DeviceListUiState.None)
     }
 
     override fun onDeviceStateChanged(device: BluetoothDevice, state: Int) {
@@ -117,34 +135,42 @@ internal class DeviceListFragment: TaggedFragment(), StateObservable {
         viewModel.uiState
             .flowWithLifecycle(viewLifecycleOwner.lifecycle)
             .onEach(::resolveUiState)
+            .filterNot { it == DeviceListUiState.None }
+            .onEach { viewModel.someUiState = it }
             .launchIn(viewLifecycleOwner.lifecycleScope)
+        elapsingResume.reset()
+    }
+
+    private val elapsingResume = ElapsingTime()
+
+    override fun onResume() {
+        super.onResume()
+        if (elapsingResume.interval(800)) {
+            // recheck current state
+            viewModel.setState(DeviceListUiState.None)
+        }
+    }
+
+    override fun onInterceptResult() {
+        // reset to block subsequent state check in onResume()
+        elapsingResume.reset()
     }
 
     private suspend fun resolveUiState(uiState: DeviceListUiState) {
+        val host = parentFragment ?: activity ?: host
+        if (host is Listener && uiState != DeviceListUiState.None) host.onUiState(uiState)
         when (uiState) {
-            DeviceListUiState.None -> {
-                if (OsUtils.dissatisfy(OsUtils.S)) {
-                    viewModel.setState(DeviceListUiState.PermissionGranted)
-                    return
-                }
-                val context = context ?: return
-                val permission = Manifest.permission.BLUETOOTH_CONNECT
-                if (PermissionUtils.check(context, arrayOf(permission)).isNotEmpty()) {
-                    bluetoothConnectLauncher.launch(permission)
-                } else {
-                    viewModel.setState(DeviceListUiState.PermissionGranted)
-                }
+            DeviceListUiState.None -> when {
+                OsUtils.satisfy(OsUtils.S) -> bluetoothConnHandler.checkState()
+                else -> viewModel.setState(DeviceListUiState.PermissionGranted)
             }
-            DeviceListUiState.PermissionGranted -> {
-                if (manager.isEnabled) {
-                    viewModel.setState(DeviceListUiState.AccessAvailable)
-                    return
-                }
-                val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-                bluetoothEnableLauncher.launch(enableBtIntent)
+            DeviceListUiState.PermissionGranted -> when {
+                manager.isEnabled -> viewModel.setState(DeviceListUiState.AccessAvailable)
+                else -> viewModel.setState(DeviceListUiState.BluetoothDisabled)
             }
-            DeviceListUiState.PermissionDenied -> {}
-            DeviceListUiState.BluetoothDisabled -> {}
+            DeviceListUiState.PermissionDenied -> Unit
+            DeviceListUiState.PermissionPermanentlyDenied -> Unit
+            DeviceListUiState.BluetoothDisabled -> Unit
             DeviceListUiState.AccessAvailable -> {
                 val context = context ?: return
                 withContext(Dispatchers.Default) {
@@ -165,16 +191,49 @@ internal class DeviceListFragment: TaggedFragment(), StateObservable {
         }
     }
 
-    private val bluetoothConnectLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()) register@{ granted ->
-        val state = if (granted) DeviceListUiState.PermissionGranted
-        else DeviceListUiState.PermissionDenied
-        viewModel.setState(state)
+    private val _btConnPerm = if (OsUtils.satisfy(OsUtils.S)) Manifest.permission.BLUETOOTH_CONNECT else ""
+    private val bluetoothConnHandler = PermissionHandler(this, _btConnPerm) { handler, state ->
+        // onActivityResult(): reset to block subsequent state check in onResume()
+        elapsingResume.reset()
+        viewModel.setState(when (state) {
+            PermissionState.Granted -> DeviceListUiState.PermissionGranted
+            is PermissionState.PermanentlyDenied -> DeviceListUiState.PermissionPermanentlyDenied
+            else -> {
+                // retain PermissionPermanentlyDenied state
+                val retain = DeviceListUiState.PermissionPermanentlyDenied
+                viewModel.someUiState.takeIf { it == retain } ?: DeviceListUiState.PermissionDenied
+            }
+        })
+        when (state) {
+            PermissionState.Granted -> Unit
+            is PermissionState.Denied -> Unit//if (state.requestCount <= 0) handler.request()
+            is PermissionState.ShowRationale -> Unit//if (state.requestCount <= 0) handler.request()
+            is PermissionState.PermanentlyDenied -> Unit
+        }
     }
 
     // Observe state change in state receiver instead
-    private val bluetoothEnableLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()) { }
+    private val bluetoothEnableLauncher = registerForActivityResultV(
+        ActivityResultContracts.StartActivityForResult(),
+        Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)) { }
+
+    private val controller = object : DeviceListController {
+        override fun requestBluetoothOn() = bluetoothEnableLauncher.launch()
+        override fun requestBluetoothConn() = bluetoothConnHandler.request()
+        override fun requestSettingsChange() {
+            val uri = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null)
+            // as stated in the doc, avoid using Intent.FLAG_ACTIVITY_NEW_TASK with startActivityForResult()
+            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, uri)
+            // use resultLauncher to trigger onActivityResult()
+            appSettingsLauncher.launch(intent)
+        }
+        private val appSettingsLauncher = registerForActivityResultV(
+            ActivityResultContracts.StartActivityForResult()) {
+            viewModel.setState(DeviceListUiState.None)
+        }
+    }
+
+    fun getController() = controller
 
     @WorkerThread
     private suspend fun updateDeviceItem(mac: String, state: Int) {

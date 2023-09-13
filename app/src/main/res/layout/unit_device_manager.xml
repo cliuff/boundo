@@ -17,6 +17,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:scrollbars="none">
 
     <LinearLayout
@@ -25,11 +27,56 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
-            style="@style/MainSectionHeader"
-            android:layout_marginTop="0dp"
-            android:textColor="?colorAOnBackground"
-            android:text="@string/dm_main_paired_devices" />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/dmTitle"
+                android:visibility="invisible"
+                tools:visibility="invisible"
+                android:layout_gravity="center_vertical"
+                style="@style/MainSectionHeader"
+                android:layout_marginTop="0dp"
+                android:textColor="?colorAOnBackground"
+                android:text="@string/dm_main_paired_devices" />
+
+            <LinearLayout
+                android:id="@+id/dmMessageContainer"
+                android:visibility="invisible"
+                tools:visibility="visible"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="20dp"
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/dmMessage"
+                    tools:text="Permission denied"
+                    android:textSize="13sp"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/dmAction"
+                    android:layout_marginStart="10dp"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    app:shapeAppearance="@style/ShapeAppearance.Circle"
+                    app:strokeColor="?colorStroke"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    tools:text="Allow"
+                    android:textSize="12sp"
+                    android:textAllCaps="false"
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp" />
+            </LinearLayout>
+        </FrameLayout>
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/dmListContainer"
