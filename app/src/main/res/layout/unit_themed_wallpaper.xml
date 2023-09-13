@@ -53,25 +53,17 @@
                         android:gravity="bottom"
                         android:orientation="vertical">
 
-                        <com.google.android.material.card.MaterialCardView
-                            android:id="@+id/twCardLight"
-                            app:cardElevation="0dp"
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/twImgLight"
+                            android:layout_margin="20dp"
+                            app:shapeAppearance="@style/ShapeAppearance.ThemedWallpaper"
                             app:strokeColor="?colorStroke"
                             app:strokeWidth="1dp"
-                            app:cardCornerRadius="10dp"
-                            android:layout_width="wrap_content"
+                            android:contentDescription="@null"
+                            android:layout_width="150dp"
                             android:layout_height="wrap_content"
-                            android:layout_margin="20dp">
-
-                            <ImageView
-                                android:id="@+id/twImgLight"
-                                android:contentDescription="@null"
-                                android:layout_width="150dp"
-                                android:layout_height="wrap_content"
-                                android:adjustViewBounds="true"
-                                tools:srcCompat="@tools:sample/backgrounds/scenic" />
-
-                        </com.google.android.material.card.MaterialCardView>
+                            android:adjustViewBounds="true"
+                            tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -87,25 +79,17 @@
                         android:gravity="bottom"
                         android:orientation="vertical">
 
-                        <com.google.android.material.card.MaterialCardView
-                            android:id="@+id/twCardDark"
-                            app:cardElevation="0dp"
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/twImgDark"
+                            android:layout_margin="20dp"
+                            app:shapeAppearance="@style/ShapeAppearance.ThemedWallpaper"
                             app:strokeColor="?colorStroke"
                             app:strokeWidth="1dp"
-                            app:cardCornerRadius="10dp"
-                            android:layout_width="wrap_content"
+                            android:contentDescription="@null"
+                            android:layout_width="150dp"
                             android:layout_height="wrap_content"
-                            android:layout_margin="20dp">
-
-                            <ImageView
-                                android:id="@+id/twImgDark"
-                                android:contentDescription="@null"
-                                android:layout_width="150dp"
-                                android:layout_height="wrap_content"
-                                android:adjustViewBounds="true"
-                                tools:srcCompat="@tools:sample/backgrounds/scenic" />
-
-                        </com.google.android.material.card.MaterialCardView>
+                            android:adjustViewBounds="true"
+                            tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -143,5 +127,43 @@
                 android:layout_height="50dp" />
         </LinearLayout>
     </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/twMessageContainer"
+        android:visibility="invisible"
+        tools:visibility="visible"
+        android:alpha="0.87"
+        android:background="?colorABackground"
+        android:orientation="horizontal"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="5dp"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/twMessage"
+            tools:text="Permission denied"
+            android:textSize="13sp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/twAction"
+            android:layout_marginStart="10dp"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            app:shapeAppearance="@style/ShapeAppearance.Circle"
+            app:strokeColor="?colorStroke"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            tools:text="Allow"
+            android:textSize="12sp"
+            android:textAllCaps="false"
+            android:layout_width="wrap_content"
+            android:layout_height="34dp" />
+    </LinearLayout>
 
 </FrameLayout>

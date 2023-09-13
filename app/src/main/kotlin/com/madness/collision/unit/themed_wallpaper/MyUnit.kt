@@ -20,29 +20,52 @@ import android.app.WallpaperManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams
+import android.view.ViewGroup.MarginLayoutParams
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
+import coil.load
+import com.madness.collision.BuildConfig
 import com.madness.collision.R
+import com.madness.collision.chief.auth.AppOpsMaster
+import com.madness.collision.chief.auth.PermissionState
 import com.madness.collision.databinding.UnitThemedWallpaperBinding
 import com.madness.collision.settings.ExteriorFragment
 import com.madness.collision.unit.Unit
-import com.madness.collision.util.*
+import com.madness.collision.util.F
+import com.madness.collision.util.alterPadding
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlin.math.roundToInt
+import kotlinx.coroutines.withContext
+import java.io.File
 
 class MyUnit: Unit() {
 
     override val id: String = "TW"
 
+    private val mutPermState: MutableStateFlow<PermissionState> =
+        MutableStateFlow(PermissionState.Granted)
+    private val permState: StateFlow<PermissionState> by ::mutPermState
     private var timestamp: Long = 0L
     private lateinit var viewBinding: UnitThemedWallpaperBinding
 
@@ -57,8 +80,9 @@ class MyUnit: Unit() {
         when (item.itemId){
             R.id.twToolbarDone -> {
                 val context = context ?: return false
+                val comp = ComponentName(context, ThemedWallpaperService::class.java)
                 val intent = Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER)
-                intent.putExtra(WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT, ComponentName(context, ThemedWallpaperService::class.java))
+                    .putExtra(WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT, comp)
                 startActivity(intent)
                 return true
             }
@@ -77,68 +101,96 @@ class MyUnit: Unit() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewBinding.twCardLight.setOnClickListener {
-            ExteriorFragment.newInstance(ExteriorFragment.MODE_TW_LIGHT).let { mainViewModel.displayFragment(it) }
+        democratize()
+        viewBinding.twImgLight.setOnClickListener {
+            ExteriorFragment.newInstance(ExteriorFragment.MODE_TW_LIGHT)
+                .let { mainViewModel.displayFragment(it) }
         }
-        viewBinding.twCardDark.setOnClickListener {
-            ExteriorFragment.newInstance(ExteriorFragment.MODE_TW_DARK).let { mainViewModel.displayFragment(it) }
+        viewBinding.twImgDark.setOnClickListener {
+            ExteriorFragment.newInstance(ExteriorFragment.MODE_TW_DARK)
+                .let { mainViewModel.displayFragment(it) }
         }
+        mainViewModel.contentWidthTop.observe(viewLifecycleOwner){
+            viewBinding.twRoot.alterPadding(top = it)
+            viewBinding.twMessageContainer.updateLayoutParams<MarginLayoutParams> { topMargin = it }
+        }
+        permState
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            .onEach(::resolvePermState)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
         val context = context ?: return
         loadPreview(context)
     }
 
-    private fun updatePreview(context: Context) {
-        if (MyBridge.changeTimestamp > timestamp) {
-            loadPreview(context)
+    override fun onResume() {
+        super.onResume()
+        val state = when {
+            AppOpsMaster.isDynamicWallpaperAllowed() -> PermissionState.Granted
+            else -> PermissionState.Denied(0)
         }
-    }
-
-    private fun loadPreview(context: Context) {
-        GlobalScope.launch {
-            val pathLight = F.valFilePubTwPortrait(context)
-            val pathDark = F.valFilePubTwPortraitDark(context)
-            val imgLight: Bitmap?
-            val imgDark: Bitmap?
-            try {
-                imgLight = ImageUtil.getBitmap(pathLight)
-                imgDark = ImageUtil.getBitmap(pathDark)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                notifyBriefly(R.string.text_error)
-                return@launch
-            } catch (e: OutOfMemoryError) {
-                e.printStackTrace()
-                notifyBriefly(R.string.text_error)
-                return@launch
-            }
-            val width: Int by lazy { X.size(context, 150f, X.DP).roundToInt() }
-            val imageDefaultLight by lazy {
-                X.toTarget(X.drawableToBitmap(ColorDrawable(Color.WHITE)), width, width)
-            }
-            val imageDefaultDark by lazy {
-                X.toTarget(X.drawableToBitmap(ColorDrawable(Color.BLACK)), width, width)
-            }
-            launch(Dispatchers.Main){
-                viewBinding.twImgLight.setImageBitmap(imgLight ?: imageDefaultLight)
-                viewBinding.twImgDark.setImageBitmap(imgDark ?: imageDefaultDark)
-            }
-        }
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        democratize()
-        mainViewModel.contentWidthTop.observe(viewLifecycleOwner){
-            viewBinding.twRoot.alterPadding(top = it)
-        }
+        mutPermState.update { state }
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
-        super.onHiddenChanged(hidden)
         if (!hidden) {
-            val context = context ?: return
-            updatePreview(context)
+            if (MyBridge.changeTimestamp > timestamp) {
+                val context = context ?: return
+                loadPreview(context)
+            }
         }
     }
 
+    private fun resolvePermState(state: PermissionState) {
+        if (state.isGranted) {
+            viewBinding.twMessageContainer.isInvisible = true
+        } else {
+            setMessageAndAction("[MIUI] Dynamic wallpaper permission should be granted from app settings", "Change")
+            viewBinding.twAction.setOnClickListener { requestSettingsChange() }
+        }
+    }
+
+    private fun setMessageAndAction(text: String, action: String) = viewBinding.run {
+        twMessage.text = text
+        twAction.text = action
+        twMessage.isVisible = true
+        twAction.isVisible = true
+        twMessageContainer.isVisible = true
+    }
+
+    private val appSettingsLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()) { }
+
+    private fun requestSettingsChange() {
+        val uri = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null)
+        // as stated in the doc, avoid using Intent.FLAG_ACTIVITY_NEW_TASK with startActivityForResult()
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, uri)
+        appSettingsLauncher.launch(intent)
+    }
+
+    private fun loadPreview(context: Context) {
+        lifecycleScope.launch {
+            val views = listOf(viewBinding.twImgLight, viewBinding.twImgDark)
+            loadWallpapers(context).zip(views).forEach { (imgAny, view) ->
+                // width is defined as 150dp in XML, change height to properly show ColorDrawable
+                val vh = if (imgAny is Int) view.width else LayoutParams.WRAP_CONTENT
+                view.updateLayoutParams<LayoutParams> { height = vh }
+                view.load(if (imgAny is Int) ColorDrawable(imgAny) else imgAny)
+            }
+        }
+    }
+
+}
+
+/** @return [File] | [ColorInt][Int] */
+private suspend fun loadWallpapers(context: Context): List<Any?> {
+    val handler = CoroutineExceptionHandler { _, t -> t.printStackTrace() }
+    return withContext(Dispatchers.IO + handler) {
+        val paths = listOf(F.valFilePubTwPortrait(context), F.valFilePubTwPortraitDark(context))
+        val files = paths.map { path -> File(path).takeIf { it.exists() && it.canRead() } }
+        buildList(2) {
+            addAll(files)
+            if (get(0) == null) set(0, Color.WHITE)
+            if (get(1) == null) set(1, Color.BLACK)
+        }
+    }
 }

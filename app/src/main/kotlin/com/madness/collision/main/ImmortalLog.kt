@@ -34,6 +34,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.text.HtmlCompat
 import com.jaredrummler.android.device.DeviceName
 import com.madness.collision.BuildConfig
+import com.madness.collision.chief.os.distro
 import com.madness.collision.util.F
 import com.madness.collision.util.P
 import com.madness.collision.util.os.OsUtils
@@ -74,13 +75,14 @@ class ImmortalLog(private val context: Context) {
         writer.write(wrapInHtml("$manufacture $deviceName"))
         listOf(
             // device info
-            "Manufacture" to manufacture,
+            "Manufacturer" to manufacture,
             "Model" to Build.MODEL,
             "Product" to Build.PRODUCT,
             "Device(Code name)" to Build.DEVICE,
             // other info
             "API level" to apiLevel.toString(),
-            "App version" to "$verName($ver)",
+            "Distribution" to distro.toString(),
+            "App version" to "$verName/$ver",
             "Locales" to getLocaleTags(),
         ).run {
             listOf(slice(0..3), slice(4..lastIndex))

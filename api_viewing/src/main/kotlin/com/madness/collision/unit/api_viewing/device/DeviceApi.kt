@@ -22,6 +22,11 @@ import android.view.LayoutInflater
 import androidx.core.view.isVisible
 import com.jaredrummler.android.device.DeviceName
 import com.madness.collision.R
+import com.madness.collision.chief.os.EmuiDistro
+import com.madness.collision.chief.os.HarmonyOsDistro
+import com.madness.collision.chief.os.MiuiDistro
+import com.madness.collision.chief.os.UndefDistro
+import com.madness.collision.chief.os.distro
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.databinding.AvDeviceApiBinding
 import com.madness.collision.util.CollisionDialog
@@ -43,7 +48,7 @@ internal class DeviceApi {
             avDeviceName.text = deviceName
             avDeviceApi.text = ver.apiText
         }
-        val versionText = when (val previewName = Build.VERSION.CODENAME) {
+        val androidVer = when (val previewName = Build.VERSION.CODENAME) {
             "", "REL" -> when (val androidVer = ver.sdk) {
                 "" -> null
                 else -> when (val codeName = ver.codeName(context)) {
@@ -53,8 +58,19 @@ internal class DeviceApi {
             }
             else -> "Android $previewName Preview"
         }
+        val distro = distro.run {
+            val name = displayName
+            when (this) {
+                is EmuiDistro -> "$name API $apiLevel"
+                is HarmonyOsDistro -> "$name $verName"
+                is MiuiDistro -> "$name ${displayVersion ?: verName}"
+                UndefDistro -> null
+            }
+        }
+        val versionText = listOfNotNull(androidVer, distro)
+            .joinToString(separator = System.lineSeparator())
         binding.avDeviceSdk.text = versionText
-        binding.avDeviceSdk.isVisible = versionText != null
+        binding.avDeviceSdk.isVisible = versionText.isNotEmpty()
         pop.show()
     }
 }
