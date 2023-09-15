@@ -63,9 +63,15 @@ private class IconFactory(
     @Px iconBitmapSize: Int, context: Context,
     dpi: Int = context.resources.configuration.densityDpi
 ) : BaseIconFactory(context, dpi, iconBitmapSize, true) {
+    private val transformer = AppIconTransformer()
+
     fun createBadgedIconBitmap(
         icon: Drawable, user: UserHandle?, shrinkNonAdaptiveIcons: Boolean, isInstantApp: Boolean): BitmapInfo {
         return super.createBadgedIconBitmap(icon, user, shrinkNonAdaptiveIcons, isInstantApp, null)
+    }
+
+    override fun createIconBitmap(icon: Drawable, scale: Float, size: Int): Bitmap {
+        return transformer.apply(icon, scale, size, super.createIconBitmap(icon, scale, size))
     }
 }
 

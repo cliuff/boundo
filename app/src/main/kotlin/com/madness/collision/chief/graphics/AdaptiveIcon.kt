@@ -30,21 +30,49 @@ import androidx.annotation.RequiresApi
 import androidx.compose.ui.graphics.asAndroidPath
 import androidx.compose.ui.graphics.vector.PathParser
 import com.madness.collision.chief.chiefContext
+import com.madness.collision.chief.os.MiuiDistro
+import com.madness.collision.chief.os.distro
 import com.madness.collision.util.os.OsUtils
 
 object AdaptiveIcon {
-    fun hasRectIconMask(drawable: Drawable): Boolean {
+    init {
         val systemRect = when {
             OsUtils.satisfy(OsUtils.O) -> getSystemIconMask()?.let(::isFullRect)
             else -> null
         }
+        val miuiRect = if (distro is MiuiDistro) getMiuiIconMask()?.let(::isFullRect) else null
+        Log.d("AdaptiveIcon", "init/sysRect:$systemRect/miuiRect:$miuiRect")
+    }
+
+    fun hasRectIconMask(drawable: Drawable): Boolean {
         val isRect = when {
             OsUtils.satisfy(OsUtils.O) && drawable is AdaptiveIconDrawable ->
                 drawable.iconMask.let(::isFullRect)
             else -> null
         }
-        Log.d("AdaptiveIcon", "hasRectIconMask/sysRect:$systemRect/hasRect:$isRect")
+        if (isRect == true) Log.d("AdaptiveIcon", "hasRectIconMask/hasRect:$isRect")
         return isRect == true
+    }
+
+    /**
+     * Behaves similar to [getSystemIconMask],
+     * the value is overridden by custom icon packs (in most cases null).
+     * Prefer this than [getSystemIconMask], which always returns full rect on MIUI.
+     */
+    private fun getMiuiIconMask(): Path? {
+        try {
+            val iconCustomizer = Class.forName("miui.content.res.IconCustomizer")
+            val maskValue = iconCustomizer.getDeclaredMethod("getConfigIconMaskValue")
+                .apply { isAccessible = true }.invoke(null)
+            Log.d("AdaptiveIcon", "getMiuiIconMask/[$maskValue]")
+            val pathData = maskValue as? String? ?: return null
+            return PathParser().parsePathString(pathData).toPath().asAndroidPath()
+        } catch (e: UnsupportedOperationException) {
+            e.printStackTrace()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return null
     }
 
     @SuppressLint("PrivateApi", "DiscouragedApi")
