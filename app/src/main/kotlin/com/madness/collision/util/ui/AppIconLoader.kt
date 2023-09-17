@@ -67,11 +67,12 @@ private class IconFactory(
 
     fun createBadgedIconBitmap(
         icon: Drawable, user: UserHandle?, shrinkNonAdaptiveIcons: Boolean, isInstantApp: Boolean): BitmapInfo {
-        return super.createBadgedIconBitmap(icon, user, shrinkNonAdaptiveIcons, isInstantApp, null)
+        val ic = transformer.applySrc(icon)
+        return super.createBadgedIconBitmap(ic, user, shrinkNonAdaptiveIcons, isInstantApp, null)
     }
 
     override fun createIconBitmap(icon: Drawable, scale: Float, size: Int): Bitmap {
-        return transformer.apply(icon, scale, size, super.createIconBitmap(icon, scale, size))
+        return transformer.apply(icon, scale, size) { super.createIconBitmap(icon, scale, size) }
     }
 }
 

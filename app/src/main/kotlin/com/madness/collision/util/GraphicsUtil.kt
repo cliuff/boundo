@@ -105,17 +105,21 @@ object GraphicsUtil {
         return bitmap
     }
 
-    fun drawAs(origin: Drawable, width: Int, height: Int): Bitmap{
-        val ow = origin.intrinsicWidth
-        val oh = origin.intrinsicHeight
+    /** Set bounds with respect to the original ratio */
+    fun resolveBounds(drawable: Drawable, width: Int, height: Int) {
+        val ow = drawable.intrinsicWidth
+        val oh = drawable.intrinsicHeight
         val lenMax = max(ow, oh)
         val drawW = width * ow / lenMax
         val drawH = height * oh / lenMax
+        drawable.setBounds((width - drawW) / 2, (height - drawH) / 2, drawW, drawH)
+    }
+
+    fun drawAs(origin: Drawable, width: Int, height: Int): Bitmap{
         val re = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(re)
         val backup = origin.bounds
-        origin.setBounds((width - drawW) / 2, (height - drawH) / 2, drawW, drawH)
-        origin.draw(canvas)
+        resolveBounds(origin, width, height)
+        origin.draw(Canvas(re))
         origin.bounds = backup
         return re
     }

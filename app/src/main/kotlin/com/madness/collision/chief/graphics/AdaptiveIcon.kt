@@ -60,19 +60,7 @@ object AdaptiveIcon {
      * Prefer this than [getSystemIconMask], which always returns full rect on MIUI.
      */
     private fun getMiuiIconMask(): Path? {
-        try {
-            val iconCustomizer = Class.forName("miui.content.res.IconCustomizer")
-            val maskValue = iconCustomizer.getDeclaredMethod("getConfigIconMaskValue")
-                .apply { isAccessible = true }.invoke(null)
-            Log.d("AdaptiveIcon", "getMiuiIconMask/[$maskValue]")
-            val pathData = maskValue as? String? ?: return null
-            return PathParser().parsePathString(pathData).toPath().asAndroidPath()
-        } catch (e: UnsupportedOperationException) {
-            e.printStackTrace()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return null
+        return MiuiIconCustomizer.getIconMaskPath()
     }
 
     @SuppressLint("PrivateApi", "DiscouragedApi")
