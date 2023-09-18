@@ -26,23 +26,36 @@ import com.madness.collision.chief.os.distro
 import com.madness.collision.util.os.OsUtils
 
 object AppOpsMaster {
+    fun isShortcutPinAllowed(): Boolean {
+        kotlin.run op@{
+            if (distro !is MiuiDistro) return@op
+            val mode = checkSelfOp("MIUI:10017") ?: return@op
+            return mode == AppOpsManager.MODE_ALLOWED
+        }
+        return true
+    }
+
     fun isDynamicWallpaperAllowed(): Boolean {
         kotlin.run op@{
             if (distro !is MiuiDistro) return@op
-            val opsMan = chiefContext.getSystemService<AppOpsManager>() ?: return@op
-            val f = when {
-                OsUtils.satisfy(OsUtils.Q) -> AppOpsManager::unsafeCheckOpNoThrow
-                else -> ::checkOpLegacy
-            }
-            try {
-                val pkg = BuildConfig.APPLICATION_ID
-                return f(opsMan, "MIUI:10045", Process.myUid(), pkg) == AppOpsManager.MODE_ALLOWED
-            } catch (e: IllegalArgumentException) {
-                e.printStackTrace()
-                return@op
-            }
+            val mode = checkSelfOp("MIUI:10045") ?: return@op
+            return mode == AppOpsManager.MODE_ALLOWED
         }
         return true
+    }
+
+    private fun checkSelfOp(op: String): Int? {
+        val opsMan = chiefContext.getSystemService<AppOpsManager>() ?: return null
+        val f = when {
+            OsUtils.satisfy(OsUtils.Q) -> AppOpsManager::unsafeCheckOpNoThrow
+            else -> ::checkOpLegacy
+        }
+        return try {
+            f(opsMan, op, Process.myUid(), BuildConfig.APPLICATION_ID)
+        } catch (e: IllegalArgumentException) {
+            e.printStackTrace()
+            null
+        }
     }
 
     @Suppress("deprecation")

@@ -31,10 +31,16 @@ import androidx.core.graphics.ColorUtils
 import androidx.core.view.get
 import androidx.core.view.size
 import androidx.core.view.updatePaddingRelative
+import coil.Coil
+import coil.request.ImageRequest
 import com.madness.collision.R
+import com.madness.collision.chief.chiefPkgMan
+import com.madness.collision.misc.PackageCompat
 import com.madness.collision.unit.api_viewing.databinding.AdapterAvTagBinding
 import com.madness.collision.util.ThemeUtil
 import com.madness.collision.util.X
+import com.madness.collision.util.ui.AppIconPackageInfo
+import kotlinx.coroutines.runBlocking
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
@@ -102,12 +108,14 @@ internal object AppTagInflater {
     fun ensureTagIcon(context: Context, pkgName: String): Bitmap? {
         val icon = tagIcons[pkgName]
         if (icon != null) return icon
-        val iconDrawable = try {
-            context.packageManager.getApplicationIcon(pkgName)
+        val pkgInfo = try {
+            PackageCompat.getInstalledPackage(chiefPkgMan, pkgName) ?: return null
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
-            null
+            return null
         }
+        val req = ImageRequest.Builder(context).data(AppIconPackageInfo(pkgInfo)).build()
+        val iconDrawable = runBlocking { Coil.imageLoader(context).execute(req).drawable }
         return if (iconDrawable != null) ensureTagIcon(context, pkgName, iconDrawable) else null
     }
 

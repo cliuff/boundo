@@ -20,7 +20,9 @@ import android.content.Context
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import com.madness.collision.chief.auth.AppOpsMaster
 import com.madness.collision.util.os.OsUtils
 
 @RequiresApi(OsUtils.N_MR1)
@@ -52,6 +54,10 @@ class Instant(private val context: Context, private val manager: ShortcutManager
 
     fun pinShortcut(id: String) {
         if (id.isEmpty()) return
+        if (AppOpsMaster.isShortcutPinAllowed().not()) {
+            Toast.makeText(context, "Shortcut permission denied", Toast.LENGTH_SHORT).show()
+            return
+        }
         if (OsUtils.satisfy(OsUtils.O) && manager != null && manager.isRequestPinShortcutSupported) {
             manager.requestPinShortcut(buildShortcut(id), null)
         } else {

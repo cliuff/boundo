@@ -28,6 +28,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import androidx.core.content.pm.PackageInfoCompat
 import androidx.room.*
+import com.madness.collision.chief.lang.mapIf
 import com.madness.collision.misc.MiscApp
 import com.madness.collision.unit.api_viewing.Utils
 import com.madness.collision.unit.api_viewing.info.AppType
@@ -313,6 +314,7 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
     private fun loadName(context: Context, applicationInfo: ApplicationInfo, overrideSystem: Boolean){
         if (!overrideSystem){
             name = context.packageManager.getApplicationLabel(applicationInfo).toString()
+                .mapIf({ it.isEmpty() }, { packageName })  // use packageName instead when empty
             return
         }
         // below: unable to create context for Android System

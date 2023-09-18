@@ -100,7 +100,7 @@ private fun Settings(options: List<AboutOption>, itemColor: Color) {
     val (insetTop, insetBottom) = LocalContentInsets.current
     Box(modifier = Modifier.fillMaxSize()) {
         LazyVerticalGrid(
-            columns = GridCells.Adaptive(180.dp),
+            columns = GridCells.Adaptive(170.dp),
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(
                 top = insetTop.toDp() + 8.dp,

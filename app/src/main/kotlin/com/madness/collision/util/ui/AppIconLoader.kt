@@ -107,21 +107,21 @@ class AppIconLoader(
     }
 }
 
-class AppIconFetcher(private val iconLoader: AppIconLoader, private val data: PackageInfo, private val context: Context) : Fetcher {
+class AppIconFetcher(private val iconLoader: AppIconLoader, private val data: PackageInfo, private val options: Options) : Fetcher {
 
     class Factory(@Px iconSize: Int, shrinkNonAdaptiveIcons: Boolean, context: Context)
         : Fetcher.Factory<PackageInfo> {
-        private val context = context.applicationContext
-        private val iconLoader = AppIconLoader(iconSize, shrinkNonAdaptiveIcons, this.context)
+        private val iconLoader = AppIconLoader(iconSize, shrinkNonAdaptiveIcons, context.applicationContext)
 
         override fun create(data: PackageInfo, options: Options, imageLoader: ImageLoader): Fetcher {
-            return AppIconFetcher(iconLoader, data, context)
+            return AppIconFetcher(iconLoader, data, options)
         }
     }
 
     override suspend fun fetch(): FetchResult {
         val icon = iconLoader.loadIcon(data.applicationInfo)
-        return DrawableResult(BitmapDrawable(context.resources, icon), true, DataSource.DISK)
+        val drawable = BitmapDrawable(options.context.resources, icon)
+        return DrawableResult(drawable, true, DataSource.DISK)
     }
 }
 

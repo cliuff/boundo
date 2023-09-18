@@ -236,6 +236,10 @@ object GraphicsUtil {
                 path.addRoundRect(unitOneSixthFloat, unitOneSixthFloat, end, end, radius, radius, Path.Direction.CW)
             }
             AI_FLAVOR_SQUIRCLE -> path.set(getSquirclePath(unitOneSixthFloat, unitOneSixthFloat, displayRadiusFloat))
+            else -> {
+                val end = displayDiameterFloat + unitOneSixthFloat
+                path.addRect(unitOneSixthFloat, unitOneSixthFloat, end, end, Path.Direction.CW)
+            }
         }
         // below: draw background
         if (back != null) {
@@ -263,6 +267,10 @@ object GraphicsUtil {
                     pathStroke.addRoundRect(unitOneSixthFloat, unitOneSixthFloat, end, end, radius, radius, Path.Direction.CW)
                 }
                 AI_FLAVOR_SQUIRCLE -> pathStroke.set(getSquirclePath(unitOneSixthFloat, unitOneSixthFloat, displayRadiusFloat))
+                else -> {
+                    val end = displayDiameterFloat + unitOneSixthFloat
+                    path.addRect(unitOneSixthFloat, unitOneSixthFloat, end, end, Path.Direction.CW)
+                }
             }
             val paintStroke = Paint(Paint.ANTI_ALIAS_FLAG)
             paintStroke.color = ThemeUtil.getColor(context, R.attr.colorStroke)
