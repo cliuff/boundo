@@ -77,7 +77,7 @@ internal object EasyAccess {
             if (isLazy && isChanged) return true
         }
 
-        isChanged = AppTag.loadTagSettings(context, prefSettings, isLazy) || isChanged
+        isChanged = AppTag.loadTagSettings(prefSettings, isLazy) || isChanged
         return isChanged
     }
 }

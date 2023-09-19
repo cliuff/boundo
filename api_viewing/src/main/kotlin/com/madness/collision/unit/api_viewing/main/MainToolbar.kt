@@ -93,10 +93,6 @@ internal class MainToolbar(
         rSort = RunnableSort(sortItem)
     }
 
-    fun removeSortPopup() {
-        popSort = null
-    }
-
     fun createOptions(context: Context, toolbar: Toolbar) {
         toolbar.setTitle(MainR.string.apiViewer)
         this.toolbar = toolbar

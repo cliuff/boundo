@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Clifford Liu
+ * Copyright 2023 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-package com.madness.collision.util
+package com.madness.collision.base
 
-import com.madness.collision.chief.app.BaseFragment
+import com.madness.collision.chief.app.BaseActivity
 
-abstract class TaggedFragment : BaseFragment(), Id
+typealias BaseActivity = BaseActivity

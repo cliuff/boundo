@@ -254,7 +254,7 @@ internal class MainStatus(
             }
             // cannot detect whether changed, previous state cannot be determined
             // because filter state share data with normal state
-            AppTag.loadTagSettings(context, value, false)
+            AppTag.loadTagSettings(value, false)
             val completeList = viewModel.screen4Display(loadItem)
             val displayList = if (value.isEmpty()) completeList
             else filterByTag(context, completeList)

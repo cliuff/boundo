@@ -31,6 +31,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.edit
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
@@ -195,29 +196,27 @@ class MyUnit: com.madness.collision.unit.Unit() {
         super.onSaveInstanceState(outState)
     }
 
-    override fun onHiddenChanged(hidden: Boolean) {
-        if (hidden) {
-            // set as null to fix anchor problem with toolbar
-                toolbarMan.removeSortPopup()
-            // remove this callback otherwise app cannot go back
-            toolbarMan.removeSearchBackCallback()
-        } else {
-            val context = context ?: return
-            // check settings
-            lifecycleScope.launch(Dispatchers.Default) {
-                val isChanged = EasyAccess.load(context, settingsPreferences, false)
-                if (isChanged) {
-                    delay(1)
-                    withContext(Dispatchers.Main) {
-                        viewBinding.avMainFilterText.text = null
-                        viewBinding.avMainFilterText.visibility = View.GONE
-                        adapter.notifyDataSetChanged()
-                    }
+    override fun onResume() {
+        super.onResume()
+        if (lifecycleEventTime.compareValues(Lifecycle.Event.ON_PAUSE, Lifecycle.Event.ON_CREATE) > 0) {
+            context?.let(::checkLoadSettings)
+        }
+    }
+
+    private fun checkLoadSettings(context: Context) {
+        // check settings
+        lifecycleScope.launch(Dispatchers.Default) {
+            val isChanged = EasyAccess.load(context, settingsPreferences, false)
+            if (isChanged) {
+                delay(1)
+                withContext(Dispatchers.Main) {
+                    viewBinding.avMainFilterText.text = null
+                    viewBinding.avMainFilterText.visibility = View.GONE
+                    adapter.notifyDataSetChanged()
                 }
             }
-            checkRefresh()
         }
-        super.onHiddenChanged(hidden)
+        checkRefresh()
     }
 
     private fun displayApk(doNow: Boolean, block: () -> Unit) {
@@ -425,7 +424,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
     fun clearTagFilter(context: Context) {
         viewBinding.avMainFilterText.text = null
         viewBinding.avMainFilterText.visibility = View.GONE
-        AppTag.loadTagSettings(context, settingsPreferences, false)
+        AppTag.loadTagSettings(settingsPreferences, false)
     }
 
     /**

@@ -20,11 +20,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import com.madness.collision.databinding.AtUpdatesBinding
 import com.madness.collision.unit.Updatable
 import com.madness.collision.util.TaggedFragment
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 internal class MyUpdatesFragment : TaggedFragment(), Updatable {
@@ -40,14 +39,14 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
         return viewBinding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         mCallback = object : AudioTimerService.Callback {
             override fun onTick(targetTime: Long, duration: Long, leftTime: Long) {
             }
 
             override fun onTick(displayText: String) {
-                GlobalScope.launch(Dispatchers.Main) {
+                lifecycleScope.launch {
                     viewBinding.atUpdatesStatus.text = displayText
                 }
             }
@@ -72,7 +71,6 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable {
             AudioTimerService.removeCallback(mCallback)
             AudioTimerService.addCallback(mCallback)
         }
-        super.onHiddenChanged(hidden)
     }
 
 }

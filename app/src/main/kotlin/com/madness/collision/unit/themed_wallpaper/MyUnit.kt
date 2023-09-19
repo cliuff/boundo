@@ -36,6 +36,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import coil.load
@@ -66,7 +67,7 @@ class MyUnit: Unit() {
     private val mutPermState: MutableStateFlow<PermissionState> =
         MutableStateFlow(PermissionState.Granted)
     private val permState: StateFlow<PermissionState> by ::mutPermState
-    private var timestamp: Long = 0L
+    private var previewLoadTimestamp: Long = 0L
     private lateinit var viewBinding: UnitThemedWallpaperBinding
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
@@ -88,11 +89,6 @@ class MyUnit: Unit() {
             }
         }
         return false
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        timestamp = System.currentTimeMillis()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -129,14 +125,8 @@ class MyUnit: Unit() {
             else -> PermissionState.Denied(0)
         }
         mutPermState.update { state }
-    }
-
-    override fun onHiddenChanged(hidden: Boolean) {
-        if (!hidden) {
-            if (MyBridge.changeTimestamp > timestamp) {
-                val context = context ?: return
-                loadPreview(context)
-            }
+        if (lifecycleEventTime.compareValues(Lifecycle.Event.ON_PAUSE, Lifecycle.Event.ON_CREATE) > 0) {
+            if (MyBridge.changeTimestamp > previewLoadTimestamp) context?.let(::loadPreview)
         }
     }
 
@@ -169,6 +159,7 @@ class MyUnit: Unit() {
 
     private fun loadPreview(context: Context) {
         lifecycleScope.launch {
+            previewLoadTimestamp = System.currentTimeMillis()
             val views = listOf(viewBinding.twImgLight, viewBinding.twImgDark)
             loadWallpapers(context).zip(views).forEach { (imgAny, view) ->
                 // width is defined as 150dp in XML, change height to properly show ColorDrawable

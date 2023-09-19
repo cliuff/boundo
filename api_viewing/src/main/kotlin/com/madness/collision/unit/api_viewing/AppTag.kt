@@ -251,7 +251,7 @@ internal object AppTag {
         } else {
             displayingTagsPrivate[key] = newValue
         }
-        val isChanged = newValue != oldValue
+        val isChanged = newValue?.state != oldValue.state
         if (isLazy && isChanged) return null
         return isChanged
     }
@@ -264,16 +264,8 @@ internal object AppTag {
         return isChanged
     }
 
-    fun loadTagSettings(context: Context, tagSettings: Map<String, TriStateSelectable>, isLazy: Boolean): Boolean {
-        return loadTagSettings(tagSettings, isLazy)
-    }
-
     fun loadTagSettings(tagSettings: Map<String, TriStateSelectable>, isLazy: Boolean): Boolean {
         return loadTriStateTagSettings(tagSettings, isLazy)
-    }
-
-    fun loadTagSettings(context: Context, prefSettings: SharedPreferences, isLazy: Boolean): Boolean {
-        return loadTagSettings(prefSettings, isLazy)
     }
 
     fun loadTagSettings(prefSettings: SharedPreferences, isLazy: Boolean): Boolean {

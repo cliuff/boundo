@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Clifford Liu
+ * Copyright 2023 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-package com.madness.collision.base
+package com.madness.collision.chief.app
 
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.*
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import com.madness.collision.R
 import com.madness.collision.main.AppAction
 import com.madness.collision.main.MainActivity
@@ -37,6 +41,7 @@ import kotlinx.coroutines.flow.onEach
 abstract class BaseActivity : AppCompatActivity() {
     private var themeId = P.SETTINGS_THEME_NONE
     private var lastActionData: Pair<String, Any>? = null
+    val lifecycleEventTime: LifecycleEventTime = LifecycleEventTime()
 
     override fun attachBaseContext(newBase: Context) {
         val context = LocaleUtils.getBaseContext(newBase)
@@ -45,6 +50,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        lifecycleEventTime.init(this)
         val pref = getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
         themeId = loadThemeId(this, pref)
         mainApplication.action
