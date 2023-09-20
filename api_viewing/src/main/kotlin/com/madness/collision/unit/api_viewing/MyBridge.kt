@@ -31,6 +31,7 @@ import androidx.core.database.getStringOrNull
 import androidx.fragment.app.Fragment
 import androidx.sqlite.db.SupportSQLiteQueryBuilder
 import com.absinthe.rulesbundle.LCRules
+import com.madness.collision.chief.chiefContext
 import com.madness.collision.misc.MiscApp
 import com.madness.collision.unit.Bridge
 import com.madness.collision.unit.Unit
@@ -40,6 +41,7 @@ import com.madness.collision.unit.api_viewing.database.AppRoom
 import com.madness.collision.unit.api_viewing.tag.app.AppTagInfo
 import com.madness.collision.unit.api_viewing.util.ApkRetriever
 import com.madness.collision.unit.api_viewing.util.PrefUtil
+import com.madness.collision.util.P
 import com.madness.collision.util.Page
 import kotlin.reflect.KClass
 import com.madness.collision.R as MainR
@@ -98,6 +100,8 @@ object MyBridge: Bridge() {
             AppTagInfo.ID_TECH_FLUTTER,
             AppTagInfo.ID_TECH_REACT_NATIVE,
             AppTagInfo.ID_TECH_XAMARIN,
+            AppTagInfo.ID_APP_SYSTEM_MODULE,
+            AppTagInfo.ID_TYPE_OVERLAY,
         )
         prefSettings.edit {
             putStringSet(PrefUtil.AV_TAGS, tagSettings)
@@ -105,19 +109,11 @@ object MyBridge: Bridge() {
     }
 
     @Suppress("unused")
-    fun updateTagSettings(prefSettings: SharedPreferences) {
-        val tags = prefSettings.getStringSet(PrefUtil.AV_TAGS, null)?.let { HashSet(it) } ?: return
-        mapOf(
-            "avTagsValNlArm" to listOf(AppTagInfo.ID_PKG_ARM32, AppTagInfo.ID_PKG_ARM64),
-            "avTagsValNlX86" to listOf(AppTagInfo.ID_PKG_X86, AppTagInfo.ID_PKG_X64)
-        ).forEach { (oldID, newIds) ->
-            if (tags.contains(oldID).not()) return@forEach // continue
-            tags.addAll(newIds)
-            tags.remove(oldID)
-        }
-        prefSettings.edit {
-            putStringSet(PrefUtil.AV_TAGS, tags)
-        }
+    fun addModOverlayTags() {
+        val prefSettings = chiefContext.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
+        val tags = prefSettings.getStringSet(PrefUtil.AV_TAGS, null)?.toHashSet() ?: return
+        tags.addAll(listOf(AppTagInfo.ID_APP_SYSTEM_MODULE, AppTagInfo.ID_TYPE_OVERLAY))
+        prefSettings.edit { putStringSet(PrefUtil.AV_TAGS, tags) }
     }
 
     @Suppress("unused")

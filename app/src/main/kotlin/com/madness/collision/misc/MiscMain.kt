@@ -18,13 +18,10 @@ package com.madness.collision.misc
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.content.pm.ShortcutManager
-import android.os.Environment
 import androidx.core.content.edit
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.madness.collision.BuildConfig
-import com.madness.collision.instant.Instant
 import com.madness.collision.settings.LanguageMan
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.api_viewing.AccessAV
@@ -32,8 +29,6 @@ import com.madness.collision.util.*
 import com.madness.collision.util.config.LocaleUtils
 import com.madness.collision.util.os.OsUtils
 import java.io.File
-import java.io.IOException
-import java.lang.Exception
 import kotlin.random.Random
 
 internal object MiscMain {
@@ -67,65 +62,6 @@ internal object MiscMain {
         }
         // below: app in update process to the newest
         // below: apply actions
-        if (verOri in 0 until 20032901) {
-            // remove old format frequency data
-            val pref = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
-            pref.edit { remove(P.UNIT_FREQUENCIES) }
-            // init pinned units
-            initPinnedUnits(prefSettings)
-            // init tags
-            AccessAV.initTagSettings(context, prefSettings)
-        }
-        if (verOri in 0 until 20042923) {
-            // delete legacy location pics in cache
-            val valCachePubExterior = F.createPath(F.cachePublicPath(context), Environment.DIRECTORY_PICTURES, "Exterior")
-            arrayOf(
-                F.createPath(valCachePubExterior, "back.webp"),
-                F.createPath(valCachePubExterior, "backDark.webp"),
-                F.createPath(valCachePubExterior, "twBack.webp"),
-                F.createPath(valCachePubExterior, "twBackDark.webp"),
-            ).forEach {
-                val oriFile = File(it)
-                if (oriFile.exists().not()) return@forEach  // continue
-                try { oriFile.delete() } catch (e: IOException) { e.printStackTrace() }
-            }
-        }
-        if ((verOri in 0 until 20092514) && X.aboveOn(X.N_MR1)) {
-            val sm = context.getSystemService(ShortcutManager::class.java)
-            if (sm != null) Instant(context, sm).refreshDynamicShortcuts(P.SC_ID_AUDIO_TIMER)
-        }
-        if (verOri in 0 until 21010113) {
-            deleteDirs(F.valCachePubAvSeal(context))
-        }
-        if (verOri in 0 until 21081315) {
-            // remove preference of Cool App unit
-            prefSettings.edit {
-                remove("toolsAppPackageName")
-            }
-            // remove unit config of removed units
-            listOf("cool_app", "no_media", "we_chat_evo", "qq_contacts").forEach {
-                Unit.unpinUnit(context, it, prefSettings)
-                Unit.enableUnit(context, it, prefSettings)
-                Unit.removeFrequency(context, it, prefSettings)
-            }
-            // clear qq contacts data
-            if (OsUtils.satisfy(OsUtils.N_MR1)) {
-                context.getSystemService(ShortcutManager::class.java)?.let { sm ->
-                    val instant = Instant(context, sm)
-                    val dataDir = F.createPath(F.cachePublicPath(context),
-                        Environment.DIRECTORY_PICTURES, "qqInstantManager")
-                    instant.dynamicShortcuts.filter {
-                        it.id.startsWith("qq")
-                    }.map { it.id }.let {
-                        instant.removeDynamicShortcuts(*it.toTypedArray())
-                    }
-                    X.deleteFolder(File(dataDir))
-                }
-            }
-        }
-        if (verOri in 0 until 21090720) {
-            AccessAV.updateTagSettings(context)
-        }
         if (verOri in 0 until 22041320) {
             // remove unit config of school timetable
             "school_timetable".let {
@@ -166,6 +102,9 @@ internal object MiscMain {
             }
             val keys = listOf("icsInstructor", "googleCalendarDefault", "iCalendarAppMode", "icsFilePath")
             prefSettings.edit { keys.forEach { remove(it) } }
+        }
+        listOf(SelfUpdater23()).forEach { updater ->
+            if (verOri in 0..<updater.maxVerCode) updater.apply(verOri)
         }
     }
 

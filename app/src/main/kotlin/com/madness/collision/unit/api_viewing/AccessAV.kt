@@ -57,11 +57,8 @@ object AccessAV: UnitAccess(Unit.UNIT_NAME_API_VIEWING) {
         getMethod("initTagSettings", SharedPreferences::class).invoke(prefSettings)
     }
 
-    fun updateTagSettings(
-        context: Context,
-        prefSettings: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
-    ) {
-        getMethod("updateTagSettings", SharedPreferences::class).invoke(prefSettings)
+    fun addModOverlayTags() {
+        invokeWithoutArg("addModOverlayTags")
     }
 
     fun resolveUri(context: Context, uri: Uri): Any? {

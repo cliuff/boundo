@@ -1,5 +1,22 @@
 
 
+- **4.1.1** 23092018
+<en-US>
+- App API: redirect to Xiaomi and Huawei app stores
+- App API: fix setting changes not automatically reflected
+- Themed Wallpaper: fix wallpaper previews not automatically updated
+- Themed Wallpaper: fix missing dynamic wallpaper permission on MIUI
+- Fix rectangle icons for splash screen and app list on MIUI/HarmonyOS
+</en-US>
+<zh-CN>
+- 应用API：支持跳转小米和华为应用商店
+- 应用API：修复设置更改后界面未自动更新
+- 主题壁纸：修复壁纸更换后预览未自动更新
+- 主题壁纸：修复部分MIUI版本上未请求动态壁纸权限
+- 修复MIUI和HarmonyOS上开屏页面和应用列表的矩形图标
+</zh-CN>
+
+
 - **4.1.0** 23081415
 <en-US>
 - App API details page: conveniently switch between apps
