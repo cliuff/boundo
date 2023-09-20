@@ -252,9 +252,11 @@ internal open class APIAdapter(context: Context, private val listener: Listener,
 
         bindUpdateTime(holder, appInfo)
 
-        holder.tags.removeAllViews()
-        scope.launch(Dispatchers.Default) {
-            AppTag.inflateAllTagsAsync(context, holder.tags, appInfo)
+        managedTagLoading(appInfo.packageName, holder.tags) {
+            holder.tags.removeAllViews()
+            scope.launch(Dispatchers.Default) {
+                AppTag.inflateAllTagsAsync(context, holder.tags, appInfo)
+            }
         }
 
         holder.card.setOnClickListener {
@@ -267,6 +269,26 @@ internal open class APIAdapter(context: Context, private val listener: Listener,
 
         holder.card.setOnLongClickListener {
             listener.longClick.invoke(appInfo)
+        }
+    }
+
+    /** pkgName to Job */
+    private val tagLoadingJobs = HashMap<String, Job>()
+
+    private inline fun managedTagLoading(newTagPkg: String, tagsView: View, newJob: () -> Job) {
+        // retrieve last pkgName from tags view because of view recycling
+        val lastTagPkg = tagsView.getTag(R.bool.tagKeyAvAdapterTags) as? String?
+        tagsView.setTag(R.bool.tagKeyAvAdapterTags, newTagPkg)
+        // cancel last loading job to fix wrong tags issue right after recycling
+        // (tags are loaded for the old pkg before recycling, instead of the new one after recycling)
+        val oldJob = when (lastTagPkg) {
+            null, newTagPkg -> tagLoadingJobs[newTagPkg]
+            else -> tagLoadingJobs[lastTagPkg]?.apply { if (isActive) cancel() }
+        }
+        // wait for old job to finish or start a new one
+        tagLoadingJobs[newTagPkg] = when (oldJob?.isActive) {
+            true -> scope.launch(Dispatchers.Default) { oldJob.join() }
+            else -> newJob()
         }
     }
 

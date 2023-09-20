@@ -154,22 +154,21 @@ internal object AppTag {
     /**
      * [ensureTagIcons] and [ensureRequisites] are called within.
      */
-    suspend fun inflateAllTagsAsync(context: Context, container: ViewGroup, app: ApiViewingApp) {
+    suspend fun inflateAllTagsAsync(context: Context, container: ViewGroup, app: ApiViewingApp)
+    = supervisorScope {
         ensureTagIcons(context)
         // inflate tags that do not have requisite first
         val directTagIds = AppTagManager.tags.mapNotNull {
             if (it.value.requisites == null) it.key else null
         }
-        withContext(Dispatchers.Main) {
+        launch(Dispatchers.Main) {
             inflateMultipleTags(context, container, directTagIds, AppTagInfo.Resources(context, app))
         }
         // ensure resources and inflate requisite tags
-        val inflatedTagIds = directTagIds.toMutableList()
+        val inflatedTagIds = directTagIds.toHashSet()
         val res = ensureRequisitesAsync(context, app) { _, tagIds, res ->
             inflatedTagIds.addAll(tagIds)
-            withContext(Dispatchers.Main) {
-                inflateMultipleTags(context, container, tagIds, res)
-            }
+            launch(Dispatchers.Main) { inflateMultipleTags(context, container, tagIds, res) }
         }
         // inflate any tag left (should be none)
         val leftTagIds = (AppTagManager.tags.keys - inflatedTagIds)
@@ -186,14 +185,16 @@ internal object AppTag {
     }
 
     // Tag inflating: selected and expressed true (no anti-ed tag icon support yet).
-    fun inflateSingleTag(context: Context, container: ViewGroup, tagInfo: AppTagInfo, res: AppTagInfo.Resources) {
+    fun inflateSingleTag(context: Context, container: ViewGroup, tagInfo: AppTagInfo, res: AppTagInfo.Resources): Boolean {
         // terminate if any requisite not satisfied
-        if (tagInfo.requisites?.any { it.checker(res).not() } == true) return
+        if (tagInfo.requisites?.any { it.checker(res).not() } == true) return false
         // selected and expressed true
         if (displayingTags[tagInfo.id].isSelected && tagInfo.express(res)) {
-            val info = getTagViewInfo(tagInfo, res, context) ?: return
+            val info = getTagViewInfo(tagInfo, res, context) ?: return false
             AppTagInflater.inflateTag(context, container, info)
+            return true
         }
+        return false
     }
 
     private fun getTagViewInfo(tagInfo: AppTagInfo, res: AppTagInfo.Resources, context: Context): AppTagInflater.TagInfo? {

@@ -19,4 +19,5 @@
     <bool name="avStatsTitlePaddingTop">false</bool>
     <bool name="tagKeyAvAdapterItemId">false</bool>
     <bool name="tagKeyAvAdapterItemIconId">false</bool>
+    <bool name="tagKeyAvAdapterTags">false</bool>
 </resources>
