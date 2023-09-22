@@ -172,6 +172,7 @@ dependencies {
         fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))),
         libs.androidxCore,
         libs.androidxCoreKtx,
+        libs.androidxCoreSplashScreen,
         libs.androidxActivity,
         libs.androidxAppcompat,
         libs.androidxFragment,

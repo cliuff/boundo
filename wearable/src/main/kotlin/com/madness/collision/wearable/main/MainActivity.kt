@@ -21,6 +21,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import androidx.wear.ambient.AmbientLifecycleObserver
 import com.madness.collision.wearable.databinding.ActivityMainBinding
@@ -45,6 +46,9 @@ internal class MainActivity : AppCompatActivity() {
     private val ambientObserver = AmbientLifecycleObserver(this, ambientCallback)
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // handle splash screen transition
+        installSplashScreen()
+
         super.onCreate(savedInstanceState)
         viewBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)

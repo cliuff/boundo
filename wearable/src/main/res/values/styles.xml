@@ -37,4 +37,10 @@
         <item name="colorActionAlertBack">@color/actionAlertVBackABlack</item>
         <item name="colorActionPass">@color/actionPassABlack</item>
     </style>
+
+    <style name="StartingAppTheme" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@android:color/black</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_screen</item>
+        <item name="postSplashScreenTheme">@style/AppTheme</item>
+    </style>
 </resources>
