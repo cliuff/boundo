@@ -12,10 +12,10 @@ internal class PagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment)
         return 2
     }
 
-    override fun createFragment(position: Int): Fragment {
-        return when(position){
-            1 -> settings
-            else -> av
-        }
+    override fun createFragment(position: Int): Fragment = getFragment(position)
+
+    fun getFragment(position: Int): Fragment = when (position) {
+        1 -> settings
+        else -> av
     }
 }

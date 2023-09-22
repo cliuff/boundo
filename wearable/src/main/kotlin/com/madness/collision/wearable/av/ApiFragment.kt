@@ -252,6 +252,11 @@ internal class ApiFragment: Fragment(), AdapterView.OnItemSelectedListener, Menu
         }
     }
 
+    fun onPageVisible() {
+        // request focus to support rotary input
+        mViews.avRecycler.run { post { requestFocus() } }
+    }
+
     override fun onLowMemory() {
         super.onLowMemory()
         val context = context ?: return

@@ -74,8 +74,8 @@ android {
         applicationId = "com.madness.collision"
         minSdk = 23
         targetSdk = 33
-        versionCode = 23081321
-        versionName = "4.0.2W"
+        versionCode = 23092113
+        versionName = "4.1.1W"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testApplicationId = "${applicationId}.test"
         if (configSigning) {

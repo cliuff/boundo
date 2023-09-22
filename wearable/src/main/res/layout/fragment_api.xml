@@ -2,6 +2,8 @@
 <androidx.wear.widget.WearableRecyclerView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/avRecycler"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:divider="@null"
     android:scrollbars="vertical"
     android:layout_width="match_parent"
