@@ -9,7 +9,9 @@ internal class PagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment)
     private val settings: AvSettingsFragment by lazy { AvSettingsFragment() }
 
     override fun getItemCount(): Int {
-        return 2
+        // hide settings page to work around the bug that
+        // pager is triggered to swipe instead of scrolling up the list from rotary input
+        return 1
     }
 
     override fun createFragment(position: Int): Fragment = getFragment(position)
