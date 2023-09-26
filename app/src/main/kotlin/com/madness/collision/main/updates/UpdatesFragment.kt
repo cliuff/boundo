@@ -22,23 +22,20 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import androidx.core.view.*
+import androidx.core.view.isEmpty
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.whenStarted
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListUpdateCallback
 import com.madness.collision.databinding.FragmentUpdatesBinding
 import com.madness.collision.databinding.MainUpdatesHeaderBinding
 import com.madness.collision.main.MainFragment
 import com.madness.collision.main.MainPageViewModel
 import com.madness.collision.main.MainViewModel
-import com.madness.collision.unit.*
-import com.madness.collision.unit.Unit
+import com.madness.collision.unit.Description
+import com.madness.collision.unit.StatefulDescription
 import com.madness.collision.unit.UnitDescViewModel
 import com.madness.collision.util.AppUtils.asBottomMargin
 import com.madness.collision.util.ElapsingTime
@@ -48,9 +45,14 @@ import com.madness.collision.util.alterPadding
 import com.madness.collision.util.controller.saveFragment
 import com.madness.collision.util.dev.idString
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.math.roundToInt
+import kotlin.time.Duration.Companion.minutes
 
 internal class UpdatesFragment : TaggedFragment() {
 
@@ -68,16 +70,17 @@ internal class UpdatesFragment : TaggedFragment() {
         }
     }
 
+    interface Listener {
+        fun onRefreshState(isRefreshing: Boolean)
+    }
+
     override val category: String = "MainUpdates"
     override val id: String = "Updates"
 
     private val dID = "@" + idString.takeLast(2)
     private lateinit var mContext: Context
+    private val updatesViewModel: UpdatesViewModel by viewModels()
     private val mainViewModel: MainViewModel by activityViewModels()
-    // used for assignment and thread-safe modification
-    private var _updatesProviders: MutableList<Pair<String, UpdatesProvider>> = mutableListOf()
-    private val updatesProviders: List<Pair<String, UpdatesProvider>>
-        get() = _updatesProviders
     // used for assignment and thread-safe modification
     private var _fragments: MutableList<Pair<String, Fragment>> = mutableListOf()
     private val fragments: List<Pair<String, Fragment>>
@@ -89,6 +92,14 @@ internal class UpdatesFragment : TaggedFragment() {
     private val elapsingViewCreated = ElapsingTime()
     private lateinit var viewBinding: FragmentUpdatesBinding
     private lateinit var inflater: LayoutInflater
+    private val updateProviderMan = UpdateProviderMan()
+    private val updateFragmentHost = object : UpdateFragmentHost {
+        override val context: Context by ::mContext
+        override val fragmentManager: FragmentManager by ::childFragmentManager
+        override val updateContainerView: ViewGroup get() = viewBinding.mainUpdatesUpdateContainer
+        override fun createUpdateHeader(desc: Description, parent: ViewGroup) = createUpdateHeaderView(desc, parent)
+    }
+    private val updateFragmentMan = UpdateFragmentMan(updateFragmentHost)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,10 +108,7 @@ internal class UpdatesFragment : TaggedFragment() {
         inflater = LayoutInflater.from(mContext)
         mode = arguments?.getInt(ARG_MODE) ?: MODE_NORMAL
         if (isNoUpdatesMode) return
-        val descList = DescRetriever(mContext).includePinState().doFilter().retrieveInstalled()
-        _updatesProviders = descList.mapNotNullTo(ArrayList(descList.size)) {
-            Unit.getUpdates(it.unitName)?.run { it.unitName to this }
-        }
+        updateProviderMan.init(mContext)
         kotlin.run r@{
             val savedState = savedInstanceState ?: return@r
             val units = savedState.getStringArrayList("UFS").orEmpty()
@@ -123,7 +131,12 @@ internal class UpdatesFragment : TaggedFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d("HomeUpdates", "$dID onViewCreated() hasState=${savedInstanceState != null}")
-        fragments.forEach { restoreUpdateFragment(it) }
+        fragments.forEach { updateFragmentMan.restoreUpdateFragment(it) }
+
+        updatesViewModel.uiStateFlow
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            .onEach(::resolveUiState)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         updateUpdates()
         elapsingViewCreated.reset()
@@ -191,170 +204,66 @@ internal class UpdatesFragment : TaggedFragment() {
         if (fragments.isEmpty()) return
         if (viewBinding.mainUpdatesUpdateContainer.isEmpty()) return
         for (i in fragments.indices.reversed()) {
-            removeUpdateFragment(fragments[i], i)
+            updateFragmentMan.removeUpdateFragment(fragments[i], i)
         }
     }
 
-    private fun restoreUpdateFragment(updateFragment: Pair<String, Fragment>) {
-        val (unitName: String, fragment: Fragment) = updateFragment
-        val container = addUpdateFragmentContainer(unitName, -1) ?: return
-        val fMan = childFragmentManager
-        if (fragment.isAdded) {
-            // avoid IllegalStateException: Can't change container ID of fragment
-            fMan.beginTransaction().remove(fragment).commitNowAllowingStateLoss()
-            fMan.executePendingTransactions()
-        }
-        fMan.beginTransaction().replace(container.id, fragment).commitNowAllowingStateLoss()
-    }
-
-    private fun addUpdateFragment(updateFragment: Pair<String, Fragment>, index: Int = -1) {
-        val (unitName: String, fragment: Fragment) = updateFragment
-        if (fragment.isAdded) return
-        val container = addUpdateFragmentContainer(unitName, index) ?: return
-        childFragmentManager.beginTransaction().add(container.id, fragment).commitNowAllowingStateLoss()
-    }
-
-    private fun addUpdateFragmentContainer(unitName: String, index: Int) : ViewGroup? {
-        val container = getUpdateFragmentContainer(unitName) ?: return null
-        viewBinding.mainUpdatesUpdateContainer.run {
-            if (index < 0) addView(container) else addView(container, index)
-        }
-        return container
-    }
-
-    private fun getUpdateFragmentContainer(unitName: String) : ViewGroup? {
-        val description = Unit.getDescription(unitName) ?: return null
-
-        val container = LinearLayout(mContext).apply {
-            id = View.generateViewId()
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-            orientation = LinearLayout.VERTICAL
-        }
-
-        val header = MainUpdatesHeaderBinding.inflate(inflater, container, false)
+    private fun createUpdateHeaderView(description: Description, parent: ViewGroup): View {
+        val header = MainUpdatesHeaderBinding.inflate(inflater, parent, false)
         val icon = description.getIcon(mContext)
         header.mainUpdatesHeader.setCompoundDrawablesRelativeWithIntrinsicBounds(icon, null, null, null)
         header.mainUpdatesHeader.text = description.getName(mContext)
         header.mainUpdatesHeaderContainer.setOnClickListener {
-            mainViewModel.displayUnit(unitName, shouldShowNavAfterBack = true)
+            mainViewModel.displayUnit(description.unitName, shouldShowNavAfterBack = true)
         }
-
-        container.addView(header.root)
-        return container
+        return header.root
     }
 
-    private fun removeUpdateFragment(updateFragment: Pair<String, Fragment>, index: Int) {
-        if (index > viewBinding.mainUpdatesUpdateContainer.size - 1) return
-        val (_, fragment: Fragment) = updateFragment
-        childFragmentManager.beginTransaction().remove(fragment).commitNowAllowingStateLoss()
-        viewBinding.mainUpdatesUpdateContainer.removeViewAt(index)
+    private val updateCheckMutex = Mutex()
+
+    private fun updateUpdates() {
+        if (updatesViewModel.uiStateFlow.value == UpdatesUiState.CheckingUpdate) return
+        lifecycleScope.launch(Dispatchers.Default) {
+            updateCheckMutex.withLock {
+                withTimeoutOrNull(2.minutes) {
+                    updatesViewModel.updateUiState(UpdatesUiState.CheckingUpdate)
+                    Log.d("HomeUpdates", "---------  $dID Checking  -------------")
+                    val host = this@UpdatesFragment
+                    val oldFragments = fragments
+                    val updatesInfo = updateProviderMan.getUpdateInfo(host, oldFragments.toMap())
+                    val state = UpdatesUiState.UpdateAvailable(updatesInfo, oldFragments)
+                    updatesViewModel.updateUiState(state)
+                }
+            }
+        }
     }
 
-    private fun updateUpdates() = lifecycleScope.launch(Dispatchers.Default) {
-        Log.d("HomeUpdates", "---------  $dID Checking  -------------")
-        val host = this@UpdatesFragment
-        val oldFragments = fragments
-        val oldFMap = oldFragments.toMap()
-        val updatesInfo = updatesProviders.mapNotNull m@{ (unitName, provider) ->
-            val newUpdate = provider.hasNewUpdate(host) ?: return@m null
-            // query old list first in case fragments were restored
-            val f = oldFMap[unitName] ?: provider.fragment ?: return@m null
-            Triple(unitName, f, newUpdate)
+    private fun resolveUiState(state: UpdatesUiState) {
+        (parentFragment as? Listener)?.run {
+            onRefreshState(state == UpdatesUiState.CheckingUpdate)
+            Log.d("HomeUpdates", "$dID/$state")
         }
-        val newFragments = updatesInfo.mapTo(ArrayList(updatesInfo.size)) { it.first to it.second }
-        val logOld = oldFragments.joinToString { it.first }
-        val logNew = updatesInfo.joinToString { it.first + "-${it.third}" }
-        Log.d("HomeUpdates", "$dID Applying u $logOld -> $logNew")
-        if (oldFragments.isEmpty() || updatesInfo.isEmpty()) {
-            // Use whenStarted() to avoid IllegalArgumentException:
-            // No view found for id 0x1 (unknown) for fragment MyUpdatesFragment
-            whenStarted {
-                if (oldFragments.isEmpty()) {
-                    if (updatesInfo.isNotEmpty()) {
-                        updatesInfo.forEach {
-                            addUpdateFragment(it.first to it.second)
-                        }
-                    }
-                } else if (updatesInfo.isEmpty()) {
-                    for (i in oldFragments.indices.reversed()) {
-                        removeUpdateFragment(oldFragments[i], i)
-                    }
+        when (state) {
+            UpdatesUiState.None -> kotlin.Unit
+            UpdatesUiState.CheckingUpdate -> kotlin.Unit
+            UpdatesUiState.NoUpdate ->
+                resolveUiState(UpdatesUiState.UpdateAvailable(emptyList(), fragments))
+            is UpdatesUiState.UpdateAvailable -> {
+                val (updatesInfo, oldFragments) = state
+                val newFragments = updatesInfo.mapTo(ArrayList(updatesInfo.size)) { it.unitName to it.fragment }
+                val logOld = oldFragments.joinToString { it.first }
+                val logNew = updatesInfo.joinToString { it.unitName + "-${it.hasNewUpdate}" }
+                Log.d("HomeUpdates", "$dID Applying u $logOld -> $logNew")
+
+                val diffHelper = UpdateDiffHelper(updateFragmentMan, oldFragments, updatesInfo)
+                if (oldFragments.isEmpty() || updatesInfo.isEmpty()) {
+                    diffHelper.applySimpleUpdate()
+                } else {
+                    val callback = diffHelper.getCallback(lifecycle, dID)
+                    diffHelper.getDiffResult().dispatchUpdatesTo(callback)
                 }
                 _fragments = newFragments
             }
-            return@launch
-        }
-        val diff = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
-            override fun getOldListSize(): Int {
-                return oldFragments.size
-            }
-
-            override fun getNewListSize(): Int {
-                return updatesInfo.size
-            }
-
-            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-                return oldFragments[oldItemPosition].first == updatesInfo[newItemPosition].first
-            }
-
-            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-                return updatesInfo[newItemPosition].third.not()
-            }
-
-        }, false)
-        withContext(Dispatchers.Main) {
-            val diffFragments = oldFragments.toMutableList()
-            diff.dispatchUpdatesTo(object : ListUpdateCallback {
-
-                override fun onInserted(position: Int, count: Int) {
-                    // Use launchWhenStarted to avoid IllegalArgumentException:
-                    // No view found for id 0x1 (unknown) for fragment MyUpdatesFragment
-                    if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED).not()) return
-                    val newPos = kotlin.run {
-                        if (position <= 0) return@run 0
-                        val oldItem = diffFragments[position - 1]
-                        updatesInfo.indexOfFirst { it.first == oldItem.first } + 1
-                    }
-                    Log.d("HomeUpdates", "$dID Diff insert: pos=$position, count=$count, newPos=$newPos")
-                    for (offset in 0 until count) {
-                        val index = position + offset
-                        val f = updatesInfo[newPos + offset].run { first to second }
-                        Log.d("HomeUpdates", "$dID Diff insert: ${f.first} at $index")
-                        addUpdateFragment(f, index)
-                        diffFragments.add(index, f)
-                    }
-                }
-
-                override fun onRemoved(position: Int, count: Int) {
-                    if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED).not()) return
-                    Log.d("HomeUpdates", "$dID Diff remove: pos=$position, count=$count")
-                    for (offset in (0 until count).reversed()) {
-                        val index = position + offset
-                        Log.d("HomeUpdates", "$dID Diff remove: ${diffFragments[index].first} at $index")
-                        removeUpdateFragment(diffFragments[index], index)
-                        diffFragments.removeAt(index)
-                    }
-                }
-
-                override fun onMoved(fromPosition: Int, toPosition: Int) {
-                    Log.d("HomeUpdates", "$dID Diff move: from=$fromPosition, to=$toPosition")
-                }
-
-                override fun onChanged(position: Int, count: Int, payload: Any?) {
-                    if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED).not()) return
-                    Log.d("HomeUpdates", "$dID Diff change: pos=$position, count=$count")
-                    for (offset in 0 until count) {
-                        val index = position + offset
-                        Log.d("HomeUpdates", "$dID Diff change: ${diffFragments[index].first} at $index")
-                        val u = diffFragments[index].second as? Updatable ?: continue
-                        u.updateState()
-                    }
-                }
-            })
-            _fragments = newFragments
         }
     }
 
@@ -362,39 +271,24 @@ internal class UpdatesFragment : TaggedFragment() {
      * List changes include addition and deletion but no update
      */
     private fun updateItem(stateful: StatefulDescription) {
-        val isAddition = stateful.isPinned
-        if (isAddition) {
-            if (updatesProviders.any { it.first == stateful.unitName }) return
-            val provider = Unit.getUpdates(stateful.unitName) ?: return
-            synchronized(_updatesProviders) {
-                _updatesProviders.add(stateful.unitName to provider)
-            }
-            if (!provider.hasUpdates(this)) return
-            val fragment = provider.fragment ?: return
-            val updateFragment = stateful.unitName to fragment
-            synchronized(_fragments) {
-                _fragments.add(updateFragment)
-            }
-            addUpdateFragment(updateFragment)
-        } else {
-            for (i in updatesProviders.indices) {
-                val provider = updatesProviders[i]
-                if (provider.first != stateful.unitName) continue
-                synchronized(_updatesProviders) {
-                    _updatesProviders.removeAt(i)
+        updateProviderMan.updateItem(
+            host = this,
+            stateful = stateful,
+            add = { fragment ->
+                val updateFragment = stateful.unitName to fragment
+                synchronized(_fragments) { _fragments.add(updateFragment) }
+                updateFragmentMan.addUpdateFragment(updateFragment)
+            },
+            remove = {
+                for (i in fragments.indices) {
+                    val fragment = fragments[i]
+                    if (fragment.first != stateful.unitName) continue
+                    synchronized(_fragments) { _fragments.removeAt(i) }
+                    updateFragmentMan.removeUpdateFragment(fragment, i)
+                    break
                 }
-                break
             }
-            for (i in fragments.indices) {
-                val fragment = fragments[i]
-                if (fragment.first != stateful.unitName) continue
-                synchronized(_fragments) {
-                    _fragments.removeAt(i)
-                }
-                removeUpdateFragment(fragment, i)
-                break
-            }
-        }
+        )
     }
 
 }

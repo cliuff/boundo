@@ -16,6 +16,8 @@
 
 package com.madness.collision.main
 
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.content.Context
 import android.os.Bundle
 import android.os.SystemClock
@@ -23,7 +25,10 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.LinearInterpolator
+import android.view.animation.OvershootInterpolator
 import androidx.appcompat.widget.Toolbar
+import androidx.core.animation.addListener
 import androidx.core.view.isVisible
 import androidx.core.view.updatePaddingRelative
 import androidx.fragment.app.Fragment
@@ -42,8 +47,9 @@ import com.madness.collision.util.ThemeUtil
 import com.madness.collision.util.controller.getSavedFragment
 import com.madness.collision.util.controller.saveFragment
 import com.madness.collision.util.measure
+import kotlin.math.roundToLong
 
-class MainFragment : TaggedFragment(), Democratic {
+class MainFragment : TaggedFragment(), Democratic, UpdatesFragment.Listener {
     override val category: String = "Main"
     override val id: String = "Main"
 
@@ -67,6 +73,37 @@ class MainFragment : TaggedFragment(), Democratic {
         toolbar.visibility = View.INVISIBLE
         (toolbar.tag as View?)?.isVisible = false  // hide toolbar divider
         return true
+    }
+
+    private var refreshToolAnimator: ObjectAnimator? = null
+
+    override fun onRefreshState(isRefreshing: Boolean) {
+        val toolItem = viewBinding.mainTB.menu.findItem(R.id.mainToolbarRefresh) ?: return
+        if (toolItem.isVisible.not()) return
+        val view = viewBinding.mainTB.findViewById<View>(R.id.mainToolbarRefresh) ?: return
+        val animator = refreshToolAnimator
+        when {
+            isRefreshing && animator == null -> {
+                val anim = ObjectAnimator.ofFloat(view, "rotation", 0f, 360f)
+                refreshToolAnimator = anim.apply {
+                    interpolator = LinearInterpolator()
+                    repeatMode = ValueAnimator.RESTART
+                    repeatCount = ValueAnimator.INFINITE
+                    duration = 1000
+                    addListener(onCancel = {
+                        val progress = view.rotation % 360f
+                        if (progress != 0f) {
+                            val duration = ((360f - progress) * 1000f / 360f).roundToLong()
+                            view.animate().setInterpolator(OvershootInterpolator())
+                                .setDuration(duration).rotation(360f).start()
+                        }
+                    })
+                    start()
+                }
+            }
+            isRefreshing -> if (animator?.isStarted == false) animator.start()
+            else -> animator?.cancel()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
