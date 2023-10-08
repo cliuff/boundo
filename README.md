@@ -7,9 +7,9 @@
 # Boundo: App API Checker
 
 **Requirements**
-- Android Studio `Giraffe Patch 1` (AGP `8.1.1`)
-- Gradle Wrapper `8.2.1`
-- Java `11`
+- Android Studio `Giraffe Patch 2` (AGP `8.1.2`)
+- Gradle Wrapper `8.4`
+- Java `17`
 - Kotlin `1.9.10`
 - Jetpack Compose Compiler `1.5.3` (requires Kotlin `1.9.10`)
 

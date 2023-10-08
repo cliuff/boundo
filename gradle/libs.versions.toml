@@ -1,6 +1,6 @@
 [versions]
 # plugins
-androidGradlePlugin = "8.1.1"  # 8.1.1-Giraffe Patch 1
+androidGradlePlugin = "8.1.2"  # 8.1.2-Giraffe Patch 2
 kotlin = "1.9.10"  # Compose Compiler 1.5.3 requires Kotlin 1.9.10
 googleKsp = "1.9.10-1.0.13"
 googlePlayServicesOSSLicensesPlugin = "0.10.6"
