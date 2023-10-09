@@ -45,6 +45,10 @@ data class MiuiDistro(
     override val displayName: String = "MIUI"
 }
 
+data class LineageOsDistro(val apiLevel: Int) : DistroBuild {
+    override val displayName: String get() = "LineageOS"
+}
+
 private fun getBuild(): DistroBuild {
     run hos@{
         if (getHuaweiOsBrand() != "harmony") return@hos
@@ -60,6 +64,10 @@ private fun getBuild(): DistroBuild {
     run emui@{
         val api = BuildProp["ro.build.hw_emui_api_level"]?.toIntOrNull() ?: return@emui
         return EmuiDistro(api)
+    }
+    run los@{
+        val api = BuildProp["ro.lineage.build.version.plat.sdk"]?.toIntOrNull() ?: return@los
+        return LineageOsDistro(api)
     }
     return UndefDistro
 }

@@ -23,6 +23,7 @@ import android.service.controls.ControlsProviderService
 import android.service.controls.actions.ControlAction
 import com.madness.collision.versatile.controls.*
 import com.madness.collision.versatile.ctrl.ControlActionRequest
+import io.reactivex.rxjava3.processors.FlowableProcessor
 import io.reactivex.rxjava3.processors.ReplayProcessor
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.SendChannel
@@ -36,7 +37,7 @@ import java.util.function.Consumer
 class MyControlService : ControlsProviderService() {
     private val coroutineScope = CoroutineScope(Dispatchers.Default + Job())
     // many ids to one publisher
-    private val publishers: MutableMap<String, Pair<ReplayProcessor<Control>, Job>> = hashMapOf()
+    private val publishers: MutableMap<String, Pair<FlowableProcessor<Control>, Job>> = hashMapOf()
     private var actionChannel: SendChannel<ControlActionRequest>? = null
     private lateinit var actionFlow: kotlinx.coroutines.flow.Flow<ControlActionRequest>
     private val providers = arrayOf(
@@ -58,7 +59,8 @@ class MyControlService : ControlsProviderService() {
 
     override fun createPublisherForAllAvailable(): Flow.Publisher<Control> {
         val context = this
-        val updatePublisher = ReplayProcessor.create<Control>()
+        // invoke toSerialized() to use ReplayProcessor in a Kotlin coroutine (multi-thread)
+        val updatePublisher = ReplayProcessor.create<Control>().toSerialized()
         coroutineScope.launch {
             val ids = providers.flatMap { it.getDeviceIds() }
             for (id in ids) {
@@ -76,7 +78,9 @@ class MyControlService : ControlsProviderService() {
     }
 
     override fun createPublisherFor(controlIds: MutableList<String>): Flow.Publisher<Control> {
-        val updatePublisher = ReplayProcessor.create<Control>(controlIds.size)
+        // invoke toSerialized() to use ReplayProcessor in a Kotlin Flow (multi-thread),
+        // fixes IndexOutOfBoundsException from (ReplayProcessor.java:772)
+        val updatePublisher = ReplayProcessor.create<Control>(controlIds.size).toSerialized()
         for (id in controlIds) {
             publishers[id]?.let { (_, oldJob) ->
                 // update publisher to be the new value

@@ -24,6 +24,7 @@ import com.jaredrummler.android.device.DeviceName
 import com.madness.collision.R
 import com.madness.collision.chief.os.EmuiDistro
 import com.madness.collision.chief.os.HarmonyOsDistro
+import com.madness.collision.chief.os.LineageOsDistro
 import com.madness.collision.chief.os.MiuiDistro
 import com.madness.collision.chief.os.UndefDistro
 import com.madness.collision.chief.os.distro
@@ -64,13 +65,28 @@ internal class DeviceApi {
                 is EmuiDistro -> "$name API $apiLevel"
                 is HarmonyOsDistro -> "$name $verName"
                 is MiuiDistro -> "$name ${displayVersion ?: verName}"
+                is LineageOsDistro -> "$name API $apiLevel"
                 UndefDistro -> null
             }
         }
-        val versionText = listOfNotNull(androidVer, distro)
-            .joinToString(separator = System.lineSeparator())
+        val props = listOfNotNull(
+            androidVer?.let { "OS: $it" },
+            distro?.let { "Distro: $it" },
+            getJavaVm()?.let { "Java VM: $it" },
+        )
+        val versionText = props.joinToString(separator = System.lineSeparator())
         binding.avDeviceSdk.text = versionText
         binding.avDeviceSdk.isVisible = versionText.isNotEmpty()
         pop.show()
+    }
+
+    private fun getJavaVm(): String? {
+        val vmName = System.getProperty("java.vm.name") ?: return null
+        val vmVer = System.getProperty("java.vm.version") ?: return null
+        if (vmName.equals("dalvik", true)) {
+            val match = """(\d+\.\d+)\.\d+""".toRegex().find(vmVer)
+            if (match != null && match.groupValues[1].toFloat() >= 2) return "ART $vmVer"
+        }
+        return "$vmName $vmVer"
     }
 }

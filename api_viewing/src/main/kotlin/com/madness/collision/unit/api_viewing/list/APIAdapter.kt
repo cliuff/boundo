@@ -42,6 +42,7 @@ import com.madness.collision.unit.api_viewing.seal.SealMaker
 import com.madness.collision.unit.api_viewing.seal.SealManager
 import com.madness.collision.util.*
 import kotlinx.coroutines.*
+import java.lang.ref.WeakReference
 import kotlin.math.min
 import kotlin.math.roundToInt
 
@@ -272,24 +273,24 @@ internal open class APIAdapter(context: Context, private val listener: Listener,
         }
     }
 
-    /** pkgName to Job */
-    private val tagLoadingJobs = HashMap<String, Job>()
+    /** pkgName to Job/tagContainer */
+    private val tagLoadingJobs = HashMap<String, Pair<Job, WeakReference<View>>>()
 
-    private inline fun managedTagLoading(newTagPkg: String, tagsView: View, newJob: () -> Job) {
+    private inline fun managedTagLoading(newTagPkg: String, tagsView: ViewGroup, newJob: () -> Job) {
         // retrieve last pkgName from tags view because of view recycling
         val lastTagPkg = tagsView.getTag(R.bool.tagKeyAvAdapterTags) as? String?
         tagsView.setTag(R.bool.tagKeyAvAdapterTags, newTagPkg)
         // cancel last loading job to fix wrong tags issue right after recycling
         // (tags are loaded for the old pkg before recycling, instead of the new one after recycling)
-        val oldJob = when (lastTagPkg) {
-            null, newTagPkg -> tagLoadingJobs[newTagPkg]
-            else -> tagLoadingJobs[lastTagPkg]?.apply { if (isActive) cancel() }
+        if (lastTagPkg != null && lastTagPkg != newTagPkg) {
+            tagLoadingJobs[lastTagPkg]?.let { (lastJob, lastViewRef) ->
+                // match view ref in case job was overridden/taken over by another binding view
+                if (lastViewRef.get() === tagsView && lastJob.isActive) lastJob.cancel()
+            }
         }
         // wait for old job to finish or start a new one
-        tagLoadingJobs[newTagPkg] = when (oldJob?.isActive) {
-            true -> scope.launch(Dispatchers.Default) { oldJob.join() }
-            else -> newJob()
-        }
+        val wait = tagLoadingJobs[newTagPkg]?.let { (j, v) -> v.get() === tagsView && j.isActive }
+        if (wait != true) tagLoadingJobs[newTagPkg] = newJob() to WeakReference(tagsView)
     }
 
     private fun bindUpdateTime(holder: Holder, appInfo: ApiViewingApp) {

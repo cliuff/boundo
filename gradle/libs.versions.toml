@@ -64,7 +64,7 @@ junitJupiter = "5.8.1"
 kotlinCoroutines = "1.7.3"
 mpChart = "v3.1.0"
 openCsv = "5.7.1"
-rxJava = "3.1.6"
+rxJava = "3.1.8"
 # Jetbrains annotations
 jbAnnotations = "24.0.0"
 androidDeviceNames = "2.1.1"

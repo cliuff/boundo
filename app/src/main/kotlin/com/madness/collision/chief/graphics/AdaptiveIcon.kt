@@ -82,8 +82,12 @@ object AdaptiveIcon {
     }
 
     /** Whether the [path] is a rectangle covering 100% area */
-    private fun isFullRect(path: Path): Boolean {
-        if (path.isEmpty || !path.isRect(null)) return false
+    private fun isFullRect(path: Path): Boolean? {
+        if (path.isEmpty) return false
+        // Path.isRect() produces a native exception on Android 8.0/8.1
+        // (tested on Nexus 9 and Google emulators)
+        if (OsUtils.dissatisfy(OsUtils.P)) return null
+        if (!path.isRect(null)) return false
         val clip = Region(0, 0, 100, 100)
         val region = Region().apply { setPath(path, clip) }
         val iterator = RegionIterator(region)

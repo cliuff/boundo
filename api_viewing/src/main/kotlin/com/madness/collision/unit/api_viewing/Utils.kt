@@ -23,7 +23,9 @@ import android.provider.Settings
 import androidx.annotation.RequiresApi
 import androidx.core.content.edit
 import androidx.core.content.pm.PackageInfoCompat
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.coroutineScope
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.database.AppDao
 import com.madness.collision.unit.api_viewing.database.DataMaintainer
@@ -62,9 +64,9 @@ import com.madness.collision.util.X.P
 import com.madness.collision.util.X.Q
 import com.madness.collision.util.os.OsUtils
 import com.madness.collision.util.regexOf
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.yield
 import java.security.Principal
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -246,10 +248,12 @@ internal object Utils {
             checkRemoval(allPackages)
         }
         // Maintainer diff
-        if (RecordMtn.shouldDiff(context)) {
-            // run asynchronously
-            CoroutineScope(Dispatchers.Default).launch {
+        val lifecycle = lifecycleOwner.lifecycle
+        if (RecordMtn.shouldDiff(context) && lifecycle.currentState >= Lifecycle.State.INITIALIZED) {
+            // run asynchronously (bind to lifecycle following DAO)
+            lifecycle.coroutineScope.launch(Dispatchers.Default) {
                 val dataDiff = RecordMtn.diff(context, allPackages, dao.selectAllApps())
+                yield()  // cooperative
                 RecordMtn.apply(context, dataDiff, allPackages, dao)
             }
         }

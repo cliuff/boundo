@@ -32,9 +32,10 @@ import java.util.concurrent.atomic.AtomicReference
  * and initialize ignored properties
  */
 object DataMaintainer {
+    class InterceptException(message: String?) : RuntimeException(message)
 
     abstract class Interceptor : InvocationHandler, Cloneable {
-        lateinit var target: () -> AppDao?
+        abstract fun getDao(): AppDao?
 
         public override fun clone(): Any {
             return super.clone()
@@ -85,17 +86,19 @@ object DataMaintainer {
      */
     private fun get(context: Context, lifecycleOwner: LifecycleOwner, daoGetter: () -> AppDao?): AppDao {
         val interceptor = object : Interceptor() {
+            override fun getDao(): AppDao? = daoGetter()
+
             override fun invoke(proxy: Any?, method: Method?, args: Array<out Any>?): Any? {
-                method ?: return null
+                method ?: throw InterceptException("method is null")
+                val dao = getDao() ?: throw InterceptException("DAO is null")
                 val result = try {
-                    if (args == null) method.invoke(target.invoke()) else method.invoke(target.invoke(), *args)
+                    if (args == null) method.invoke(dao) else method.invoke(dao, *args)
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    return null
+                    throw InterceptException("invocation failure")
                 }
                 return when (result) {
                     is ApiViewingApp -> {
-                        val dao = target.invoke() ?: return result
                         AppMaintainer.get(context, lifecycleOwner, dao).apply {
                             result.copyTo(this)
                             initIgnored(context)
@@ -105,7 +108,6 @@ object DataMaintainer {
                         // assume the whole list is ApiViewingApp if the first one is,
                         // otherwise assume none of it is
                         if (result.isNotEmpty() && result[0] !is ApiViewingApp) return result
-                        val dao = target.invoke() ?: return result
                         val anApp = AppMaintainer.get(context, lifecycleOwner, dao)
                         runBlocking { mapToApp(context, result, anApp) }
                     }
@@ -115,7 +117,6 @@ object DataMaintainer {
         }
         val clazz = daoGetter.invoke()!!::class.java
         val proxy = Proxy.newProxyInstance(clazz.classLoader, clazz.interfaces, interceptor) as AppDao
-        interceptor.target = daoGetter
-        return proxy
+        return SafeAppDaoProxy(proxy)
     }
 }

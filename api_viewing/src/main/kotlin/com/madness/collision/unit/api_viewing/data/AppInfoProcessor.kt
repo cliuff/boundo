@@ -17,12 +17,32 @@
 package com.madness.collision.unit.api_viewing.data
 
 import android.content.Context
+import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import com.madness.collision.chief.lang.mapIf
 import com.madness.collision.util.SystemUtil
+import com.madness.collision.util.config.LocaleUtils
+import com.madness.collision.util.os.OsUtils
 import java.util.*
 
 object AppInfoProcessor {
-    fun loadLabel(context: Context, pkgName: String, locale: Locale): String? {
+
+    fun loadName(context: Context, applicationInfo: ApplicationInfo, overrideSystem: Boolean): String {
+        val packageName = applicationInfo.packageName
+        if (overrideSystem) loadLocaleLabel(context, packageName)?.let { return it }
+        return context.packageManager.getApplicationLabel(applicationInfo).toString()
+            .mapIf({ it.isEmpty() }, { packageName })  // use packageName instead when empty
+    }
+
+    private fun loadLocaleLabel(context: Context, pkgName: String): String? {
+        // below: unable to create context for Android System
+        if (pkgName == "android" || OsUtils.satisfy(OsUtils.T)) return null
+        val locale = LocaleUtils.getSet()?.first()
+        if (locale == null || locale == LocaleUtils.getApp()[0]) return null
+        return loadLabel(context, pkgName, locale)
+    }
+
+    private fun loadLabel(context: Context, pkgName: String, locale: Locale): String? {
         val nContext: Context
         try {
             nContext = context.createPackageContext(pkgName, Context.CONTEXT_RESTRICTED)

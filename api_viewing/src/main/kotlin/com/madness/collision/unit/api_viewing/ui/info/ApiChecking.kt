@@ -138,7 +138,8 @@ private fun AppDetails(
                 if (updateTime != null) {
                     AppDetailsItem1(app.verName, totalSize, updateTime, Icons.Outlined.Info)
                 } else {
-                    val verSize = if (totalSize != null) "${app.verName} • $totalSize" else app.verName
+                    val verSize = listOfNotNull(app.verName.takeIf { it.isNotEmpty() }, totalSize)
+                        .joinToString(separator = " • ")
                     AppDetailsItem(verSize, Icons.Outlined.Info)
                 }
                 AppDetailsItem(app.packageName, Icons.Outlined.Inventory2)
@@ -246,24 +247,28 @@ private fun AppDetailsItem1(label: String, label0: String?, label1: String, icon
             tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
         )
         Spacer(modifier = Modifier.width(6.dp))
-        Text(
-            text = label,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
-            fontSize = 11.sp,
-            fontWeight = FontWeight.Medium,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.weight(1f, fill = false),
-        )
-        if (label0 != null) {
+        if (label.isNotEmpty()) {
             Text(
-                text = " • ",
+                text = label,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
                 fontSize = 11.sp,
                 fontWeight = FontWeight.Medium,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(1f, fill = false),
             )
+        }
+        if (label0 != null) {
+            if (label.isNotEmpty()) {
+                Text(
+                    text = " • ",
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
+                    fontSize = 11.sp,
+                    fontWeight = FontWeight.Medium,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
             Text(
                 text = label0,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),

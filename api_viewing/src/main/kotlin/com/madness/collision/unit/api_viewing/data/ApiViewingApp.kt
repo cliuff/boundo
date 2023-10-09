@@ -28,7 +28,6 @@ import android.os.Parcel
 import android.os.Parcelable
 import androidx.core.content.pm.PackageInfoCompat
 import androidx.room.*
-import com.madness.collision.chief.lang.mapIf
 import com.madness.collision.misc.MiscApp
 import com.madness.collision.unit.api_viewing.Utils
 import com.madness.collision.unit.api_viewing.info.AppType
@@ -39,7 +38,6 @@ import com.madness.collision.unit.api_viewing.util.ApkUtil
 import com.madness.collision.unit.api_viewing.util.ManifestUtil
 import com.madness.collision.util.GraphicsUtil
 import com.madness.collision.util.X
-import com.madness.collision.util.config.LocaleUtils
 import com.madness.collision.util.os.OsUtils
 import kotlinx.parcelize.Parcelize
 
@@ -308,33 +306,7 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
     }
 
     private fun loadName(context: Context, applicationInfo: ApplicationInfo) {
-        loadName(context, applicationInfo, false)
-    }
-
-    private fun loadName(context: Context, applicationInfo: ApplicationInfo, overrideSystem: Boolean){
-        if (!overrideSystem){
-            name = context.packageManager.getApplicationLabel(applicationInfo).toString()
-                .mapIf({ it.isEmpty() }, { packageName })  // use packageName instead when empty
-            return
-        }
-        // below: unable to create context for Android System
-        if (packageName == "android") {
-            loadName(context, applicationInfo, false)
-            return
-        }
-        kotlin.run {
-            if (OsUtils.satisfy(OsUtils.T)) {
-                loadName(context, applicationInfo, false)
-                return
-            }
-            val locale = LocaleUtils.getSet()?.first()
-            if (locale == null || locale == LocaleUtils.getApp()[0]) {
-                loadName(context, applicationInfo, false)
-                return
-            }
-            val label = AppInfoProcessor.loadLabel(context, packageName, locale)
-            if (label != null) name = label else loadName(context, applicationInfo, false)
-        }
+        name = AppInfoProcessor.loadName(context, applicationInfo, false)
     }
 
     fun getApplicationInfo(context: Context): ApplicationInfo? {

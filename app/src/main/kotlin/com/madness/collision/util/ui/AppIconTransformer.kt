@@ -35,7 +35,6 @@ import com.madness.collision.chief.graphics.MiuiIconCustomizer
 import com.madness.collision.chief.os.EmuiDistro
 import com.madness.collision.chief.os.HarmonyOsDistro
 import com.madness.collision.chief.os.MiuiDistro
-import com.madness.collision.chief.os.UndefDistro
 import com.madness.collision.chief.os.distro
 import com.madness.collision.util.os.OsUtils
 import me.zhanghai.android.appiconloader.iconloaderlib.ShadowGenerator
@@ -53,7 +52,7 @@ fun AppIconTransformer(): AppIconTransformer {
         is MiuiDistro -> MiuiAppIconTransformer(SmoothCornerPathProvider())
         is HarmonyOsDistro, is EmuiDistro -> RectAppIconTransformer(SmoothCornerPathProvider())
         // unconditionally apply to other distros
-        UndefDistro -> RectAppIconTransformer(SmoothCornerPathProvider())
+        else -> RectAppIconTransformer(SmoothCornerPathProvider())
     }
 }
 
