@@ -81,9 +81,6 @@ object DataMaintainer {
     /**
      * Check [AppDao] method invocations
      */
-    /**
-     * Check [AppDao] method invocations
-     */
     private fun get(context: Context, lifecycleOwner: LifecycleOwner, daoGetter: () -> AppDao?): AppDao {
         val interceptor = object : Interceptor() {
             override fun getDao(): AppDao? = daoGetter()
@@ -115,8 +112,8 @@ object DataMaintainer {
                 }
             }
         }
-        val clazz = daoGetter.invoke()!!::class.java
-        val proxy = Proxy.newProxyInstance(clazz.classLoader, clazz.interfaces, interceptor) as AppDao
+        val clazz = AppDao::class.java
+        val proxy = Proxy.newProxyInstance(clazz.classLoader, arrayOf(clazz), interceptor) as AppDao
         return SafeAppDaoProxy(proxy)
     }
 }

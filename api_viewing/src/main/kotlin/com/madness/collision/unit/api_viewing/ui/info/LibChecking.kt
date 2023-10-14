@@ -17,6 +17,7 @@
 package com.madness.collision.unit.api_viewing.ui.info
 
 import android.content.Context
+import android.os.Parcelable
 import android.util.Log
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
@@ -55,6 +56,7 @@ import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import kotlinx.parcelize.Parcelize
 
 @Composable
 fun LibPage(
@@ -323,8 +325,6 @@ private fun ComponentList(
     listContent: LazyListScope.() -> Unit,
     maxWidth: Dp,
 ) {
-    val itemCount = itemCollection.sectionItems.flatten().sumOf { it.size }
-    val typeCount = itemCollection.sectionSize
     val loadedTypeSet = itemCollection.entryIterator().asSequence().mapNotNullTo(HashSet()) {
         if (itemCollection.getTypeState(it.key) == PackCompCollection.State.Loaded) it.key else null
     }
@@ -343,6 +343,21 @@ private fun ComponentList(
         lastStrategyValues = typeList.zip(list).mapNotNull { (k, v) -> v?.let { k to v } }.toMap()
         list
     }
+    val layoutGroupsList = remember(strategyValuesList) {
+        strategyValuesList.map list@{ strategyValues ->
+            strategyValues ?: return@list null
+            strategyValues.map layout@{ value ->
+                if (value !is LibItemLayoutStrategy.GroupedValue) return@layout null
+                value.entries.map { (sizeLimit, rowList) ->
+                    val rowSize = layoutStrategy.calculateRowSize(sizeLimit)
+                    when {
+                        rowSize <= 1 -> GroupedLayoutList.Normal(rowList)
+                        else -> GroupedLayoutList.Chunked(rowSize, rowList.chunked(rowSize))
+                    }
+                }
+            }
+        }
+    }
     val prefCompressedSize = remember { mutableStateOf(true) }
     val libPrefs = remember { LibPrefs(prefCompressedSize) }
     LazyColumn(
@@ -354,13 +369,7 @@ private fun ComponentList(
         for ((typeIndex, compType) in compTypeList.withIndex()) {
             val typeCollection = itemCollection[compType].firstOrNull()
             if (typeIndex > 0) {
-                item {
-                    Divider(
-                        modifier = Modifier.padding(top = 8.dp),
-                        thickness = 0.6.dp,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.25f),
-                    )
-                }
+                item { CompTypeDivider() }
             }
             item {
                 if (itemCollection.getTypeState(compType) == PackCompCollection.State.None) {
@@ -369,149 +378,189 @@ private fun ComponentList(
                         loadCompType(compType)
                     }
                 }
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text(
-                        modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
-                        text = getTypeLabel(compType),
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.85f),
-                        fontWeight = FontWeight.Medium,
-                        fontSize = 13.sp,
-                        lineHeight = 14.sp,
-                    )
-                    if (compType == PackCompType.NativeLibrary) {
-                        val textRes = when {
-                            libPrefs.preferCompressedSize -> R.string.av_info_lib_pref_compressed_size
-                            else -> R.string.av_info_lib_pref_uncompressed_size
-                        }
-                        Text(
-                            modifier = Modifier
-                                .padding(horizontal = 6.dp)
-                                .clip(RoundedCornerShape(50))
-                                .clickable { libPrefs.preferCompressedSize = !libPrefs.preferCompressedSize }
-                                .padding(horizontal = 14.dp, vertical = 8.dp),
-                            text = stringResource(textRes),
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.55f),
-                            fontWeight = FontWeight.Medium,
-                            fontSize = 8.sp,
-                            lineHeight = 9.sp,
-                        )
-                    }
-                }
+                CompTypeTitle(compType, libPrefs)
             }
             if (typeCollection != null) {
                 val sections = typeCollection.entryIterator().asSequence().toList()
-                val strategyValues = strategyValuesList[typeIndex].orEmpty()
                 if (sections.all { it.value.isEmpty() }) {
-                    item {
-                        Text(
-                            modifier = Modifier.padding(horizontal = 20.dp).padding(bottom = 5.dp),
-                            text = stringResource(R.string.av_info_lib_no_data),
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
-                            fontSize = 10.sp,
-                            lineHeight = 11.sp,
-                        )
-                    }
+                    item { EmptyContent() }
                 }
                 for (sectionIndex in sections.indices) {
-                    val compSection = sections[sectionIndex].key
-                    val itemList = sections[sectionIndex].value
-            //                Log.d("LIB", "$typeIndex, $sectionIndex")
+                    val (compSection, itemList) = sections[sectionIndex]
                     if (sectionIndex > 0 && itemList.isNotEmpty() &&
                         (0 until sectionIndex).any { sections[it].value.isNotEmpty() }) {
-                        item {
-                            Divider(
-                                modifier = Modifier.padding(vertical = 5.dp).padding(start = 20.dp),
-                                thickness = 0.5.dp,
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.25f),
-                            )
-                        }
+                        item { SectionDivider() }
                     }
                     if (itemList.isNotEmpty()) {
-                        item {
-                            val sectionType = when (compSection) {
-                                CompSection.Marked -> R.string.av_info_lib_sec_marked
-                                CompSection.Normal -> R.string.av_info_lib_sec_normal
-                                CompSection.MinimizedSelf -> R.string.av_info_lib_sec_minimized_self
-                                CompSection.Minimized -> R.string.av_info_lib_sec_minimized
-                            }
-                            Text(
-                                modifier = Modifier.padding(horizontal = 20.dp).padding(bottom = 5.dp),
-                                text = "${stringResource(sectionType)} ${itemList.size}",
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f),
-                                fontWeight = FontWeight.Medium,
-                                fontSize = 10.sp,
-                                lineHeight = 11.sp,
-                            )
-                        }
+                        item { SectionTitle(compSection, itemList.size) }
                     }
-                    val sortedGroups = when (val value = strategyValues.getOrNull(sectionIndex)) {
-                        null -> emptyList()
-                        is LibItemLayoutStrategy.GroupedValue -> value.entries
-                        is LibItemLayoutStrategy.SimpleValue -> emptyList()
-                    }
-                    val keyCoefficient = typeCount * (typeIndex + 1) + sections.size * (sectionIndex + 1)
-                    if (sortedGroups.isNotEmpty()) {
-                        for ((groupIndex, groupEntry) in sortedGroups.withIndex()) {
-                            val (sizeLimit, rowList) = groupEntry
-                            val rowSize = layoutStrategy.calculateRowSize(sizeLimit)
-                            if (rowSize > 1) {
-                                val minimizedList = rowList.chunked(rowSize)
-                                itemsIndexed(minimizedList, key = { i, _ ->
-                                    itemCount * (keyCoefficient + groupIndex + 2) + i
-                                }) { _, items ->
-                                    ChunkedLibItem(items, rowSize)
-                                }
-                            } else {
-                                itemsIndexed(rowList, key = { i, _ ->
-                                    itemCount * (keyCoefficient + groupIndex + 2) + i
-                                }) { _, item ->
-                                    if (item is MarkedComponent) {
-                                        MarkedSimpleLibItem(item)
-                                    } else {
-                                        PlainLibItem(item = item)
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        itemsIndexed(itemList, key = { i, _ ->
-                            val k = itemCount * (keyCoefficient + 1) + i
-//                            Log.d("LIB-K", "$itemCount * ($typeCount * $typeIndex + $sectionIndex) + $i = $k")
-                            k
-                        }) { _, item ->
-                            CompositionLocalProvider(LocalLibPrefs provides libPrefs) {
-                                if (item is MarkedComponent) {
-                                    if (sectionIndex < 1) {
-                                        MarkedLibItem(item = item)
-                                    } else {
-                                        MarkedSimpleLibItem(item)
-                                    }
-                                } else {
-                                    PlainLibItem(item = item)
-                                }
-                            }
-                        }
-                    }
+                    val layoutGroups = layoutGroupsList[typeIndex]?.getOrNull(sectionIndex)
+                    layoutGroupItems(itemList, layoutGroups, typeIndex, sectionIndex, libPrefs)
                     if (compSection == CompSection.Marked && itemList.isNotEmpty()) {
-                        item {
-                            Text(
-                                modifier = Modifier.padding(horizontal = 20.dp).padding(top = 3.dp, bottom = 5.dp),
-                                text = "Powered by LibChecker",
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.55f),
-                                fontWeight = FontWeight.Medium,
-                                fontSize = 6.sp,
-                                lineHeight = 7.sp,
-                            )
-                        }
+                        item { LibCheckerMark() }
                     }
                 }
             }
         }
     }
+}
+
+sealed interface GroupedLayoutList {
+    data class Chunked(val rowSize: Int, val chunks: List<List<PackComponent>>) : GroupedLayoutList
+    data class Normal(val rowList: List<PackComponent>) : GroupedLayoutList
+}
+
+/** Dedicated class to provide [equals] implementation for an [IntArray] field */
+@Parcelize
+class CompositeItemKey(private val indexes: IntArray) : Parcelable {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as CompositeItemKey
+        if (!indexes.contentEquals(other.indexes)) return false
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return indexes.contentHashCode()
+    }
+}
+
+fun compItemKeyOf(vararg indexes: Int) = CompositeItemKey(indexes)
+
+private fun LazyListScope.layoutGroupItems(
+    itemList: List<PackComponent>,
+    layoutGroups: List<GroupedLayoutList>?,
+    typeIndex: Int,
+    sectionIndex: Int,
+    libPrefs: LibPrefs,
+) {
+    if (layoutGroups != null) {
+        for ((groupIndex, layoutList) in layoutGroups.withIndex()) {
+            val key = { i: Int, _: Any -> compItemKeyOf(typeIndex, sectionIndex, groupIndex, i) }
+            if (layoutList is GroupedLayoutList.Chunked) {
+                val (rowSize, chunks) = layoutList
+                itemsIndexed(chunks, key) { _, items -> ChunkedLibItem(items, rowSize) }
+            } else if (layoutList is GroupedLayoutList.Normal) {
+                itemsIndexed(layoutList.rowList, key) { _, item ->
+                    if (item is MarkedComponent) MarkedSimpleLibItem(item) else PlainLibItem(item)
+                }
+            }
+        }
+    } else {
+        val key = { i: Int, _: Any -> compItemKeyOf(typeIndex, sectionIndex, i) }
+        itemsIndexed(itemList, key) { _, item -> ItemList(item, sectionIndex, libPrefs) }
+    }
+}
+
+@Composable
+private fun CompTypeDivider() {
+    Divider(
+        modifier = Modifier.padding(top = 8.dp),
+        thickness = 0.6.dp,
+        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.25f),
+    )
+}
+
+@Composable
+private fun CompTypeTitle(compType: PackCompType, libPrefs: LibPrefs) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
+            text = getTypeLabel(compType),
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.85f),
+            fontWeight = FontWeight.Medium,
+            fontSize = 13.sp,
+            lineHeight = 14.sp,
+        )
+        if (compType == PackCompType.NativeLibrary) {
+            val textRes = when {
+                libPrefs.preferCompressedSize -> R.string.av_info_lib_pref_compressed_size
+                else -> R.string.av_info_lib_pref_uncompressed_size
+            }
+            Text(
+                modifier = Modifier
+                    .padding(horizontal = 6.dp)
+                    .clip(RoundedCornerShape(50))
+                    .clickable { libPrefs.preferCompressedSize = !libPrefs.preferCompressedSize }
+                    .padding(horizontal = 14.dp, vertical = 8.dp),
+                text = stringResource(textRes),
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.55f),
+                fontWeight = FontWeight.Medium,
+                fontSize = 8.sp,
+                lineHeight = 9.sp,
+            )
+        }
+    }
+}
+
+@Composable
+private fun EmptyContent() {
+    Text(
+        modifier = Modifier.padding(horizontal = 20.dp).padding(bottom = 5.dp),
+        text = stringResource(R.string.av_info_lib_no_data),
+        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
+        fontSize = 10.sp,
+        lineHeight = 11.sp,
+    )
+}
+
+@Composable
+private fun SectionDivider() {
+    Divider(
+        modifier = Modifier.padding(vertical = 5.dp).padding(start = 20.dp),
+        thickness = 0.5.dp,
+        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.25f),
+    )
+}
+
+@Composable
+private fun SectionTitle(compSection: CompSection, listSize: Int) {
+    val sectionType = when (compSection) {
+        CompSection.Marked -> R.string.av_info_lib_sec_marked
+        CompSection.Normal -> R.string.av_info_lib_sec_normal
+        CompSection.MinimizedSelf -> R.string.av_info_lib_sec_minimized_self
+        CompSection.Minimized -> R.string.av_info_lib_sec_minimized
+    }
+    Text(
+        modifier = Modifier.padding(horizontal = 20.dp).padding(bottom = 5.dp),
+        text = "${stringResource(sectionType)} $listSize",
+        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f),
+        fontWeight = FontWeight.Medium,
+        fontSize = 10.sp,
+        lineHeight = 11.sp,
+    )
+}
+
+@Composable
+private fun ItemList(item: PackComponent, sectionIndex: Int, libPrefs: LibPrefs) {
+    CompositionLocalProvider(LocalLibPrefs provides libPrefs) {
+        if (item is MarkedComponent) {
+            if (sectionIndex < 1) {
+                MarkedLibItem(item = item)
+            } else {
+                MarkedSimpleLibItem(item)
+            }
+        } else {
+            PlainLibItem(item = item)
+        }
+    }
+}
+
+@Composable
+private fun LibCheckerMark() {
+    Text(
+        modifier = Modifier.padding(horizontal = 20.dp).padding(top = 3.dp, bottom = 5.dp),
+        text = "Powered by LibChecker",
+        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.55f),
+        fontWeight = FontWeight.Medium,
+        fontSize = 6.sp,
+        lineHeight = 7.sp,
+    )
 }
 
 @Composable
