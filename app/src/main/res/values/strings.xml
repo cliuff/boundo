@@ -243,4 +243,8 @@
     <string name="about_twitter_account">\@libekliff</string>
     <string name="at_status_running">Timer running</string>
     <string name="at_action_start">Start timer</string>
+    <string name="at_hint_dev_ctrl">Quick access: add Audio Timer to device controls</string>
+    <string name="settings_dev_ctrl_switch">Enable Boundo controls</string>
+    <string name="settings_dev_ctrl_switch_desc">Note: add controls from system\'s device controls panel, added controls will be cleared once this switch is off</string>
+    <string name="settings_dev_ctrl_list_title">All controls available</string>
 </resources>

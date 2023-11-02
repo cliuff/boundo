@@ -30,6 +30,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
@@ -37,6 +38,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ChevronLeft
+import androidx.compose.material.icons.outlined.ChevronRight
 import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.material.icons.rounded.Stop
 import androidx.compose.material.ripple.rememberRipple
@@ -74,10 +77,11 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.madness.collision.R
 import com.madness.collision.main.MainViewModel
+import com.madness.collision.util.ui.layoutDirected
 import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape
 
 @Composable
-fun AudioTimerPage(mainViewModel: MainViewModel, onStartTimer: () -> Unit) {
+fun AudioTimerPage(mainViewModel: MainViewModel, onStartTimer: () -> Unit, onNavControls: () -> Unit) {
     val context = LocalContext.current
     val timerController = remember { AudioTimerController(context) }
     val scope = rememberCoroutineScope()
@@ -114,6 +118,31 @@ fun AudioTimerPage(mainViewModel: MainViewModel, onStartTimer: () -> Unit) {
                 .padding(horizontal = 20.dp, vertical = 12.dp),
         ) {
             SetTimer(timerController = timerController, onStart = onStartTimer)
+        }
+        Spacer(modifier = Modifier.height(15.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(AbsoluteSmoothCornerShape(20.dp, 60))
+                .clickable(onClick = onNavControls)
+                .background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.06f))
+                .padding(horizontal = 20.dp, vertical = 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                modifier = Modifier.weight(1f),
+                text = stringResource(R.string.at_hint_dev_ctrl),
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.75f),
+                fontSize = 11.sp,
+                lineHeight = 12.sp,
+            )
+            Icon(
+                modifier = Modifier.size(16.dp),
+                imageVector = layoutDirected(
+                    { Icons.Outlined.ChevronRight }, { Icons.Outlined.ChevronLeft }),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.75f),
+            )
         }
     }
 }

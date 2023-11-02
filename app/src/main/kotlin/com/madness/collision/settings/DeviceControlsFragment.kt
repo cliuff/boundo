@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Clifford Liu
+ * Copyright 2023 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,58 +14,53 @@
  * limitations under the License.
  */
 
-package com.madness.collision.unit.audio_timer
+package com.madness.collision.settings
 
-import android.Manifest
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.core.app.NotificationManagerCompat
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
+import com.madness.collision.Democratic
 import com.madness.collision.R
-import com.madness.collision.main.showPage
-import com.madness.collision.settings.DeviceControlsFragment
-import com.madness.collision.unit.Unit
+import com.madness.collision.main.MainViewModel
+import com.madness.collision.util.TaggedFragment
 import com.madness.collision.util.mainApplication
 import com.madness.collision.util.os.OsUtils
 
-class MyUnit : Unit() {
+class DeviceControlsFragment : TaggedFragment(), Democratic {
+    override val category: String = "Settings"
+    override val id: String = "DeviceControls"
 
-    override val id: String = "AT"
-
-    private val viewModel: AtUnitViewModel by viewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
     private var mutComposeView: ComposeView? = null
     private val composeView: ComposeView get() = mutComposeView!!
-    private lateinit var timerController: AudioTimerController
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
-        configNavigation(toolbar, iconColor)
-        toolbar.setTitle(R.string.unit_audio_timer)
+        mainViewModel.configNavigation(toolbar, iconColor)
+        toolbar.setTitle(R.string.app_device_controls)
         return true
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        timerController = AudioTimerController(requireContext())
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val composeView = ComposeView(inflater.context).apply {
-            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-        }
-        mutComposeView = composeView
-        return composeView
+        val view = ComposeView(inflater.context)
+        view.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+        mutComposeView = view
+        return view
     }
 
     override fun onDestroyView() {
@@ -74,7 +69,7 @@ class MyUnit : Unit() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        democratize()
+        democratize(mainViewModel)
         val context = context ?: return
         val colorScheme = if (OsUtils.satisfy(OsUtils.S)) {
             val isDark = mainApplication.isDarkTheme
@@ -83,32 +78,17 @@ class MyUnit : Unit() {
             if (mainApplication.isDarkTheme) darkColorScheme() else lightColorScheme()
         }
         composeView.setContent {
+            val insetTop = mainViewModel.contentWidthTop.observeAsState(0).value.toDp()
+            val insetBottom = mainViewModel.contentWidthBottom.observeAsState(0).value.toDp()
+            val paddingValues = remember(insetTop, insetBottom) {
+                PaddingValues(top = insetTop, bottom = insetBottom)
+            }
             MaterialTheme(colorScheme = colorScheme) {
-                AudioTimerPage(
-                    mainViewModel = mainViewModel,
-                    onStartTimer = { requestTimer(context) },
-                    onNavControls = { context.showPage<DeviceControlsFragment>() },
-                )
+                DeviceControlsPage(paddingValues = paddingValues)
             }
         }
     }
 
-    private fun requestTimer(context: Context) {
-        when {
-            // request runtime permission on Android 13
-            OsUtils.dissatisfy(OsUtils.T) -> startTimer()
-            NotificationManagerCompat.from(context).areNotificationsEnabled() -> startTimer()
-            else -> postNotificationsLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-        }
-    }
-
-    private val postNotificationsLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()) register@{ granted ->
-        if (!granted) return@register
-        startTimer()
-    }
-
-    private fun startTimer() {
-        timerController.startTimer(viewModel.uiState.value)
-    }
+    @Composable
+    private fun Int.toDp() = with(LocalDensity.current) { toDp() }
 }

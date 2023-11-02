@@ -71,8 +71,15 @@ fun SettingsPage(mainViewModel: MainViewModel, showLanguages: (context: Context)
                 context.showPage<InstantFragment>()
             },
         )
+        val specialOptions = buildList {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+                add(Triple(R.string.app_device_controls, R.drawable.ic_devices_24) {
+                    context.showPage<DeviceControlsFragment>()
+                })
+            }
+        }
         val unitOptions = getUnitOptions(mainViewModel, context)
-        builtIn + unitOptions
+        builtIn + specialOptions + unitOptions
     }
     val contentInsetTop by mainViewModel.contentWidthTop.observeAsState(0)
     val contentInsetBottom by mainViewModel.contentWidthBottom.observeAsState(0)

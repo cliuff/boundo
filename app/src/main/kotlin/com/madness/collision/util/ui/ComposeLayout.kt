@@ -16,6 +16,7 @@
 
 package com.madness.collision.util.ui
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.scale
@@ -23,6 +24,15 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 
 fun Modifier.autoMirrored(): Modifier = composed {
-    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
-    if (isRtl) scale(scaleX = -1f, scaleY = 1f) else this
+    orWithRtl { scale(scaleX = -1f, scaleY = 1f) }
 }
+
+@Composable
+inline fun <T> T.orWithRtl(rtl: () -> T) = layoutDirected({ this }, rtl)
+
+@Composable
+inline fun <T> layoutDirected(ltr: () -> T, rtl: () -> T) =
+    when (LocalLayoutDirection.current) {
+        LayoutDirection.Ltr -> ltr()
+        LayoutDirection.Rtl -> rtl()
+    }

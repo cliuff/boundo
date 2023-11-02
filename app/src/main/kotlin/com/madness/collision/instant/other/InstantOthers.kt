@@ -18,6 +18,7 @@ package com.madness.collision.instant.other
 
 import com.madness.collision.R
 import com.madness.collision.instant.instantComponent
+import com.madness.collision.settings.DeviceControlsFragment
 import com.madness.collision.unit.Unit
 import com.madness.collision.util.X
 import com.madness.collision.versatile.MyControlService
@@ -28,7 +29,7 @@ internal object InstantOthers {
     val OTHERS = listOf(
             // Classes of higher API level cannot be loaded on lower API level
             X.M to { instantComponent<TextProcessingActivity>(R.string.activityTextProcessingApp, Unit.UNIT_NAME_API_VIEWING) },
-            X.R to { instantComponent<MyControlService>(R.string.app_device_controls) }
+            X.R to { instantComponent<MyControlService>(R.string.app_device_controls) { DeviceControlsFragment() } }
     )
 
 }
