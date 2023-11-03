@@ -24,19 +24,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.RecyclerView
 import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.databinding.ActivityInstantManagerBinding
-import com.madness.collision.instant.other.InstantOthers
-import com.madness.collision.instant.shortcut.InstantShortcuts
-import com.madness.collision.instant.tile.InstantTiles
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.Unit
 import com.madness.collision.util.AppUtils.asBottomMargin
 import com.madness.collision.util.CollisionDialog
 import com.madness.collision.util.TaggedFragment
-import com.madness.collision.util.X
 import com.madness.collision.util.alterPadding
+import com.madness.collision.util.os.OsUtils
 
 internal class InstantFragment: TaggedFragment(), Democratic {
 
@@ -74,8 +72,7 @@ internal class InstantFragment: TaggedFragment(), Democratic {
         return viewBinding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val context = context ?: return
         democratize(mainViewModel)
         mainViewModel.contentWidthTop.observe(viewLifecycleOwner) {
@@ -89,56 +86,41 @@ internal class InstantFragment: TaggedFragment(), Democratic {
         val predicate: (InstantItem) -> Boolean = {
             (!it.hasRequiredUnit || installedUnits.contains(it.requiredUnitName)) && it.isAvailable(context)
         }
-        // qs tiles
-        val availableTiles by lazy { InstantTiles.TILES.filter(predicate) }
-        if (X.aboveOn(X.N) && availableTiles.isNotEmpty()) {
-            val adapterTile = InstantAdapter(context,
-                    mainViewModel, InstantAdapter.TYPE_TILE, availableTiles)
-            adapterTile.resolveSpanCount(this, 290f)
-            viewBinding.instantRecyclerTile.run {
-                setHasFixedSize(true)
-                setItemViewCacheSize(availableTiles.size)
-                layoutManager = adapterTile.suggestLayoutManager()
-                adapter = adapterTile
-            }
-        } else {
-            viewBinding.instantRecyclerTile.visibility = View.GONE
-            viewBinding.instantIntroTile.visibility = View.GONE
+
+        kotlin.run {
+            val items = if (OsUtils.satisfy(OsUtils.N)) BuiltInItems.Tiles.filter(predicate) else emptyList()
+            val views = viewBinding.instantRecyclerTile to viewBinding.instantIntroTile
+            views.load(InstantAdapter.TYPE_TILE, items, context)
         }
-        // shortcuts
-        val availableShortcuts = InstantShortcuts.SHORTCUTS.filter(predicate)
-        if (availableShortcuts.isNotEmpty()) {
-            val adapterShortcut = InstantAdapter(context, mainViewModel,
-                    InstantAdapter.TYPE_SHORTCUT, availableShortcuts)
-            adapterShortcut.resolveSpanCount(this, 290f)
-            viewBinding.instantRecyclerShortcut.run {
-                setHasFixedSize(true)
-                setItemViewCacheSize(availableShortcuts.size)
-                layoutManager = adapterShortcut.suggestLayoutManager()
-                adapter = adapterShortcut
-            }
-        } else {
-            viewBinding.instantRecyclerShortcut.visibility = View.GONE
-            viewBinding.instantIntroShortcut.visibility = View.GONE
+        kotlin.run {
+            val items = BuiltInItems.Shortcuts.filter(predicate)
+            val views = viewBinding.instantRecyclerShortcut to viewBinding.instantIntroShortcut
+            views.load(InstantAdapter.TYPE_SHORTCUT, items, context)
         }
-        // other
-        val availableOther = InstantOthers.OTHERS.filter {
-            X.aboveOn(it.first)
-        }.map { it.second.invoke() }.filter(predicate)
-        if (availableOther.isNotEmpty()) {
-            val adapterOther = InstantAdapter(context,
-                    mainViewModel, InstantAdapter.TYPE_OTHER, availableOther)
-            adapterOther.resolveSpanCount(this, 290f)
-            viewBinding.instantRecyclerOther.run {
-                setHasFixedSize(true)
-                setItemViewCacheSize(availableOther.size)
-                layoutManager = adapterOther.suggestLayoutManager()
-                adapter = adapterOther
-            }
-        } else {
-            viewBinding.instantRecyclerOther.visibility = View.GONE
-            viewBinding.instantIntroOther.visibility = View.GONE
+        kotlin.run {
+            val items = BuiltInItems.Others
+                .mapNotNull { (api, comp) -> if (OsUtils.satisfy(api)) comp() else null }
+                .filter(predicate)
+            val views = viewBinding.instantRecyclerOther to viewBinding.instantIntroOther
+            views.load(InstantAdapter.TYPE_OTHER, items, context)
         }
     }
 
+    private fun Pair<RecyclerView, View>.load(type: Int, items: List<InstantItem>, context: Context) {
+        val (recyclerView, titleView) = this
+        if (items.isNotEmpty()) {
+            recyclerView.bind(InstantAdapter(context, mainViewModel, type, items))
+        } else {
+            recyclerView.visibility = View.GONE
+            titleView.visibility = View.GONE
+        }
+    }
+
+    private fun RecyclerView.bind(instantAdapter: InstantAdapter<*>) {
+        instantAdapter.resolveSpanCount(this@InstantFragment, 290f)
+        setHasFixedSize(true)
+        setItemViewCacheSize(instantAdapter.itemCount)
+        layoutManager = instantAdapter.suggestLayoutManager()
+        adapter = instantAdapter
+    }
 }

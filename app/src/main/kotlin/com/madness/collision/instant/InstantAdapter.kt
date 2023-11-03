@@ -34,7 +34,6 @@ import com.madness.collision.databinding.InstantItemComplexBinding
 import com.madness.collision.databinding.InstantItemShortcutBinding
 import com.madness.collision.databinding.InstantItemSimpleBinding
 import com.madness.collision.diy.SpanAdapter
-import com.madness.collision.instant.shortcut.InstantShortcut
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.misc.MiscApplication
 import com.madness.collision.util.X

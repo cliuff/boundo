@@ -28,6 +28,7 @@ import com.madness.collision.util.P
 import com.madness.collision.util.SystemUtil
 import com.madness.collision.util.X
 
+class ShortcutBuildRes(val intent: Intent, val shortLabel: String, val longLabel: String, val iconRes: Int?)
 
 object InstantCompat {
     fun getShortcutBuildRes(context: Context, id: String): ShortcutBuildRes? {

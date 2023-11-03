@@ -1,12 +1,43 @@
 package com.madness.collision.instant
 
+import android.content.Context
 import androidx.fragment.app.Fragment
 import com.madness.collision.unit.DynamicItem
+import kotlin.reflect.KClass
 
-internal open class InstantItem(displayNameResId: Int, val requiredUnitName: String = "", descriptionPageGetter: (() -> Fragment)? = null)
-    : DynamicItem(displayNameResId, descriptionPageGetter) {
+sealed class InstantItem(
+    displayNameResId: Int,
+    val requiredUnitName: String = "",
+    descriptionPageGetter: (() -> Fragment)? = null
+) : DynamicItem(displayNameResId, descriptionPageGetter) {
 
     val hasRequiredUnit: Boolean
         get() = requiredUnitName.isNotEmpty()
 
+}
+
+class InstantComponent<T: Any>(
+    displayNameResId: Int,
+    val klass: KClass<T>,
+    requiredUnitName: String = "",
+    descriptionPageGetter: (() -> Fragment)? = null
+): InstantItem(displayNameResId, requiredUnitName, descriptionPageGetter) {
+
+    fun setRequirement(checker: (context: Context) -> Boolean): InstantComponent<T> {
+        availabilityChecker = checker
+        return this
+    }
+}
+
+class InstantShortcut(
+    val id: String,
+    displayNameResId: Int,
+    requiredUnitName: String = "",
+    descriptionPageGetter: (() -> Fragment)? = null
+): InstantItem(displayNameResId, requiredUnitName, descriptionPageGetter) {
+
+    fun setRequirement(checker: (context: Context) -> Boolean): InstantShortcut {
+        availabilityChecker = checker
+        return this
+    }
 }
