@@ -45,8 +45,10 @@ class CommonControlScope(private val context: Context) {
     }
 
     fun drawableIcon(@DrawableRes id: Int): Icon? {
+        // Icon.setTint() does not work for control adding page
+        // Icon.createWithResource(context, id).setTint(tint)
         return ContextCompat.getDrawable(context, id)?.run {
-            setTint(context.getColor(R.color.primaryAWhite))
+            setTint(ContextCompat.getColor(context, R.color.primaryAWhite))
             toBitmap().toIcon()
         }
     }

@@ -57,6 +57,11 @@ interface StateObservable {
     }
 
     fun unregisterStateReceiver(context: Context) {
-        context.unregisterReceiver(stateReceiver)
+        try {
+            context.unregisterReceiver(stateReceiver)
+        } catch (e: IllegalArgumentException) {
+            // java.lang.IllegalArgumentException: Receiver not registered
+            e.printStackTrace()
+        }
     }
 }

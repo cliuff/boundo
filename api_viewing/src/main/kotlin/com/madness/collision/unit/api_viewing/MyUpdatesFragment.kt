@@ -173,11 +173,15 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable, AppInfoFragment.
     private val dID = "@" + idString.takeLast(2)
     private lateinit var mContext: Context
     private var _viewBinding: AvUpdatesBinding? = null
-    private val viewBinding: AvUpdatesBinding
-        get() = _viewBinding!!
+    private val viewBinding: AvUpdatesBinding? by ::_viewBinding
     private val sections: MutableMap<Int, List<*>> = LinkedHashMap()
     private lateinit var concatAdapter: ConcatAdapter
     private val popOwner = AppPopOwner()
+
+    private suspend fun getViewBinding(): AvUpdatesBinding {
+        yield()  // cooperative
+        return viewBinding ?: throw CancellationException("view binding is null")
+    }
 
     override fun getAppOwner(): AppInfoFragment.AppOwner {
         return object : AppInfoFragment.AppOwner {
@@ -214,7 +218,8 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable, AppInfoFragment.
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         Log.d("AvUpdates", "$dID onCreateView() hasState=${savedInstanceState != null}")
-        _viewBinding = AvUpdatesBinding.inflate(inflater, container, false)
+        val viewBinding = AvUpdatesBinding.inflate(inflater, container, false)
+        _viewBinding = viewBinding
         return viewBinding.root
     }
 
@@ -227,7 +232,7 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable, AppInfoFragment.
         Log.d("AvUpdates", "$dID onViewCreated() hasState=${savedInstanceState != null}")
         val spanCount = SpanAdapter.getSpanCount(this, 290f)
         val manager = SpanAdapter.suggestLayoutManager(requireContext(), spanCount)
-        viewBinding.avUpdListRecycler.run {
+        viewBinding?.avUpdListRecycler?.run {
             layoutManager = manager
             adapter = concatAdapter
             if (manager !is GridLayoutManager || spanCount == 1) return@run
@@ -385,7 +390,7 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable, AppInfoFragment.
             }
 
             updateDiff()
-            withContext(Dispatchers.Main) { updateView() }
+            withContext(Dispatchers.Main) { updateView(getViewBinding()) }
         }
     }
 
@@ -562,16 +567,18 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable, AppInfoFragment.
     private fun scheduleTimeUpdate(lifecycle: Lifecycle = viewLifecycleOwner.lifecycle)
     = lifecycle.coroutineScope.launch {
         val scheduleTime = SystemClock.uptimeMillis()
-        val man = viewBinding.avUpdListRecycler.layoutManager as LinearLayoutManager
         lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             // delay only right after scheduling
             if (SystemClock.uptimeMillis() - scheduleTime < 500) delay(30.seconds)
             while (isActive) {
-                val startIndex = man.findFirstVisibleItemPosition()
-                val endIndex = man.findLastVisibleItemPosition()
-                if (startIndex <= endIndex) {
-                    Log.d("av.updates", "$dID Updating time [$startIndex, $endIndex]")
-                    updateTime(startIndex, endIndex)
+                viewBinding?.run {
+                    val man = avUpdListRecycler.layoutManager as LinearLayoutManager
+                    val startIndex = man.findFirstVisibleItemPosition()
+                    val endIndex = man.findLastVisibleItemPosition()
+                    if (startIndex <= endIndex) {
+                        Log.d("av.updates", "$dID Updating time [$startIndex, $endIndex]")
+                        updateTime(startIndex, endIndex)
+                    }
                 }
                 delay(45.seconds)
             }
@@ -595,7 +602,7 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable, AppInfoFragment.
         }
     }
 
-    private fun updateView() {
+    private fun updateView(viewBinding: AvUpdatesBinding) {
         val hasNoUpdates = sections.all { it.value.isEmpty() }
         viewBinding.avUpdatesRecentsMore.run {
             visibility = if (hasNoUpdates) View.GONE else View.VISIBLE
