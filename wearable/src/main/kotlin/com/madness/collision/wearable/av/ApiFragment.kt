@@ -28,11 +28,9 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.PopupMenu
 import android.widget.Spinner
-import android.widget.Toast
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.wear.ambient.AmbientLifecycleObserver
 import androidx.wear.widget.WearableLinearLayoutManager
 import com.madness.collision.wearable.R
 import com.madness.collision.wearable.av.data.ApiUnit
@@ -75,7 +73,6 @@ internal class ApiFragment: Fragment(), AdapterView.OnItemSelectedListener, Menu
     private lateinit var manager: WearableLinearLayoutManager
     private var popSort: PopupMenu? = null
     private lateinit var mViews: FragmentApiBinding
-    private lateinit var ambientCallback: AmbientLifecycleObserver.AmbientLifecycleCallback
 
     // context related
     private lateinit var pm: PackageManager
@@ -214,18 +211,6 @@ internal class ApiFragment: Fragment(), AdapterView.OnItemSelectedListener, Menu
             listInsetBottom = if (it == 0) dp5 * 7 else it
             adapter.listInsetBottom = listInsetBottom
         }
-
-        ambientCallback = object : AmbientLifecycleObserver.AmbientLifecycleCallback {
-            override fun onEnterAmbient(ambientDetails: AmbientLifecycleObserver.AmbientDetails) {
-                EasyAccess.isInAmbientMode = true
-                refreshVisibleItems()
-            }
-
-            override fun onExitAmbient() {
-                EasyAccess.isInAmbientMode = false
-                refreshVisibleItems()
-            }
-        }
     }
 
     private fun refreshVisibleItems(){
@@ -240,7 +225,6 @@ internal class ApiFragment: Fragment(), AdapterView.OnItemSelectedListener, Menu
 
     override fun onResume() {
         super.onResume()
-        mainViewModel.ambientCallbackDelegate = ambientCallback
         val context = context ?: return
         if (loadedItems.shouldLoad(ApiUnit.ALL_APPS)){
             loadedItems.finish(ApiUnit.ALL_APPS)
@@ -255,12 +239,6 @@ internal class ApiFragment: Fragment(), AdapterView.OnItemSelectedListener, Menu
     fun onPageVisible() {
         // request focus to support rotary input
         mViews.avRecycler.run { post { requestFocus() } }
-    }
-
-    override fun onLowMemory() {
-        super.onLowMemory()
-        val context = context ?: return
-        X.toast(context, "out of memory", Toast.LENGTH_LONG)
     }
 
     private fun refreshList() {

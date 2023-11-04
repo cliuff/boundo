@@ -102,8 +102,6 @@ internal class APIAdapter(private val context: Context) : SandwichAdapter<APIAda
     }
 
     override fun onMakeBody(holder: Holder, index: Int) {
-        holder.logo.visibility = if (EasyAccess.isInAmbientMode) View.INVISIBLE else View.VISIBLE
-
         val appInfo = apps[index]
         holder.name.dartFuture(appInfo.name)
         if (appInfo.preload) return
@@ -113,8 +111,10 @@ internal class APIAdapter(private val context: Context) : SandwichAdapter<APIAda
         val verInfo = VerInfo.targetDisplay(appInfo)
         holder.api.dartFuture(verInfo.sdk)
 
-        holder.api.setTextColor(if (!EasyAccess.isInAmbientMode && EasyAccess.isSweet) getItemColorAccent(verInfo.api)
-        else holder.name.currentTextColor)
+        holder.api.setTextColor(when {
+            EasyAccess.isSweet -> getItemColorAccent(verInfo.api)
+            else -> holder.name.currentTextColor
+        })
 
         if (shouldShowTime) {
             holder.updateTime.dartFuture(DateUtils.getRelativeTimeSpanString(appInfo.updateTime, System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS))

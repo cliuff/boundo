@@ -23,7 +23,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
-import androidx.wear.ambient.AmbientLifecycleObserver
 import com.madness.collision.wearable.databinding.ActivityMainBinding
 import com.madness.collision.wearable.misc.MiscMain
 import com.madness.collision.wearable.util.P
@@ -33,17 +32,6 @@ import kotlinx.coroutines.launch
 internal class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModels()
     private lateinit var viewBinding: ActivityMainBinding
-    private val ambientCallback = object : AmbientLifecycleObserver.AmbientLifecycleCallback {
-        private val delegate: AmbientLifecycleObserver.AmbientLifecycleCallback?
-            get() = viewModel.ambientCallbackDelegate
-
-        override fun onEnterAmbient(ambientDetails: AmbientLifecycleObserver.AmbientDetails) =
-            delegate?.onEnterAmbient(ambientDetails) ?: Unit
-
-        override fun onUpdateAmbient() = delegate?.onUpdateAmbient() ?: Unit
-        override fun onExitAmbient() = delegate?.onExitAmbient() ?: Unit
-    }
-    private val ambientObserver = AmbientLifecycleObserver(this, ambientCallback)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // handle splash screen transition
@@ -53,9 +41,6 @@ internal class MainActivity : AppCompatActivity() {
         viewBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
         applyInsets()
-
-        viewModel.ambientCallbackDelegate = object : AmbientLifecycleObserver.AmbientLifecycleCallback { }
-        lifecycle.addObserver(ambientObserver)
 
         lifecycleScope.launch {
             applyUpdates(this@MainActivity)
