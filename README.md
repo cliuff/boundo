@@ -1,7 +1,7 @@
 <p align="center">
-  <img src=".markdown/shot1.png" width="270">
-  <img src=".markdown/shot2.png" width="270">
-  <img src=".markdown/shot3.png" width="270">
+  <img src="doconfig/markdown/shot1.png" width="270">
+  <img src="doconfig/markdown/shot2.png" width="270">
+  <img src="doconfig/markdown/shot3.png" width="270">
 </p>
 
 # Boundo: App API Checker
@@ -15,7 +15,7 @@
 
 **After Git check-out**
 - Clone project [**Apk Parser**](https://github.com/cliuff/apk-parser.git) into `subproject`, resulting in `ROOT_DIR/subproject/apk-parser`
-- **Copy** the file named `custom.properties.template` in project root directory,
+- **Copy** the file named `custom.properties.template` in `doconfig` directory,
   **rename** it to `custom.properties` and make necessary **change**s to it
 
 **After Gradle sync**

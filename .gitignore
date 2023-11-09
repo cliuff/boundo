@@ -33,7 +33,7 @@ google-services.json
 
 
 
-/custom.properties
+doconfig/custom.properties
 !**/resources/**/*.apk
 subproject
 .idea/markdown-navigator
