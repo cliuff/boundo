@@ -34,6 +34,7 @@ google-services.json
 
 
 doconfig/custom.properties
+!**/src/**/build
 !**/resources/**/*.apk
 subproject
 .idea/markdown-navigator

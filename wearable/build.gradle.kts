@@ -1,67 +1,25 @@
-/*
- * Copyright 2021 Clifford Liu
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-
-import java.util.*
+import com.cliuff.boundo.build.getCustomConfig
 
 plugins {
     alias(libs.plugins.android)
     alias(libs.plugins.kotlin.android)
 }
 
-// below: load the desired values from custom.properties in order to be injected into BuildConfig and Res
-// the values in custom.properties must not contain quotes otherwise the parsed values here will contain quotes
-val properties = Properties()
-val configSigning = try {
-    val customPropFile = project.rootProject.file("custom.properties")
-    properties.load(customPropFile.inputStream())
-    true
-} catch (ignored: Exception) {
-    false
-}
-val prop: (key: String, defValue: String) -> String = { key, defValue ->
-    if (configSigning) properties.getProperty(key, defValue) else defValue
-}
-val buildPackage: String = prop("packageName", "com.madness.collision")
-val signingKeyStorePath: String = prop("signingKeyStorePath", "")
-val signingKeyStorePassword: String = prop("signingKeyStorePassword", "")
-val signingKeyAlias: String = prop("signingKeyAlias", "")
-val signingKeyPassword: String = prop("signingKeyPassword", "")
-
-//dokkaHtml {
-//    outputDirectory = "$buildDir/dokka"
-//    dokkaSourceSets {
-//        create("main") {
-//            noAndroidSdkLink = true
-//        }
-//    }
-//}
-
 android {
     buildToolsVersion = "34.0.0"
     sourceSets {
         getByName("main").java.srcDir("src/main/kotlin")
     }
+    val customConfig = getCustomConfig(project)
+    val buildPackage = customConfig.buildPackage
+    val configSigning = customConfig.signing != null
     signingConfigs {
-        if (configSigning) {
+        customConfig.signing?.run {
             create("Sign4Release") {
-                keyAlias = signingKeyAlias
-                keyPassword = signingKeyPassword
-                storeFile = file(signingKeyStorePath)
-                storePassword = signingKeyStorePassword
+                keyAlias = key.alias
+                keyPassword = key.password
+                storeFile = file(store.path)
+                storePassword = store.password
             }
         }
     }
