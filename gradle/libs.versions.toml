@@ -175,13 +175,11 @@ androidxWear = { module = "androidx.wear:wear", version.ref = "androidxWear" }
 # Ambient mode support is provided by this dependency
 googleWearable = { module = "com.google.android.wearable:wearable", version.ref = "googleWearable" }
 
-# plugins
-androidGradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "androidGradlePlugin" }
-kotlinGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
-googlePlayServicesOSSLicensesPlugin = { module = "com.google.android.gms:oss-licenses-plugin", version.ref = "googlePlayServicesOSSLicensesPlugin" }
-
 [plugins]
+android = { id = "com.android.application", version.ref = "androidGradlePlugin" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 google-ksp = { id = "com.google.devtools.ksp", version.ref = "googleKsp" }
+google-gms-licenses = { id = "com.google.android.gms.oss-licenses-plugin", version.ref = "googlePlayServicesOSSLicensesPlugin" }
 
 [bundles]
 dynamicFeatureBasics = [

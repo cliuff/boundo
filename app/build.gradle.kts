@@ -18,14 +18,12 @@
 import java.util.*
 
 plugins {
-    id("com.android.application")
-    kotlin("android")
+    alias(libs.plugins.android)
+    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.ksp)
     // implement parcelable interface by using annotation
     id("kotlin-parcelize")
-//    id("org.jetbrains.dokka")
-//    id("org.jetbrains.dokka-android")
-    id("com.google.android.gms.oss-licenses-plugin")
+    alias(libs.plugins.google.gms.licenses)
 }
 
 // below: load the desired values from custom.properties in order to be injected into BuildConfig and Res
@@ -198,11 +196,6 @@ android {
         // for language resources occupy a little space and implementing on-demand language downloads is tedious
         language.enableSplit = false
     }
-}
-
-repositories {
-    // required by SmoothCornerShape
-    maven { url = uri("https://jitpack.io") }
 }
 
 dependencies {

@@ -17,7 +17,7 @@
 
 plugins {
     id("com.android.dynamic-feature")
-    kotlin("android")
+    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.ksp)
     // implement parcelable interface by using annotation
     id("kotlin-parcelize")
@@ -78,11 +78,6 @@ android {
         // Jetpack Compose compiler version
         kotlinCompilerExtensionVersion = libs.versions.androidxComposeCompiler.get()
     }
-}
-
-repositories {
-    // required by LibChecker-Rules-Bundle, SmoothCornerShape
-    maven { url = uri("https://jitpack.io") }
 }
 
 dependencies {

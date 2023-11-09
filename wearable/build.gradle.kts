@@ -18,8 +18,8 @@
 import java.util.*
 
 plugins {
-    id("com.android.application")
-    kotlin("android")
+    alias(libs.plugins.android)
+    alias(libs.plugins.kotlin.android)
 }
 
 // below: load the desired values from custom.properties in order to be injected into BuildConfig and Res
