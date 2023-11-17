@@ -7,11 +7,11 @@
 # Boundo: App API Checker
 
 **Requirements**
-- Android Studio `Giraffe Patch 2` (AGP `8.1.2`)
+- Android Studio `Giraffe Patch 4` (AGP `8.1.4`)
 - Gradle Wrapper `8.4`
 - Java `17`
-- Kotlin `1.9.10`
-- Jetpack Compose Compiler `1.5.3` (requires Kotlin `1.9.10`)
+- Kotlin `1.9.20`
+- Jetpack Compose Compiler `1.5.4` (requires Kotlin `1.9.20`)
 
 **After Git check-out**
 - Clone project [**Apk Parser**](https://github.com/cliuff/apk-parser.git) into `subproject`, resulting in `ROOT_DIR/subproject/apk-parser`
