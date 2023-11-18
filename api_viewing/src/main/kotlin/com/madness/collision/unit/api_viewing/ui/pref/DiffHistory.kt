@@ -35,33 +35,28 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.api_viewing.R
 import com.madness.collision.unit.api_viewing.database.maintainer.DiffChange
 import com.madness.collision.unit.api_viewing.database.maintainer.DiffType
 import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape
 
 @Composable
-fun DiffHistoryPage(mainViewModel: MainViewModel) {
+fun DiffHistoryPage(paddingValues: PaddingValues) {
     val context = LocalContext.current
     val diffRecords by produceState(mutableListOf<DiffUi>()) { value = DiffUiData.retrieve(context) }
-    val contentInsetTop by mainViewModel.contentWidthTop.observeAsState(0)
-    val contentInsetBottom by mainViewModel.contentWidthBottom.observeAsState(0)
     LazyColumn(
         modifier = Modifier.fillMaxWidth(),
         contentPadding = PaddingValues(
-            top = contentInsetTop.toDp() + 12.dp,
-            bottom = contentInsetBottom.toDp() + 50.dp,
+            top = paddingValues.calculateTopPadding() + 12.dp,
+            bottom = paddingValues.calculateBottomPadding() + 50.dp,
         ),
     ) {
         itemsIndexed(
@@ -87,9 +82,6 @@ fun DiffHistoryPage(mainViewModel: MainViewModel) {
         }
     }
 }
-
-@Composable
-private fun Int.toDp() = with(LocalDensity.current) { toDp() }
 
 @Composable
 private fun ExpandAction(modifier: Modifier = Modifier, action: DiffUi.ExpandAction) {

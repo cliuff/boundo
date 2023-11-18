@@ -37,7 +37,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,7 +44,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -59,7 +57,6 @@ import coil.compose.AsyncImage
 import com.madness.collision.BuildConfig
 import com.madness.collision.R
 import com.madness.collision.chief.graphics.AdaptiveIcon
-import com.madness.collision.main.MainViewModel
 import com.madness.collision.util.ThemeUtil
 import com.madness.collision.util.ui.autoMirrored
 import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape
@@ -78,33 +75,21 @@ sealed interface AboutOptionIcon {
 }
 
 @Composable
-fun AboutPage(mainViewModel: MainViewModel, options: List<AboutOption>) {
+fun AboutPage(paddingValues: PaddingValues, options: List<AboutOption>) {
     val context = LocalContext.current
-    val contentInsetTop by mainViewModel.contentWidthTop.observeAsState(0)
-    val contentInsetBottom by mainViewModel.contentWidthBottom.observeAsState(0)
     val itemColor = remember { Color(ThemeUtil.getColor(context, R.attr.colorAItem)) }
-    CompositionLocalProvider(
-        LocalContentInsets provides (contentInsetTop to contentInsetBottom)
-    ) {
-        Settings(options = options, itemColor = itemColor)
-    }
+    Settings(paddingValues = paddingValues, options = options, itemColor = itemColor)
 }
 
-private val LocalContentInsets = compositionLocalOf { 0 to 0 }
-
 @Composable
-private fun Int.toDp() = with(LocalDensity.current) { toDp() }
-
-@Composable
-private fun Settings(options: List<AboutOption>, itemColor: Color) {
-    val (insetTop, insetBottom) = LocalContentInsets.current
+private fun Settings(paddingValues: PaddingValues, options: List<AboutOption>, itemColor: Color) {
     Box(modifier = Modifier.fillMaxSize()) {
         LazyVerticalGrid(
             columns = GridCells.Adaptive(170.dp),
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(
-                top = insetTop.toDp() + 8.dp,
-                bottom = insetBottom.toDp() + 10.dp,
+                top = paddingValues.calculateTopPadding() + 8.dp,
+                bottom = paddingValues.calculateBottomPadding() + 10.dp,
                 start = 10.dp,
                 end = 10.dp,
             ),
@@ -254,7 +239,7 @@ private fun SettingsPreview() {
         ).map { (label, icon, action) -> AboutOption(icon, label, "$label description", true, action = action) }
     }
     val itemColor = if (isSystemInDarkTheme()) 0xff202020.toInt() else 0xfff2f2f2.toInt()
-    Settings(options = options, itemColor = Color(itemColor))
+    Settings(paddingValues = PaddingValues(), options = options, itemColor = Color(itemColor))
 }
 
 @Preview(showBackground = true)

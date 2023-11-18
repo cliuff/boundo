@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -53,7 +54,6 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -64,7 +64,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -76,27 +75,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.madness.collision.R
-import com.madness.collision.main.MainViewModel
 import com.madness.collision.util.ui.layoutDirected
 import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape
 
 @Composable
-fun AudioTimerPage(mainViewModel: MainViewModel, onStartTimer: () -> Unit, onNavControls: () -> Unit) {
+fun AudioTimerPage(paddingValues: PaddingValues, onStartTimer: () -> Unit, onNavControls: () -> Unit) {
     val context = LocalContext.current
     val timerController = remember { AudioTimerController(context) }
     val scope = rememberCoroutineScope()
     val lifecycleOwner = LocalLifecycleOwner.current
     val statusFlow = remember { timerController.getTimerStatusFlow(lifecycleOwner, scope) }
     val status by statusFlow.collectAsState()
-    val contentInsetTop by mainViewModel.contentWidthTop.observeAsState(0)
-    val contentInsetBottom by mainViewModel.contentWidthBottom.observeAsState(0)
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
             .fillMaxWidth()
             .padding(horizontal = 12.dp)
-            .padding(top = contentInsetTop.toDp() + 13.dp)
-            .padding(bottom = contentInsetBottom.toDp() + 50.dp),
+            .padding(paddingValues)
+            .padding(top = 13.dp, bottom = 50.dp),
     ) {
         AnimatedVisibility(visible = status) {
             Column(
@@ -146,9 +142,6 @@ fun AudioTimerPage(mainViewModel: MainViewModel, onStartTimer: () -> Unit, onNav
         }
     }
 }
-
-@Composable
-private fun Int.toDp() = with(LocalDensity.current) { toDp() }
 
 @Composable
 private fun TimerStatus(status: Boolean, timerController: AudioTimerController) {

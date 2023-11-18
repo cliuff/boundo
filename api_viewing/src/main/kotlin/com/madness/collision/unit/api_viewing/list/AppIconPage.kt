@@ -33,7 +33,6 @@ import androidx.compose.material.icons.outlined.Android
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -56,7 +55,6 @@ import coil.compose.AsyncImage
 import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.SizeMode
-import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.api_viewing.R
 import com.madness.collision.util.dev.DarkPreview
 import com.madness.collision.util.dev.LayoutDirectionPreviews
@@ -70,41 +68,30 @@ import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape
 import kotlin.math.pow
 
 @Composable
-fun AppIconPage(mainViewModel: MainViewModel, env: AppIconEnv) {
+fun AppIconPage(paddingValues: PaddingValues, env: AppIconEnv) {
     val viewModel: AppIconViewModel = viewModel()
     val uiState by viewModel.uiState.collectAsState()
-    val contentInsetTop by mainViewModel.contentWidthTop.observeAsState(0)
-    val contentInsetBottom by mainViewModel.contentWidthBottom.observeAsState(0)
-    CompositionLocalProvider(
-        LocalContentInsets provides (contentInsetTop to contentInsetBottom)
-    ) {
-        val (appState, launcherState) = uiState
-        val list = remember(appState, launcherState) full@{
-            val appIcons = run app@{
-                if (appState !is IconLoadingState.Result) return@app List(3) { null }
-                (0..2).map { appState.value.getOrNull(it) }
-            }
-            if (launcherState !is IconLoadingState.Result) return@full appIcons
-            appIcons + launcherState.value
+    val (appState, launcherState) = uiState
+    val list = remember(appState, launcherState) full@{
+        val appIcons = run app@{
+            if (appState !is IconLoadingState.Result) return@app List(3) { null }
+            (0..2).map { appState.value.getOrNull(it) }
         }
-        if (list.isNotEmpty()) {
-            AppIconSet(list, env)
-        }
+        if (launcherState !is IconLoadingState.Result) return@full appIcons
+        appIcons + launcherState.value
+    }
+    if (list.isNotEmpty()) {
+        AppIconSet(paddingValues, list, env)
     }
 }
 
-private val LocalContentInsets = compositionLocalOf { 0 to 0 }
 private val LocalContentMargin = compositionLocalOf { PaddingValues() }
 
 class AppIconEnv(val iconExportPrefix: String)
 private val LocalAppIconEnv = compositionLocalOf<AppIconEnv> { error("No env specified") }
 
 @Composable
-private fun Int.toDp() = with(LocalDensity.current) { toDp() }
-
-@Composable
-private fun AppIconSet(list: List<IconInfo?>, env: AppIconEnv) {
-    val (insetTop, insetBottom) = LocalContentInsets.current
+private fun AppIconSet(paddingValues: PaddingValues, list: List<IconInfo?>, env: AppIconEnv) {
     CompositionLocalProvider(
         LocalContentMargin provides PaddingValues(horizontal = 20.dp),
         LocalAppIconEnv provides env,
@@ -112,7 +99,10 @@ private fun AppIconSet(list: List<IconInfo?>, env: AppIconEnv) {
         // Twitter has nearly 30 adaptive icons, which is too much to handle for a Column
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(top = insetTop.toDp() + 20.dp, bottom = insetBottom.toDp() + 40.dp),
+            contentPadding = PaddingValues(
+                top = paddingValues.calculateTopPadding() + 20.dp,
+                bottom = paddingValues.calculateBottomPadding() + 40.dp
+            ),
         ) {
             itemsIndexed(list, key = key@{ i, info ->
                 val id = info?.resId ?: return@key i
@@ -505,7 +495,7 @@ private fun AppIconSetPreview() {
         val item = IconInfo.Item("Icon $index", null, IconInfo.Source.API)
         IconInfo(null, ColorDrawable(0xffffffff.toInt()), null, IconInfo.MonoEntry(item))
     }
-    AppIconSet(list, env)
+    AppIconSet(PaddingValues(), list, env)
 }
 
 @LayoutDirectionPreviews

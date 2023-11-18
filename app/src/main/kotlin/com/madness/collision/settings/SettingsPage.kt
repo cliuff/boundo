@@ -24,13 +24,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -48,7 +46,11 @@ import com.madness.collision.util.Page
 import kotlinx.coroutines.delay
 
 @Composable
-fun SettingsPage(mainViewModel: MainViewModel, showLanguages: (context: Context) -> Unit) {
+fun SettingsPage(
+    mainViewModel: MainViewModel,
+    paddingValues: PaddingValues,
+    showLanguages: () -> Unit,
+) {
     val context = LocalContext.current
     val options = remember {
         val builtIn = listOf(
@@ -59,7 +61,7 @@ fun SettingsPage(mainViewModel: MainViewModel, showLanguages: (context: Context)
                 }
             },
             Triple(R.string.Settings_Button_SwitchLanguage, R.drawable.ic_language_24) {
-                showLanguages(context)
+                showLanguages()
             },
             Triple(R.string.Main_TextView_Advice_Text, R.drawable.ic_info_24) {
                 context.showPage<AdviceFragment>()
@@ -81,30 +83,19 @@ fun SettingsPage(mainViewModel: MainViewModel, showLanguages: (context: Context)
         val unitOptions = getUnitOptions(mainViewModel, context)
         builtIn + specialOptions + unitOptions
     }
-    val contentInsetTop by mainViewModel.contentWidthTop.observeAsState(0)
-    val contentInsetBottom by mainViewModel.contentWidthBottom.observeAsState(0)
-    CompositionLocalProvider(
-        LocalContentInsets provides (contentInsetTop to contentInsetBottom)
-    ) {
-        Settings(options = options)
-    }
+    Settings(options = options, paddingValues = paddingValues)
 }
 
-private val LocalContentInsets = compositionLocalOf { 0 to 0 }
-
 @Composable
-private fun Int.toDp() = with(LocalDensity.current) { toDp() }
-
-@Composable
-private fun Settings(options: List<Triple<Int, Int, () -> Unit>>) {
+private fun Settings(options: List<Triple<Int, Int, () -> Unit>>, paddingValues: PaddingValues) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .verticalScroll(rememberScrollState())
+                .padding(paddingValues)
+                .padding(top = 8.dp, bottom = 10.dp)
         ) {
-            Spacer(modifier = Modifier.height(LocalContentInsets.current.first.toDp()))
-            Spacer(modifier = Modifier.height(8.dp))
             options.forEachIndexed { index, (label, icon, onClick) ->
                 if (index != 0) {
                     val dividerColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.22f)
@@ -121,8 +112,6 @@ private fun Settings(options: List<Triple<Int, Int, () -> Unit>>) {
                     onClick = onClick
                 )
             }
-            Spacer(modifier = Modifier.height(10.dp))
-            Spacer(modifier = Modifier.height(LocalContentInsets.current.second.toDp()))
         }
     }
 }
@@ -209,7 +198,7 @@ private fun SettingsPreview() {
             Triple(R.string.apiViewer, R.drawable.ic_android_24) { },
         )
     }
-    Settings(options = options)
+    Settings(options = options, paddingValues = PaddingValues())
 }
 
 @Preview(showBackground = true)
