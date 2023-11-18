@@ -25,19 +25,16 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.viewModels
 import com.madness.collision.R
+import com.madness.collision.chief.app.ComposeViewOwner
+import com.madness.collision.chief.app.rememberColorScheme
+import com.madness.collision.chief.app.rememberContentPadding
 import com.madness.collision.main.showPage
 import com.madness.collision.settings.DeviceControlsFragment
 import com.madness.collision.unit.Unit
-import com.madness.collision.util.mainApplication
 import com.madness.collision.util.os.OsUtils
 
 class MyUnit : Unit() {
@@ -45,8 +42,7 @@ class MyUnit : Unit() {
     override val id: String = "AT"
 
     private val viewModel: AtUnitViewModel by viewModels()
-    private var mutComposeView: ComposeView? = null
-    private val composeView: ComposeView get() = mutComposeView!!
+    private val composeViewOwner = ComposeViewOwner()
     private lateinit var timerController: AudioTimerController
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
@@ -61,31 +57,16 @@ class MyUnit : Unit() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val composeView = ComposeView(inflater.context).apply {
-            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-        }
-        mutComposeView = composeView
-        return composeView
-    }
-
-    override fun onDestroyView() {
-        mutComposeView = null
-        super.onDestroyView()
+        return composeViewOwner.createView(inflater.context, viewLifecycleOwner)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         democratize()
-        val context = context ?: return
-        val colorScheme = if (OsUtils.satisfy(OsUtils.S)) {
-            val isDark = mainApplication.isDarkTheme
-            if (isDark) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        } else {
-            if (mainApplication.isDarkTheme) darkColorScheme() else lightColorScheme()
-        }
-        composeView.setContent {
-            MaterialTheme(colorScheme = colorScheme) {
+        composeViewOwner.getView()?.setContent {
+            val context = LocalContext.current
+            MaterialTheme(colorScheme = rememberColorScheme()) {
                 AudioTimerPage(
-                    mainViewModel = mainViewModel,
+                    paddingValues = rememberContentPadding(mainViewModel),
                     onStartTimer = { requestTimer(context) },
                     onNavControls = { context.showPage<DeviceControlsFragment>() },
                 )

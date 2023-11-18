@@ -20,38 +20,34 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.appcompat.widget.Toolbar
-import androidx.compose.material3.*
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.edit
 import androidx.core.content.res.use
-import androidx.fragment.app.activityViewModels
 import com.madness.collision.Democratic
 import com.madness.collision.R
+import com.madness.collision.chief.app.ComposeFragment
+import com.madness.collision.chief.app.rememberColorScheme
 import com.madness.collision.main.MainActivity
-import com.madness.collision.main.MainViewModel
-import com.madness.collision.util.*
+import com.madness.collision.util.CollisionDialog
+import com.madness.collision.util.P
+import com.madness.collision.util.PermissionRequestHandler
+import com.madness.collision.util.PopupUtil
 import com.madness.collision.util.config.LocaleUtils
 import com.madness.collision.util.os.OsUtils
-import java.util.*
+import java.util.Locale
 
-internal class SettingsFragment : TaggedFragment(), Democratic {
-
+internal class SettingsFragment : ComposeFragment(), Democratic {
     override val category: String = "Settings"
     override val id: String = "Settings"
 
     companion object {
         private const val TAG = "Settings"
     }
-
-    private val mainViewModel: MainViewModel by activityViewModels()
-    private var _composeView: ComposeView? = null
-    private val composeView: ComposeView get() = _composeView!!
 
     private lateinit var prHandler: PermissionRequestHandler
 
@@ -61,29 +57,19 @@ internal class SettingsFragment : TaggedFragment(), Democratic {
         return true
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _composeView = ComposeView(inflater.context)
-        return composeView
-    }
-
-    override fun onDestroyView() {
-        _composeView = null
-        super.onDestroyView()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         democratize(mainViewModel)
-        val context = context ?: return
-        composeView.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-        val colorScheme = if (OsUtils.satisfy(OsUtils.S)) {
-            if (mainApplication.isDarkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        } else {
-            if (mainApplication.isDarkTheme) darkColorScheme() else lightColorScheme()
-        }
-        composeView.setContent {
-            MaterialTheme(colorScheme = colorScheme) {
-                SettingsPage(mainViewModel) { showLanguages(it) }
-            }
+    }
+
+    @Composable
+    override fun ComposeContent() {
+        val context = LocalContext.current
+        MaterialTheme(colorScheme = rememberColorScheme()) {
+            SettingsPage(
+                mainViewModel = mainViewModel,
+                paddingValues = rememberContentPadding(),
+                showLanguages = { showLanguages(context) },
+            )
         }
     }
 

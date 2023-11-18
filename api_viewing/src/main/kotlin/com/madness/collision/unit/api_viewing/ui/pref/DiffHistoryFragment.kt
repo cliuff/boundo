@@ -18,45 +18,18 @@ package com.madness.collision.unit.api_viewing.ui.pref
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.fragment.app.activityViewModels
+import androidx.compose.runtime.Composable
 import com.madness.collision.Democratic
-import com.madness.collision.main.MainViewModel
+import com.madness.collision.chief.app.ComposeFragment
+import com.madness.collision.chief.app.rememberColorScheme
 import com.madness.collision.unit.api_viewing.R
-import com.madness.collision.util.TaggedFragment
-import com.madness.collision.util.mainApplication
-import com.madness.collision.util.os.OsUtils
 
-class DiffHistoryFragment : TaggedFragment(), Democratic {
+class DiffHistoryFragment : ComposeFragment(), Democratic {
     override val category: String = "AV"
     override val id: String = "DiffHistory"
-
-    private var mutableComposeView: ComposeView? = null
-    private val composeView: ComposeView get() = mutableComposeView!!
-    private val mainViewModel: MainViewModel by activityViewModels()
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val composeView = ComposeView(inflater.context).apply {
-            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-        }
-        mutableComposeView = composeView
-        return composeView
-    }
-
-    override fun onDestroyView() {
-        mutableComposeView = null
-        super.onDestroyView()
-    }
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
         mainViewModel.configNavigation(toolbar, iconColor)
@@ -66,16 +39,12 @@ class DiffHistoryFragment : TaggedFragment(), Democratic {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         democratize(mainViewModel)
-        val context = context ?: return
-        val colorScheme = if (OsUtils.satisfy(OsUtils.S)) {
-            if (mainApplication.isDarkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        } else {
-            if (mainApplication.isDarkTheme) darkColorScheme() else lightColorScheme()
-        }
-        composeView.setContent {
-            MaterialTheme(colorScheme = colorScheme) {
-                DiffHistoryPage(mainViewModel = mainViewModel)
-            }
+    }
+
+    @Composable
+    override fun ComposeContent() {
+        MaterialTheme(colorScheme = rememberColorScheme()) {
+            DiffHistoryPage(paddingValues = rememberContentPadding())
         }
     }
 }

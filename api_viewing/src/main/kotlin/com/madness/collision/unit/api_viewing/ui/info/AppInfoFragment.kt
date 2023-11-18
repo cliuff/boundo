@@ -30,10 +30,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -45,9 +41,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -55,6 +49,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.madness.collision.R
+import com.madness.collision.chief.app.ComposeViewOwner
+import com.madness.collision.chief.app.rememberColorScheme
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
@@ -67,7 +63,6 @@ import com.madness.collision.util.ThemeUtil
 import com.madness.collision.util.configure
 import com.madness.collision.util.mainApplication
 import com.madness.collision.util.os.DialogFragmentSystemBarMaintainer
-import com.madness.collision.util.os.OsUtils
 import com.madness.collision.util.os.SystemBarMaintainer
 import com.madness.collision.util.os.SystemBarMaintainerOwner
 import com.madness.collision.util.os.checkInsets
@@ -97,8 +92,7 @@ class AppInfoFragment() : BottomSheetDialogFragment(), SystemBarMaintainerOwner 
 
     private val mainViewModel: MainViewModel by activityViewModels()
     private var infoApp: ApiViewingApp? = null
-    private var _composeView: ComposeView? = null
-    private val composeView: ComposeView get() = _composeView!!
+    private val composeViewOwner = ComposeViewOwner()
     override val systemBarMaintainer: SystemBarMaintainer = DialogFragmentSystemBarMaintainer(this)
     private val appPkgName: String get() = arguments?.getString(ARG_PKG_NAME) ?: ""
     private val commCallback: Callback? get() = (parentFragment ?: activity) as? Callback
@@ -134,13 +128,7 @@ class AppInfoFragment() : BottomSheetDialogFragment(), SystemBarMaintainerOwner 
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _composeView = ComposeView(inflater.context)
-        return composeView
-    }
-
-    override fun onDestroyView() {
-        _composeView = null
-        super.onDestroyView()
+        return composeViewOwner.createView(inflater.context, viewLifecycleOwner)
     }
 
     private fun setBackgroundColor(color: Int) {
@@ -157,19 +145,12 @@ class AppInfoFragment() : BottomSheetDialogFragment(), SystemBarMaintainerOwner 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val context = context ?: return
         view.setOnApplyWindowInsetsListener { _, insets ->
             if (checkInsets(insets)) edgeToEdge(insets, false)
             WindowInsetsCompat.CONSUMED.toWindowInsets()!!
         }
-        composeView.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-        val colorScheme = if (OsUtils.satisfy(OsUtils.S)) {
-            if (mainApplication.isDarkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        } else {
-            if (mainApplication.isDarkTheme) darkColorScheme() else lightColorScheme()
-        }
-        composeView.setContent {
-            AppInfoPageContent(colorScheme)
+        composeViewOwner.getView()?.setContent {
+            AppInfoPageContent(colorScheme = rememberColorScheme())
         }
     }
 

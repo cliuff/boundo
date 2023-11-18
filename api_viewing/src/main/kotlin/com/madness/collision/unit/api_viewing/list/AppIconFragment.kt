@@ -32,8 +32,6 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.activityViewModels
@@ -44,6 +42,8 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.madness.collision.Democratic
 import com.madness.collision.R
+import com.madness.collision.chief.app.ComposeViewOwner
+import com.madness.collision.chief.app.rememberContentPadding
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.misc.MiscApp
 import com.madness.collision.unit.api_viewing.data.AppIcon
@@ -80,8 +80,7 @@ internal class AppIconFragment : TaggedFragment(), Democratic {
 
     private val mainViewModel: MainViewModel by activityViewModels()
     private val viewModel: AppIconViewModel by viewModels()
-    private var mutableComposeView: ComposeView? = null
-    private val composeView: ComposeView get() = mutableComposeView!!
+    private val composeViewOwner = ComposeViewOwner()
 
     private var apkRes: Resources? = null
     private var apkPath: String? = null
@@ -109,13 +108,7 @@ internal class AppIconFragment : TaggedFragment(), Democratic {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        mutableComposeView = ComposeView(inflater.context)
-        return composeView
-    }
-
-    override fun onDestroyView() {
-        mutableComposeView = null
-        super.onDestroyView()
+        return composeViewOwner.createView(inflater.context, viewLifecycleOwner)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -129,10 +122,9 @@ internal class AppIconFragment : TaggedFragment(), Democratic {
 
         democratize(mainViewModel)
         val context = context ?: return
-        composeView.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
         val env = AppIconEnv(appName)
         val compViewModel = viewModel
-        composeView.setContent {
+        composeViewOwner.getView()?.setContent {
             val isDark by compViewModel.darkUiState.collectAsState()
             val colorScheme = remember(isDark) {
                 if (OsUtils.satisfy(OsUtils.S)) {
@@ -142,7 +134,7 @@ internal class AppIconFragment : TaggedFragment(), Democratic {
                 }
             }
             MaterialTheme(colorScheme = colorScheme) {
-                AppIconPage(mainViewModel, env)
+                AppIconPage(rememberContentPadding(mainViewModel), env)
             }
         }
 

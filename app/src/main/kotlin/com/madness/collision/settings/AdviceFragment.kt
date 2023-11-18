@@ -20,35 +20,32 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.Toolbar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.Code
 import androidx.compose.material.icons.twotone.Email
-import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.edit
-import androidx.fragment.app.activityViewModels
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.madness.collision.Democratic
 import com.madness.collision.R
-import com.madness.collision.main.MainViewModel
-import com.madness.collision.util.*
-import com.madness.collision.util.os.OsUtils
+import com.madness.collision.chief.app.ComposeFragment
+import com.madness.collision.chief.app.rememberColorScheme
+import com.madness.collision.util.CollisionDialog
+import com.madness.collision.util.P
+import com.madness.collision.util.X
+import com.madness.collision.util.mainApplication
 
-internal class AdviceFragment : TaggedFragment(), Democratic {
+internal class AdviceFragment : ComposeFragment(), Democratic {
     override val category: String = "Advice"
     override val id: String = "Advice"
-
-    private val mainViewModel: MainViewModel by activityViewModels()
-    private var mutableComposeView: ComposeView? = null
-    private val composeView: ComposeView get() = mutableComposeView!!
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
         mainViewModel.configNavigation(toolbar, iconColor)
@@ -56,49 +53,37 @@ internal class AdviceFragment : TaggedFragment(), Democratic {
         return true
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        mutableComposeView = ComposeView(inflater.context)
-        return composeView
-    }
-
-    override fun onDestroyView() {
-        mutableComposeView = null
-        super.onDestroyView()
-    }
-
     private val @receiver:DrawableRes Int.icon get() = AboutOptionIcon.Res(this)
     private val ImageVector.icon get() = AboutOptionIcon.Vector(this)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         democratize(mainViewModel)
-        val context = context ?: return
-        val options = listOf(
-            AboutOption(Icons.TwoTone.Code.icon, getString(R.string.advice_license), "", false) {
-                startActivity(Intent(context, OssLicensesMenuActivity::class.java))
-            },
-            AboutOption(R.drawable.ic_github_24.icon, "Github", "cliuff/boundo", true) {
-                openUrl(context, P.LINK_SOURCE_CODE)
-            },
-            AboutOption(Icons.TwoTone.Email.icon, "Email", P.CONTACT_EMAIL, true) {
-                openEmail(context, P.CONTACT_EMAIL)
-            },
-            AboutOption(R.drawable.ic_twitter_24.icon, "Twitter", getString(R.string.about_twitter_account), true) {
-                openUrl(context, P.LINK_TWITTER_ACCOUNT)
-            },
-            AboutOption(R.drawable.ic_telegram_24.icon, "Telegram", "t.me/cliuff_boundo", true) {
-                openUrl(context, P.LINK_TELEGRAM_GROUP)
-            },
-        )
-        composeView.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-        val colorScheme = if (OsUtils.satisfy(OsUtils.S)) {
-            if (mainApplication.isDarkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        } else {
-            if (mainApplication.isDarkTheme) darkColorScheme() else lightColorScheme()
+    }
+
+    @Composable
+    override fun ComposeContent() {
+        val context = LocalContext.current
+        val options = remember {
+            listOf(
+                AboutOption(Icons.TwoTone.Code.icon, getString(R.string.advice_license), "", false) {
+                    startActivity(Intent(context, OssLicensesMenuActivity::class.java))
+                },
+                AboutOption(R.drawable.ic_github_24.icon, "Github", "cliuff/boundo", true) {
+                    openUrl(context, P.LINK_SOURCE_CODE)
+                },
+                AboutOption(Icons.TwoTone.Email.icon, "Email", P.CONTACT_EMAIL, true) {
+                    openEmail(context, P.CONTACT_EMAIL)
+                },
+                AboutOption(R.drawable.ic_twitter_24.icon, "Twitter", getString(R.string.about_twitter_account), true) {
+                    openUrl(context, P.LINK_TWITTER_ACCOUNT)
+                },
+                AboutOption(R.drawable.ic_telegram_24.icon, "Telegram", "t.me/cliuff_boundo", true) {
+                    openUrl(context, P.LINK_TELEGRAM_GROUP)
+                },
+            )
         }
-        composeView.setContent {
-            MaterialTheme(colorScheme = colorScheme) {
-                AboutPage(mainViewModel, options = options)
-            }
+        MaterialTheme(colorScheme = rememberColorScheme()) {
+            AboutPage(paddingValues = rememberContentPadding(), options = options)
         }
     }
 

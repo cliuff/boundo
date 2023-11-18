@@ -18,10 +18,6 @@ package com.madness.collision.main
 
 import android.content.Context
 import android.content.res.Configuration
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -37,9 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -47,46 +41,22 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import com.madness.collision.R
+import com.madness.collision.chief.app.ComposeFragment
+import com.madness.collision.chief.app.rememberColorScheme
 import com.madness.collision.unit.DescRetriever
 import com.madness.collision.unit.Description
 import com.madness.collision.unit.Unit
 import com.madness.collision.util.P
 import com.madness.collision.util.ThemeUtil
-import com.madness.collision.util.mainApplication
-import com.madness.collision.util.os.OsUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class UnitBarFragment : Fragment() {
-    private val mainViewModel: MainViewModel by activityViewModels()
-    private var _composeView: ComposeView? = null
-    private val composeView: ComposeView get() = _composeView!!
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _composeView = ComposeView(inflater.context)
-        return composeView
-    }
-
-    override fun onDestroyView() {
-        _composeView = null
-        super.onDestroyView()
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val context = context ?: return
-        composeView.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-        val colorScheme = if (OsUtils.satisfy(OsUtils.S)) {
-            if (mainApplication.isDarkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        } else {
-            if (mainApplication.isDarkTheme) darkColorScheme() else lightColorScheme()
-        }
-        composeView.setContent {
-            MaterialTheme(colorScheme = colorScheme) {
-                UnitBarPage(mainViewModel)
-            }
+class UnitBarFragment : ComposeFragment() {
+    @Composable
+    override fun ComposeContent() {
+        MaterialTheme(colorScheme = rememberColorScheme()) {
+            UnitBarPage(mainViewModel)
         }
     }
 }
