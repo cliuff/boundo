@@ -34,6 +34,7 @@ import com.madness.collision.chief.graphics.AdaptiveIconLoader
 import com.madness.collision.chief.graphics.MiuiIconCustomizer
 import com.madness.collision.chief.os.EmuiDistro
 import com.madness.collision.chief.os.HarmonyOsDistro
+import com.madness.collision.chief.os.HyperOsDistro
 import com.madness.collision.chief.os.MiuiDistro
 import com.madness.collision.chief.os.distro
 import com.madness.collision.util.os.OsUtils
@@ -49,7 +50,7 @@ fun AppIconTransformer(): AppIconTransformer {
     if (BuildConfig.DEBUG) getDebugTransformer()?.let { return it }
     return when (distro) {
         // confirmed issues on MIUI and HarmonyOS
-        is MiuiDistro -> MiuiAppIconTransformer(SmoothCornerPathProvider())
+        is HyperOsDistro, is MiuiDistro -> MiuiAppIconTransformer(SmoothCornerPathProvider())
         is HarmonyOsDistro, is EmuiDistro -> RectAppIconTransformer(SmoothCornerPathProvider())
         // unconditionally apply to other distros
         else -> RectAppIconTransformer(SmoothCornerPathProvider())

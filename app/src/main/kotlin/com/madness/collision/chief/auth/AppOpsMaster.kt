@@ -21,14 +21,14 @@ import android.os.Process
 import androidx.core.content.getSystemService
 import com.madness.collision.BuildConfig
 import com.madness.collision.chief.chiefContext
-import com.madness.collision.chief.os.MiuiDistro
+import com.madness.collision.chief.os.DistroSpec
 import com.madness.collision.chief.os.distro
 import com.madness.collision.util.os.OsUtils
 
 object AppOpsMaster {
     fun isShortcutPinAllowed(): Boolean {
         kotlin.run op@{
-            if (distro !is MiuiDistro) return@op
+            if (distro[DistroSpec.MIUI] == null) return@op
             val mode = checkSelfOp("MIUI:10017") ?: return@op
             return mode == AppOpsManager.MODE_ALLOWED
         }
@@ -37,7 +37,7 @@ object AppOpsMaster {
 
     fun isDynamicWallpaperAllowed(): Boolean {
         kotlin.run op@{
-            if (distro !is MiuiDistro) return@op
+            if (distro[DistroSpec.MIUI] == null) return@op
             val mode = checkSelfOp("MIUI:10045") ?: return@op
             return mode == AppOpsManager.MODE_ALLOWED
         }

@@ -22,52 +22,114 @@ val distro: DistroBuild = getBuild()
 /** DistributionBuild */
 sealed interface DistroBuild {
     val displayName: String
+    val specs: Map<DistroSpec.Id<*>, DistroSpec>
+
+    @Suppress("UNCHECKED_CAST")
+    operator fun <Spec : DistroSpec> get(spec: DistroSpec.Id<Spec>): Spec? {
+        return specs[spec] as? Spec
+    }
 }
+
+
+/** DistributionSpecification */
+sealed interface DistroSpec {
+    val id: Id<*>
+
+    sealed interface Id<Spec : DistroSpec>
+
+    data class EMUI(val apiLevel: Int) : DistroSpec {
+        companion object Id : DistroSpec.Id<EMUI>
+        override val id: DistroSpec.Id<*> = Id
+    }
+
+    data class HarmonyOS(val verName: String) : DistroSpec {
+        companion object Id : DistroSpec.Id<HarmonyOS>
+        override val id: DistroSpec.Id<*> = Id
+    }
+
+    data class MIUI(val verCode: Int, val verName: String, val displayVersion: String?) : DistroSpec {
+        companion object Id : DistroSpec.Id<MIUI>
+        override val id: DistroSpec.Id<*> = Id
+    }
+
+    data class HyperOS(val verCode: Int, val verName: String, val displayVersion: String?) : DistroSpec {
+        companion object Id : DistroSpec.Id<HyperOS>
+        override val id: DistroSpec.Id<*> = Id
+    }
+
+    data class LineageOS(val apiLevel: Int) : DistroSpec {
+        companion object Id : DistroSpec.Id<LineageOS>
+        override val id: DistroSpec.Id<*> = Id
+    }
+}
+
 
 /** UndefinedDistro */
 data object UndefDistro : DistroBuild {
     override val displayName: String = "Android"
+    override val specs: Map<DistroSpec.Id<*>, DistroSpec> = emptyMap()
 }
 
-data class EmuiDistro(val apiLevel: Int) : DistroBuild {
+data class EmuiDistro(val emui: DistroSpec.EMUI) : DistroBuild {
     override val displayName: String = "EMUI"
+    override val specs: Map<DistroSpec.Id<*>, DistroSpec> = specMapOf(emui)
 }
 
-data class HarmonyOsDistro(val verName: String) : DistroBuild {
+data class HarmonyOsDistro(val emui: DistroSpec.EMUI, val harmonyOS: DistroSpec.HarmonyOS) : DistroBuild {
     override val displayName: String = "HarmonyOS"
+    override val specs: Map<DistroSpec.Id<*>, DistroSpec> = specMapOf(emui, harmonyOS)
 }
 
-data class MiuiDistro(
-    val verCode: Int,
-    val verName: String,
-    val displayVersion: String?,
-) : DistroBuild {
+data class MiuiDistro(val miui: DistroSpec.MIUI) : DistroBuild {
     override val displayName: String = "MIUI"
+    override val specs: Map<DistroSpec.Id<*>, DistroSpec> = specMapOf(miui)
 }
 
-data class LineageOsDistro(val apiLevel: Int) : DistroBuild {
-    override val displayName: String get() = "LineageOS"
+data class HyperOsDistro(val miui: DistroSpec.MIUI, val hyperOS: DistroSpec.HyperOS) : DistroBuild {
+    override val displayName: String = "HyperOS"
+    override val specs: Map<DistroSpec.Id<*>, DistroSpec> = specMapOf(miui, hyperOS)
 }
+
+data class LineageOsDistro(val lineageOS: DistroSpec.LineageOS) : DistroBuild {
+    override val displayName: String get() = "LineageOS"
+    override val specs: Map<DistroSpec.Id<*>, DistroSpec> = specMapOf(lineageOS)
+}
+
+
+private fun specMapOf(spec: DistroSpec) = mapOf(spec.id to spec)
+private fun specMapOf(vararg specs: DistroSpec) = specs.associateBy(DistroSpec::id)
 
 private fun getBuild(): DistroBuild {
-    run hos@{
-        if (getHuaweiOsBrand() != "harmony") return@hos
-        val verName = BuildProp["hw_sc.build.platform.version"] ?: return@hos
-        return HarmonyOsDistro(verName)
-    }
-    run miui@{
-        val verCode = BuildProp["ro.miui.ui.version.code"]?.toIntOrNull() ?: return@miui
-        val verName = BuildProp["ro.miui.ui.version.name"] ?: return@miui
-        val displayVersion = parseMiuiDisplayVersion(verName)
-        return MiuiDistro(verCode, verName, displayVersion)
-    }
     run emui@{
         val api = BuildProp["ro.build.hw_emui_api_level"]?.toIntOrNull() ?: return@emui
-        return EmuiDistro(api)
+        val emui = DistroSpec.EMUI(api)
+        run hos@{
+            if (getHuaweiOsBrand() != "harmony") return@hos
+            val verName = BuildProp["hw_sc.build.platform.version"] ?: return@hos
+            val harmonyOS = DistroSpec.HarmonyOS(verName)
+            return HarmonyOsDistro(emui, harmonyOS)
+        }
+        return EmuiDistro(emui)
+    }
+    run miui@{
+        val miui = run {
+            val verCode = BuildProp["ro.miui.ui.version.code"]?.toIntOrNull() ?: return@miui
+            val verName = BuildProp["ro.miui.ui.version.name"] ?: return@miui
+            val displayVersion = parseMiuiDisplayVersion(verName)
+            DistroSpec.MIUI(verCode, verName, displayVersion)
+        }
+        run hyper@{
+            val verCode = BuildProp["ro.mi.os.version.code"]?.toIntOrNull() ?: return@hyper
+            val verName = BuildProp["ro.mi.os.version.name"] ?: return@hyper
+            val displayVersion = parseHyperOsDisplayVersion(verName)
+            val hyperOS = DistroSpec.HyperOS(verCode, verName, displayVersion)
+            return HyperOsDistro(miui, hyperOS)
+        }
+        return MiuiDistro(miui)
     }
     run los@{
         val api = BuildProp["ro.lineage.build.version.plat.sdk"]?.toIntOrNull() ?: return@los
-        return LineageOsDistro(api)
+        return LineageOsDistro(DistroSpec.LineageOS(api))
     }
     return UndefDistro
 }
@@ -99,4 +161,10 @@ private fun parseMiuiDisplayVersion(verName: String): String? {
         }
         else -> null
     }
+}
+
+private fun parseHyperOsDisplayVersion(verName: String): String? {
+    // OS1.0
+    if (verName.matches("""OS\d.*""".toRegex())) return verName.substring(2)
+    return null
 }

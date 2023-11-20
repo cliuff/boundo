@@ -30,7 +30,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.ui.graphics.asAndroidPath
 import androidx.compose.ui.graphics.vector.PathParser
 import com.madness.collision.chief.chiefContext
-import com.madness.collision.chief.os.MiuiDistro
+import com.madness.collision.chief.os.DistroSpec
 import com.madness.collision.chief.os.distro
 import com.madness.collision.util.os.OsUtils
 
@@ -40,7 +40,7 @@ object AdaptiveIcon {
             OsUtils.satisfy(OsUtils.O) -> getSystemIconMask()?.let(::isFullRect)
             else -> null
         }
-        val miuiRect = if (distro is MiuiDistro) getMiuiIconMask()?.let(::isFullRect) else null
+        val miuiRect = distro[DistroSpec.MIUI]?.let { getMiuiIconMask()?.let(::isFullRect) }
         Log.d("AdaptiveIcon", "init/sysRect:$systemRect/miuiRect:$miuiRect")
     }
 
