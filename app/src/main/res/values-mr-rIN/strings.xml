@@ -19,33 +19,19 @@
     <string name="appDesc">तुमच्यासाठी काही गोष्टी करण्यासाठी बांधील असलेल्या साधनांचा समूह</string>
     <string name="Main_ToolBar_title_Settings">सेटिंग्ज</string>
     <string name="Settings_Button_SwitchLanguage">भाषा</string>
-    <string name="Settings_Button_CheckUpdate">अॅप अपडेट</string>
     <string name="Settings_LanguagePicker_Auto">प्रणालीचे अनुसरण करा</string>
     <string name="Settings_Language_Button_Cancel">रद्द करा</string>
     <string name="Settings_Language_Dialog_Title">भाषा</string>
-    <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">नवीन आवृत्ती सापडली</string>
-    <string name="SettingsSync_Update_AlertDialog_MessagePart1">नवीन आवृत्ती</string>
-    <string name="SettingsSync_Update_AlertDialog_MessagePart2">बदल</string>
-    <string name="SettingsSync_Update_AlertDialog_PositiveButtonText">अपडेट करा</string>
-    <string name="SettingsSync_Update_AlertDialog_NeutralButtonText">त्रास देऊ नका</string>
-    <string name="SettingsSync_Update_AlertDialog_NegativeButtonText">आता नाही</string>
-    <string name="SettingsSync_UpdateFalse_AlertDialog_Title">अपडेट नाही</string>
     <string name="text_alright">ठीक आहे</string>
     <string name="text_allset">समाप्त करा</string>
     <string name="text_forgetit">रद्द करा</string>
     <string name="Main_TextView_Launcher">झटपट</string>
     <string name="Main_TextView_Advice_Text">बद्दल</string>
-    <string name="textQQ">QQ</string>
     <string name="textEmail">ईमेल</string>
-    <string name="Advice_QQ_Toast_Text">संभाषण सुरू करण्यापूर्वी संपर्क म्हणून जोडा, अन्यथा संदेश मला पाठविला जाणार नाही</string>
     <string name="Advice_Switch_Debug_Text">उपभोग मोड</string>
-    <string name="Settings_ImageView_Update">अॅप अपडेट</string>
-    <string name="Settings_ImageView_Language">भाषा</string>
-    <string name="Launcher_QQContacts_Toast_Avatar_PermissionDenied">कृपया परवानगी द्या जेणेकरून आम्ही प्रतिमा वाचू शकू</string>
     <string name="developertools_cropimage">प्रतिमा सुधारित करणे</string>
     <string name="toast_permission_storage_denied">कृपया परवानगी द्या जेणेकरून आम्ही डेटा वाचू/लिहू शकू</string>
     <string name="apiViewer">अॅप API</string>
-    <string name="settingsfunction_downloaddescription">अपडेट डाउनलोड करत आहे</string>
     <string name="text_OK">ठीक आहे</string>
     <string name="text_cancel">रद्द करा</string>
     <string name="text_done">समाप्त करा</string>
@@ -64,8 +50,6 @@
     <string name="instant_manager_intro">अॅप शॉर्टकट</string>
     <string name="text_new">नवीन</string>
     <string name="settings_sdk">गोल अॅप चिन्ह प्रदर्शित करा</string>
-    <string name="nm_adapter_img_content_1">प्रतिमा फोल्डर प्रतिमा</string>
-    <string name="settings_fun_update_via_browser">ब्राउझरद्वारे डाउनलोड करा\n(लिंक कॉपी करण्यासाठी स्पर्श करा आणि धरून ठेवा)</string>
     <string name="text_copy_link">लिंक कॉपी केली</string>
     <string name="advice_license">मुक्त स्रोत परवाने</string>
     <string name="advice_license_details">खुल्या सॉफ्टवेअरसाठी परवाना तपशील जे बौंडोला आकार देण्यास मदत करतात</string>
@@ -126,7 +110,6 @@
     <string name="prefSettingsThemeAuto">प्रणालीचे अनुसरण करा</string>
     <string name="prefSettingsTheme">थीम</string>
     <string name="apiDragDropHint">शोधा किंवा APK</string>
-    <string name="updateDownload">डाउनलोड करा</string>
     <string name="instantTileScannerAlipay">Alipay बारकोड स्कॅनर</string>
     <string name="instantTileScannerWechat">WeChat बारकोड स्कॅनर</string>
     <string name="instantTileIntro">द्रुत सेटिंग्ज टाइल</string>
@@ -175,7 +158,6 @@
     <string name="twLiveWallpaperDesc">गडद थीम सक्षम केल्यावर गडद वॉलपेपरवर स्वयंचलितपणे स्विच करा</string>
     <string name="activity_av_search">अॅप API</string>
     <string name="title_api_viewing" translatable="false">App API</string>
-    <string name="main_updates">अपडेट्स</string>
     <string name="main_more">अधिक</string>
     <string name="unit_audio_timer">ऑडिओ टाइमर</string>
     <string name="unit_desc_installed">स्थापित केले</string>
@@ -196,8 +178,6 @@
     <string name="unit_desc_uninstall_notice">विस्थापित करणे पुढे ढकलत आहे</string>
     <string name="unit_desc_install_notice">स्थापित करण्याचा प्रयत्न करत आहे</string>
     <string name="unit_desc_pin">पिन</string>
-    <string name="mainSecFrequents">वारंवार</string>
-    <string name="mainSecStarred">तारांकित</string>
     <string name="app_device_controls">Boundo नियंत्रणे</string>
     <string name="access_sys_usage">बौंडोला वापर डेटामध्ये प्रवेश करण्याची अनुमती द्या</string>
     <string name="text_access_denied">प्रवेश नाकारला</string>

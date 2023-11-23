@@ -19,33 +19,19 @@
     <string name="appDesc">ਔਜ਼ਾਰਾਂ ਦਾ ਇੱਕ ਬੰਡਲ ਤੁਹਾਡੇ ਲਈ ਕੁਝ ਕੰਮ ਕਰਨ ਲਈ ਪਾਬੰਦ ਹੈ</string>
     <string name="Main_ToolBar_title_Settings">ਸੈਟਿੰਗਾਂ</string>
     <string name="Settings_Button_SwitchLanguage">ਭਾਸ਼ਾਵਾਂ</string>
-    <string name="Settings_Button_CheckUpdate">ਐਪ ਅੱਪਡੇਟ</string>
     <string name="Settings_LanguagePicker_Auto">ਸਿਸਟਮ ਦੀ ਪਾਲਣਾ ਕਰੋ</string>
     <string name="Settings_Language_Button_Cancel">ਰੱਦ ਕਰੋ</string>
     <string name="Settings_Language_Dialog_Title">ਭਾਸ਼ਾਵਾਂ</string>
-    <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">ਨਵਾਂ ਸੰਸਕਰਣ ਮਿਲਿਆ</string>
-    <string name="SettingsSync_Update_AlertDialog_MessagePart1">ਨਵਾਂ ਸੰਸਕਰਣ</string>
-    <string name="SettingsSync_Update_AlertDialog_MessagePart2">ਤਬਦੀਲੀਆਂ</string>
-    <string name="SettingsSync_Update_AlertDialog_PositiveButtonText">ਅੱਪਡੇਟ ਕਰੋ</string>
-    <string name="SettingsSync_Update_AlertDialog_NeutralButtonText">ਪਰੇਸ਼ਾਨ ਨਾ ਕਰੋ</string>
-    <string name="SettingsSync_Update_AlertDialog_NegativeButtonText">ਹਾਲੇ ਨਹੀਂ</string>
-    <string name="SettingsSync_UpdateFalse_AlertDialog_Title">ਕੋਈ ਅੱਪਡੇਟ ਨਹੀਂ</string>
     <string name="text_alright">ਠੀਕ ਹੈ</string>
     <string name="text_allset">ਸਮਾਪਤ</string>
     <string name="text_forgetit">ਰੱਦ ਕਰੋ</string>
     <string name="Main_TextView_Launcher">ਤਤਕਾਲ</string>
     <string name="Main_TextView_Advice_Text">ਬਾਰੇ</string>
-    <string name="textQQ">QQ</string>
     <string name="textEmail">ਈ - ਮੇਲ</string>
-    <string name="Advice_QQ_Toast_Text">ਗੱਲਬਾਤ ਸ਼ੁਰੂ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਸੰਪਰਕ ਵਜੋਂ ਸ਼ਾਮਲ ਕਰੋ, ਨਹੀਂ ਤਾਂ ਮੈਨੂੰ ਸੁਨੇਹਾ ਨਹੀਂ ਭੇਜਿਆ ਜਾਵੇਗਾ</string>
     <string name="Advice_Switch_Debug_Text">ਖਪਤ ਮੋਡ</string>
-    <string name="Settings_ImageView_Update">ਐਪ ਅੱਪਡੇਟ</string>
-    <string name="Settings_ImageView_Language">ਭਾਸ਼ਾਵਾਂ</string>
-    <string name="Launcher_QQContacts_Toast_Avatar_PermissionDenied">ਕਿਰਪਾ ਕਰਕੇ ਇਜਾਜ਼ਤ ਦਿਓ ਤਾਂ ਜੋ ਅਸੀਂ ਚਿੱਤਰ ਨੂੰ ਪੜ੍ਹ ਸਕੀਏ</string>
     <string name="developertools_cropimage">ਚਿੱਤਰ ਸੋਧਿਆ ਜਾ ਰਿਹਾ ਹੈ</string>
     <string name="toast_permission_storage_denied">ਕਿਰਪਾ ਕਰਕੇ ਇਜਾਜ਼ਤ ਦਿਓ ਤਾਂ ਜੋ ਅਸੀਂ ਡਾਟਾ ਪੜ੍ਹ/ਲਿਖ ਸਕੀਏ</string>
     <string name="apiViewer">ਐਪ API</string>
-    <string name="settingsfunction_downloaddescription">ਇੱਕ ਅੱਪਡੇਟ ਡਾਊਨਲੋਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ</string>
     <string name="text_OK">ਠੀਕ ਹੈ</string>
     <string name="text_cancel">ਰੱਦ ਕਰੋ</string>
     <string name="text_done">ਸਮਾਪਤ</string>
@@ -64,8 +50,6 @@
     <string name="instant_manager_intro">ਐਪ ਸ਼ਾਰਟਕੱਟ</string>
     <string name="text_new">ਨਵਾਂ</string>
     <string name="settings_sdk">ਗੋਲ ਐਪ ਆਈਕਨ ਡਿਸਪਲੇ ਕਰੋ</string>
-    <string name="nm_adapter_img_content_1">ਚਿੱਤਰ ਫੋਲਡਰ ਚਿੱਤਰ</string>
-    <string name="settings_fun_update_via_browser">ਬ੍ਰਾਊਜ਼ਰ ਰਾਹੀਂ ਡਾਊਨਲੋਡ ਕਰੋ\n(ਲਿੰਕ ਨੂੰ ਕਾਪੀ ਕਰਨ ਲਈ ਛੋਹਵੋ ਅਤੇ ਹੋਲਡ ਕਰੋ)</string>
     <string name="text_copy_link">ਲਿੰਕ ਕਾਪੀ ਕੀਤਾ ਗਿਆ</string>
     <string name="advice_license">ਓਪਨ ਸੋਰਸ ਲਾਇਸੰਸ</string>
     <string name="advice_license_details">ਓਪਨ ਸੌਫਟਵੇਅਰ ਲਈ ਲਾਇਸੈਂਸ ਵੇਰਵੇ ਜੋ ਬੌਂਡੋ ਨੂੰ ਆਕਾਰ ਦੇਣ ਵਿੱਚ ਮਦਦ ਕਰਦਾ ਹੈ</string>
@@ -126,7 +110,6 @@
     <string name="prefSettingsThemeAuto">ਸਿਸਟਮ ਦੀ ਪਾਲਣਾ ਕਰੋ</string>
     <string name="prefSettingsTheme">ਥੀਮ</string>
     <string name="apiDragDropHint">ਖੋਜ ਜਾਂ ਏ.ਪੀ.ਕੇ</string>
-    <string name="updateDownload">ਡਾਊਨਲੋਡ ਕਰੋ</string>
     <string name="instantTileScannerAlipay">ਅਲੀਪੇ ਬਾਰਕੋਡ ਸਕੈਨਰ</string>
     <string name="instantTileScannerWechat">WeChat ਬਾਰਕੋਡ ਸਕੈਨਰ</string>
     <string name="instantTileIntro">ਤਤਕਾਲ ਸੈਟਿੰਗਾਂ ਟਾਈਲਾਂ</string>
@@ -175,7 +158,6 @@
     <string name="twLiveWallpaperDesc">ਗੂੜ੍ਹਾ ਥੀਮ ਚਾਲੂ ਹੋਣ \'ਤੇ ਆਪਣੇ ਆਪ ਗੂੜ੍ਹੇ ਵਾਲਪੇਪਰ \'ਤੇ ਸਵਿਚ ਕਰੋ</string>
     <string name="activity_av_search">ਐਪ API</string>
     <string name="title_api_viewing" translatable="false">App API</string>
-    <string name="main_updates">ਅੱਪਡੇਟ</string>
     <string name="main_more">ਹੋਰ</string>
     <string name="unit_audio_timer">ਆਡੀਓ ਟਾਈਮਰ</string>
     <string name="unit_desc_installed">ਸਥਾਪਿਤ ਕੀਤਾ</string>
@@ -196,8 +178,6 @@
     <string name="unit_desc_uninstall_notice">ਅਣਇੰਸਟੌਲ ਨੂੰ ਮੁਲਤਵੀ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ</string>
     <string name="unit_desc_install_notice">ਸਥਾਪਤ ਕਰਨ ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰ ਰਿਹਾ ਹੈ</string>
     <string name="unit_desc_pin">ਪਿੰਨ</string>
-    <string name="mainSecFrequents">ਵਾਰ-ਵਾਰ</string>
-    <string name="mainSecStarred">ਸਟਾਰ ਕੀਤਾ ਗਿਆ</string>
     <string name="app_device_controls">ਬਾਉਂਡੋ ਨਿਯੰਤਰਣ</string>
     <string name="access_sys_usage">Boundo ਨੂੰ ਵਰਤੋਂ ਡੇਟਾ ਤੱਕ ਪਹੁੰਚ ਕਰਨ ਦਿਓ</string>
     <string name="text_access_denied">ਐਕਸੇਸ ਡਿਨਾਇਡ</string>

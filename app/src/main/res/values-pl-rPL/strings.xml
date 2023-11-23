@@ -19,33 +19,19 @@
     <string name="appDesc">Zestaw narzędzi, które zrobią dla Ciebie kilka rzeczy</string>
     <string name="Main_ToolBar_title_Settings">Ustawienia</string>
     <string name="Settings_Button_SwitchLanguage">Języki</string>
-    <string name="Settings_Button_CheckUpdate">Aktualizacja aplikacji</string>
     <string name="Settings_LanguagePicker_Auto">Śledź system</string>
     <string name="Settings_Language_Button_Cancel">Anulować</string>
     <string name="Settings_Language_Dialog_Title">Języki</string>
-    <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">Znaleziono nową wersję</string>
-    <string name="SettingsSync_Update_AlertDialog_MessagePart1">Nowa wersja</string>
-    <string name="SettingsSync_Update_AlertDialog_MessagePart2">Zmiany</string>
-    <string name="SettingsSync_Update_AlertDialog_PositiveButtonText">Aktualizacja</string>
-    <string name="SettingsSync_Update_AlertDialog_NeutralButtonText">Nie zawracaj sobie głowy!</string>
-    <string name="SettingsSync_Update_AlertDialog_NegativeButtonText">Nie teraz</string>
-    <string name="SettingsSync_UpdateFalse_AlertDialog_Title">Brak aktualizacji</string>
     <string name="text_alright">OK</string>
     <string name="text_allset">Skończyć</string>
     <string name="text_forgetit">Anulować</string>
     <string name="Main_TextView_Launcher">Natychmiastowy</string>
     <string name="Main_TextView_Advice_Text">O</string>
-    <string name="textQQ">QQ</string>
     <string name="textEmail">E-mail</string>
-    <string name="Advice_QQ_Toast_Text">Dodaj jako kontakt przed rozpoczęciem rozmowy, w przeciwnym razie wiadomość nie zostanie do mnie wysłana</string>
     <string name="Advice_Switch_Debug_Text">Tryb konsumpcji</string>
-    <string name="Settings_ImageView_Update">Aktualizacja aplikacji</string>
-    <string name="Settings_ImageView_Language">Języki</string>
-    <string name="Launcher_QQContacts_Toast_Avatar_PermissionDenied">Proszę o pozwolenie, abyśmy mogli przeczytać obraz</string>
     <string name="developertools_cropimage">Modyfikowanie obrazu</string>
     <string name="toast_permission_storage_denied">Proszę o pozwolenie, abyśmy mogli odczytywać/zapisywać dane</string>
     <string name="apiViewer">Interfejs API aplikacji</string>
-    <string name="settingsfunction_downloaddescription">Pobieranie aktualizacji</string>
     <string name="text_OK">OK</string>
     <string name="text_cancel">Anulować</string>
     <string name="text_done">Skończyć</string>
@@ -64,8 +50,6 @@
     <string name="instant_manager_intro">Skróty aplikacji</string>
     <string name="text_new">Nowy</string>
     <string name="settings_sdk">Wyświetlaj okrągłe ikony aplikacji</string>
-    <string name="nm_adapter_img_content_1">Obraz folderu obrazu</string>
-    <string name="settings_fun_update_via_browser">Pobierz przez przeglądarkę\n(kliknij i przytrzymaj, aby skopiować link)</string>
     <string name="text_copy_link">Link skopiowany</string>
     <string name="advice_license">Licencje open source</string>
     <string name="advice_license_details">Szczegóły licencji dla otwartego oprogramowania, które pomaga Boundo kształtować się</string>
@@ -126,7 +110,6 @@
     <string name="prefSettingsThemeAuto">Śledź system</string>
     <string name="prefSettingsTheme">Motyw</string>
     <string name="apiDragDropHint">Szukaj lub APK</string>
-    <string name="updateDownload">Ściągnij</string>
     <string name="instantTileScannerAlipay">Skaner kodów kreskowych Alipay</string>
     <string name="instantTileScannerWechat">Skaner kodów kreskowych WeChat</string>
     <string name="instantTileIntro">Kafelki szybkich ustawień</string>
@@ -175,7 +158,6 @@
     <string name="twLiveWallpaperDesc">Przełącz się na ciemną tapetę automatycznie po włączeniu ciemnego motywu</string>
     <string name="activity_av_search">Interfejs API aplikacji</string>
     <string name="title_api_viewing" translatable="false">App API</string>
-    <string name="main_updates">Aktualizacje</string>
     <string name="main_more">Więcej</string>
     <string name="unit_audio_timer">Zegar audio</string>
     <string name="unit_desc_installed">Zainstalowane</string>
@@ -196,8 +178,6 @@
     <string name="unit_desc_uninstall_notice">Odraczanie odinstalowania</string>
     <string name="unit_desc_install_notice">Próbuję zainstalować</string>
     <string name="unit_desc_pin">Szpilka</string>
-    <string name="mainSecFrequents">Bywalcy</string>
-    <string name="mainSecStarred">Oznaczone gwiazdką</string>
     <string name="app_device_controls">Kontrola Boundo</string>
     <string name="access_sys_usage">Zezwól Boundo na dostęp do danych użytkowania</string>
     <string name="text_access_denied">Brak dostępu</string>

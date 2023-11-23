@@ -19,33 +19,19 @@
     <string name="appDesc">بسته‌ای از ابزارها برای انجام برخی کارها برای شما</string>
     <string name="Main_ToolBar_title_Settings">تنظیمات</string>
     <string name="Settings_Button_SwitchLanguage">زبان ها</string>
-    <string name="Settings_Button_CheckUpdate">آپدیت اپلیکیشن</string>
     <string name="Settings_LanguagePicker_Auto">سیستم را دنبال کنید</string>
     <string name="Settings_Language_Button_Cancel">لغو کنید</string>
     <string name="Settings_Language_Dialog_Title">زبان ها</string>
-    <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">نسخه جدید پیدا شد</string>
-    <string name="SettingsSync_Update_AlertDialog_MessagePart1">نسخه جدید</string>
-    <string name="SettingsSync_Update_AlertDialog_MessagePart2">تغییرات</string>
-    <string name="SettingsSync_Update_AlertDialog_PositiveButtonText">به روز رسانی</string>
-    <string name="SettingsSync_Update_AlertDialog_NeutralButtonText">اذیت نکن</string>
-    <string name="SettingsSync_Update_AlertDialog_NegativeButtonText">الان نه</string>
-    <string name="SettingsSync_UpdateFalse_AlertDialog_Title">بدون آپدیت</string>
     <string name="text_alright">خوب</string>
     <string name="text_allset">پایان</string>
     <string name="text_forgetit">لغو کنید</string>
     <string name="Main_TextView_Launcher">فوری</string>
     <string name="Main_TextView_Advice_Text">در باره</string>
-    <string name="textQQ">&#8207;QQ</string>
     <string name="textEmail">پست الکترونیک</string>
-    <string name="Advice_QQ_Toast_Text">قبل از شروع مکالمه به عنوان مخاطب اضافه کنید، در غیر این صورت پیام برای من ارسال نخواهد شد</string>
     <string name="Advice_Switch_Debug_Text">حالت مصرف</string>
-    <string name="Settings_ImageView_Update">آپدیت اپلیکیشن</string>
-    <string name="Settings_ImageView_Language">زبان ها</string>
-    <string name="Launcher_QQContacts_Toast_Avatar_PermissionDenied">لطفا اجازه بدهید تا بتوانیم تصویر را بخوانیم</string>
     <string name="developertools_cropimage">اصلاح تصویر</string>
     <string name="toast_permission_storage_denied">لطفاً اجازه بدهید تا بتوانیم داده‌ها را بخوانیم/بنویسیم</string>
     <string name="apiViewer">برنامه API</string>
-    <string name="settingsfunction_downloaddescription">در حال دانلود به روز رسانی</string>
     <string name="text_OK">خوب</string>
     <string name="text_cancel">لغو کنید</string>
     <string name="text_done">پایان</string>
@@ -64,8 +50,6 @@
     <string name="instant_manager_intro">میانبرهای برنامه</string>
     <string name="text_new">جدید</string>
     <string name="settings_sdk">نمایش آیکون های گرد برنامه</string>
-    <string name="nm_adapter_img_content_1">تصویر پوشه تصویر</string>
-    <string name="settings_fun_update_via_browser">دانلود از طریق مرورگر\n(برای کپی کردن پیوند، لمس کنید و نگه دارید)</string>
     <string name="text_copy_link">لینک کپی شد</string>
     <string name="advice_license">مجوزهای منبع باز</string>
     <string name="advice_license_details">جزئیات مجوز برای نرم افزار باز که به شکل گیری Boundo کمک می کند</string>
@@ -126,7 +110,6 @@
     <string name="prefSettingsThemeAuto">سیستم را دنبال کنید</string>
     <string name="prefSettingsTheme">موضوع</string>
     <string name="apiDragDropHint">جستجو یا APK</string>
-    <string name="updateDownload">دانلود</string>
     <string name="instantTileScannerAlipay">بارکد اسکنر Alipay</string>
     <string name="instantTileScannerWechat">اسکنر بارکد وی چت</string>
     <string name="instantTileIntro">کاشی های تنظیمات سریع</string>
@@ -175,7 +158,6 @@
     <string name="twLiveWallpaperDesc">وقتی تم تیره فعال است، به طور خودکار به کاغذدیواری تیره بروید</string>
     <string name="activity_av_search">برنامه API</string>
     <string name="title_api_viewing" translatable="false">App API</string>
-    <string name="main_updates">به روز رسانی ها</string>
     <string name="main_more">بیشتر</string>
     <string name="unit_audio_timer">تایمر صوتی</string>
     <string name="unit_desc_installed">نصب شده است</string>
@@ -196,8 +178,6 @@
     <string name="unit_desc_uninstall_notice">به تعویق انداختن حذف</string>
     <string name="unit_desc_install_notice">در حال تلاش برای نصب</string>
     <string name="unit_desc_pin">سنجاق</string>
-    <string name="mainSecFrequents">مکرر</string>
-    <string name="mainSecStarred">ستاره دار</string>
     <string name="app_device_controls">کنترل های Boundo</string>
     <string name="access_sys_usage">به Boundo اجازه دسترسی به داده‌های استفاده را بدهید</string>
     <string name="text_access_denied">دسترسی رد شد</string>

@@ -17,23 +17,11 @@
 
 <resources>
     <string name="app_name">Boundo</string>
-    <string name="Advice_QQ_Toast_Text">Agregar como contacto antes de comenzar una conversación; de lo contrario, el mensaje no me será enviado.</string>
     <string name="Advice_Switch_Debug_Text">Modo de consumo</string>
-    <string name="Launcher_QQContacts_Toast_Avatar_PermissionDenied">Por favor conceda el permiso para que podamos leer la imagen.</string>
     <string name="Main_TextView_Advice_Text">Información</string>
     <string name="Main_TextView_Launcher">Instantáneo</string>
     <string name="Main_ToolBar_title_Settings">Ajustes</string>
-    <string name="SettingsSync_UpdateFalse_AlertDialog_Title">Ninguna actualización</string>
-    <string name="SettingsSync_Update_AlertDialog_MessagePart1">Nueva versión</string>
-    <string name="SettingsSync_Update_AlertDialog_MessagePart2">Cambios</string>
-    <string name="SettingsSync_Update_AlertDialog_NegativeButtonText">Ahora no</string>
-    <string name="SettingsSync_Update_AlertDialog_NeutralButtonText">No recordar</string>
-    <string name="SettingsSync_Update_AlertDialog_PositiveButtonText">Actualizar</string>
-    <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">Nueva versión encontrada</string>
-    <string name="Settings_Button_CheckUpdate">Actualización de la aplicación</string>
     <string name="Settings_Button_SwitchLanguage">Idiomas</string>
-    <string name="Settings_ImageView_Language">Idiomas</string>
-    <string name="Settings_ImageView_Update">Actualización de la aplicación</string>
     <string name="Settings_LanguagePicker_Auto">Predeterminado del sistema</string>
     <string name="Settings_Language_Button_Cancel">Cancelar</string>
     <string name="Settings_Language_Dialog_Title">Idiomas</string>
@@ -84,9 +72,7 @@
     <string name="instantTileScannerWechat">Escáner de código de barras WeChat</string>
     <string name="instant_manager_intro">Atajos de aplicaciones</string>
     <string name="main_more">Más</string>
-    <string name="main_updates">Actualizaciones</string>
     <string name="menuApiSortApiTime">Recientemente actualizado</string>
-    <string name="nm_adapter_img_content_1">Imagen de la carpeta de imágenes</string>
     <string name="notifyChannelGroupApp">Aplicación</string>
     <string name="notifyChannelGroupAppDesc">Notificaciones relacionadas con la aplicación</string>
     <string name="notifyChannelService">Solicitudes de servicio</string>
@@ -121,7 +107,6 @@
     <string name="settingsApiRetrieveRoundIcon">Recupere el ícono redondo del recurso cuando se le proporcione</string>
     <string name="settings_exterior">Estilo</string>
     <string name="settings_sdk">Mostrar iconos redondos de aplicaciones</string>
-    <string name="settingsfunction_downloaddescription">Descargar una actualización</string>
     <string name="sharingNonApkLink">Enlace de descarga no apk</string>
     <string name="textAlways">Siempre</string>
     <string name="textAsk4Notification">Concédenos el permiso para mostrar notificaciones, dependemos de las notificaciones de Toast para brindarte la mejor experiencia. Se utiliza para notificarle instrucciones, consejos, sugerencias, mensajes de operación exitosa y, a veces, mensajes de error. Puede encontrar confusión en nuestra aplicación si elige no otorgarnos el permiso de notificación.</string>
@@ -134,7 +119,6 @@
     <string name="textManual">Manual</string>
     <string name="textNever">Nunca</string>
     <string name="textParentheses">" (%s)"</string>
-    <string name="textQQ">QQ</string>
     <string name="textQuality">Calidad</string>
     <string name="textRound">Redondo</string>
     <string name="textRounded">Rectángulo redondeado</string>
@@ -172,12 +156,10 @@
     <string name="unit_audio_timer">Temporiz. de audio</string>
     <string name="units">Modulos</string>
     <string name="unitsManager">Gestor del módulo</string>
-    <string name="updateDownload">Descargar</string>
     <string name="apiDetailsPackageName">"Nombre del paquete: "</string>
     <string name="av_details_native_libs">"Bibliotecas nativas: "</string>
     <string name="immortalMessage">Oh no!\nNosotros estamos irritados por un error.\nNo te preocupes, ha sido reconocido!\nEnvíenos el registro para investigar!</string>
     <string name="instantManual">Mantenga presionado el icono de la aplicación en el iniciador para mostrar accesos directos a aplicaciones.\nTire hacia abajo el tono de notificación, la configuración se alterna por encima del área de notificación son los iconos en ajustes rápidos que está buscando.</string>
-    <string name="settings_fun_update_via_browser">Descargar a través del navegador\n(toque y mantenga presionado para copiar el enlace)</string>
     <string name="unit_desc_av">• Verifique el nivel de API de Android de todas las aplicaciones y aplicaciones en el dispositivo\n• Verifique el soporte de Adaptive Icon de todas las aplicaciones\n• Estadísticas de la API de la aplicación\n• APK y extracción de iconos\n•Detalles del paquete y detalles de la firma</string>
     <string name="unit_desc_im">• Modificar resolución\n• Modificar formato: png jpg webp heif\n• Imagen borrosa</string>
     <string name="unit_desc_tw">• Haga que su fondo de pantalla cumpla con el tema oscuro de Android 10 aplicando un fondo de pantalla de color oscuro automáticamente</string>
@@ -196,8 +178,6 @@
     <string name="unit_manager_uninstall_success">La desinstalación ocurrirá cuando esté inactivo</string>
     <string name="unit_desc_uninstall_notice">Desinstalación diferida</string>
     <string name="unit_desc_pin">prender con alfileres</string>
-    <string name="mainSecStarred">Favoritos</string>
-    <string name="mainSecFrequents">Utilizado a menudo</string>
     <string name="text_access_denied">Acceso denegado</string>
     <string name="versatile_device_controls_at_hint_on">Desliza para ajustar</string>
     <string name="versatile_device_controls_at_hint_off">Toca para empezar</string>

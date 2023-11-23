@@ -19,33 +19,19 @@
     <string name="appDesc">আপনার জন্য কিছু জিনিস করতে আবদ্ধ সরঞ্জামগুলির একটি বান্ডিল</string>
     <string name="Main_ToolBar_title_Settings">সেটিংস</string>
     <string name="Settings_Button_SwitchLanguage">ভাষা</string>
-    <string name="Settings_Button_CheckUpdate">অ্যাপ আপডেট</string>
     <string name="Settings_LanguagePicker_Auto">সিস্টেম অনুসরণ করুন</string>
     <string name="Settings_Language_Button_Cancel">বাতিল করুন</string>
     <string name="Settings_Language_Dialog_Title">ভাষা</string>
-    <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">নতুন সংস্করণ পাওয়া গেছে</string>
-    <string name="SettingsSync_Update_AlertDialog_MessagePart1">নতুন সংস্করণ</string>
-    <string name="SettingsSync_Update_AlertDialog_MessagePart2">পরিবর্তন</string>
-    <string name="SettingsSync_Update_AlertDialog_PositiveButtonText">হালনাগাদ</string>
-    <string name="SettingsSync_Update_AlertDialog_NeutralButtonText">বিরক্ত করবেন না</string>
-    <string name="SettingsSync_Update_AlertDialog_NegativeButtonText">এখন না</string>
-    <string name="SettingsSync_UpdateFalse_AlertDialog_Title">কোন আপডেট নাই</string>
     <string name="text_alright">ঠিক আছে</string>
     <string name="text_allset">শেষ করুন</string>
     <string name="text_forgetit">বাতিল করুন</string>
     <string name="Main_TextView_Launcher">তাৎক্ষণিক</string>
     <string name="Main_TextView_Advice_Text">সম্পর্কিত</string>
-    <string name="textQQ">QQ</string>
     <string name="textEmail">ইমেইল</string>
-    <string name="Advice_QQ_Toast_Text">একটি কথোপকথন শুরু করার আগে পরিচিতি হিসাবে যোগ করুন, অন্যথায় বার্তাটি আমাকে পাঠানো হবে না</string>
     <string name="Advice_Switch_Debug_Text">গ্রাসকারী মোড</string>
-    <string name="Settings_ImageView_Update">অ্যাপ আপডেট</string>
-    <string name="Settings_ImageView_Language">ভাষা</string>
-    <string name="Launcher_QQContacts_Toast_Avatar_PermissionDenied">অনুগ্রহ করে অনুমতি দিন যাতে আমরা ছবিটি পড়তে পারি</string>
     <string name="developertools_cropimage">ইমেজ পরিবর্তন</string>
     <string name="toast_permission_storage_denied">অনুগ্রহ করে অনুমতি দিন যাতে আমরা ডেটা পড়তে/লিখতে পারি</string>
     <string name="apiViewer">অ্যাপ API</string>
-    <string name="settingsfunction_downloaddescription">একটি আপডেট ডাউনলোড করা হচ্ছে</string>
     <string name="text_OK">ঠিক আছে</string>
     <string name="text_cancel">বাতিল করুন</string>
     <string name="text_done">শেষ করুন</string>
@@ -64,8 +50,6 @@
     <string name="instant_manager_intro">অ্যাপ শর্টকাট</string>
     <string name="text_new">নতুন</string>
     <string name="settings_sdk">গোলাকার অ্যাপ আইকন প্রদর্শন করুন</string>
-    <string name="nm_adapter_img_content_1">ইমেজ ফোল্ডার ইমেজ</string>
-    <string name="settings_fun_update_via_browser">ব্রাউজারের মাধ্যমে ডাউনলোড করুন\n(লিঙ্কটি অনুলিপি করতে স্পর্শ করুন এবং ধরে রাখুন)</string>
     <string name="text_copy_link">লিঙ্ক কপি করা হয়েছে</string>
     <string name="advice_license">ওপেন সোর্স লাইসেন্স</string>
     <string name="advice_license_details">খোলা সফ্টওয়্যারের লাইসেন্সের বিশদ বিবরণ যা বাউন্ডোকে আকারে আসতে সাহায্য করে</string>
@@ -126,7 +110,6 @@
     <string name="prefSettingsThemeAuto">সিস্টেম অনুসরণ করুন</string>
     <string name="prefSettingsTheme">থিম</string>
     <string name="apiDragDropHint">অনুসন্ধান বা APK</string>
-    <string name="updateDownload">ডাউনলোড করুন</string>
     <string name="instantTileScannerAlipay">আলিপে বারকোড স্ক্যানার</string>
     <string name="instantTileScannerWechat">WeChat বারকোড স্ক্যানার</string>
     <string name="instantTileIntro">দ্রুত সেটিংস টাইলস</string>
@@ -175,7 +158,6 @@
     <string name="twLiveWallpaperDesc">অন্ধকার থিম সক্ষম হলে স্বয়ংক্রিয়ভাবে অন্ধকার ওয়ালপেপারে স্যুইচ করুন</string>
     <string name="activity_av_search">অ্যাপ API</string>
     <string name="title_api_viewing" translatable="false">App API</string>
-    <string name="main_updates">আপডেট</string>
     <string name="main_more">আরও</string>
     <string name="unit_audio_timer">অডিও টাইমার</string>
     <string name="unit_desc_installed">ইনস্টল করা হয়েছে</string>
@@ -196,8 +178,6 @@
     <string name="unit_desc_uninstall_notice">আনইনস্টল বিলম্বিত</string>
     <string name="unit_desc_install_notice">ইন্সটল করার চেষ্টা করছি</string>
     <string name="unit_desc_pin">পিন</string>
-    <string name="mainSecFrequents">ঘন ঘন</string>
-    <string name="mainSecStarred">তারকাচিহ্নিত</string>
     <string name="app_device_controls">বাউন্ডো কন্ট্রোল</string>
     <string name="access_sys_usage">বাউন্ডোকে ব্যবহারের ডেটা অ্যাক্সেস করার অনুমতি দিন</string>
     <string name="text_access_denied">অ্যাক্সেস অস্বীকার করা হয়েছে৷</string>

@@ -19,33 +19,19 @@
     <string name="appDesc">Sekumpulan alat yang terikat untuk melakukan beberapa hal untuk Anda</string>
     <string name="Main_ToolBar_title_Settings">Pengaturan</string>
     <string name="Settings_Button_SwitchLanguage">Bahasa</string>
-    <string name="Settings_Button_CheckUpdate">Pembaruan aplikasi</string>
     <string name="Settings_LanguagePicker_Auto">Ikuti sistem</string>
     <string name="Settings_Language_Button_Cancel">Membatalkan</string>
     <string name="Settings_Language_Dialog_Title">Bahasa</string>
-    <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">Versi baru ditemukan</string>
-    <string name="SettingsSync_Update_AlertDialog_MessagePart1">Versi baru</string>
-    <string name="SettingsSync_Update_AlertDialog_MessagePart2">Perubahan</string>
-    <string name="SettingsSync_Update_AlertDialog_PositiveButtonText">Memperbarui</string>
-    <string name="SettingsSync_Update_AlertDialog_NeutralButtonText">Jangan repot-repot</string>
-    <string name="SettingsSync_Update_AlertDialog_NegativeButtonText">Tidak sekarang</string>
-    <string name="SettingsSync_UpdateFalse_AlertDialog_Title">Tidak ada pembaruan</string>
     <string name="text_alright">Oke</string>
     <string name="text_allset">Menyelesaikan</string>
     <string name="text_forgetit">Membatalkan</string>
     <string name="Main_TextView_Launcher">Instan</string>
     <string name="Main_TextView_Advice_Text">Tentang</string>
-    <string name="textQQ">QQ</string>
     <string name="textEmail">Surel</string>
-    <string name="Advice_QQ_Toast_Text">Tambahkan sebagai kontak sebelum memulai percakapan, jika tidak, pesan tidak akan dikirimkan kepada saya</string>
     <string name="Advice_Switch_Debug_Text">Modus konsumsi</string>
-    <string name="Settings_ImageView_Update">Pembaruan aplikasi</string>
-    <string name="Settings_ImageView_Language">Bahasa</string>
-    <string name="Launcher_QQContacts_Toast_Avatar_PermissionDenied">Tolong beri izin agar kami dapat membaca gambarnya</string>
     <string name="developertools_cropimage">Memodifikasi Gambar</string>
     <string name="toast_permission_storage_denied">Mohon izin agar kami dapat membaca/menulis data</string>
     <string name="apiViewer">API Aplikasi</string>
-    <string name="settingsfunction_downloaddescription">Mengunduh pembaruan</string>
     <string name="text_OK">Oke</string>
     <string name="text_cancel">Membatalkan</string>
     <string name="text_done">Menyelesaikan</string>
@@ -64,8 +50,6 @@
     <string name="instant_manager_intro">Pintasan Aplikasi</string>
     <string name="text_new">Baru</string>
     <string name="settings_sdk">Tampilkan ikon aplikasi bulat</string>
-    <string name="nm_adapter_img_content_1">Gambar folder gambar</string>
-    <string name="settings_fun_update_via_browser">Unduh melalui browser\n(sentuh dan tahan untuk menyalin tautan)</string>
     <string name="text_copy_link">Tautan disalin</string>
     <string name="advice_license">Lisensi sumber terbuka</string>
     <string name="advice_license_details">Detail lisensi untuk perangkat lunak terbuka yang membantu Boundo terbentuk</string>
@@ -126,7 +110,6 @@
     <string name="prefSettingsThemeAuto">Ikuti sistem</string>
     <string name="prefSettingsTheme">Tema</string>
     <string name="apiDragDropHint">Cari atau APK</string>
-    <string name="updateDownload">Unduh</string>
     <string name="instantTileScannerAlipay">Pemindai kode batang Alipay</string>
     <string name="instantTileScannerWechat">Pemindai kode batang WeChat</string>
     <string name="instantTileIntro">Ubin Pengaturan Cepat</string>
@@ -175,7 +158,6 @@
     <string name="twLiveWallpaperDesc">Beralih ke wallpaper gelap secara otomatis saat tema gelap diaktifkan</string>
     <string name="activity_av_search">API Aplikasi</string>
     <string name="title_api_viewing" translatable="false">App API</string>
-    <string name="main_updates">Pembaruan</string>
     <string name="main_more">Lagi</string>
     <string name="unit_audio_timer">Pengatur Waktu Audio</string>
     <string name="unit_desc_installed">Terpasang</string>
@@ -196,8 +178,6 @@
     <string name="unit_desc_uninstall_notice">Menunda pencopotan</string>
     <string name="unit_desc_install_notice">Mencoba untuk menginstal</string>
     <string name="unit_desc_pin">Pin</string>
-    <string name="mainSecFrequents">Sering</string>
-    <string name="mainSecStarred">Berbintang</string>
     <string name="app_device_controls">Kontrol Batas</string>
     <string name="access_sys_usage">Izinkan Bondo mengakses data penggunaan</string>
     <string name="text_access_denied">Akses ditolak</string>

@@ -17,25 +17,20 @@
 package com.madness.collision.settings
 
 import android.content.Context
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.ProgressBar
 import androidx.appcompat.widget.Toolbar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import androidx.core.content.edit
 import androidx.core.content.res.use
 import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.chief.app.ComposeFragment
 import com.madness.collision.chief.app.rememberColorScheme
 import com.madness.collision.main.MainActivity
-import com.madness.collision.util.CollisionDialog
 import com.madness.collision.util.P
-import com.madness.collision.util.PermissionRequestHandler
 import com.madness.collision.util.PopupUtil
 import com.madness.collision.util.config.LocaleUtils
 import com.madness.collision.util.os.OsUtils
@@ -48,8 +43,6 @@ internal class SettingsFragment : ComposeFragment(), Democratic {
     companion object {
         private const val TAG = "Settings"
     }
-
-    private lateinit var prHandler: PermissionRequestHandler
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
         mainViewModel.configNavigation(toolbar, iconColor)
@@ -103,34 +96,4 @@ internal class SettingsFragment : ComposeFragment(), Democratic {
             }
         }.show()
     }
-
-    // check update from CoolApk, not used now, need INTERNET permission
-    private fun checkUpdate(context: Context){
-        val activity = activity ?: return
-        val bar = ProgressBar(context)
-        val checking = CollisionDialog.loading(context, bar)
-        bar.post {
-            val settingsPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
-            settingsPreferences.edit {
-                putBoolean(P.SETTINGS_UPDATE_NOTIFY, true)
-                putBoolean(P.SETTINGS_UPDATE_VIA_SETTINGS, true)
-            }
-            prHandler = PermissionRequestHandler(activity)
-            SettingsFunc.check4Update(context, checking, prHandler)
-        }
-        checking.show()
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode){
-            SettingsFunc.requestWriteStorage -> {
-                if (grantResults.isEmpty()) return
-                when (grantResults[0]){
-                    PackageManager.PERMISSION_GRANTED -> prHandler.resumeJob.run()
-                }
-            }
-        }
-    }
-
 }

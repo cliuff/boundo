@@ -19,7 +19,6 @@
     <string name="app_name">Boundo</string>
     <string name="Main_ToolBar_title_Settings">Настройки</string>
     <string name="Settings_Button_SwitchLanguage">Сменить язык</string>
-    <string name="Settings_Button_CheckUpdate">Обновление программы</string>
     <string name="Settings_Language_Button_Cancel">Отмена</string>
     <string name="Settings_Language_Dialog_Title">Язык</string>
     <string name="text_alright">ОК</string>
@@ -44,18 +43,7 @@
     <string name="immortalLocate">Расположение</string>
     <string name="apiDisplaySys">Системные приложения</string>
     <string name="Advice_Switch_Debug_Text">Режим потребления</string>
-    <string name="Launcher_QQContacts_Toast_Avatar_PermissionDenied">Пожалуйста, дайте разрешение, чтобы мы могли прочитать изображение</string>
-    <string name="Advice_QQ_Toast_Text">Добавьте как контакт до начала разговора, иначе сообщение не будет отправлено мне</string>
     <string name="Main_TextView_Launcher">Мгновенное</string>
-    <string name="SettingsSync_UpdateFalse_AlertDialog_Title">Без обновления</string>
-    <string name="SettingsSync_Update_AlertDialog_MessagePart1">Новая версия</string>
-    <string name="SettingsSync_Update_AlertDialog_MessagePart2">изменения</string>
-    <string name="SettingsSync_Update_AlertDialog_NegativeButtonText">Потом</string>
-    <string name="SettingsSync_Update_AlertDialog_NeutralButtonText">Не напоминай</string>
-    <string name="SettingsSync_Update_AlertDialog_PositiveButtonText">Обновить</string>
-    <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">Найдена новая версия</string>
-    <string name="Settings_ImageView_Language">Языки</string>
-    <string name="Settings_ImageView_Update">Обновление приложения</string>
     <string name="Settings_LanguagePicker_Auto">Следуйте системе</string>
     <string name="activityApkSharing">Проверьте API</string>
     <string name="activityTextProcessingApp">Посмотреть Bnd приложения</string>
@@ -98,9 +86,7 @@
     <string name="instantTileScannerWechat">WeChat сканер штрих-кода</string>
     <string name="instant_manager_intro">Ярлыки приложений</string>
     <string name="main_more">Больше</string>
-    <string name="main_updates">Обновления</string>
     <string name="menuApiSortApiTime">Недавно обновленный</string>
-    <string name="nm_adapter_img_content_1">Изображение папки с изображением</string>
     <string name="notifyChannelGroupApp">Приложение</string>
     <string name="notifyChannelGroupAppDesc">Уведомления, связанные с приложением</string>
     <string name="notifyChannelService">Запросы на обслуживание</string>
@@ -133,8 +119,6 @@
     <string name="settingsApiApkPreload">Сканирование для APK заранее в фоновом режиме</string>
     <string name="settingsApiRetrieveRoundIcon">Извлечь круглый значок из ресурса, если он указан</string>
     <string name="settings_sdk">Отображать круглые значки приложений</string>
-    <string name="settingsfunction_downloaddescription">Загрузка обновления</string>
-    <string name="settings_fun_update_via_browser">Загрузка через браузер\n(нажмите и удерживайте, чтобы скопировать ссылку)</string>
     <string name="sharingNonApkLink">Не apk ссылка для скачивания</string>
     <string name="textAlways">Всегда</string>
     <string name="textAsk4Notification">Пожалуйста, дайте нам разрешение показывать уведомления, мы полагаемся на Toast Notifications, чтобы предоставить вам лучший опыт. Он используется для уведомления вас о инструкциях, советах, предложениях, сообщениях об успешной работе и иногда сообщениях об ошибках. Вы можете столкнуться с путаницей в нашем приложении, если решите не предоставлять нам разрешение на уведомление.</string>
@@ -147,7 +131,6 @@
     <string name="textManual">Руководство</string>
     <string name="textNever">Никогда</string>
     <string name="textParentheses">" (%s)"</string>
-    <string name="textQQ">QQ</string>
     <string name="textQuality">Качество</string>
     <string name="textRound">Круглый</string>
     <string name="textRounded">Прямоугольник с закругленными углами</string>
@@ -176,7 +159,6 @@
     <string name="twService">Тематические Живые Обои</string>
     <string name="units">Модули</string>
     <string name="unitsManager">Диспетчер модулей</string>
-    <string name="updateDownload">Скачать</string>
     <string name="unit_audio_timer">Аудио Таймер</string>
     <string name="unit_desc_av">• Проверьте уровень Android API всех приложений и приложений на устройстве\n• Проверьте поддержку Adaptive Icon всех приложений\n• Статистика API приложения\n• APK и значок извлечения\n• Детали пакета и подпись</string>
     <string name="unit_desc_im">• Изменить разрешение\n• Изменить формат: png jpg webp heif\n• Размытие изображения</string>
@@ -196,8 +178,6 @@
     <string name="unit_manager_uninstall_success">Удаление произойдет, когда простаивает</string>
     <string name="unit_desc_uninstall_notice">Отсрочка удаления</string>
     <string name="unit_desc_pin">приколоть</string>
-    <string name="mainSecStarred">Помеченные</string>
-    <string name="mainSecFrequents">Часто используется</string>
     <string name="text_access_denied">В доступе отказано</string>
     <string name="versatile_device_controls_at_hint_on">Проведите, чтобы настроить</string>
     <string name="versatile_device_controls_at_hint_off">Нажмите, чтобы начать</string>

@@ -294,10 +294,6 @@
             </intent-filter>
         </service>
         <service
-            android:name=".util.NotificationActions"
-            android:exported="false"
-            android:enabled="true" />
-        <service
             android:name=".versatile.ScreenCapturingService"
             android:exported="false"
             android:enabled="true"

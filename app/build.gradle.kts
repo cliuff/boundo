@@ -205,7 +205,6 @@ dependencies {
         libs.googlePlayFeatureDelivery,
         libs.googlePlayFeatureDeliveryKtx,
         libs.gglGuava,
-        libs.jsoup,
         libs.kotlinStdlib,
         libs.kotlinReflect,
         libs.rxJava,

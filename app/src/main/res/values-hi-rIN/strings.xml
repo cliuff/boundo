@@ -19,33 +19,19 @@
     <string name="appDesc">आपके लिए कुछ काम करने के लिए बाध्य उपकरणों का एक बंडल</string>
     <string name="Main_ToolBar_title_Settings">समायोजन</string>
     <string name="Settings_Button_SwitchLanguage">बोली</string>
-    <string name="Settings_Button_CheckUpdate">ऐप अपडेट</string>
     <string name="Settings_LanguagePicker_Auto">सिस्टम का पालन करें</string>
     <string name="Settings_Language_Button_Cancel">रद्द करना</string>
     <string name="Settings_Language_Dialog_Title">बोली</string>
-    <string name="SettingsSync_Update_AlertDialog_Title_UpdateInfo">नया संस्करण मिला</string>
-    <string name="SettingsSync_Update_AlertDialog_MessagePart1">नया संस्करण</string>
-    <string name="SettingsSync_Update_AlertDialog_MessagePart2">परिवर्तन</string>
-    <string name="SettingsSync_Update_AlertDialog_PositiveButtonText">अद्यतन</string>
-    <string name="SettingsSync_Update_AlertDialog_NeutralButtonText">भेजा मत खा</string>
-    <string name="SettingsSync_Update_AlertDialog_NegativeButtonText">अभी नहीं</string>
-    <string name="SettingsSync_UpdateFalse_AlertDialog_Title">कोई अपग्रेड नहीं</string>
     <string name="text_alright">ठीक है</string>
     <string name="text_allset">खत्म करना</string>
     <string name="text_forgetit">रद्द करना</string>
     <string name="Main_TextView_Launcher">तुरंत</string>
     <string name="Main_TextView_Advice_Text">के बारे में</string>
-    <string name="textQQ">क्यू क्यू</string>
     <string name="textEmail">ईमेल</string>
-    <string name="Advice_QQ_Toast_Text">बातचीत शुरू करने से पहले संपर्क के रूप में जोड़ें, अन्यथा मुझे संदेश नहीं भेजा जाएगा</string>
     <string name="Advice_Switch_Debug_Text">खपत मोड</string>
-    <string name="Settings_ImageView_Update">ऐप अपडेट</string>
-    <string name="Settings_ImageView_Language">बोली</string>
-    <string name="Launcher_QQContacts_Toast_Avatar_PermissionDenied">कृपया अनुमति दें ताकि हम छवि को पढ़ सकें</string>
     <string name="developertools_cropimage">छवि संशोधन</string>
     <string name="toast_permission_storage_denied">कृपया अनुमति दें ताकि हम डेटा पढ़/लिख सकें</string>
     <string name="apiViewer">ऐप एपीआई</string>
-    <string name="settingsfunction_downloaddescription">एक अपडेट डाउनलोड कर रहा है</string>
     <string name="text_OK">ठीक है</string>
     <string name="text_cancel">रद्द करना</string>
     <string name="text_done">खत्म करना</string>
@@ -64,8 +50,6 @@
     <string name="instant_manager_intro">ऐप शॉर्टकट</string>
     <string name="text_new">नया</string>
     <string name="settings_sdk">गोल ऐप आइकन प्रदर्शित करें</string>
-    <string name="nm_adapter_img_content_1">छवि फ़ोल्डर छवि</string>
-    <string name="settings_fun_update_via_browser">ब्राउज़र से डाउनलोड करें\n(लिंक को कॉपी करने के लिए टच और होल्ड करें)</string>
     <string name="text_copy_link">लिंक कॉपी किया गया</string>
     <string name="advice_license">ओपन सोर्स लाइसेंस</string>
     <string name="advice_license_details">बाउंडो को आकार देने में मदद करने वाले खुले सॉफ़्टवेयर के लिए लाइसेंस विवरण</string>
@@ -126,7 +110,6 @@
     <string name="prefSettingsThemeAuto">सिस्टम का पालन करें</string>
     <string name="prefSettingsTheme">थीम</string>
     <string name="apiDragDropHint">खोज या APK</string>
-    <string name="updateDownload">डाउनलोड</string>
     <string name="instantTileScannerAlipay">Alipay बारकोड स्कैनर</string>
     <string name="instantTileScannerWechat">WeChat बारकोड स्कैनर</string>
     <string name="instantTileIntro">त्वरित सेटिंग टाइल</string>
@@ -175,7 +158,6 @@
     <string name="twLiveWallpaperDesc">गहरे रंग वाली थीम के सक्षम होने पर स्वचालित रूप से गहरे रंग के वॉलपेपर पर स्विच करें</string>
     <string name="activity_av_search">ऐप एपीआई</string>
     <string name="title_api_viewing" translatable="false">App API</string>
-    <string name="main_updates">अपडेट</string>
     <string name="main_more">अधिक</string>
     <string name="unit_audio_timer">ऑडियो टाइमर</string>
     <string name="unit_desc_installed">स्थापित</string>
@@ -196,8 +178,6 @@
     <string name="unit_desc_uninstall_notice">अनइंस्टॉल करना स्थगित करना</string>
     <string name="unit_desc_install_notice">स्थापित करने की कोशिश कर रहा है</string>
     <string name="unit_desc_pin">नत्थी करना</string>
-    <string name="mainSecFrequents">बारंबार</string>
-    <string name="mainSecStarred">तारांकित</string>
     <string name="app_device_controls">बाउंडो नियंत्रण</string>
     <string name="access_sys_usage">बाउंडो को उपयोग डेटा तक पहुंचने दें</string>
     <string name="text_access_denied">पहुंच अस्वीकृत</string>
