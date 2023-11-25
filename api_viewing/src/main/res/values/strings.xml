@@ -103,6 +103,13 @@
     <string name="av_details_real_installer">"Real installer: "</string>
     <string name="av_upd_ver_upd">Version updated</string>
     <string name="av_upd_pck_upd">Package updated</string>
+    <string name="av_tag_kotlin">Kotlin</string>
+    <string name="av_tag_compose">Jetpack Compose</string>
+    <string name="av_tag_flutter">Flutter</string>
+    <string name="av_tag_react_native">React Native</string>
+    <string name="av_tag_xamarin">Xamarin</string>
+    <string name="av_tag_fcm_normal">FCM</string>
+    <string name="av_tag_fcm_full">Firebase Cloud Messaging (FCM)</string>
     <string name="av_tag_jpush_normal">JPush</string>
     <string name="av_tag_upush_normal">U-Push</string>
     <string name="av_tag_tpns_normal">TPNS</string>
@@ -112,6 +119,9 @@
     <string name="av_tag_full_64bit_full">64-bit (ARM 64-bit, x86 64-bit)</string>
     <string name="av_tag_arm_32bit">ARM 32-bit</string>
     <string name="av_tag_arm_64bit">ARM 64-bit</string>
+    <string name="av_tag_x86_32bit">x86</string>
+    <string name="av_tag_x86_64bit_normal">x64</string>
+    <string name="av_tag_x86_64bit_full">x86-64 (x64)</string>
     <string name="av_tag_result_service">%s is found in this app</string>
     <string name="av_tag_result_mipush_service">Checked by MiPush SDK, otherwise %s is found in this app</string>
     <string name="av_tag_result_file">%s is found in the APK</string>

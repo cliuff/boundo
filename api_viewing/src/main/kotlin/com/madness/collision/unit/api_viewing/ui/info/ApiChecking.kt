@@ -52,6 +52,8 @@ import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.seal.SealMaker
 import com.madness.collision.util.os.OsUtils
+import com.madness.collision.util.regexOf
+import com.madness.collision.util.ui.orWithRtl
 import java.io.File
 
 @Composable
@@ -135,10 +137,15 @@ private fun AppDetails(
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 val app = LocalApp.current
+                // version name in RTL layout, CORRECT: 5.0-A01, WRONG: A01-5.0
+                val appVerName = app.verName.let { v ->
+                    val verRegex = regexOf("""[0-9a-zA-Z-_+.()\[\]\s]+""")
+                    v.orWithRtl { if (v.matches(verRegex.toRegex())) "\u2068$v" else v }
+                }
                 if (updateTime != null) {
-                    AppDetailsItem1(app.verName, totalSize, updateTime, Icons.Outlined.Info)
+                    AppDetailsItem1(appVerName, totalSize, updateTime, Icons.Outlined.Info)
                 } else {
-                    val verSize = listOfNotNull(app.verName.takeIf { it.isNotEmpty() }, totalSize)
+                    val verSize = listOfNotNull(appVerName.takeIf { it.isNotEmpty() }, totalSize)
                         .joinToString(separator = " • ")
                     AppDetailsItem(verSize, Icons.Outlined.Info)
                 }

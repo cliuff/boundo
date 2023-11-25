@@ -56,6 +56,7 @@ import com.madness.collision.unit.api_viewing.env.SettingsAppInfoOwner
 import com.madness.collision.util.StringUtils
 import com.madness.collision.util.X
 import com.madness.collision.util.ui.AppIconPackageInfo
+import com.madness.collision.util.ui.autoMirrored
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -323,7 +324,7 @@ private fun ComplexActionItem(label: String, imageVector: ImageVector, desc: Str
             )
             Spacer(modifier = Modifier.width(4.dp))
             Icon(
-                modifier = Modifier.size(10.dp),
+                modifier = Modifier.size(10.dp).autoMirrored(),
                 imageVector = Icons.Outlined.ContentCopy,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
@@ -336,7 +337,7 @@ private fun ComplexActionItem(label: String, imageVector: ImageVector, desc: Str
 private fun RawActionItem(label: String, imageVector: ImageVector, modifier: Modifier = Modifier) {
     Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
         Icon(
-            modifier = Modifier.size(20.dp),
+            modifier = Modifier.size(20.dp).autoMirrored(),
             imageVector = imageVector,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),

@@ -55,35 +55,35 @@ internal fun builtInTags(): Map<String, AppTagInfo> = listOf(
 
     AppTagInfo(
         id = AppTagInfo.ID_TECH_KOTLIN, category = 0.cat, icon = R.drawable.ic_kotlin_72.icon,
-        label = "Kotlin".labels, rank = "12",
+        label = R.string.av_tag_kotlin.labels, rank = "12",
         desc = "kotlin.kotlin_builtins".fileResultDesc,
         requisites = nativeLibrariesRequisite().list,
         expressing = commonExpressing { it.nativeLibraries[7] }
     ).apply { iconKey = "kot" },
     AppTagInfo(
         id = AppTagInfo.ID_TECH_X_COMPOSE, category = 0.cat, icon = R.drawable.ic_cmp_72.icon,
-        label = "Jetpack Compose".labels, rank = "13",
+        label = R.string.av_tag_compose.labels, rank = "13",
         desc = "androidx.compose".packageResultDesc,
         requisites = thirdPartyPkgRequisite().list,
         expressing = commonExpressing { it.isJetpackComposed }
     ).apply { iconKey = "xcm" },
     AppTagInfo(
         id = AppTagInfo.ID_TECH_FLUTTER, category = 0.cat, icon = R.drawable.ic_flutter_72.icon,
-        label = "Flutter".labels, rank = "14",
+        label = R.string.av_tag_flutter.labels, rank = "14",
         desc = "libflutter.so".fileResultDesc,
         requisites = nativeLibrariesRequisite().list,
         expressing = commonExpressing { it.nativeLibraries[4] }
     ).apply { iconKey = "flu" },
     AppTagInfo(
         id = AppTagInfo.ID_TECH_REACT_NATIVE, category = 0.cat, icon = R.drawable.ic_react_72.icon,
-        label = "React Native".labels, rank = "15",
+        label = R.string.av_tag_react_native.labels, rank = "15",
         desc = "libreactnativejni.so".fileResultDesc,
         requisites = nativeLibrariesRequisite().list,
         expressing = commonExpressing { it.nativeLibraries[5] }
     ).apply { iconKey = "rn" },
     AppTagInfo(
         id = AppTagInfo.ID_TECH_XAMARIN, category = 0.cat, icon = R.drawable.ic_xamarin_72.icon,
-        label = "Xamarin".labels, rank = "16",
+        label = R.string.av_tag_xamarin.labels, rank = "16",
         desc = "libxamarin-app.so".fileResultDesc,
         requisites = nativeLibrariesRequisite().list,
         expressing = commonExpressing { it.nativeLibraries[6] }
@@ -178,14 +178,14 @@ internal fun builtInTags(): Map<String, AppTagInfo> = listOf(
     ),
     AppTagInfo(
         id = AppTagInfo.ID_PKG_X86, category = 0.cat, icon = "x86".icon,
-        label = "x86".labels, rank = "30",
+        label = R.string.av_tag_x86_32bit.labels, rank = "30",
         desc = "lib/x86".dirResultDesc,
         requisites = nativeLibrariesRequisite().list,
         expressing = commonExpressing { it.nativeLibraries[2] }
     ),
     AppTagInfo(
         id = AppTagInfo.ID_PKG_X64, category = 0.cat, icon = "x64".icon,
-        label = ("x64" to "x86-64 (x64)").strLabels, rank = "31",
+        label = (R.string.av_tag_x86_64bit_normal to R.string.av_tag_x86_64bit_full).resLabels, rank = "31",
         desc = "lib/x86_64".dirResultDesc,
         requisites = nativeLibrariesRequisite().list,
         expressing = commonExpressing { it.nativeLibraries[3] }
@@ -193,7 +193,7 @@ internal fun builtInTags(): Map<String, AppTagInfo> = listOf(
 
     AppTagInfo(
         id = AppTagInfo.ID_MSG_FCM, category = 0.cat, icon = R.drawable.ic_firebase_72.icon,
-        label = ("FCM" to "Firebase Cloud Messaging (FCM)").strLabels, rank = "32",
+        label = (R.string.av_tag_fcm_normal to R.string.av_tag_fcm_full).resLabels, rank = "32",
         desc = "com.google.firebase.messaging.FirebaseMessagingService".serviceResultDesc,
         requisites = pkgServicesRequisite().list,
         expressing = serviceExpressing("com.google.firebase.messaging.FirebaseMessagingService")

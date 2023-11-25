@@ -52,9 +52,6 @@ import androidx.compose.ui.window.Popup
 import androidx.core.graphics.drawable.toDrawable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
-import com.google.accompanist.flowlayout.FlowRow
-import com.google.accompanist.flowlayout.SizeMode
 import com.madness.collision.unit.api_viewing.R
 import com.madness.collision.util.dev.DarkPreview
 import com.madness.collision.util.dev.LayoutDirectionPreviews
@@ -118,15 +115,13 @@ private fun AppIconSet(paddingValues: PaddingValues, list: List<IconInfo?>, env:
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun IconInfoSection(i: Int, iconInfo: IconInfo) {
     val (_, icon, resName) = iconInfo
     if (i > 0) Spacer(modifier = Modifier.height(24.dp))
     Column(modifier = Modifier.padding(LocalContentMargin.current)) {
-        FlowRow(
-            mainAxisSize = SizeMode.Expand,
-            crossAxisAlignment = FlowCrossAxisAlignment.Center,
-        ) {
+        FlowRow {
             val items = remember { iconInfo.entry.all }
             items.forEachIndexed { index, item ->
                 val fullName = item.fullName
@@ -134,6 +129,7 @@ private fun IconInfoSection(i: Int, iconInfo: IconInfo) {
                 var popItemName by remember { mutableStateOf(false) }
                 Row(
                     modifier = Modifier
+                        .align(Alignment.CenterVertically)
                         .clip(AbsoluteSmoothCornerShape(3.dp, 80))
                         .let { if (fullName != null) it.clickable { popItemName = !popItemName } else it }
                 ) {
@@ -179,6 +175,7 @@ private fun IconInfoSection(i: Int, iconInfo: IconInfo) {
                 Spacer(modifier = Modifier.width(4.dp))
                 Box(
                     modifier = Modifier
+                        .align(Alignment.CenterVertically)
                         .clip(AbsoluteSmoothCornerShape(3.dp, 80))
                         .background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.06f))
                         .padding(horizontal = 3.dp, vertical = 1.dp)

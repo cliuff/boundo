@@ -38,11 +38,9 @@ import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -54,6 +52,7 @@ import com.madness.collision.unit.api_viewing.info.AppType
 import com.madness.collision.unit.api_viewing.info.ExpressedTag
 import com.madness.collision.unit.api_viewing.list.LocalAppSwitcherHandler
 import com.madness.collision.unit.api_viewing.tag.app.AppTagInfo
+import com.madness.collision.util.ui.autoMirrored
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
@@ -93,22 +92,13 @@ internal fun TagDetailsList(
                     AppTagInfo.ID_PKG_AAB, AppTagInfo.ID_APP_SYSTEM_MODULE, AppTagInfo.ID_TYPE_OVERLAY -> true
                     else -> false
                 }
-                val direction = LocalLayoutDirection.current
-                val chevron by remember(showTagDetails) {
-                    derivedStateOf {
-                        when (expressed.intrinsic.id) {
-                            AppTagInfo.ID_APP_INSTALLER_PLAY -> Icons.Outlined.Launch
-                            AppTagInfo.ID_APP_ADAPTIVE_ICON -> {
-                                if (direction == LayoutDirection.Rtl) Icons.Outlined.ChevronLeft
-                                else Icons.Outlined.ChevronRight
-                            }
-                            AppTagInfo.ID_PKG_AAB, AppTagInfo.ID_APP_SYSTEM_MODULE, AppTagInfo.ID_TYPE_OVERLAY -> {
-                                if (showTagDetails) Icons.Outlined.ExpandLess
-                                else Icons.Outlined.ExpandMore
-                            }
-                            else -> null
-                        }
+                val chevron = when (expressed.intrinsic.id) {
+                    AppTagInfo.ID_APP_INSTALLER_PLAY -> Icons.Outlined.Launch
+                    AppTagInfo.ID_APP_ADAPTIVE_ICON -> Icons.Outlined.ChevronRight
+                    AppTagInfo.ID_PKG_AAB, AppTagInfo.ID_APP_SYSTEM_MODULE, AppTagInfo.ID_TYPE_OVERLAY -> {
+                        if (showTagDetails) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore
                     }
+                    else -> null
                 }
                 val itemColor = MaterialTheme.colorScheme.onSurface
                     .copy(alpha = if (activated) 0.75f else 0.35f)
@@ -212,7 +202,7 @@ private fun TagItem(
         }
         if (chevron != null) {
             Icon(
-                modifier = Modifier.size(16.dp),
+                modifier = Modifier.size(16.dp).autoMirrored(),
                 imageVector = chevron,
                 contentDescription = null,
                 tint = itemColor,
@@ -266,7 +256,7 @@ private fun TagItemIcon(icon: Bitmap?, activated: Boolean) {
         )
     } else {
         Icon(
-            modifier = Modifier.size(16.dp),
+            modifier = Modifier.size(16.dp).autoMirrored(),
             imageVector = Icons.Outlined.Label,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurface.copy(alpha = if (activated) 0.75f else 0.4f),

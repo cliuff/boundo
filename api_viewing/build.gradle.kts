@@ -81,7 +81,6 @@ dependencies {
         libs.smoothCornerCompose,
         libs.androidxConstraintLayoutCompose,
         libs.libCheckerRules,
-        libs.googleAccompanistFlowLayout,
         project(":apk-parser"),
     ).forEach { implementation(it) }
     implementation(libs.bundles.dynamicFeatureBasics)

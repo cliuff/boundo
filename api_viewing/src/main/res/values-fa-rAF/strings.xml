@@ -103,15 +103,26 @@
     <string name="av_details_real_installer">"نصب واقعی: "</string>
     <string name="av_upd_ver_upd">نسخه به روز شد</string>
     <string name="av_upd_pck_upd">بسته به روز شد</string>
+    <string name="av_tag_kotlin">&#8207;Kotlin</string>
+    <string name="av_tag_compose">&#8207;Jetpack Compose</string>
+    <string name="av_tag_flutter">&#8207;Flutter</string>
+    <string name="av_tag_react_native">&#8207;React Native</string>
+    <string name="av_tag_xamarin">&#8207;Xamarin</string>
+    <string name="av_tag_fcm_normal">&#8207;FCM</string>
+    <string name="av_tag_fcm_full">&#8207;Firebase Cloud Messaging (FCM)</string>
     <string name="av_tag_jpush_normal">&#8207;JPush</string>
     <string name="av_tag_upush_normal">&#8207;U-Push</string>
     <string name="av_tag_tpns_normal">&#8207;TPNS</string>
     <string name="av_tag_ali_push_normal">&#8207;Alibaba Cloud push</string>
     <string name="av_tag_full_64bit">64-bit</string>
     <string name="av_tag_full_64bit_normal">64-bit</string>
-    <string name="av_tag_full_64bit_full">&#8206;64-bit (ARM 64-bit, x86 64-bit)</string>
+    <!-- prefix with \u2068 for texts start with numbers in bidi text -->
+    <string name="av_tag_full_64bit_full">\u206864-bit (ARM 64-bit, x86 64-bit)</string>
     <string name="av_tag_arm_32bit">&#8207;ARM 32-bit</string>
     <string name="av_tag_arm_64bit">&#8207;ARM 64-bit</string>
+    <string name="av_tag_x86_32bit">&#8207;x86</string>
+    <string name="av_tag_x86_64bit_normal">&#8207;x64</string>
+    <string name="av_tag_x86_64bit_full">&#8207;x86-64 (x64)</string>
     <string name="av_tag_result_service">%s در این برنامه یافت می شود</string>
     <string name="av_tag_result_mipush_service">توسط MiPush SDK بررسی شده است، در غیر این صورت %s در این برنامه یافت می شود</string>
     <string name="av_tag_result_file">%s در APK یافت می شود</string>
