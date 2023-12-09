@@ -40,20 +40,25 @@ import com.madness.collision.versatile.ctrl.MduControlCreator
 import com.madness.collision.versatile.ctrl.TimerValues
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 class DeviceControlsViewModel : ViewModel() {
     private val mutEnabledState: MutableState<Boolean> = mutableStateOf(false)
     val enabledState: State<Boolean> by ::mutEnabledState
     private val mutControlListState: MutableState<List<ControlInfo>> = mutableStateOf(emptyList())
     val controlListState: State<List<ControlInfo>> by ::mutControlListState
+    private val initMutex = Mutex()
 
     fun init() {
         val context = chiefContext
         if (OsUtils.dissatisfy(OsUtils.R)) return
         viewModelScope.launch(Dispatchers.Default) {
-            mutEnabledState.value = isFeatureEnabled(context)
-            if (controlListState.value.isEmpty()) {
-                mutControlListState.value = loadControls(context)
+            initMutex.withLock {
+                mutEnabledState.value = isFeatureEnabled(context)
+                if (controlListState.value.isEmpty()) {
+                    mutControlListState.value = loadControls(context)
+                }
             }
         }
     }
@@ -108,6 +113,7 @@ private suspend fun loadControls(context: Context): List<ControlInfo> {
         val atCreator = AudioTimerControlCreator(TimerValues(120f, 5f, 120f))
         put(atCreator, listOf(AtControlsProvider.DEV_ID_AT))
         put(MduControlCreator(), listOf(MduControlsProvider.DEV_ID_MDU))
+        // skip DevManControlCreator.onCreate() call to avoid unnecessary receiver registration
         DevManControlCreator().let { put(it, it.getDeviceIds(context)) }
     }
     val controls = controlIds.flatMap { (creator, ids) ->

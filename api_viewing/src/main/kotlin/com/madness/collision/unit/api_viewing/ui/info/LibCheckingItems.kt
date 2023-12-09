@@ -49,9 +49,11 @@ import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
 import androidx.constraintlayout.compose.Visibility
 import coil.compose.AsyncImage
+import com.madness.collision.chief.lang.runIf
 import com.madness.collision.unit.api_viewing.info.*
 import com.madness.collision.util.ColorUtil
 import com.madness.collision.util.mainApplication
+import com.madness.collision.util.ui.rememberExpandableTextLayout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape
@@ -61,20 +63,37 @@ fun PlainLibItem(item: PackComponent, horizontalPadding: Dp = 20.dp) {
     when (item) {
         is ValueComponent.NativeLib -> {
             PlainNativeLibItem(
-                modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 2.dp),
+                modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 3.dp),
                 comp = item,
             )
         }
         else -> {
+            // apply expandable end padding, to allow for more text to display
+            val textLayout = rememberExpandableTextLayout(item, horizontalPadding)
             Text(
-                modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 2.dp),
+                modifier = Modifier
+                    .padding(vertical = 3.dp)
+                    .padding(start = horizontalPadding)
+                    .runIf({ textLayout.expandLine.not() }, { padding(end = horizontalPadding) }),
                 text = item.comp.value,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.9f),
-                fontSize = 9.sp,
-                lineHeight = 11.sp,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.85f),
+                fontSize = 10.sp,
+                lineHeight = 14.sp,
+                onTextLayout = textLayout::onTextLayout,
             )
         }
     }
+}
+
+@Composable
+fun PlainChunkPartLibItem(item: PackComponent, horizontalPadding: Dp = 20.dp) {
+    Text(
+        modifier = Modifier.padding(vertical = 3.dp).padding(horizontal = horizontalPadding),
+        text = item.comp.value,
+        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.85f),
+        fontSize = 10.sp,
+        lineHeight = 14.sp,
+    )
 }
 
 @Composable
@@ -101,29 +120,34 @@ fun MarkedLibItem(item: MarkedComponent) {
 }
 
 @Composable
-private fun MarkedSimpleLibItem(item: MarkedComponent, enabled: Boolean = true, horizontalPadding: Dp = 20.dp,
-                                itemContent: @Composable () -> Unit) {
+private fun LibIcon(resId: Int, mono: Boolean, size: Dp, alpha: Float = 1f) {
+    if (mono) {
+        Icon(
+            modifier = Modifier.width(size).heightIn(max = size),
+            painter = painterResource(resId),
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurface.copy(alpha = alpha),
+        )
+    } else {
+        AsyncImage(
+            modifier = Modifier.width(size).heightIn(max = size),
+            model = resId,
+            contentDescription = null,
+            alpha = alpha,
+        )
+    }
+}
+
+@Composable
+private fun MarkedSimpleLibItem(
+    modifier: Modifier = Modifier, item: MarkedComponent, enabled: Boolean = true,
+    horizontalPadding: Dp = 20.dp, itemContent: @Composable () -> Unit) {
     val iconAlpha = if (enabled) 1f else 0.7f
     val textAlpha = if (enabled) 1f else 0.7f
-    Column(modifier = Modifier.padding(horizontalPadding, vertical = 2.dp)) {
+    Column(modifier = modifier.padding(vertical = 3.dp).padding(start = horizontalPadding)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            val markedIconResId = item.markedIconResId
-            if (markedIconResId != null) {
-                if (item.isMarkedIconMono) {
-                    Icon(
-                        modifier = Modifier.width(8.dp).heightIn(max = 8.dp),
-                        painter = painterResource(markedIconResId),
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = iconAlpha),
-                    )
-                } else {
-                    AsyncImage(
-                        modifier = Modifier.width(8.dp).heightIn(max = 8.dp),
-                        model = markedIconResId,
-                        contentDescription = null,
-                        alpha = iconAlpha,
-                    )
-                }
+            item.markedIconResId?.let { icId ->
+                LibIcon(resId = icId, mono = item.isMarkedIconMono, size = 8.dp, alpha = iconAlpha)
                 Spacer(modifier = Modifier.width(3.dp))
             }
             Text(
@@ -145,14 +169,48 @@ private fun MarkedSimpleLibItem(item: MarkedComponent, enabled: Boolean = true, 
 }
 
 @Composable
+fun MarkedSimpleChunkPartLibItem(item: MarkedComponent, horizontalPadding: Dp = 20.dp) {
+    Column(modifier = Modifier.padding(horizontalPadding, vertical = 3.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            item.markedIconResId?.let { icId ->
+                LibIcon(resId = icId, mono = item.isMarkedIconMono, size = 5.dp)
+                Spacer(modifier = Modifier.width(3.dp))
+            }
+            Text(
+                text = item.markedLabel,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
+                fontWeight = FontWeight.Medium,
+                fontSize = 5.sp,
+                lineHeight = 5.sp,
+            )
+        }
+        Text(
+            text = item.comp.value,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.85f),
+            fontSize = 8.sp,
+            lineHeight = 8.sp,
+        )
+    }
+}
+
+@Composable
 private fun MarkedSimpleLibItem(item: MarkedComponent, enabled: Boolean = true, horizontalPadding: Dp = 20.dp) {
-    MarkedSimpleLibItem(item = item, enabled = enabled, horizontalPadding = horizontalPadding) {
+    // apply expandable end padding, to allow for more text to display
+    val textLayout = rememberExpandableTextLayout(item, horizontalPadding)
+    MarkedSimpleLibItem(
+        modifier = (Modifier as Modifier)
+            .runIf({ textLayout.expandLine.not() }, { padding(end = horizontalPadding) }),
+        item = item,
+        enabled = enabled,
+        horizontalPadding = horizontalPadding,
+    ) {
         val textAlpha = if (enabled) 1f else 0.7f
         Text(
             text = item.comp.value,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.9f * textAlpha),
-            fontSize = 9.sp,
-            lineHeight = 11.sp,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.85f * textAlpha),
+            fontSize = 10.sp,
+            lineHeight = 14.sp,
+            onTextLayout = textLayout::onTextLayout,
         )
     }
 }
@@ -414,7 +472,7 @@ private fun MarkedSimpleItem(item: MarkedComponent, compUiType: MarkedCompUiType
                         modifier = Modifier.layoutId("fullValues"),
                         text = itemValuesString.orEmpty(),
                         color = compItemColor,
-                        fontSize = 7.sp,
+                        fontSize = 8.sp,
                         lineHeight = 10.sp,
                     )
                 }
@@ -528,8 +586,8 @@ fun CompLabel(modifier: Modifier = Modifier, label: String, color: Color = Mater
         text = label,
         color = color,
         fontWeight = FontWeight.Medium,
-        fontSize = 9.sp,
-        lineHeight = 11.sp,
+        fontSize = 10.sp,
+        lineHeight = 12.sp,
     )
 }
 
@@ -540,7 +598,7 @@ private fun CompLabel(modifier: Modifier = Modifier, label: String, labelColor: 
         Text(
             text = desc,
             color = descColor,
-            fontSize = 7.sp,
+            fontSize = 8.sp,
             lineHeight = 10.sp,
             maxLines = descMaxLines,
             overflow = TextOverflow.Ellipsis,
@@ -560,14 +618,14 @@ private fun NativeLibCompEntry(modifier: Modifier = Modifier, label: String, des
             text = label,
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
             fontWeight = FontWeight.Medium,
-            fontSize = 7.sp,
-            lineHeight = 7.sp,
+            fontSize = 8.sp,
+            lineHeight = 8.sp,
         )
         Text(
             text = desc,
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.9f),
-            fontSize = 7.sp,
-            lineHeight = 8.sp,
+            fontSize = 8.sp,
+            lineHeight = 9.sp,
         )
     }
 }
@@ -579,14 +637,14 @@ private fun NativeLibNormalCompEntry(modifier: Modifier = Modifier, label: Strin
             text = label,
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
             fontWeight = FontWeight.Medium,
-            fontSize = 7.sp,
-            lineHeight = 7.sp,
+            fontSize = 8.sp,
+            lineHeight = 8.sp,
         )
         Text(
             text = desc,
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.9f),
-            fontSize = 7.sp,
-            lineHeight = 8.sp,
+            fontSize = 8.sp,
+            lineHeight = 9.sp,
         )
     }
 }

@@ -65,8 +65,8 @@ fun AppCompLabel(
                 modifier = Modifier.padding(vertical = 0.5.dp),
                 text = desc.comp.value,
                 color = descColor,
-                fontSize = 7.sp,
-                lineHeight = 8.sp,
+                fontSize = 8.sp,
+                lineHeight = 9.sp,
                 maxLines = descMaxLines,
                 overflow = TextOverflow.Ellipsis,
             )
@@ -74,8 +74,8 @@ fun AppCompLabel(
             InlineEnabledDesc(
                 modifier = Modifier.padding(vertical = 0.5.dp),
                 desc = listOf(desc),
-                fontSize = 7.sp,
-                lineHeight = 8.sp,
+                fontSize = 8.sp,
+                lineHeight = 9.sp,
                 normalColor = descColor,
                 disabledColor = descColor,
                 maxLines = descMaxLines,
@@ -131,15 +131,15 @@ fun CompFullDesc(
                         modifier = Modifier.padding(vertical = 0.5.dp),
                         text = descItem.value,
                         color = if (desc[0].isEnabled) normalColor else disabledColor,
-                        fontSize = 7.sp,
-                        lineHeight = 8.sp,
+                        fontSize = 8.sp,
+                        lineHeight = 9.sp,
                     )
                 } else {
                     InlineEnabledDesc(
                         modifier = Modifier.padding(vertical = 0.5.dp),
                         desc = listOf(descItem),
-                        fontSize = 7.sp,
-                        lineHeight = 8.sp,
+                        fontSize = 8.sp,
+                        lineHeight = 9.sp,
                         normalColor = normalColor,
                         disabledColor = disabledColor
                     )

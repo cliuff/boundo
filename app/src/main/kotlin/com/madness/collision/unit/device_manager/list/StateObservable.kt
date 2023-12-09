@@ -61,7 +61,8 @@ interface StateObservable {
             context.unregisterReceiver(stateReceiver)
         } catch (e: IllegalArgumentException) {
             // java.lang.IllegalArgumentException: Receiver not registered
-            e.printStackTrace()
+            val msg = "IllegalArgumentException in StateObservable.unregisterStateReceiver()"
+            listOfNotNull(msg, e.message).joinToString(separator = ": ").let(System.err::println)
         }
     }
 }

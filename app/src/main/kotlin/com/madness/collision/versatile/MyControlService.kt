@@ -23,6 +23,7 @@ import android.service.controls.ControlsProviderService
 import android.service.controls.actions.ControlAction
 import com.madness.collision.versatile.controls.*
 import com.madness.collision.versatile.ctrl.ControlActionRequest
+import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.processors.FlowableProcessor
 import io.reactivex.rxjava3.processors.ReplayProcessor
 import kotlinx.coroutines.*
@@ -78,6 +79,8 @@ class MyControlService : ControlsProviderService() {
     }
 
     override fun createPublisherFor(controlIds: MutableList<String>): Flow.Publisher<Control> {
+        // ReplayProcessor.create(capacity: Int) requires capacity > 0
+        if (controlIds.size <= 0) return FlowAdapters.toFlowPublisher(Flowable.empty())
         // invoke toSerialized() to use ReplayProcessor in a Kotlin Flow (multi-thread),
         // fixes IndexOutOfBoundsException from (ReplayProcessor.java:772)
         val updatePublisher = ReplayProcessor.create<Control>(controlIds.size).toSerialized()

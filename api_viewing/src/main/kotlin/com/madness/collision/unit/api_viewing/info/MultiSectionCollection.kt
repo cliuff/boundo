@@ -16,6 +16,8 @@
 
 package com.madness.collision.unit.api_viewing.info
 
+import java.util.Collections
+
 interface MultiSectionCollection<Section, out Item> {
     val size: Int
     val sectionSize: Int
@@ -28,12 +30,13 @@ interface MultiSectionCollection<Section, out Item> {
 }
 
 open class SectionMapCollection<Section, Item> : MultiSectionCollection<Section, Item> {
-    private val sectionMap: MutableMap<Section, List<Item>> = mutableMapOf()
+    // use linked map to preserve insertion order
+    private val sectionMap: MutableMap<Section, List<Item>> = Collections.synchronizedMap(LinkedHashMap())
     // use copy to avoid ConcurrentModificationException during iteration
     private val sectionsCopy: Map<Section, List<Item>> get() = sectionMap.toMap()
     override val size: Int get() = sectionsCopy.values.sumOf { it.size }
     override val sectionSize: Int get() = sectionMap.size
-    override val sectionItems: List<List<Item>> get() = sectionsCopy.values.toList()
+    override val sectionItems: List<List<Item>> get() = sectionMap.values.toList()
 
     override fun get(section: Section): List<Item> {
         return sectionMap[section].orEmpty()

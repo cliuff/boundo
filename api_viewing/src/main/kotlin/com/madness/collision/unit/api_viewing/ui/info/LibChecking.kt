@@ -395,7 +395,8 @@ private fun ComponentList(
                         item { SectionTitle(compSection, itemList.size) }
                     }
                     val layoutGroups = layoutGroupsList[typeIndex]?.getOrNull(sectionIndex)
-                    layoutGroupItems(itemList, layoutGroups, typeIndex, sectionIndex, libPrefs)
+                    layoutGroupItems(itemList, layoutGroups, typeIndex, sectionIndex, libPrefs,
+                        altRowColorEnabled = compSection != CompSection.Marked)
                     if (compSection == CompSection.Marked && itemList.isNotEmpty()) {
                         item { LibCheckerMark() }
                     }
@@ -406,7 +407,11 @@ private fun ComponentList(
 }
 
 sealed interface GroupedLayoutList {
-    data class Chunked(val rowSize: Int, val chunks: List<List<PackComponent>>) : GroupedLayoutList
+    data class Chunked(
+        /** maximum number of columns in a row */
+        val rowSize: Int,
+        val chunks: List<List<PackComponent>>,
+    ) : GroupedLayoutList
     data class Normal(val rowList: List<PackComponent>) : GroupedLayoutList
 }
 
@@ -434,22 +439,69 @@ private fun LazyListScope.layoutGroupItems(
     typeIndex: Int,
     sectionIndex: Int,
     libPrefs: LibPrefs,
+    altRowColorEnabled: Boolean,
 ) {
     if (layoutGroups != null) {
+        val rowsList = layoutGroups.map { layoutList ->
+            when (layoutList) {
+                is GroupedLayoutList.Chunked -> layoutList.chunks.size
+                is GroupedLayoutList.Normal -> layoutList.rowList.size
+            }
+        }
+        val applyAltRowColor = altRowColorEnabled && rowsList.sum() >= 3
+        val consecutiveOffset = when {
+            applyAltRowColor -> rowsList.runningFold(0) { acc, size -> acc + size }
+            else -> emptyList()
+        }
         for ((groupIndex, layoutList) in layoutGroups.withIndex()) {
             val key = { i: Int, _: Any -> compItemKeyOf(typeIndex, sectionIndex, groupIndex, i) }
-            if (layoutList is GroupedLayoutList.Chunked) {
-                val (rowSize, chunks) = layoutList
-                itemsIndexed(chunks, key) { _, items -> ChunkedLibItem(items, rowSize) }
-            } else if (layoutList is GroupedLayoutList.Normal) {
-                itemsIndexed(layoutList.rowList, key) { _, item ->
-                    if (item is MarkedComponent) MarkedSimpleLibItem(item) else PlainLibItem(item)
+            if (applyAltRowColor) {
+                val indexOffset = consecutiveOffset[groupIndex]
+                if (layoutList is GroupedLayoutList.Chunked) {
+                    val (rowSize, chunks) = layoutList
+                    itemsIndexed(chunks, key) { i, items ->
+                        val altColor = (indexOffset + i) % 2 == 0
+                        AlternateListItem(altColor) { ChunkedLibItem(items, rowSize) }
+                    }
+                } else if (layoutList is GroupedLayoutList.Normal) {
+                    itemsIndexed(layoutList.rowList, key) { i, item ->
+                        AlternateListItem(applyAlternateColor = (indexOffset + i) % 2 == 0) {
+                            if (item is MarkedComponent) MarkedSimpleLibItem(item) else PlainLibItem(item)
+                        }
+                    }
+                }
+            } else {
+                if (layoutList is GroupedLayoutList.Chunked) {
+                    val (rowSize, chunks) = layoutList
+                    itemsIndexed(chunks, key) { _, items -> ChunkedLibItem(items, rowSize) }
+                } else if (layoutList is GroupedLayoutList.Normal) {
+                    itemsIndexed(layoutList.rowList, key) { _, item ->
+                        if (item is MarkedComponent) MarkedSimpleLibItem(item) else PlainLibItem(item)
+                    }
                 }
             }
         }
     } else {
         val key = { i: Int, _: Any -> compItemKeyOf(typeIndex, sectionIndex, i) }
-        itemsIndexed(itemList, key) { _, item -> ItemList(item, sectionIndex, libPrefs) }
+        val applyAltRowColor = altRowColorEnabled && itemList.size >= 3
+        if (applyAltRowColor) {
+            itemsIndexed(itemList, key) { i, item ->
+                val altColor = i % 2 == 0
+                AlternateListItem(altColor) { ItemList(item, sectionIndex, libPrefs) }
+            }
+        } else {
+            itemsIndexed(itemList, key) { _, item -> ItemList(item, sectionIndex, libPrefs) }
+        }
+    }
+}
+
+@Composable
+private fun AlternateListItem(applyAlternateColor: Boolean, content: @Composable () -> Unit) {
+    if (applyAlternateColor) {
+        val color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f)
+        Box(modifier = Modifier.fillMaxWidth().background(color)) { content() }
+    } else {
+        content()
     }
 }
 
@@ -531,8 +583,8 @@ private fun SectionTitle(compSection: CompSection, listSize: Int) {
         text = "${stringResource(sectionType)} $listSize",
         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f),
         fontWeight = FontWeight.Medium,
-        fontSize = 10.sp,
-        lineHeight = 11.sp,
+        fontSize = 11.sp,
+        lineHeight = 12.sp,
     )
 }
 
@@ -566,13 +618,13 @@ private fun LibCheckerMark() {
 @Composable
 private fun ChunkedLibItem(items: List<PackComponent>, rowSize: Int) {
     // make items bottom aligned
-    Row(modifier = Modifier.padding(horizontal = 17.dp), verticalAlignment = Alignment.Bottom) {
+    Row(modifier = Modifier.padding(horizontal = 19.5.dp), verticalAlignment = Alignment.Bottom) {
         for (item in items) {
             Box(modifier = Modifier.weight(1f)) {
                 if (item is MarkedComponent) {
-                    MarkedSimpleLibItem(item, horizontalPadding = 3.dp)
+                    MarkedSimpleChunkPartLibItem(item, horizontalPadding = 0.5.dp)
                 } else {
-                    PlainLibItem(item = item, horizontalPadding = 3.dp)
+                    PlainChunkPartLibItem(item = item, horizontalPadding = 0.5.dp)
                 }
             }
         }

@@ -19,3 +19,7 @@ package com.madness.collision.chief.lang
 inline fun <T> T.mapIf(predicate: (T) -> Boolean, block: (T) -> T): T {
     return if (predicate(this)) block(this) else this
 }
+
+inline fun <T> T.runIf(predicate: T.() -> Boolean, block: T.() -> T): T {
+    return if (predicate(this)) block(this) else this
+}

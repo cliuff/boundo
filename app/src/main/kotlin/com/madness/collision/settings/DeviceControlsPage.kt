@@ -2,9 +2,13 @@ package com.madness.collision.settings
 
 import android.graphics.drawable.Drawable
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
@@ -26,7 +30,7 @@ import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.produceState
@@ -45,6 +49,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.madness.collision.R
 import com.madness.collision.util.mainApplication
+import com.madness.collision.util.ui.initDelayed
 import com.madness.collision.versatile.ctrl.ControlInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -53,9 +58,12 @@ import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape
 @Composable
 fun DeviceControlsPage(paddingValues: PaddingValues) {
     val viewModel = viewModel<DeviceControlsViewModel>()
-    val isEnabled by viewModel.enabledState
-    val controlList by viewModel.controlListState
-    SideEffect { viewModel.init() }
+    // delay state to show switch animation more clearly
+    val isEnabled by viewModel.enabledState.initDelayed(200)
+    val controlList by viewModel.controlListState.initDelayed(210)
+    // use LaunchedEffect instead of SideEffect to avoid repetitive invocations
+    // that are triggered by consecutive recompositions due to list changes
+    LaunchedEffect(Unit) { viewModel.init() }
     DeviceControls(
         featureEnabled = isEnabled,
         onToggleFeature = { viewModel.setEnabled(!isEnabled) },
@@ -71,7 +79,7 @@ private fun DeviceControls(
     controlList: List<ControlInfo>,
     paddingValues: PaddingValues,
 ) {
-    Column(
+    BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
@@ -83,9 +91,23 @@ private fun DeviceControls(
             .padding(horizontal = 15.dp)
             .padding(top = 13.dp, bottom = 50.dp),
     ) {
-        FeatureSwitchCard(enabled = featureEnabled, onToggle = onToggleFeature)
-        Spacer(modifier = Modifier.height(15.dp))
-        ControlListCard(controlList = controlList)
+        if (maxWidth < 600.dp) {
+            Column {
+                FeatureSwitchCard(enabled = featureEnabled, onToggle = onToggleFeature)
+                Spacer(modifier = Modifier.height(15.dp))
+                ControlListCard(controlList = controlList)
+            }
+        } else {
+            Row {
+                Box(modifier = Modifier.weight(1f)) {
+                    ControlListCard(controlList = controlList)
+                }
+                Spacer(modifier = Modifier.width(15.dp))
+                Box(modifier = Modifier.weight(1f)) {
+                    FeatureSwitchCard(enabled = featureEnabled, onToggle = onToggleFeature)
+                }
+            }
+        }
     }
 }
 
@@ -136,7 +158,7 @@ private fun ControlListCard(controlList: List<ControlInfo>) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .animateContentSize()
+                .animateContentSize(animationSpec = spring(stiffness = 150f))
                 .padding(horizontal = 20.dp, vertical = 12.dp),
         ) {
             Text(
@@ -146,9 +168,31 @@ private fun ControlListCard(controlList: List<ControlInfo>) {
                 lineHeight = 18.sp,
             )
             Spacer(modifier = Modifier.height(6.dp))
-            for (ctrl in controlList) {
-                key(ctrl) {
-                    ControlItem(control = ctrl)
+            Box {
+                androidx.compose.animation.AnimatedVisibility(
+                    visible = controlList.isEmpty(),
+                    enter = fadeIn(animationSpec = spring(stiffness = 50f)),
+                    exit = fadeOut(animationSpec = spring(stiffness = 1500f)),
+                ) {
+                    Text(
+                        text = stringResource(R.string.text_no_content),
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
+                        fontSize = 14.sp,
+                        lineHeight = 15.sp,
+                    )
+                }
+                androidx.compose.animation.AnimatedVisibility(
+                    visible = controlList.isNotEmpty(),
+                    enter = fadeIn(animationSpec = spring(stiffness = 50f)),
+                    exit = fadeOut(animationSpec = spring(stiffness = 150f)),
+                ) {
+                    Column {
+                        for (ctrl in controlList) {
+                            key(ctrl) {
+                                ControlItem(control = ctrl)
+                            }
+                        }
+                    }
                 }
             }
         }
