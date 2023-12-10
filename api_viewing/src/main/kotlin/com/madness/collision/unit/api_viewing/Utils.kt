@@ -67,9 +67,6 @@ import com.madness.collision.util.regexOf
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
-import java.security.Principal
-import java.util.regex.Matcher
-import java.util.regex.Pattern
 
 internal object Utils {
 
@@ -132,9 +129,6 @@ internal object Utils {
 
     private fun androidCodenameInfo(context: Context?, apiLevel: Int, fullName: Boolean): String {
         if (fullName) context ?: return " "
-        val getString: (id: Int) -> String = {
-            context?.getString(it) ?: " "
-        }
         return when (apiLevel) {
             OsUtils.U -> if (fullName) "Upside Down Cake" else "u"
             OsUtils.T -> if (fullName) "Tiramisu" else "t"
@@ -142,62 +136,24 @@ internal object Utils {
             OsUtils.S -> if (fullName) "12" else "s"
             X.R -> if (fullName) "11" else "r"
             Q -> if (fullName) "10" else "q"
-            P -> if (fullName) getString(R.string.res_api_code_names_p) else "p"  // Pie
-            O, O_MR1 -> if (fullName) getString(R.string.res_api_code_names_o) else "o"  // Oreo
-            N, N_MR1 -> if (fullName) getString(R.string.res_api_code_names_n) else "n"  // Nougat
-            M -> if (fullName) getString(R.string.res_api_code_names_m) else "m"  // Marshmallow
-            L, L_MR1 -> if (fullName) getString(R.string.res_api_code_names_l) else "l"  // Lollipop
-            K, K_WATCH -> if (fullName) getString(R.string.res_api_code_names_k) else "k"  // KitKat
-            J, J_MR1, J_MR2 -> if (fullName) getString(R.string.res_api_code_names_j) else "j"  // Jelly Bean
-            I, I_MR1 -> if (fullName) getString(R.string.res_api_code_names_i) else "i"  // Ice Cream Sandwich
-            H, H_MR1, H_MR2 -> if (fullName) getString(R.string.res_api_code_names_h) else "h"  // Honeycomb
-            G, G_MR1 -> if (fullName) getString(R.string.res_api_code_names_g) else "g"  // Gingerbread
-            F -> if (fullName) getString(R.string.res_api_code_names_f) else "f"  // Froyo
-            E, E_0_1, E_MR1 -> if (fullName) getString(R.string.res_api_code_names_e) else "e"  // Eclair
-            D -> if (fullName) getString(R.string.res_api_code_names_d) else "d"  // Donut
-            C -> if (fullName) getString(R.string.res_api_code_names_c) else "c"  // Cupcake
-            B -> if (fullName) getString(R.string.resApiCodeNamesB) else " "  // from wikipedia
+            P -> if (fullName) "Pie" else "p"  // Pie
+            O, O_MR1 -> if (fullName) "Oreo" else "o"  // Oreo
+            N, N_MR1 -> if (fullName) "Nougat" else "n"  // Nougat
+            M -> if (fullName) "Marshmallow" else "m"  // Marshmallow
+            L, L_MR1 -> if (fullName) "Lollipop" else "l"  // Lollipop
+            K, K_WATCH -> if (fullName) "KitKat" else "k"  // KitKat
+            J, J_MR1, J_MR2 -> if (fullName) "Jelly Bean" else "j"  // Jelly Bean
+            I, I_MR1 -> if (fullName) "Ice Cream Sandwich" else "i"  // Ice Cream Sandwich
+            H, H_MR1, H_MR2 -> if (fullName) "Honeycomb" else "h"  // Honeycomb
+            G, G_MR1 -> if (fullName) "Gingerbread" else "g"  // Gingerbread
+            F -> if (fullName) "Froyo" else "f"  // Froyo
+            E, E_0_1, E_MR1 -> if (fullName) "Eclair" else "e"  // Eclair
+            D -> if (fullName) "Donut" else "d"  // Donut
+            C -> if (fullName) "Cupcake" else "c"  // Cupcake
+            B -> if (fullName) "Petit Four" else " "  // from wikipedia
 //            1 -> if (fullName) "Base" else " " // from Build.VERSION_CODES.BASE
             else -> if (fullName) "" else " "
         }
-    }
-
-    fun principalFields( context: Context, regexFields: MutableMap<String, String> ){
-        regexFields["^(CN)(=.*)"] = context.getString(R.string.resPrincipalCN)
-        regexFields["^(OU)(=.*)"] = context.getString(R.string.resPrincipalOU)
-        regexFields["^(O)(=.*)"] = context.getString(R.string.resPrincipalO)
-        regexFields["^(L)(=.*)"] = context.getString(R.string.resPrincipalL)
-        regexFields["^(ST)(=.*)"] = context.getString(R.string.resPrincipalST)
-        regexFields["^(C)(=.*)"] = context.getString(R.string.resPrincipalC)
-        regexFields["^(EMAILADDRESS)(=.*)"] = context.getString(R.string.resPrincipalEmail)
-    }
-
-    fun getDesc(regexFields: Map<String, String> ,  p: Principal): String{
-        val slices = p.toString().split(", ")
-        val keys = regexFields.keys.toTypedArray()
-        val builder = StringBuilder()
-        var matcher : Matcher
-        var matched = false
-        for (s in slices){
-            for (j in 0 until regexFields.size) {
-                if (keys[j].isEmpty()) continue
-                matcher = Pattern.compile(keys[j]).matcher(s)
-                if (matcher.matches()){
-                    matched = true
-                    builder.append(matcher.group(1))
-                            .append('(')
-                            .append(regexFields[keys[j]])
-                            .append(')')
-                            .append(matcher.group(2))
-                            .append(", ")
-                    keys[j] = ""
-                    break
-                }
-            }
-            if (!matched) builder.append(s).append(", ")
-            matched = false
-        }
-        return builder.delete(builder.length-2, builder.length-1).toString()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

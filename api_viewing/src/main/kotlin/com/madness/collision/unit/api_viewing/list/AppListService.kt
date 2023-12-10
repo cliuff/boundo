@@ -28,10 +28,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.madness.collision.R
 import com.madness.collision.misc.MiscApp
 import com.madness.collision.misc.PackageCompat
-import com.madness.collision.unit.api_viewing.Utils
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
+import com.madness.collision.unit.api_viewing.info.CertResolver
 import com.madness.collision.util.*
 import com.madness.collision.util.os.OsUtils
 import com.madness.collision.util.ui.appContext
@@ -44,13 +44,9 @@ import java.io.File
 import java.io.IOException
 import java.text.DateFormat
 import java.util.*
-import javax.security.cert.CertificateException
-import javax.security.cert.X509Certificate
 import com.madness.collision.unit.api_viewing.R as RAv
 
 internal class AppListService(private val serviceContext: Context? = null) {
-    private var regexFields: MutableMap<String, String> = HashMap()
-
     sealed class AppInfoItem(val text: String) {
         class Normal(text: String) : AppInfoItem(text)
         class Bold(text: String) : AppInfoItem(text)
@@ -226,41 +222,34 @@ internal class AppListService(private val serviceContext: Context? = null) {
             }
         }
 
-        var signatures: Array<Signature> = emptyArray()
-        if (X.aboveOn(X.P)) {
-            if (pi.signingInfo != null) {
-                signatures = if (pi.signingInfo.hasMultipleSigners()) {
-                    pi.signingInfo.apkContentsSigners
-                } else {
-                    pi.signingInfo.signingCertificateHistory
+        val signatures = when {
+            OsUtils.satisfy(OsUtils.P) -> when (pi.signingInfo?.hasMultipleSigners()) {
+                true -> pi.signingInfo.apkContentsSigners
+                false -> pi.signingInfo.signingCertificateHistory
+                null -> pi.sigLegacy.orEmpty()
+            }
+            else -> pi.sigLegacy.orEmpty()
+        }
+        for ((signatureIndex, signature) in signatures.withIndex()) {
+            CertResolver.getCertificateInfo(signature, context)?.run {
+                val (issuerInfo, subjectInfo) = listOf(issuerValues, subjectValues).map { values ->
+                    values.joinToString(separator = "\n", prefix = "\n") { (k, v, n) ->
+                        if (n != null) "$n ($k): $v" else "$k: $v"
+                    }
                 }
-            }
-        } else {
-            val piSignature = pi.sigLegacy
-            if (piSignature != null) signatures = piSignature
-        }
-        if (regexFields.isEmpty()) {
-            Utils.principalFields(context, regexFields)
-        }
-        for (s in signatures) {
-            val cert: X509Certificate? = try {
-                X509Certificate.getInstance(s.toByteArray())
-            } catch (e: CertificateException) {
-                e.printStackTrace()
-                null
-            }
-            if (cert != null) {
-                val issuerInfo = Utils.getDesc(regexFields, cert.issuerDN)
-                val subjectInfo = Utils.getDesc(regexFields, cert.subjectDN)
-                val formerPart = "X.509 " +
-                        context.getString(RAv.string.apiDetailsCert) +
-                        "\nNo." + cert.serialNumber.toString(16).uppercase(appLocale) +
-                        " v${cert.version + 1}" +
-                        '\n' + context.getString(RAv.string.apiDetailsValiSince)
+                val certName = cert.type + " " + context.getString(RAv.string.apiDetailsCert)
+                val serialNo = cert.serialNumber.toString(16).uppercase(appLocale)
+                val formerPart = "$certName v${cert.version}\nNo.$serialNo"
+                val certFingerprint = listOf("MD5", "SHA-1", "SHA-256").zip(fingerprint.toList())
+                    .joinToString(separator = "\n", prefix = "\n") { (alg, fp) -> "[$alg]  $fp" }
 
                 val format = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM, appLocale)
 
+                if (signatureIndex >= 1) yieldLineBreak()
                 yield(formerPart.boldItem)
+                yieldLineBreak()
+
+                yield(RAv.string.apiDetailsValiSince.boldItem)
                 yield(format.format(cert.notBefore))
                 yieldLineBreak()
 
@@ -282,6 +271,10 @@ internal class AppListService(private val serviceContext: Context? = null) {
 
                 yield(RAv.string.apiDetailsSigAlgOID.boldItem)
                 yield(cert.sigAlgOID)
+                yieldLineBreak()
+
+                yield("Fingerprint:".boldItem)
+                yield(certFingerprint)
                 yieldLineBreak()
             }
         }

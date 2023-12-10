@@ -20,10 +20,7 @@ import android.content.Context
 import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -34,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -51,8 +49,13 @@ import com.madness.collision.util.P
 import com.madness.collision.util.ThemeUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape
+import kotlin.math.ceil
 
 class UnitBarFragment : ComposeFragment() {
+    override val category: String = "UnitBar"
+    override val id: String = "UnitBar"
+
     @Composable
     override fun ComposeContent() {
         MaterialTheme(colorScheme = rememberColorScheme()) {
@@ -90,45 +93,73 @@ private fun getFrequentUnits(context: Context): List<Description> {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Updates(descriptions: List<Description>, onClick: (unitName: String) -> kotlin.Unit) {
-    Row(modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState())) {
-        Spacer(modifier = Modifier.width(8.dp))
-        val context = LocalContext.current
-        val itemColor = remember {
-            ThemeUtil.getColor(context, R.attr.colorAItem)
+    val itemColor = when {
+        LocalInspectionMode.current -> MaterialTheme.colorScheme.onBackground.copy(alpha = 0.07f)
+        else -> Color(ThemeUtil.getColor(LocalContext.current, R.attr.colorAItem))
+    }
+    // layout like LazyVerticalGrid but with fixed height
+    BoxWithConstraints(modifier = Modifier.padding(horizontal = 8.dp)) {
+        val minItemSize = when {
+            maxWidth < 360.dp -> 80.dp
+            maxWidth < 600.dp -> 100.dp
+            maxWidth < 900.dp -> 110.dp
+            else -> 120.dp
         }
-        descriptions.forEach { desc ->
-            Column(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(20.dp))
-                    .clickable { onClick(desc.unitName) }
-                    .padding(horizontal = 9.dp, vertical = 10.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Icon(
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .background(Color(itemColor))
-                        .padding(12.dp),
-                    painter = painterResource(id = desc.iconResId),
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurface,
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    modifier = Modifier.widthIn(max = 60.dp),
-                    text = stringResource(id = desc.nameResId),
-                    color = MaterialTheme.colorScheme.onSurface,
-                    fontSize = 10.sp,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                    textAlign = TextAlign.Center,
-                    lineHeight = 12.sp,
-                )
+        val maxColumnCount = (maxWidth / minItemSize).toInt().coerceAtLeast(1)
+        val rowSize = ceil(descriptions.size / maxColumnCount.toFloat()).toInt()
+        Column {
+            for (i in 0..<rowSize) {
+                Row {
+                    for (j in 0..<maxColumnCount) {
+                        val desc = descriptions.getOrNull(i * maxColumnCount + j)
+                        Box(modifier = Modifier.weight(1f)) {
+                            if (desc != null) {
+                                UnitItem(
+                                    desc = desc,
+                                    backgroundColor = itemColor,
+                                    onClick = { onClick(desc.unitName) },
+                                )
+                            }
+                        }
+                    }
+                }
             }
         }
+    }
+}
+
+@Composable
+private fun UnitItem(desc: Description, backgroundColor: Color, onClick: () -> kotlin.Unit) {
+    Column(
+        modifier = Modifier
+            .clip(RoundedCornerShape(20.dp))
+            .clickable(onClick = onClick)
+            .padding(vertical = 10.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Icon(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 9.dp)
+                .clip(AbsoluteSmoothCornerShape(20.dp, 100))
+                .background(backgroundColor)
+                .padding(vertical = 18.dp),
+            painter = painterResource(id = desc.iconResId),
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurface,
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = stringResource(id = desc.nameResId),
+            color = MaterialTheme.colorScheme.onSurface,
+            fontSize = 10.sp,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
+            textAlign = TextAlign.Center,
+            lineHeight = 12.sp,
+        )
     }
 }
 

@@ -114,7 +114,8 @@ internal class AppListFragment : TaggedFragment(), AppList, Filterable, AppInfoF
         }, lifecycleScope)
 
         mAdapter.resolveSpanCount(this, 290f)
-        popOwner.register(this)
+        // commented out: disable re-pop
+//        popOwner.register(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

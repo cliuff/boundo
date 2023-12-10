@@ -213,7 +213,8 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable, AppInfoFragment.
         mContext = context ?: return
         EasyAccess.init(mContext)
         concatAdapter = ConcatAdapter()
-        popOwner.register(this)
+        // commented out: disable re-pop
+//        popOwner.register(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -551,7 +552,7 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable, AppInfoFragment.
         }
         timeUpdateJob?.cancel()
         if (concatAdapter.adapters.filterIsInstance<APIAdapter>().isEmpty()) return
-        timeUpdateJob = scheduleTimeUpdate()
+        if (view != null) timeUpdateJob = scheduleTimeUpdate(viewLifecycleOwner.lifecycle)
     }
 
     private fun removeAdapter(adapter: RecyclerView.Adapter<*>) {
