@@ -36,7 +36,6 @@ google-services.json
 doconfig/custom.properties
 !**/src/**/build
 !**/resources/**/*.apk
-subproject
 .idea/markdown-navigator
 .idea/markdown-navigator.xml
 .idea/statistic.xml

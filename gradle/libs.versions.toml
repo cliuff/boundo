@@ -69,8 +69,6 @@ androidDeviceNames = "2.1.1"
 byteBuddy = "1.12.22"
 androidDesugaring = "2.0.3"
 mockito = "5.1.1"
-# for checking apk dex, archived since 2019.11
-apkParser = "2.6.10"
 appIconLoader = "1.5.0"
 # Superellipse shape for Compose
 smoothCornerCompose = "v1.0.0"
@@ -162,7 +160,6 @@ jbAnnotations = { module = "org.jetbrains:annotations", version.ref = "jbAnnotat
 androidDeviceNames = { module = "com.jaredrummler:android-device-names", version.ref = "androidDeviceNames" }
 byteBuddy = { module = "net.bytebuddy:byte-buddy-android", version.ref = "byteBuddy" }
 mockito = { module = "org.mockito:mockito-android", version.ref = "mockito" }
-apkParser = { module = "net.dongliu:apk-parser", version.ref = "apkParser" }
 appIconLoader = { module = "me.zhanghai.android.appiconloader:appiconloader-iconloaderlib", version.ref = "appIconLoader" }
 smoothCornerCompose = { module = "com.github.racra:smooth-corner-rect-android-compose", version.ref = "smoothCornerCompose" }
 libCheckerRules = { module = "com.github.LibChecker:LibChecker-Rules-Bundle", version.ref = "libCheckerRules" }

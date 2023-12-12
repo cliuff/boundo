@@ -14,7 +14,6 @@
 - Jetpack Compose Compiler `1.5.4` (requires Kotlin `1.9.20`)
 
 **After Git check-out**
-- Clone project [**Apk Parser**](https://github.com/cliuff/apk-parser.git) into `subproject`, resulting in `ROOT_DIR/subproject/apk-parser`
 - **Copy** the file named `custom.properties.template` in `doconfig` directory,
   **rename** it to `custom.properties` and make necessary **change**s to it
 
@@ -29,8 +28,3 @@
     - Open **Build Variants** tool window
     - Change the **Active Build Variant** of module **boundo.app** to **fullDebug**
     - Change the **Active Build Variant** of module **boundo.wearable** to **fullDebug**
-
-**Attention**
-- As a standalone project, `apk-parser` may need to be built independently after code changes in that module,  
-  by clicking window menu item "Build" -> "Make module boundo.apk-parser",
-  otherwise changes may not take effect immediately.
