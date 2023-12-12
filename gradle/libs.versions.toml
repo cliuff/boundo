@@ -75,6 +75,7 @@ appIconLoader = "1.5.0"
 # Superellipse shape for Compose
 smoothCornerCompose = "v1.0.0"
 libCheckerRules = "34.2"
+googleSmali = "3.0.3"
 
 [libraries]
 androidxTestCore = { module = "androidx.test:core", version.ref = "androidxTestCore" }
@@ -165,6 +166,7 @@ apkParser = { module = "net.dongliu:apk-parser", version.ref = "apkParser" }
 appIconLoader = { module = "me.zhanghai.android.appiconloader:appiconloader-iconloaderlib", version.ref = "appIconLoader" }
 smoothCornerCompose = { module = "com.github.racra:smooth-corner-rect-android-compose", version.ref = "smoothCornerCompose" }
 libCheckerRules = { module = "com.github.LibChecker:LibChecker-Rules-Bundle", version.ref = "libCheckerRules" }
+google-smali = { module = "com.android.tools.smali:smali-dexlib2", version.ref = "googleSmali" }
 
 # wear
 androidxWear = { module = "androidx.wear:wear", version.ref = "androidxWear" }

@@ -18,8 +18,7 @@ package com.madness.collision.unit.api_viewing.util
 
 import android.content.res.Resources
 import android.util.Log
-import net.dongliu.apk.parser.ApkFile
-import net.dongliu.apk.parser.traverse.ApkTraverse
+import com.madness.collision.unit.api_viewing.info.DexResolver
 import java.io.File
 import java.util.zip.ZipEntry
 import java.util.zip.ZipFile
@@ -165,8 +164,8 @@ object ApkUtil {
         return loadThirdPartyPkg(file, ownPkg) { pkgList ->
             val pkgFilter = ThirdPartyPkgFilter(ownPkg, removeInternals)
             val rewriteReverser = R8RewriteReverser()
-            sequence { pkgList.forEach { yieldAll(it.iterator()) } }
-                .filterNotNull().mapNotNull(pkgFilter::map).map(rewriteReverser::map)
+            pkgList.asSequence()
+                .mapNotNull(pkgFilter::map).map(rewriteReverser::map)
                 .toMutableSet().toList()  // Sequence.distinct() seems inefficient
         } ?: emptyList()
     }
@@ -182,8 +181,7 @@ object ApkUtil {
             val pkgFilter = ThirdPartyPkgFilter(ownPkg, removeInternals)
             val rewriteReverser = R8RewriteReverser()
             val transforms = mutableSetOf<String>()
-            val pkgSequence = sequence { pkgList.forEach { yieldAll(it.iterator()) } }
-                .filterNotNull().map(rewriteReverser::map)
+            val pkgSequence = pkgList.asSequence().map(rewriteReverser::map)
             val filtered = ArrayList<String>()
             val self = ArrayList<String>()
             val out = ArrayList<String>()
@@ -202,22 +200,16 @@ object ApkUtil {
         } ?: PkgPartitions(emptyList(), emptyList(), emptyList())
     }
 
-    private fun <T> loadThirdPartyPkg(file: File, ownPkg: String, block: (List<List<String?>>) -> T): T? {
-        return try {
-            ApkFile(file).use { apk ->
-                val dexPackageList = mutableListOf<List<String?>>()
-                ApkTraverse.transformDexFiles(apk,
-                    { dexClass -> if (dexClass.isPublic) dexClass.packageName else null },
-                    { classList -> dexPackageList.add(classList) })
-                block(dexPackageList)
+    private fun <T> loadThirdPartyPkg(file: File, ownPkg: String, block: (List<String>) -> T): T? {
+        return DexResolver.loadDexLib(file.path)
+            .map(block)
+            .onFailure { e ->
+                val eMsg = e::class.simpleName + ": " + e.message
+                val cause = e.cause?.message?.let { " BY $it" } ?: ""
+                val fileName = file.path.decentApkFileName
+                Log.w("av.util.ApkUtils", "$eMsg$cause ($ownPkg, $fileName)")
             }
-        } catch (e: Throwable) { // may produce OutOfMemoryError
-            val eMsg = e::class.simpleName + ": " + e.message
-            val cause = e.cause?.message?.let { " BY $it" } ?: ""
-            val fileName = file.path.decentApkFileName
-            Log.w("av.util.ApkUtils", "$eMsg$cause ($ownPkg, $fileName)")
-            null
-        }
+            .getOrNull()
     }
 
     class ThirdPartyPkgFilter(private val ownPkg: String, private val removeInternals: Boolean) {
@@ -278,22 +270,14 @@ object ApkUtil {
     }
 
     fun checkPkg(file: File, packageName: String): Boolean {
-        return try {
-            ApkFile(file).use { apk ->
-                var isFound = false
-                ApkTraverse.traverseDexFiles(apk) { _, data ->
-                    isFound = data.packageName.startsWith(packageName)
-                    isFound.not()
-                }
-                isFound
+        return DexResolver.findPackage(file.path, packageName)
+            .onFailure { e ->
+                val eMsg = e::class.simpleName + ": " + e.message
+                val cause = e.cause?.message?.let { " BY $it" } ?: ""
+                val fileName = file.path.decentApkFileName
+                Log.w("av.util.ApkUtils", "$eMsg$cause (check $packageName in $fileName)")
             }
-        } catch (e: Throwable) { // may produce OutOfMemoryError
-            val eMsg = e::class.simpleName + ": " + e.message
-            val cause = e.cause?.message?.let { " BY $it" } ?: ""
-            val fileName = file.path.decentApkFileName
-            Log.w("av.util.ApkUtils", "$eMsg$cause (check $packageName in $fileName)")
-            false
-        }
+            .getOrDefault(false)
     }
 
     private val String.decentApkFileName: String

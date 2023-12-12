@@ -81,7 +81,7 @@ dependencies {
         libs.smoothCornerCompose,
         libs.androidxConstraintLayoutCompose,
         libs.libCheckerRules,
-        project(":apk-parser"),
+        libs.google.smali,
     ).forEach { implementation(it) }
     implementation(libs.bundles.dynamicFeatureBasics)
 
