@@ -135,7 +135,7 @@ object LibInfoRetriever {
         AndroidComponents, DexPackages, NativeLibraries
     }
 
-    private fun loadTypeActual(context: Context, app: ApiViewingApp, collection: PackCompCollection, type: PackCompType) {
+    private suspend fun loadTypeActual(context: Context, app: ApiViewingApp, collection: PackCompCollection, type: PackCompType) {
         Log.d("LibInfoRetriever", "loadTypeActual/${app.packageName}/$type")
         when (type.loadType) {
             LoadType.AndroidComponents -> {
@@ -241,14 +241,10 @@ object LibInfoRetriever {
         }
     }
 
-    private fun resolveDexPackages(app: ApiViewingApp): Triple<Collection<ValueOwnerComp>, Collection<ValueOwnerComp>, Collection<ValueOwnerComp>> {
-        val dexPackages = app.appPackage.apkPaths.map {
-            ApkUtil.getThirdPartyPkgPartitions(it, app.packageName)
-        }
-        val a = dexPackages.flatMap { (a, _, _) -> a.map { getMarkedItem(it, DEX) } }
-        val b = dexPackages.flatMap { (_, b, _) -> b.map { getMarkedItem(it, DEX) } }
-        val c = dexPackages.flatMap { (_, _, c) -> c.map { getMarkedItem(it, DEX) } }
-        return Triple(a, b, c)
+    private suspend fun resolveDexPackages(app: ApiViewingApp): Triple<Collection<ValueOwnerComp>, Collection<ValueOwnerComp>, Collection<ValueOwnerComp>> {
+        val (a, b, c) = ApkUtil.getThirdPartyPkgPartitions(app.appPackage.apkPaths, app.packageName)
+        val marked = listOf(a, b, c).map { pkgList -> pkgList.map { getMarkedItem(it, DEX) } }
+        return Triple(marked[0], marked[1], marked[2])
     }
 
     private fun getNativeLibs(app: ApiViewingApp): Collection<ValueOwnerComp> {

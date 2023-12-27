@@ -19,7 +19,15 @@ package com.madness.collision.unit.api_viewing.util
 import android.content.res.Resources
 import android.util.Log
 import com.madness.collision.unit.api_viewing.info.DexResolver
+import com.madness.collision.unit.api_viewing.info.R8RewriteReverser
+import com.madness.collision.unit.api_viewing.info.ThirdPartyPkgFilter
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.map
 import java.io.File
+import java.util.TreeSet
 import java.util.zip.ZipEntry
 import java.util.zip.ZipFile
 
@@ -161,13 +169,10 @@ object ApkUtil {
     }
 
     fun getThirdPartyPkg(file: File, ownPkg: String, removeInternals: Boolean = true): List<String> {
-        return loadThirdPartyPkg(file, ownPkg) { pkgList ->
-            val pkgFilter = ThirdPartyPkgFilter(ownPkg, removeInternals)
-            val rewriteReverser = R8RewriteReverser()
-            pkgList.asSequence()
-                .mapNotNull(pkgFilter::map).map(rewriteReverser::map)
-                .toMutableSet().toList()  // Sequence.distinct() seems inefficient
-        } ?: emptyList()
+        val pkgFilter = ThirdPartyPkgFilter(ownPkg, removeInternals)
+        val rewriteReverser = R8RewriteReverser()
+        return DexResolver.loadDexLib(file.path) { pkgFilter.map(it)?.let(rewriteReverser::map) }
+            .logApkError(file.path, ownPkg).getOrNull().orEmpty()
     }
 
     data class PkgPartitions(val filtered: List<String>, val self: List<String>, val minimized: List<String>)
@@ -176,93 +181,53 @@ object ApkUtil {
         return getThirdPartyPkgPartitions(File(path), ownPkg)
     }
 
+    suspend fun getThirdPartyPkgPartitions(pathList: List<String>, ownPkg: String): PkgPartitions {
+        val files = pathList.mapNotNull { p -> File(p).takeIf { it.exists() && it.canRead() } }
+        // fast path: avoid TreeSet.addAll() invocation
+        when {
+            files.isEmpty() -> return PkgPartitions(emptyList(), emptyList(), emptyList())
+            files.size == 1 -> return getThirdPartyPkgPartitions(files[0], ownPkg)
+        }
+        return coroutineScope {
+            // use tree set to eliminate duplicates and sort package names from several apks
+            val pkgSet = List(3) { TreeSet<String>() }
+            // async() makes 2x+ speed boost for Taobao
+            files.map { file -> async(Dispatchers.IO) { getThirdPartyPkgPartitions(file, ownPkg) } }
+                .asFlow().map { it.await() }
+                .collect { (a, b, c) -> pkgSet[0].addAll(a); pkgSet[1].addAll(b); pkgSet[2].addAll(c) }
+            PkgPartitions(pkgSet[0].toList(), pkgSet[1].toList(), pkgSet[2].toList())
+        }
+    }
+
     fun getThirdPartyPkgPartitions(file: File, ownPkg: String, removeInternals: Boolean = true): PkgPartitions {
-        return loadThirdPartyPkg(file, ownPkg) { pkgList ->
-            val pkgFilter = ThirdPartyPkgFilter(ownPkg, removeInternals)
-            val rewriteReverser = R8RewriteReverser()
-            val transforms = mutableSetOf<String>()
-            val pkgSequence = pkgList.asSequence().map(rewriteReverser::map)
-            val filtered = ArrayList<String>()
-            val self = ArrayList<String>()
-            val out = ArrayList<String>()
-            pkgSequence.forEach { pkg ->
-                val fOwn = pkgFilter.mapOwnPkg(pkg)
-                if (fOwn != pkg) {
-                    self.add(pkg)
-                } else {
-                    val f = pkgFilter.mapObfuscated(pkg)
-                    if (f != null && f != pkg) transforms.add(f)
-                    (if (f == pkg) filtered else out).add(pkg)
-                }
+        val pkgFilter = ThirdPartyPkgFilter(ownPkg, removeInternals)
+        val rewriteReverser = R8RewriteReverser()
+        val pkgList = DexResolver.loadDexLib(file.path, rewriteReverser::map)
+            .logApkError(file.path, ownPkg).getOrNull()
+            ?: return PkgPartitions(emptyList(), emptyList(), emptyList())
+        val transforms = mutableSetOf<String>()
+        val filtered = ArrayList<String>()
+        val self = ArrayList<String>()
+        val out = ArrayList<String>()
+        pkgList.forEach { pkg ->
+            val fOwn = pkgFilter.mapOwnPkg(pkg)
+            if (fOwn != pkg) {
+                self.add(pkg)
+            } else {
+                val f = pkgFilter.mapObfuscated(pkg)
+                if (f != null && f != pkg) transforms.add(f)
+                (if (f == pkg) filtered else out).add(pkg)
             }
-            val first = if (transforms.isNotEmpty()) filtered + transforms else filtered
-            PkgPartitions(first.distinct(), self.distinct(), out.distinct())
-        } ?: PkgPartitions(emptyList(), emptyList(), emptyList())
+        }
+        val first = if (transforms.isNotEmpty()) filtered + transforms else filtered
+        return PkgPartitions(first.distinct(), self.distinct(), out.distinct())
     }
 
-    private fun <T> loadThirdPartyPkg(file: File, ownPkg: String, block: (List<String>) -> T): T? {
-        return DexResolver.loadDexLib(file.path)
-            .map(block)
-            .onFailure { e ->
-                val eMsg = e::class.simpleName + ": " + e.message
-                val cause = e.cause?.message?.let { " BY $it" } ?: ""
-                val fileName = file.path.decentApkFileName
-                Log.w("av.util.ApkUtils", "$eMsg$cause ($ownPkg, $fileName)")
-            }
-            .getOrNull()
-    }
-
-    class ThirdPartyPkgFilter(private val ownPkg: String, private val removeInternals: Boolean) {
-        private val regexOwnPkg = """$ownPkg\..+""".toRegex()
-        // more than one section: end with one character or plus a digit
-        private val regexObfuscatedEnding = """.*\.\w\d?""".toRegex()
-        // only one section: no more than two characters, or one character plus a digit
-//        private val regexObfuscated1 = """\w[\w\d]?""".toRegex()
-        // only one section: without any dot
-        private val regexObfuscatedSingleSection = """[^.]+""".toRegex()
-        private val pKReflect = "kotlin.reflect.jvm.internal"
-        private val obfuscatedExceptions = hashSetOf(
-            "androidx.legacy.v4",
-            "java.com.android.tools.r8",
-            "kotlin",
-            "okhttp3",
-            "okio",
-            "retrofit2",
-        )
-
-        fun map(target: String): String? {
-            val mapOwn = mapOwnPkg(target)
-            if (mapOwn != target) return mapOwn
-            val mapObfuscated = mapObfuscated(target)
-            if (mapObfuscated != target) return mapObfuscated
-            return target
-        }
-
-        fun mapOwnPkg(target: String): String? {
-            if (target == ownPkg) return null // packages of its own
-            if (target.matches(regexOwnPkg)) return null // packages of its own
-            return target
-        }
-
-        fun mapObfuscated(target: String): String? {
-            if (target in obfuscatedExceptions) return target
-            if (target.matches(regexObfuscatedSingleSection)) return null // the obfuscated
-//            if (target.matches(regexObfuscated1)) return null // the obfuscated
-            if (target.matches(regexObfuscatedEnding)) return null // the obfuscated
-            if (removeInternals && target.startsWith(pKReflect)) return pKReflect
-            return target
-        }
-    }
-
-    class R8RewriteReverser {
-        private val regexR8Rewrite = """(j\$)((?:\..+)*)""".toRegex()
-
-        fun map(target: String): String {
-            // return self if starts with j
-            if (target.firstOrNull() != 'j') return target
-            // convert R8 prefix rewrite of Java 8 APIs
-            return target.replace(regexR8Rewrite) { s -> "java" + s.groupValues[2] }
-        }
+    private fun <T> Result<T>.logApkError(path: String, ownPkg: String) = onFailure { e ->
+        val eMsg = e::class.simpleName + ": " + e.message
+        val cause = e.cause?.message?.let { " BY $it" } ?: ""
+        val fileName = path.decentApkFileName
+        Log.w("av.util.ApkUtils", "$eMsg$cause ($ownPkg, $fileName)")
     }
 
     fun checkPkg(path: String, packageName: String): Boolean {
