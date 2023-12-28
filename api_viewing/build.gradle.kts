@@ -1,5 +1,5 @@
 plugins {
-    id("com.android.dynamic-feature")
+    alias(libs.plugins.android.dynamic.feature)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.ksp)
     // implement parcelable interface by using annotation

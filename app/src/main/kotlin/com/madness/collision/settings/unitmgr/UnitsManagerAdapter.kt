@@ -26,6 +26,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.graphics.ColorUtils
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.google.android.material.card.MaterialCardView
@@ -115,18 +116,19 @@ internal class UnitsManagerAdapter(context: Context, private val listener: Liste
         }
         holder.icon.setImageDrawable(description.getIcon(mContext))
         holder.icon.imageTintList = ColorStateList.valueOf(if (stateful.isAvailable) colorOnItem else colorSubText)
-        val opaqueCardColor = if (stateful.isDynamic) cardColorDynamic else cardColorStatic
+        val showDynamicState = stateful.isDynamic && description.isRemovable
+        val opaqueCardColor = if (showDynamicState) cardColorDynamic else cardColorStatic
         // adjust card color alpha manually since card background color overrides view alpha
         val semitransparentCardColor = ColorUtils.setAlphaComponent(opaqueCardColor, cardAlphaComp)
         holder.card.setCardBackgroundColor(semitransparentCardColor)
-        if (stateful.isDynamic) {
+        if (showDynamicState) {
             holder.dynamicState.setText(if (stateful.isInstalled) R.string.unit_desc_installed else R.string.unit_desc_not_installed)
             holder.dynamicState.setTextColor(if (stateful.isInstalled) colorPass else colorSubText)
         }
-        holder.dynamic.visibility = if (stateful.isDynamic) View.VISIBLE else View.GONE
-        holder.dynamicState.visibility = if (stateful.isDynamic) View.VISIBLE else View.GONE
+        holder.dynamic.isVisible = showDynamicState
+        holder.dynamicState.isVisible = showDynamicState
         val showDisableMsg = stateful.isDisabled && stateful.isInstalled && stateful.isAvailable
-        holder.disabled.visibility = if (showDisableMsg) View.VISIBLE else View.GONE
+        holder.disabled.isVisible = showDisableMsg
         holder.container.setOnClickListener {
             listener.click.invoke(stateful)
         }

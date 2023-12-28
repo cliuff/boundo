@@ -27,7 +27,9 @@
                 <!-- When unset or set to false, bundletool will fuse install-time modules... -->
                 <!-- ...into the base module when generating split APKs from the bundle. -->
                 <!-- This makes the module un-removable afterwards. -->
-                <dist:removable dist:value="true" />
+                <!-- 2023.12.18 set removable to false for a few missing module cases reported, -->
+                <!-- which should be caused by deferred module-uninstall until next app install/update. -->
+                <dist:removable dist:value="false" />
             </dist:install-time>
         </dist:delivery>
         <!-- Specifies whether to include the module in multi-APKs... -->

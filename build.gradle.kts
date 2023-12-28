@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android) apply false
+    alias(libs.plugins.android.dynamic.feature) apply false
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.google.gms.licenses) apply false
     alias(libs.plugins.room) apply false

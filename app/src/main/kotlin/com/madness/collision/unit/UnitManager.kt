@@ -69,6 +69,8 @@ internal class UnitManager(private val context: Context, private val splitInstal
     fun uninstallUnit(description: Description, view: View? = null) {
         val splitInstallManager = splitInstallManager ?: return
         val viewRef = WeakReference(view)
+        // uninstall can only be deferred, which in practice defers until the next app update
+        // (because app stays in memory?), confusing the user for missing feature after update
         splitInstallManager.deferredUninstall(listOf(description.unitName)).addOnSuccessListener {
             viewRef.notify(R.string.unit_manager_uninstall_success, true)
             Unit.unpinUnit(context, description.unitName)

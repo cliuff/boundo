@@ -25,7 +25,9 @@ import com.madness.collision.util.controller.DynamicItem
 import com.madness.collision.util.controller.NameCached
 
 class StaticDescription(unitName: String, displayNameResId: Int, iconResId: Int) :
-    Description(unitName, displayNameResId, iconResId)
+    Description(unitName, displayNameResId, iconResId) {
+        init { setRemovable(false) }
+    }
 
 private fun getDescPage(unitName: String): Fragment {
     return Unit.getDescription(unitName)?.let(UnitDescFragment::newInstance) ?: UnitDescFragment()
@@ -37,6 +39,9 @@ open class Description(val unitName: String, displayNameResId: Int, val iconResI
     val packagedName: String = "${BuildConfig.BUILD_PACKAGE}.unit.$unitName"
     private var mIcon: Drawable? = null
     private var mCheckers: Array<out Checker>? = null
+    /** Whether can be installed/uninstalled */
+    var isRemovable: Boolean = false
+        private set
 
     val checkers: Array<out Checker>
         get() = mCheckers!!
@@ -79,4 +84,8 @@ open class Description(val unitName: String, displayNameResId: Int, val iconResI
         return this
     }
 
+    fun setRemovable(removable: Boolean): Description {
+        isRemovable = removable
+        return this
+    }
 }

@@ -143,8 +143,9 @@ internal class UnitDescFragment() : TaggedFragment(), Democratic {
             it ?: return@observe
             // show unit icon
             viewBinding.unitDescIcon.setImageDrawable(it.description.getIcon(context))
+            val showDynamicState = it.isDynamic && it.description.isRemovable
             // show install status for dynamic unit
-            if (it.isDynamic) {
+            if (showDynamicState) {
                 val iconTint = viewBinding.unitDescIcon.imageTintList
                 val installStatusColor = if (it.isInstalled) ColorStateList.valueOf(colorPass) else iconTint
                 viewBinding.unitDescInstallStatus.run {
@@ -200,7 +201,7 @@ internal class UnitDescFragment() : TaggedFragment(), Democratic {
             // show install action for dynamic unit
             viewBinding.unitDescAction.run {
                 when {
-                    it.isDynamic && it.isInstalled -> {
+                    showDynamicState && it.isInstalled -> {
                         setText(R.string.unit_desc_uninstall)
                         setTextColor(colorAlert)
                         setBackgroundColor(colorAlertBack)
@@ -213,7 +214,7 @@ internal class UnitDescFragment() : TaggedFragment(), Democratic {
                         }
                         visibility = View.VISIBLE
                     }
-                    it.isDynamic && it.isAvailable -> {
+                    showDynamicState && it.isAvailable -> {
                         setText(R.string.unit_desc_install)
                         setTextColor(colorPass)
                         setBackgroundColor(colorPassBack)
