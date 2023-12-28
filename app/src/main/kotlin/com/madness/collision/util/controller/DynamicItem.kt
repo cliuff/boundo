@@ -1,8 +1,16 @@
-package com.madness.collision.unit
+package com.madness.collision.util.controller
 
 import android.content.Context
 import androidx.fragment.app.Fragment
-import com.madness.collision.util.NameCached
+
+interface NameCached {
+    var name: String
+    val nameResId: Int
+
+    fun getName(context: Context): String {
+        return if (name.isEmpty()) context.getString(nameResId) else name
+    }
+}
 
 open class DynamicItem(override val nameResId: Int, private val descriptionPageGetter: (() -> Fragment)? = null): NameCached {
 

@@ -16,37 +16,39 @@
 
 package com.madness.collision.unit
 
-class StatefulDescription(val unitName: String,
-                          val description: Description,
-                          /**
-                           * Whether is a [dynamic unit][Description].
-                           */
-                          var isDynamic: Boolean = false,
-                          /**
-                           * Whether is present on device.
-                           *
-                           * True if a [static unit][StaticDescription] or
-                           * installed [dynamic unit][Description], check [Unit.getInstalledUnits].
-                           */
-                          var isInstalled: Boolean = false,
-                          /**
-                           * Whether meets [unit requirement][Description.isAvailable].
-                           *
-                           * No matter [installed][isInstalled] or not.
-                           */
-                          var isAvailable: Boolean = false,
-                          /**
-                           * Whether is not [disabled][Unit.getDisabledUnits].
-                           *
-                           * Preconditions: [installed][isInstalled] and [available][isAvailable].
-                           */
-                          var isEnabled: Boolean = false,
-                          /**
-                           * Whether is [pinned][Unit.getPinnedUnits].
-                           *
-                           * Preconditions: [installed][isInstalled] and [available][isAvailable].
-                           */
-                          var isPinned: Boolean = false) {
+class StatefulDescription(
+    val unitName: String,
+    val description: Description,
+    /**
+     * Whether is a [dynamic unit][Description].
+     */
+    var isDynamic: Boolean = false,
+    /**
+     * Whether is present on device.
+     *
+     * True if a [static unit][StaticDescription] or
+     * installed [dynamic unit][Description], check [Unit.getInstalledUnits].
+     */
+    var isInstalled: Boolean = false,
+    /**
+     * Whether meets [unit requirement][Description.isAvailable].
+     *
+     * No matter [installed][isInstalled] or not.
+     */
+    var isAvailable: Boolean = false,
+    /**
+     * Whether is not [disabled][Unit.getDisabledUnits].
+     *
+     * Preconditions: [installed][isInstalled] and [available][isAvailable].
+     */
+    var isEnabled: Boolean = false,
+    /**
+     * Whether is [pinned][Unit.getPinnedUnits].
+     *
+     * Preconditions: [installed][isInstalled] and [available][isAvailable].
+     */
+    var isPinned: Boolean = false,
+) {
     val isStatic: Boolean
         get() = !isDynamic
     val isUninstalled: Boolean

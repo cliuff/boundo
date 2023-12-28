@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.madness.collision.unit
+package com.madness.collision.settings.unitmgr
 
 import android.content.Context
 import android.content.res.ColorStateList
@@ -32,6 +32,8 @@ import com.google.android.material.card.MaterialCardView
 import com.madness.collision.R
 import com.madness.collision.databinding.AdapterUnitsManagerBinding
 import com.madness.collision.diy.SandwichAdapter
+import com.madness.collision.unit.DescRetriever
+import com.madness.collision.unit.StatefulDescription
 import com.madness.collision.util.ColorUtil
 import com.madness.collision.util.ThemeUtil
 import com.madness.collision.util.mainApplication
@@ -52,7 +54,7 @@ internal class UnitsManagerAdapter(context: Context, private val listener: Liste
     }
 
     interface Listener {
-        val click: (StatefulDescription) -> kotlin.Unit
+        val click: (StatefulDescription) -> Unit
     }
 
     private val mContext = context

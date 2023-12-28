@@ -16,10 +16,12 @@
 
 package com.madness.collision.main
 
+import android.app.Application
+import android.content.Context
 import android.content.Intent
 import coil.ImageLoader
 import coil.ImageLoaderFactory
-import com.google.android.play.core.splitcompat.SplitCompatApplication
+import com.google.android.play.core.splitcompat.SplitCompat
 import com.madness.collision.BuildConfig
 import com.madness.collision.unit.api_viewing.AccessAV
 import com.madness.collision.util.X
@@ -34,7 +36,7 @@ import kotlin.system.exitProcess
 
 typealias AppAction = Pair<String, Any?>
 
-class MainApplication : SplitCompatApplication(), Thread.UncaughtExceptionHandler, ImageLoaderFactory {
+class MainApplication : Application(), Thread.UncaughtExceptionHandler, ImageLoaderFactory {
     companion object {
         lateinit var INSTANCE: MainApplication
     }
@@ -75,6 +77,12 @@ class MainApplication : SplitCompatApplication(), Thread.UncaughtExceptionHandle
 //        val context = LanguageMan(newBase).getLocaleContext()
 //        super.attachBaseContext(context)
 //    }
+
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(base)
+        // access dynamic feature modules after download
+        SplitCompat.install(this)
+    }
 
     override fun onCreate() {
         super.onCreate()

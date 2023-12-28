@@ -19,6 +19,11 @@ package com.madness.collision.unit
 import androidx.fragment.app.Fragment
 import java.lang.ref.WeakReference
 
+interface Updatable {
+    fun hasUpdates(hostFragment: Fragment): Boolean = false
+    fun updateState() { }
+}
+
 abstract class UpdatesProvider: Updatable {
 
     protected abstract val updatesFragment: Fragment

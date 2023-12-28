@@ -19,15 +19,20 @@ package com.madness.collision.unit
 import android.content.Context
 import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.madness.collision.BuildConfig
-import com.madness.collision.util.NameCached
+import com.madness.collision.util.controller.DynamicItem
+import com.madness.collision.util.controller.NameCached
 
-open class Description(val unitName: String, displayNameResId: Int, val iconResId: Int)
-    : DynamicItem(displayNameResId,  {
-    Unit.getDescription(unitName)?.let {
-        UnitDescFragment.newInstance(it)
-    } ?: UnitDescFragment()
-}) {
+class StaticDescription(unitName: String, displayNameResId: Int, iconResId: Int) :
+    Description(unitName, displayNameResId, iconResId)
+
+private fun getDescPage(unitName: String): Fragment {
+    return Unit.getDescription(unitName)?.let(UnitDescFragment::newInstance) ?: UnitDescFragment()
+}
+
+open class Description(val unitName: String, displayNameResId: Int, val iconResId: Int) :
+    DynamicItem(displayNameResId, { getDescPage(unitName) }) {
 
     val packagedName: String = "${BuildConfig.BUILD_PACKAGE}.unit.$unitName"
     private var mIcon: Drawable? = null

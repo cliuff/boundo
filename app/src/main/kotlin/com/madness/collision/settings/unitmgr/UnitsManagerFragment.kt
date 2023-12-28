@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.madness.collision.unit
+package com.madness.collision.settings.unitmgr
 
 import android.content.Context
 import android.os.Bundle
@@ -28,6 +28,8 @@ import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.databinding.FragmentUnitsManagerBinding
 import com.madness.collision.main.MainViewModel
+import com.madness.collision.unit.StatefulDescription
+import com.madness.collision.unit.UnitDescViewModel
 import com.madness.collision.util.AppUtils.asBottomMargin
 import com.madness.collision.util.TaggedFragment
 
@@ -67,7 +69,7 @@ internal class UnitsManagerFragment : TaggedFragment(), Democratic {
         mRecyclerView = mViews.unitsManagerRecyclerView
 
         val mAdapter = UnitsManagerAdapter(context, object : UnitsManagerAdapter.Listener {
-            override val click: (StatefulDescription) -> kotlin.Unit = {
+            override val click: (StatefulDescription) -> Unit = {
                 it.description.descriptionPage?.run {
                     mainViewModel.displayFragment(this)
                 }

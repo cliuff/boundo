@@ -40,8 +40,8 @@ import com.madness.collision.main.DevOptions
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.main.showPage
 import com.madness.collision.pref.PrefExterior
+import com.madness.collision.settings.unitmgr.UnitsManagerFragment
 import com.madness.collision.unit.DescRetriever
-import com.madness.collision.unit.UnitsManagerFragment
 import com.madness.collision.util.Page
 import kotlinx.coroutines.delay
 
