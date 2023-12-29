@@ -56,7 +56,7 @@ gglGuava = "31.0.1-android"
 # This dependency is set to compile only
 googleWearable = "2.9.0"
 okhttp = "4.12.0"
-coil = "2.4.0"
+coil = "2.5.0"
 junit4 = "4.13.2"
 junitJupiter = "5.8.1"
 kotlinCoroutines = "1.7.3"
@@ -72,7 +72,7 @@ mockito = "5.1.1"
 appIconLoader = "1.5.0"
 # Superellipse shape for Compose
 smoothCornerCompose = "v1.0.0"
-libCheckerRules = "34.2"
+libCheckerRules = "34.7"
 googleSmali = "3.0.3"
 
 [libraries]

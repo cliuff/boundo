@@ -20,14 +20,11 @@ import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.util.Log
-import com.absinthe.rulesbundle.*
 import com.madness.collision.misc.PackageCompat
-import com.madness.collision.unit.api_viewing.R
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.util.ApkUtil
 import com.madness.collision.util.StringUtils
 import com.madness.collision.util.os.OsUtils
-import com.madness.collision.util.ui.appContext
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.io.File
@@ -78,16 +75,6 @@ enum class CompSection {
 enum class PackCompType {
     Activity, Service, Receiver, Provider, DexPackage, NativeLibrary
 }
-
-private val PackCompType.libType
-    get() = when (this) {
-        PackCompType.Activity -> ACTIVITY
-        PackCompType.Service -> SERVICE
-        PackCompType.Receiver -> RECEIVER
-        PackCompType.Provider -> PROVIDER
-        PackCompType.DexPackage -> DEX
-        PackCompType.NativeLibrary -> NATIVE
-    }
 
 class CompSectionCollection : SectionMapCollection<CompSection, PackComponent>()
 
@@ -199,28 +186,9 @@ object LibInfoRetriever {
         }
     }
 
-    private fun getMarkedItem(compName: String, compType: Int): ValueOwnerComp {
-        val rule = kotlin.run rule@{
-            RuleRepository.rules?.get(compName)?.let { return@rule it }
-            val rules = RuleRepository.regexRules ?: return@rule null
-            for ((pattern, r) in rules) {
-                if (r.type != compType) continue
-                if (pattern.matcher(compName).matches()) return@rule r
-            }
-            null
-        }
-        rule ?: return ValueComponent.Simple(compName)
-        val label = mapLocalizedLabelId(rule)?.let { appContext.getString(it) } ?: rule.label
-        val iconId = IconResMap.getIconRes(rule.iconIndex)
-        val isIconMono = IconResMap.isSingleColorIcon(rule.iconIndex)
-        val mark = LibMarkImpl(label, iconId, isIconMono)
+    private fun getMarkedItem(compName: String, compType: PackCompType): ValueOwnerComp {
+        val mark = LibRules.getLibMark(compName, compType) ?: return ValueComponent.Simple(compName)
         return MarkedValueComp(mark, ValueComponent.Simple(compName))
-    }
-
-    private fun mapLocalizedLabelId(rule: RuleEntity) = when (rule.id) {
-        102, 104 -> R.string.av_lib_rule_cpp_shared
-        247, 297, 302, 303, 305, 307, 320, 329, 362, 366, 556, 723 -> R.string.av_lib_rule_alipay
-        else -> null
     }
 
     private fun getComponents(context: Context, app: ApiViewingApp): Map<PackCompType, Collection<ValueOwnerComp>> {
@@ -231,10 +199,9 @@ object LibInfoRetriever {
         val pack = getPack(context, app) ?: return typeList.associateWith { emptyList() }
         val compList = pack.run { listOf(activities, services, receivers, providers).map { it.orEmpty() } }
         return typeList.zip(compList).associate { (compType, compArray) ->
-            val libType = compType.libType
             compType to compArray.map { compInfo ->
                 val comp = ValueComponent.AppComp(compInfo.name, compInfo.enabled)
-                val mark = getMarkedItem(compInfo.name, libType)
+                val mark = getMarkedItem(compInfo.name, compType)
                 if (mark !is LibMark) return@map comp
                 MarkedValueComp(mark, comp)
             }
@@ -243,7 +210,7 @@ object LibInfoRetriever {
 
     private suspend fun resolveDexPackages(app: ApiViewingApp): Triple<Collection<ValueOwnerComp>, Collection<ValueOwnerComp>, Collection<ValueOwnerComp>> {
         val (a, b, c) = ApkUtil.getThirdPartyPkgPartitions(app.appPackage.apkPaths, app.packageName)
-        val marked = listOf(a, b, c).map { pkgList -> pkgList.map { getMarkedItem(it, DEX) } }
+        val marked = listOf(a, b, c).map { pkgList -> pkgList.map { getMarkedItem(it, PackCompType.DexPackage) } }
         return Triple(marked[0], marked[1], marked[2])
     }
 
@@ -255,7 +222,7 @@ object LibInfoRetriever {
             .map comp@{ (libName, libEntries) ->
                 val sortedEntries = libEntries.sortedBy { (_, en) -> en.first }
                 val lib = ValueComponent.NativeLib(libName, sortedEntries)
-                val marked = getMarkedItem(libName, NATIVE)
+                val marked = getMarkedItem(libName, PackCompType.NativeLibrary)
                 if (marked !is LibMark) return@comp lib
                 MarkedValueComp(marked, lib)
             }

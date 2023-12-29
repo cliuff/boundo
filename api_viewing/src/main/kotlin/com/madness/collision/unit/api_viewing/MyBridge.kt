@@ -30,7 +30,6 @@ import androidx.core.database.getIntOrNull
 import androidx.core.database.getStringOrNull
 import androidx.fragment.app.Fragment
 import androidx.sqlite.db.SupportSQLiteQueryBuilder
-import com.absinthe.rulesbundle.LCRules
 import com.madness.collision.chief.chiefContext
 import com.madness.collision.misc.MiscApp
 import com.madness.collision.unit.Bridge
@@ -38,6 +37,7 @@ import com.madness.collision.unit.Unit
 import com.madness.collision.unit.UpdatesProvider
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.database.AppRoom
+import com.madness.collision.unit.api_viewing.info.LibRules
 import com.madness.collision.unit.api_viewing.tag.app.AppTagInfo
 import com.madness.collision.unit.api_viewing.util.ApkRetriever
 import com.madness.collision.unit.api_viewing.util.PrefUtil
@@ -68,7 +68,7 @@ object MyBridge: Bridge() {
 
     @Suppress("unused")
     fun initUnit(context: Context) {
-        LCRules.init(context.applicationContext)
+        LibRules.init(context)
     }
 
     @Suppress("unused")

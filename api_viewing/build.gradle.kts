@@ -1,3 +1,5 @@
+import com.cliuff.boundo.build.configLibCheckerRules
+
 plugins {
     alias(libs.plugins.android.dynamic.feature)
     alias(libs.plugins.kotlin.android)
@@ -35,6 +37,10 @@ android {
     defaultConfig {
         minSdk = 23
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        configLibCheckerRules(libs.libCheckerRules) { ver ->
+            val javaValue = if (ver != null) "\"$ver\"" else "null"
+            buildConfigField("String", "LIBCHECKER_RULES_VER", javaValue)
+        }
     }
     buildTypes {
         getByName("debug") {
@@ -56,6 +62,7 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
     }
     kotlin.jvmToolchain(17)
+    buildFeatures.buildConfig = true
     buildFeatures.viewBinding = true
     buildFeatures.compose = true
     composeOptions {

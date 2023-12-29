@@ -33,7 +33,9 @@ open class SectionMapCollection<Section, Item> : MultiSectionCollection<Section,
     // use linked map to preserve insertion order
     private val sectionMap: MutableMap<Section, List<Item>> = Collections.synchronizedMap(LinkedHashMap())
     // use copy to avoid ConcurrentModificationException during iteration
-    private val sectionsCopy: Map<Section, List<Item>> get() = sectionMap.toMap()
+    private val sectionsCopy: Map<Section, List<Item>>
+        // manually synchronize for iterator access
+        get() = synchronized(sectionMap) { sectionMap.toMap() }
     override val size: Int get() = sectionsCopy.values.sumOf { it.size }
     override val sectionSize: Int get() = sectionMap.size
     override val sectionItems: List<List<Item>> get() = sectionMap.values.toList()
