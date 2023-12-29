@@ -16,7 +16,6 @@
 
 package com.madness.collision.settings
 
-import android.content.res.Configuration
 import android.text.format.DateUtils
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
@@ -49,7 +48,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
@@ -58,6 +56,8 @@ import com.madness.collision.BuildConfig
 import com.madness.collision.R
 import com.madness.collision.chief.graphics.AdaptiveIcon
 import com.madness.collision.util.ThemeUtil
+import com.madness.collision.util.dev.DarkPreview
+import com.madness.collision.util.dev.LayoutDirectionPreviews
 import com.madness.collision.util.ui.autoMirrored
 import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape
 
@@ -242,7 +242,7 @@ private fun SettingsPreview() {
     Settings(paddingValues = PaddingValues(), options = options, itemColor = Color(itemColor))
 }
 
-@Preview(showBackground = true)
+@LayoutDirectionPreviews
 @Composable
 private fun SettingsPagePreview() {
     MaterialTheme {
@@ -250,18 +250,10 @@ private fun SettingsPagePreview() {
     }
 }
 
-@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@DarkPreview
 @Composable
 private fun SettingsPageDarkPreview() {
     MaterialTheme(colorScheme = darkColorScheme()) {
-        SettingsPreview()
-    }
-}
-
-@Preview(showBackground = true, locale = "ar")
-@Composable
-private fun SettingsPageRtlPreview() {
-    MaterialTheme {
         SettingsPreview()
     }
 }

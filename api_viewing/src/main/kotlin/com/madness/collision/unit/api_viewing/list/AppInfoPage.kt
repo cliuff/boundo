@@ -16,7 +16,6 @@
 
 package com.madness.collision.unit.api_viewing.list
 
-import android.content.res.Configuration
 import android.text.format.DateUtils
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
@@ -38,7 +37,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -63,6 +61,8 @@ import com.madness.collision.unit.api_viewing.ui.info.AppSwitcherHandler
 import com.madness.collision.unit.api_viewing.ui.info.LibPage
 import com.madness.collision.unit.api_viewing.ui.info.TagDetailsList
 import com.madness.collision.util.ThemeUtil
+import com.madness.collision.util.dev.DarkPreview
+import com.madness.collision.util.dev.StandardPreview
 import com.madness.collision.util.mainApplication
 import com.madness.collision.util.os.*
 import kotlinx.coroutines.*
@@ -145,7 +145,7 @@ private fun AppInfo(
     AppInfoWithHeader(itemBackColor, cardColor, isDarkTheme) {
         BoxWithConstraints {
             val margin = remember {
-                if (maxWidth > 600.dp) 30.dp else if (maxWidth > 360.dp) 24.dp else 12.dp
+                if (maxWidth >= 600.dp) 30.dp else if (maxWidth >= 360.dp) 24.dp else 12.dp
             }
             val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
             // use coefficient to invert slide animation offset for RTL layout
@@ -198,13 +198,12 @@ private fun AppInfoWithHeader(
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             BoxWithConstraints {
-                val sizeToken = remember { maxWidth > 360.dp }
-                val margin = if (sizeToken) 40.dp else 30.dp
+                val sizeToken = remember { maxWidth >= 360.dp }
                 val (mTop, mBottom) = if (sizeToken) (30.dp to 18.dp) else (18.dp to 14.dp)
                 AppHeaderContent(
                     cardColor,
                     modifier = Modifier
-                        .padding(horizontal = margin)
+                        .padding(horizontal = 40.dp)
                         .padding(top = mTop, bottom = mBottom),
                 )
             }
@@ -470,7 +469,7 @@ private fun DetailedAppInfoPreview() {
     }
 }
 
-@Preview(showBackground = true)
+@StandardPreview
 @Composable
 private fun AppInfoPagePreview() {
     MaterialTheme {
@@ -478,7 +477,7 @@ private fun AppInfoPagePreview() {
     }
 }
 
-@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@DarkPreview
 @Composable
 private fun AppInfoPageDarkPreview() {
     MaterialTheme(colorScheme = darkColorScheme()) {
@@ -486,7 +485,7 @@ private fun AppInfoPageDarkPreview() {
     }
 }
 
-@Preview(showBackground = true)
+@StandardPreview
 @Composable
 private fun AppInfoPageDetailedPreview() {
     MaterialTheme {
@@ -494,7 +493,7 @@ private fun AppInfoPageDetailedPreview() {
     }
 }
 
-@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@DarkPreview
 @Composable
 private fun AppInfoPageDetailedDarkPreview() {
     MaterialTheme(colorScheme = darkColorScheme()) {

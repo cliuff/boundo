@@ -17,7 +17,6 @@
 package com.madness.collision.settings
 
 import android.content.Context
-import android.content.res.Configuration
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -31,7 +30,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.madness.collision.R
@@ -43,6 +41,8 @@ import com.madness.collision.pref.PrefExterior
 import com.madness.collision.settings.unitmgr.UnitsManagerFragment
 import com.madness.collision.unit.DescRetriever
 import com.madness.collision.util.Page
+import com.madness.collision.util.dev.DarkPreview
+import com.madness.collision.util.dev.LayoutDirectionPreviews
 import kotlinx.coroutines.delay
 
 @Composable
@@ -201,7 +201,7 @@ private fun SettingsPreview() {
     Settings(options = options, paddingValues = PaddingValues())
 }
 
-@Preview(showBackground = true)
+@LayoutDirectionPreviews
 @Composable
 private fun SettingsPagePreview() {
     MaterialTheme {
@@ -209,18 +209,10 @@ private fun SettingsPagePreview() {
     }
 }
 
-@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@DarkPreview
 @Composable
 private fun SettingsPageDarkPreview() {
     MaterialTheme(colorScheme = darkColorScheme()) {
-        SettingsPreview()
-    }
-}
-
-@Preview(showBackground = true, locale = "ar")
-@Composable
-private fun SettingsPageRtlPreview() {
-    MaterialTheme {
         SettingsPreview()
     }
 }

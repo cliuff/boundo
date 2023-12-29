@@ -42,12 +42,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.madness.collision.R
+import com.madness.collision.util.dev.LayoutDirectionPreviews
 import com.madness.collision.util.mainApplication
 import com.madness.collision.util.ui.initDelayed
 import com.madness.collision.versatile.ctrl.ControlInfo
@@ -254,7 +254,7 @@ private fun Contained(onClick: () -> Unit, content: @Composable ColumnScope.() -
     )
 }
 
-@Preview(showBackground = true)
+@LayoutDirectionPreviews
 @Composable
 private fun DeviceControlsPreview() {
     val controls = remember {

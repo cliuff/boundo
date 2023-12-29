@@ -17,7 +17,6 @@
 package com.madness.collision.main
 
 import android.content.Context
-import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -36,7 +35,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.madness.collision.R
@@ -47,6 +46,8 @@ import com.madness.collision.unit.Description
 import com.madness.collision.unit.Unit
 import com.madness.collision.util.P
 import com.madness.collision.util.ThemeUtil
+import com.madness.collision.util.dev.DarkPreview
+import com.madness.collision.util.dev.LayoutDirectionPreviews
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape
@@ -100,16 +101,20 @@ private fun Updates(descriptions: List<Description>, onClick: (unitName: String)
         else -> Color(ThemeUtil.getColor(LocalContext.current, R.attr.colorAItem))
     }
     // layout like LazyVerticalGrid but with fixed height
-    BoxWithConstraints(modifier = Modifier.padding(horizontal = 8.dp)) {
-        val minItemSize = when {
-            maxWidth < 360.dp -> 80.dp
-            maxWidth < 600.dp -> 100.dp
-            maxWidth < 900.dp -> 110.dp
-            else -> 120.dp
+    BoxWithConstraints {
+        val (minItemSize, horizontalItemMargin) = when {
+            maxWidth < 316.dp -> 80.dp to 5.dp
+            maxWidth < 375.dp -> 100.dp to 9.dp
+            maxWidth < 600.dp -> 110.dp to 9.dp
+            maxWidth < 900.dp -> 110.dp to 9.dp
+            else -> 125.dp to 9.dp
         }
-        val maxColumnCount = (maxWidth / minItemSize).toInt().coerceAtLeast(1)
+        val expectedBoxPadding = 17.dp
+        val actualBoxPadding = expectedBoxPadding - horizontalItemMargin
+        val itemsLayoutWidth = maxWidth - actualBoxPadding * 2
+        val maxColumnCount = (itemsLayoutWidth / minItemSize).toInt().coerceAtLeast(1)
         val rowSize = ceil(descriptions.size / maxColumnCount.toFloat()).toInt()
-        Column {
+        Column(modifier = Modifier.padding(horizontal = actualBoxPadding)) {
             for (i in 0..<rowSize) {
                 Row {
                     for (j in 0..<maxColumnCount) {
@@ -119,6 +124,7 @@ private fun Updates(descriptions: List<Description>, onClick: (unitName: String)
                                 UnitItem(
                                     desc = desc,
                                     backgroundColor = itemColor,
+                                    horizontalMargin = horizontalItemMargin,
                                     onClick = { onClick(desc.unitName) },
                                 )
                             }
@@ -131,7 +137,12 @@ private fun Updates(descriptions: List<Description>, onClick: (unitName: String)
 }
 
 @Composable
-private fun UnitItem(desc: Description, backgroundColor: Color, onClick: () -> kotlin.Unit) {
+private fun UnitItem(
+    desc: Description,
+    backgroundColor: Color,
+    horizontalMargin: Dp,
+    onClick: () -> kotlin.Unit
+) {
     Column(
         modifier = Modifier
             .clip(RoundedCornerShape(20.dp))
@@ -142,7 +153,7 @@ private fun UnitItem(desc: Description, backgroundColor: Color, onClick: () -> k
         Icon(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 9.dp)
+                .padding(horizontal = horizontalMargin)
                 .clip(AbsoluteSmoothCornerShape(20.dp, 100))
                 .background(backgroundColor)
                 .padding(vertical = 18.dp),
@@ -177,7 +188,7 @@ private fun UpdatesPreview() {
     Updates(descriptions) { }
 }
 
-@Preview(showBackground = true)
+@LayoutDirectionPreviews
 @Composable
 private fun UpdatesPagePreview() {
     MaterialTheme {
@@ -185,7 +196,7 @@ private fun UpdatesPagePreview() {
     }
 }
 
-@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@DarkPreview
 @Composable
 private fun UpdatesPageDarkPreview() {
     MaterialTheme(colorScheme = darkColorScheme()) {
