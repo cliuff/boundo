@@ -223,4 +223,8 @@
     <string name="about_twitter_account">&#8206;\@libekliff</string>
     <string name="at_status_running">تایمر در حال اجرا است</string>
     <string name="at_action_start">شروع تایمر</string>
+    <string name="at_hint_dev_ctrl">دسترسی سریع: تایمر را به کنترل های دستگاه اضافه کنید</string>
+    <string name="settings_dev_ctrl_switch">کنترل های Boundo را فعال کنید</string>
+    <string name="settings_dev_ctrl_switch_desc">توجه: کنترل‌ها را از پانل کنترل‌های دستگاه سیستم اضافه کنید، پس از خاموش شدن این سوئیچ، کنترل‌های اضافه شده پاک می‌شوند</string>
+    <string name="settings_dev_ctrl_list_title">تمام کنترل های موجود</string>
 </resources>

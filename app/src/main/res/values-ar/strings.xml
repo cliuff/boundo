@@ -223,4 +223,8 @@
     <string name="about_twitter_account">&#8206;\@libekliff</string>
     <string name="at_status_running">الموقت قيد التشغيل</string>
     <string name="at_action_start">بدء الموقت</string>
+    <string name="at_hint_dev_ctrl">الوصول السريع: أضف مؤقتًا إلى عناصر التحكم في الجهاز</string>
+    <string name="settings_dev_ctrl_switch">تمكين ضوابط Boundo</string>
+    <string name="settings_dev_ctrl_switch_desc">ملاحظة: أضف عناصر التحكم من لوحة التحكم في جهاز النظام، وسيتم مسح عناصر التحكم المضافة بمجرد إيقاف تشغيل هذا المفتاح</string>
+    <string name="settings_dev_ctrl_list_title">جميع الضوابط المتاحة</string>
 </resources>

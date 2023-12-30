@@ -222,4 +222,8 @@
     <string name="unit_man_dynamic_feature">Δυναμική λειτουργία</string>
     <string name="at_status_running">Το χρονόμετρο λειτουργεί</string>
     <string name="at_action_start">Έναρξη χρονοδιακόπτη</string>
+    <string name="at_hint_dev_ctrl">Γρήγορη πρόσβαση: προσθήκη χρονοδιακόπτη στα χειριστήρια της συσκευής</string>
+    <string name="settings_dev_ctrl_switch">Ενεργοποιήστε τα στοιχεία ελέγχου Boundo</string>
+    <string name="settings_dev_ctrl_switch_desc">Σημείωση: προσθέστε στοιχεία ελέγχου από τον πίνακα ελέγχου συσκευών του συστήματος, τα πρόσθετα στοιχεία ελέγχου θα διαγραφούν μόλις απενεργοποιηθεί αυτός ο διακόπτης</string>
+    <string name="settings_dev_ctrl_list_title">Όλα τα διαθέσιμα χειριστήρια</string>
 </resources>

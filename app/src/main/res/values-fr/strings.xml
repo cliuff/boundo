@@ -221,4 +221,8 @@
     <string name="unit_man_dynamic_feature">Fonction dynamique</string>
     <string name="at_status_running">La minuterie tourne</string>
     <string name="at_action_start">Démarrer la minuterie</string>
+    <string name="at_hint_dev_ctrl">Accès rapide : ajoutez une minuterie aux commandes de l\'appareil</string>
+    <string name="settings_dev_ctrl_switch">Activer les contrôles Boundo</string>
+    <string name="settings_dev_ctrl_switch_desc">Remarque : ajoutez des commandes à partir du panneau de commandes de l\'appareil du système, les commandes ajoutées seront effacées une fois cet interrupteur éteint.</string>
+    <string name="settings_dev_ctrl_list_title">Toutes les commandes disponibles</string>
 </resources>

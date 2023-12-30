@@ -222,4 +222,8 @@
     <string name="unit_man_dynamic_feature">動的機能</string>
     <string name="at_status_running">タイマーが作動中です</string>
     <string name="at_action_start">タイマーを開始します</string>
+    <string name="at_hint_dev_ctrl">クイックアクセス: デバイスコントロールにタイマーを追加</string>
+    <string name="settings_dev_ctrl_switch">バウンドコントロールを有効にする</string>
+    <string name="settings_dev_ctrl_switch_desc">注: システムのデバイス コントロール パネルからコントロールを追加します。このスイッチがオフになると、追加されたコントロールはクリアされます。</string>
+    <string name="settings_dev_ctrl_list_title">利用可能なすべてのコントロール</string>
 </resources>

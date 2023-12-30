@@ -222,4 +222,8 @@
     <string name="unit_man_dynamic_feature">Fitur dinamis</string>
     <string name="at_status_running">Timer sedang berjalan</string>
     <string name="at_action_start">Mulai pengatur waktu</string>
+    <string name="at_hint_dev_ctrl">Akses cepat: tambahkan pengatur waktu ke kontrol perangkat</string>
+    <string name="settings_dev_ctrl_switch">Aktifkan kontrol Boundo</string>
+    <string name="settings_dev_ctrl_switch_desc">Catatan: tambahkan kontrol dari panel kontrol perangkat sistem, kontrol yang ditambahkan akan dihapus setelah sakelar ini dimatikan</string>
+    <string name="settings_dev_ctrl_list_title">Semua kontrol yang tersedia</string>
 </resources>

@@ -222,4 +222,8 @@
     <string name="unit_man_dynamic_feature">गतिशील सुविधा</string>
     <string name="at_status_running">टाइमर चल रहा है</string>
     <string name="at_action_start">टाइमर प्रारंभ करें</string>
+    <string name="at_hint_dev_ctrl">त्वरित पहुंच: डिवाइस नियंत्रण में टाइमर जोड़ें</string>
+    <string name="settings_dev_ctrl_switch">बाउंडो नियंत्रण सक्षम करें</string>
+    <string name="settings_dev_ctrl_switch_desc">नोट: सिस्टम के डिवाइस नियंत्रण पैनल से नियंत्रण जोड़ें, इस स्विच के बंद होते ही जोड़े गए नियंत्रण साफ़ हो जाएंगे</string>
+    <string name="settings_dev_ctrl_list_title">सभी उपलब्ध नियंत्रण</string>
 </resources>

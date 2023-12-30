@@ -222,4 +222,8 @@
     <string name="unit_man_dynamic_feature">Funzione dinamica</string>
     <string name="at_status_running">Il timer è in esecuzione</string>
     <string name="at_action_start">Avvia il cronometro</string>
+    <string name="at_hint_dev_ctrl">Accesso rapido: aggiungi timer ai controlli del dispositivo</string>
+    <string name="settings_dev_ctrl_switch">Abilita i controlli Boundo</string>
+    <string name="settings_dev_ctrl_switch_desc">Nota: aggiungi controlli dal pannello di controllo del dispositivo del sistema, i controlli aggiunti verranno cancellati una volta disattivato questo interruttore</string>
+    <string name="settings_dev_ctrl_list_title">Tutti i controlli disponibili</string>
 </resources>

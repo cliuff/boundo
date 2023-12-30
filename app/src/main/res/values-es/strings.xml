@@ -222,4 +222,8 @@
     <string name="unit_man_dynamic_feature">Característica dinámica</string>
     <string name="at_status_running">El temporizador está corriendo</string>
     <string name="at_action_start">Temporizador de inicio</string>
+    <string name="at_hint_dev_ctrl">Acceso rápido: agregue temporizador al control de dispositivos</string>
+    <string name="settings_dev_ctrl_switch">Habilitar Controles de Boundo</string>
+    <string name="settings_dev_ctrl_switch_desc">Nota: agregue controles desde el panel de controles del dispositivo del sistema; los controles agregados se borrarán una vez que este interruptor esté desactivado</string>
+    <string name="settings_dev_ctrl_list_title">Todos los controles disponibles</string>
 </resources>

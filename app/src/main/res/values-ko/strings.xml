@@ -222,4 +222,8 @@
     <string name="unit_man_dynamic_feature">동적 기능</string>
     <string name="at_status_running">타이머 실행 중</string>
     <string name="at_action_start">타이머 시작</string>
+    <string name="at_hint_dev_ctrl">빠른 액세스: 장치 제어에 타이머 추가</string>
+    <string name="settings_dev_ctrl_switch">Boundo 컨트롤 활성화</string>
+    <string name="settings_dev_ctrl_switch_desc">참고: 시스템의 장치 제어판에서 컨트롤을 추가하세요. 이 스위치를 끄면 추가된 컨트롤이 지워집니다.</string>
+    <string name="settings_dev_ctrl_list_title">사용 가능한 모든 컨트롤</string>
 </resources>

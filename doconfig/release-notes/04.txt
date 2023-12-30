@@ -1,5 +1,22 @@
 
 
+- **4.1.3** 23123023
+<en-US>
+- App API: apply alternate row colors in app info
+- App API: 20%-100% speed improvement in dex resolving
+- App API: add MD5 and SHA fingerprints of signing certificates
+- Device Manager: recognize headphones, computers and watches
+- App settings: add settings page for device controls
+</en-US>
+<zh-CN>
+- 应用API：应用详情页面列表使用交替颜色
+- 应用API：dex解析速度提升20%-100%
+- 应用API：新增签名证书MD5和SHA指纹
+- 设备管理：识别蓝牙耳机、电脑和手表
+- 应用设置：添加设备控制器设置页面
+</zh-CN>
+
+
 - **4.1.1** 23092018
 <en-US>
 - App API: redirect to Xiaomi and Huawei app stores

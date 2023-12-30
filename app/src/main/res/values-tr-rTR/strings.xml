@@ -222,4 +222,8 @@
     <string name="unit_man_dynamic_feature">Dinamik özellik</string>
     <string name="at_status_running">Zamanlayıcı çalışıyor</string>
     <string name="at_action_start">Zamanlayıcıyı başlat</string>
+    <string name="at_hint_dev_ctrl">Hızlı erişim: cihaz kontrollerine zamanlayıcı ekleyin</string>
+    <string name="settings_dev_ctrl_switch">Boundo kontrollerini etkinleştir</string>
+    <string name="settings_dev_ctrl_switch_desc">Not: Kontrolleri sistemin cihaz kontrol panelinden ekleyin; eklenen kontroller bu anahtar kapatıldığında silinecektir.</string>
+    <string name="settings_dev_ctrl_list_title">Mevcut tüm kontroller</string>
 </resources>

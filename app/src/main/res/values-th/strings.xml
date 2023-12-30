@@ -222,4 +222,8 @@
     <string name="unit_man_dynamic_feature">คุณสมบัติไดนามิก</string>
     <string name="at_status_running">ตัวจับเวลากำลังทำงานอยู่</string>
     <string name="at_action_start">เริ่มจับเวลา</string>
+    <string name="at_hint_dev_ctrl">เข้าถึงด่วน: เพิ่มตัวจับเวลาในการควบคุมอุปกรณ์</string>
+    <string name="settings_dev_ctrl_switch">เปิดใช้งานการควบคุม Boundo</string>
+    <string name="settings_dev_ctrl_switch_desc">หมายเหตุ: เพิ่มการควบคุมจากแผงควบคุมอุปกรณ์ของระบบ การควบคุมที่เพิ่มจะถูกล้างเมื่อสวิตช์นี้ปิดอยู่</string>
+    <string name="settings_dev_ctrl_list_title">การควบคุมที่มีอยู่ทั้งหมด</string>
 </resources>

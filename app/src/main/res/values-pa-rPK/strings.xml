@@ -222,4 +222,8 @@
     <string name="unit_man_dynamic_feature">ਗਤੀਸ਼ੀਲ ਵਿਸ਼ੇਸ਼ਤਾ</string>
     <string name="at_status_running">ਟਾਈਮਰ ਚੱਲ ਰਿਹਾ ਹੈ</string>
     <string name="at_action_start">ਟਾਈਮਰ ਸ਼ੁਰੂ ਕਰੋ</string>
+    <string name="at_hint_dev_ctrl">ਤਤਕਾਲ ਪਹੁੰਚ: ਡਿਵਾਈਸ ਨਿਯੰਤਰਣ ਵਿੱਚ ਟਾਈਮਰ ਸ਼ਾਮਲ ਕਰੋ</string>
+    <string name="settings_dev_ctrl_switch">ਬਾਉਂਡੋ ਨਿਯੰਤਰਣ ਨੂੰ ਸਮਰੱਥ ਬਣਾਓ</string>
+    <string name="settings_dev_ctrl_switch_desc">ਨੋਟ: ਸਿਸਟਮ ਦੇ ਡਿਵਾਈਸ ਕੰਟਰੋਲ ਪੈਨਲ ਤੋਂ ਨਿਯੰਤਰਣ ਸ਼ਾਮਲ ਕਰੋ, ਇਸ ਸਵਿੱਚ ਦੇ ਬੰਦ ਹੋਣ \'ਤੇ ਸ਼ਾਮਲ ਕੀਤੇ ਗਏ ਨਿਯੰਤਰਣ ਸਾਫ਼ ਹੋ ਜਾਣਗੇ</string>
+    <string name="settings_dev_ctrl_list_title">ਸਾਰੇ ਉਪਲਬਧ ਨਿਯੰਤਰਣ</string>
 </resources>

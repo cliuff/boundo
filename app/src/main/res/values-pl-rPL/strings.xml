@@ -222,4 +222,8 @@
     <string name="unit_man_dynamic_feature">Funkcja dynamiczna</string>
     <string name="at_status_running">Minutnik działa</string>
     <string name="at_action_start">Uruchom minutnik</string>
+    <string name="at_hint_dev_ctrl">Szybki dostęp: dodaj timer do elementów sterujących urządzenia</string>
+    <string name="settings_dev_ctrl_switch">Włącz kontrolki Boundo</string>
+    <string name="settings_dev_ctrl_switch_desc">Uwaga: dodaj elementy sterujące z panelu sterowania urządzenia systemowego. Dodane elementy sterujące zostaną usunięte po wyłączeniu tego przełącznika</string>
+    <string name="settings_dev_ctrl_list_title">Wszystkie dostępne elementy sterujące</string>
 </resources>

@@ -222,4 +222,8 @@
     <string name="unit_man_dynamic_feature">动态功能</string>
     <string name="at_status_running">正在倒计时</string>
     <string name="at_action_start">开始倒计时</string>
+    <string name="at_hint_dev_ctrl">快捷访问：添加倒计时到设备控制器</string>
+    <string name="settings_dev_ctrl_switch">启用斑朵控制中心</string>
+    <string name="settings_dev_ctrl_switch_desc">注意：请前往系统的设备控制器面板添加控制器，关闭此开关会清除当前已添加的控制器</string>
+    <string name="settings_dev_ctrl_list_title">可添加的控制器</string>
 </resources>

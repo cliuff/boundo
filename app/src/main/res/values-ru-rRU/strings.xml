@@ -222,4 +222,8 @@
     <string name="unit_man_dynamic_feature">Динамическая функция</string>
     <string name="at_status_running">Таймер работает</string>
     <string name="at_action_start">Запустить таймер</string>
+    <string name="at_hint_dev_ctrl">Быстрый доступ: добавьте таймер в элементы управления устройством</string>
+    <string name="settings_dev_ctrl_switch">Включить элементы управления Boundo</string>
+    <string name="settings_dev_ctrl_switch_desc">Примечание. Добавьте элементы управления с панели управления устройством системы. Добавленные элементы управления будут удалены после выключения этого переключателя.</string>
+    <string name="settings_dev_ctrl_list_title">Все доступные элементы управления</string>
 </resources>

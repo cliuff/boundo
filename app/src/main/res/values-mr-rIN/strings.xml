@@ -222,4 +222,8 @@
     <string name="unit_man_dynamic_feature">डायनॅमिक वैशिष्ट्य</string>
     <string name="at_status_running">टायमर चालू आहे</string>
     <string name="at_action_start">टाइमर सुरू करा</string>
+    <string name="at_hint_dev_ctrl">द्रुत प्रवेश: डिव्हाइस नियंत्रणांमध्ये टायमर जोडा</string>
+    <string name="settings_dev_ctrl_switch">Boundo नियंत्रणे सक्षम करा</string>
+    <string name="settings_dev_ctrl_switch_desc">टीप: सिस्टमच्या डिव्हाइस नियंत्रण पॅनेलमधून नियंत्रणे जोडा, एकदा हे स्विच बंद झाल्यावर जोडलेली नियंत्रणे साफ केली जातील</string>
+    <string name="settings_dev_ctrl_list_title">सर्व उपलब्ध नियंत्रणे</string>
 </resources>

@@ -222,4 +222,8 @@
     <string name="unit_man_dynamic_feature">Tính năng động</string>
     <string name="at_status_running">Hẹn giờ đang chạy</string>
     <string name="at_action_start">bắt đầu hẹn giờ</string>
+    <string name="at_hint_dev_ctrl">Truy cập nhanh: thêm bộ hẹn giờ vào điều khiển thiết bị</string>
+    <string name="settings_dev_ctrl_switch">Bật điều khiển Boundo</string>
+    <string name="settings_dev_ctrl_switch_desc">Lưu ý: thêm các điều khiển từ bảng điều khiển thiết bị của hệ thống, các điều khiển đã thêm sẽ bị xóa sau khi công tắc này tắt</string>
+    <string name="settings_dev_ctrl_list_title">Tất cả các điều khiển có sẵn</string>
 </resources>

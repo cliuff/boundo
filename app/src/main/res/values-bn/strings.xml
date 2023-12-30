@@ -222,4 +222,8 @@
     <string name="unit_man_dynamic_feature">গতিশীল বৈশিষ্ট্য</string>
     <string name="at_status_running">টাইমার চলছে</string>
     <string name="at_action_start">টাইমার শুরু করুন</string>
+    <string name="at_hint_dev_ctrl">দ্রুত অ্যাক্সেস: ডিভাইস নিয়ন্ত্রণে টাইমার যোগ করুন</string>
+    <string name="settings_dev_ctrl_switch">বাউন্ডো নিয়ন্ত্রণ সক্ষম করুন</string>
+    <string name="settings_dev_ctrl_switch_desc">দ্রষ্টব্য: সিস্টেমের ডিভাইস নিয়ন্ত্রণ প্যানেল থেকে নিয়ন্ত্রণ যোগ করুন, এই সুইচটি বন্ধ হয়ে গেলে যোগ করা নিয়ন্ত্রণগুলি সাফ হয়ে যাবে</string>
+    <string name="settings_dev_ctrl_list_title">সমস্ত উপলব্ধ নিয়ন্ত্রণ</string>
 </resources>
