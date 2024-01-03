@@ -72,7 +72,7 @@ internal class ApiFragment: Fragment(), AdapterView.OnItemSelectedListener, Menu
     private lateinit var adapter: APIAdapter
     private lateinit var manager: WearableLinearLayoutManager
     private var popSort: PopupMenu? = null
-    private lateinit var mViews: FragmentApiBinding
+    private var mViews: FragmentApiBinding? = null
 
     // context related
     private lateinit var pm: PackageManager
@@ -97,7 +97,8 @@ internal class ApiFragment: Fragment(), AdapterView.OnItemSelectedListener, Menu
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mViews = FragmentApiBinding.inflate(inflater, container, false)
+        val mViews = FragmentApiBinding.inflate(inflater, container, false)
+        this.mViews = mViews
         return mViews.root
     }
 
@@ -147,6 +148,7 @@ internal class ApiFragment: Fragment(), AdapterView.OnItemSelectedListener, Menu
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val context = context ?: return
+        val mViews = mViews ?: return
 
 //        refreshLayout.isRefreshing = true todo
         pm = context.packageManager
@@ -237,6 +239,7 @@ internal class ApiFragment: Fragment(), AdapterView.OnItemSelectedListener, Menu
     }
 
     fun onPageVisible() {
+        val mViews = mViews ?: return
         // request focus to support rotary input
         mViews.avRecycler.run { post { requestFocus() } }
     }
