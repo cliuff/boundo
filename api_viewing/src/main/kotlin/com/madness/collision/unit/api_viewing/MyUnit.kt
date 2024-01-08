@@ -21,6 +21,7 @@ import android.content.*
 import android.content.pm.PackageInfo
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.provider.DocumentsContract
 import android.view.*
 import android.widget.Filter
@@ -55,6 +56,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 import com.madness.collision.unit.api_viewing.R as MyR
 
 class MyUnit: com.madness.collision.unit.Unit() {
@@ -89,7 +91,6 @@ class MyUnit: com.madness.collision.unit.Unit() {
     // managers
     private lateinit var toolbarMan: MainToolbar
     private lateinit var statusMan: MainStatus
-    private lateinit var listLoadingMan: MainListLoader
     private val operationMan = MainOperations()
 
     // views
@@ -112,6 +113,49 @@ class MyUnit: com.madness.collision.unit.Unit() {
             listFragment.clearBottomAppIcons()
         }
         return true
+    }
+
+    inner class MainStateHandler {
+        private val filter = listFragment.filter
+
+        private fun handleSort(newSortPos: Int) {
+            val sortPosition = if (newSortPos >= 0) newSortPos else sortItem
+            sortItem = sortPosition
+            refreshLayout.isRefreshing = true
+            context?.let(::clearTagFilter)
+            viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Default) {
+                adapter.setSortMethod(sortPosition)
+                settingsPreferences.edit { putInt(PrefUtil.AV_SORT_ITEM, sortPosition) }
+                viewModel.sortApps(sortPosition)
+                refreshList()
+            }
+        }
+
+        private fun handleSearchState(searchState: SearchState) {
+            when (searchState) {
+                SearchState.None -> TODO()
+                SearchState.EmptyQuery -> {
+                    refreshLayout.isRefreshing = true
+                    lifecycleScope.launch(Dispatchers.Default) {
+                        refreshList()
+                        filter.onCancel()
+                    }
+                }
+                is SearchState.QueryText -> {
+                    refreshLayout.isRefreshing = true
+                    filter.isAddition = searchState.isAddition
+                    filter.filterBy(searchState.value)
+                }
+                SearchState.SubmitQuery -> Unit
+            }
+        }
+
+        private fun Filter.filterBy(constraint: CharSequence) {
+            filter(constraint) {
+                doListUpdateAftermath()
+                refreshLayout.isRefreshing = false
+            }
+        }
     }
 
     /**
@@ -155,8 +199,6 @@ class MyUnit: com.madness.collision.unit.Unit() {
         settingsPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
         EasyAccess.init(context, settingsPreferences)
 
-        loadedItems.apkPreload = settingsPreferences.getBoolean(
-            PrefUtil.API_APK_PRELOAD, PrefUtil.API_APK_PRELOAD_DEFAULT)
         apkRetriever = ApkRetriever(context)
 
         listFragment = childFragmentManager.getSavedFragment(savedInstanceState, STATE_KEY_LIST)
@@ -171,12 +213,6 @@ class MyUnit: com.madness.collision.unit.Unit() {
             this.context = context
             this.viewModel = this@MyUnit.viewModel
         }
-        listLoadingMan = MainListLoader(this, dataConfig).apply {
-            this.context = context
-            this.viewModel = this@MyUnit.viewModel
-            this.listFragment = this@MyUnit.listFragment
-            this.apkRetriever = this@MyUnit.apkRetriever
-        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -186,7 +222,6 @@ class MyUnit: com.madness.collision.unit.Unit() {
 
     override fun onStop() {
         toolbarMan.removeSearchBackCallback()
-        ApiTaskManager.cancelAll()
         super.onStop()
     }
 
@@ -218,39 +253,10 @@ class MyUnit: com.madness.collision.unit.Unit() {
         checkRefresh()
     }
 
-    private fun displayApk(doNow: Boolean, block: () -> Unit) {
-        if (doNow) {
-            block.invoke()
-            viewModel.sortApps(sortItem)
-            updateList(viewModel.screen4Display(loadItem))
-        } else lifecycleScope.launch(Dispatchers.Default) {
-            block.invoke()
-        }
-    }
-
-    private fun <T> displayApk(resolve: ApkRetriever.(T, (ApiViewingApp?) -> Unit) -> Unit,
-                               arg: T, doNow: Boolean) {
-        displayApk(doNow) {
-            apkRetriever.resolve(arg) {
-                it ?: return@resolve
-                viewModel.addArchiveApp(it)
-            }
-        }
-    }
-
-    private fun <T> displayApk(context: Context, arg: T): Unit = when (arg) {
-        is Uri -> {
-            val doNow = when (loadItem) {
-                ApiUnit.APK, ApiUnit.SELECTED, ApiUnit.VOLUME, ApiUnit.DISPLAY -> true
-                else -> launchMethod.mode == LaunchMethod.LAUNCH_MODE_LINK
-            }
-            displayApk(ApkRetriever::resolveUri, arg, doNow)
-        }
-        is String -> {
-            val doNow = loadItem == ApiUnit.APK
-            displayApk(ApkRetriever::resolvePath, arg, doNow)
-        }
-        else -> Unit
+    private fun displayApk(uri: Uri) {
+        apkRetriever.resolveUri(uri, viewModel::addArchiveApp)
+        viewModel.sortApps(sortItem)
+        refreshList()
     }
 
     /**
@@ -294,7 +300,6 @@ class MyUnit: com.madness.collision.unit.Unit() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         toolbarMan.viewBinding = this@MyUnit.viewBinding
         statusMan.viewBinding = this@MyUnit.viewBinding
-        listLoadingMan.viewBinding = this@MyUnit.viewBinding
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -310,7 +315,6 @@ class MyUnit: com.madness.collision.unit.Unit() {
         // myAdapter.setStateRestorationStrategy(StateRestorationStrategy.WHEN_NOT_EMPTY);
 
         sortItem = settingsPreferences.getInt(PrefUtil.AV_SORT_ITEM, PrefUtil.AV_SORT_ITEM_DEFAULT)
-        toolbarMan.setupSortRunnable()
         adapter.setSortMethod(sortItem)
 
         launchMethod = LaunchMethod(arguments)
@@ -333,7 +337,6 @@ class MyUnit: com.madness.collision.unit.Unit() {
             displayItem = settingsPreferences.getInt(PrefUtil.AV_LIST_SRC_ITEM, PrefUtil.AV_LIST_SRC_ITEM_DEFAULT)
             statusMan.createListSrcPopup(context, viewBinding.apiSpinnerDisplayBack)
             viewBinding.avListSrc.setOnClickListener { statusMan.showListSrcPopup() }
-            statusMan.setupDisplayRunnable()
             statusMan.setupTagFilterPopup(context)
 //            val width = ViewGroup.LayoutParams.WRAP_CONTENT
 //            popFilterTag = PopupWindow(filterTagDelegate, width, width).apply {
@@ -482,72 +485,54 @@ class MyUnit: com.madness.collision.unit.Unit() {
                 // load as ApiUnit.ALL_APPS,
                 // because loadedItems is used to check loading and avoid repeated loading
                 if (!loadedItems.shouldLoad(ApiUnit.ALL_APPS)) return
-                loadedItems.loading(ApiUnit.ALL_APPS)
-                displaySearch(context, textExtra)
-                loadedItems.finish(ApiUnit.ALL_APPS)
+                loadedItems.startLoad(ApiUnit.ALL_APPS) {
+                    displaySearch(context, textExtra)
+                }
             }
             return
         } else if (launchMethod.mode == LaunchMethod.LAUNCH_MODE_LINK) {
             val dataStreamExtra = launchMethod.dataStreamExtra
             if (dataStreamExtra != null) {
-                lifecycleScope.launch(Dispatchers.Default) {
-                    displayPkgInfo(dataStreamExtra)
-                    ceaseRefresh(ApiUnit.NON)
-                }
+                apkRetriever.resolvePackage(dataStreamExtra) { it?.let(viewModel::addArchiveApp) }
+                viewModel.sortApps(sortItem)
+                refreshList()
+                ceaseRefresh(ApiUnit.NON)
             }
             return
         }
 
-        var loadingItem: Int = item
-        var isForegroundLoading = fg
-        var isEfficientSort = sortEfficiently
-        while (true) {
-            loadingItem = listLoadingMan.loadSortedStandardList(loadingItem, isEfficientSort, isForegroundLoading) {
-                when (loadingItem) {
-                    ApiUnit.USER, ApiUnit.SYS, ApiUnit.ALL_APPS -> listLoadingMan.loadAppItemList(context, loadingItem)
-                    ApiUnit.APK, ApiUnit.SELECTED, ApiUnit.VOLUME -> loadApkItemList(context, loadingItem)
-                }
-            } ?: break
-            isForegroundLoading = false  // next item will be loaded in background
-            isEfficientSort = true  // next item will sort efficiently
-            if (loadingItem != ApiUnit.APK) continue
-            // check APK item to load in background for permission
-            if (OsUtils.satisfy(OsUtils.Q)) {
-//                if (!accessiblePrimaryExternal(context, null)) break
-                break // prohibit background loading due to storage consumption issue
-            } else {
-                val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
-                if (PermissionUtil.check(context, permissions).isNotEmpty()) break
+        if (!viewModel.loadedItems.shouldLoad(item)) {
+            if (!sortEfficiently && fg) {
+                viewModel.sortApps(dataConfig.sortItem)
+                listFragment.updateList(viewModel.apps4Cache, viewBinding.apiSwipeRefresh)
             }
+            return
         }
-    }
 
-    private fun loadApkItemList(context: Context, item: Int) {
-        loadedItems.loading(item)
-        when (item){
+        when (item) {
             ApiUnit.APK -> {
-                lifecycleScope.launch(Dispatchers.Default) {
-                    listLoadingMan.loadDeviceApks(context) { displayApk(context, it) }
+                loadedItems.startLoad(item) {
+                    // user selected primary storage to scan APKs
+                    accessiblePrimaryExternal(context) { treeUri ->
+                        apkRetriever.fromUri(treeUri, ::displayApk)
+                    }
                     ceaseRefresh(ApiUnit.APK)
-                    loadedItems.finish(item)
                 }
+                return
             }
             ApiUnit.SELECTED -> {
                 getContentLauncher.launch("application/vnd.android.package-archive")
+                return
             }
             ApiUnit.VOLUME -> {
                 openVolumeLauncher.launch(null)
+                return
             }
         }
-    }
 
-    private fun displayPkgInfo(info: PackageInfo) {
-        displayApk(true) {
-            apkRetriever.resolvePackage(info) {
-                it ?: return@resolvePackage
-                viewModel.addArchiveApp(it)
-            }
-        }
+        viewModel.loadAppItemList(context, item)
+        if (fg) viewModel.sortApps(dataConfig.sortItem)
+        viewModel.loadAppItems(context)
     }
 
     fun accessiblePrimaryExternal(context: Context, task: ((uri: Uri) -> Unit)?): Boolean{
@@ -593,7 +578,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
         val description = cd.description
         if (!description.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
             loadItem = ApiUnit.DISPLAY
-            ApiTaskManager.now(Dispatchers.Main) {
+            viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
                 statusMan.selectListSrcItem(MainStatus.DISPLAY_APPS_SELECT)
             }
         }
@@ -607,12 +592,10 @@ class MyUnit: com.madness.collision.unit.Unit() {
                 }
                 else -> {
                     if (!DocumentsContract.isDocumentUri(context, itemUri)) {
-                        displayApk(context, itemUri)
+                        displayApk(itemUri)
                         continue@items
                     }
-                    apkRetriever.fromDocumentUri(itemUri) {
-                        displayApk(context, it)
-                    }
+                    apkRetriever.fromDocumentUri(itemUri, ::displayApk)
                 }
             }
         }
@@ -627,7 +610,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
         }
         val context = context ?: return@register
         lifecycleScope.launch(Dispatchers.Default) {
-            uriList.forEach { displayApk(context, it) }
+            uriList.forEach(::displayApk)
             ceaseRefresh(if (launchMethod.mode == LaunchMethod.LAUNCH_MODE_LINK) ApiUnit.NON else ApiUnit.SELECTED)
         }
     }
@@ -655,10 +638,9 @@ class MyUnit: com.madness.collision.unit.Unit() {
             ceaseRefresh(ApiUnit.VOLUME)
             return@register
         }
-        val context = context ?: return@register
         // todo
         lifecycleScope.launch(Dispatchers.Default) {
-            apkRetriever.fromUri(uri) { displayApk(context, it) }
+            apkRetriever.fromUri(uri, ::displayApk)
             ceaseRefresh(ApiUnit.VOLUME)
         }
     }

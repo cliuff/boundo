@@ -78,22 +78,7 @@ internal class MainToolbar(
     // internal
     private val service = AppMainService()
     private var searchBackPressedCallback: OnBackPressedCallback? = null
-    private var popSort: PopupMenu? = null
     private lateinit var toolbar: Toolbar
-    private lateinit var rSort: RunnableSort
-
-    private inner class RunnableSort(var position: Int) : Runnable {
-        override fun run()  {
-            adapter.setSortMethod(position)
-            settingsPreferences.edit { putInt(PrefUtil.AV_SORT_ITEM, position) }
-            viewModel.sortApps(sortItem)
-            host.refreshList()
-        }
-    }
-
-    fun setupSortRunnable() {
-        rSort = RunnableSort(sortItem)
-    }
 
     fun createOptions(context: Context, toolbar: Toolbar) {
         toolbar.setTitle(MainR.string.apiViewer)
@@ -110,12 +95,36 @@ internal class MainToolbar(
         host.reloadList()
     }
 
-    private fun Filter.filterBy(constraint: CharSequence) {
-        filter(constraint) {
-            host.doListUpdateAftermath()
-            refreshLayout.isRefreshing = false
-        }
+    sealed interface SearchState {
+        object None : SearchState
+        object EmptyQuery : SearchState
+        class QueryText(val value: String, val isAddition: Boolean) : SearchState
+        object SubmitQuery : SearchState
     }
+
+    private fun getQueryTextListener(searchView: SearchView) =
+        object : SearchView.OnQueryTextListener {
+            private var sOri: String = ""
+
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                val state = SearchState.SubmitQuery
+                val window = activity?.window ?: return true
+                SystemUtil.hideImeCompat(context, searchView, window)
+                searchView.clearFocus()
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                val sAft: String = newText?.replace(" ", "") ?: ""
+                if (sOri.compareTo(sAft, true) == 0) return true
+                val state = when {
+                    sAft.isEmpty() -> SearchState.EmptyQuery
+                    else -> SearchState.QueryText(sAft, sOri.isEmpty() || sAft.startsWith(sOri))
+                }
+                sOri = sAft
+                return true
+            }
+        }
 
     fun selectOption(item: MenuItem): Boolean {
         when(item.itemId){
@@ -128,52 +137,16 @@ internal class MainToolbar(
             R.id.apiTBSearch -> {
                 val searchView = item.actionView as SearchView
                 searchView.queryHint = context.getText(MainR.string.sdk_search_hint)
-                val filter = listFragment.filter
-                searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                    private var sOri: String = ""
-
-                    override fun onQueryTextSubmit(query: String?): Boolean {
-                        val window = activity?.window ?: return true
-                        SystemUtil.hideImeCompat(context, searchView, window)
-                        searchView.clearFocus()
-                        return true
-                    }
-
-                    override fun onQueryTextChange(newText: String?): Boolean {
-                        val sAft: String = newText?.replace(" ", "") ?: ""
-                        if (sOri.compareTo(sAft, true) == 0) return true
-                        refreshLayout.isRefreshing = true
-                        if (sAft.isEmpty()) lifecycleScope.launch(Dispatchers.Default) {
-                            host.refreshList()
-                            filter.onCancel()
-                        } else {
-                            filter.isAddition = sOri.isEmpty() || sAft.startsWith(sOri)
-                            filter.filterBy(sAft)
-                        }
-                        sOri = sAft
-                        return true
-                    }
-                })
+                searchView.setOnQueryTextListener(getQueryTextListener(searchView))
                 ensureSearchActionCollapse(item)
                 return true
             }
             R.id.apiTBSort -> {
-                if (popSort == null) {
-                    // when in overflow menu, menu item has no icon button
-                    // thus anchor would be null
-                    val anchor: View = toolbar.findViewById(R.id.apiTBSort)
-                        ?: toolbar.findViewById(MainR.id.overflowButton)
-                        ?: return false
-                    popSort = PopupMenu(context, anchor).apply {
-                        if (OsUtils.satisfy(OsUtils.Q)) setForceShowIcon(true)
-                        inflate(R.menu.api_sort)
-                        setOnMenuItemClickListener {
-                            clickSortItem(it)
-                        }
-                        menu.getItem(sortItem).isChecked = true
-                    }
-                }
-                popSort!!.show()
+                // when in overflow menu, menu item has no icon button, thus anchor would be null
+                val anchor: View = toolbar.findViewById(R.id.apiTBSort)
+                    ?: toolbar.findViewById(MainR.id.overflowButton)
+                    ?: return false
+                getSortPopup(anchor).show()
                 return true
             }
             R.id.apiTBSettings -> {
@@ -240,22 +213,24 @@ internal class MainToolbar(
         })
     }
 
-    private fun clickSortItem(item: MenuItem): Boolean  {
-        refreshLayout.isRefreshing = true
-        sortItem = when (item.itemId) {
-            R.id.menuApiSortAPIL -> MyUnit.SORT_POSITION_API_LOW
-            R.id.menuApiSortAPIH -> MyUnit.SORT_POSITION_API_HIGH
-            R.id.menuApiSortAPIName -> MyUnit.SORT_POSITION_API_NAME
-            R.id.menuApiSortAPITime -> MyUnit.SORT_POSITION_API_TIME
-            else -> sortItem
+    private fun getSortPopup(anchor: View) =
+        PopupMenu(context, anchor).apply {
+            if (OsUtils.satisfy(OsUtils.Q)) setForceShowIcon(true)
+            inflate(R.menu.api_sort)
+            setOnMenuItemClickListener { item ->
+                val newSortItem = when (item.itemId) {
+                    R.id.menuApiSortAPIL -> MyUnit.SORT_POSITION_API_LOW
+                    R.id.menuApiSortAPIH -> MyUnit.SORT_POSITION_API_HIGH
+                    R.id.menuApiSortAPIName -> MyUnit.SORT_POSITION_API_NAME
+                    R.id.menuApiSortAPITime -> MyUnit.SORT_POSITION_API_TIME
+                    else -> -1
+                }
+                item.isChecked = true
+                handleSort(newSortItem)
+                true
+            }
+            menu.getItem(sortItem).isChecked = true
         }
-        item.isChecked = true
-        // clear tag filter
-        host.clearTagFilter(context)
-        rSort.position = sortItem
-        ApiTaskManager.join(task = rSort)
-        return true
-    }
 
     fun removeSearchBackCallback() {
         searchBackPressedCallback?.remove()

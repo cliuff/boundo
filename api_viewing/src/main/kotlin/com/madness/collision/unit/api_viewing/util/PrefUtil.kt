@@ -21,6 +21,7 @@ import com.madness.collision.unit.api_viewing.main.MainStatus
 
 internal object PrefUtil {
     const val AV_TAGS = "AvTags"
+    // todo remove
     const val API_APK_PRELOAD = "apiAPKPreload"
     const val API_APK_PRELOAD_DEFAULT = false
     const val API_CIRCULAR_ICON = "SDKCircularIcon"

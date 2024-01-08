@@ -74,7 +74,6 @@ internal class MainStatus(
     private var popSrc: PopupMenu? = null
     private var popTags: CollisionDialog? = null
     private val antiSelectedIndexes = mutableSetOf<Int>()
-    private lateinit var rDisplay: RunnableDisplay
 
     companion object {
         const val DISPLAY_APPS_USER: Int = 0
@@ -85,8 +84,10 @@ internal class MainStatus(
         const val DISPLAY_APPS_VOLUME: Int = 5
     }
 
-    private inner class RunnableDisplay(var position: Int) : Runnable {
-        override fun run()  {
+    fun joinDisplay(newDisplayPos: Int) {
+        val position = newDisplayPos
+        displayItem = newDisplayPos
+        host.viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Default) {
             if (position != DISPLAY_APPS_SELECT && position != DISPLAY_APPS_VOLUME) {
                 settingsPreferences.edit { putInt(PrefUtil.AV_LIST_SRC_ITEM, position) }
             }
@@ -94,15 +95,6 @@ internal class MainStatus(
             viewModel.sortApps(sortItem)
             host.refreshList()
         }
-    }
-
-    fun setupDisplayRunnable() {
-        rDisplay = RunnableDisplay(displayItem)
-    }
-
-    fun joinDisplay() {
-        rDisplay.position = displayItem
-        ApiTaskManager.join(task = rDisplay)
     }
 
     fun createListSrcPopup(context: Context, anchor: View) {
@@ -142,7 +134,7 @@ internal class MainStatus(
             host.notify(com.madness.collision.R.string.toast_permission_storage_denied)
             return@registerForActivityResult
         }
-        joinDisplay()
+        joinDisplay(displayItem)
     }
 
     private fun clickListSrcItem(item: MenuItem): Boolean {
@@ -151,8 +143,7 @@ internal class MainStatus(
         if (host.needPermission { storagePermissionLauncher.launch(it) }) return true
         // clear tag filter
         host.clearTagFilter(context)
-        rDisplay.position = displayItem
-        ApiTaskManager.join(task = rDisplay)
+        joinDisplay(displayItem)
         return true
     }
 
@@ -241,28 +232,34 @@ internal class MainStatus(
     private fun closeFilterTagMenu(checkedIndexes: Set<Int>, tags: List<AppTagInfo>) {
         refreshLayout.isRefreshing = true
         lifecycleScope.launch(Dispatchers.Default) {
-            val value = checkedIndexes.associate {
-                val name = tags[it].id
-                val isAntied = it in antiSelectedIndexes
-                name to TriStateSelectable(name, !isAntied)
-            }
-            val firstCheckedTagId = checkedIndexes.firstOrNull()
-            val singleTitle = if (checkedIndexes.size == 1) tags[firstCheckedTagId!!].getNormalLabel(context) else null
-            val strikeThru = firstCheckedTagId in antiSelectedIndexes
+            val (displayList, leadingTag) = getTagFilterClosure(checkedIndexes, tags)
             withContext(Dispatchers.Main) {
-                updateTagFilterView(context, singleTitle, strikeThru, value.isNotEmpty())
-            }
-            // cannot detect whether changed, previous state cannot be determined
-            // because filter state share data with normal state
-            AppTag.loadTagSettings(value, false)
-            val completeList = viewModel.screen4Display(loadItem)
-            val displayList = if (value.isEmpty()) completeList
-            else filterByTag(context, completeList)
-            withContext(Dispatchers.Main) {
+                val title = leadingTag?.first?.getNormalLabel(context)
+                val strikeThru = leadingTag?.second ?: false
+                updateTagFilterView(context, title, strikeThru, checkedIndexes.isNotEmpty())
                 host.updateList(displayList)
                 refreshLayout.isRefreshing = false
             }
         }
+    }
+
+    private suspend fun getTagFilterClosure(checkedIndexes: Set<Int>, tags: List<AppTagInfo>)
+    : Pair<List<ApiViewingApp>, Pair<AppTagInfo, Boolean>?> {
+        val value = checkedIndexes.associate {
+            val name = tags[it].id
+            val isAntied = it in antiSelectedIndexes
+            name to TriStateSelectable(name, !isAntied)
+        }
+        val leadingTag = when (checkedIndexes.size) {
+            1 -> checkedIndexes.first().let { i -> tags[i] to (i in antiSelectedIndexes) }
+            else -> null
+        }
+        // cannot detect whether changed, previous state cannot be determined
+        // because filter state share data with normal state
+        AppTag.loadTagSettings(value, false)
+        val completeList = viewModel.screen4Display(loadItem)
+        val displayList = if (value.isEmpty()) completeList else filterByTag(context, completeList)
+        return displayList to leadingTag
     }
 
     @MainThread
@@ -291,10 +288,9 @@ internal class MainStatus(
      */
     private suspend fun filterByTag(context: Context, appList: List<ApiViewingApp>)
     : List<ApiViewingApp> = coroutineScope {
-        appList.map {
+        appList.map { app ->
             async(Dispatchers.Default) {
-                val result = AppTag.filterTags(context, it)
-                if (result) it else null
+                app.takeIf { AppTag.filterTags(context, app) }
             }
         }.mapNotNull { it.await() }
     }

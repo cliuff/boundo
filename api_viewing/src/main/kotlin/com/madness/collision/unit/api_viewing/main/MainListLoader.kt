@@ -17,99 +17,41 @@
 package com.madness.collision.unit.api_viewing.main
 
 import android.content.Context
-import android.os.Environment
-import androidx.lifecycle.LifecycleOwner
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.madness.collision.unit.api_viewing.ApiViewingViewModel
-import com.madness.collision.unit.api_viewing.MyUnit
 import com.madness.collision.unit.api_viewing.data.ApiUnit
-import com.madness.collision.unit.api_viewing.databinding.FragmentApiBinding
-import com.madness.collision.unit.api_viewing.list.AppListFragment
-import com.madness.collision.unit.api_viewing.util.ApkRetriever
-import com.madness.collision.util.os.OsUtils
-import java.io.File
 
-internal class MainListLoader(
-    private val host: MyUnit,
-    // external data dependencies
-    private val dataConfig: MainDataConfig,
-) : LifecycleOwner by host {
-
-    // external context dependencies
-    lateinit var context: Context
-    lateinit var viewBinding: FragmentApiBinding
-    lateinit var viewModel: ApiViewingViewModel  // AndroidViewModel
-    lateinit var listFragment: AppListFragment
-    lateinit var apkRetriever: ApkRetriever
-
-    private var sortItem: Int by dataConfig::sortItem
-    private val refreshLayout: SwipeRefreshLayout
-        get() = viewBinding.apiSwipeRefresh
-    private val loadedItems: ApiUnit
-        get() = viewModel.loadedItems
-
-    /**
-     * Load items defined in [ApiUnit] (i.e. excluding various launch modes).
-     */
-    fun loadSortedStandardList(item: Int, sortEfficiently: Boolean, fg: Boolean, appItemLoader: (item: Int) -> Unit): Int? {
-        if (!loadedItems.shouldLoad(item)) {
-            if (!sortEfficiently && fg) {
-                viewModel.sortApps(sortItem)
-                listFragment.updateList(viewModel.apps4Cache, refreshLayout)
-            }
-            return null
-        }
-        appItemLoader(item)
-        if (fg) viewModel.sortApps(sortItem)
-        val item2Load = loadedItems.item2Load()
-        if (item2Load == ApiUnit.NON) return null
-        return item2Load
+internal fun ApiViewingViewModel.loadAppItems(context: Context) {
+    while (true) {
+        val item = loadedItems.item2Load().takeUnless { it == ApiUnit.NON } ?: break
+        loadAppItemList(context, item)
     }
+}
 
-    fun loadAppItemList(context: Context, item: Int) {
-        when (item) {
-            ApiUnit.USER -> {
-                loadedItems.loading(item)
+internal fun ApiViewingViewModel.loadAppItemList(context: Context, item: Int) {
+    val viewModel = this
+    when (item) {
+        ApiUnit.USER -> {
+            loadedItems.loading(item)
+            viewModel.addUserApps(context)
+            loadedItems.finish(item)
+        }
+        ApiUnit.SYS -> {
+            loadedItems.loading(item)
+            viewModel.addSystemApps(context)
+            loadedItems.finish(item)
+        }
+        ApiUnit.ALL_APPS -> {
+            val bUser = loadedItems.shouldLoad(ApiUnit.USER)
+            val bSys = loadedItems.shouldLoad(ApiUnit.SYS)
+            loadedItems.loading(item)  // placed after loadedItems.shouldLoad
+            if (bUser && bSys){
+                viewModel.addAllApps(context)
+            } else if (bUser){
                 viewModel.addUserApps(context)
-            }
-            ApiUnit.SYS -> {
-                loadedItems.loading(item)
+            } else if (bSys){
                 viewModel.addSystemApps(context)
             }
-            ApiUnit.ALL_APPS -> {
-                val bUser = loadedItems.shouldLoad(ApiUnit.USER)
-                val bSys = loadedItems.shouldLoad(ApiUnit.SYS)
-                loadedItems.loading(item)  // placed after loadedItems.shouldLoad
-                if (bUser && bSys){
-                    viewModel.addAllApps(context)
-                } else if (bUser){
-                    viewModel.addUserApps(context)
-                } else if (bSys){
-                    viewModel.addSystemApps(context)
-                }
-            }
+            loadedItems.finish(item)
         }
-        loadedItems.finish(item)
-    }
-
-    fun loadDeviceApks(context: Context, block: (apk: Any) -> Unit) {
-        if (OsUtils.satisfy(OsUtils.Q)) {
-            // user selected primary storage to scan APKs
-            host.accessiblePrimaryExternal(context) { treeUri ->
-                apkRetriever.fromUri(treeUri, block)
-            }
-        } else {
-            try {
-                val externalStorage = getExternalStorageDirectory()
-                apkRetriever.fromFileFolder(externalStorage) { block(it.path) }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-    }
-
-    @Suppress("DEPRECATION")
-    private fun getExternalStorageDirectory(): File {
-        return Environment.getExternalStorageDirectory()
     }
 }

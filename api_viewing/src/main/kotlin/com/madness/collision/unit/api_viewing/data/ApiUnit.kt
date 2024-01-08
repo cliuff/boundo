@@ -34,7 +34,6 @@ class ApiUnit : ArrayList<Int>() {
         fun ineffective(item: Int): Boolean = item !in 1..7
     }
 
-    var apkPreload = false
     private val loading = ArrayList<Int>()
 
     /**
@@ -61,6 +60,12 @@ class ApiUnit : ArrayList<Int>() {
             }
         }
         return false
+    }
+
+    inline fun startLoad(item: Int, block: (item: Int) -> Unit) {
+        loading(item)
+        block(item)
+        finish(item)
     }
 
     fun loading(item: Int) {
@@ -100,7 +105,6 @@ class ApiUnit : ArrayList<Int>() {
     fun item2Load(): Int {
         if (shouldLoad(USER)) return USER
         if (shouldLoad(SYS)) return SYS
-        if (shouldLoad(APK) && apkPreload) return APK
         return NON
     }
 

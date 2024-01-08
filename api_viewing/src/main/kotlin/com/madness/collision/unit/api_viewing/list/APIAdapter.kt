@@ -30,7 +30,6 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.ChipGroup
 import com.madness.collision.R
 import com.madness.collision.diy.SandwichAdapter
-import com.madness.collision.unit.api_viewing.ApiTaskManager
 import com.madness.collision.unit.api_viewing.AppTag
 import com.madness.collision.unit.api_viewing.MyUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
@@ -43,7 +42,6 @@ import com.madness.collision.unit.api_viewing.seal.SealManager
 import com.madness.collision.util.*
 import kotlinx.coroutines.*
 import java.lang.ref.WeakReference
-import kotlin.math.min
 import kotlin.math.roundToInt
 
 internal open class APIAdapter(context: Context, private val listener: Listener,
@@ -133,17 +131,6 @@ internal open class APIAdapter(context: Context, private val listener: Listener,
         return false
     }
 
-    private fun preloadAppIconsForward(index: Int) {
-        ApiTaskManager.join {
-            try {
-                val endIndex = min(index + loadPref.preloadLimit, listCount)
-                for (i in index until endIndex) ensureItem(i)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-    }
-
     private suspend fun ensureAppIcon(index: Int, logoView: ImageView) {
         ensureItem(index)
         val iconApp = logoView.getTag(R.bool.tagKeyAvAdapterItemIconId) as ApiViewingApp?
@@ -221,15 +208,6 @@ internal open class APIAdapter(context: Context, private val listener: Listener,
         val finalForeIndex = if (shouldSpanFore) foreIndex + foreSpan else foreIndex
         if (finalBackIndex >= 0 && !apps[finalBackIndex].preload) apps[finalBackIndex].clearIcons()
         if (finalForeIndex < listCount && !apps[finalForeIndex].preload) apps[finalForeIndex].clearIcons()
-
-        // loadPref.preloadLimit may equal to zero
-//        if (!appInfo.preload && loadPref.preloadLimit > 0 && loadPref.preloadLimit < listCount) {
-//            val preloadIndex = index + loadPref.loadAmount
-//            if (preloadIndex >= loadPref.preloadLimit && preloadIndex < listCount &&
-//                    preloadIndex % loadPref.preloadLimit == 0 && apps[preloadIndex].preload) {
-//                preloadAppIconsForward(index)
-//            }
-//        }
 
         val verInfo = if (loadPref.isViewingTarget) VerInfo.targetDisplay(appInfo)
         else VerInfo.minDisplay(appInfo)
