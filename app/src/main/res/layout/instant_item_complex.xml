@@ -16,6 +16,7 @@
   -->
 
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     style="@style/InstantCard"
     android:id="@+id/instantItemComplexCard">
 
@@ -35,14 +36,15 @@
 
             <TextView
                 android:id="@+id/instantItemComplexTitle"
+                tools:text="Instant item toggle"
                 style="@style/InstantSwitchText" />
 
         </FrameLayout>
 
         <View style="@style/InstantSwitchDivider"/>
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
+        <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/instantItemComplexSwitch"
-            style="@style/InstantSwitchAlone"/>
+            style="@style/InstantSwitch3Alone"/>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

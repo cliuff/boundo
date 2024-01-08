@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.madness.collision.instant
+package com.madness.collision.settings.instant
 
 import android.content.ComponentName
 import android.content.Context
@@ -26,9 +26,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.widget.SwitchCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
-import com.google.android.material.switchmaterial.SwitchMaterial
 import com.madness.collision.R
 import com.madness.collision.databinding.InstantItemComplexBinding
 import com.madness.collision.databinding.InstantItemShortcutBinding
@@ -57,21 +57,21 @@ internal class InstantAdapter<T: InstantItem>(
 
     class InstantSimpleHolder(binding: InstantItemSimpleBinding): RecyclerView.ViewHolder(binding.root) {
         val card: MaterialCardView = binding.instantItemSimpleCard
-        val switch: SwitchMaterial = binding.instantItemSimpleSwitch
+        val switch: SwitchCompat = binding.instantItemSimpleSwitch
         val title: TextView = binding.instantItemSimpleTitle
         val container: View = binding.instantItemSimpleContainer
     }
 
     class InstantComplexHolder(binding: InstantItemComplexBinding): RecyclerView.ViewHolder(binding.root) {
         val card: MaterialCardView = binding.instantItemComplexCard
-        val switch: SwitchMaterial = binding.instantItemComplexSwitch
+        val switch: SwitchCompat = binding.instantItemComplexSwitch
         val title: TextView = binding.instantItemComplexTitle
         val titleLayout: View = binding.instantItemComplexTitleLayout
     }
 
     class InstantShortcutHolder(binding: InstantItemShortcutBinding): RecyclerView.ViewHolder(binding.root) {
         val card: MaterialCardView = binding.instantItemShortcutCard
-        val switch: SwitchMaterial = binding.instantItemShortcutSwitch
+        val switch: SwitchCompat = binding.instantItemShortcutSwitch
         val title: TextView = binding.instantItemShortcutTitle
         val titleLayout: View = binding.instantItemShortcutTitleLayout
         val pin: ImageView = binding.instantItemShortcutPin
@@ -132,7 +132,7 @@ internal class InstantAdapter<T: InstantItem>(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = mData[position]
         val name = item.getName(mContext)
-        val switch: SwitchMaterial
+        val switch: SwitchCompat
         when (holder) {
             is InstantSimpleHolder -> {
                 optimizeSideMargin(position, 30f, 7f, holder.card)

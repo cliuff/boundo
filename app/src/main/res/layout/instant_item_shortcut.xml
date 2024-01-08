@@ -17,6 +17,7 @@
 
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/instantItemShortcutCard"
     style="@style/InstantCard">
 
@@ -40,6 +41,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/instantItemShortcutPin"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintHorizontal_bias="0"
+                tools:text="Instant item toggle"
                 style="@style/InstantSwitchText" />
 
             <ImageView
@@ -63,8 +65,8 @@
             android:id="@+id/instantItemShortcutDivider"
             style="@style/InstantSwitchDivider"/>
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
+        <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/instantItemShortcutSwitch"
-            style="@style/InstantSwitchAlone"/>
+            style="@style/InstantSwitch3Alone"/>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

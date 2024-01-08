@@ -35,7 +35,7 @@ import com.madness.collision.R
 import com.madness.collision.base.BaseActivity
 import com.madness.collision.databinding.ActivityImmortalBinding
 import com.madness.collision.diy.WindowInsets
-import com.madness.collision.instant.Instant
+import com.madness.collision.settings.instant.Instant
 import com.madness.collision.util.*
 import com.madness.collision.util.os.*
 import kotlinx.coroutines.Dispatchers

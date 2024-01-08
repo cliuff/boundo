@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.madness.collision.instant.tile
+package com.madness.collision.settings.instant.tile
 
 import android.content.Context
 import android.os.Bundle
@@ -28,20 +28,20 @@ import com.madness.collision.R
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.util.TaggedFragment
 
-internal class WeChatScannerDesc : TaggedFragment(), Democratic {
+internal class AlipayScannerDesc : TaggedFragment(), Democratic {
 
-    override val category: String = "WeChatScannerDesc"
-    override val id: String = "WeChatScannerDesc"
+    override val category: String = "AlipayScannerDesc"
+    override val id: String = "AlipayScannerDesc"
     private val mainViewModel: MainViewModel by activityViewModels()
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
         mainViewModel.configNavigation(toolbar, iconColor)
-        toolbar.setTitle(R.string.instantTileScannerWechat)
+        toolbar.setTitle(R.string.instantTileScannerAlipay)
         return true
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.instant_tile_we_chat_scanner_desc, container, false)
+        return inflater.inflate(R.layout.instant_tile_alipay_scanner_desc, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

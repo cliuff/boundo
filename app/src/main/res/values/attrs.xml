@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <attr name="themeId" format="reference"/>
+    <!-- Material 3 theme to apply to individual activity/view -->
+    <attr name="material3" format="reference"/>
 <!--    Having a primary color that is close to black. Dark themes are tailored for use in low light environment-->
     <attr name="isDarkTheme" format="boolean"/>
 <!--    Having a primary color that is nearly white. Pale themes use black text color, while other themes use white text color -->

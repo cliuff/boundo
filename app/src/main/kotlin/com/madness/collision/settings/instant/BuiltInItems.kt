@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package com.madness.collision.instant
+package com.madness.collision.settings.instant
 
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.madness.collision.R
-import com.madness.collision.instant.tile.AlipayScannerDesc
-import com.madness.collision.instant.tile.MonthDataUsageDesc
-import com.madness.collision.instant.tile.WeChatScannerDesc
+import com.madness.collision.settings.instant.tile.AlipayScannerDesc
+import com.madness.collision.settings.instant.tile.MonthDataUsageDesc
+import com.madness.collision.settings.instant.tile.WeChatScannerDesc
 import com.madness.collision.misc.MiscApp
 import com.madness.collision.qs.TileServiceApiViewer
 import com.madness.collision.qs.TileServiceAudioTimer

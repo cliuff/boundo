@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.madness.collision.instant
+package com.madness.collision.settings.instant
 
 import android.content.Context
 import android.content.pm.ShortcutInfo

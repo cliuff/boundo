@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.madness.collision.instant.tile
+package com.madness.collision.settings.instant.tile
 
 import android.content.Context
 import android.os.Bundle

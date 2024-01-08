@@ -80,6 +80,7 @@
 
     <style name="AppTheme" parent="AppThemeBase">
         <item name="themeId">@style/AppTheme</item>
+        <item name="material3">@style/Theme.Material3.Light.NoActionBar</item>
         <item name="isDarkTheme">false</item>
         <item name="isPaleTheme">true</item>
         <item name="colorAPrimary">@color/primaryAWhite</item>
@@ -116,6 +117,7 @@
 
     <style name="AppTheme.CnRed" parent="AppThemeBase">
         <item name="themeId">@style/AppTheme.CnRed</item>
+        <item name="material3">@style/Theme.Material3.Light.NoActionBar</item>
         <item name="isDarkTheme">false</item>
         <item name="isPaleTheme">false</item>
         <item name="colorAPrimary">@color/primaryACnRed</item>
@@ -152,6 +154,7 @@
 
     <style name="AppTheme.Black" parent="AppThemeBase">
         <item name="themeId">@style/AppTheme.Black</item>
+        <item name="material3">@style/Theme.Material3.Dark.NoActionBar</item>
         <item name="isDarkTheme">true</item>
         <item name="isPaleTheme">false</item>
         <item name="colorAPrimary">@color/primaryABlack</item>
@@ -188,6 +191,7 @@
 
     <style name="AppTheme.BlackGray" parent="AppThemeBase">
         <item name="themeId">@style/AppTheme.BlackGray</item>
+        <item name="material3">@style/Theme.Material3.Dark.NoActionBar</item>
         <item name="isDarkTheme">true</item>
         <item name="isPaleTheme">false</item>
         <item name="colorAPrimary">@color/primaryABlackGray</item>
@@ -424,10 +428,9 @@
     </style>
 
     <style name="InstantSwitchDivider">
-        <item name="android:layout_marginTop">21dp</item>
-        <item name="android:layout_marginBottom">21dp</item>
         <item name="android:layout_width">1dp</item>
-        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_height">22dp</item>
+        <item name="android:layout_gravity">center_vertical</item>
         <item name="android:background">?colorStroke</item>
     </style>
 
@@ -437,6 +440,15 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">match_parent</item>
         <item name="colorAccent">?colorAccent</item>
+    </style>
+
+    <style name="InstantSwitch3Alone" parent="Widget.Material3.CompoundButton.MaterialSwitch">
+        <item name="android:paddingStart">18dp</item>
+        <item name="android:paddingEnd">26dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <!-- apply material 3 theme -->
+        <item name="theme">?material3</item>
     </style>
 
     <style name="MainCard" parent="Widget.MaterialComponents.CardView">

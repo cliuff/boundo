@@ -33,7 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.madness.collision.R
-import com.madness.collision.instant.InstantFragment
+import com.madness.collision.settings.instant.InstantFragment
 import com.madness.collision.main.DevOptions
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.main.showPage
