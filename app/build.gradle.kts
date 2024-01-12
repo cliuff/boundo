@@ -97,7 +97,6 @@ android {
             if (configSigning) {
                 signingConfig = signingConfigs.getByName("Sign4Release")
             }
-            isRenderscriptDebuggable = false
             renderscriptOptimLevel = 3
             isMinifyEnabled = false
             isShrinkResources = false
@@ -109,7 +108,6 @@ android {
             if (configSigning) {
                 signingConfig = signingConfigs.getByName("Sign4Release")
             }
-            isRenderscriptDebuggable = false
             renderscriptOptimLevel = 3
             isMinifyEnabled = true
             isShrinkResources = false
@@ -125,10 +123,8 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
     }
     kotlin.jvmToolchain(17)
-    packagingOptions {
-        // The kotlinx-coroutines-core artifact contains a resource file
-        // that is not required for the coroutines to operate normally
-        // and is only used by the debugger
+    packaging {
+        // a resource file from kotlinx-coroutines that is only used by the debugger
         resources.excludes.add("DebugProbesKt.bin")
     }
     lint {
@@ -207,6 +203,7 @@ dependencies {
         libs.gglGuava,
         libs.kotlinStdlib,
         libs.kotlinReflect,
+        libs.kotlinCoroutines,
         libs.rxJava,
         libs.jbAnnotations,
         libs.okhttp,
@@ -233,7 +230,5 @@ dependencies {
         libs.googleTruthExtensions,
         libs.junit4,
     ).forEach { androidTestImplementation(it) }
-
-    api(libs.kotlinCoroutines)
 
 }

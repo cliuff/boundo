@@ -81,7 +81,6 @@ android {
             if (configSigning) {
                 signingConfig = signingConfigs.getByName("Sign4Release")
             }
-            isRenderscriptDebuggable = false
             isMinifyEnabled = false
             isShrinkResources = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
@@ -92,7 +91,6 @@ android {
             if (configSigning) {
                 signingConfig = signingConfigs.getByName("Sign4Release")
             }
-            isRenderscriptDebuggable = false
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
@@ -105,10 +103,8 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
     }
     kotlin.jvmToolchain(17)
-    packagingOptions {
-        // The kotlinx-coroutines-core artifact contains a resource file
-        // that is not required for the coroutines to operate normally
-        // and is only used by the debugger
+    packaging {
+        // a resource file from kotlinx-coroutines that is only used by the debugger
         resources.excludes.add("DebugProbesKt.bin")
     }
     lint {
@@ -144,10 +140,9 @@ dependencies {
         libs.androidxPreference,
         libs.googleMaterialComponents,
         libs.kotlinStdlib,
+        libs.kotlinCoroutines,
         libs.androidxWear,
     ).forEach { implementation(it) }
 
     compileOnly(libs.googleWearable)
-
-    api(libs.kotlinCoroutines)
 }

@@ -38,11 +38,6 @@
  public <init>();
 }
 
-# Navigation
-#-keep class androidx.navigation.fragment.NavHostFragment
-# This is refrenced in nav graph file
--keep class com.madness.collision.util.TypedNavArg
-
 # Keep dynamic feature module classes
 # com.madness.collision.unit.Unit extends Fragment
 #-keep class * extends com.madness.collision.unit.Unit

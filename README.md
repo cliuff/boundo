@@ -7,11 +7,11 @@
 # Boundo: App API Checker
 
 **Requirements**
-- Android Studio `Giraffe Patch 4` (AGP `8.1.4`)
+- Android Studio `Hedgehog Patch 1` (AGP `8.2.1`)
 - Gradle Wrapper `8.4`
 - Java `17`
-- Kotlin `1.9.20`
-- Jetpack Compose Compiler `1.5.4` (requires Kotlin `1.9.20`)
+- Kotlin `1.9.22`
+- Jetpack Compose Compiler `1.5.8` (requires Kotlin `1.9.22`)
 
 **After Git check-out**
 - **Copy** the file named `custom.properties.template` in `doconfig` directory,
