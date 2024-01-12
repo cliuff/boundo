@@ -37,7 +37,6 @@
     <string name="apiDetailsIssuer">"Penerbit: "</string>
     <string name="apiDetailsSubject">"Subjek: "</string>
     <string name="apiDetailsSigAlg">"Algoritme tanda tangan: "</string>
-    <string name="apiDetailsSigAlgOID">"OID algoritma tanda tangan: "</string>
     <string name="apiDetailsPermissions">Izin:</string>
     <string name="apiDetailsActivities">Kegiatan:</string>
     <string name="apiDetailsReceivers">Penerima Siaran:</string>

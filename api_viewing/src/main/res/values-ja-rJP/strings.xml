@@ -37,7 +37,6 @@
     <string name="apiDetailsIssuer">発行者：</string>
     <string name="apiDetailsSubject">本体：</string>
     <string name="apiDetailsSigAlg">署名アルゴリズム：</string>
-    <string name="apiDetailsSigAlgOID">署名アルゴリズムオブジェクト識別子：</string>
     <string name="apiDetailsPermissions">許可：</string>
     <string name="apiDetailsActivities">アクティビティ：</string>
     <string name="apiDetailsReceivers">放送受信機：</string>

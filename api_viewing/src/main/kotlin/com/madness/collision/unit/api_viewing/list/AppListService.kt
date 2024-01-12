@@ -58,9 +58,10 @@ internal class AppListService(private val serviceContext: Context? = null) {
     private val Int.boldItem: AppInfoItem.Bold get() = AppInfoItem.Bold((serviceContext ?: appContext).getString(this))
 
     private val LineBreakItem = "\n".item
-    private suspend fun SequenceScope<AppInfoItem>.yield(text: String) = yield(text.item)
-    private suspend fun SequenceScope<AppInfoItem>.yield(resId: Int) = yield(resId.item)
-    private suspend fun SequenceScope<AppInfoItem>.yieldLineBreak() = yield(LineBreakItem)
+    private fun MutableList<AppInfoItem>.yield(item: AppInfoItem) = add(item)
+    private fun MutableList<AppInfoItem>.yield(text: String) = add(text.item)
+    private fun MutableList<AppInfoItem>.yield(resId: Int) = add(resId.item)
+    private fun MutableList<AppInfoItem>.yieldLineBreak() = add(LineBreakItem)
 
     fun getRetrievedPkgInfo(context: Context, app: ApiViewingApp): PackageInfo? {
         return retrieveOn(context, app, 0, "")
@@ -69,13 +70,16 @@ internal class AppListService(private val serviceContext: Context? = null) {
     fun getAppDetailsSequence(context: Context, appInfo: ApiViewingApp): Sequence<AppInfoItem> {
         val pkgInfo = getRetrievedPkgInfo(context, appInfo) ?: return emptySequence()
         return sequenceOf(
-            getAppInfoDetailsSequence(context, appInfo, pkgInfo),
+            getAppInfoDetailsSequence(context, appInfo, pkgInfo).asSequence(),
             sequenceOf(LineBreakItem, LineBreakItem),
-            getAppExtendedDetailsSequence(context, appInfo, pkgInfo),
+            getAppExtendedDetailsSequence(context, appInfo, pkgInfo).asSequence(),
         ).flatten()
     }
 
-    fun getAppInfoDetailsSequence(context: Context, appInfo: ApiViewingApp, pkgInfo: PackageInfo) = sequence<AppInfoItem> {
+    // returns List instead of Sequence,
+    // which has compatibility issues when running from IDE on lower APIs
+    // (sequence {} builder uses coroutines internally to suspend yield() invocations)
+    fun getAppInfoDetailsSequence(context: Context, appInfo: ApiViewingApp, pkgInfo: PackageInfo) = buildList<AppInfoItem> {
         val format = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM, appLocale)
 
         yield(R.string.apiDetailsPackageName.boldItem)
@@ -196,7 +200,7 @@ internal class AppListService(private val serviceContext: Context? = null) {
         yieldLineBreak()
     }
 
-    fun getAppExtendedDetailsSequence(context: Context, appInfo: ApiViewingApp, pkgInfo: PackageInfo) = sequence<AppInfoItem> {
+    fun getAppExtendedDetailsSequence(context: Context, appInfo: ApiViewingApp, pkgInfo: PackageInfo) = buildList<AppInfoItem> {
         var pi = pkgInfo
         var permissions: Array<String> = emptyArray()
 
@@ -269,10 +273,6 @@ internal class AppListService(private val serviceContext: Context? = null) {
                 yield(cert.sigAlgName)
                 yieldLineBreak()
 
-                yield(RAv.string.apiDetailsSigAlgOID.boldItem)
-                yield(cert.sigAlgOID)
-                yieldLineBreak()
-
                 yield("Fingerprint:".boldItem)
                 yield(certFingerprint)
                 yieldLineBreak()
@@ -314,7 +314,7 @@ internal class AppListService(private val serviceContext: Context? = null) {
         }
     }
 
-    private suspend fun SequenceScope<AppInfoItem>.appendSection(context: Context, titleId: Int) {
+    private fun MutableList<AppInfoItem>.appendSection(context: Context, titleId: Int) {
         yieldLineBreak()
         yieldLineBreak()
         yield(titleId.boldItem)

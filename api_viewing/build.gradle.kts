@@ -89,6 +89,7 @@ dependencies {
         libs.androidxConstraintLayoutCompose,
         libs.libCheckerRules,
         libs.google.smali,
+        libs.bouncycastle.provider,
     ).forEach { implementation(it) }
     implementation(libs.bundles.dynamicFeatureBasics)
 

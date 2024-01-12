@@ -48,7 +48,6 @@
     <string name="apiDetailsIssuer">"المصدر: "</string>
     <string name="apiDetailsSubject">"موضوع: "</string>
     <string name="apiDetailsSigAlg">"خوارزمية التوقيع: "</string>
-    <string name="apiDetailsSigAlgOID">"خوارزمية التوقيع OID: "</string>
     <string name="apiDetailsPermissions">"ضوابط: "</string>
     <string name="apiDetailsActivities">"أنشطة: "</string>
     <string name="apiDetailsReceivers">"مستقبلات البث: "</string>

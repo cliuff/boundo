@@ -37,7 +37,6 @@
     <string name="apiDetailsIssuer">"ইস্যুকারী: "</string>
     <string name="apiDetailsSubject">"বিষয়: "</string>
     <string name="apiDetailsSigAlg">"স্বাক্ষর অ্যালগরিদম: "</string>
-    <string name="apiDetailsSigAlgOID">"স্বাক্ষর অ্যালগরিদম OID: "</string>
     <string name="apiDetailsPermissions">অনুমতি:</string>
     <string name="apiDetailsActivities">কার্যক্রম:</string>
     <string name="apiDetailsReceivers">ব্রডকাস্ট রিসিভার:</string>

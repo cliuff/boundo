@@ -37,7 +37,6 @@
     <string name="apiDetailsIssuer">"ਜਾਰੀਕਰਤਾ: "</string>
     <string name="apiDetailsSubject">"ਵਿਸ਼ਾ: "</string>
     <string name="apiDetailsSigAlg">"ਦਸਤਖਤ ਐਲਗੋਰਿਦਮ: "</string>
-    <string name="apiDetailsSigAlgOID">"ਦਸਤਖਤ ਐਲਗੋਰਿਦਮ OID: "</string>
     <string name="apiDetailsPermissions">ਇਜਾਜ਼ਤਾਂ:</string>
     <string name="apiDetailsActivities">ਗਤੀਵਿਧੀਆਂ:</string>
     <string name="apiDetailsReceivers">ਪ੍ਰਸਾਰਣ ਪ੍ਰਾਪਤਕਰਤਾ:</string>

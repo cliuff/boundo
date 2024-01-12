@@ -37,7 +37,6 @@
     <string name="apiDetailsIssuer">"Issuer: "</string>
     <string name="apiDetailsSubject">"Subject: "</string>
     <string name="apiDetailsSigAlg">"Signature algorithm: "</string>
-    <string name="apiDetailsSigAlgOID">"Signature algorithm OID: "</string>
     <string name="apiDetailsPermissions">Permissions:</string>
     <string name="apiDetailsActivities">Activities:</string>
     <string name="apiDetailsReceivers">Broadcast Receivers:</string>

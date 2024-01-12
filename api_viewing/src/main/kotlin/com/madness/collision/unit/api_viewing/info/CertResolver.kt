@@ -19,6 +19,8 @@ package com.madness.collision.unit.api_viewing.info
 import android.content.Context
 import android.content.pm.Signature
 import com.madness.collision.unit.api_viewing.R
+import org.bouncycastle.asn1.x500.X500Name
+import org.bouncycastle.asn1.x500.style.BCStyle
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.security.cert.CertificateException
@@ -51,7 +53,7 @@ object CertResolver {
             val digests = listOf("MD5", "SHA-1", "SHA-256")
                 .map { MessageDigest.getInstance(it).digest(certBytes).toHexString(hexFormat) }
             val (issValues, subValues) = listOf(cert.issuerX500Principal, cert.subjectX500Principal)
-                .map { convertPrincipal(it, context) }
+                .map { convertDN(X500Name.getInstance(it.encoded), context) }
             val fingerprint = Triple(digests[0], digests[1], digests[2])
             CertificateInfo(cert, issValues, subValues, fingerprint)
         } catch (e: CertificateException) {
@@ -70,6 +72,18 @@ object CertResolver {
             .toList()
     }
 
+    fun convertDN(x500Name: X500Name, context: Context): List<PrincipalEntry> {
+        val x500NameStyle = BCStyle.INSTANCE
+        return x500Name.getRDNs().reversed().flatMap { it.typesAndValues.asList() }.map { attr ->
+            val (attrOid, attrValue) = attr.type to attr.value
+            when (val oidName: String? = x500NameStyle.oidToDisplayName(attrOid)) {
+                // prefer toString() over IETFUtils.valueToString() to obtain unescaped string
+                null -> Triple(attrOid.id, attrValue.toString(), null)
+                else -> Triple(oidName, attrValue.toString(), getReferenceName(oidName, context))
+            }
+        }
+    }
+
     private fun getReferenceName(keyword: String, context: Context): String? {
         return context.getString(when (keyword) {
             "CN" -> R.string.resPrincipalCN
@@ -79,6 +93,7 @@ object CertResolver {
             "ST" -> R.string.resPrincipalST
             "C" -> R.string.resPrincipalC
             "EMAILADDRESS" -> R.string.resPrincipalEmail
+            "E" -> R.string.resPrincipalEmail
             else -> return null
         })
     }

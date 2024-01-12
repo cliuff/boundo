@@ -48,7 +48,6 @@
     <string name="apiDetailsIssuer">"Tổ chức phát hành: "</string>
     <string name="apiDetailsSubject">"Môn học: "</string>
     <string name="apiDetailsSigAlg">"Thuật toán chữ ký: "</string>
-    <string name="apiDetailsSigAlgOID">"Thuật toán chữ ký OID: "</string>
     <string name="apiDetailsPermissions">"Quyền: "</string>
     <string name="apiDetailsActivities">"Hoạt động: "</string>
     <string name="apiDetailsReceivers">"Máy thu phát sóng: "</string>

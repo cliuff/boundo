@@ -48,7 +48,6 @@
     <string name="apiDetailsIssuer">"ผู้ออก DW: "</string>
     <string name="apiDetailsSubject">"เรื่อง: "</string>
     <string name="apiDetailsSigAlg">"อัลกอริธึมลายเซ็น: "</string>
-    <string name="apiDetailsSigAlgOID">"อัลกอริทึมลายเซ็น OID: "</string>
     <string name="apiDetailsPermissions">"สิทธิ์: "</string>
     <string name="apiDetailsActivities">"กิจกรรม: "</string>
     <string name="apiDetailsReceivers">"เครื่องรับสัญญาณออกอากาศ: "</string>

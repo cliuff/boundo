@@ -74,6 +74,7 @@ appIconLoader = "1.5.0"
 smoothCornerCompose = "v1.0.0"
 libCheckerRules = "34.7"
 googleSmali = "3.0.3"
+bouncycastleProvider = "1.77"
 
 [libraries]
 androidxTestCore = { module = "androidx.test:core", version.ref = "androidxTestCore" }
@@ -164,6 +165,7 @@ appIconLoader = { module = "me.zhanghai.android.appiconloader:appiconloader-icon
 smoothCornerCompose = { module = "com.github.racra:smooth-corner-rect-android-compose", version.ref = "smoothCornerCompose" }
 libCheckerRules = { module = "com.github.LibChecker:LibChecker-Rules-Bundle", version.ref = "libCheckerRules" }
 google-smali = { module = "com.android.tools.smali:smali-dexlib2", version.ref = "googleSmali" }
+bouncycastle-provider = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "bouncycastleProvider" }
 
 # wear
 androidxWear = { module = "androidx.wear:wear", version.ref = "androidxWear" }

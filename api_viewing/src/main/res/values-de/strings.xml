@@ -56,7 +56,6 @@
     <string name="apiDetailsIssuer">"Aussteller: "</string>
     <string name="apiDetailsSubject">"Gegenstand: "</string>
     <string name="apiDetailsSigAlg">"Signaturalgorithmus: "</string>
-    <string name="apiDetailsSigAlgOID">"Signaturalgorithmus OID: "</string>
     <string name="apiDetailsVerName">"Versionsname: "</string>
     <string name="apiDetailsVerCode">"Versionscode: "</string>
     <string name="apiDetailsFirstInstall">"Erste Installation: "</string>

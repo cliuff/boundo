@@ -31,7 +31,6 @@
     <string name="apiDetailsIssuer">"Editor: "</string>
     <string name="apiDetailsSubject">"Sujeto: "</string>
     <string name="apiDetailsSigAlg">"Algoritmo de firma: "</string>
-    <string name="apiDetailsSigAlgOID">"Algoritmo de firma OID: "</string>
     <string name="apiDetailsPermissions">Permisos:</string>
     <string name="apiDetailsActivities">Ocupaciones:</string>
     <string name="apiDetailsReceivers">Receptores de difusión:</string>

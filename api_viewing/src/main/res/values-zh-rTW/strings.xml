@@ -37,7 +37,6 @@
     <string name="apiDetailsIssuer">簽發者：</string>
     <string name="apiDetailsSubject">主體：</string>
     <string name="apiDetailsSigAlg">簽章演算法：</string>
-    <string name="apiDetailsSigAlgOID">簽章演算法物件識別：</string>
     <string name="apiDetailsPermissions">權限：</string>
     <string name="apiDetailsActivities">活動：</string>
     <string name="apiDetailsReceivers">廣播接收器：</string>

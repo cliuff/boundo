@@ -37,7 +37,6 @@
     <string name="apiDetailsIssuer">"Veren: "</string>
     <string name="apiDetailsSubject">"Konu: "</string>
     <string name="apiDetailsSigAlg">"İmza algoritması: "</string>
-    <string name="apiDetailsSigAlgOID">"İmza algoritması OID: "</string>
     <string name="apiDetailsPermissions">İzinler:</string>
     <string name="apiDetailsActivities">Etkinlikler:</string>
     <string name="apiDetailsReceivers">Yayın Alıcıları:</string>

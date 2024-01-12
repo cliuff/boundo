@@ -252,7 +252,7 @@ private fun AppDetails() {
     }
 }
 
-private fun Sequence<AppListService.AppInfoItem>.annotated() = buildAnnotatedString {
+private fun Iterable<AppListService.AppInfoItem>.annotated() = buildAnnotatedString {
     val style = SpanStyle(fontWeight = FontWeight.SemiBold)
     forEach { item ->
         when (item) {

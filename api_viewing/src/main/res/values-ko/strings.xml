@@ -37,7 +37,6 @@
     <string name="apiDetailsIssuer">"발급자 : "</string>
     <string name="apiDetailsSubject">"본체: "</string>
     <string name="apiDetailsSigAlg">"서명 알고리즘 : "</string>
-    <string name="apiDetailsSigAlgOID">"서명 알고리즘 객체 식별자 : "</string>
     <string name="apiDetailsPermissions">허가:</string>
     <string name="apiDetailsActivities">활동:</string>
     <string name="apiDetailsReceivers">방송 수신기 :</string>

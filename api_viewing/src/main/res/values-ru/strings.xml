@@ -33,7 +33,6 @@
     <string name="apiDetailsReceivers">"Приемники вещания: "</string>
     <string name="apiDetailsServices">"Сервисы: "</string>
     <string name="apiDetailsSigAlg">"Алгоритм подписи: "</string>
-    <string name="apiDetailsSigAlgOID">"Подпись алгоритма OID: "</string>
     <string name="apiDetailsSubject">"Предмет: "</string>
     <string name="apiDetailsValiSince">"Срок действия с: "</string>
     <string name="apiDetailsValiUntil">"Срок действия до: "</string>

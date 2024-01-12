@@ -37,7 +37,6 @@
     <string name="apiDetailsIssuer">"जारीकर्ता: "</string>
     <string name="apiDetailsSubject">"विषय: "</string>
     <string name="apiDetailsSigAlg">"स्वाक्षरी अल्गोरिदम: "</string>
-    <string name="apiDetailsSigAlgOID">"स्वाक्षरी अल्गोरिदम OID: "</string>
     <string name="apiDetailsPermissions">परवानग्या:</string>
     <string name="apiDetailsActivities">उपक्रम:</string>
     <string name="apiDetailsReceivers">ब्रॉडकास्ट रिसीव्हर्स:</string>

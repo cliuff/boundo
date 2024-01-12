@@ -36,7 +36,6 @@
     <string name="apiDetailsIssuer">"Емітент: "</string>
     <string name="apiDetailsSubject">"Тема: "</string>
     <string name="apiDetailsSigAlg">"Алгоритм підпису: "</string>
-    <string name="apiDetailsSigAlgOID">"OID алгоритму підпису: "</string>
     <string name="apiDetailsPermissions">Дозволи:</string>
     <string name="apiDetailsActivities">Діяльність:</string>
     <string name="apiDetailsReceivers">Приймачі мовлення:</string>

@@ -37,7 +37,6 @@
     <string name="apiDetailsIssuer">"Emitent: "</string>
     <string name="apiDetailsSubject">"Temat: "</string>
     <string name="apiDetailsSigAlg">"Algorytm podpisu: "</string>
-    <string name="apiDetailsSigAlgOID">"Algorytm podpisu OID: "</string>
     <string name="apiDetailsPermissions">Uprawnienia:</string>
     <string name="apiDetailsActivities">Zajęcia:</string>
     <string name="apiDetailsReceivers">Odbiorniki transmisji:</string>

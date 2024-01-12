@@ -48,7 +48,6 @@
     <string name="apiDetailsIssuer">"Emittente: "</string>
     <string name="apiDetailsSubject">"Soggetto: "</string>
     <string name="apiDetailsSigAlg">"Algoritmo di firma: "</string>
-    <string name="apiDetailsSigAlgOID">"Algoritmo di firma OID: "</string>
     <string name="apiDetailsPermissions">"permessi: "</string>
     <string name="apiDetailsActivities">"attività: "</string>
     <string name="apiDetailsReceivers">"Ricevitori broadcast: "</string>

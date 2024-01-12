@@ -37,7 +37,6 @@
     <string name="apiDetailsIssuer">"صادر کننده: "</string>
     <string name="apiDetailsSubject">"موضوع: "</string>
     <string name="apiDetailsSigAlg">"الگوریتم امضا: "</string>
-    <string name="apiDetailsSigAlgOID">"الگوریتم امضای OID: "</string>
     <string name="apiDetailsPermissions">مجوزها:</string>
     <string name="apiDetailsActivities">فعالیت ها:</string>
     <string name="apiDetailsReceivers">گیرنده های پخش:</string>

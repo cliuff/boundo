@@ -37,7 +37,6 @@
     <string name="apiDetailsIssuer">"Εκδότης: "</string>
     <string name="apiDetailsSubject">"Θέμα: "</string>
     <string name="apiDetailsSigAlg">"Αλγόριθμος υπογραφής: "</string>
-    <string name="apiDetailsSigAlgOID">"OID αλγόριθμος υπογραφής: "</string>
     <string name="apiDetailsPermissions">Άδειες:</string>
     <string name="apiDetailsActivities">Δραστηριότητες:</string>
     <string name="apiDetailsReceivers">Δέκτες μετάδοσης:</string>
