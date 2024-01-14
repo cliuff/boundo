@@ -19,8 +19,7 @@ package com.madness.collision.unit.api_viewing.info
 import android.content.Context
 import android.content.pm.Signature
 import com.madness.collision.unit.api_viewing.R
-import org.bouncycastle.asn1.x500.X500Name
-import org.bouncycastle.asn1.x500.style.BCStyle
+import com.unboundid.ldap.sdk.DN
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.security.cert.CertificateException
@@ -53,7 +52,7 @@ object CertResolver {
             val digests = listOf("MD5", "SHA-1", "SHA-256")
                 .map { MessageDigest.getInstance(it).digest(certBytes).toHexString(hexFormat) }
             val (issValues, subValues) = listOf(cert.issuerX500Principal, cert.subjectX500Principal)
-                .map { convertDN(X500Name.getInstance(it.encoded), context) }
+                .map { convertLdapDN(it, context) }
             val fingerprint = Triple(digests[0], digests[1], digests[2])
             CertificateInfo(cert, issValues, subValues, fingerprint)
         } catch (e: CertificateException) {
@@ -72,15 +71,15 @@ object CertResolver {
             .toList()
     }
 
-    fun convertDN(x500Name: X500Name, context: Context): List<PrincipalEntry> {
-        val x500NameStyle = BCStyle.INSTANCE
-        return x500Name.getRDNs().reversed().flatMap { it.typesAndValues.asList() }.map { attr ->
-            val (attrOid, attrValue) = attr.type to attr.value
-            when (val oidName: String? = x500NameStyle.oidToDisplayName(attrOid)) {
-                // prefer toString() over IETFUtils.valueToString() to obtain unescaped string
-                null -> Triple(attrOid.id, attrValue.toString(), null)
-                else -> Triple(oidName, attrValue.toString(), getReferenceName(oidName, context))
-            }
+    fun convertLdapDN(principal: X500Principal, context: Context): List<PrincipalEntry> {
+        // refer to org.bouncycastle.asn1.x500.style.BCStyle for more oid-keyword mappings
+        val oidMap = mapOf("1.2.840.113549.1.9.1" to "E")
+        val name = kotlin.runCatching { DN(principal.getName(X500Principal.RFC2253, oidMap)) }
+            .onFailure(Throwable::printStackTrace)
+            .getOrNull() ?: return emptyList()
+        return name.getRDNs().flatMap { it.attributes.asList() }.map { attr ->
+            val (attrName, attrValue) = attr.name to attr.value
+            Triple(attrName, attrValue.toString(), getReferenceName(attrName, context))
         }
     }
 
