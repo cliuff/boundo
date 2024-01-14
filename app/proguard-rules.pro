@@ -43,11 +43,6 @@
 #-keep class * extends com.madness.collision.unit.Unit
 -keep class * extends com.madness.collision.unit.Bridge { *; }
 
-# Kotlin reflect
-# T::class.createInstance() in com.madness.collision.util.Page seems to be needing this to work
--dontwarn kotlin.reflect.jvm.internal.**
--keep class kotlin.reflect.jvm.internal.** { *; }
-
 # Xiaomi push detection
 -keep class com.xiaomi.mipush.sdk.v {
  void d(...);

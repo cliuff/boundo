@@ -32,12 +32,10 @@ import com.madness.collision.main.MainViewModel
 import com.madness.collision.util.AppUtils.asBottomMargin
 import com.madness.collision.util.controller.getSavedFragment
 import com.madness.collision.util.controller.saveFragment
-import kotlin.reflect.full.createInstance
 
-@Suppress("FunctionName")
 inline fun <reified T: Fragment> Page(titleId: Int = 0, democratic: Democratic? = null): Page {
     val f = try {
-        T::class.createInstance()
+        T::class.java.getDeclaredConstructor().newInstance()
     } catch (e: Throwable) {
         e.printStackTrace()
         null
