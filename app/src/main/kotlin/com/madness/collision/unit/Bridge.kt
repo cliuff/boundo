@@ -12,11 +12,7 @@ abstract class Bridge {
 
     abstract fun getUnitInstance(vararg args: Any?): Unit
 
-    open fun getUpdates(): UpdatesProvider? {
-        return null
-    }
-
-    open fun getSettings(): Fragment? {
-        return null
-    }
+    open fun getUpdates(): UpdatesProvider? = null
+    open fun getSettings(): Fragment? = null
+    open fun getAccessor(): Any? = null
 }

@@ -16,12 +16,14 @@
 
 package com.madness.collision.unit.themed_wallpaper
 
-import com.madness.collision.unit.Unit
-import com.madness.collision.unit.UnitAccess
+object AccessTw : ThemedWallpaperAccessor by ThemedWallpaperAccessorImpl()
 
-object AccessTw: UnitAccess(Unit.UNIT_NAME_THEMED_WALLPAPER) {
+interface ThemedWallpaperAccessor {
+    fun updateChangeTimestamp()
+}
 
-    fun updateChangeTimestamp() {
+class ThemedWallpaperAccessorImpl : ThemedWallpaperAccessor {
+    override fun updateChangeTimestamp() {
         MyBridge.changeTimestamp = System.currentTimeMillis()
     }
 }

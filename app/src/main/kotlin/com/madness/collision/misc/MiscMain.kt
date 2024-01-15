@@ -57,7 +57,7 @@ internal object MiscMain {
             // init pinned units
             initPinnedUnits(prefSettings)
             // init tags
-            AccessAV.initTagSettings(context, prefSettings)
+            AccessAV.initTagSettings(prefSettings)
             return
         }
         // below: app in update process to the newest

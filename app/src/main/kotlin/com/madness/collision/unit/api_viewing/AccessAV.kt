@@ -20,61 +20,39 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
 import androidx.activity.ComponentActivity
-import com.madness.collision.unit.Unit
-import com.madness.collision.unit.UnitAccess
-import com.madness.collision.util.P
+import com.madness.collision.unit.Unit as ModUnit
 
-object AccessAV: UnitAccess(Unit.UNIT_NAME_API_VIEWING) {
-
+object AccessAV : ApiViewingAccessor by SafeApiViewingAccessor() {
     const val EXTRA_DATA_STREAM = "apiData"
     const val EXTRA_LAUNCH_MODE = "launch mode"
-    const val LAUNCH_MODE_SEARCH: Int  = 1
-    /**
-     * from url link sharing
-     */
-    const val LAUNCH_MODE_LINK: Int  = 2
+    const val LAUNCH_MODE_SEARCH: Int = 1
+    /** from url link sharing */
+    const val LAUNCH_MODE_LINK: Int = 2
+}
 
-    fun initUnit(context: Context) {
-        getMethod("initUnit", Context::class).invoke(context)
-    }
+internal class SafeApiViewingAccessor : ApiViewingAccessor {
+    private val ax = ModUnit.getBridge(ModUnit.UNIT_NAME_API_VIEWING)?.getAccessor() as? ApiViewingAccessor
+    override fun initUnit(context: Context) = ax?.initUnit(context) ?: Unit
+    override fun clearApps(activity: ComponentActivity) = ax?.clearApps(activity) ?: Unit
+    override fun clearTags() = ax?.clearTags() ?: Unit
+    override fun clearContext() = ax?.clearContext() ?: Unit
+    override fun initTagSettings(pref: SharedPreferences) = ax?.initTagSettings(pref) ?: Unit
+    override fun addModOverlayTags() = ax?.addModOverlayTags() ?: Unit
+    override fun resolveUri(context: Context, uri: Uri): Any? = ax?.resolveUri(context, uri)
+    override fun clearRoom(context: Context) = ax?.clearRoom(context) ?: Unit
+    override fun getRoomInfo(context: Context): String = ax?.getRoomInfo(context).orEmpty()
+    override fun nukeAppRoom(context: Context): Boolean = ax?.nukeAppRoom(context) ?: false
+}
 
-    fun clearApps(activity: ComponentActivity) {
-        getMethod("clearApps", ComponentActivity::class).invoke(activity)
-    }
-
-    fun clearTags() {
-        invokeWithoutArg("clearTags")
-    }
-
-    fun clearContext() {
-        invokeWithoutArg("clearContext")
-    }
-
-    fun initTagSettings(
-        context: Context,
-        prefSettings: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
-    ) {
-        getMethod("initTagSettings", SharedPreferences::class).invoke(prefSettings)
-    }
-
-    fun addModOverlayTags() {
-        invokeWithoutArg("addModOverlayTags")
-    }
-
-    fun resolveUri(context: Context, uri: Uri): Any? {
-        return getMethod("resolveUri", Context::class, Uri::class).invoke(context, uri)
-    }
-
-    fun clearRoom(context: Context) {
-        getMethod("clearRoom", Context::class).invoke(context)
-    }
-
-    fun getRoomInfo(context: Context): String {
-        return getMethod("getRoomInfo", Context::class).invoke(context) as String
-    }
-
-    fun nukeAppRoom(context: Context): Boolean {
-        return getMethod("nukeAppRoom", Context::class).invoke(context) as Boolean
-    }
-
+interface ApiViewingAccessor {
+    fun initUnit(context: Context)
+    fun clearApps(activity: ComponentActivity)
+    fun clearTags()
+    fun clearContext()
+    fun initTagSettings(pref: SharedPreferences)
+    fun addModOverlayTags()
+    fun resolveUri(context: Context, uri: Uri): Any?
+    fun clearRoom(context: Context)
+    fun getRoomInfo(context: Context): String
+    fun nukeAppRoom(context: Context): Boolean
 }

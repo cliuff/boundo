@@ -17,33 +17,41 @@
 package com.madness.collision.unit.audio_timer
 
 import android.content.Context
-import com.madness.collision.unit.Unit
-import com.madness.collision.unit.UnitAccess
 
-object AccessAT: UnitAccess(Unit.UNIT_NAME_AUDIO_TIMER) {
+object AccessAT : AudioTimerAccessor by AudioTimerAccessorImpl()
 
-    fun start(context: Context) {
+interface AudioTimerAccessor {
+    fun start(context: Context)
+    fun start(context: Context, duration: Long)
+    fun stop(context: Context)
+    fun isRunning(): Boolean
+    fun addCallback(callback: AtCallback?)
+    fun removeCallback(callback: AtCallback?)
+}
+
+class AudioTimerAccessorImpl : AudioTimerAccessor {
+    override fun start(context: Context) {
         MyBridge.timerService.start(context)
     }
 
-    fun start(context: Context, duration: Long) {
+    override fun start(context: Context, duration: Long) {
         MyBridge.timerService.start(context, duration)
     }
 
-    fun stop(context: Context) {
+    override fun stop(context: Context) {
         MyBridge.timerService.stop(context)
     }
 
-    fun isRunning(): Boolean {
+    override fun isRunning(): Boolean {
         return MyBridge.timerService.isRunning
     }
 
-    fun addCallback(callback: AtCallback?) {
+    override fun addCallback(callback: AtCallback?) {
         callback ?: return
         MyBridge.addCallback(callback)
     }
 
-    fun removeCallback(callback: AtCallback?) {
+    override fun removeCallback(callback: AtCallback?) {
         callback ?: return
         MyBridge.removeCallback(callback)
     }

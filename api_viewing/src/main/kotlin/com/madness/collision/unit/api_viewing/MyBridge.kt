@@ -66,24 +66,26 @@ object MyBridge: Bridge() {
         return Page<PrefAv>(MainR.string.apiViewer)
     }
 
-    @Suppress("unused")
-    fun initUnit(context: Context) {
+    override fun getAccessor(): Any {
+        return ApiViewingAccessorImpl()
+    }
+}
+
+class ApiViewingAccessorImpl : ApiViewingAccessor {
+    override fun initUnit(context: Context) {
         LibRules.init(context)
     }
 
-    @Suppress("unused")
-    fun clearApps(activity: ComponentActivity) {
+    override fun clearApps(activity: ComponentActivity) {
         val viewModel: ApiViewingViewModel by activity.viewModels()
         viewModel.clearCache()
     }
 
-    @Suppress("unused")
-    fun clearTags() {
+    override fun clearTags() {
         AppTag.clearCache()
     }
 
-    @Suppress("unused")
-    fun clearContext() {
+    override fun clearContext() {
         AppTag.clearContext()
     }
 
@@ -92,8 +94,7 @@ object MyBridge: Bridge() {
      * Users will have a glimpse of available features in Filter by Tag
      * Consequently tag settings alone does not serve that purpose any more
      */
-    @Suppress("unused")
-    fun initTagSettings(prefSettings: SharedPreferences) {
+    override fun initTagSettings(pref: SharedPreferences) {
         val tagSettings = setOf(
             AppTagInfo.ID_APP_INSTALLER_PLAY,
             AppTagInfo.ID_APP_INSTALLER,
@@ -103,33 +104,29 @@ object MyBridge: Bridge() {
             AppTagInfo.ID_APP_SYSTEM_MODULE,
             AppTagInfo.ID_TYPE_OVERLAY,
         )
-        prefSettings.edit {
+        pref.edit {
             putStringSet(PrefUtil.AV_TAGS, tagSettings)
         }
     }
 
-    @Suppress("unused")
-    fun addModOverlayTags() {
+    override fun addModOverlayTags() {
         val prefSettings = chiefContext.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
         val tags = prefSettings.getStringSet(PrefUtil.AV_TAGS, null)?.toHashSet() ?: return
         tags.addAll(listOf(AppTagInfo.ID_APP_SYSTEM_MODULE, AppTagInfo.ID_TYPE_OVERLAY))
         prefSettings.edit { putStringSet(PrefUtil.AV_TAGS, tags) }
     }
 
-    @Suppress("unused")
-    fun resolveUri(context: Context, uri: Uri): PackageInfo? {
+    override fun resolveUri(context: Context, uri: Uri): PackageInfo? {
         val retriever = ApkRetriever(context)
         val file = retriever.toFile(uri) ?: return null
         return MiscApp.getPackageInfo(context, apkPath = file.path)
     }
 
-    @Suppress("unused")
-    fun clearRoom(context: Context) {
+    override fun clearRoom(context: Context) {
         AppRoom.getDatabase(context).clearAllTables()
     }
 
-    @Suppress("unused")
-    fun getRoomInfo(context: Context): String {
+    override fun getRoomInfo(context: Context): String {
         val helper = AppRoom.getDatabase(context).openHelper
         val iName = helper.databaseName ?: "Unknown Database"
         helper.readableDatabase.run {
@@ -165,8 +162,7 @@ object MyBridge: Bridge() {
         return dataRows
     }
 
-    @Suppress("unused")
-    fun nukeAppRoom(context: Context): Boolean {
+    override fun nukeAppRoom(context: Context): Boolean {
         val room = AppRoom.getDatabase(context)
         val name = room.openHelper.databaseName ?: return false
         AppRoom.clearInstance()
