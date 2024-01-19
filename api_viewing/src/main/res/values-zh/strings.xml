@@ -155,4 +155,6 @@
     <string name="av_tag_result_type_instant">该应用可免安装运行</string>
     <string name="av_tag_result_type_web_apk">该应用是 Chromium WebAPK</string>
     <string name="av_tag_result_predictive_back">该应用在此设备上支持预测性返回手势动画</string>
+    <string name="av_osmod">系统模块</string>
+    <string name="av_osmod_title">系统模块</string>
 </resources>

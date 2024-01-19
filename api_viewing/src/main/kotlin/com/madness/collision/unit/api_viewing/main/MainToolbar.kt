@@ -33,12 +33,14 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.madness.collision.main.MainViewModel
+import com.madness.collision.main.showPage
 import com.madness.collision.unit.api_viewing.*
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.databinding.FragmentApiBinding
 import com.madness.collision.unit.api_viewing.device.DeviceApi
 import com.madness.collision.unit.api_viewing.list.APIAdapter
 import com.madness.collision.unit.api_viewing.list.AppListFragment
+import com.madness.collision.unit.api_viewing.ui.os.SystemModulesFragment
 import com.madness.collision.unit.api_viewing.util.PrefUtil
 import com.madness.collision.util.CollisionDialog
 import com.madness.collision.util.FilePop
@@ -193,6 +195,10 @@ internal class MainToolbar(
                 lifecycleScope.launch(Dispatchers.Default) {
                     exportList(context)
                 }
+                return true
+            }
+            R.id.avMainTbModules -> {
+                context.showPage<SystemModulesFragment>()
                 return true
             }
             R.id.avMainTbDevice -> {

@@ -17,3 +17,8 @@
 package com.madness.collision.unit.api_viewing.data
 
 class ModuleInfo(val name: String?, val pkgName: String?, val isVisible: Boolean)
+
+sealed interface ModuleDistroInfo {
+    data object Undefined : ModuleDistroInfo
+    class Apex(val apexModuleName: String) : ModuleDistroInfo
+}

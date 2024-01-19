@@ -105,6 +105,23 @@ private fun getSystemModule(pkgName: String, context: Context): PkgModuleInfo? {
 }
 
 @SuppressLint("PrivateApi")
+@Deprecated("hidden API with access denied")
+@RequiresApi(Build.VERSION_CODES.Q)
+private fun PkgModuleInfo.getHiddenApexModuleName(): Result<String?> {
+    val module = this
+    return try {
+        val field = PkgModuleInfo::class.java
+            .getDeclaredMethod("getApexModuleName")
+            .apply { isAccessible = true }
+        val result = field.invoke(module)
+        if (result is String?) Result.success(result) else Result.failure(Exception())
+    } catch (e: Exception) {
+        e.printStackTrace()
+        Result.failure(e)
+    }
+}
+
+@SuppressLint("PrivateApi")
 private fun PackageInfo.getOverlayTarget(): Result<String?> {
     val pkg = this
     return try {
@@ -159,18 +176,39 @@ object PkgInfo {
         return pkgInfo.isCoreApp()
     }
 
+    /** Get modules that are available as [packages][PackageManager.getInstalledPackages] */
     fun getPkgModules(context: Context): List<ModuleInfo> {
         if (OsUtils.dissatisfy(OsUtils.Q)) return emptyList()
         return getPkgSystemModules(context).map(PkgModuleInfo::toModuleInfo)
+    }
+
+    /**
+     * Get all modules that are declared in the metadata XML from
+     * [ModuleMetadata](https://source.android.com/docs/core/ota/modular-system/metadata)
+     */
+    fun getMetadataModules(context: Context): List<ModuleInfo> {
+        if (OsUtils.dissatisfy(OsUtils.Q)) return emptyList()
+        // use MATCH_ALL to get all modules (as opposed to only installed ones)
+        // ["installed" as determined by PackageManger.getInstalledPackages(),
+        // refer to com.android.server.pm.ModuleInfoProvider for more details]
+        val modules = context.packageManager.getInstalledModules(PackageManager.MATCH_ALL)
+        return modules.map(PkgModuleInfo::toModuleInfo)
     }
 
     fun getModuleInfo(pkgName: String, context: Context): ModuleInfo? {
         if (OsUtils.dissatisfy(OsUtils.Q)) return null
         return getSystemModule(pkgName, context)?.toModuleInfo()
     }
+
+    fun getApexIncludedPackages(context: Context): List<PackageInfo> {
+        if (OsUtils.dissatisfy(OsUtils.Q)) return emptyList()
+        return PackageCompat.getAllPackages(context.packageManager, PackageManager.MATCH_APEX)
+    }
 }
 
 @RequiresApi(Build.VERSION_CODES.Q)
 private fun PkgModuleInfo.toModuleInfo(): ModuleInfo {
+//    val apex = getHiddenApexModuleName().getOrNull()
+//    val dis = if (apex.isNullOrBlank()) ModuleDistroInfo.Undefined else ModuleDistroInfo.Apex(apex)
     return ModuleInfo(name = name?.toString(), pkgName = packageName, isVisible = !isHidden)
 }

@@ -54,6 +54,10 @@
         android:title="@string/avTBViewingTarget"
         app:showAsAction="never"/>
     <item
+        android:id="@+id/avMainTbModules"
+        android:title="@string/av_osmod"
+        app:showAsAction="never"/>
+    <item
         android:id="@+id/avMainTbDevice"
         android:title="@string/av_main_option_device_api"
         app:showAsAction="never"/>
