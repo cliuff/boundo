@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<network-security-config>
-    <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">coolapk.com</domain>
-        <domain includeSubdomains="true">dl.coolapk.com</domain>
-        <domain includeSubdomains="true">dl-cdn.coolapkmarket.com</domain>
-        <domain includeSubdomains="true">coolapkmarket.com</domain>
-    </domain-config>
-</network-security-config>

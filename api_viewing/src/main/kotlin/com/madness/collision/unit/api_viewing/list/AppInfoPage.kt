@@ -18,6 +18,7 @@ package com.madness.collision.unit.api_viewing.list
 
 import android.text.format.DateUtils
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.PredictiveBackHandler
 import androidx.compose.animation.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -66,8 +67,13 @@ import com.madness.collision.util.dev.StandardPreview
 import com.madness.collision.util.mainApplication
 import com.madness.collision.util.os.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
 import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape
 import java.io.File
+import kotlin.math.roundToInt
 
 @Composable
 fun AppInfoPage(
@@ -150,7 +156,8 @@ private fun AppInfo(
             val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
             // use coefficient to invert slide animation offset for RTL layout
             val offsetCoeff = if (isRtl) -1 else 1
-            var pageIndex by remember { mutableStateOf(0) }
+            var pageIndex by remember { mutableIntStateOf(0) }
+            var predictiveProgress by remember { mutableFloatStateOf(-1f) }
             AnimatedVisibility(
                 visible = pageIndex == 0,
                 enter = fadeIn() + slideInHorizontally(initialOffsetX = { offsetCoeff * -it / 2 }),
@@ -165,10 +172,27 @@ private fun AppInfo(
                 enter = fadeIn() + slideInHorizontally(initialOffsetX = { offsetCoeff * it / 2 }),
                 exit = fadeOut(),
             ) {
-                DetailedAppInfo(cardColor, margin, shareIcon, shareApk)
+                Box(modifier = Modifier.offset {
+                    if (predictiveProgress <= 0) return@offset IntOffset.Zero
+                    val px = 30.dp.toPx() * predictiveProgress
+                    IntOffset(px.roundToInt(), 0)
+                }) {
+                    // reset progress when the exit anim finishes and page removed from composition
+                    DisposableEffect(Unit) { onDispose { predictiveProgress = -1f } }
+                    DetailedAppInfo(cardColor, margin, shareIcon, shareApk)
+                }
             }
             if (pageIndex == 1) {
-                BackHandler { pageIndex = 0 }
+                if (OsUtils.satisfy(OsUtils.U)) {
+                    PredictiveBackHandler { events ->
+                        events.onEach { event -> predictiveProgress = event.progress }
+                            .catch { predictiveProgress = -1f }  // canceled
+                            .onCompletion { e -> if (e == null) pageIndex = 0 }
+                            .collect()
+                    }
+                } else {
+                    BackHandler { pageIndex = 0 }
+                }
             }
         }
     }

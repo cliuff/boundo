@@ -87,8 +87,6 @@ object EnvPackages {
         val map = HashMap<String, AppInfoOwner>(standardOwners.size + marketOwners.size + 5).apply {
             // Google Play Store itself is a standard owner, this serves as a fallback
             put(GooglePlayAppInfoOwner.packageName, GooglePlayAppInfoOwner)
-            // CoolApk itself is a market owner, this serves as a fallback
-            put(CoolApkAppInfoOwner.packageName, CoolApkAppInfoOwner)
             put(AppManagerAppInfoOwner.packageName, AppManagerAppInfoOwner)
             put(packageSettings, SettingsAppInfoOwner(packageSettings))
             // put standard owners afterwards to override custom owners, in reversed order
@@ -100,7 +98,27 @@ object EnvPackages {
             put(XiaomiAppInfoOwner.packageName, XiaomiAppInfoOwner)
             // remove self owner (though N/A right now)
             remove(BuildConfig.APPLICATION_ID)
+            // remove unqualified owners
+            for ((invalidPkg, invalidClassName) in UnqualifiedAppInfoOwners) {
+                val addedOwner = get(invalidPkg) as? CompAppInfoOwner ?: continue
+                if (addedOwner.comp.className == invalidClassName) remove(invalidPkg)
+            }
         }
         return map.values.toList()
     }
 }
+
+private const val BaiduSearchFileManager =
+    "com.baidu.searchbox.download.center.ui.fusion.FileManagerActivity"
+private val UnqualifiedAppInfoOwners: Map<String, String> = hashMapOf(
+    // a MarketAppInfoOwner that queries packageName and downloads APK from its own source,
+    // which would rather be qualified as ApkDownloader instead of AppInfoOwner
+    "com.baidu.searchbox" to BaiduSearchFileManager,
+    "com.baidu.searchbox.lite" to BaiduSearchFileManager,
+    "com.baidu.searchbox.tomas" to BaiduSearchFileManager,
+    // UC 神马应用, not actively operated, likely being replaced by PP助手
+    "com.UCMobile" to "com.UCMobile.main.UCMobile",
+    "com.ucmobile.lite" to "com.UCMobile.main.UCMobile",
+    // QQ Browser, page not opening up
+    "com.tencent.mtt" to "com.tencent.mtt.external.market.ui.QQMarketReceiveIntentActivity",
+)

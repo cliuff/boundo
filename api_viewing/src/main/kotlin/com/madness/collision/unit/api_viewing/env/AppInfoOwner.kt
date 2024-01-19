@@ -31,22 +31,30 @@ interface AppInfoOwner {
     fun showAppInfo(appPkgName: String, context: Context)
 }
 
-class StandardAppInfoOwner(override val packageName: String, val activityName: String) : AppInfoOwner {
+sealed class CompAppInfoOwner(val comp: ComponentName) : AppInfoOwner {
+    override val packageName: String = comp.packageName
+    constructor(packageName: String, activityName: String) :
+            this(ComponentName(packageName, activityName))
+}
+
+class StandardAppInfoOwner(packageName: String, activityName: String) :
+    CompAppInfoOwner(packageName, activityName) {
     override fun showAppInfo(appPkgName: String, context: Context) {
         val intent = Intent(EnvPackages.ActionShowAppInfo)
             .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             .putExtra(EnvPackages.ExtraPackageName, appPkgName)
-            .setComponent(ComponentName(packageName, activityName))
+            .setComponent(comp)
         context.startActivity(intent)
     }
 }
 
-class MarketAppInfoOwner(override val packageName: String, val activityName: String) : AppInfoOwner {
+class MarketAppInfoOwner(packageName: String, activityName: String) :
+    CompAppInfoOwner(packageName, activityName) {
     override fun showAppInfo(appPkgName: String, context: Context) {
         val uri = Uri.parse("market://details?id=$appPkgName")
         val intent = Intent(Intent.ACTION_VIEW, uri)
             .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            .setComponent(ComponentName(packageName, activityName))
+            .setComponent(comp)
         context.startActivity(intent)
     }
 }
@@ -67,20 +75,6 @@ object GooglePlayAppInfoOwner : AppInfoOwner {
 
     override fun showAppInfo(appPkgName: String, context: Context) {
         val uri = Uri.parse("https://play.google.com/store/apps/details?id=$appPkgName")
-        val intent = Intent(Intent.ACTION_VIEW, uri)
-            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            .setComponent(ComponentName(packageName, infoActivity))
-        context.startActivity(intent)
-    }
-}
-
-object CoolApkAppInfoOwner : AppInfoOwner {
-    private const val packageCoolApk = "com.coolapk.market"
-    private const val infoActivity = "com.coolapk.market.view.AppLinkActivity"
-    override val packageName: String = packageCoolApk
-
-    override fun showAppInfo(appPkgName: String, context: Context) {
-        val uri = Uri.parse("https://www.coolapk.com/apk/$appPkgName")
         val intent = Intent(Intent.ACTION_VIEW, uri)
             .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             .setComponent(ComponentName(packageName, infoActivity))
