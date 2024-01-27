@@ -223,6 +223,7 @@ private fun TagItemDeactivated(
                 text = title,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.35f),
                 fontSize = 10.sp,
+                lineHeight = 11.sp,
                 fontWeight = FontWeight.Medium,
             )
             if (desc != null) {

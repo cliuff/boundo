@@ -1,11 +1,11 @@
 [versions]
 # plugins
-androidGradlePlugin = "8.2.1"  # 8.2.1-Hedgehog Patch 1
-kotlin = "1.9.22"  # Compose Compiler 1.5.8 requires Kotlin 1.9.22
+androidGradlePlugin = "8.2.2"  # 8.2.2-Hedgehog Patch 2
+kotlin = "1.9.22"  # Compose Compiler 1.5.9 requires Kotlin 1.9.22
 googleKsp = "1.9.22-1.0.16"
 googlePlayServicesOSSLicensesPlugin = "0.10.6"
 
-kotlinCoroutines = "1.8.0-RC2"
+kotlinCoroutines = "1.8.0"
 
 androidxTestCore = "1.5.0"
 androidxTestRunner = "1.5.2"
@@ -14,13 +14,13 @@ androidxTestEspresso = "3.5.1"
 
 androidxCore = "1.12.0"
 androidxCoreSplashScreen = "1.1.0-alpha02"
-androidxComposeCompiler = "1.5.8"
-androidxComposeRuntime = "1.5.4"
-androidxComposeFoundation = "1.5.4"
-androidxComposeUi = "1.5.4"
-androidxComposeAnimation = "1.5.4"
-androidxComposeMaterial = "1.5.4"
-androidxComposeMaterial3 = "1.1.2"
+androidxComposeCompiler = "1.5.9"
+androidxComposeRuntime = "1.6.1"
+androidxComposeFoundation = "1.6.1"
+androidxComposeUi = "1.6.1"
+androidxComposeAnimation = "1.6.1"
+androidxComposeMaterial = "1.6.1"
+androidxComposeMaterial3 = "1.2.0"
 androidxActivity = "1.8.1"
 androidxAppcompat = "1.6.1"
 androidxLifecycle = "2.6.2"

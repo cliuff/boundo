@@ -107,12 +107,16 @@ private fun DiffRecord(changeList: List<DiffChange>) {
                 Text(
                     text = idChange.diff.id,
                     color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.95f),
+                    fontSize = 16.sp,
+                    lineHeight = 18.sp,
                     fontWeight = FontWeight.Bold,
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = recordTime,
                     color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.65f),
+                    fontSize = 16.sp,
+                    lineHeight = 18.sp,
                     fontWeight = FontWeight.Medium,
                 )
             }
