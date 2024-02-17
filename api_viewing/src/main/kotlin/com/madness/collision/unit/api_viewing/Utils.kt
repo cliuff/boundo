@@ -72,6 +72,7 @@ internal object Utils {
 
     fun getAndroidVersionByAPI(api: Int, exact: Boolean, isCompact: Boolean = false): String {
         return when (api) {
+            OsUtils.V -> "15"
             OsUtils.U -> "14"
             OsUtils.T -> "13"
             OsUtils.S_V2 -> if (exact) "12L" else "12"
@@ -120,6 +121,7 @@ internal object Utils {
 
     fun getDevCodenameLetter(): Char? {
         return when (Build.VERSION.CODENAME) {
+            "VanillaIceCream" -> 'v'
             "UpsideDownCake", "UpsideDownCakePrivacySandbox" -> 'u'
             "Tiramisu", "TiramisuPrivacySandbox" -> 't'
             "REL" -> null
@@ -130,6 +132,7 @@ internal object Utils {
     private fun androidCodenameInfo(context: Context?, apiLevel: Int, fullName: Boolean): String {
         if (fullName) context ?: return " "
         return when (apiLevel) {
+            OsUtils.V -> if (fullName) "Vanilla Ice Cream" else "v"
             OsUtils.U -> if (fullName) "Upside Down Cake" else "u"
             OsUtils.T -> if (fullName) "Tiramisu" else "t"
             OsUtils.S_V2 -> if (fullName) "12L" else "s"

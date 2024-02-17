@@ -44,6 +44,7 @@ object SealMaker {
     fun getAndroidCodenameImageRes(letter: Char): Int {
         if (!EasyAccess.isSweet) return 0
         return when (letter) {
+            'v' -> MyR.drawable.seal_v
             'u' -> MyR.drawable.seal_u
             't' -> MyR.drawable.seal_t
             's' -> MyR.drawable.seal_s
@@ -86,6 +87,7 @@ object SealMaker {
         }
         val level = when (apiLevel) {
             OsUtils.DEV -> when (Utils.getDevCodenameLetter()) {
+                'v' -> OsUtils.V
                 'u' -> OsUtils.U
                 't' -> OsUtils.T
                 else -> apiLevel
@@ -96,6 +98,7 @@ object SealMaker {
             OsUtils.DEV -> when (Utils.getDevCodenameLetter()) {
                 else -> if (isAccent) "c5e8b0" else X.getColorHex(context, R.color.androidRobotGreenBack)
             }
+            OsUtils.V -> if (isAccent) "bde1a4" else "e0ffd0"
             OsUtils.U -> if (isAccent) "a3c1d5" else "d7f0fb"
             OsUtils.T -> if (isAccent) "a3d5c1" else "d7fbf0"
             OsUtils.S, OsUtils.S_V2 -> if (isAccent) "acdcb2" else "defbde"
@@ -238,7 +241,7 @@ object SealMaker {
         } else {
             val seal = getSealBitmap(context, index.value, itemLength) ?: return null
             val (offsetPointX, offsetPointY) = when (index.value) {
-                'u' -> 3 to 3
+                'u', 'v' -> 3 to 3
                 else -> 4 to 2
             }
             drawBlurredImage(context, seal, offsetPointX, offsetPointY)
