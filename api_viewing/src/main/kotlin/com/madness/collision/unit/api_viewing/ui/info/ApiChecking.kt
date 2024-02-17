@@ -21,6 +21,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Android
 import androidx.compose.material.icons.outlined.ChevronLeft
 import androidx.compose.material.icons.outlined.ChevronRight
 import androidx.compose.material.icons.outlined.Info
@@ -33,6 +34,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -119,7 +121,7 @@ private fun AppDetails(
                     label = label,
                     ver = sdk,
                     color = color,
-                    verInfoList[index].letter,
+                    verInfoList[index].letterOrDev,
                 )
             }
         }
@@ -180,21 +182,27 @@ private fun AppSdkItem(modifier: Modifier = Modifier, label: String, ver: String
         modifier = modifier.padding(horizontal = 3.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Box(contentAlignment = Alignment.Center) {
-            if (sealFile != null) {
-                AsyncImage(
-                    model = sealFile,
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .size(30.dp),
+        Box(
+            modifier = Modifier.clip(CircleShape),
+            contentAlignment = Alignment.Center,
+        ) {
+            Box(modifier = Modifier.rotate(if (sealIndex == 'u') 180f else 0f)) {
+                if (sealFile != null) {
+                    AsyncImage(
+                        model = sealFile,
+                        modifier = Modifier.size(30.dp),
+                        contentDescription = null,
+                    )
+                } else {
+                    val c = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.25f)
+                    Box(modifier = Modifier.size(30.dp).background(c))
+                }
+                Icon(
+                    modifier = Modifier.align(Alignment.BottomCenter).size(24.dp).offset(y = 10.5.dp),
+                    imageVector = Icons.Outlined.Android,
                     contentDescription = null,
+                    tint = color.copy(alpha = 0.3f),
                 )
-            } else {
-                val c = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.25f)
-                Box(modifier = Modifier
-                    .clip(CircleShape)
-                    .size(30.dp)
-                    .background(c))
             }
             Text(
                 text = ver,

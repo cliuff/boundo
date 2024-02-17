@@ -1,5 +1,16 @@
 
 
+- **4.1.5** 24021713
+<en-US>
+- App API： support for Android 15 / Vanilla Ice Cream
+- App API： check "Project Mainline" system modules from the overflow menu
+</en-US>
+<zh-CN>
+- 应用API：现已支持安卓15/香草冰淇淋
+- 应用API：向隐藏菜单添加 Mainline系统模块的查看入口
+</zh-CN>
+
+
 - **4.1.3** 23123023
 <en-US>
 - App API: apply alternate row colors in app info

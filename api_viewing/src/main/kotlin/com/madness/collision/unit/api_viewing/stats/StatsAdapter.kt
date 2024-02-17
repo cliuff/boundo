@@ -76,8 +76,7 @@ internal class StatsAdapter(context: Context) : SandwichAdapter<StatsAdapter.Hol
     val indexOffset: Int
         get() = spanCount
 
-    private val isSweet = EasyAccess.isSweet
-    private val shouldShowDesserts = isSweet
+    private val shouldShowDesserts = EasyAccess.isSweet
 //    private val sweetElevation = if (shouldShowDesserts) X.size(context, 1f, X.DP) else 0f
     private val sweetMargin = if (shouldShowDesserts) X.size(context, 5f, X.DP).roundToInt() else 0
     private val innerMargin: Float
@@ -109,7 +108,7 @@ internal class StatsAdapter(context: Context) : SandwichAdapter<StatsAdapter.Hol
         val logoText = if (verInfo.api > 99) "•" else verInfo.apiText
         holder.logoText.text = logoText
         if (EasyAccess.isSweet) {
-            val colorText = SealManager.getItemColorText(verInfo.api)
+            val colorText = SealMaker.getItemColorText(verInfo.api)
             holder.logoText.setTextColor(colorText)
         }
         scope.launch(Dispatchers.Main) {
@@ -118,8 +117,8 @@ internal class StatsAdapter(context: Context) : SandwichAdapter<StatsAdapter.Hol
         }
 
         if (shouldShowDesserts){
-            holder.count.setTextColor(SealManager.getItemColorAccent(context, verInfo.api))
-            val itemBack = SealManager.getItemColorBack(context, verInfo.api)
+            holder.count.setTextColor(SealMaker.getItemColorAccent(context, verInfo.api))
+            val itemBack = SealMaker.getItemColorBack(context, verInfo.api)
             holder.card.setCardBackgroundColor(itemBack)
 
             scope.launch(Dispatchers.Main) {
@@ -129,17 +128,21 @@ internal class StatsAdapter(context: Context) : SandwichAdapter<StatsAdapter.Hol
             }
         }
 
-        when {
-            verInfo.api == OsUtils.DEV && Build.VERSION.CODENAME != "REL" -> {
-                holder.codeName.text = Build.VERSION.CODENAME
-                holder.codeName.visibility = View.VISIBLE
-            }
-            isSweet && verInfo.codeName(context) != verInfo.sdk -> {
-                holder.codeName.text = verInfo.codeName(context)
+        val codename = when {
+            verInfo.api == OsUtils.DEV && Build.VERSION.CODENAME != "REL" -> Build.VERSION.CODENAME
+            else -> verInfo.codeName(context)
+        }
+        when (codename) {
+            // unknown api level
+            "" -> holder.codeName.visibility = View.GONE
+            // no codename
+            verInfo.sdk -> {
+                holder.codeName.text = String.format("API %d", verInfo.api)
                 holder.codeName.visibility = View.VISIBLE
             }
             else -> {
-                holder.codeName.visibility = View.GONE
+                holder.codeName.text = String.format("API %d, %s", verInfo.api, codename)
+                holder.codeName.visibility = View.VISIBLE
             }
         }
     }

@@ -58,7 +58,7 @@ internal class DeviceApi {
                     else -> "Android $androidVer, $codeName"
                 }
             }
-            else -> "Android $previewName Preview"
+            else -> "$previewName Preview"
         }
         val distro = distro.run {
             val name = displayName

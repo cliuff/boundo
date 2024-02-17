@@ -94,8 +94,8 @@ internal class ChartFragment: TaggedFragment(){
             }
             chartEntries.add(PieEntry(value.toFloat(), label).apply {
                 if (!EasyAccess.isSweet) return@apply
-                SealMaker.makeSeal(context, apiVer.letter, itemLength) ?: return@apply
-                val file = SealMaker.getSealCacheFile(apiVer.letter) ?: return@apply
+                SealMaker.makeSeal(context, apiVer.letterOrDev, itemLength) ?: return@apply
+                val file = SealMaker.getSealCacheFile(apiVer.letterOrDev) ?: return@apply
                 try {
                     val bitmap = ImageUtil.getSampledBitmap(file, iconSize, iconSize) ?: return@apply
                     icon = BitmapDrawable(context.resources, X.toMax(bitmap, iconSize))
@@ -105,7 +105,7 @@ internal class ChartFragment: TaggedFragment(){
                     e.printStackTrace()
                 }
             })
-            chartEntryColors.add(SealManager.getItemColorForIllustration(context, key))
+            chartEntryColors.add(SealMaker.getItemColorForIllustration(context, key))
         }
         val chartDataSet = PieDataSet(chartEntries, null).apply {
             colors = chartEntryColors
