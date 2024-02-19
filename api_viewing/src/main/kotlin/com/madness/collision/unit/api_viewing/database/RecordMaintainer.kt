@@ -18,77 +18,12 @@ package com.madness.collision.unit.api_viewing.database
 
 import android.content.Context
 import android.content.pm.PackageInfo
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.lifecycleScope
-import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
-import com.madness.collision.unit.api_viewing.origin.AppRetriever
-import com.madness.collision.unit.api_viewing.origin.OriginRetriever
-import com.madness.collision.unit.api_viewing.origin.PackageRetriever
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 /**
- * [OriginRetriever] proxy to update database record
+ * update database record
  */
-internal class RecordMaintainer<T>(private val context: Context,
-                                   private val target: OriginRetriever<T>,
-                                   private val lifecycleOwner: LifecycleOwner,
-                                   private val dao: AppDao = DataMaintainer.get(context, lifecycleOwner))
-    : OriginRetriever<T> {
-    private val scope = lifecycleOwner.lifecycleScope
-
-    companion object {
-
-        fun pack(context: Context, lifecycleOwner: LifecycleOwner): RecordMaintainer<PackageInfo> {
-            return RecordMaintainer(context, PackageRetriever(context), lifecycleOwner)
-        }
-
-        fun app(context: Context, lifecycleOwner: LifecycleOwner): RecordMaintainer<ApiViewingApp> {
-            return RecordMaintainer(context, AppRetriever(context, lifecycleOwner), lifecycleOwner)
-        }
-    }
-
-    /**
-     * Update records when getting any packages,
-     * this method is the base and always gets invoked
-     */
-    override fun get(predicate: ((PackageInfo) -> Boolean)?): List<T> {
-        return target.get(predicate).also {
-            // update asynchronously
-            scope.launch(Dispatchers.Default) {
-                update(it)
-            }
-        }
-    }
-
-    /**
-     * Check removal when getting all packages,
-     * this is an extra after the invocation of [get] by predicate
-     */
-    override fun get(unit: Int): List<T> {
-        return super.get(unit).also {
-            // update asynchronously
-            if (unit != ApiUnit.ALL_APPS) return@also
-            scope.launch(Dispatchers.Default) {
-                checkRemoval(it)
-            }
-        }
-    }
-
-    /**
-     * Check removal when getting all packages,
-     * this is an extra after the invocation of [get] by predicate
-     */
-    override fun get(): List<T> {
-        return super.get().also {
-            // update asynchronously
-            scope.launch(Dispatchers.Default) {
-                checkRemoval(it)
-            }
-        }
-    }
-
+internal class RecordMaintainer<T>(private val context: Context, private val dao: AppDao) {
     /**
      * Add and update
      */

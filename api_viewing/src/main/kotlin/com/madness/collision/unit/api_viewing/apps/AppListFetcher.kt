@@ -1,0 +1,131 @@
+/*
+ * Copyright 2024 Clifford Liu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.madness.collision.unit.api_viewing.apps
+
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
+import android.util.Log
+import com.madness.collision.chief.chiefContext
+import com.madness.collision.misc.PackageCompat
+import com.madness.collision.unit.api_viewing.data.ApiViewingApp
+import com.madness.collision.unit.api_viewing.database.DataMaintainer
+import com.madness.collision.util.PermissionUtils
+import com.madness.collision.util.os.OsUtils
+import java.io.File
+import kotlin.time.measureTimedValue
+
+enum class AppListFetcherType { Platform, Storage, Memory }
+sealed interface AppListResult {
+    class PermissionRequired() : AppListResult
+}
+
+interface AppListFetcher<out T> {
+    fun getRawList(): List<T>
+}
+
+
+class PlatformAppsFetcher(private val context: Context) : AppListFetcher<PackageInfo> {
+    // companion object: direct access to singleton object by simply the class name
+    companion object : AppListFetcher<PackageInfo> by PlatformAppsFetcher(chiefContext)
+
+    override fun getRawList(): List<PackageInfo> {
+        queryAllPkgsCheck(context)
+        val timed = measureTimedValue {
+            var flags = 0
+            if (OsUtils.satisfy(OsUtils.N)) flags = flags or PackageManager.MATCH_DISABLED_COMPONENTS
+            if (OsUtils.satisfy(OsUtils.Q)) flags = flags or PackageManager.MATCH_APEX
+            PackageCompat.getAllPackages(context.packageManager, flags)
+        }
+        Log.d("AppListFetcher", "PlatformAppListFetcher/${timed.value.size}/${timed.duration}")
+        return timed.value
+    }
+}
+
+private fun queryAllPkgsCheck(context: Context): Boolean {
+    if (OsUtils.satisfy(OsUtils.R)) {
+        val permission = Manifest.permission.QUERY_ALL_PACKAGES
+        val isGranted = PermissionUtils.check(context, arrayOf(permission)).isEmpty()
+        if (!isGranted) Log.d("AppListFetcher", "$permission not granted")
+        return isGranted
+    }
+    return true
+}
+
+
+data class ShellAppResult(val packageName: String, val apkPath: String?)
+
+class ShellAppsFetcher(private val context: Context) : AppListFetcher<ShellAppResult> {
+    companion object : AppListFetcher<ShellAppResult> by ShellAppsFetcher(chiefContext)
+
+    override fun getRawList(): List<ShellAppResult> {
+        queryAllPkgsCheck(context)
+        val timed = measureTimedValue {
+            kotlin.runCatching { retrieveAppList() }
+                .onFailure(Throwable::printStackTrace)
+                .getOrNull().orEmpty()
+        }
+        Log.d("AppListFetcher", "ShellAppListFetcher/${timed.value.size}/${timed.duration}")
+        return timed.value
+    }
+
+    private fun retrieveAppList(): List<ShellAppResult> = buildList {
+        // --apex-only not working on Galaxy Tab S4, Android 10
+        if (OsUtils.satisfy(OsUtils.Q)) {
+            // start processes first before handling outputs to run them concurrently
+            val p0 = ProcessBuilder("pm", "list", "packages", "-f").start()
+            val p1 = ProcessBuilder("pm", "list", "packages", "-f", "--apex-only").start()
+            p0.resolve(::addAll); p1.resolve(::addAll)
+        } else {
+            ProcessBuilder("pm", "list", "packages", "-f").start().resolve(::addAll)
+        }
+    }
+
+    private inline fun Process.resolve(outputBlock: (Sequence<ShellAppResult>) -> Unit) {
+        inputStream.bufferedReader().useLines { stringSeq ->
+            stringSeq.mapNotNull(::parseShellPackage)
+                .map { (path, pkg) -> ShellAppResult(pkg, path) }.let(outputBlock)
+        }
+        errorStream.bufferedReader()
+            .useLines { seq -> seq.forEach { Log.e("ShellAppListFetcher", it) } }
+    }
+
+    // package:com.madness.collision
+    // package:/data/app/~~r81YwItuzCKDhQrgh7OJsA==/com.madness.collision-QII83-vP4Bna87T27lb48Q==/base.apk=com.madness.collision
+    private fun parseShellPackage(pkgString: String): Pair<String?, String>? {
+        if (pkgString.startsWith("package:").not()) return null
+        return when (val sepIndex = pkgString.lastIndexOf('=')) {
+            -1 -> null to pkgString.substring(8)
+            else -> {
+                val path = pkgString.substring(8, sepIndex)
+                val pkgName = pkgString.substring(sepIndex + 1)
+                (path to pkgName).takeUnless { pkgName.contains(File.separatorChar) }
+            }
+        }
+    }
+}
+
+
+class StorageAppsFetcher(private val context: Context) : AppListFetcher<ApiViewingApp> {
+    companion object : AppListFetcher<ApiViewingApp> by StorageAppsFetcher(chiefContext)
+
+    override fun getRawList(): List<ApiViewingApp> {
+        val dao = DataMaintainer.getDefault(context)
+        return dao.selectAllApps()
+    }
+}

@@ -17,8 +17,9 @@
 package com.madness.collision.unit.api_viewing.database
 
 import android.content.Context
-import android.os.Parcel
 import androidx.lifecycle.*
+import com.madness.collision.unit.api_viewing.apps.copyTo
+import com.madness.collision.unit.api_viewing.apps.toRecApps
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import kotlinx.coroutines.*
 import java.lang.reflect.InvocationHandler
@@ -40,28 +41,6 @@ object DataMaintainer {
         public override fun clone(): Any {
             return super.clone()
         }
-    }
-
-    private fun ApiViewingApp.copyTo(other: ApiViewingApp) {
-        val parcel = Parcel.obtain()
-        writeToParcel(parcel, 0)
-        parcel.setDataPosition(0)
-        other.readParcel(parcel)
-    }
-
-    private suspend fun mapToApp(context: Context, list: List<*>, anApp: ApiViewingApp)
-    : List<ApiViewingApp> = coroutineScope {
-        val lastIndex = list.lastIndex
-        list.mapIndexedNotNull { index, item ->
-            if (item !is ApiViewingApp) return@mapIndexedNotNull null
-            async(Dispatchers.Default) {
-                val app = if (index == lastIndex) anApp else anApp.clone() as ApiViewingApp
-                item.copyTo(app)
-                // get application info one at a time, may be optimized
-                app.initIgnored(context)
-                app
-            }
-        }.map { it.await() }
     }
 
     fun getDefault(context: Context): AppDao {
@@ -106,7 +85,7 @@ object DataMaintainer {
                         // otherwise assume none of it is
                         if (result.isNotEmpty() && result[0] !is ApiViewingApp) return result
                         val anApp = AppMaintainer.get(context, lifecycleOwner, dao)
-                        runBlocking { mapToApp(context, result, anApp) }
+                        runBlocking { result.toRecApps(context, anApp) }
                     }
                     else -> result
                 }
