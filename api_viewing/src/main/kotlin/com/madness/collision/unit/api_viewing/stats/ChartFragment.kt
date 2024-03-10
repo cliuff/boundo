@@ -16,7 +16,9 @@
 
 package com.madness.collision.unit.api_viewing.stats
 
+import android.content.Context
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -34,7 +36,6 @@ import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.databinding.FragmentChartBinding
 import com.madness.collision.unit.api_viewing.seal.SealMaker
-import com.madness.collision.unit.api_viewing.seal.SealManager
 import com.madness.collision.util.*
 import com.madness.collision.util.os.OsUtils
 import kotlin.math.roundToInt
@@ -62,11 +63,8 @@ internal class ChartFragment: TaggedFragment(){
         return viewBinding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val context = context ?: return
-
-        val pieChart = viewBinding.avChartPieChart
 
         val unit: Int = arguments?.getInt(ARG_TYPE) ?: ApiUnit.ALL_APPS
         val viewModel = ApiViewingViewModel.appListStats ?: return
@@ -78,37 +76,54 @@ internal class ChartFragment: TaggedFragment(){
         }
         val screenWidth = X.getCurrentAppResolution(context).x
         val isSmallScreen = screenWidth < X.size(context, 360f, X.DP)
-        val chartEntries = ArrayList<PieEntry>(stats.size())
-        val chartEntryColors = ArrayList<Int>(stats.size())
-        val iconSize = X.size(context, if (isSmallScreen) 16f else 20f, X.DP).roundToInt()
-        val itemLength = X.size(context, 45f, X.DP).roundToInt()
-        stats.forEach { key, value ->
-            val apiVer = VerInfo(key, isExact = true, isCompact = true)
-//            val apiName = Utils.getAndroidCodenameByAPI(context, key)
-            // exclude apiName when entry value is small to decrease overlapping
-//            val label = apiVersion + context.getString(R.string.textParentheses, apiName)
-            val label = when {
+        val enList = buildList(stats.size()) {
+            val iconSize = X.size(context, if (isSmallScreen) 16f else 20f, X.DP).roundToInt()
+            val itemLength = X.size(context, 45f, X.DP).roundToInt()
+            stats.forEach { k, v -> add(generateEntry(k, v, iconSize, itemLength, context)) }
+        }
+        val chartDataSet = loadDataSet(enList, isSmallScreen, context)
+        configPieChart(PieData(chartDataSet), isSmallScreen)
+    }
+
+    class PieChartEntry(val value: Int, val label: String, val color: Int, val icon: Drawable?)
+
+    private fun generateEntry(api: Int, count: Int, iconSize: Int, itemLength: Int, context: Context): PieChartEntry {
+        val apiVer = VerInfo(api, isExact = true, isCompact = true)
+        return PieChartEntry(
+            value = count,
+            label = when {
                 apiVer.api == OsUtils.DEV -> "Dev"
                 apiVer.sdk.isEmpty() -> "API ${apiVer.api}"
                 else -> apiVer.sdk
+            },
+            color = SealMaker.getItemColorForIllustration(context, apiVer.api),
+            icon = when {
+                !EasyAccess.isSweet -> null
+                else -> loadApiIcon(apiVer.letterOrDev, iconSize, itemLength, context)
+            },
+        )
+    }
+
+    private fun loadApiIcon(apiLetter: Char, iconSize: Int, itemLength: Int, context: Context): Drawable? {
+        try {
+            kotlin.run apply@{
+                SealMaker.makeSeal(context, apiLetter, itemLength) ?: return@apply
+                val file = SealMaker.getSealCacheFile(apiLetter) ?: return@apply
+                val bitmap = ImageUtil.getSampledBitmap(file, iconSize, iconSize) ?: return@apply
+                return BitmapDrawable(context.resources, X.toMax(bitmap, iconSize))
             }
-            chartEntries.add(PieEntry(value.toFloat(), label).apply {
-                if (!EasyAccess.isSweet) return@apply
-                SealMaker.makeSeal(context, apiVer.letterOrDev, itemLength) ?: return@apply
-                val file = SealMaker.getSealCacheFile(apiVer.letterOrDev) ?: return@apply
-                try {
-                    val bitmap = ImageUtil.getSampledBitmap(file, iconSize, iconSize) ?: return@apply
-                    icon = BitmapDrawable(context.resources, X.toMax(bitmap, iconSize))
-                } catch (e: OutOfMemoryError) {
-                    e.printStackTrace()
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            })
-            chartEntryColors.add(SealMaker.getItemColorForIllustration(context, key))
+        } catch (e: OutOfMemoryError) {
+            e.printStackTrace()
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
-        val chartDataSet = PieDataSet(chartEntries, null).apply {
-            colors = chartEntryColors
+        return null
+    }
+
+    private fun loadDataSet(enList: List<PieChartEntry>, isSmallScreen: Boolean, context: Context): PieDataSet {
+        val chartEntries = enList.map { en -> PieEntry(en.value.toFloat(), en.label, en.icon) }
+        return PieDataSet(chartEntries, null).apply {
+            colors = enList.map { en -> en.color }
             // value text: the proportion value of an entry
             valueTextSize = if (isSmallScreen) 7f else 9f
             valueTextColor = ThemeUtil.getColor(context, R.attr.colorTextSub)
@@ -121,31 +136,23 @@ internal class ChartFragment: TaggedFragment(){
                 }
             }
         }
-        val chartData = PieData(chartDataSet)
-        pieChart.run {
-            val colorOnBack = ThemeUtil.getColor(context, R.attr.colorAOnBackground)
-//            holeRadius = 40f
-//            transparentCircleRadius = 45f
-            setHoleColor(ThemeUtil.getColor(context, R.attr.colorABackground))
-            centerText = getString(if (EasyAccess.isViewingTarget) R.string.apiSdkTarget else R.string.apiSdkMin)
-            setCenterTextColor(colorOnBack)
-            setEntryLabelTextSize(if (isSmallScreen) 9f else 15f)
-            setEntryLabelColor(ThemeUtil.getColor(context, R.attr.colorAOnSurface))
-            // decrease overlapping
-            minAngleForSlices = if (isSmallScreen) 8f else 11f
-            setUsePercentValues(true)
-//            setOnChartValueSelectedListener(object : OnChartValueSelectedListener{
-//                override fun onNothingSelected() {
-//                }
-//
-//                override fun onValueSelected(e: Entry?, h: Highlight?) {
-//                }
-//            })
-            description = null
-            legend.textColor = colorOnBack
-            legend.textSize = if (isSmallScreen) 7f else 12f
-            data = chartData
-        }
+    }
 
+    private fun configPieChart(chartData: PieData, isSmallScreen: Boolean) = viewBinding.avChartPieChart.run {
+        val colorOnBack = ThemeUtil.getColor(context, R.attr.colorAOnBackground)
+//        holeRadius = 40f
+//        transparentCircleRadius = 45f
+        setHoleColor(ThemeUtil.getColor(context, R.attr.colorABackground))
+        centerText = getString(if (EasyAccess.isViewingTarget) R.string.apiSdkTarget else R.string.apiSdkMin)
+        setCenterTextColor(colorOnBack)
+        setEntryLabelTextSize(if (isSmallScreen) 9f else 15f)
+        setEntryLabelColor(ThemeUtil.getColor(context, R.attr.colorAOnSurface))
+        // decrease overlapping
+        minAngleForSlices = if (isSmallScreen) 8f else 11f
+        setUsePercentValues(true)
+        description = null
+        legend.textColor = colorOnBack
+        legend.textSize = if (isSmallScreen) 7f else 12f
+        data = chartData
     }
 }

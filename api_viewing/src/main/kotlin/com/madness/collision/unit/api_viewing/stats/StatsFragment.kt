@@ -54,7 +54,6 @@ internal class StatsFragment : TaggedFragment() {
         val context = context ?: return
         val unit: Int = arguments?.getInt(ARG_TYPE) ?: ApiUnit.ALL_APPS
         val viewModel = ApiViewingViewModel.appListStats ?: return
-//        val (aiCountUser, aiCountSystem) = viewModel.aiCount
         val stats = when (unit) {
             ApiUnit.USER -> if (EasyAccess.isViewingTarget) viewModel.apiCountUser else viewModel.minApiCountUser
             ApiUnit.SYS -> if (EasyAccess.isViewingTarget) viewModel.apiCountSystem else viewModel.minApiCountSystem
