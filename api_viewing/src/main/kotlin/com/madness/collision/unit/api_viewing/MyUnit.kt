@@ -40,7 +40,6 @@ import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.database.DataMaintainer
-import com.madness.collision.unit.api_viewing.database.RecordMaintainer
 import com.madness.collision.unit.api_viewing.databinding.FragmentApiBinding
 import com.madness.collision.unit.api_viewing.list.APIAdapter
 import com.madness.collision.unit.api_viewing.list.AppListFragment
@@ -474,7 +473,7 @@ class MyUnit: com.madness.collision.unit.Unit() {
 
         // update records
         if (MyUpdatesFragment.isNewSession(mainViewModel.timestamp)) {
-            RecordMaintainer.pack(context, this).all
+            viewModel.maintainRecords(context)
         }
 
         if (launchMethod.mode == LaunchMethod.LAUNCH_MODE_SEARCH) {

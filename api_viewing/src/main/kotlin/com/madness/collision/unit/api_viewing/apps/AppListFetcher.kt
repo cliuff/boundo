@@ -44,13 +44,23 @@ class PlatformAppsFetcher(private val context: Context) : AppListFetcher<Package
     // companion object: direct access to singleton object by simply the class name
     companion object : AppListFetcher<PackageInfo> by PlatformAppsFetcher(chiefContext)
 
+    class Session(val includeApex: Boolean)
+
+    private var session: Session? = null
+
+    fun withSession(includeApex: Boolean): PlatformAppsFetcher {
+        session = Session(includeApex = includeApex)
+        return this
+    }
+
     override fun getRawList(): List<PackageInfo> {
         queryAllPkgsCheck(context)
         val timed = measureTimedValue {
+            val ss = session
             var flags = 0
             if (OsUtils.satisfy(OsUtils.N)) flags = flags or PackageManager.MATCH_DISABLED_COMPONENTS
-            if (OsUtils.satisfy(OsUtils.Q)) flags = flags or PackageManager.MATCH_APEX
-            PackageCompat.getAllPackages(context.packageManager, flags)
+            if (OsUtils.satisfy(OsUtils.Q) && ss?.includeApex != false) flags = flags or PackageManager.MATCH_APEX
+            PackageCompat.getAllPackages(context.packageManager, flags).also { session = null }
         }
         Log.d("AppListFetcher", "PlatformAppListFetcher/${timed.value.size}/${timed.duration}")
         return timed.value

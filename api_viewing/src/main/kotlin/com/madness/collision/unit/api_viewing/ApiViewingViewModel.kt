@@ -19,6 +19,8 @@ package com.madness.collision.unit.api_viewing
 import android.app.Application
 import android.content.Context
 import androidx.lifecycle.*
+import com.madness.collision.unit.api_viewing.apps.AppRepoImpl
+import com.madness.collision.unit.api_viewing.apps.AppRepository
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
@@ -61,7 +63,7 @@ internal class ApiViewingViewModel(application: Application): AndroidViewModel(a
             lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
         }
         val dao = DataMaintainer.get(application, lifecycleOwner)
-        repository = AppRepository(lifecycleOwner, dao)
+        repository = AppRepoImpl(dao, lifecycleOwner)
     }
 
     override fun onCleared() {
@@ -87,9 +89,7 @@ internal class ApiViewingViewModel(application: Application): AndroidViewModel(a
     }
 
     fun addApps(vararg apps: ApiViewingApp) {
-        apps4Cache.addAll(apps)
-        timestampCache = System.currentTimeMillis()
-        updateDeviceAppsCount()
+        addApps(apps.asList())
     }
 
     fun addApps(list: List<ApiViewingApp>) {
@@ -101,26 +101,17 @@ internal class ApiViewingViewModel(application: Application): AndroidViewModel(a
         appListCache.add(app)
     }
 
-    fun addUserApps(context: Context) {
-        apps4Cache.addAll(repository.getUserApps(context))
-        timestampCache = System.currentTimeMillis()
-        updateDeviceAppsCount()
-    }
-
-    fun addSystemApps(context: Context) {
-        apps4Cache.addAll(repository.getSystemApps(context))
-        timestampCache = System.currentTimeMillis()
-        updateDeviceAppsCount()
-    }
-
-    fun addAllApps(context: Context) {
-        apps4Cache.addAll(repository.getAllApps(context))
-        timestampCache = System.currentTimeMillis()
-        updateDeviceAppsCount()
-    }
+    private fun addApps(unit: Int) = addApps(repository.getApps(unit))
+    fun addUserApps(context: Context) = addApps(ApiUnit.USER)
+    fun addSystemApps(context: Context) = addApps(ApiUnit.SYS)
+    fun addAllApps(context: Context) = addApps(ApiUnit.ALL_APPS)
 
     fun get(packageName: String): ApiViewingApp?{
         return apps4Cache.find { it.packageName == packageName }
+    }
+
+    fun maintainRecords(context: Context) {
+        repository.maintainRecords(context)
     }
 
 

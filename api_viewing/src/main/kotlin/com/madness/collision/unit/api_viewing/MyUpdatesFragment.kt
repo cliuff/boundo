@@ -36,6 +36,9 @@ import com.madness.collision.diy.SpanAdapter
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.misc.MiscApp
 import com.madness.collision.unit.Updatable
+import com.madness.collision.unit.api_viewing.apps.AppRepoImpl
+import com.madness.collision.unit.api_viewing.apps.toMtnPkgApps
+import com.madness.collision.unit.api_viewing.apps.toPkgApps
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.database.AppMaintainer
@@ -44,7 +47,6 @@ import com.madness.collision.unit.api_viewing.databinding.AvUpdSectionBinding
 import com.madness.collision.unit.api_viewing.databinding.AvUpdatesBinding
 import com.madness.collision.unit.api_viewing.list.*
 import com.madness.collision.unit.api_viewing.list.APIAdapter
-import com.madness.collision.unit.api_viewing.origin.AppRetriever
 import com.madness.collision.unit.api_viewing.ui.info.AppInfoFragment
 import com.madness.collision.unit.api_viewing.update.UpdateLists
 import com.madness.collision.unit.api_viewing.upgrade.Upgrade
@@ -156,16 +158,18 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable, AppInfoFragment.
             val currentTime = System.currentTimeMillis()
             secondLastRetrievalTime = lastRetrievalTime
             lastRetrievalTime = currentTime
+            val dao = DataMaintainer.get(context.applicationContext, lifecycleOwner)
+            val appRepo = AppRepoImpl(dao, lifecycleOwner)
             return if (isBrandNewSession) {
                 // use last persisted timestamp to retrieve updates then persist current time
-                val result = Utils.getChangedPackages(context, lifecycleOwner, lastTimestamp)
+                val result = appRepo.getChangedPackages(context, lastTimestamp)
                 prefSettings.edit { putLong(P.PACKAGE_CHANGED_TIMESTAMP, currentTime) }
                 appTimestamp = lastTimestamp
                 sessionTimestamp = mainTimestamp
                 result
             } else {
                 // use last the same timestamp used the last time to retrieve updates
-                Utils.getChangedPackages(context, lifecycleOwner, appTimestamp)
+                appRepo.getChangedPackages(context, appTimestamp)
             }
         }
     }
@@ -264,8 +268,7 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable, AppInfoFragment.
     private suspend fun getUsedList(context: Context, used: List<String>) {
         val packages = used.mapNotNull { MiscApp.getPackageInfo(context, packageName = it) }
         val lifecycleOwner = this@MyUpdatesFragment
-        val anApp = AppMaintainer.get(context, lifecycleOwner)
-        val appList = AppRetriever.mapToApp(packages, context, anApp)
+        val appList = packages.toMtnPkgApps(context, lifecycleOwner)
         sections[I_USE] = appList
     }
 
@@ -275,7 +278,7 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable, AppInfoFragment.
     ) {
         val anApp = AppMaintainer.get(context, this@MyUpdatesFragment)
         val packages = changedPkgList.subList(0, listLimitSize)
-        val appList = AppRetriever.mapToApp(packages, context, anApp.clone() as ApiViewingApp)
+        val appList = packages.toPkgApps(context, anApp.clone() as ApiViewingApp)
 
         // separate new ones from list
         val (newAppList, familiarAppList) = if (detectNew) {
@@ -320,7 +323,7 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable, AppInfoFragment.
             }
         }
         // get missing apps
-        val getApps = AppRetriever.mapToApp(getPackages, context, anApp)
+        val getApps = getPackages.toPkgApps(context, anApp)
         // get missing upgrades
         val upgradesB = getPrevious.mapIndexedNotNull { index, previous ->
             Upgrade.get(previous, getApps[index])

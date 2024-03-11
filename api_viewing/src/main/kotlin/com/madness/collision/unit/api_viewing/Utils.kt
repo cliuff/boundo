@@ -17,21 +17,7 @@
 package com.madness.collision.unit.api_viewing
 
 import android.content.Context
-import android.content.pm.PackageInfo
 import android.os.Build
-import android.provider.Settings
-import androidx.annotation.RequiresApi
-import androidx.core.content.edit
-import androidx.core.content.pm.PackageInfoCompat
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.coroutineScope
-import com.madness.collision.unit.api_viewing.data.ApiViewingApp
-import com.madness.collision.unit.api_viewing.database.AppDao
-import com.madness.collision.unit.api_viewing.database.DataMaintainer
-import com.madness.collision.unit.api_viewing.database.RecordMaintainer
-import com.madness.collision.unit.api_viewing.database.maintainer.RecordMtn
-import com.madness.collision.unit.api_viewing.origin.PackageRetriever
 import com.madness.collision.util.X
 import com.madness.collision.util.X.A
 import com.madness.collision.util.X.B
@@ -64,9 +50,6 @@ import com.madness.collision.util.X.P
 import com.madness.collision.util.X.Q
 import com.madness.collision.util.os.OsUtils
 import com.madness.collision.util.regexOf
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.yield
 
 internal object Utils {
 
@@ -157,111 +140,6 @@ internal object Utils {
 //            1 -> if (fullName) "Base" else " " // from Build.VERSION_CODES.BASE
             else -> if (fullName) "" else " "
         }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun getChangedPackageNames(context: Context): List<String> {
-        val pref = com.madness.collision.util.P
-        val prefSettings = context.getSharedPreferences(pref.PREF_SETTINGS, Context.MODE_PRIVATE)
-        val bootCount = Settings.Global.getInt(context.contentResolver, Settings.Global.BOOT_COUNT, 0)
-        val sequenceNum = if (bootCount == prefSettings.getInt(pref.PACKAGE_CHANGED_BOOT_COUNT, 0))
-            prefSettings.getInt(pref.PACKAGE_CHANGED_SEQUENCE_NO, 0)
-        else 0
-        val changedPackages = context.packageManager.getChangedPackages(sequenceNum)
-        prefSettings.edit {
-            putInt(pref.PACKAGE_CHANGED_BOOT_COUNT, bootCount)
-            putInt(pref.PACKAGE_CHANGED_SEQUENCE_NO, changedPackages?.sequenceNumber ?: sequenceNum)
-        }
-        changedPackages ?: return emptyList()
-        return changedPackages.packageNames
-    }
-
-    fun getChangedPackages(context: Context, lifecycleOwner: LifecycleOwner, timestamp: Long = 0)
-    : Pair<List<ApiViewingApp>?, List<PackageInfo>> {
-//        return if (X.aboveOn(X.O)) {
-//            getChangedPackageNames(context).mapNotNull { getPackageInfo(context, it) }
-//        } else {
-//        }
-        val shouldOverride = timestamp != 0L
-        val pref = com.madness.collision.util.P
-        val prefSettings = if (shouldOverride) null
-        else context.getSharedPreferences(pref.PREF_SETTINGS, Context.MODE_PRIVATE)
-        val finalTimestamp = if (shouldOverride) timestamp
-        else prefSettings!!.getLong(pref.PACKAGE_CHANGED_TIMESTAMP, System.currentTimeMillis())
-
-        val retriever = PackageRetriever(context)
-        // get latest installed packages
-        val allPackages = retriever.all
-        // get changed packages
-        val dao = DataMaintainer.get(context, lifecycleOwner)
-        val re = getUpdatedPackages(allPackages, finalTimestamp, dao)
-        // get past records
-        val previous = when (dao.selectCount()) {
-            null -> null
-            0 -> emptyList()
-            else -> dao.selectApps(re.map { it.packageName })
-        }
-        // update records
-        RecordMaintainer(context, retriever, lifecycleOwner, dao).run {
-            update(allPackages)
-            checkRemoval(allPackages)
-        }
-        // Maintainer diff
-        val lifecycle = lifecycleOwner.lifecycle
-        if (RecordMtn.shouldDiff(context) && lifecycle.currentState >= Lifecycle.State.INITIALIZED) {
-            // run asynchronously (bind to lifecycle following DAO)
-            lifecycle.coroutineScope.launch(Dispatchers.Default) {
-                val dataDiff = RecordMtn.diff(context, allPackages, dao.selectAllApps())
-                yield()  // cooperative
-                RecordMtn.apply(context, dataDiff, allPackages, dao)
-            }
-        }
-
-        if (!shouldOverride) prefSettings!!.edit {
-            putLong(pref.PACKAGE_CHANGED_TIMESTAMP, System.currentTimeMillis())
-        }
-        return previous to re
-    }
-
-    fun getNewPackages(changedPackages: List<PackageInfo>): List<PackageInfo> {
-        return changedPackages.filter {
-            it.lastUpdateTime == it.firstInstallTime
-        }
-    }
-
-    private fun getUpdatedPackages(allPackages: List<PackageInfo>, timestamp: Long, dao: AppDao): List<PackageInfo> {
-        val preinstalledPackages = ArrayList<PackageInfo>()
-        val updatedPackages = ArrayList<PackageInfo>()
-        for (info in allPackages) {
-            when {
-                // 0->1970.01.01, 1230768000000->2009.01.01
-                info.lastUpdateTime <= 1230768000000L -> preinstalledPackages.add(info)
-                // 1293840000000->2011.01.01, before OS 4.0 was released, to accommodate potential cases
-                // with minSDK 23, it is impossible to find an app actually installed by this date
-                info.lastUpdateTime <= 1293840000000L -> preinstalledPackages.add(info)
-                // case observed on a Xiaomi device, view as preinstalled case to further examine it
-                info.lastUpdateTime < info.firstInstallTime -> preinstalledPackages.add(info)
-                info.lastUpdateTime >= timestamp -> updatedPackages.add(info)
-                else -> Unit
-            }
-        }
-        if (preinstalledPackages.isNotEmpty()) {
-            val preinstalledRecords = dao.selectApps(preinstalledPackages.map { it.packageName })
-                .associateBy { it.packageName }
-            for (info in preinstalledPackages) {
-                val record = preinstalledRecords[info.packageName] ?: continue
-                val app = info.applicationInfo
-                val isChanged = when {
-                    PackageInfoCompat.getLongVersionCode(info) != record.verCode -> true
-                    info.versionName != record.verName -> true
-                    // apex has version in path
-                    app.publicSourceDir.orEmpty() != record.appPackage.basePath -> true
-                    else -> false
-                }
-                if (isChanged) updatedPackages.add(info)
-            }
-        }
-        return updatedPackages
     }
 
     /**

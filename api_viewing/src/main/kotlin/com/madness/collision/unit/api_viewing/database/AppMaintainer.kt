@@ -54,7 +54,7 @@ object AppMaintainer {
             scopeWrapper.set(null)
             daoWrapper.set(null)
         }
-        return get(context, { daoWrapper.get() }, scopeGetter)
+        return get({ daoWrapper.get() }, scopeGetter)
     }
 
     /**
@@ -62,7 +62,7 @@ object AppMaintainer {
      * Somehow ByteBuddy proxy cannot be garbage collected, causing context leaks.
      * So, use with a lifecycle owner.
      */
-    private fun get(context: Context, daoGetter: () -> AppDao?, scopeGetter: () -> CoroutineScope?): ApiViewingApp {
+    private fun get(daoGetter: () -> AppDao?, scopeGetter: () -> CoroutineScope?): ApiViewingApp {
         return MaintainedApp(daoGetter, scopeGetter)
     }
 }
