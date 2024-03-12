@@ -1,6 +1,6 @@
 [versions]
 # plugins
-androidGradlePlugin = "8.2.2"  # 8.2.2-Hedgehog Patch 2
+androidGradlePlugin = "8.3.2"  # 8.3.2-Iguana Patch 2
 kotlin = "1.9.22"  # Compose Compiler 1.5.9 requires Kotlin 1.9.22
 googleKsp = "1.9.22-1.0.16"
 googlePlayServicesOSSLicensesPlugin = "0.10.6"

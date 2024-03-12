@@ -21,19 +21,6 @@ android {
     namespace = "com.madness.collision.unit.api_viewing"
     compileSdk = 34
 
-    flavorDimensions.add("arch")
-    productFlavors {
-        create("full") {
-            dimension = "arch"
-        }
-        create("arm") {
-            dimension = "arch"
-        }
-        create("x86") {
-            dimension = "arch"
-        }
-    }
-
     defaultConfig {
         minSdk = 23
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -45,12 +32,10 @@ android {
     buildTypes {
         getByName("debug") {
             isJniDebuggable = false
-            isRenderscriptDebuggable = false
             renderscriptOptimLevel = 3
         }
         getByName("release") {
             isJniDebuggable = false
-            isRenderscriptDebuggable = false
             renderscriptOptimLevel = 3
         }
     }

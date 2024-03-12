@@ -55,24 +55,6 @@ android {
             "tr", "tr-rTR", "de", "de-rDE"
         ))
     }
-    flavorDimensions.add("arch")
-    productFlavors {
-        create("full") {
-            dimension = "arch"
-        }
-        create("arm") {
-            dimension = "arch"
-            ndk {
-                abiFilters.addAll(listOf("armeabi-v7a", "arm64-v8a"))
-            }
-        }
-        create("x86") {
-            dimension = "arch"
-            ndk {
-                abiFilters.addAll(listOf("x86", "x86_64"))
-            }
-        }
-    }
     buildTypes {
         getByName("debug") {
             applicationIdSuffix = ".mortal"

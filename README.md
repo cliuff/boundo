@@ -7,8 +7,8 @@
 # Boundo: App API Checker
 
 **Requirements**
-- Android Studio `Hedgehog Patch 2` (AGP `8.2.2`)
-- Gradle Wrapper `8.4`
+- Android Studio `Iguana Patch 2` (AGP `8.3.2`)
+- Gradle Wrapper `8.6`
 - Java `17`
 - Kotlin `1.9.22`
 - Jetpack Compose Compiler `1.5.9` (requires Kotlin `1.9.22`)
@@ -16,15 +16,3 @@
 **After Git check-out**
 - **Copy** the file named `custom.properties.template` in `doconfig` directory,
   **rename** it to `custom.properties` and make necessary **change**s to it
-
-**After Gradle sync**
-- Adjust **Run/Debug Configurations** settings
-    - Open **Edit Run/Debug configurations** dialog
-    - Click **Edit Configurations...**
-    - Select configuration **boundo.app**
-    - Locate **deploy** under **Installation Options**
-    - Change the configuration to **APK from app bundle**
-- Adjust **Build Variants** settings
-    - Open **Build Variants** tool window
-    - Change the **Active Build Variant** of module **boundo.app** to **fullDebug**
-    - Change the **Active Build Variant** of module **boundo.wearable** to **fullDebug**
