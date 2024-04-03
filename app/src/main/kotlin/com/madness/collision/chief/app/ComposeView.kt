@@ -17,6 +17,7 @@
 package com.madness.collision.chief.app
 
 import android.content.Context
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.darkColorScheme
@@ -30,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
@@ -64,12 +66,13 @@ class ComposeViewOwner {
 
 @Composable
 fun rememberColorScheme(): ColorScheme {
+    val isInspected = LocalInspectionMode.current
+    val isDark = if (isInspected) isSystemInDarkTheme() else mainApplication.isDarkTheme
     return if (OsUtils.satisfy(OsUtils.S)) {
         val context = LocalContext.current
-        val isDark = mainApplication.isDarkTheme
         if (isDark) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
     } else {
-        if (mainApplication.isDarkTheme) darkColorScheme() else lightColorScheme()
+        if (isDark) darkColorScheme() else lightColorScheme()
     }
 }
 

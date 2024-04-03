@@ -39,6 +39,7 @@ import kotlinx.coroutines.yield
 interface AppRepository {
     suspend fun addApp(app: ApiViewingApp)
     fun getApps(unit: Int): List<ApiViewingApp>
+    fun queryApps(query: String): List<ApiViewingApp>
     fun maintainRecords(context: Context)
 }
 
@@ -50,6 +51,12 @@ class AppRepoImpl(private val appDao: AppDao, private val lifecycleOwner: Lifecy
     override fun getApps(unit: Int): List<ApiViewingApp> {
         if ((appDao.selectCount() ?: 0) == 0) return fetchAppsFromPlatform(chiefContext, unit)
         return appDao.selectApps(unit)
+    }
+
+    override fun queryApps(query: String): List<ApiViewingApp> {
+        if (query.isBlank()) return emptyList()
+        val q = query.trim()
+        return appDao.selectAllApps().filter { it.name.contains(q, ignoreCase = true) }
     }
 
     private fun fetchAppsFromPlatform(context: Context, unit: Int): List<ApiViewingApp> {

@@ -18,16 +18,38 @@ package com.madness.collision.util.dev
 
 import android.content.res.Configuration
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Wallpapers
 
+@Retention(AnnotationRetention.BINARY)
+@Target(AnnotationTarget.ANNOTATION_CLASS, AnnotationTarget.FUNCTION)
 @Preview(showBackground = true)
 annotation class StandardPreview
 
-@Preview(showBackground = true, locale = "ar")
+@Retention(AnnotationRetention.BINARY)
+@Target(AnnotationTarget.ANNOTATION_CLASS, AnnotationTarget.FUNCTION)
+@PreviewRtlLayout
 annotation class RtlPreview
 
+@Retention(AnnotationRetention.BINARY)
+@Target(AnnotationTarget.ANNOTATION_CLASS, AnnotationTarget.FUNCTION)
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 annotation class DarkPreview
 
+@Retention(AnnotationRetention.BINARY)
+@Target(AnnotationTarget.ANNOTATION_CLASS, AnnotationTarget.FUNCTION)
 @RtlPreview
 @StandardPreview
 annotation class LayoutDirectionPreviews
+
+@Retention(AnnotationRetention.BINARY)
+@Target(AnnotationTarget.ANNOTATION_CLASS, AnnotationTarget.FUNCTION)
+@Preview(showBackground = true, locale = "ar")
+annotation class PreviewRtlLayout
+
+@Retention(AnnotationRetention.BINARY)
+@Target(AnnotationTarget.ANNOTATION_CLASS, AnnotationTarget.FUNCTION)
+@Preview(name = "#0 Light")
+@Preview(name = "#1 130% Red", fontScale = 1.3f, wallpaper = Wallpapers.RED_DOMINATED_EXAMPLE)
+@Preview(name = "#2 180% Blue", fontScale = 1.8f, wallpaper = Wallpapers.BLUE_DOMINATED_EXAMPLE)
+@Preview(name = "#3 RTL Dark", locale = "ar", uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL)
+annotation class PreviewCombinedColorLayout
