@@ -16,9 +16,6 @@
 
 package com.madness.collision.unit.api_viewing.util
 
-import com.madness.collision.unit.api_viewing.MyUnit
-import com.madness.collision.unit.api_viewing.main.MainStatus
-
 internal object PrefUtil {
     const val AV_TAGS = "AvTags"
     // todo remove
@@ -38,7 +35,5 @@ internal object PrefUtil {
     const val AV_INCLUDE_DISABLED = "AVIncludeDisabled"
     const val AV_INCLUDE_DISABLED_DEFAULT = false
     const val AV_SORT_ITEM = "SDKCheckSortSpinnerSelection"
-    const val AV_SORT_ITEM_DEFAULT = MyUnit.SORT_POSITION_API_TIME
     const val AV_LIST_SRC_ITEM = "SDKCheckDisplaySpinnerSelection"
-    const val AV_LIST_SRC_ITEM_DEFAULT = MainStatus.DISPLAY_APPS_USER
 }
