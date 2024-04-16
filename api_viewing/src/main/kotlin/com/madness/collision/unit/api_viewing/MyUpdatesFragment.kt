@@ -180,6 +180,7 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable, AppInfoFragment.
     private val viewBinding: AvUpdatesBinding? by ::_viewBinding
     private val sections: MutableMap<Int, List<*>> = LinkedHashMap()
     private lateinit var concatAdapter: ConcatAdapter
+    private val diffMutex = Mutex()
     private val popOwner = AppPopOwner()
 
     private suspend fun getViewBinding(): AvUpdatesBinding {
@@ -393,7 +394,7 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable, AppInfoFragment.
                 getUsedList(mContext, usedPkgList.subList(0, usedSize))
             }
 
-            updateDiff()
+            diffMutex.withLock { updateDiff() }
             withContext(Dispatchers.Main) { updateView(getViewBinding()) }
         }
     }
@@ -485,8 +486,8 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable, AppInfoFragment.
                         val adapterIndex = index * 2
                         Log.d("AvUpdates", "$dID Diff remove: ${diffList[index].first} at $index, adapter at $adapterIndex")
                         arrayOf(adapterIndex + 1, adapterIndex)
-                            .mapNotNull { adapters.getOrNull(it) }
-                            .forEach { removeAdapter(it) }
+                            .mapNotNull(adapters::getOrNull)
+                            .forEach(::removeAdapter)
                         diffList.removeAt(index)
                     }
                 }
@@ -505,7 +506,7 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable, AppInfoFragment.
                     for (offset in 0 until count) {
                         val index = position + offset
                         val adapterIndex = index * 2
-                        val adapter = adapters[adapterIndex + 1]
+                        val adapter = adapters.getOrNull(adapterIndex + 1)
                         if (adapter !is APIAdapter) continue
                         Log.d("AvUpdates", "$dID Diff change: at $index")
                         adapter.appList = newList[newPos + offset].second

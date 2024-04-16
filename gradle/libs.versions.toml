@@ -1,8 +1,8 @@
 [versions]
 # plugins
 androidGradlePlugin = "8.3.2"  # 8.3.2-Iguana Patch 2
-kotlin = "1.9.22"  # Compose Compiler 1.5.9 requires Kotlin 1.9.22
-googleKsp = "1.9.22-1.0.16"
+kotlin = "1.9.23"  # Compose Compiler 1.5.11 requires Kotlin 1.9.23
+googleKsp = "1.9.23-1.0.20"
 googlePlayServicesOSSLicensesPlugin = "0.10.6"
 
 kotlinCoroutines = "1.8.0"
@@ -14,18 +14,13 @@ androidxTestEspresso = "3.5.1"
 
 androidxCore = "1.12.0"
 androidxCoreSplashScreen = "1.1.0-alpha02"
-androidxComposeCompiler = "1.5.9"
-androidxComposeRuntime = "1.6.1"
-androidxComposeFoundation = "1.6.1"
-androidxComposeUi = "1.6.1"
-androidxComposeAnimation = "1.6.1"
-androidxComposeMaterial = "1.6.1"
-androidxComposeMaterial3 = "1.2.0"
-androidxActivity = "1.8.1"
+androidxComposeCompiler = "1.5.11"
+androidxComposeBom = "2024.04.00"
+androidxActivity = "1.8.2"
 androidxAppcompat = "1.6.1"
-androidxLifecycle = "2.6.2"
+androidxLifecycle = "2.7.0"
 androidxRoom = "2.6.0"
-androidxNavigation = "2.5.3"
+androidxNavigation = "2.6.0"
 androidxCoreTesting = "2.2.0"
 androidxFragment = "1.6.2"
 androidxWindow = "1.2.0"
@@ -58,7 +53,7 @@ gglGuava = "31.0.1-android"
 # This dependency is set to compile only
 googleWearable = "2.9.0"
 okhttp = "4.12.0"
-coil = "2.5.0"
+coil = "2.6.0"
 junit4 = "4.13.2"
 junitJupiter = "5.8.1"
 mpChart = "v3.1.0"
@@ -73,8 +68,8 @@ mockito = "5.1.1"
 appIconLoader = "1.5.0"
 # Superellipse shape for Compose
 smoothCornerCompose = "v1.0.0"
-libCheckerRules = "34.7"
-googleSmali = "3.0.3"
+libCheckerRules = "35.3"
+googleSmali = "3.0.5"
 ldapsdk = "6.0.11"
 
 [libraries]
@@ -86,21 +81,22 @@ androidxTestEspresso = { module = "androidx.test.espresso:espresso-core", versio
 androidxCore = { module = "androidx.core:core", version.ref = "androidxCore" }
 androidxCoreKtx = { module = "androidx.core:core-ktx", version.ref = "androidxCore" }
 androidxCoreSplashScreen = { module = "androidx.core:core-splashscreen", version.ref = "androidxCoreSplashScreen" }
-androidxComposeRuntimeLiveData = { module = "androidx.compose.runtime:runtime-livedata", version.ref = "androidxComposeRuntime" }
-androidxComposeFoundation = { module = "androidx.compose.foundation:foundation", version.ref = "androidxComposeFoundation" }
-androidxComposeUi = { module = "androidx.compose.ui:ui", version.ref = "androidxComposeUi" }
+androidxComposeBom = { module = "androidx.compose:compose-bom", version.ref = "androidxComposeBom" }
+androidxComposeRuntimeLiveData = { module = "androidx.compose.runtime:runtime-livedata" }
+androidxComposeFoundation = { module = "androidx.compose.foundation:foundation" }
+androidxComposeUi = { module = "androidx.compose.ui:ui" }
 # Integration with activities
 androidxComposeActivity = { module = "androidx.activity:activity-compose", version.ref = "androidxActivity" }
 # Compose Material Design
-androidxComposeMaterial3 = { module = "androidx.compose.material3:material3", version.ref = "androidxComposeMaterial3" }
-androidxComposeMaterialIcons = { module = "androidx.compose.material:material", version.ref = "androidxComposeMaterial" }
-androidxComposeMaterialIconsExtended = { module = "androidx.compose.material:material-icons-extended", version.ref = "androidxComposeMaterial" }
-androidxComposeAnimation = { module = "androidx.compose.animation:animation", version.ref = "androidxComposeAnimation" }
+androidxComposeMaterial3 = { module = "androidx.compose.material3:material3" }
+androidxComposeMaterialIcons = { module = "androidx.compose.material:material" }
+androidxComposeMaterialIconsExtended = { module = "androidx.compose.material:material-icons-extended" }
+androidxComposeAnimation = { module = "androidx.compose.animation:animation" }
 # Tooling support (Previews, etc.)
-androidxComposeUiTooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "androidxComposeUi" }
+androidxComposeUiTooling = { module = "androidx.compose.ui:ui-tooling" }
 # Integration with ViewModels
 androidxComposeViewModel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
-androidxComposeUiTest = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "androidxComposeUi" }
+androidxComposeUiTest = { module = "androidx.compose.ui:ui-test-junit4" }
 androidxActivity = { module = "androidx.activity:activity-ktx", version.ref = "androidxActivity" }
 androidxAppcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidxAppcompat" }
 androidxFragment = { module = "androidx.fragment:fragment-ktx", version.ref = "androidxFragment" }

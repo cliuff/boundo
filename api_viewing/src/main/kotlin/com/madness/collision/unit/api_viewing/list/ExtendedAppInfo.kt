@@ -85,7 +85,7 @@ private fun ExtendedAppInfo(shareIcon: () -> Unit, shareApk: () -> Unit) {
                 stringResource(R.string.fileActionsOpen),
                 Icons.Outlined.Launch,
                 activityName,
-                onClick = c@{ launchIntent?.let { context.startActivity(it) } },
+                onClick = c@{ safely { launchIntent?.let(context::startActivity) } },
                 onLongClick = { X.copyText2Clipboard(context, activityName, R.string.text_copy_content) },
             )
         }

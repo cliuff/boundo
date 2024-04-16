@@ -16,7 +16,6 @@
 
 package com.madness.collision.unit.api_viewing.info
 
-import android.os.Build
 import com.android.tools.smali.dexlib2.DexFileFactory
 import com.android.tools.smali.dexlib2.Opcodes
 import com.android.tools.smali.dexlib2.dexbacked.DexBackedDexFile
@@ -49,10 +48,15 @@ class ExtensionDexContainer(file: File, opcodes: Opcodes) : ZipDexContainer(file
 
 /** see [DexFileFactory.loadDexContainer] */
 object DexContainerFactory {
-    fun load(apkPath: String): MultiDexContainer<DexBackedDexFile> {
+    /**
+     * Opcodes are the instruction set of Dalvik/ART virtual machine,
+     * Dalvik executable (DEX) is compiled by D8 dexer,
+     * and its version is determined by min SDK.
+     */
+    fun load(apkPath: String, minSdk: Int = -1): MultiDexContainer<DexBackedDexFile> {
         val file = File(apkPath)
         if (file.exists().not()) throw RuntimeException("file does not exist")
-        val opcodes = Opcodes.forApi(Build.VERSION.SDK_INT)
+        val opcodes = if (minSdk >= 0) Opcodes.forApi(minSdk) else Opcodes.getDefault()
         return ExtensionDexContainer(file, opcodes).takeIf { it.isZipFile }
             ?: throw RuntimeException("not a zip file")
     }
