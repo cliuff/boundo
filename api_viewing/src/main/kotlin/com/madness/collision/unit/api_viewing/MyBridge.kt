@@ -39,6 +39,7 @@ import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.database.AppRoom
 import com.madness.collision.unit.api_viewing.info.LibRules
 import com.madness.collision.unit.api_viewing.tag.app.AppTagInfo
+import com.madness.collision.unit.api_viewing.ui.list.AppListViewModel
 import com.madness.collision.unit.api_viewing.util.ApkRetriever
 import com.madness.collision.unit.api_viewing.util.PrefUtil
 import com.madness.collision.util.P
@@ -77,7 +78,7 @@ class ApiViewingAccessorImpl : ApiViewingAccessor {
     }
 
     override fun clearApps(activity: ComponentActivity) {
-        val viewModel: ApiViewingViewModel by activity.viewModels()
+        val viewModel: AppListViewModel by activity.viewModels()
         viewModel.clearCache()
     }
 

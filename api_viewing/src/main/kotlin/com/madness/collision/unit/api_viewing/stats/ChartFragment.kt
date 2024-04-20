@@ -30,12 +30,12 @@ import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.utils.MPPointF
 import com.madness.collision.R
-import com.madness.collision.unit.api_viewing.ApiViewingViewModel
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.databinding.FragmentChartBinding
 import com.madness.collision.unit.api_viewing.seal.SealMaker
+import com.madness.collision.unit.api_viewing.ui.list.AppListViewModel
 import com.madness.collision.util.*
 import com.madness.collision.util.os.OsUtils
 import kotlin.math.roundToInt
@@ -67,7 +67,7 @@ internal class ChartFragment: TaggedFragment(){
         val context = context ?: return
 
         val unit: Int = arguments?.getInt(ARG_TYPE) ?: ApiUnit.ALL_APPS
-        val viewModel = ApiViewingViewModel.appListStats ?: return
+        val viewModel = AppListViewModel.appListStats ?: return
         val stats = when (unit) {
             ApiUnit.USER -> if (EasyAccess.isViewingTarget) viewModel.apiCountUser else viewModel.minApiCountUser
             ApiUnit.SYS -> if (EasyAccess.isViewingTarget) viewModel.apiCountSystem else viewModel.minApiCountSystem

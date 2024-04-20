@@ -21,10 +21,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.doOnLayout
-import com.madness.collision.unit.api_viewing.ApiViewingViewModel
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.databinding.FragmentStatsBinding
+import com.madness.collision.unit.api_viewing.ui.list.AppListViewModel
 import com.madness.collision.util.TaggedFragment
 
 internal class StatsFragment : TaggedFragment() {
@@ -53,7 +53,7 @@ internal class StatsFragment : TaggedFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val context = context ?: return
         val unit: Int = arguments?.getInt(ARG_TYPE) ?: ApiUnit.ALL_APPS
-        val viewModel = ApiViewingViewModel.appListStats ?: return
+        val viewModel = AppListViewModel.appListStats ?: return
         val stats = when (unit) {
             ApiUnit.USER -> if (EasyAccess.isViewingTarget) viewModel.apiCountUser else viewModel.minApiCountUser
             ApiUnit.SYS -> if (EasyAccess.isViewingTarget) viewModel.apiCountSystem else viewModel.minApiCountSystem

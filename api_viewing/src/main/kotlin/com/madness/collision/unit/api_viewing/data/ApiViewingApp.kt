@@ -466,10 +466,6 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
         appPackage.apkPaths.any { ApkUtil.checkPkg(it, "kotlin") }
     }
 
-    fun clearIcons(){
-        preload = true
-    }
-
     private constructor(parIn: Parcel): this(parIn.readString() ?: "") {
         readParcel(parIn)
     }

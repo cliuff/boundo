@@ -20,6 +20,8 @@ import android.content.Context
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.madness.collision.unit.api_viewing.AppListStats
+import com.madness.collision.unit.api_viewing.AppStatsTracker
 import com.madness.collision.unit.api_viewing.MyUpdatesFragment
 import com.madness.collision.unit.api_viewing.apps.AppListRepoImpl
 import com.madness.collision.unit.api_viewing.apps.AppListRepository
@@ -66,6 +68,11 @@ typealias AppListUiState = List<GuiArt>
 data class AppListOpUiState(val options: AppListOptions)
 
 class AppListViewModel : ViewModel() {
+    companion object {
+        private var mutAppListStats: AppListStats? = null
+        val appListStats: AppListStats? by ::mutAppListStats
+    }
+
     private val appListRepo: AppListRepository = AppListRepoImpl()
     private val mutUiState = MutableStateFlow<AppListUiState>(emptyList())
     val uiState: StateFlow<AppListUiState> by ::mutUiState
@@ -82,6 +89,7 @@ class AppListViewModel : ViewModel() {
     val opUiState: StateFlow<AppListOpUiState> by ::mutOpUiState
     private val optionsOwner = AppListOptionsOwner()
     private lateinit var srcLoader: AppListSrcLoader
+    private val appStatsTracker = AppStatsTracker()
 
     val isLoadingSrc: Flow<Boolean>
         get() = srcLoader.loadingSrcFlow.map { it.isNotEmpty() }
@@ -92,6 +100,16 @@ class AppListViewModel : ViewModel() {
         mutOpUiState = MutableStateFlow(AppListOpUiState(options))
         appListRepo.apps.onEach { r -> mutUiState.update { r.toGui() } }.launchIn(viewModelScope)
 //        viewModelScope.launch(Dispatchers.Default) { appListRepo.fetchNewData(chiefPkgMan) }
+    }
+
+    override fun onCleared() {
+        clearCache()
+        super.onCleared()
+    }
+
+    fun clearCache() {
+        multiSrcApps.clearAll()
+        mutAppListStats = AppListStats()
     }
 
     private fun updateSrcApps() {
@@ -117,6 +135,12 @@ class AppListViewModel : ViewModel() {
             multiSrcApps[ListSrcCat.Platform].setOptions(options.listOrder, options.apiMode)
             options.srcSet.forEach { src ->
                 srcLoader.addListSrc(src)
+                    .onEach {
+                        if (src.cat == ListSrcCat.Platform) {
+                            val platformList = multiSrcApps[ListSrcCat.Platform].getList()
+                            launch { mutAppListStats = appStatsTracker.updateDeviceAppsCount(platformList) }
+                        }
+                    }
                     .filter { terminalSrcCat == src.cat }
                     .onEach { updateList -> mutAppList.update { updateList } }
                     .catch { it.printStackTrace() }
@@ -145,6 +169,10 @@ class AppListViewModel : ViewModel() {
             optionsOwner.setListSrc(src, newSrcSet)
             if (src in srcSet) {
                 multiSrcApps[src.cat].removeAppSrc(src)
+                if (src.cat == ListSrcCat.Platform) {
+                    val platformList = multiSrcApps[ListSrcCat.Platform].getList()
+                    launch { mutAppListStats = appStatsTracker.updateDeviceAppsCount(platformList) }
+                }
                 val srcCat = src.cat.takeIf { multiSrcApps[it].isNotEmpty() }
                     ?: ListSrcCat.entries.find { multiSrcApps[it].isNotEmpty() }
                     ?: ListSrcCat.Platform
@@ -152,6 +180,12 @@ class AppListViewModel : ViewModel() {
                 mutAppList.update { multiSrcApps[srcCat].getList() }
             } else {
                 srcLoader.addListSrc(src)
+                    .onEach {
+                        if (src.cat == ListSrcCat.Platform) {
+                            val platformList = multiSrcApps[ListSrcCat.Platform].getList()
+                            launch { mutAppListStats = appStatsTracker.updateDeviceAppsCount(platformList) }
+                        }
+                    }
                     .filter { terminalSrcCat == src.cat }
                     .onEach { updateList -> mutAppList.update { updateList } }
                     .catch { it.printStackTrace() }

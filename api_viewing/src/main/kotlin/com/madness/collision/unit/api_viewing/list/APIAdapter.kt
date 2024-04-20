@@ -108,7 +108,6 @@ internal open class APIAdapter(context: Context, private val listener: Listener,
     private val _colorSurface by lazy { ThemeUtil.getColor(context, R.attr.colorASurface) }
     protected val colorSurface: Int
         get() = if (loadPref.shouldShowDesserts) _colorSurface else 0
-    private val animator = AppListAnimator()
 
     fun setSortMethod(sortMethod: Int): APIAdapter {
         this.sortMethod = sortMethod
@@ -129,36 +128,6 @@ internal open class APIAdapter(context: Context, private val listener: Listener,
         if (isIconLoaded) return true
         app.load(context)
         return false
-    }
-
-    private suspend fun ensureAppIcon(index: Int, logoView: ImageView) {
-        ensureItem(index)
-        val iconApp = logoView.getTag(R.bool.tagKeyAvAdapterItemIconId) as ApiViewingApp?
-        if (index >= listCount) return
-        val appInfo = apps[index]
-        // logo was set with the same app icon
-        if (appInfo === iconApp) return
-        val finalBlock: suspend () -> Unit = {
-            withContext(Dispatchers.Main) {
-                logoView.setTag(R.bool.tagKeyAvAdapterItemIconId, appInfo)
-                animator.animateLogo(logoView)
-            }
-        }
-        if (appInfo.hasIcon) {
-            finalBlock()
-            return
-        }
-        // wait for icon otherwise (for unknown reason) there will be blank icons
-        // once jumping from the bottom of the list directly to the top
-        val elapsingTime = ElapsingTime()
-        while (true) {
-            if (appInfo.hasIcon) {
-                finalBlock()
-                break
-            }
-            if (elapsingTime.elapsed() >= 6000) break
-            delay(200)
-        }
     }
 
     override fun onMakeBody(holder: Holder, index: Int, payloads: MutableList<Any>) {
@@ -185,29 +154,9 @@ internal open class APIAdapter(context: Context, private val listener: Listener,
         holder.name.text = appInfo.name
         holder.logo.setTag(R.bool.tagKeyAvAdapterItemId, appInfo)
 
-//        if (!appInfo.hasIcon) {
-//            scope.launch(Dispatchers.Default) {
-//                ensureAppIcon(index, holder.logo)
-//            }
-//        } else {
-//            holder.logo.setTag(R.bool.tagKeyAvAdapterItemIconId, appInfo)
-//            holder.logo.setImageBitmap(appInfo.icon)
-//        }
         scope.launch(Dispatchers.IO) {
             holder.logo.load(AppPackageInfo(context, appInfo))
         }
-
-        val loadLimitHalf = loadPref.loadLimitHalf
-        val backIndex = index - loadLimitHalf - 5
-        val shouldSpanFore = backIndex < 0
-        val foreSpan: Int by lazy { -backIndex }
-        val foreIndex = index + loadLimitHalf + 5
-        val shouldSpanBack = foreIndex > listCount
-        val backSpan: Int by lazy { foreIndex - listCount }
-        val finalBackIndex = if (shouldSpanBack) backIndex - backSpan else backIndex
-        val finalForeIndex = if (shouldSpanFore) foreIndex + foreSpan else foreIndex
-        if (finalBackIndex >= 0 && !apps[finalBackIndex].preload) apps[finalBackIndex].clearIcons()
-        if (finalForeIndex < listCount && !apps[finalForeIndex].preload) apps[finalForeIndex].clearIcons()
 
         val verInfo = if (loadPref.isViewingTarget) VerInfo.targetDisplay(appInfo)
         else VerInfo.minDisplay(appInfo)

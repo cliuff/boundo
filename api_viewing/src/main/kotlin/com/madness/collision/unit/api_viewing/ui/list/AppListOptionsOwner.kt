@@ -20,16 +20,16 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.madness.collision.unit.api_viewing.AppTag
-import com.madness.collision.unit.api_viewing.MainPageDataHolder
 import com.madness.collision.unit.api_viewing.TriStateSelectable
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.util.PrefUtil
+import com.madness.collision.util.P
 
 class AppListOptionsOwner {
     private var prefs: SharedPreferences? = null
 
     fun getOptions(context: Context): AppListOptions {
-        val prefs = MainPageDataHolder(context).prefs.also { prefs = it }
+        val prefs = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE).also { prefs = it }
         val sortItem = prefs.getInt(PrefUtil.AV_SORT_ITEM, AppListOrder.UpdateTime.code)
         val displayItem = prefs.getInt(PrefUtil.AV_LIST_SRC_ITEM, 0)
         val savedSrcSet = when (displayItem) {
@@ -39,7 +39,9 @@ class AppListOptionsOwner {
             3 -> listOf(AppListSrc.DeviceApks)
             else -> listOf(AppListSrc.SystemApps, AppListSrc.UserApps)
         }
-        return AppListOptions(savedSrcSet, AppListOrderOrDefault(sortItem), AppApiMode.Target)
+        EasyAccess.init(context, prefs)
+        val apiMode = if (EasyAccess.isViewingTarget) AppApiMode.Target else AppApiMode.Minimum
+        return AppListOptions(savedSrcSet, AppListOrderOrDefault(sortItem), apiMode)
     }
 
     fun setListSrc(changedSrc: AppListSrc, newSrcSet: Set<AppListSrc>) {

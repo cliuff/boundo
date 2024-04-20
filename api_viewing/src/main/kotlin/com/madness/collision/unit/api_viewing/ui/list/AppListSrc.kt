@@ -197,4 +197,8 @@ class MultiSrcApps(order: AppListOrder, apiMode: AppApiMode) {
 //    fun setAppList(key: ListSrcCat, list: Collection<ApiViewingApp>, options: OrderedAppList.Options) {
 //        srcAppsMap[key] = OrderedAppList(options)
 //    }
+
+    fun clearAll() {
+        srcAppsMap.values.forEach(OrderedAppList::clearAll)
+    }
 }

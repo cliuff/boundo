@@ -241,20 +241,6 @@ internal class AppListFragment : TaggedFragment(), AppList, Filterable, AppInfoF
         service.loadAppIcons(this, this, refreshLayout)
     }
 
-    fun clearBottomAppIcons() = lifecycleScope.launch(Dispatchers.Default) {
-        try {
-            var index = viewModel.apps4DisplayValue.size - 1
-            val cacheSize = EasyAccess.loadLimitHalf * 2 + 10
-            while (index >= cacheSize) {
-                val app = viewModel.apps4DisplayValue[index]
-                if (!app.preload) app.clearIcons()
-                index--
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
     abstract class Filter: android.widget.Filter() {
         var isAddition: Boolean = false
         abstract fun onCancel()

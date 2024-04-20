@@ -48,6 +48,9 @@ import com.madness.collision.unit.api_viewing.databinding.AvUpdatesBinding
 import com.madness.collision.unit.api_viewing.list.*
 import com.madness.collision.unit.api_viewing.list.APIAdapter
 import com.madness.collision.unit.api_viewing.ui.info.AppInfoFragment
+import com.madness.collision.unit.api_viewing.ui.list.AppApiMode
+import com.madness.collision.unit.api_viewing.ui.list.AppListOrder
+import com.madness.collision.unit.api_viewing.ui.list.getComparator
 import com.madness.collision.unit.api_viewing.update.UpdateLists
 import com.madness.collision.unit.api_viewing.upgrade.Upgrade
 import com.madness.collision.unit.api_viewing.upgrade.UpgradeAdapter
@@ -288,13 +291,14 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable, AppInfoFragment.
             // not present in previous records
             previousRecords[it.packageName] == null
         }
-        sections[I_NEW] = ApiViewingViewModel.sortList(newAppList, MyUnit.SORT_POSITION_API_TIME)
+        val appListComparator = AppListOrder.UpdateTime.getComparator(AppApiMode.Target)
+        sections[I_NEW] = newAppList.sortedWith(appListComparator)
 
         val (verUpdList, pckUpdList) = familiarAppList.partition {
             val prev = previousRecords[it.packageName] ?: return@partition false
             it.verCode != prev.verCode
         }
-        sections[I_VER] = ApiViewingViewModel.sortList(verUpdList, MyUnit.SORT_POSITION_API_TIME)
+        sections[I_VER] = verUpdList.sortedWith(appListComparator)
         val (latestUpdList, recentUpdList) = if (secondLastRetrievalTime <= 0) {
             pckUpdList.partition p@{
                 val prev = previousRecords[it.packageName] ?: return@p false
@@ -303,8 +307,8 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable, AppInfoFragment.
         } else {
             pckUpdList.partition { it.updateTime >= secondLastRetrievalTime }
         }
-        sections[I_PCK] = ApiViewingViewModel.sortList(latestUpdList, MyUnit.SORT_POSITION_API_TIME)
-        sections[I_REC] = ApiViewingViewModel.sortList(recentUpdList, MyUnit.SORT_POSITION_API_TIME)
+        sections[I_PCK] = latestUpdList.sortedWith(appListComparator)
+        sections[I_REC] = recentUpdList.sortedWith(appListComparator)
 
         // upgrades that can be found in appList
         val upgradesA = ArrayList<Upgrade>(familiarAppList.size)
