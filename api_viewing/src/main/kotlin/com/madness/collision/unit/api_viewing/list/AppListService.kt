@@ -31,6 +31,8 @@ import com.madness.collision.misc.PackageCompat
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
+import com.madness.collision.unit.api_viewing.data.codenameOrNull
+import com.madness.collision.unit.api_viewing.data.verNameOrNull
 import com.madness.collision.unit.api_viewing.info.CertResolver
 import com.madness.collision.util.*
 import com.madness.collision.util.os.OsUtils
@@ -97,13 +99,9 @@ internal class AppListService(private val serviceContext: Context? = null) {
         val sdkInfo = sdkInfo@ { ver: VerInfo ->
             val sdkDetails = when (ver.api) {
                 OsUtils.DEV -> "Android Preview"
-                else -> when (val androidVer = ver.sdk) {
-                    "" -> return@sdkInfo ver.apiText
-                    else -> when (val codeName = ver.codeName(context)) {
-                        androidVer -> "Android $androidVer"
-                        else -> "Android $androidVer, $codeName"
-                    }
-                }
+                else -> ver.verNameOrNull?.let { v ->
+                    listOfNotNull("Android $v", ver.codenameOrNull(context)).joinToString()
+                } ?: return@sdkInfo ver.apiText
             }
             ver.apiText + context.getString(R.string.textParentheses, sdkDetails)
         }

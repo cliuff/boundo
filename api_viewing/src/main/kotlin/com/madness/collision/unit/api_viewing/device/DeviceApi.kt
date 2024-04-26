@@ -27,9 +27,12 @@ import com.madness.collision.chief.os.HarmonyOsDistro
 import com.madness.collision.chief.os.HyperOsDistro
 import com.madness.collision.chief.os.LineageOsDistro
 import com.madness.collision.chief.os.MiuiDistro
+import com.madness.collision.chief.os.PreviewBuild
 import com.madness.collision.chief.os.UndefDistro
 import com.madness.collision.chief.os.distro
 import com.madness.collision.unit.api_viewing.data.VerInfo
+import com.madness.collision.unit.api_viewing.data.codenameOrNull
+import com.madness.collision.unit.api_viewing.data.verNameOrNull
 import com.madness.collision.unit.api_viewing.databinding.AvDeviceApiBinding
 import com.madness.collision.util.CollisionDialog
 
@@ -50,15 +53,9 @@ internal class DeviceApi {
             avDeviceName.text = deviceName
             avDeviceApi.text = ver.apiText
         }
-        val androidVer = when (val previewName = Build.VERSION.CODENAME) {
-            "", "REL" -> when (val androidVer = ver.sdk) {
-                "" -> null
-                else -> when (val codeName = ver.codeName(context)) {
-                    androidVer -> "Android $androidVer"
-                    else -> "Android $androidVer, $codeName"
-                }
-            }
-            else -> "$previewName Preview"
+        val androidPreview = PreviewBuild.codenameOrNull?.let { "$it Preview" }
+        val androidVer = androidPreview ?: ver.verNameOrNull?.let { v ->
+            listOfNotNull("Android $v", ver.codenameOrNull(context)).joinToString()
         }
         val distro = distro.run {
             val name = displayName
@@ -76,9 +73,8 @@ internal class DeviceApi {
             distro?.let { "Distro: $it" },
             getJavaVm()?.let { "Java VM: $it" },
         )
-        val versionText = props.joinToString(separator = System.lineSeparator())
-        binding.avDeviceSdk.text = versionText
-        binding.avDeviceSdk.isVisible = versionText.isNotEmpty()
+        binding.avDeviceSdk.text = props.joinToString(separator = System.lineSeparator())
+        binding.avDeviceSdk.isVisible = props.isNotEmpty()
         pop.show()
     }
 

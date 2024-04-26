@@ -79,3 +79,10 @@ internal class VerInfo(val api: Int, sdk: String, val letter: Char) {
         return codeName ?: ""
     }
 }
+
+internal val VerInfo.verNameOrNull
+    get() = sdk.takeUnless { it.isBlank() }
+
+internal fun VerInfo.codenameOrNull(context: Context): String? {
+    return codeName(context).takeUnless { it == sdk || it.isBlank() }
+}

@@ -17,7 +17,6 @@
 package com.madness.collision.unit.api_viewing.ui.list
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -46,7 +45,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.madness.collision.chief.app.BoundoTheme
@@ -71,20 +69,6 @@ fun AppListOptions(
             .background(MaterialTheme.colorScheme.surface)
             .padding(vertical = 20.dp)
     ) {
-        Text(
-            modifier = Modifier
-                .align(Alignment.End)
-                .padding(horizontal = horizontalPadding)
-                .clip(CircleShape)
-                .border(Dp.Hairline, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.25f), CircleShape)
-                .clickable {  }
-                .padding(horizontal = 10.dp, vertical = 5.dp),
-            text = "More settings",
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
-            fontSize = 13.sp,
-            lineHeight = 15.sp,
-        )
-
         Text(
             modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 13.dp),
             text = "Choose app sources",
