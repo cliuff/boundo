@@ -39,6 +39,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,15 +54,17 @@ import com.madness.collision.util.dev.PreviewCombinedColorLayout
 import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape
 import com.madness.collision.R as MainR
 
+@Stable
+interface ListOptionsEventHandler {
+    fun toggleSrc(src: AppListSrc)
+    fun toggleApks()
+    fun toggleFolder()
+    fun setOrder(order: AppListOrder)
+    fun setApiMode(apiMode: AppApiMode)
+}
+
 @Composable
-fun AppListOptions(
-    options: AppListOptions,
-    onClickSrc: (AppListSrc) -> Unit,
-    onSelectApks: () -> Unit,
-    onSelectFolder: () -> Unit,
-    onClickOrder: (AppListOrder) -> Unit,
-    onClickApiMode: (AppApiMode) -> Unit,
-) {
+fun AppListOptions(options: AppListOptions, eventHandler: ListOptionsEventHandler) {
     val horizontalPadding = 20.dp
     Column(
         modifier = Modifier
@@ -92,7 +95,7 @@ fun AppListOptions(
                     selected = listSrc in selSrcSet,
                     label = srcLabel,
                     category = "Installed app",
-                    onClick = { onClickSrc(listSrc) },
+                    onClick = { eventHandler.toggleSrc(listSrc) },
                 )
             }
 
@@ -101,7 +104,7 @@ fun AppListOptions(
                 selected = selSrcSet.any { it is AppListSrc.SelectApks },
                 label = stringResource(MainR.string.apiDisplayFile),
                 category = "APK files",
-                onClick = onSelectApks,
+                onClick = eventHandler::toggleApks,
             )
 
             Spacer(modifier = Modifier.width(15.dp))
@@ -109,7 +112,7 @@ fun AppListOptions(
                 selected = selSrcSet.any { it is AppListSrc.SelectVolume },
                 label = stringResource(MainR.string.apiDisplayVolume),
                 category = "APK files",
-                onClick = onSelectFolder,
+                onClick = eventHandler::toggleFolder,
             )
         }
 
@@ -135,7 +138,7 @@ fun AppListOptions(
                 OrderItem(
                     selected = options.listOrder == order,
                     label = orderLabel,
-                    onClick = { onClickOrder(order) }
+                    onClick = { eventHandler.setOrder(order) }
                 )
             }
         }
@@ -161,7 +164,7 @@ fun AppListOptions(
                 OrderItem(
                     selected = options.apiMode == mode,
                     label = modeLabel,
-                    onClick = { onClickApiMode(mode) }
+                    onClick = { eventHandler.setApiMode(mode) }
                 )
             }
         }
@@ -238,6 +241,15 @@ private fun OrderItem(selected: Boolean, label: String, onClick: () -> Unit) {
     }
 }
 
+internal fun PseudoListOptionsEventHandler() =
+    object : ListOptionsEventHandler {
+        override fun toggleSrc(src: AppListSrc) {}
+        override fun toggleApks() {}
+        override fun toggleFolder() {}
+        override fun setOrder(order: AppListOrder) {}
+        override fun setApiMode(apiMode: AppApiMode) {}
+    }
+
 @PreviewCombinedColorLayout
 @Composable
 private fun AppListOptionsPreview() {
@@ -248,11 +260,7 @@ private fun AppListOptionsPreview() {
     BoundoTheme {
         AppListOptions(
             options = options,
-            onClickSrc = { },
-            onSelectApks = { },
-            onSelectFolder = { },
-            onClickOrder = { },
-            onClickApiMode = { },
+            eventHandler = remember { PseudoListOptionsEventHandler() }
         )
     }
 }

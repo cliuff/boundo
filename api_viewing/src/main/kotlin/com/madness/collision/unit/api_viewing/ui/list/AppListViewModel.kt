@@ -31,11 +31,16 @@ import com.madness.collision.unit.api_viewing.apps.CodingArtifact
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.database.DataMaintainer
 import com.madness.collision.unit.api_viewing.util.ApkRetriever
+import com.madness.collision.util.F
 import com.madness.collision.util.ui.PackageInfo
+import com.opencsv.CSVWriter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
@@ -43,6 +48,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.io.File
+import java.io.FileWriter
 
 /** Graphical UI Artifact */
 data class GuiArt(val packageName: String, val label: String, val iconPkgInfo: PackageInfo?)
@@ -67,6 +74,10 @@ data class AppListOptions(
 typealias AppListUiState = List<GuiArt>
 data class AppListOpUiState(val options: AppListOptions)
 
+sealed interface AppListEvent {
+    class ShareAppList(val file: File) : AppListEvent
+}
+
 class AppListViewModel : ViewModel() {
     companion object {
         private var mutAppListStats: AppListStats? = null
@@ -90,9 +101,15 @@ class AppListViewModel : ViewModel() {
     private val optionsOwner = AppListOptionsOwner()
     private lateinit var srcLoader: AppListSrcLoader
     private val appStatsTracker = AppStatsTracker()
+    private val mutEvents = MutableSharedFlow<AppListEvent>()
+    val events: SharedFlow<AppListEvent> = mutEvents.asSharedFlow()
 
     val isLoadingSrc: Flow<Boolean>
         get() = srcLoader.loadingSrcFlow.map { it.isNotEmpty() }
+    val loadedSrcCats: Flow<Set<ListSrcCat>>
+        get() = srcLoader.loadingSrcFlow.map {
+            ListSrcCat.entries.filter { c -> multiSrcApps[c].isNotEmpty() }.toSet()
+        }
 
     init {
         val options = AppListOptions(emptyList(), AppListOrder.UpdateTime, AppApiMode.Target)
@@ -133,15 +150,24 @@ class AppListViewModel : ViewModel() {
             mutOpUiState.update { AppListOpUiState(options) }
 
             multiSrcApps[ListSrcCat.Platform].setOptions(options.listOrder, options.apiMode)
-            options.srcSet.forEach { src ->
-                srcLoader.addListSrc(src)
+            val flows = buildList(options.srcSet.size) {
+                val (pList, otherList) = options.srcSet.partition { it.cat == ListSrcCat.Platform }
+                if (pList.size >= 2) {
+                    add(ListSrcCat.Platform to srcLoader.addPlatformSrc())
+                    otherList.forEach { src -> add(src.cat to srcLoader.addListSrc(src)) }
+                } else {
+                    options.srcSet.forEach { src -> add(src.cat to srcLoader.addListSrc(src)) }
+                }
+            }
+            flows.forEach { (srcCat, flow) ->
+                flow
                     .onEach {
-                        if (src.cat == ListSrcCat.Platform) {
+                        if (srcCat == ListSrcCat.Platform) {
                             val platformList = multiSrcApps[ListSrcCat.Platform].getList()
                             launch { mutAppListStats = appStatsTracker.updateDeviceAppsCount(platformList) }
                         }
                     }
-                    .filter { terminalSrcCat == src.cat }
+                    .filter { terminalSrcCat == srcCat }
                     .onEach { updateList -> mutAppList.update { updateList } }
                     .catch { it.printStackTrace() }
                     .launchIn(this)
@@ -157,6 +183,11 @@ class AppListViewModel : ViewModel() {
         opUiState.value.options.srcSet
             .filter { it.key == srcKey }
             .forEach(::toggleListSrc)
+    }
+
+    fun setListSrcCat(cat: ListSrcCat) {
+        terminalSrcCat = cat
+        mutAppList.update { multiSrcApps[cat].getList() }
     }
 
     fun toggleListSrc(src: AppListSrc) {
@@ -217,6 +248,22 @@ class AppListViewModel : ViewModel() {
             optionsOwner.setApiMode(apiMode)
             val sortedList = multiSrcApps[terminalSrcCat].setOptions(apiMode = apiMode).getList()
             mutAppList.update { sortedList }
+        }
+    }
+
+    fun exportAppList(context: Context) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val apps = multiSrcApps[terminalSrcCat].getList()
+            val name = "AppList"
+            val path = F.createPath(F.cachePublicPath(context), "Temp", "AV", "$name.csv")
+            val file = File(path)
+            if (!F.prepare4(file)) return@launch
+            CSVWriter(FileWriter(file)).use { csv ->
+                apps.forEach { app ->
+                    csv.writeNext(arrayOf(app.name))
+                }
+            }
+            mutEvents.emit(AppListEvent.ShareAppList(file))
         }
     }
 }

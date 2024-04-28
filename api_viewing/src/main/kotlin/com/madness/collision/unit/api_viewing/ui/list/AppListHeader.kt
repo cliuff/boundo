@@ -16,6 +16,9 @@
 
 package com.madness.collision.unit.api_viewing.ui.list
 
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateIntOffsetAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -27,6 +30,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -41,6 +45,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,13 +53,64 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.madness.collision.chief.app.BoundoTheme
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
 import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape
+
+@Stable
+interface ListHeaderState {
+    var headerHeight: Int
+    val headerOffsetY: Int
+    val devInfoLabel: String
+    val devInfoDesc: String
+    var statsSize: Int
+    var listCat: ListSrcCat
+    fun updateOffsetY(scrollY: Int)
+    fun showStats(options: AppListOptions)
+    fun showSystemModules()
+}
+
+@Composable
+fun AppListSwitchHeader(
+    modifier: Modifier = Modifier,
+    options: AppListOptions,
+    loadedSrc: Set<ListSrcCat>,
+    headerState: ListHeaderState,
+) {
+    val headerOffset by animateIntOffsetAsState(
+        targetValue = IntOffset(0, headerState.headerOffsetY),
+        animationSpec = tween(easing = LinearEasing, durationMillis = 0),
+        label = "HeaderOffsetAnim",
+    )
+    Column(
+        modifier = Modifier
+            .onSizeChanged { headerState.headerHeight = it.height }
+            .offset { headerOffset }
+            .then(modifier)
+    ) {
+        AppListHeader(
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
+            devInfoLabel = headerState.devInfoLabel,
+            devInfoDesc = headerState.devInfoDesc,
+            statsSizeLabel = headerState.statsSize.takeIf { it > 0 }?.toString().orEmpty(),
+            onClickDevInfo = headerState::showSystemModules,
+            onClickStats = { headerState.showStats(options) },
+        )
+        if (loadedSrc.isNotEmpty() && loadedSrc.singleOrNull() != ListSrcCat.Platform) {
+            AppSrcTypeSwitcher(
+                types = loadedSrc.associateWith { it.name },
+                selType = headerState.listCat,
+                onSelType = { headerState.listCat = it },
+            )
+        }
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

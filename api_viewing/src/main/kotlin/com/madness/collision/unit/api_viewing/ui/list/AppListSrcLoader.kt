@@ -93,6 +93,22 @@ class AppListSrcLoader(
         }
     }
 
+    /** Add both [AppListSrc.SystemApps] and [AppListSrc.UserApps] at once */
+    suspend fun addPlatformSrc() = channelFlow {
+        load(AppListSrc.SystemApps) {
+            load(AppListSrc.UserApps) user@{
+                val appList = getAppList(ListSrcCat.Platform)
+                if (appList.containsSrc(AppListSrc.SystemApps)) return@user
+                if (appList.containsSrc(AppListSrc.UserApps)) return@user
+                val (list1, list2) = appRepo.getApps(ApiUnit.ALL_APPS)
+                    .partition { it.apiUnit == ApiUnit.SYS }
+                appList.addAllItems(AppListSrc.SystemApps, list1)
+                appList.addAllItems(AppListSrc.UserApps, list2)
+                send(appList.getList())
+            }
+        }
+    }
+
     private fun addApps(src: AppListSrc, apiUnit: Int): List<ApiViewingApp>? {
         val appList = getAppList(src.cat)
         if (appList.containsSrc(src.key)) return null
