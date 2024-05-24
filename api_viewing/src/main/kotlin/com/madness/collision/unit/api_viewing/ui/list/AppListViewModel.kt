@@ -22,11 +22,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.madness.collision.unit.api_viewing.AppListStats
 import com.madness.collision.unit.api_viewing.AppStatsTracker
-import com.madness.collision.unit.api_viewing.MyUpdatesFragment
 import com.madness.collision.unit.api_viewing.apps.AppListRepoImpl
 import com.madness.collision.unit.api_viewing.apps.AppListRepository
 import com.madness.collision.unit.api_viewing.apps.AppRepoImpl
 import com.madness.collision.unit.api_viewing.apps.AppRepository
+import com.madness.collision.unit.api_viewing.apps.AppUpdatesLists
 import com.madness.collision.unit.api_viewing.apps.CodingArtifact
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.database.DataMaintainer
@@ -143,7 +143,7 @@ class AppListViewModel : ViewModel() {
         srcLoader = AppListSrcLoader(loader, optionsOwner)
 
         viewModelScope.launch(Dispatchers.Default) {
-            if (MyUpdatesFragment.isNewSession(sessionTimestamp)) {
+            if (AppUpdatesLists.updatesSession.isNewSession(sessionTimestamp)) {
                 appRepo.maintainRecords(context)
             }
             val options = optionsOwner.getOptions(context)

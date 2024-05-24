@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Clifford Liu
+ * Copyright 2024 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package com.madness.collision.unit.api_viewing.update
+package com.madness.collision.unit.api_viewing.apps
 
+import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import androidx.core.content.getSystemService
 import com.madness.collision.BuildConfig
-import com.madness.collision.unit.api_viewing.util.AppUsage
 import com.madness.collision.util.os.OsUtils
 
 class UsedPkgChecker {
@@ -62,8 +63,17 @@ class UsedPkgChecker {
 
     fun get(context: Context): List<String> {
         val currentTime = System.currentTimeMillis()
-        val rawList = AppUsage.getUsed(context, currentTime - 60_000 * 5, currentTime)
+        val rawList = getUsed(context, currentTime - 60_000 * 5, currentTime)
         val x = getExclusions(context)
         return rawList.asSequence().filterNot { it in x }.take(10).toList()
+    }
+
+    // requires PACKAGE_USAGE_STATS permission
+    private fun getUsed(context: Context, beginTime: Long, endTime: Long): List<String> {
+        val manager = context.getSystemService<UsageStatsManager>() ?: return emptyList()
+        val stats = manager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, beginTime, endTime)
+        if (stats.isNullOrEmpty()) return emptyList()
+        val st = stats.filter { it.lastTimeUsed > 0 }.sortedByDescending { it.lastTimeUsed }
+        return st.map { it.packageName }
     }
 }

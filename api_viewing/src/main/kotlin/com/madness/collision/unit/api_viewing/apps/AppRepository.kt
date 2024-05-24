@@ -36,10 +36,16 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.yield
 
+data class AppPkgChanges(
+    val previousRecords: List<ApiViewingApp>?,
+    val changedPackages: List<PackageInfo>
+)
+
 interface AppRepository {
     suspend fun addApp(app: ApiViewingApp)
     fun getApps(unit: Int): List<ApiViewingApp>
     fun queryApps(query: String): List<ApiViewingApp>
+    fun getChangedPackages(context: Context, timestamp: Long): AppPkgChanges
     fun maintainRecords(context: Context)
 }
 
@@ -92,7 +98,7 @@ class AppRepoImpl(private val appDao: AppDao, private val lifecycleOwner: Lifecy
         }
     }
 
-    fun getChangedPackages(context: Context, timestamp: Long = 0): Pair<List<ApiViewingApp>?, List<PackageInfo>> {
+    override fun getChangedPackages(context: Context, timestamp: Long): AppPkgChanges {
 //        return if (X.aboveOn(X.O)) {
 //            getChangedPackageNames(context).mapNotNull { getPackageInfo(context, it) }
 //        } else {
@@ -128,7 +134,7 @@ class AppRepoImpl(private val appDao: AppDao, private val lifecycleOwner: Lifecy
         }
     }
 
-    private fun detectPkgChanges(allPackages: List<PackageInfo>, timestamp: Long, dao: AppDao, context: Context): Pair<List<ApiViewingApp>?, List<PackageInfo>> {
+    private fun detectPkgChanges(allPackages: List<PackageInfo>, timestamp: Long, dao: AppDao, context: Context): AppPkgChanges {
         val (changeTimestamp, finally) = if (timestamp != 0L) {
             timestamp to { }
         } else {
@@ -147,6 +153,6 @@ class AppRepoImpl(private val appDao: AppDao, private val lifecycleOwner: Lifecy
             0 -> emptyList()
             else -> dao.selectApps(re.map { it.packageName })
         }
-        return (previous to re).also { finally() }
+        return AppPkgChanges(previous, re).also { finally() }
     }
 }
