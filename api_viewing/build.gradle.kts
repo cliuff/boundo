@@ -3,6 +3,7 @@ import com.cliuff.boundo.build.configLibCheckerRules
 plugins {
     alias(libs.plugins.android.dynamic.feature)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.ksp)
     // implement parcelable interface by using annotation
     id("kotlin-parcelize")
@@ -50,10 +51,6 @@ android {
     buildFeatures.buildConfig = true
     buildFeatures.viewBinding = true
     buildFeatures.compose = true
-    composeOptions {
-        // Jetpack Compose compiler version
-        kotlinCompilerExtensionVersion = libs.versions.androidxComposeCompiler.get()
-    }
 }
 
 dependencies {

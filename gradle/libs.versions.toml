@@ -1,8 +1,8 @@
 [versions]
 # plugins
 androidGradlePlugin = "8.3.2"  # 8.3.2-Iguana Patch 2
-kotlin = "1.9.23"  # Compose Compiler 1.5.11 requires Kotlin 1.9.23
-googleKsp = "1.9.23-1.0.20"
+kotlin = "2.0.0"
+googleKsp = "2.0.0-1.0.21"
 googlePlayServicesOSSLicensesPlugin = "0.10.6"
 
 kotlinCoroutines = "1.8.0"
@@ -14,8 +14,7 @@ androidxTestEspresso = "3.5.1"
 
 androidxCore = "1.12.0"
 androidxCoreSplashScreen = "1.1.0-alpha02"
-androidxComposeCompiler = "1.5.11"
-androidxComposeBom = "2024.04.00"
+androidxComposeBom = "2024.05.00"
 androidxActivity = "1.8.2"
 androidxAppcompat = "1.6.1"
 androidxLifecycle = "2.7.0"
@@ -174,6 +173,7 @@ googleWearable = { module = "com.google.android.wearable:wearable", version.ref 
 android = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-dynamic-feature = { id = "com.android.dynamic-feature", version.ref = "androidGradlePlugin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 google-ksp = { id = "com.google.devtools.ksp", version.ref = "googleKsp" }
 google-gms-licenses = { id = "com.google.android.gms.oss-licenses-plugin", version.ref = "googlePlayServicesOSSLicensesPlugin" }
 room = { id = "androidx.room", version.ref = "androidxRoom" }
