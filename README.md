@@ -11,8 +11,7 @@ Designed for Android enthusiasts, Boundo is available on **Android** and **Wear 
 ### Develop
 **Requirements**
 - Android Studio `Iguana Patch 2` (AGP `8.3.2`)
-- Java `17`, Kotlin `1.9.23`, Gradle Wrapper `8.6`
-- Jetpack Compose Compiler `1.5.11` (requires Kotlin `1.9.23`)
+- Java `17`, Kotlin `2.0.0`, Gradle Wrapper `8.6`
 
 **Configure automatic signing**
 - **Copy** the file named `custom.properties.template` in `doconfig` directory,

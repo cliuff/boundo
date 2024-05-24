@@ -3,6 +3,7 @@ import com.cliuff.boundo.build.getCustomConfig
 plugins {
     alias(libs.plugins.android)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.ksp)
     // implement parcelable interface by using annotation
     id("kotlin-parcelize")
@@ -122,10 +123,6 @@ android {
         buildConfig = true
         viewBinding = true
         compose = true
-    }
-    composeOptions {
-        // Jetpack Compose compiler version
-        kotlinCompilerExtensionVersion = libs.versions.androidxComposeCompiler.get()
     }
     dynamicFeatures.add(":api_viewing")
     bundle {

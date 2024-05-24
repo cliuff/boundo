@@ -17,6 +17,7 @@
 package com.madness.collision.unit.api_viewing.info
 
 import android.content.Context
+import android.content.pm.ComponentInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.util.Log
@@ -197,7 +198,8 @@ object LibInfoRetriever {
             PackCompType.Receiver, PackCompType.Provider
         )
         val pack = getPack(context, app) ?: return typeList.associateWith { emptyList() }
-        val compList = pack.run { listOf(activities, services, receivers, providers).map { it.orEmpty() } }
+        // specify Array<out ComponentInfo> explicitly to fix crash with Kotlin 2.0.0
+        val compList = pack.run { listOf<Array<out ComponentInfo>?>(activities, services, receivers, providers).map { it.orEmpty() } }
         return typeList.zip(compList).associate { (compType, compArray) ->
             compType to compArray.map { compInfo ->
                 val comp = ValueComponent.AppComp(compInfo.name, compInfo.enabled)
