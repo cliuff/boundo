@@ -1,6 +1,6 @@
 [versions]
 # plugins
-androidGradlePlugin = "8.3.2"  # 8.3.2-Iguana Patch 2
+androidGradlePlugin = "8.4.1"  # 8.4.1-Jellyfish Patch 1
 kotlin = "2.0.0"
 googleKsp = "2.0.0-1.0.21"
 googlePlayServicesOSSLicensesPlugin = "0.10.6"
