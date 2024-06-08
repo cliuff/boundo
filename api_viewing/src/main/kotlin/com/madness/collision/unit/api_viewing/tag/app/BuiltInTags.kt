@@ -19,8 +19,6 @@ package com.madness.collision.unit.api_viewing.tag.app
 import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.util.Log
 import com.madness.collision.misc.PackageCompat
 import com.madness.collision.unit.api_viewing.R
@@ -30,9 +28,7 @@ import com.madness.collision.unit.api_viewing.info.AppType
 import com.madness.collision.unit.api_viewing.list.AppListService
 import com.madness.collision.unit.api_viewing.tag.inflater.AppTagInflater
 import com.madness.collision.unit.api_viewing.util.ManifestUtil
-import com.madness.collision.util.ElapsingTime
 import com.madness.collision.util.os.OsUtils
-import kotlinx.coroutines.delay
 
 internal fun builtInTags(): Map<String, AppTagInfo> = listOf(
     AppTagInfo(
@@ -418,18 +414,10 @@ private fun appIconRequisite(): AppTagInfo.Requisite = AppTagInfo.Requisite(
     loader = { res ->
         val context = res.context
         val app = res.app
-        if (app.isLoadingIcon) {
-            val elapsingTime = ElapsingTime()
-            while (true) {
-                if (app.hasIcon || app.isLoadingIcon.not()) break
-                if (elapsingTime.elapsed() > 8000) break
-                delay(400)
-            }
-        }
         run icon@{
             if (app.hasIcon) return@icon
             val appInfo = app.getApplicationInfo(context) ?: return@icon
-            val icon = app.getOriginalIconDrawable(context, appInfo)?.mutate() ?: ColorDrawable(Color.TRANSPARENT)
+            val icon = context.packageManager.getApplicationIcon(appInfo).mutate()
             val set = listOf(icon) + ManifestUtil.getIconSet(context, appInfo, app.appPackage.basePath)
             app.retrieveAppIconInfo(set)
         }

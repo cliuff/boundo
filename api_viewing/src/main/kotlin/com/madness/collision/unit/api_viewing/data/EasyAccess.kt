@@ -23,9 +23,6 @@ import com.madness.collision.unit.api_viewing.util.PrefUtil
 import com.madness.collision.util.P
 
 internal object EasyAccess {
-    var shouldRoundIcon = false
-    var shouldManifestedRound = false
-    var shouldClip2Round = false
     var isSweet: Boolean = false
     val shouldShowDesserts: Boolean
         get() = isSweet
@@ -54,18 +51,6 @@ internal object EasyAccess {
         var isChanged = false
         isViewingTarget = prefSettings.getBoolean(PrefUtil.AV_VIEWING_TARGET, PrefUtil.AV_VIEWING_TARGET_DEFAULT).also {
             isChanged = isChanged || it != isViewingTarget
-            if (isLazy && isChanged) return true
-        }
-        shouldRoundIcon = prefSettings.getBoolean(PrefUtil.API_CIRCULAR_ICON, PrefUtil.API_CIRCULAR_ICON_DEFAULT).also {
-            isChanged = isChanged || it != shouldRoundIcon
-            if (isLazy && isChanged) return true
-        }
-        shouldManifestedRound = prefSettings.getBoolean(PrefUtil.API_PACKAGE_ROUND_ICON, PrefUtil.API_PACKAGE_ROUND_ICON_DEFAULT).also {
-            isChanged = isChanged || it != shouldManifestedRound
-            if (isLazy && isChanged) return true
-        }
-        shouldClip2Round = prefSettings.getBoolean(PrefUtil.AV_CLIP_ROUND, PrefUtil.AV_CLIP_ROUND_DEFAULT).also {
-            isChanged = isChanged || it != shouldClip2Round
             if (isLazy && isChanged) return true
         }
         isSweet = prefSettings.getBoolean(PrefUtil.AV_SWEET, PrefUtil.AV_SWEET_DEFAULT).also {

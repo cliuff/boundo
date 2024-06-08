@@ -30,7 +30,6 @@ import com.madness.collision.util.os.OsUtils
 import java.lang.Math.cbrt
 import kotlin.math.abs
 import kotlin.math.max
-import kotlin.math.min
 import kotlin.math.roundToInt
 
 object GraphicsUtil {
@@ -123,21 +122,6 @@ object GraphicsUtil {
         origin.bounds = backup
         return re
     }
-
-    /**
-     * draw standard round icon from standard adaptive icon
-     * @param context context
-     * @param drawable res
-     * @return round icon
-     */
-    @RequiresApi(api = X.O)
-    fun drawAIRound(context: Context, drawable: Drawable): Bitmap = drawAI(context, drawable, AI_FLAVOR_ROUND)
-
-    @RequiresApi(api = X.O)
-    fun drawAIRounded(context: Context, drawable: Drawable): Bitmap = drawAI(context, drawable, AI_FLAVOR_ROUNDED)
-
-    @RequiresApi(api = X.O)
-    fun drawAISquircle(context: Context, drawable: Drawable): Bitmap = drawAI(context, drawable, AI_FLAVOR_SQUIRCLE)
 
     /**
      * see if the icon should be stroked
@@ -304,124 +288,6 @@ object GraphicsUtil {
         path.transform(matrix)
 
         return path
-    }
-
-    private fun Int.hasNoTransparency(noTransparency: Boolean, alphaLimit: Int): Boolean {
-        val alpha = this ushr 24 and 0xFF
-        return if (noTransparency) alpha == 0xFF else alpha >= alphaLimit
-    }
-
-    /**
-     * @param isLogo true: remove equal number of pixels on two sides to ensure the logo is properly centered
-     * @param noTransparency true: remove pixels that have transparency
-     * @param alphaLimit [0, 255]
-     */
-    fun removeOuterTransparentPixels(src: Bitmap, isLogo: Boolean = true, noTransparency: Boolean = true, alphaLimit: Int = 1): Bitmap{
-        val bitmap = Bitmap.createBitmap(src)
-        val width: Int = bitmap.width
-        val height: Int = bitmap.height
-        var top = 0
-        var bottom = 0
-        var left = 0
-        var right = 0
-        val pixels = IntArray(width * height)
-        bitmap.getPixels(pixels, 0, width, 0, 0, width, height)
-        val matrix = Array(height){ IntArray(width) }
-        for (pixel in pixels.withIndex()) {
-            val row = pixel.index / width
-            val column = pixel.index % width
-            matrix[row][column] = pixel.value
-        }
-        var flagIsColored = false
-        row@
-        for (row in matrix) {
-            for (column in row.withIndex()){
-                flagIsColored = flagIsColored || row[column.index].hasNoTransparency(noTransparency, alphaLimit)
-                if (flagIsColored) break@row
-            }
-            top++
-        }
-        flagIsColored = false
-        row@
-        for (row in matrix.reversedArray()) {
-            for (column in row.withIndex()){
-                flagIsColored = flagIsColored || row[column.index].hasNoTransparency(noTransparency, alphaLimit)
-                if (flagIsColored) break@row
-            }
-            bottom++
-        }
-        var row = 0
-        var column = 0
-        flagIsColored = false
-        outer@
-        while (column < width) {
-            while (row < height){
-                flagIsColored = flagIsColored || matrix[row][column].hasNoTransparency(noTransparency, alphaLimit)
-                if (flagIsColored) break@outer
-                row++
-            }
-            left++
-            row = 0
-            column++
-        }
-        row = 0
-        column = width - 1
-        flagIsColored = false
-        outer@
-        while (column >= 0) {
-            while (row < height){
-                flagIsColored = flagIsColored || matrix[row][column].hasNoTransparency(noTransparency, alphaLimit)
-                if (flagIsColored) break@outer
-                row++
-            }
-            right++
-            row = 0
-            column--
-        }
-        if (top == 0 && bottom == 0 && left == 0 && right == 0) return bitmap
-        if (isLogo){
-            var width2BCroppedHalf = min(left, right)
-            var height2BCroppedHalf = min(top, bottom)
-            var crop2Width = width - 2 * width2BCroppedHalf
-            if (crop2Width <= 0) {
-                width2BCroppedHalf = 0
-                crop2Width = width
-            }
-            var crop2Height = height - 2 * height2BCroppedHalf
-            if (crop2Height <= 0) {
-                height2BCroppedHalf = 0
-                crop2Height = height
-            }
-            return Bitmap.createBitmap(bitmap, width2BCroppedHalf, height2BCroppedHalf, crop2Width, crop2Height)
-        }else{
-            var crop2Width = width - left - right
-            if (crop2Width <= 0) {
-                left = 0
-                crop2Width = width
-            }
-            var crop2Height = height - top - bottom
-            if (crop2Height <= 0) {
-                top = 0
-                crop2Height = height
-            }
-            return Bitmap.createBitmap(bitmap, left, top, crop2Width, crop2Height)
-        }
-    }
-
-    /**
-     * convert the given bitmap to proper square which has both width and height mutually equal
-     * by placing the bitmap on a transparent background
-     */
-    fun properly2Square(src: Bitmap): Bitmap{
-        val width = src.width
-        val height = src.height
-        if (width == height) return src
-        val targetWidth = max(width, height)
-        val target = Bitmap.createBitmap(targetWidth, targetWidth, Bitmap.Config.ARGB_8888)
-        val offsetLeft = (targetWidth - width) / 2
-        val offsetTop = (targetWidth - height) / 2
-        Canvas(target).drawBitmap(src, offsetLeft.toFloat(), offsetTop.toFloat(), null)
-        return target
     }
 
     /**

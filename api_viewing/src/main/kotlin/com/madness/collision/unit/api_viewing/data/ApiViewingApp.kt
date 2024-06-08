@@ -19,10 +19,7 @@ package com.madness.collision.unit.api_viewing.data
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
-import android.graphics.Bitmap
-import android.graphics.Color
 import android.graphics.drawable.AdaptiveIconDrawable
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Parcel
 import android.os.Parcelable
@@ -36,8 +33,6 @@ import com.madness.collision.unit.api_viewing.info.getAppType
 import com.madness.collision.unit.api_viewing.info.isOnBackInvokedCallbackEnabled
 import com.madness.collision.unit.api_viewing.util.ApkUtil
 import com.madness.collision.unit.api_viewing.util.ManifestUtil
-import com.madness.collision.util.GraphicsUtil
-import com.madness.collision.util.X
 import com.madness.collision.util.os.OsUtils
 import kotlinx.parcelize.Parcelize
 
@@ -119,14 +114,7 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
     val adaptiveIcon: Boolean
         get() = iconInfo?.run { listOf(system, normal, round).any { it.isDefined && it.isAdaptive } } == true
     @Ignore
-    var preload: Boolean = false
-    @Ignore
     private var type: Int = TYPE_APP
-    @Ignore
-    var isLoadingIcon: Boolean = false
-        private set
-    @Ignore
-    var iconRetrievingDetails: IconRetrievingDetails? = null
     @Ignore
     var appType: AppType = AppType.Common
     @Ignore
@@ -144,10 +132,6 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
         get() = apiUnit == ApiUnit.APK
     val isNotArchive: Boolean
         get() = !isArchive
-    private val isIconDefined: Boolean
-        get() = iconRetrievingDetails != null
-    private val iconDetails: IconRetrievingDetails
-        get() = iconRetrievingDetails!!
     val hasIcon: Boolean get() = iconInfo != null
 
     constructor(): this("")
@@ -178,10 +162,7 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
         compileApiCodeName = null
         name = ""
         initApiVer()
-        preload = true
         type = TYPE_APP
-        isLoadingIcon = false
-        iconRetrievingDetails = null
         appType = AppType.Common
         moduleInfo = null
         isCoreApp = null
@@ -197,42 +178,42 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
     }
 
     fun init(context: Context, info: PackageInfo, preloadProcess: Boolean, archive: Boolean) {
-        if (preloadProcess) {
-            packageName = info.packageName
-            type = TYPE_APP
-            verName = info.versionName ?: ""
-            verCode = PackageInfoCompat.getLongVersionCode(info)
-            updateTime = info.lastUpdateTime
-            preload = true
-            uid = info.applicationInfo.uid
-            if (archive) {
-                apiUnit = ApiUnit.APK
-                name = packageName
-            } else {
-                val isNotSysApp = (info.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM) == 0
-                apiUnit = if (isNotSysApp) ApiUnit.USER else ApiUnit.SYS
-                appPackage = AppPackage(info.applicationInfo)
-                loadCompileSdk(info.applicationInfo)
-                loadName(context, info.applicationInfo)
-                loadFreshProperties(info, context)
-                //name = manager.getApplicationLabel(pi.applicationInfo).toString();
-            }
+        // preloadProcess is always true
+        if (preloadProcess) init(context, info, archive)
+    }
 
-            // API ver
-            targetAPI = info.applicationInfo.targetSdkVersion
-            if (OsUtils.satisfy(OsUtils.N)) {
-                minAPI = info.applicationInfo.minSdkVersion
-                initApiVer()
-            } else if (archive.not()) {
-                minAPI = getMinApiLevelFromArchive()
-                initApiVer()
-            } // else (when API<N and is archive), init minAPI in initArchive()
-
-            val pm = context.packageManager
-            isLaunchable = pm.getLaunchIntentForPackage(packageName) != null
+    private fun init(context: Context, info: PackageInfo, archive: Boolean) {
+        packageName = info.packageName
+        type = TYPE_APP
+        verName = info.versionName ?: ""
+        verCode = PackageInfoCompat.getLongVersionCode(info)
+        updateTime = info.lastUpdateTime
+        uid = info.applicationInfo.uid
+        if (archive) {
+            apiUnit = ApiUnit.APK
+            name = packageName
         } else {
-            load(context, info.applicationInfo)
+            val isNotSysApp = (info.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM) == 0
+            apiUnit = if (isNotSysApp) ApiUnit.USER else ApiUnit.SYS
+            appPackage = AppPackage(info.applicationInfo)
+            loadCompileSdk(info.applicationInfo)
+            loadName(context, info.applicationInfo)
+            loadFreshProperties(info, context)
+            //name = manager.getApplicationLabel(pi.applicationInfo).toString();
         }
+
+        // API ver
+        targetAPI = info.applicationInfo.targetSdkVersion
+        if (OsUtils.satisfy(OsUtils.N)) {
+            minAPI = info.applicationInfo.minSdkVersion
+            initApiVer()
+        } else if (archive.not()) {
+            minAPI = getMinApiLevelFromArchive()
+            initApiVer()
+        } // else (when API<N and is archive), init minAPI in initArchive()
+
+        val pm = context.packageManager
+        isLaunchable = pm.getLaunchIntentForPackage(packageName) != null
     }
 
     private fun getMinApiLevelFromArchive(): Int {
@@ -319,87 +300,8 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
         else MiscApp.getPackageInfo(context, packageName = packageName)
     }
 
-    fun getOriginalIcon(context: Context): Bitmap? {
-        return getOriginalIconDrawable(context)?.let { X.drawableToBitmap(it) }
-    }
-
-    fun getOriginalIconDrawable(context: Context, applicationInfo: ApplicationInfo? = getApplicationInfo(context)): Drawable? {
-        applicationInfo ?: return null
-        return context.packageManager.getApplicationIcon(applicationInfo)
-    }
-
-    /**
-     * for quick load of both app and apk
-     */
-    fun load(context: Context, applicationInfo: ApplicationInfo? = getApplicationInfo(context)): ApiViewingApp {
-        return when (type) {
-            TYPE_APP -> {
-                applicationInfo ?: return this
-                load(context, {
-                    val ic = getOriginalIconDrawable(context, applicationInfo)?.mutate() ?: ColorDrawable(Color.TRANSPARENT)
-                    listOf(ic) + ManifestUtil.getIconSet(context, applicationInfo, appPackage.basePath)
-                }, { ManifestUtil.getRoundIcon(context, applicationInfo, appPackage.basePath) })
-            }
-            TYPE_ICON -> throw IllegalArgumentException("instance of TYPE_ICON must provide icon retrievers")
-            else -> this
-        }
-    }
-
-    private fun load(context: Context, retrieverLogo: () -> List<Drawable?>, retrieverRound: () -> Drawable?): ApiViewingApp {
-        if (!preload || isLoadingIcon || hasIcon) return this
-        preload = false
-        isLoadingIcon = true
-        retrieveAppIconInfo(retrieverLogo())
-        isLoadingIcon = false
-        return this
-    }
-
-    private fun loadLogo(context: Context, retrieverLogo: () -> Drawable,  retrieverRound: () -> Drawable?) {
-        val isDefined = isIconDefined
-        if (!isDefined) {
-            iconRetrievingDetails = IconRetrievingDetails()
-        }
-
-        val iconDrawable = retrieverLogo.invoke()
-        retrieveAppIconInfo(iconDrawable)
-        val originalIcon: Bitmap? by lazy {
-            AppIconProcessor.retrieveAppIcon(context, isDefined, iconDrawable, iconDetails)
-        }
-        val icon = if (EasyAccess.shouldRoundIcon) {
-            val (roundIcon, roundIconDrawable) = adaptiveRoundIcon(context, iconDrawable, retrieverRound)
-            roundIcon ?: originalIcon?.let {
-                AppIconProcessor.roundIcon(context, isDefined, it, roundIconDrawable, iconDetails)
-            }
-        } else {
-            originalIcon
-        }
-    }
-
-    private fun retrieveAppIconInfo(iconDrawable: Drawable) {
-        retrieveAppIconInfo(listOf(iconDrawable, null, null))
-    }
-
     fun retrieveAppIconInfo(iconSet: List<Drawable?>) {
         retrieveConsuming(2, iconSet)
-    }
-
-    /**
-     * @return final icon, raw round icon from retriever
-     */
-    private fun adaptiveRoundIcon(context: Context, logoDrawable: Drawable, retrieverRound: () -> Drawable?): Pair<Bitmap?, Drawable?> {
-        // below: adaptive round icon
-        if (OsUtils.satisfy(OsUtils.O) && adaptiveIcon) {
-            return GraphicsUtil.drawAIRound(context, logoDrawable) to null
-        }
-        // below: retrieve round icon from package
-        var roundIcon: Drawable? = null
-        if (EasyAccess.shouldManifestedRound) {
-            roundIcon = retrieverRound()
-            if (OsUtils.satisfy(OsUtils.O) && roundIcon is AdaptiveIconDrawable) {
-                return GraphicsUtil.drawAIRound(context, roundIcon) to roundIcon
-            }
-        }
-        return null to roundIcon
     }
 
     private fun ApkUtil.getNativeLibSupport(appPackage: AppPackage): BooleanArray {
@@ -489,11 +391,8 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
         appPackage = readParcelable(AppPackage::class.java.classLoader) ?: AppPackage("")
         updateTime = readLong()
         type = readInt()
-        preload = readInt() == 1
-        isLoadingIcon = readInt() == 1
         isNativeLibrariesRetrieved = readInt() == 1
         isLaunchable = readInt() == 1
-        iconRetrievingDetails = readParcelable(IconRetrievingDetails::class.java.classLoader)
         nativeLibraries = BooleanArray(ApkUtil.NATIVE_LIB_SUPPORT_SIZE) { false }
         for (i in nativeLibraries.indices) nativeLibraries[i] = readInt() == 1
         jetpackComposed = readInt()
@@ -519,11 +418,8 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
         writeParcelable(appPackage, flags)
         writeLong(updateTime)
         writeInt(type)
-        writeInt(if (preload) 1 else 0)
-        writeInt(if (isLoadingIcon) 1 else 0)
         writeInt(if (isNativeLibrariesRetrieved) 1 else 0)
         writeInt(if (isLaunchable) 1 else 0)
-        writeParcelable(iconRetrievingDetails, flags)
         nativeLibraries.forEach { writeInt(if (it) 1 else 0) }
         writeInt(jetpackComposed)
         writeParcelable(iconInfo, flags)

@@ -155,7 +155,10 @@ class ApkRetriever(private val context: Context) {
     fun resolvePackage(info: PackageInfo, block: (ApiViewingApp?) -> Unit) {
         val ai = info.applicationInfo
         val app = ApiViewingApp(context, info, preloadProcess = true, archive = true)
-                .initArchive(context, info).load(context, ai)
+                .initArchive(context, info)
+        val ic = context.packageManager.getApplicationIcon(ai).mutate()
+        val set = listOf(ic) + ManifestUtil.getIconSet(context, ai, app.appPackage.basePath)
+        app.retrieveAppIconInfo(set)
         block.invoke(app)
     }
 

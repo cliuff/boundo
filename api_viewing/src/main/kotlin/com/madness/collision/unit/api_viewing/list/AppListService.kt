@@ -385,8 +385,9 @@ internal class AppListService(private val serviceContext: Context? = null) {
     fun actionIcon(context: Context, app: ApiViewingApp, fragmentManager: FragmentManager) {
         val path = F.createPath(F.cachePublicPath(context), "App", "Logo", "${app.name}.png")
         val image = File(path)
-        app.getOriginalIcon(context)?.let {
-            if (F.prepare4(image)) X.savePNG(it, path)
+        app.getApplicationInfo(context)?.let { appInfo ->
+            val appIcon = context.packageManager.getApplicationIcon(appInfo).let(X::drawableToBitmap)
+            if (F.prepare4(image)) X.savePNG(appIcon, path)
         }
         val uri: Uri = image.getProviderUri(context)
 //        val previewTitle = app.name // todo set preview title
@@ -413,8 +414,10 @@ internal class AppListService(private val serviceContext: Context? = null) {
 //        val flag = Intent.FLAG_GRANT_WRITE_URI_PERMISSION
         val previewPath = F.createPath(F.cachePublicPath(context), "App", "Logo", "${app.name}.png")
         val image = File(previewPath)
-        val appIcon = app.getOriginalIcon(context)
-        if (appIcon != null && F.prepare4(image)) X.savePNG(appIcon, previewPath)
+        app.getApplicationInfo(context)?.let { appInfo ->
+            val appIcon = context.packageManager.getApplicationIcon(appInfo).let(X::drawableToBitmap)
+            if (F.prepare4(image)) X.savePNG(appIcon, previewPath)
+        }
         val imageUri = image.getProviderUri(context)
         fragmentManager.let {
             val fileType = "application/vnd.android.package-archive"

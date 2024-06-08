@@ -18,7 +18,6 @@ package com.madness.collision.unit.api_viewing.database
 
 import androidx.room.TypeConverter
 import com.madness.collision.unit.api_viewing.data.AppPackage
-import com.madness.collision.unit.api_viewing.data.IconRetrievingDetails
 import com.madness.collision.unit.api_viewing.util.ApkUtil
 import com.madness.collision.util.jsonSimpleTo
 import com.madness.collision.util.simpleToJson
@@ -43,29 +42,5 @@ internal class Converters {
     @TypeConverter
     fun fromAppPackageString(string: String?): AppPackage {
         return AppPackage(string?.jsonSimpleTo<List<String>>() ?: listOf(""))
-    }
-
-    class IconRetrievingDetailsDto(val i: List<Int>, val b: List<Boolean>)
-
-    @TypeConverter
-    fun iconRetrievingDetailsToString(details: IconRetrievingDetails?): String? {
-        details ?: return null
-        val i = details.run { listOf(width, height, standardWidth) }
-        val b = details.run { listOf(isDefault, shouldClip, shouldStroke) }
-        return IconRetrievingDetailsDto(i, b).simpleToJson()
-    }
-
-    @TypeConverter
-    fun fromIconRetrievingDetailsString(string: String?): IconRetrievingDetails? {
-        string ?: return null
-        val dto = string.jsonSimpleTo<IconRetrievingDetailsDto>() ?: return null
-        return IconRetrievingDetails().apply {
-            width = dto.i[0]
-            height = dto.i[1]
-            standardWidth = dto.i[2]
-            isDefault = dto.b[0]
-            shouldClip = dto.b[1]
-            shouldStroke = dto.b[2]
-        }
     }
 }
