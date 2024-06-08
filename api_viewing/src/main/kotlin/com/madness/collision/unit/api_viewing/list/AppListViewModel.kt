@@ -19,25 +19,16 @@ package com.madness.collision.unit.api_viewing.list
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.madness.collision.unit.api_viewing.apps.AppQueryUseCase
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 
 internal class AppListViewModel : ViewModel() {
     // for internal access
     private val apps4DisplayInternal: MutableLiveData<List<ApiViewingApp>> = MutableLiveData(emptyList())
-
     // for external access
-    val apps4Display: LiveData<List<ApiViewingApp>>
-        get() = apps4DisplayInternal
-
-    // shortcut for external access
-    val apps4DisplayValue: List<ApiViewingApp>
-        get() = apps4Display.value ?: emptyList()
-
-    /**
-     * Reserve app list to restore after filter
-     */
-    var reservedApps: List<ApiViewingApp>? = null
-        private set
+    val apps4Display: LiveData<List<ApiViewingApp>> by ::apps4DisplayInternal
+    // Reserve app list to restore after filter
+    private var reservedApps: List<ApiViewingApp>? = null
 
     fun updateApps4Display(list: List<ApiViewingApp>) {
         apps4DisplayInternal.value = list.toList()
@@ -45,10 +36,15 @@ internal class AppListViewModel : ViewModel() {
 
     fun reserveApps() {
         if (reservedApps != null) return
-        reservedApps = apps4DisplayValue
+        reservedApps = apps4Display.value
     }
 
     fun clearReserved() {
         reservedApps = null
+    }
+
+    fun filterApps(charSequence: CharSequence, isAddition: Boolean): List<ApiViewingApp> {
+        val appList = if (isAddition) apps4Display.value.orEmpty() else reservedApps.orEmpty()
+        return AppQueryUseCase().filterInMemoryList(appList, charSequence.toString())
     }
 }

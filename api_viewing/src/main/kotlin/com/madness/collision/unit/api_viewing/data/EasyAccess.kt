@@ -31,9 +31,6 @@ internal object EasyAccess {
      * indicate that in viewing target api mode
      */
     var isViewingTarget = false
-    var loadLimitHalf = 90
-    var preloadLimit = 80
-    var loadAmount = 10
 
     fun init(context: Context, prefSettings: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)) {
         load(context, prefSettings, false)

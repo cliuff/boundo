@@ -121,15 +121,6 @@ internal open class APIAdapter(context: Context, private val listener: Listener,
         return Holder(binding)
     }
 
-    fun ensureItem(index: Int): Boolean {
-        if (index >= listCount) return true
-        val app = apps[index]
-        val isIconLoaded = !app.preload && !app.isLoadingIcon && app.hasIcon
-        if (isIconLoaded) return true
-        app.load(context)
-        return false
-    }
-
     override fun onMakeBody(holder: Holder, index: Int, payloads: MutableList<Any>) {
         if (payloads.isEmpty()) {
             onMakeBody(holder, index)

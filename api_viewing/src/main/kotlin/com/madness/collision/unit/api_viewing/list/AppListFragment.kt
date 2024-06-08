@@ -31,67 +31,42 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.madness.collision.unit.api_viewing.MyUnit
-import com.madness.collision.unit.api_viewing.Utils
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
-import com.madness.collision.unit.api_viewing.data.EasyAccess
-import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.database.DataMaintainer
 import com.madness.collision.unit.api_viewing.databinding.AvListBinding
 import com.madness.collision.unit.api_viewing.ui.info.AppInfoFragment
 import com.madness.collision.util.*
-import com.madness.collision.util.ui.appLocale
 import kotlinx.coroutines.*
 import kotlin.time.Duration.Companion.seconds
 
-internal class AppListFragment : TaggedFragment(), AppList, Filterable, AppInfoFragment.Callback {
+internal class AppListFragment : TaggedFragment(), Filterable, AppInfoFragment.Callback {
 
     override val category: String = "AV"
     override val id: String = "AppList"
 
-    companion object {
-        private const val ARG_IS_SCROLLBAR_ENABLED = "isScrollbarEnabled"
-        private const val ARG_IS_FADING_EDGE_ENABLED = "isFadingEdgeEnabled"
-        private const val ARG_IS_NESTED_SCROLLING_ENABLED = "isNestedScrollingEnabled"
-
-        fun newInstance(): AppListFragment {
-            return AppListFragment()
-        }
-
-        fun newInstance(isScrollbarEnabled: Boolean, isFadingEdgeEnabled: Boolean, isNestedScrollingEnabled: Boolean): AppListFragment {
-            val args = Bundle().apply {
-                putBoolean(ARG_IS_SCROLLBAR_ENABLED, isScrollbarEnabled)
-                putBoolean(ARG_IS_FADING_EDGE_ENABLED, isFadingEdgeEnabled)
-                putBoolean(ARG_IS_NESTED_SCROLLING_ENABLED, isNestedScrollingEnabled)
-            }
-            return AppListFragment().apply { arguments = args }
-        }
-    }
-
     private lateinit var mContext: Context
-    private lateinit var mRecyclerView: RecyclerView
     private lateinit var mAdapter: APIAdapter
     private lateinit var mManager: RecyclerView.LayoutManager
     private lateinit var viewBinding: AvListBinding
-    private val service = AppListService()
     private val viewModel: AppListViewModel by viewModels()
     private val popOwner = AppPopOwner()
 
     override fun getAppOwner(): AppInfoFragment.AppOwner {
         return object : AppInfoFragment.AppOwner {
-            override val size: Int get() = viewModel.apps4DisplayValue.size
+            private val appList get() = viewModel.apps4Display.value.orEmpty()
+            override val size: Int get() = appList.size
 
             override fun get(index: Int): ApiViewingApp? {
-                return viewModel.apps4DisplayValue.getOrNull(index)
+                return appList.getOrNull(index)
             }
 
             override fun getIndex(app: ApiViewingApp): Int {
-                return viewModel.apps4DisplayValue.indexOf(app)
+                return appList.indexOf(app)
             }
 
             override fun findInAll(pkgName: String): ApiViewingApp? {
-                return viewModel.apps4DisplayValue.find { it.packageName == pkgName }
+                return appList.find { it.packageName == pkgName }
                     ?: DataMaintainer.get(mContext, viewLifecycleOwner).selectApp(pkgName)
             }
         }
@@ -124,17 +99,9 @@ internal class AppListFragment : TaggedFragment(), AppList, Filterable, AppInfoF
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        mRecyclerView = viewBinding.avListRecyclerView
-
-        arguments?.run {
-            mRecyclerView.isVerticalScrollBarEnabled = getBoolean(ARG_IS_SCROLLBAR_ENABLED, mRecyclerView.isVerticalScrollBarEnabled)
-            mRecyclerView.isVerticalFadingEdgeEnabled = getBoolean(ARG_IS_FADING_EDGE_ENABLED, mRecyclerView.isVerticalFadingEdgeEnabled)
-            mRecyclerView.isNestedScrollingEnabled = getBoolean(ARG_IS_NESTED_SCROLLING_ENABLED, mRecyclerView.isNestedScrollingEnabled)
-        }
-
         mManager = mAdapter.suggestLayoutManager()
-        mRecyclerView.layoutManager = mManager
-        mRecyclerView.adapter = mAdapter
+        viewBinding.avListRecyclerView.layoutManager = mManager
+        viewBinding.avListRecyclerView.adapter = mAdapter
 
         viewModel.apps4Display.observe(viewLifecycleOwner) {
             mAdapter.apps = it
@@ -168,78 +135,10 @@ internal class AppListFragment : TaggedFragment(), AppList, Filterable, AppInfoF
         }
     }
 
-    fun scrollToTop() {
-        mManager.scrollToPosition(0)
-    }
-
-    override fun getAdapter(): APIAdapter {
-        return mAdapter
-    }
-
-    override fun getRecyclerView(): RecyclerView {
-        return mRecyclerView
-    }
-
-    private fun updateCacheSize() {
-        val manager = mManager as LinearLayoutManager
-        val unitSize = manager.findLastVisibleItemPosition() - manager.findFirstVisibleItemPosition()
-        updateCacheSize(unitSize)
-    }
-
-    private fun updateCacheSize(unitSize: Int) {
-        val cacheSize = if (unitSize < 20) (30 + unitSize * 10) else (100 + unitSize * 7)
-        EasyAccess.loadLimitHalf = cacheSize
-        EasyAccess.loadAmount = unitSize
-        EasyAccess.preloadLimit = EasyAccess.loadLimitHalf - EasyAccess.loadAmount
-    }
-
-    fun updateList(list: List<ApiViewingApp>, refreshLayout: SwipeRefreshLayout? = null) {
-        if (list.isEmpty() && viewModel.apps4DisplayValue.isEmpty()) {
-            refreshLayout ?: return
-            lifecycleScope.launch(Dispatchers.Main) {
-                refreshLayout.isRefreshing = false
-            }
-            return
-        }
-        lifecycleScope.launch(Dispatchers.Main) {
-            viewModel.updateApps4Display(list)
-        }
-        updateListRes(refreshLayout)
-    }
-
-    /**
-     * Update synchronously
-     */
-    suspend fun updateListSync(list: List<ApiViewingApp>, refreshLayout: SwipeRefreshLayout? = null) {
-        if (list.isEmpty() && viewModel.apps4DisplayValue.isEmpty()) {
-            refreshLayout ?: return
-            withContext(Dispatchers.Main) {
-                refreshLayout.isRefreshing = false
-            }
-            return
-        }
-        withContext(Dispatchers.Main) {
-            viewModel.updateApps4Display(list)
-        }
-        updateListRes(refreshLayout)
-    }
-
-    /**
-     * Update list cache size and start loading icons
-     */
-    private fun updateListRes(refreshLayout: SwipeRefreshLayout?) {
-        // use launchWhenStarted to avoid mRecyclerView not initialized bug when linking from app store
-        lifecycleScope.launchWhenStarted {
-            mRecyclerView.post {
-                updateCacheSize()
-                loadAppIcons(refreshLayout)
-            }
-        }
-    }
-
-    fun loadAppIcons(refreshLayout: SwipeRefreshLayout? = null) {
-        service.loadAppIcons(this, this, refreshLayout)
-    }
+    fun scrollToTop() = mManager.scrollToPosition(0)
+    fun getAdapter(): APIAdapter = mAdapter
+    fun getRecyclerView(): RecyclerView = viewBinding.avListRecyclerView
+    fun updateList(list: List<ApiViewingApp>) = viewModel.updateApps4Display(list)
 
     abstract class Filter: android.widget.Filter() {
         var isAddition: Boolean = false
@@ -249,49 +148,11 @@ internal class AppListFragment : TaggedFragment(), AppList, Filterable, AppInfoF
     override fun getFilter(): Filter {
         return object : Filter() {
             override fun performFiltering(charSequence: CharSequence): FilterResults {
-                val appList = if (isAddition) viewModel.apps4DisplayValue
-                else (viewModel.reservedApps ?: emptyList())
-                val filterResults = FilterResults()
-                if (appList.isEmpty()) {
-                    filterResults.count = 0
-                    return filterResults
+                val filtered = viewModel.filterApps(charSequence, isAddition)
+                return FilterResults().apply {
+                    values = filtered
+                    count = filtered.size
                 }
-                val filtered: MutableList<ApiViewingApp> = mutableListOf()
-                val filterText = charSequence.toString()
-                val iterator: Iterator<ApiViewingApp> = appList.iterator()
-                // Check store links
-                val appFromStore = Utils.checkStoreLink(filterText)
-                if (appFromStore != null) {
-                    while (iterator.hasNext()) {
-                        val info = iterator.next()
-                        if (info.packageName == appFromStore) {
-                            filtered.add(info)
-                            break
-                        }
-                    }
-                    filterResults.values = filtered
-                    filterResults.count = filtered.size
-                    return filterResults
-                }
-                val locale = appLocale
-                val input4Comparision: String = filterText.lowercase(locale)
-                while (iterator.hasNext()) {
-                    val info = iterator.next()
-                    val appName = info.name.replace(" ", "").lowercase(locale)
-                    if (appName.contains(input4Comparision)
-                            || info.packageName.lowercase(locale).contains(input4Comparision)) {
-                        filtered.add(info)
-                        continue
-                    }
-                    val ver = if (EasyAccess.isViewingTarget) VerInfo(info.targetAPI, info.targetSDK, info.targetSDKLetter)
-                    else VerInfo(info.minAPI, info.minSDK, info.minSDKLetter)
-                    if (filterText == ver.apiText || ver.sdk.startsWith(filterText)) {
-                        filtered.add(info)
-                    }
-                }
-                filterResults.values = filtered
-                filterResults.count = filtered.size
-                return filterResults
             }
 
             override fun publishResults(charSequence: CharSequence, filterResults: FilterResults) {
@@ -303,7 +164,7 @@ internal class AppListFragment : TaggedFragment(), AppList, Filterable, AppInfoF
                 }
                 // reserve app list
                 viewModel.reserveApps()
-                updateList(re)
+                viewModel.updateApps4Display(re)
             }
 
             override fun onCancel() {

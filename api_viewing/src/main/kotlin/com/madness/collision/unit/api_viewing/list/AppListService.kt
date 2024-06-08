@@ -20,16 +20,11 @@ import android.content.Context
 import android.content.pm.*
 import android.net.Uri
 import android.util.Log
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.madness.collision.R
 import com.madness.collision.misc.MiscApp
 import com.madness.collision.misc.PackageCompat
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
-import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.data.codenameOrNull
 import com.madness.collision.unit.api_viewing.data.verNameOrNull
@@ -41,7 +36,6 @@ import com.madness.collision.util.ui.appLocale
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.IOException
 import java.text.DateFormat
@@ -350,35 +344,6 @@ internal class AppListService(private val serviceContext: Context? = null) {
             e.printStackTrace()
             Log.e("APIAdapter", String.format("failed to retrieve %s of %s", subject, appInfo.packageName))
             null
-        }
-    }
-
-    fun loadAppIcons(fragment: Fragment, appList: AppList, refreshLayout: SwipeRefreshLayout? = null)
-    = fragment.lifecycleScope.launch(Dispatchers.Default) {
-        val adapter = appList.getAdapter()
-        val viewModel: AppListViewModel by fragment.viewModels()
-        try {
-            for (index in viewModel.apps4DisplayValue.indices) {
-                if (index >= EasyAccess.preloadLimit) break
-                if (index >= viewModel.apps4DisplayValue.size) break
-                if (refreshLayout == null) {
-                    adapter.ensureItem(index)
-                    continue
-                }
-                val shouldCeaseRefresh = (index >= EasyAccess.loadAmount - 1)
-                        || (index >= adapter.listCount - 1)
-                val doCeaseRefresh = shouldCeaseRefresh && refreshLayout.isRefreshing
-                if (doCeaseRefresh) withContext(Dispatchers.Main) {
-                    refreshLayout.isRefreshing = false
-                }
-                if (adapter.ensureItem(index)) continue
-                if (!doCeaseRefresh) continue
-                withContext(Dispatchers.Main) {
-                    refreshLayout.isRefreshing = false
-                }
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
     }
 
