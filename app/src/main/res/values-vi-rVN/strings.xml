@@ -50,7 +50,6 @@
     <string name="sdk_search_hint"><font size="12">Tên, gói, cấp API, phiên bản Android</font></string>
     <string name="instant_manager_intro">Phím tắt ứng dụng</string>
     <string name="text_new">Mới</string>
-    <string name="settings_sdk">Hiển thị biểu tượng ứng dụng tròn</string>
     <string name="text_copy_link">Liên kết được sao chép</string>
     <string name="unit_audio_timer">Hẹn giờ âm thanh</string>
     <string name="main_more">Hơn</string>
@@ -91,13 +90,11 @@
     <string name="textBugLog">Lỗi bắt gặp trong nhật ký</string>
     <string name="apiDisplayAPK">APK thiết bị</string>
     <string name="apiDisplaySys">Ứng dụng hệ thống</string>
-    <string name="settingsApiApkPreload">Quét APK trước trong nền</string>
     <string name="tileColorful">Vẫn đầy màu sắc</string>
     <string name="apiViewerShort">API ứng dụng</string>
     <string name="menuApiSortApiTime">Cập nhật gần đây</string>
     <string name="apiSdkTarget">SDK mục tiêu</string>
     <string name="apiSdkMin">SDK tối thiểu</string>
-    <string name="settingsApiRetrieveRoundIcon">Lấy biểu tượng tròn từ tài nguyên khi được cung cấp</string>
     <string name="activityTextProcessingApp">Xem ứng dụng Bnd</string>
     <string name="res_invalid_input">Đâu vao không hợp lệ</string>
     <string name="text_sort">Sắp xếp</string>
@@ -141,7 +138,6 @@
     <string name="prefExteriorDarkByBatterySaverSummaryOff">Nếu tiết kiệm pin được triển khai, không áp dụng chủ đề tối khi bật, ngoại trừ ghi đè hệ thống</string>
     <string name="prefExteriorDarkPlanScheduleStart">Thời gian bắt đầu</string>
     <string name="prefExteriorDarkPlanScheduleEnd">Thời gian kết thúc</string>
-    <string name="prefSettingsTrim2Round">Cắt các biểu tượng không thích ứng thành tròn khi thích hợp</string>
     <string name="textManual">Hướng dẫn sử dụng</string>
     <string name="avAdapterActionsIcon">Chia sẻ biểu tượng</string>
     <string name="avAdapterActionsApk">Chia sẻ apk</string>

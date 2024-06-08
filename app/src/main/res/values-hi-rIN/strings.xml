@@ -49,7 +49,6 @@
     <string name="sdk_search_hint"><font size="12">नाम, पैकेज, API स्तर, Android संस्करण</font></string>
     <string name="instant_manager_intro">ऐप शॉर्टकट</string>
     <string name="text_new">नया</string>
-    <string name="settings_sdk">गोल ऐप आइकन प्रदर्शित करें</string>
     <string name="text_copy_link">लिंक कॉपी किया गया</string>
     <string name="advice_license">ओपन सोर्स लाइसेंस</string>
     <string name="advice_license_details">बाउंडो को आकार देने में मदद करने वाले खुले सॉफ़्टवेयर के लिए लाइसेंस विवरण</string>
@@ -62,7 +61,6 @@
     <string name="text_yes">हाँ</string>
     <string name="apiDisplayAPK">डिवाइस APK</string>
     <string name="apiDisplaySys">सिस्टम ऐप्स</string>
-    <string name="settingsApiApkPreload">बैकग्राउंड में पहले से APK के लिए स्कैन करें</string>
     <string name="immortalMessage">अरे नहीं!\nहम एक बग से परेशान हैं।\nचिंता न करें, यह हमारे बैग में फंस गया है!\nअनुसंधान करने के लिए हमें लॉग वितरित करें!</string>
     <string name="immortalBag">लकड़ी का लट्ठा</string>
     <string name="immortalRestart">वापस आना</string>
@@ -80,7 +78,6 @@
     <string name="menuApiSortApiTime">हाल ही में अद्यतित</string>
     <string name="apiSdkTarget">लक्ष्य एसडीके</string>
     <string name="apiSdkMin">न्यूनतम एसडीके</string>
-    <string name="settingsApiRetrieveRoundIcon">प्रदान किए जाने पर संसाधन से गोल चिह्न प्राप्त करें</string>
     <string name="activityTextProcessingApp">बीएनडी ऐप्स देखें</string>
     <string name="res_invalid_input">अमान्य निवेश</string>
     <string name="text_sort">क्रम से लगाना</string>
@@ -127,7 +124,6 @@
     <string name="prefExteriorDarkByBatterySaverSummaryOff">अगर बैटरी सेवर लागू किया गया है, तो सिस्टम ओवरराइड को छोड़कर, उसके चालू होने पर डार्क थीम लागू न करें</string>
     <string name="prefExteriorDarkPlanScheduleStart">समय शुरू</string>
     <string name="prefExteriorDarkPlanScheduleEnd">अंत समय</string>
-    <string name="prefSettingsTrim2Round">उपयुक्त होने पर गैर-अनुकूली चिह्नों को गोल करने के लिए ट्रिम करें</string>
     <string name="textManual">नियमावली</string>
     <string name="instantManual">ऐप शॉर्टकट दिखाने के लिए लॉन्चर में ऐप आइकन पर लंबे समय तक दबाएं।\nसूचना शेड को नीचे खींचें, सूचना क्षेत्र के ऊपर सेटिंग टॉगल त्वरित सेटिंग टाइलें हैं जिन्हें आप ढूंढ रहे हैं।</string>
     <string name="instantTileScannerMmManual">स्क्रीन पर कब्जा करने के लिए टाइल पर क्लिक करें और स्कैन करने के लिए स्क्रीनशॉट को मैन्युअल रूप से चुनने के लिए WeChat स्कैनर खोलें।</string>

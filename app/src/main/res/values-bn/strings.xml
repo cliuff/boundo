@@ -49,7 +49,6 @@
     <string name="sdk_search_hint"><font size="12">নাম, প্যাকেজ, API স্তর, Android সংস্করণ</font></string>
     <string name="instant_manager_intro">অ্যাপ শর্টকাট</string>
     <string name="text_new">নতুন</string>
-    <string name="settings_sdk">গোলাকার অ্যাপ আইকন প্রদর্শন করুন</string>
     <string name="text_copy_link">লিঙ্ক কপি করা হয়েছে</string>
     <string name="advice_license">ওপেন সোর্স লাইসেন্স</string>
     <string name="advice_license_details">খোলা সফ্টওয়্যারের লাইসেন্সের বিশদ বিবরণ যা বাউন্ডোকে আকারে আসতে সাহায্য করে</string>
@@ -62,7 +61,6 @@
     <string name="text_yes">হ্যাঁ</string>
     <string name="apiDisplayAPK">ডিভাইস APKs</string>
     <string name="apiDisplaySys">সিস্টেম অ্যাপস</string>
-    <string name="settingsApiApkPreload">পটভূমিতে অগ্রিম APKগুলির জন্য স্ক্যান করুন</string>
     <string name="immortalMessage">ওহ না!\nআমরা একটি বাগ দ্বারা বিরক্ত।\nচিন্তা করবেন না, এটি আমাদের ব্যাগে ধরা পড়েছে!\nগবেষণা করার জন্য আমাদের কাছে লগটি সরবরাহ করুন!</string>
     <string name="immortalBag">লগ</string>
     <string name="immortalRestart">ফিরে যান</string>
@@ -80,7 +78,6 @@
     <string name="menuApiSortApiTime">সম্প্রতি আপডেট করা হয়েছে</string>
     <string name="apiSdkTarget">টার্গেট SDK</string>
     <string name="apiSdkMin">ন্যূনতম SDK</string>
-    <string name="settingsApiRetrieveRoundIcon">প্রদান করা হলে সম্পদ থেকে বৃত্তাকার আইকন পুনরুদ্ধার করুন</string>
     <string name="activityTextProcessingApp">Bnd অ্যাপস দেখুন</string>
     <string name="res_invalid_input">ভুল ইনপুট</string>
     <string name="text_sort">সাজান</string>
@@ -127,7 +124,6 @@
     <string name="prefExteriorDarkByBatterySaverSummaryOff">ব্যাটারি সেভার প্রয়োগ করা হলে, সিস্টেম ওভাররাইড ছাড়া এটি চালু থাকা অবস্থায় অন্ধকার থিম প্রয়োগ করবেন না</string>
     <string name="prefExteriorDarkPlanScheduleStart">সময় শুরু</string>
     <string name="prefExteriorDarkPlanScheduleEnd">শেষ সময়</string>
-    <string name="prefSettingsTrim2Round">উপযুক্ত হলে অ-অভিযোজিত আইকনগুলিকে বৃত্তাকারে ছাঁটাই করুন</string>
     <string name="textManual">ম্যানুয়াল</string>
     <string name="instantManual">অ্যাপ শর্টকাটগুলি দেখানোর জন্য লঞ্চারে অ্যাপ আইকনে দীর্ঘক্ষণ চাপ দিন৷\nবিজ্ঞপ্তি শেডটি নীচে টানুন, বিজ্ঞপ্তি এলাকার উপরে সেটিংস টগলগুলি হল দ্রুত সেটিংস টাইলস যা আপনি খুঁজছেন৷</string>
     <string name="instantTileScannerMmManual">স্ক্রীন ক্যাপচার করতে টাইলটিতে ক্লিক করুন এবং স্ক্যান করার জন্য স্ক্রিনশটটি ম্যানুয়ালি নির্বাচন করতে WeChat স্ক্যানার খুলুন।</string>

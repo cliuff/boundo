@@ -97,15 +97,12 @@
     <string name="text_error">에러 발생됨</string>
     <string name="exterior_blur_degree">흐림 정도</string>
     <string name="text_loading">로딩</string>
-    <string name="settings_sdk">라운드 앱 아이콘 표시</string>
     <string name="text_copy_link">링크 복사</string>
     <string name="text_copy_content">복사 한 내용</string>
     <string name="text_apply_background">바탕 화면으로 설정하기</string>
     <string name="apiInfoSubAiDes">적응 형 아이콘은 원하는 모양으로 자유롭게 변형 가능</string>
-    <string name="settingsApiApkPreload">배경 사전 스캔 APK</string>
     <string name="textBugLog">오류 기록</string>
     <string name="tileColorful">모 블랙 스크린</string>
-    <string name="settingsApiRetrieveRoundIcon">앱이 둥근 아이콘 리소스를 제공 할 때 아이콘로드</string>
     <string name="res_invalid_input">잘못된 입력</string>
     <string name="text_sort">종류</string>
     <string name="textShareApk">앱 설치 패키지를 다른 사람과 공유</string>
@@ -140,7 +137,6 @@
     <string name="prefExteriorDarkByBatterySaverSummaryOff">시스템이 절전 모드를 구현하는 경우 시스템이 어두운 테마를 활성화하지 않으면 모드를 켤 때 어두운 테마가 활성화되지 않습니다.</string>
     <string name="prefExteriorDarkPlanScheduleStart">개관 시간</string>
     <string name="prefExteriorDarkPlanScheduleEnd">종료 시간</string>
-    <string name="prefSettingsTrim2Round">자르기 아이콘이 위반되지 않으면 비 적응 아이콘을 원으로 자릅니다.</string>
     <string name="instantTileScannerMmManual">타일을 클릭하여 스크린 샷을 만들고 WeChat Scan을 열어 스캔 할 스크린 샷을 수동으로 선택하십시오.</string>
     <string name="instantTileScannerAlipayManual">타일을 클릭하여 스크린 샷을 만들고 Alipay에 전화하여 스캔 한 스크린 샷을 스캔하십시오.</string>
     <string name="instantTileMDUManual">타일을 클릭하여 데이터를 새로 고칩니다. 이 타일을 추가하면 사용 통계 권한을 부여하라는 메시지가 표시됩니다.</string>

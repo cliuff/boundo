@@ -49,7 +49,6 @@
     <string name="sdk_search_hint"><font size="12">nazwa, pakiet, poziom API, wersja Androida</font></string>
     <string name="instant_manager_intro">Skróty aplikacji</string>
     <string name="text_new">Nowy</string>
-    <string name="settings_sdk">Wyświetlaj okrągłe ikony aplikacji</string>
     <string name="text_copy_link">Link skopiowany</string>
     <string name="advice_license">Licencje open source</string>
     <string name="advice_license_details">Szczegóły licencji dla otwartego oprogramowania, które pomaga Boundo kształtować się</string>
@@ -62,7 +61,6 @@
     <string name="text_yes">TAk</string>
     <string name="apiDisplayAPK">Pliki APK urządzenia</string>
     <string name="apiDisplaySys">Aplikacje systemowe</string>
-    <string name="settingsApiApkPreload">Skanuj z wyprzedzeniem w poszukiwaniu plików APK w tle</string>
     <string name="immortalMessage">O nie!\nIrytuje nas błąd.\nNie martw się, utknął w naszej torbie!\nDostarcz nam dziennik, abyśmy mogli go zbadać!</string>
     <string name="immortalBag">Dziennik</string>
     <string name="immortalRestart">Cofnąć się</string>
@@ -80,7 +78,6 @@
     <string name="menuApiSortApiTime">Ostatnio zaktualizowane</string>
     <string name="apiSdkTarget">Docelowy pakiet SDK</string>
     <string name="apiSdkMin">Minimalny pakiet SDK</string>
-    <string name="settingsApiRetrieveRoundIcon">Odzyskaj okrągłą ikonę z zasobu, gdy zostanie on dostarczony</string>
     <string name="activityTextProcessingApp">Zobacz aplikacje Bnd</string>
     <string name="res_invalid_input">Nieprawidłowe dane wejściowe</string>
     <string name="text_sort">Sortować</string>
@@ -127,7 +124,6 @@
     <string name="prefExteriorDarkByBatterySaverSummaryOff">Jeśli Oszczędzanie baterii jest zaimplementowane, nie stosuj ciemnego motywu, gdy jest włączony, z wyjątkiem nadpisania systemu</string>
     <string name="prefExteriorDarkPlanScheduleStart">Czas rozpoczęcia</string>
     <string name="prefExteriorDarkPlanScheduleEnd">Koniec czasu</string>
-    <string name="prefSettingsTrim2Round">W razie potrzeby przycinaj ikony nieadaptacyjne, aby były zaokrąglane</string>
     <string name="textManual">podręcznik</string>
     <string name="instantManual">Naciśnij i przytrzymaj ikonę aplikacji w programie uruchamiającym, aby wyświetlić skróty do aplikacji.\nOpuść obszar powiadomień, ustawienia przełączane nad obszarem powiadomień to kafelki szybkich ustawień, których szukasz.</string>
     <string name="instantTileScannerMmManual">Kliknij kafelek, aby przechwycić ekran i otwórz skaner WeChat, aby ręcznie wybrać zrzut ekranu do skanowania.</string>

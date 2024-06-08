@@ -49,7 +49,6 @@
     <string name="sdk_search_hint"><font size="12">应用名 包名 API等级 安卓版本</font></string>
     <string name="instant_manager_intro">应用 Shortcuts</string>
     <string name="text_new">新建</string>
-    <string name="settings_sdk">显示圆形应用图标</string>
     <string name="text_copy_link">链接已复制</string>
     <string name="advice_license">开源许可</string>
     <string name="advice_license_details">斑朵的诞生全靠开源软件的支持</string>
@@ -61,7 +60,6 @@
     <string name="apiInfoSubAiDes">自适应图标可自由变换为任意形状</string>
     <string name="text_yes">是的</string>
     <string name="apiDisplaySys">系统应用</string>
-    <string name="settingsApiApkPreload">后台预扫描APK</string>
     <string name="immortalMessage">噢！出现了一点儿小问题。\n不过罪魁祸首已经被捉住啦！\n将日志发给我们做进一步分析吧！</string>
     <string name="immortalRestart">返回</string>
     <string name="immortalMessageMortal">已生成日志文件</string>
@@ -80,7 +78,6 @@
     <string name="apiSdkTarget">目标 SDK</string>
     <string name="apiSdkMin">最低 SDK</string>
     <string name="apiDisplayAPK">设备安装包</string>
-    <string name="settingsApiRetrieveRoundIcon">当应用提供了圆形图标资源时加载它</string>
     <string name="activityTextProcessingApp">查看斑朵应用</string>
     <string name="res_invalid_input">无效的输入</string>
     <string name="text_refresh">刷新</string>
@@ -126,7 +123,6 @@
     <string name="prefExteriorDarkByBatterySaverSummaryOn">若系统实现了节电模式，当该模式开启时启用暗黑主题</string>
     <string name="prefExteriorDarkPlanScheduleEnd">结束时间</string>
     <string name="prefExteriorDarkPlanScheduleStart">开启时间</string>
-    <string name="prefSettingsTrim2Round">若剪切图标不违和，将非自适应图标剪切为圆形</string>
     <string name="textManual">使用说明</string>
     <string name="instantTileMDUManual">点击磁贴以刷新数据。添加该磁贴时会提示授予使用统计权限。</string>
     <string name="instantTileScannerAlipayManual">点击磁贴以截屏并调用支付宝扫一扫扫描屏幕截图。</string>

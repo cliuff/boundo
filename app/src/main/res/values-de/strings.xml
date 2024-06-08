@@ -49,7 +49,6 @@
     <string name="text_loading">Wird geladen</string>
     <string name="instant_manager_intro">App-Verknüpfungen</string>
     <string name="text_new">Neu</string>
-    <string name="settings_sdk">Zeigen Sie runde App-Symbole an</string>
     <string name="text_copy_link">Link kopiert</string>
     <string name="advice_license">Open Source Lizenzen</string>
     <string name="advice_license_details">Lizenzdetails für offene Software, die Boundo bei der Gestaltung unterstützt</string>
@@ -62,7 +61,6 @@
     <string name="text_yes">Ja</string>
     <string name="apiDisplayAPK">Geräte-APKs</string>
     <string name="apiDisplaySys">System-Apps</string>
-    <string name="settingsApiApkPreload">Scannen Sie im Hintergrund im Voraus nach APKs</string>
     <string name="immortalBag">Log</string>
     <string name="immortalRestart">Komm zurück</string>
     <string name="immortalMessageMortal">Protokolldatei generiert</string>
@@ -79,7 +77,6 @@
     <string name="menuApiSortApiTime">Kürzlich aktualisiert</string>
     <string name="apiSdkTarget">Ziel-SDK</string>
     <string name="apiSdkMin">Minimales SDK</string>
-    <string name="settingsApiRetrieveRoundIcon">Ruft das runde Symbol von der Ressource ab, wenn es bereitgestellt wird</string>
     <string name="activityTextProcessingApp">Anzeigen von Bnd-Apps</string>
     <string name="res_invalid_input">Ungültige Eingabe</string>
     <string name="text_sort">Sortieren</string>
@@ -124,7 +121,6 @@
     <string name="prefExteriorDarkByBatterySaverSummaryOff">Wenn Battery Saver implementiert ist, wenden Sie kein dunkles Thema an, wenn es aktiviert ist, außer bei Systemüberschreibung</string>
     <string name="prefExteriorDarkPlanScheduleStart">Startzeit</string>
     <string name="prefExteriorDarkPlanScheduleEnd">Endzeit</string>
-    <string name="prefSettingsTrim2Round">Schneiden Sie nicht adaptive Symbole gegebenenfalls auf Rundung</string>
     <string name="textManual">Handbuch</string>
     <string name="instantTileScannerMmManual">Klicken Sie auf die Kachel, um den Bildschirm aufzunehmen, und öffnen Sie den WeChat-Scanner, um den zu scannenden Screenshot manuell auszuwählen.</string>
     <string name="instantTileScannerAlipayManual">Klicken Sie auf die Kachel, um den Bildschirm aufzunehmen, und rufen Sie den Alipay-Scanner auf, um den Screenshot zu scannen.</string>

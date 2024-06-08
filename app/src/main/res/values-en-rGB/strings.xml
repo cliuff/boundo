@@ -48,7 +48,6 @@
     <string name="sdk_search_hint"><font size="12">name, package, API level, Android version</font></string>
     <string name="instant_manager_intro">App Shortcuts</string>
     <string name="text_new">New</string>
-    <string name="settings_sdk">Display round app icons</string>
     <string name="text_copy_link">Link copied</string>
     <string name="advice_license">Open source licenses</string>
     <string name="advice_license_details">License details for open software that helps Boundo come to shape</string>
@@ -60,7 +59,6 @@
     <string name="apiInfoSubAiDes">Adaptive Icon adapts to any shape instead of being limited to a predefined one</string>
     <string name="text_yes">Yes</string>
     <string name="apiDisplaySys">System apps</string>
-    <string name="settingsApiApkPreload">Scan for APKs in advance in background</string>
     <string name="immortalMessage">Oh no!\nWe are irritated by a bug.\nDon\'t worry, it\'s caught in our bag!\nDeliver the log to us to do research on!</string>
     <string name="immortalBag">Log</string>
     <string name="immortalRestart">Get back</string>
@@ -79,7 +77,6 @@
     <string name="apiSdkTarget">Target SDK</string>
     <string name="apiSdkMin">Minimum SDK</string>
     <string name="apiDisplayAPK">Device APKs</string>
-    <string name="settingsApiRetrieveRoundIcon">Retrieve round icon from resource when provided</string>
     <string name="activityTextProcessingApp">View Bnd apps</string>
     <string name="res_invalid_input">Invalid input</string>
     <string name="text_sort">Sort</string>
@@ -125,7 +122,6 @@
     <string name="prefExteriorDarkByBatterySaverSummaryOff">If Battery Saver is implemented, do not apply dark theme when it is on, except for system override</string>
     <string name="prefExteriorDarkPlanScheduleStart">Start time</string>
     <string name="prefExteriorDarkPlanScheduleEnd">End time</string>
-    <string name="prefSettingsTrim2Round">Trim non-adaptive icons to round when appropriate</string>
     <string name="textManual">Manual</string>
     <string name="instantTileMDUManual">Click the tile to refresh data.You are to be prompted to grant the Usage Access permission when adding the tile.</string>
     <string name="instantTileScannerAlipayManual">Click the tile to capture screen and invoke Alipay scanner to scan the screenshot.</string>

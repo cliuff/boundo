@@ -62,22 +62,6 @@ internal object MiscMain {
         }
         // below: app in update process to the newest
         // below: apply actions
-        if (verOri in 0 until 22041320) {
-            // remove unit config of school timetable
-            "school_timetable".let {
-                Unit.unpinUnit(context, it, prefSettings)
-                Unit.removeFrequency(context, it, prefSettings)
-            }
-            // delete exterior app background
-            arrayOf(
-                F.createPath(F.valFilePubExterior(context), "back.webp"),
-                F.createPath(F.valFilePubExterior(context), "backDark.webp"),
-            ).forEach {
-                val file = File(it)
-                if (file.exists().not()) return@forEach
-                try { file.delete() } catch (e: Exception) { e.printStackTrace() }
-            }
-        }
         if (verOri in 0 until 22082119 && OsUtils.satisfy(OsUtils.T)) {
             val locale = LanguageMan(context).getLocaleOrNull()
             if (locale != null) LocaleUtils.set(locale)
@@ -104,7 +88,7 @@ internal object MiscMain {
             prefSettings.edit { keys.forEach { remove(it) } }
         }
         listOf(SelfUpdater23()).forEach { updater ->
-            if (verOri in 0..<updater.maxVerCode) updater.apply(verOri)
+            if (verOri in 0..<updater.maxVerCode) updater.apply(verOri, prefSettings)
         }
     }
 

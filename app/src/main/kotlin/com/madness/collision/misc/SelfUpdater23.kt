@@ -16,16 +16,22 @@
 
 package com.madness.collision.misc
 
+import android.content.SharedPreferences
+import androidx.core.content.edit
 import com.madness.collision.unit.api_viewing.AccessAV
 
 class SelfUpdater23 {
-    val maxVerCode = 23092018
-    fun apply(oldVerCode: Int) {
+    val maxVerCode = 24060815
+    fun apply(oldVerCode: Int, prefSettings: SharedPreferences) {
         // check illegal version code
         if (oldVerCode < 0) return
         // use ifs instead of when to implement fallthrough
         if (oldVerCode < 23092018) {
             AccessAV.addModOverlayTags()
+        }
+        if (oldVerCode < 24060815) {
+            val keys = listOf("apiAPKPreload", "SDKCircularIcon", "APIPackageRoundIcon", "AVClip2Round")
+            prefSettings.edit { keys.forEach(::remove) }
         }
     }
 }

@@ -97,16 +97,13 @@
     <string name="text_error">出現錯誤</string>
     <string name="exterior_blur_degree">模糊度</string>
     <string name="text_loading">正在載入</string>
-    <string name="settings_sdk">顯示圓形應用程式圖示</string>
     <string name="text_copy_link">連結已複製</string>
     <string name="advice_license_details">斑朵的誕生依靠開放原始碼軟體的支持</string>
     <string name="text_copy_content">內容已複製</string>
     <string name="text_apply_background">套用為背景</string>
     <string name="apiInfoSubAiDes">自適性圖示可自由變換為任意形狀</string>
-    <string name="settingsApiApkPreload">在背景預先掃描安裝檔</string>
     <string name="textBugLog">已記錄錯誤</string>
     <string name="tileColorful">保持多彩</string>
-    <string name="settingsApiRetrieveRoundIcon">在應用程式提供圓形圖示資源時擷取</string>
     <string name="activityTextProcessingApp">檢視斑朵應用程式</string>
     <string name="res_invalid_input">無效的輸入</string>
     <string name="text_sort">排序</string>
@@ -142,7 +139,6 @@
     <string name="prefExteriorDarkByBatterySaverSummaryOff">若節電模式已實作，此模式開啟時不套用暗黑主題，除非系統已啟用暗黑主題</string>
     <string name="prefExteriorDarkPlanScheduleStart">開啟時間</string>
     <string name="prefExteriorDarkPlanScheduleEnd">結束時間</string>
-    <string name="prefSettingsTrim2Round">若修剪圖示適當，將非自適性圖示修剪為圓形</string>
     <string name="instantTileScannerMmManual">按一下圖塊以擷取畫面並開啟 WeChat 掃一掃手動選取螢幕截圖掃描。</string>
     <string name="instantTileScannerAlipayManual">按一下圖塊以擷取畫面並叫用支付寶掃一掃掃描螢幕截圖。</string>
     <string name="instantTileMDUManual">按一下圖塊以重新整理資料，新增此圖塊時會提示授予存取權。</string>

@@ -18,16 +18,6 @@ package com.madness.collision.unit.api_viewing.util
 
 internal object PrefUtil {
     const val AV_TAGS = "AvTags"
-    // todo remove
-    const val API_APK_PRELOAD = "apiAPKPreload"
-    const val API_APK_PRELOAD_DEFAULT = false
-    const val API_CIRCULAR_ICON = "SDKCircularIcon"
-    // render round icon only when user specifies
-    const val API_CIRCULAR_ICON_DEFAULT = false
-    const val API_PACKAGE_ROUND_ICON = "APIPackageRoundIcon"
-    const val API_PACKAGE_ROUND_ICON_DEFAULT = false
-    const val AV_CLIP_ROUND = "AVClip2Round"
-    const val AV_CLIP_ROUND_DEFAULT = true
     const val AV_SWEET = "AVSweet"
     const val AV_SWEET_DEFAULT = true
     const val AV_VIEWING_TARGET = "AVViewingTarget"

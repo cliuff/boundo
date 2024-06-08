@@ -31,7 +31,6 @@ import com.madness.collision.util.P
 import com.madness.collision.util.PopupUtil
 import com.madness.collision.util.X
 import com.madness.collision.util.findPref
-import com.madness.collision.util.os.OsUtils
 
 internal class PrefAv: PreferenceFragmentCompat() {
     companion object {
@@ -44,17 +43,6 @@ internal class PrefAv: PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         preferenceManager.sharedPreferencesName = P.PREF_SETTINGS
         setPreferencesFromResource(R.xml.pref_settings_av, rootKey)
-        if (OsUtils.satisfy(OsUtils.Q)) {
-            findPref<SwitchPreference>(PrefUtil.API_APK_PRELOAD)?.isVisible = false
-        }
-
-        findPref<SwitchPreference>(PrefUtil.API_CIRCULAR_ICON)?.apply {
-            updatePrefRound(this.isChecked)
-            onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                if(newValue is Boolean) updatePrefRound(newValue)
-                true
-            }
-        }
         findPref<SwitchPreference>(PrefUtil.AV_SWEET)?.apply {
             updatePrefSweet(this.isChecked)
             onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
@@ -62,11 +50,6 @@ internal class PrefAv: PreferenceFragmentCompat() {
                 true
             }
         }
-    }
-
-    private fun updatePrefRound(newValue: Boolean) {
-        findPref<SwitchPreference>(PrefUtil.API_PACKAGE_ROUND_ICON)?.isVisible = newValue
-        findPref<SwitchPreference>(PrefUtil.AV_CLIP_ROUND)?.isVisible = newValue
     }
 
     private fun updatePrefSweet(newValue: Boolean) {

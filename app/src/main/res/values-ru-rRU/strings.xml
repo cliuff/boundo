@@ -113,12 +113,8 @@
     <string name="prefSettingsThemeBlackGray">Material Design черный</string>
     <string name="prefSettingsThemeCnRed">красный</string>
     <string name="prefSettingsThemeDefault">белый</string>
-    <string name="prefSettingsTrim2Round">Обрезать неадаптивные значки для округления при необходимости</string>
     <string name="res_invalid_input">Неверный Ввод</string>
     <string name="sdk_search_hint"><font size="12">имя, пакет, уровень API, версия Android</font></string>
-    <string name="settingsApiApkPreload">Сканирование для APK заранее в фоновом режиме</string>
-    <string name="settingsApiRetrieveRoundIcon">Извлечь круглый значок из ресурса, если он указан</string>
-    <string name="settings_sdk">Отображать круглые значки приложений</string>
     <string name="sharingNonApkLink">Не apk ссылка для скачивания</string>
     <string name="textAlways">Всегда</string>
     <string name="textAsk4Notification">Пожалуйста, дайте нам разрешение показывать уведомления, мы полагаемся на Toast Notifications, чтобы предоставить вам лучший опыт. Он используется для уведомления вас о инструкциях, советах, предложениях, сообщениях об успешной работе и иногда сообщениях об ошибках. Вы можете столкнуться с путаницей в нашем приложении, если решите не предоставлять нам разрешение на уведомление.</string>

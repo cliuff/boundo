@@ -50,7 +50,6 @@
     <string name="sdk_search_hint"><font size="12">nome, pacote, nível da API, versão do Android</font></string>
     <string name="instant_manager_intro">Atalhos de aplicativos</string>
     <string name="text_new">Novo</string>
-    <string name="settings_sdk">Exibir ícones de aplicativos redondos</string>
     <string name="text_copy_link">Link copiado</string>
     <string name="unit_audio_timer">Temporizador de áudio</string>
     <string name="main_more">Mais</string>
@@ -91,13 +90,11 @@
     <string name="textBugLog">Bug detectado no log</string>
     <string name="apiDisplayAPK">APKs de dispositivos</string>
     <string name="apiDisplaySys">Aplicativos do sistema</string>
-    <string name="settingsApiApkPreload">Pesquise APKs com antecedência em segundo plano</string>
     <string name="tileColorful">Fique colorido</string>
     <string name="apiViewerShort">API do aplicativo</string>
     <string name="menuApiSortApiTime">Atualizado recentemente</string>
     <string name="apiSdkTarget">SDK de destino</string>
     <string name="apiSdkMin">SDK mínimo</string>
-    <string name="settingsApiRetrieveRoundIcon">Recuperar ícone redondo do recurso quando fornecido</string>
     <string name="activityTextProcessingApp">Ver aplicações Bnd</string>
     <string name="res_invalid_input">Entrada inválida</string>
     <string name="text_sort">Ordenar</string>
@@ -141,7 +138,6 @@
     <string name="prefExteriorDarkByBatterySaverSummaryOff">Se o Economizador de bateria estiver implementado, não aplique o tema escuro quando estiver ligado, exceto a substituição do sistema</string>
     <string name="prefExteriorDarkPlanScheduleStart">Hora de início</string>
     <string name="prefExteriorDarkPlanScheduleEnd">Fim do tempo</string>
-    <string name="prefSettingsTrim2Round">Apare ícones não adaptáveis para arredondar quando apropriado</string>
     <string name="textManual">Manual</string>
     <string name="avAdapterActionsIcon">Compartilhar ícone</string>
     <string name="avAdapterActionsApk">Compartilhar apk</string>

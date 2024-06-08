@@ -97,16 +97,13 @@
     <string name="text_error">Παρουσιάστηκε σφάλμα</string>
     <string name="exterior_blur_degree">Βαθμός θαμπώματος</string>
     <string name="text_loading">Φόρτωση</string>
-    <string name="settings_sdk">Εμφάνιση εικονιδίων στρογγυλής εφαρμογής</string>
     <string name="text_copy_link">Ο σύνδεσμος αντιγράφηκε</string>
     <string name="advice_license_details">Λεπτομέρειες άδειας για ανοιχτό λογισμικό που βοηθά το Boundo να διαμορφωθεί</string>
     <string name="text_copy_content">Το περιεχόμενο αντιγράφηκε</string>
     <string name="text_apply_background">Εφαρμόστε ως φόντο</string>
     <string name="apiInfoSubAiDes">Το Adaptive Icon προσαρμόζεται σε οποιοδήποτε σχήμα αντί να περιορίζεται σε ένα προκαθορισμένο</string>
-    <string name="settingsApiApkPreload">Σάρωση για APK εκ των προτέρων στο παρασκήνιο</string>
     <string name="textBugLog">Το σφάλμα εντοπίστηκε στο αρχείο καταγραφής</string>
     <string name="tileColorful">Μείνετε πολύχρωμοι</string>
-    <string name="settingsApiRetrieveRoundIcon">Ανάκτηση στρογγυλού εικονιδίου από τον πόρο όταν παρέχεται</string>
     <string name="activityTextProcessingApp">Προβολή εφαρμογών Bnd</string>
     <string name="res_invalid_input">Μη έγκυρη εισαγωγή</string>
     <string name="text_sort">Είδος</string>
@@ -142,7 +139,6 @@
     <string name="prefExteriorDarkByBatterySaverSummaryOff">Εάν η Εξοικονόμηση μπαταρίας έχει εφαρμοστεί, μην εφαρμόζετε σκοτεινό θέμα όταν είναι ενεργοποιημένη, εκτός από την παράκαμψη συστήματος</string>
     <string name="prefExteriorDarkPlanScheduleStart">Ωρα έναρξης</string>
     <string name="prefExteriorDarkPlanScheduleEnd">Τέλος χρόνου</string>
-    <string name="prefSettingsTrim2Round">Περικοπή μη προσαρμοστικών εικονιδίων για στρογγυλοποίηση όταν χρειάζεται</string>
     <string name="instantTileScannerMmManual">Κάντε κλικ στο πλακίδιο για να τραβήξετε την οθόνη και ανοίξτε το σαρωτή WeChat για να επιλέξετε μη αυτόματα το στιγμιότυπο οθόνης για σάρωση.</string>
     <string name="instantTileScannerAlipayManual">Κάντε κλικ στο πλακίδιο για να τραβήξετε την οθόνη και καλέστε τον σαρωτή Alipay για να σαρώσετε το στιγμιότυπο οθόνης.</string>
     <string name="instantTileMDUManual">Κάντε κλικ στο πλακίδιο για ανανέωση δεδομένων. Θα σας ζητηθεί να εκχωρήσετε το δικαίωμα πρόσβασης χρήσης κατά την προσθήκη του πλακιδίου.</string>

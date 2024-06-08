@@ -50,7 +50,6 @@
     <string name="sdk_search_hint"><font size="12">الاسم ، الحزمة ، مستوى API ، إصدار Android</font></string>
     <string name="instant_manager_intro">اختصارات التطبيق</string>
     <string name="text_new">جديد</string>
-    <string name="settings_sdk">عرض الرموز التطبيق جولة</string>
     <string name="text_copy_link">تم نسخ الرابط</string>
     <string name="unit_audio_timer">توقيت الصوت</string>
     <string name="main_more">أكثر</string>
@@ -91,13 +90,11 @@
     <string name="textBugLog">علة اشتعلت في السجل</string>
     <string name="apiDisplayAPK">APKs الجهاز</string>
     <string name="apiDisplaySys">تطبيقات النظام</string>
-    <string name="settingsApiApkPreload">البحث عن ملفات APK مسبقًا في الخلفية</string>
     <string name="tileColorful">البقاء الملونة</string>
     <string name="apiViewerShort">API التطبيق</string>
     <string name="menuApiSortApiTime">تم تحديثه مؤخرا</string>
     <string name="apiSdkTarget">الهدف SDK</string>
     <string name="apiSdkMin">الحد الأدنى من SDK</string>
-    <string name="settingsApiRetrieveRoundIcon">استرجع الأيقونة المستديرة من المورد عند توفرها</string>
     <string name="activityTextProcessingApp">عرض تطبيقات Bnd</string>
     <string name="res_invalid_input">مدخل غير صالح</string>
     <string name="text_sort">فرز</string>
@@ -141,7 +138,6 @@
     <string name="prefExteriorDarkByBatterySaverSummaryOff">إذا تم تطبيق Battery Saver ، فلا تقم بتطبيق سمة داكنة عندما تكون قيد التشغيل ، باستثناء تجاوز النظام</string>
     <string name="prefExteriorDarkPlanScheduleStart">وقت البدء</string>
     <string name="prefExteriorDarkPlanScheduleEnd">وقت النهاية</string>
-    <string name="prefSettingsTrim2Round">قم بقص الرموز غير القابلة للتكيف لتقريبها عند الاقتضاء</string>
     <string name="textManual">كتيب</string>
     <string name="avAdapterActionsIcon">أيقونة المشاركة</string>
     <string name="avAdapterActionsApk">مشاركة apk</string>

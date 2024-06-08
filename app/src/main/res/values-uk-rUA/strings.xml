@@ -50,7 +50,6 @@
     <string name="sdk_search_hint"><font size="12">назва, пакет, рівень API, версія Android</font></string>
     <string name="instant_manager_intro">Ярлики програм</string>
     <string name="text_new">Новий</string>
-    <string name="settings_sdk">Відображати круглі значки програм</string>
     <string name="text_copy_link">Посилання скопійовано</string>
     <string name="advice_license">Ліцензії з відкритим кодом</string>
     <string name="advice_license_details">Інформація про ліцензію на відкрите програмне забезпечення, яке допомагає Boundo сформуватися</string>
@@ -63,7 +62,6 @@
     <string name="text_yes">Так</string>
     <string name="apiDisplayAPK">APK-файли пристрою</string>
     <string name="apiDisplaySys">Системні програми</string>
-    <string name="settingsApiApkPreload">Скануйте файли .apk заздалегідь у фоновому режимі</string>
     <string name="immortalMessage">О ні!\nНас дратує помилка.\nНе хвилюйтеся, вона потрапила в нашу сумку!\nНадайте журнал нам для дослідження!</string>
     <string name="immortalBag">журнал</string>
     <string name="immortalRestart">Повертатися</string>
@@ -81,7 +79,6 @@
     <string name="menuApiSortApiTime">Нещодавно оновлено</string>
     <string name="apiSdkTarget">Цільовий SDK</string>
     <string name="apiSdkMin">Мінімальний пакет SDK</string>
-    <string name="settingsApiRetrieveRoundIcon">Отримати круглу піктограму з ресурсу, якщо надано</string>
     <string name="activityTextProcessingApp">Перегляд додатків Bnd</string>
     <string name="res_invalid_input">Неправильні дані</string>
     <string name="text_sort">Сортувати</string>
@@ -128,7 +125,6 @@
     <string name="prefExteriorDarkByBatterySaverSummaryOff">Якщо ввімкнено режим економії заряду акумулятора, не застосовуйте темну тему, коли вона ввімкнена, за винятком системної заміни</string>
     <string name="prefExteriorDarkPlanScheduleStart">Час початку</string>
     <string name="prefExteriorDarkPlanScheduleEnd">Час закінчення</string>
-    <string name="prefSettingsTrim2Round">Обріжте неадаптивні піктограми, щоб вони округлялися, коли це необхідно</string>
     <string name="textManual">Посібник</string>
     <string name="instantManual">Утримуйте піктограму програми на панелі запуску, щоб відобразити ярлики додатків.\nПотягніть панель сповіщень вниз, перемикачі налаштувань над областю сповіщень – це плитки швидкого налаштування, які ви шукаєте.</string>
     <string name="instantTileScannerMmManual">Натисніть плитку, щоб зробити знімок екрана, і відкрийте сканер WeChat, щоб вручну вибрати знімок екрана для сканування.</string>

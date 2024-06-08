@@ -49,7 +49,6 @@
     <string name="sdk_search_hint"><font size="12">nama, paket, level API, versi Android</font></string>
     <string name="instant_manager_intro">Pintasan Aplikasi</string>
     <string name="text_new">Baru</string>
-    <string name="settings_sdk">Tampilkan ikon aplikasi bulat</string>
     <string name="text_copy_link">Tautan disalin</string>
     <string name="advice_license">Lisensi sumber terbuka</string>
     <string name="advice_license_details">Detail lisensi untuk perangkat lunak terbuka yang membantu Boundo terbentuk</string>
@@ -62,7 +61,6 @@
     <string name="text_yes">Ya</string>
     <string name="apiDisplayAPK">APK Perangkat</string>
     <string name="apiDisplaySys">Aplikasi sistem</string>
-    <string name="settingsApiApkPreload">Pindai APK terlebih dahulu di latar belakang</string>
     <string name="immortalMessage">Oh tidak!\nKami terganggu oleh serangga.\nJangan khawatir, itu tertangkap di tas kami!\nKirimkan log kepada kami untuk melakukan penelitian!</string>
     <string name="immortalBag">Catatan</string>
     <string name="immortalRestart">Kembali</string>
@@ -80,7 +78,6 @@
     <string name="menuApiSortApiTime">Baru-baru ini diperbarui</string>
     <string name="apiSdkTarget">SDK Target</string>
     <string name="apiSdkMin">SDK Minimum</string>
-    <string name="settingsApiRetrieveRoundIcon">Ambil ikon bulat dari sumber daya saat disediakan</string>
     <string name="activityTextProcessingApp">Lihat aplikasi Bnd</string>
     <string name="res_invalid_input">Masukan tidak valid</string>
     <string name="text_sort">Menyortir</string>
@@ -127,7 +124,6 @@
     <string name="prefExteriorDarkByBatterySaverSummaryOff">Jika Penghemat Baterai diterapkan, jangan terapkan tema gelap saat aktif, kecuali untuk penggantian sistem</string>
     <string name="prefExteriorDarkPlanScheduleStart">Waktu mulai</string>
     <string name="prefExteriorDarkPlanScheduleEnd">Akhir waktu</string>
-    <string name="prefSettingsTrim2Round">Pangkas ikon non-adaptif untuk membulatkan jika perlu</string>
     <string name="textManual">manual</string>
     <string name="instantManual">Tekan lama pada ikon aplikasi di peluncur untuk menampilkan Pintasan Aplikasi.\nTarik bayangan pemberitahuan ke bawah, sakelar pengaturan di atas area pemberitahuan adalah Ubin Pengaturan Cepat yang Anda cari.</string>
     <string name="instantTileScannerMmManual">Klik ubin untuk mengambil layar dan buka pemindai WeChat untuk memilih tangkapan layar secara manual untuk dipindai.</string>

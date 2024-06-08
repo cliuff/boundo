@@ -22,15 +22,6 @@
     <bool name="avIncludeDisabledDefault">false</bool>
     <string name="avSweet" translatable="false">AVSweet</string>
     <bool name="avSweetDefault">true</bool>
-    <string name="API_APK_PRELOAD" translatable="false">apiAPKPreload</string>
-    <bool name="API_APK_PRELOAD_DEFAULT">false</bool>
-    <string name="API_CIRCULAR_ICON" translatable="false">SDKCircularIcon</string>
-    <!-- render round icon only when user specifies -->
-    <bool name="API_CIRCULAR_ICON_DEFAULT">false</bool>
-    <string name="API_PACKAGE_ROUND_ICON" translatable="false">APIPackageRoundIcon</string>
-    <bool name="API_PACKAGE_ROUND_ICON_DEFAULT">false</bool>
-    <string name="avClipRound" translatable="false">AVClip2Round</string>
-    <bool name="avClipRoundDefault">true</bool>
     <string name="avTags" translatable="false">AvTags</string>
     <string name="avDiffHistory" translatable="false">AvDiffHistory</string>
     <!-- preference keys -->

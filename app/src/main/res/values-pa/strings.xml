@@ -49,7 +49,6 @@
     <string name="sdk_search_hint"><font size="12">ਨਾਮ, ਪੈਕੇਜ, API ਪੱਧਰ, Android ਸੰਸਕਰਣ</font></string>
     <string name="instant_manager_intro">ਐਪ ਸ਼ਾਰਟਕੱਟ</string>
     <string name="text_new">ਨਵਾਂ</string>
-    <string name="settings_sdk">ਗੋਲ ਐਪ ਆਈਕਨ ਡਿਸਪਲੇ ਕਰੋ</string>
     <string name="text_copy_link">ਲਿੰਕ ਕਾਪੀ ਕੀਤਾ ਗਿਆ</string>
     <string name="advice_license">ਓਪਨ ਸੋਰਸ ਲਾਇਸੰਸ</string>
     <string name="advice_license_details">ਓਪਨ ਸੌਫਟਵੇਅਰ ਲਈ ਲਾਇਸੈਂਸ ਵੇਰਵੇ ਜੋ ਬੌਂਡੋ ਨੂੰ ਆਕਾਰ ਦੇਣ ਵਿੱਚ ਮਦਦ ਕਰਦਾ ਹੈ</string>
@@ -62,7 +61,6 @@
     <string name="text_yes">ਹਾਂ</string>
     <string name="apiDisplayAPK">ਡਿਵਾਈਸ ਏ.ਪੀ.ਕੇ</string>
     <string name="apiDisplaySys">ਸਿਸਟਮ ਐਪਸ</string>
-    <string name="settingsApiApkPreload">ਬੈਕਗ੍ਰਾਊਂਡ ਵਿੱਚ ਪਹਿਲਾਂ ਤੋਂ ਹੀ ਏਪੀਕੇ ਲਈ ਸਕੈਨ ਕਰੋ</string>
     <string name="immortalMessage">ਓਹ ਨਹੀਂ!\nਅਸੀਂ ਇੱਕ ਬੱਗ ਤੋਂ ਪਰੇਸ਼ਾਨ ਹਾਂ।\nਚਿੰਤਾ ਨਾ ਕਰੋ, ਇਹ ਸਾਡੇ ਬੈਗ ਵਿੱਚ ਫਸ ਗਿਆ ਹੈ!\nਇਸ \'ਤੇ ਖੋਜ ਕਰਨ ਲਈ ਸਾਨੂੰ ਲੌਗ ਡਿਲੀਵਰ ਕਰੋ!</string>
     <string name="immortalBag">ਲਾਗ</string>
     <string name="immortalRestart">ਪਿੱਛੇ ਹੋਵੋ</string>
@@ -80,7 +78,6 @@
     <string name="menuApiSortApiTime">ਹਾਲ ਹੀ ਵਿੱਚ ਅੱਪਡੇਟ ਕੀਤਾ ਗਿਆ</string>
     <string name="apiSdkTarget">ਟੀਚਾ SDK</string>
     <string name="apiSdkMin">ਨਿਊਨਤਮ SDK</string>
-    <string name="settingsApiRetrieveRoundIcon">ਪ੍ਰਦਾਨ ਕੀਤੇ ਜਾਣ \'ਤੇ ਸਰੋਤ ਤੋਂ ਗੋਲ ਆਈਕਨ ਮੁੜ ਪ੍ਰਾਪਤ ਕਰੋ</string>
     <string name="activityTextProcessingApp">Bnd ਐਪਾਂ ਦੇਖੋ</string>
     <string name="res_invalid_input">ਅਵੈਧ ਇਨਪੁਟ</string>
     <string name="text_sort">ਲੜੀਬੱਧ</string>
@@ -127,7 +124,6 @@
     <string name="prefExteriorDarkByBatterySaverSummaryOff">ਜੇਕਰ ਬੈਟਰੀ ਸੇਵਰ ਲਾਗੂ ਕੀਤਾ ਗਿਆ ਹੈ, ਤਾਂ ਸਿਸਟਮ ਓਵਰਰਾਈਡ ਨੂੰ ਛੱਡ ਕੇ, ਇਸਦੇ ਚਾਲੂ ਹੋਣ \'ਤੇ ਡਾਰਕ ਥੀਮ ਨੂੰ ਲਾਗੂ ਨਾ ਕਰੋ</string>
     <string name="prefExteriorDarkPlanScheduleStart">ਸ਼ੁਰੂਆਤੀ ਸਮਾਂ</string>
     <string name="prefExteriorDarkPlanScheduleEnd">ਸਮਾਪਤੀ ਸਮਾਂ</string>
-    <string name="prefSettingsTrim2Round">ਜਦੋਂ ਢੁਕਵਾਂ ਹੋਵੇ ਤਾਂ ਗੈਰ-ਅਨੁਕੂਲ ਪ੍ਰਤੀਕਾਂ ਨੂੰ ਗੋਲ ਕਰਨ ਲਈ ਕੱਟੋ</string>
     <string name="textManual">ਮੈਨੁਅਲ</string>
     <string name="instantManual">ਐਪ ਸ਼ਾਰਟਕੱਟ ਦਿਖਾਉਣ ਲਈ ਲਾਂਚਰ ਵਿੱਚ ਐਪ ਆਈਕਨ \'ਤੇ ਦੇਰ ਤੱਕ ਦਬਾਓ।\nਸੂਚਨਾ ਸ਼ੇਡ ਨੂੰ ਹੇਠਾਂ ਖਿੱਚੋ, ਸੂਚਨਾ ਖੇਤਰ ਦੇ ਉੱਪਰ ਸੈਟਿੰਗਾਂ ਟੌਗਲ ਉਹ ਤੇਜ਼ ਸੈਟਿੰਗਾਂ ਟਾਈਲਾਂ ਹਨ ਜੋ ਤੁਸੀਂ ਲੱਭ ਰਹੇ ਹੋ।</string>
     <string name="instantTileScannerMmManual">ਸਕ੍ਰੀਨ ਕੈਪਚਰ ਕਰਨ ਲਈ ਟਾਈਲ \'ਤੇ ਕਲਿੱਕ ਕਰੋ ਅਤੇ ਸਕੈਨ ਕਰਨ ਲਈ ਸਕ੍ਰੀਨਸ਼ਾਟ ਨੂੰ ਹੱਥੀਂ ਚੁਣਨ ਲਈ WeChat ਸਕੈਨਰ ਖੋਲ੍ਹੋ।</string>

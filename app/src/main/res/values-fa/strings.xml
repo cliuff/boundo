@@ -49,7 +49,6 @@
     <string name="sdk_search_hint"><font size="12">نام، بسته، سطح API، نسخه Android</font></string>
     <string name="instant_manager_intro">میانبرهای برنامه</string>
     <string name="text_new">جدید</string>
-    <string name="settings_sdk">نمایش آیکون های گرد برنامه</string>
     <string name="text_copy_link">لینک کپی شد</string>
     <string name="advice_license">مجوزهای منبع باز</string>
     <string name="advice_license_details">جزئیات مجوز برای نرم افزار باز که به شکل گیری Boundo کمک می کند</string>
@@ -62,7 +61,6 @@
     <string name="text_yes">آره</string>
     <string name="apiDisplayAPK">فایل‌های APK دستگاه</string>
     <string name="apiDisplaySys">برنامه های سیستمی</string>
-    <string name="settingsApiApkPreload">از قبل در پس‌زمینه فایل‌های APK را اسکن کنید</string>
     <string name="immortalMessage">اوه نه!\nما توسط یک اشکال عصبانی شده‌ایم.\nنگران نباشید، در کیف ما گیر کرده است!\nلاگ را به ما تحویل دهید تا در مورد آن تحقیق کنیم!</string>
     <string name="immortalBag">ورود به سیستم</string>
     <string name="immortalRestart">برگرد</string>
@@ -80,7 +78,6 @@
     <string name="menuApiSortApiTime">به تازگی به روز شده است</string>
     <string name="apiSdkTarget">هدف SDK&#8207;</string>
     <string name="apiSdkMin">حداقل SDK&#8207;</string>
-    <string name="settingsApiRetrieveRoundIcon">در صورت ارائه، نماد گرد را از منبع بازیابی کنید</string>
     <string name="activityTextProcessingApp">مشاهده برنامه های Bnd</string>
     <string name="res_invalid_input">ورودی نامعتبر</string>
     <string name="text_sort">مرتب سازی</string>
@@ -127,7 +124,6 @@
     <string name="prefExteriorDarkByBatterySaverSummaryOff">اگر «بهینه‌سازی باتری» پیاده‌سازی شده است، از تم تیره وقتی روشن است استفاده نکنید، به‌جز برای لغو سیستم</string>
     <string name="prefExteriorDarkPlanScheduleStart">زمان شروع</string>
     <string name="prefExteriorDarkPlanScheduleEnd">زمان پایان</string>
-    <string name="prefSettingsTrim2Round">نمادهای غیر تطبیقی را برش دهید تا در صورت لزوم گرد شوند</string>
     <string name="textManual">کتابچه راهنمای</string>
     <string name="instantManual">برای نمایش میانبرهای برنامه، روی نماد برنامه در راه‌انداز به مدت طولانی فشار دهید.\nشاخه اعلان‌ها را پایین بیاورید، جابه‌جایی‌های تنظیمات بالای ناحیه اعلان، کاشی‌های تنظیمات سریع مورد نظر شما هستند.</string>
     <string name="instantTileScannerMmManual">روی کاشی کلیک کنید تا از صفحه عکس بگیرید و اسکنر WeChat را باز کنید تا به صورت دستی اسکرین شات را برای اسکن انتخاب کنید.</string>

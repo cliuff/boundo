@@ -97,16 +97,13 @@
     <string name="text_error">Bir hata oluştu</string>
     <string name="exterior_blur_degree">Bulanıklık derecesi</string>
     <string name="text_loading">Yükleniyor</string>
-    <string name="settings_sdk">Yuvarlak uygulama simgelerini görüntüle</string>
     <string name="text_copy_link">Bağlantı kopyalandı</string>
     <string name="advice_license_details">Boundo\'nun şekillenmesine yardımcı olan açık yazılımlar için lisans ayrıntıları</string>
     <string name="text_copy_content">İçerik kopyalandı</string>
     <string name="text_apply_background">Arka plan olarak uygula</string>
     <string name="apiInfoSubAiDes">Uyarlanabilir Simge, önceden tanımlanmış bir şekil ile sınırlanmak yerine herhangi bir şekle uyum sağlar</string>
-    <string name="settingsApiApkPreload">APK\'ları önceden arka planda tarayın</string>
     <string name="textBugLog">Günlükte yakalanan hata</string>
     <string name="tileColorful">Renkli Kalın</string>
-    <string name="settingsApiRetrieveRoundIcon">Sağlandığında yuvarlak simgeyi kaynaktan al</string>
     <string name="activityTextProcessingApp">Bnd uygulamalarını görüntüleme</string>
     <string name="res_invalid_input">Geçersiz Giriş</string>
     <string name="text_sort">Çeşit</string>
@@ -142,7 +139,6 @@
     <string name="prefExteriorDarkByBatterySaverSummaryOff">Pil Tasarrufu uygulanmışsa, sistem geçersiz kılma dışında karanlık temayı açıkken uygulamayın</string>
     <string name="prefExteriorDarkPlanScheduleStart">Başlangıç saati</string>
     <string name="prefExteriorDarkPlanScheduleEnd">Bitiş zamanı</string>
-    <string name="prefSettingsTrim2Round">Uygun olmadığında yuvarlamak için uyarlanabilir olmayan simgeleri kırpın</string>
     <string name="instantTileScannerMmManual">Ekranı yakalamak için döşemeye tıklayın ve taranacak ekran görüntüsünü manuel olarak seçmek için WeChat tarayıcısını açın.</string>
     <string name="instantTileScannerAlipayManual">Ekranı yakalamak için döşemeye tıklayın ve ekran görüntüsünü taramak için Alipay tarayıcıyı çağırın.</string>
     <string name="instantTileMDUManual">Verileri yenilemek için kutucuğa tıklayın. Kutucuğu eklerken Kullanım Erişimi izni vermeniz istenir.</string>

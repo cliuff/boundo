@@ -50,7 +50,6 @@
     <string name="sdk_search_hint"><font size="12">ชื่อแพคเกจระดับ API เวอร์ชัน Android</font></string>
     <string name="instant_manager_intro">ทางลัดแอพ</string>
     <string name="text_new">ใหม่</string>
-    <string name="settings_sdk">แสดงไอคอนแอพ</string>
     <string name="text_copy_link">คัดลอกลิงก์แล้ว</string>
     <string name="unit_audio_timer">ตัวจับเวลาเสียง</string>
     <string name="main_more">มากกว่า</string>
@@ -91,13 +90,11 @@
     <string name="textBugLog">ข้อผิดพลาดที่ติดอยู่ในบันทึก</string>
     <string name="apiDisplayAPK">อุปกรณ์ APK</string>
     <string name="apiDisplaySys">แอพระบบ</string>
-    <string name="settingsApiApkPreload">สแกนหา APK ล่วงหน้าในพื้นหลัง</string>
     <string name="tileColorful">สีสันสดใส</string>
     <string name="apiViewerShort">แอป API</string>
     <string name="menuApiSortApiTime">อัพเดทล่าสุด</string>
     <string name="apiSdkTarget">SDK เป้าหมาย</string>
     <string name="apiSdkMin">SDK ขั้นต่ำ</string>
-    <string name="settingsApiRetrieveRoundIcon">ดึงไอคอนรอบจากทรัพยากรเมื่อมีการจัด</string>
     <string name="activityTextProcessingApp">ดูแอพ Bnd</string>
     <string name="res_invalid_input">อินพุตไม่ถูกต้อง</string>
     <string name="text_sort">ประเภท</string>
@@ -141,7 +138,6 @@
     <string name="prefExteriorDarkByBatterySaverSummaryOff">หากมีการใช้งาน Battery Saver ห้ามใช้ธีมมืดเมื่อเปิดใช้งานยกเว้นการแทนที่ระบบ</string>
     <string name="prefExteriorDarkPlanScheduleStart">เวลาเริ่มต้น</string>
     <string name="prefExteriorDarkPlanScheduleEnd">เวลาสิ้นสุด</string>
-    <string name="prefSettingsTrim2Round">ตัดแต่งไอคอนที่ไม่ปรับตัวเพื่อปัดเศษตามความเหมาะสม</string>
     <string name="textManual">คู่มือ</string>
     <string name="avAdapterActionsIcon">ไอคอนแบ่งปัน</string>
     <string name="avAdapterActionsApk">แชร์ apk</string>

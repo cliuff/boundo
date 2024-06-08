@@ -97,16 +97,13 @@
     <string name="text_error">出現錯誤</string>
     <string name="exterior_blur_degree">模糊程度</string>
     <string name="text_loading">加載中</string>
-    <string name="settings_sdk">顯示圓形應用圖標</string>
     <string name="text_copy_link">鏈接已復制</string>
     <string name="advice_license_details">斑朵的誕生全靠開源軟件的支持</string>
     <string name="text_copy_content">內容已復制</string>
     <string name="text_apply_background">設置為背景</string>
     <string name="apiInfoSubAiDes">自適應圖標可自由變換為任意形狀</string>
-    <string name="settingsApiApkPreload">後台預掃描APK</string>
     <string name="textBugLog">已記錄下錯誤</string>
     <string name="tileColorful">莫黑屏</string>
-    <string name="settingsApiRetrieveRoundIcon">當應用提供了圓形圖標資源時加載它</string>
     <string name="activityTextProcessingApp">查看斑朵應用</string>
     <string name="res_invalid_input">無效的輸入</string>
     <string name="text_sort">排序</string>
@@ -142,7 +139,6 @@
     <string name="prefExteriorDarkByBatterySaverSummaryOff">若係統實現了節電模式，當該模式開啟時不啟用暗黑主題，除非系統啟用了暗黑主題</string>
     <string name="prefExteriorDarkPlanScheduleStart">開啟時間</string>
     <string name="prefExteriorDarkPlanScheduleEnd">結束時間</string>
-    <string name="prefSettingsTrim2Round">若剪切圖標不違和，將非自適應圖標剪切為圓形</string>
     <string name="instantTileScannerMmManual">點擊磁貼以截屏並打開微信掃一掃手動選取屏幕截圖掃描。</string>
     <string name="instantTileScannerAlipayManual">點擊磁貼以截屏並調用支付寶掃一掃掃描屏幕截圖。</string>
     <string name="instantTileMDUManual">點擊磁貼以刷新數據。添加該磁貼時會提示授予使用統計權限。</string>

@@ -97,15 +97,12 @@
     <string name="text_error">エラーが発生しました</string>
     <string name="exterior_blur_degree">ぼかし度</string>
     <string name="text_loading">読み込み中</string>
-    <string name="settings_sdk">丸いアプリのアイコンを表示</string>
     <string name="text_copy_link">リンクをコピーしました</string>
     <string name="text_copy_content">コピーされたコンテンツ</string>
     <string name="text_apply_background">背景として設定</string>
     <string name="apiInfoSubAiDes">アダプティブアイコンは自由に任意の形状に変換できます</string>
-    <string name="settingsApiApkPreload">バックグラウンドプレスキャンAPK</string>
     <string name="textBugLog">ログに記録されたエラー</string>
     <string name="tileColorful">Mo黒画面</string>
-    <string name="settingsApiRetrieveRoundIcon">アプリが丸いアイコンリソースを提供するときにアイコンを読み込みます</string>
     <string name="res_invalid_input">無効入力</string>
     <string name="text_sort">ソート</string>
     <string name="textShareApk">アプリのインストールパッケージを他のユーザーと共有する</string>
@@ -140,7 +137,6 @@
     <string name="prefExteriorDarkByBatterySaverSummaryOff">システムが省電力モードを実装している場合、システムがダークテーマを有効にしない限り、モードをオンにしてもダークテーマは有効になりません。</string>
     <string name="prefExteriorDarkPlanScheduleStart">開始時間</string>
     <string name="prefExteriorDarkPlanScheduleEnd">終了時間</string>
-    <string name="prefSettingsTrim2Round">切り取りアイコンが違反していない場合は、非適応アイコンを円に切り取ります</string>
     <string name="instantTileScannerMmManual">タイルをクリックしてスクリーンショットを撮り、WeChatスキャンを開いてスキャンするスクリーンショットを手動で選択します。</string>
     <string name="instantTileScannerAlipayManual">タイルをクリックしてスクリーンショットを撮り、スキャンしたスクリーンショットをスキャンするためにAlipayを呼び出します。</string>
     <string name="instantTileMDUManual">タイルをクリックしてデータを更新します。 このタイルを追加すると、使用統計情報の許可を付与するように求められます。</string>
