@@ -16,7 +16,6 @@
 
 package com.madness.collision.unit.api_viewing.ui.list
 
-import android.view.LayoutInflater
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -32,10 +31,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.viewinterop.AndroidView
+import androidx.fragment.compose.AndroidFragment
 import androidx.recyclerview.widget.RecyclerView
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
-import com.madness.collision.unit.api_viewing.databinding.AvLegacyAppListBinding
 import com.madness.collision.unit.api_viewing.list.AppListFragment
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -74,16 +72,8 @@ fun LegacyAppList(
 @Composable
 private fun AppListView(update: AppListFragment.() -> Unit) {
     var listFragment: AppListFragment? by remember { mutableStateOf(null) }
-    AndroidView(
-        modifier = Modifier.fillMaxSize(),
-        factory = { ctx ->
-            val con = AvLegacyAppListBinding.inflate(LayoutInflater.from(ctx)).root
-            con.also { listFragment = con.getFragment() }
-        },
-        update = { fContainer ->
-            update(requireNotNull(listFragment))
-        },
-    )
+    AndroidFragment<AppListFragment>(modifier = Modifier.fillMaxSize()) { listFragment = it }
+    LaunchedEffect(update) { listFragment?.update() }
 }
 
 private class AppListOnScrollListener : RecyclerView.OnScrollListener() {

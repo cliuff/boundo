@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.core.graphics.drawable.toDrawable
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.madness.collision.unit.api_viewing.R
@@ -67,7 +68,7 @@ import kotlin.math.pow
 @Composable
 fun AppIconPage(paddingValues: PaddingValues, env: AppIconEnv) {
     val viewModel: AppIconViewModel = viewModel()
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val (appState, launcherState) = uiState
     val list = remember(appState, launcherState) full@{
         val appIcons = run app@{

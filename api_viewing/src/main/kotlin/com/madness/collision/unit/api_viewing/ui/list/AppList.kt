@@ -32,7 +32,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -41,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -88,8 +88,8 @@ open class AppListFragment : ComposeUnit(), Democratic {
 @Composable
 fun AppList(paddingValues: PaddingValues) {
     val viewModel = viewModel<AppListViewModel>()
-    val appList by viewModel.appList.collectAsState()
-    val opUiState by viewModel.opUiState.collectAsState()
+    val appList by viewModel.appList.collectAsStateWithLifecycle()
+    val opUiState by viewModel.opUiState.collectAsStateWithLifecycle()
     AppListScaffold(
         listState = rememberAppListState(viewModel),
         eventHandler = rememberCompOptionsEventHandler(viewModel),
@@ -108,7 +108,7 @@ fun AppList(paddingValues: PaddingValues) {
 @Composable
 private fun AppListV2(paddingValues: PaddingValues) {
     val viewModel = viewModel<AppListViewModel>()
-    val artList by viewModel.uiState.collectAsState()
+    val artList by viewModel.uiState.collectAsStateWithLifecycle()
     Box(modifier = Modifier.background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f))) {
         LazyColumn(contentPadding = paddingValues) {
             items(items = artList, key = { p -> p.packageName }) { art ->

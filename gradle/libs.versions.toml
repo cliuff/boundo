@@ -21,7 +21,7 @@ androidxLifecycle = "2.7.0"
 androidxRoom = "2.6.0"
 androidxNavigation = "2.6.0"
 androidxCoreTesting = "2.2.0"
-androidxFragment = "1.6.2"
+androidxFragment = "1.8.0"
 androidxWindow = "1.2.0"
 androidxDrawerLayout = "1.2.0"
 androidxSwipeRefreshLayout = "1.1.0"
@@ -99,6 +99,7 @@ androidxComposeUiTest = { module = "androidx.compose.ui:ui-test-junit4" }
 androidxActivity = { module = "androidx.activity:activity-ktx", version.ref = "androidxActivity" }
 androidxAppcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidxAppcompat" }
 androidxFragment = { module = "androidx.fragment:fragment-ktx", version.ref = "androidxFragment" }
+androidxFragmentCompose = { module = "androidx.fragment:fragment-compose", version.ref = "androidxFragment" }
 androidxWindow = { module = "androidx.window:window", version.ref = "androidxWindow" }
 androidxDrawerLayout = { module = "androidx.drawerlayout:drawerlayout", version.ref = "androidxDrawerLayout" }
 androidxSwipeRefreshLayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "androidxSwipeRefreshLayout" }
@@ -112,6 +113,7 @@ androidxViewPager = { module = "androidx.viewpager2:viewpager2", version.ref = "
 androidxDocumentFile = { module = "androidx.documentfile:documentfile", version.ref = "androidxDocumentFile" }
 
 androidxLifecycleRuntime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidxLifecycle" }
+androidxLifecycleRuntimeCompose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
 androidxLifecycleCommon = { module = "androidx.lifecycle:lifecycle-common", version.ref = "androidxLifecycle" }
 androidxLifecycleViewModel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidxLifecycle" }
 androidxLifecycleLiveData = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "androidxLifecycle" }
@@ -196,8 +198,10 @@ dynamicFeatureBasics = [
     "androidxActivity",
     "androidxAppcompat",
     "androidxFragment",
+    "androidxFragmentCompose",
     "androidxConstraintLayout",
     "androidxLifecycleRuntime",
+    "androidxLifecycleRuntimeCompose",
     "androidxLifecycleCommon",
     "androidxLifecycleViewModel",
     "androidxLifecycleLiveData",

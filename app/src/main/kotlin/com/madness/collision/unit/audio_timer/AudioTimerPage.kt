@@ -51,7 +51,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -63,7 +62,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -72,6 +70,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.madness.collision.R
 import com.madness.collision.util.os.OsUtils
@@ -83,9 +82,8 @@ fun AudioTimerPage(paddingValues: PaddingValues, onStartTimer: () -> Unit, onNav
     val context = LocalContext.current
     val timerController = remember { AudioTimerController(context) }
     val scope = rememberCoroutineScope()
-    val lifecycleOwner = LocalLifecycleOwner.current
-    val statusFlow = remember { timerController.getTimerStatusFlow(lifecycleOwner, scope) }
-    val status by statusFlow.collectAsState()
+    val statusFlow = remember { timerController.getTimerStatusFlow(scope) }
+    val status by statusFlow.collectAsStateWithLifecycle()
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
@@ -147,9 +145,8 @@ fun AudioTimerPage(paddingValues: PaddingValues, onStartTimer: () -> Unit, onNav
 
 @Composable
 private fun TimerStatus(status: Boolean, timerController: AudioTimerController) {
-    val lifecycleOwner = LocalLifecycleOwner.current
-    val runningStatusFlow = remember { timerController.getTimerRunningStatus(lifecycleOwner) }
-    val displayStatus by runningStatusFlow.collectAsState("")
+    val runningStatusFlow = remember { timerController.getTimerRunningStatus() }
+    val displayStatus by runningStatusFlow.collectAsStateWithLifecycle("")
     Column() {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             Column() {

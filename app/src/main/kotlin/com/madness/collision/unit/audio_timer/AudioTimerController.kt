@@ -19,8 +19,6 @@ package com.madness.collision.unit.audio_timer
 import android.content.Context
 import android.content.Intent
 import androidx.core.content.edit
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.flowWithLifecycle
 import com.madness.collision.util.P
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose
@@ -36,7 +34,7 @@ import kotlinx.coroutines.launch
 class AudioTimerController(private val context: Context) {
     val isTimerRunning: Boolean get() = AudioTimerService.isRunning
 
-    fun getTimerStatusFlow(lifecycleOwner: LifecycleOwner, scope: CoroutineScope): StateFlow<Boolean> {
+    fun getTimerStatusFlow(scope: CoroutineScope): StateFlow<Boolean> {
         val statusFlow = flow {
             while (true) {
                 emit(AudioTimerService.isRunning)
@@ -45,12 +43,10 @@ class AudioTimerController(private val context: Context) {
             }
         }
         val isRunning = AudioTimerService.isRunning
-        return statusFlow
-            .flowWithLifecycle(lifecycleOwner.lifecycle)
-            .stateIn(scope, SharingStarted.WhileSubscribed(), isRunning)
+        return statusFlow.stateIn(scope, SharingStarted.WhileSubscribed(), isRunning)
     }
 
-    fun getTimerRunningStatus(lifecycleOwner: LifecycleOwner): Flow<String> {
+    fun getTimerRunningStatus(): Flow<String> {
         val flow = callbackFlow {
             val timerCallback = object : AudioTimerService.Callback {
                 override fun onTick(targetTime: Long, duration: Long, leftTime: Long) {
@@ -63,7 +59,7 @@ class AudioTimerController(private val context: Context) {
             AudioTimerService.addCallback(timerCallback)
             awaitClose { AudioTimerService.removeCallback(timerCallback) }
         }
-        return flow.flowWithLifecycle(lifecycleOwner.lifecycle)
+        return flow
     }
 
     fun startTimer(state: AtUiState) {
