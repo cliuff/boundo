@@ -28,8 +28,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
@@ -37,6 +39,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -125,6 +128,7 @@ interface AppListState {
     val opUiState: AppListOpUiState
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AppListScaffold(
     listState: AppListState,
@@ -138,7 +142,8 @@ private fun AppListScaffold(
         topBar = {
             AppListBar(
                 isRefreshing = listState.isRefreshing,
-                windowInsets = WindowInsets(top = 28.dp)
+                windowInsets = WindowInsets(top = 28.dp),
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
             ) {
                 AppListBarAction(
                     icon = Icons.Outlined.CheckCircle,

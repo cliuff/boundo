@@ -67,6 +67,7 @@ mockito = "5.1.1"
 appIconLoader = "1.5.0"
 # Superellipse shape for Compose
 smoothCornerCompose = "v1.0.0"
+haze = "0.7.2"
 libCheckerRules = "35.3"
 googleSmali = "3.0.5"
 ldapsdk = "6.0.11"
@@ -161,6 +162,7 @@ byteBuddy = { module = "net.bytebuddy:byte-buddy-android", version.ref = "byteBu
 mockito = { module = "org.mockito:mockito-android", version.ref = "mockito" }
 appIconLoader = { module = "me.zhanghai.android.appiconloader:appiconloader-iconloaderlib", version.ref = "appIconLoader" }
 smoothCornerCompose = { module = "com.github.racra:smooth-corner-rect-android-compose", version.ref = "smoothCornerCompose" }
+haze = { module = "dev.chrisbanes.haze:haze", version.ref = "haze" }
 libCheckerRules = { module = "com.github.LibChecker:LibChecker-Rules-Bundle", version.ref = "libCheckerRules" }
 google-smali = { module = "com.android.tools.smali:smali-dexlib2", version.ref = "googleSmali" }
 # resolve distinguished names from X.509 cert

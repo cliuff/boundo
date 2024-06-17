@@ -39,6 +39,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Android
 import androidx.compose.material.icons.outlined.PieChart
 import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.twotone.Android
+import androidx.compose.material.icons.twotone.PieChart
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -53,6 +55,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -121,8 +124,29 @@ fun AppListHeader(
     statsSizeLabel: String,
     onClickDevInfo: () -> Unit,
     onClickStats: () -> Unit,
+    headerType: Int = 0,
 ) {
     Column(modifier = modifier) {
+        if (headerType == 0) {
+            Row() {
+                TextLabelAction(
+                    modifier = Modifier.weight(2f),
+                    icon = Icons.TwoTone.Android,
+                    titleLabel = devInfoLabel,
+                    valueLabel = "",
+                    onClick = onClickDevInfo,
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                TextLabelAction(
+                    modifier = Modifier.weight(2f),
+                    icon = Icons.TwoTone.PieChart,
+                    titleLabel = "List stats",
+                    valueLabel = statsSizeLabel,
+                    onClick = onClickStats
+                )
+            }
+        }
+
         var query by remember { mutableStateOf("") }
         var isActive by remember { mutableStateOf(false) }
         SearchBar(
@@ -152,20 +176,22 @@ fun AppListHeader(
             content = {},
         )
 
-        Spacer(modifier = Modifier.height(10.dp))
-        Row(modifier = Modifier.height(IntrinsicSize.Min)) {
-            DeviceApiInfo(
-                modifier = Modifier.weight(3f).fillMaxHeight(),
-                label = devInfoLabel,
-                desc = devInfoDesc,
-                onClick = onClickDevInfo,
-            )
-            Spacer(modifier = Modifier.width(10.dp))
-            ListStats(
-                modifier = Modifier.weight(2f).fillMaxHeight(),
-                sizeLabel = statsSizeLabel,
-                onClick = onClickStats
-            )
+        if (headerType == 1) {
+            Spacer(modifier = Modifier.height(10.dp))
+            Row(modifier = Modifier.height(IntrinsicSize.Min)) {
+                DeviceApiInfo(
+                    modifier = Modifier.weight(3f).fillMaxHeight(),
+                    label = devInfoLabel,
+                    desc = devInfoDesc,
+                    onClick = onClickDevInfo,
+                )
+                Spacer(modifier = Modifier.width(10.dp))
+                ListStats(
+                    modifier = Modifier.weight(2f).fillMaxHeight(),
+                    sizeLabel = statsSizeLabel,
+                    onClick = onClickStats
+                )
+            }
         }
     }
 }
@@ -257,12 +283,56 @@ private fun ListStats(modifier: Modifier = Modifier, sizeLabel: String, onClick:
     }
 }
 
+@Composable
+private fun TextLabelAction(
+    modifier: Modifier = Modifier,
+    icon: ImageVector,
+    titleLabel: String,
+    valueLabel: String,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = modifier
+            .clip(RoundedCornerShape(5.dp))
+            .clickable(onClick = onClick)
+            .padding(horizontal = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(
+            modifier = Modifier.padding(vertical = 5.dp).size(12.dp),
+            imageVector = icon,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.85f),
+        )
+        Spacer(modifier = Modifier.width(5.dp))
+        Text(
+            modifier = Modifier.weight(1f),
+            text = titleLabel,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.9f),
+            fontSize = 12.sp,
+            lineHeight = 12.sp,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+        Text(
+            text = valueLabel,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
+            fontSize = 11.sp,
+            lineHeight = 11.sp,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+    }
+}
+
 @PreviewCombinedColorLayout
 @Composable
 private fun HeaderPreview() {
     BoundoTheme {
         AppListHeader(
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 5.dp),
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .padding(horizontal = 12.dp, vertical = 5.dp),
             devInfoLabel = "Android 15",
             devInfoDesc = "API 35, Vanilla Ice Cream",
             statsSizeLabel = "231",

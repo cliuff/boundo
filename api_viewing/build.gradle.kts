@@ -69,6 +69,7 @@ dependencies {
         libs.openCsv,
         libs.androidDeviceNames,
         libs.smoothCornerCompose,
+        libs.haze,
         libs.androidxConstraintLayoutCompose,
         libs.libCheckerRules,
         libs.google.smali,

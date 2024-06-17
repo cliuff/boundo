@@ -48,6 +48,8 @@ import androidx.compose.material3.PrimaryScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
@@ -70,6 +72,7 @@ import com.madness.collision.util.dev.PreviewCombinedColorLayout
 fun AppListBar(
     isRefreshing: Boolean,
     windowInsets: WindowInsets = WindowInsets(0),
+    colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
     primaryAction: @Composable () -> Unit,
 ) {
     val refreshRotation by rememberRefreshRotation(isRefreshing)
@@ -101,6 +104,7 @@ fun AppListBar(
             Spacer(modifier = Modifier.width(5.dp))
         },
         windowInsets = windowInsets,
+        colors = colors,
     )
 }
 
@@ -186,6 +190,7 @@ fun AppSrcTypeSwitcher(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @PreviewCombinedColorLayout
 @Composable
 private fun AppListBarPreview() {

@@ -16,11 +16,15 @@
 
 package com.madness.collision.unit.api_viewing.ui.list
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,12 +35,25 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.dp
 import androidx.fragment.compose.AndroidFragment
 import androidx.recyclerview.widget.RecyclerView
+import coil.compose.rememberAsyncImagePainter
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.list.AppListFragment
+import com.madness.collision.util.F
+import dev.chrisbanes.haze.HazeState
+import dev.chrisbanes.haze.haze
+import dev.chrisbanes.haze.hazeChild
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlin.math.roundToInt
 
 @Composable
 fun LegacyAppList(
@@ -51,17 +68,43 @@ fun LegacyAppList(
         snapshotFlow { appList.size }.onEach(headerState::statsSize::set).launchIn(this)
         snapshotFlow { scrollListener.absScrollY }.onEach(headerState::updateOffsetY).launchIn(this)
     }
-    Box(modifier = Modifier.background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f))) {
-        AppListView {
-            getAdapter().topCover = headerState.headerHeight
-            getAdapter().setSortMethod(options.listOrder.code)
-            updateList(appList)
-            getRecyclerView().removeOnScrollListener(scrollListener)
-            getRecyclerView().addOnScrollListener(scrollListener)
+    Box() {
+        val hazeState = remember { HazeState() }
+        Box(modifier = Modifier.haze(hazeState)) {
+            if (!LocalInspectionMode.current) {
+                val context = LocalContext.current
+                val imgFile = remember { F.createFile(F.valFilePubExterior(context), "Art_ListHeader.jpg") }
+                Image(
+                    modifier = Modifier.fillMaxWidth(),
+                    painter = rememberAsyncImagePainter(imgFile),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop
+                )
+            }
+
+            // backdrop for app list
+            Box(modifier = Modifier
+                .padding(top = with(LocalDensity.current) { headerState.headerHeight.toDp() })
+                .offset { IntOffset(0, headerState.headerOffsetY) }
+                .fillMaxSize()
+                .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
+                .background(MaterialTheme.colorScheme.background))
+
+            val backdropPadding = with(LocalDensity.current) { 20.dp.toPx().roundToInt() }
+            AppListView {
+                getAdapter().topCover = headerState.headerHeight + backdropPadding
+                getAdapter().setSortMethod(options.listOrder.code)
+                updateList(appList)
+                getRecyclerView().removeOnScrollListener(scrollListener)
+                getRecyclerView().addOnScrollListener(scrollListener)
+            }
         }
 
         AppListSwitchHeader(
-            modifier = Modifier.padding(top = paddingValues.calculateTopPadding()),
+            modifier = Modifier
+                .padding(top = paddingValues.calculateTopPadding())
+                .padding(top = 110.dp)
+                .hazeChild(hazeState),
             options = options,
             loadedSrc = loadedCats,
             headerState = headerState,
