@@ -34,7 +34,7 @@ class MyUnit : AppListFragment() {
 }
 
 abstract class ComposeUnit : com.madness.collision.unit.Unit() {
-    private val composeViewOwner = ComposeViewOwner()
+    protected val composeViewOwner = ComposeViewOwner()
 
     @Composable
     protected abstract fun ComposeContent()

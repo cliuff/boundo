@@ -16,9 +16,14 @@
 
 package com.madness.collision.unit.api_viewing.ui.list
 
+import android.content.ClipData
+import android.content.ClipDescription
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
+import android.view.DragEvent
 import android.view.View
+import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.Toolbar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -48,9 +53,12 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.madness.collision.Democratic
+import com.madness.collision.R
 import com.madness.collision.chief.app.rememberColorScheme
 import com.madness.collision.unit.api_viewing.ComposeUnit
 import com.madness.collision.util.FilePop
+import com.madness.collision.util.notifyBriefly
+import com.madness.collision.util.os.OsUtils
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -67,6 +75,12 @@ open class AppListFragment : ComposeUnit(), Democratic {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         democratize(mainViewModel)
+        if (OsUtils.satisfy(OsUtils.N)) {
+            composeViewOwner.getView()?.setOnDragListener { _, event ->
+                handleDragEvent(event)
+                true
+            }
+        }
         val viewModel by viewModels<AppListViewModel>()
         viewModel.events
             .filterIsInstance<AppListEvent.ShareAppList>()
@@ -78,6 +92,36 @@ open class AppListFragment : ComposeUnit(), Democratic {
                     .show(childFragmentManager, FilePop.TAG)
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun handleDragEvent(event: DragEvent) {
+        fun ClipData.toQueryOrUris() = run {
+            if (description.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)
+                || description.hasMimeType(ClipDescription.MIMETYPE_TEXT_HTML)) {
+                if (itemCount > 0 && getItemAt(0).text.isNullOrEmpty().not()) {
+                    return@run getItemAt(0).text to null
+                }
+            }
+            null to (0..<itemCount).mapNotNull { i -> getItemAt(i).uri }
+        }
+        when (event.action) {
+            DragEvent.ACTION_DRAG_ENTERED -> notifyBriefly(R.string.apiDragDropHint)
+            DragEvent.ACTION_DROP -> {
+                val viewModel by viewModels<AppListViewModel>()
+                event.clipData?.toQueryOrUris().let clip@{ pair ->
+                    val (query, uriList) = pair ?: return@clip
+                    if (query != null) {
+                        viewModel.setQueryFilter(query)
+                    } else if (uriList != null) {
+                        val permissions = activity?.requestDragAndDropPermissions(event)
+                        viewModel.toggleListSrc(AppListSrc.DragAndDrop(uriList)) {
+                            permissions?.release()
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @Composable

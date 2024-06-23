@@ -186,9 +186,13 @@ class AppListViewModel : ViewModel() {
         mutAppList.update { multiSrcApps[cat].getList() }
     }
 
-    fun toggleListSrc(src: AppListSrc) {
+    fun toggleListSrc(src: AppListSrc, onFinish: (() -> Unit)? = null) {
         val srcSet = opUiState.value.options.srcSet.toHashSet()
-        val newSrcSet = if (src in srcSet) srcSet - src else srcSet + src
+        val newSrcSet = when (src.cat == ListSrcCat.Filter) {
+            // remove all other Filters so that only one filter can be active at a time
+            true -> if (src in srcSet) srcSet - src else srcSet.apply { removeIf { it.cat == ListSrcCat.Filter } } + src
+            else -> if (src in srcSet) srcSet - src else srcSet + src
+        }
         mutOpUiState.update {
             opUiState.value.run { copy(options = options.copy(srcSet = newSrcSet.toList())) }
         }
@@ -206,6 +210,10 @@ class AppListViewModel : ViewModel() {
                 terminalSrcCat = srcCat
                 mutAppList.update { multiSrcApps[srcCat].getList() }
             } else {
+                // only one filter can be active at a time
+                if (src.cat == ListSrcCat.Filter) {
+                    multiSrcApps[ListSrcCat.Filter].clearAll()
+                }
                 srcLoader.addListSrc(src)
                     .onEach {
                         if (src.cat == ListSrcCat.Platform) {
@@ -217,9 +225,23 @@ class AppListViewModel : ViewModel() {
                     .onEach { updateList -> mutAppList.update { updateList } }
                     .catch { it.printStackTrace() }
                     .launchIn(this)
+                    .invokeOnCompletion { onFinish?.invoke() }
                 terminalSrcCat = src.cat
                 mutAppList.update { multiSrcApps[src.cat].getList() }
             }
+        }
+    }
+
+    fun setQueryFilter(query: CharSequence) {
+        if (terminalSrcCat == AppListSrc.DataSourceQuery.cat) {
+            val cat = when (val src = opUiState.value.options.srcSet.find { it.cat == ListSrcCat.Filter }) {
+                is AppListSrc.DataSourceQuery -> src.targetCat
+                is AppListSrc.TagFilter -> src.targetCat
+                else -> error("ListSrcCat.Filter not found or matched")
+            }
+            toggleListSrc(AppListSrc.DataSourceQuery(cat, query.toString()))
+        } else {
+            toggleListSrc(AppListSrc.DataSourceQuery(terminalSrcCat, query.toString()))
         }
     }
 

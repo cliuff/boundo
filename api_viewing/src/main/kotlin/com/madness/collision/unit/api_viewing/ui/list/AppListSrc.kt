@@ -79,15 +79,16 @@ sealed interface AppListSrc {
         companion object Key : ListSrcKey<SelectVolume>
         override val key: ListSrcKey<SelectVolume> = Key
     }
-    object DragAndDrop : AppListSrc, ListSrcKey<DragAndDrop> {
-        override val key: ListSrcKey<DragAndDrop> = this
+    class DragAndDrop(val uriList: List<Uri>) : AppListSrc {
+        companion object Key : ListSrcKey<DragAndDrop>
+        override val key: ListSrcKey<DragAndDrop> = Key
     }
 
     class TagFilter(val targetCat: ListSrcCat, val checkedTags: Map<String, Boolean>) : AppListSrc {
         companion object Key : ListSrcKey<TagFilter>
         override val key: ListSrcKey<TagFilter> = Key
     }
-    class DataSourceQuery(val value: String) : AppListSrc {
+    class DataSourceQuery(val targetCat: ListSrcCat, val value: String) : AppListSrc {
         companion object Key : ListSrcKey<DataSourceQuery>
         override val key: ListSrcKey<DataSourceQuery> = Key
     }

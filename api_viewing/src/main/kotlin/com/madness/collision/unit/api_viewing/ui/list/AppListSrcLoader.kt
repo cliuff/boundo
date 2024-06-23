@@ -18,8 +18,10 @@ package com.madness.collision.unit.api_viewing.ui.list
 
 import android.content.Context
 import android.net.Uri
+import android.provider.DocumentsContract
 import com.madness.collision.chief.chiefContext
 import com.madness.collision.unit.api_viewing.AppTag
+import com.madness.collision.unit.api_viewing.apps.AppQueryUseCase
 import com.madness.collision.unit.api_viewing.apps.AppRepository
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
@@ -83,10 +85,19 @@ class AppListSrcLoader(
                         apkRetriever.fromUri(src.uri) { addApk(src, it) }
                     }
                 }
-                AppListSrc.DragAndDrop -> TODO()
+                is AppListSrc.DragAndDrop -> {
+                    for (itemUri in src.uriList) {
+                        when (DocumentsContract.isDocumentUri(chiefContext, itemUri)) {
+                            true -> apkRetriever.fromDocumentUri(itemUri) { addApk(src, it) }
+                            false -> addApk(src, itemUri)
+                        }
+                    }
+                }
                 is AppListSrc.TagFilter -> send(src.apply(chiefContext))
                 is AppListSrc.DataSourceQuery -> {
-                    getAppList(src.cat).addAllItems(src, appRepo.queryApps(src.value))
+                    val appList = getAppList(src.targetCat).getList()
+                    val filterList = AppQueryUseCase().filterInMemoryList(appList, src.value)
+                    getAppList(src.cat).addAllItems(src, filterList)
                     send(getAppList(src.cat).getList())
                 }
             }
