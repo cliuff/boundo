@@ -18,20 +18,8 @@ package com.madness.collision.util
 
 import android.app.ActivityManager
 import android.content.Context
-import androidx.activity.ComponentActivity
-import com.madness.collision.unit.api_viewing.AccessAV
 
 object MemoryManager {
-
-    fun ensureSpace(amount: Int) {
-    }
-
-    fun clearSpace(activity: ComponentActivity? = null) {
-        AccessAV.clearTags()
-        if (activity == null) return
-        AccessAV.clearApps(activity)
-    }
-
     fun requireMemoryIntensive(context: Context, block: () -> Unit) {
         if (context.availableMemory.lowMemory.not()) block()
     }

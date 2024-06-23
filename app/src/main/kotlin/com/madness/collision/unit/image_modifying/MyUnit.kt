@@ -161,11 +161,9 @@ class MyUnit: Unit(){
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         val context = context ?: return
-        val activity = activity ?: return
         if (requestCode == REQUEST_GET_IMAGE && resultCode == Activity.RESULT_OK && data != null) {
             GlobalScope.launch {
                 val dataUri = data.data ?: return@launch
-                MemoryManager.clearSpace(activity)
                 sampleImage = null
                 launch(Dispatchers.Main) {
                     viewBinding.imagePreview.setImageDrawable(null)

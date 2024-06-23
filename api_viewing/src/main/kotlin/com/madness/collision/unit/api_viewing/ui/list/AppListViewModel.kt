@@ -120,13 +120,9 @@ class AppListViewModel : ViewModel() {
     }
 
     override fun onCleared() {
-        clearCache()
-        super.onCleared()
-    }
-
-    fun clearCache() {
         multiSrcApps.clearAll()
         mutAppListStats = AppListStats()
+        super.onCleared()
     }
 
     private fun updateSrcApps() {

@@ -22,8 +22,6 @@ import android.content.pm.PackageInfo
 import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.viewModels
 import androidx.core.content.edit
 import androidx.core.database.getFloatOrNull
 import androidx.core.database.getIntOrNull
@@ -39,7 +37,6 @@ import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.database.AppRoom
 import com.madness.collision.unit.api_viewing.info.LibRules
 import com.madness.collision.unit.api_viewing.tag.app.AppTagInfo
-import com.madness.collision.unit.api_viewing.ui.list.AppListViewModel
 import com.madness.collision.unit.api_viewing.util.ApkRetriever
 import com.madness.collision.unit.api_viewing.util.PrefUtil
 import com.madness.collision.util.P
@@ -75,11 +72,6 @@ object MyBridge: Bridge() {
 class ApiViewingAccessorImpl : ApiViewingAccessor {
     override fun initUnit(context: Context) {
         LibRules.init(context)
-    }
-
-    override fun clearApps(activity: ComponentActivity) {
-        val viewModel: AppListViewModel by activity.viewModels()
-        viewModel.clearCache()
     }
 
     override fun clearTags() {

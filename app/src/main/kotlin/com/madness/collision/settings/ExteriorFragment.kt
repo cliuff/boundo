@@ -195,7 +195,6 @@ class ExteriorFragment: TaggedFragment(), Democratic {
     }
 
     private fun loadSamples(context: Context, uri: Uri? = null, file: File? = null): Pair<Bitmap?, Bitmap?> {
-        MemoryManager.clearSpace(activity)
         val previewSize = X.size(context, 200f, X.DP).roundToInt()
         var imagePreview: Bitmap? = null
         var backPreview: Bitmap? = null

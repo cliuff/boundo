@@ -19,7 +19,6 @@ package com.madness.collision.unit.api_viewing
 import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
-import androidx.activity.ComponentActivity
 import com.madness.collision.unit.Unit as ModUnit
 
 object AccessAV : ApiViewingAccessor by SafeApiViewingAccessor() {
@@ -33,7 +32,6 @@ object AccessAV : ApiViewingAccessor by SafeApiViewingAccessor() {
 internal class SafeApiViewingAccessor : ApiViewingAccessor {
     private val ax = ModUnit.getBridge(ModUnit.UNIT_NAME_API_VIEWING)?.getAccessor() as? ApiViewingAccessor
     override fun initUnit(context: Context) = ax?.initUnit(context) ?: Unit
-    override fun clearApps(activity: ComponentActivity) = ax?.clearApps(activity) ?: Unit
     override fun clearTags() = ax?.clearTags() ?: Unit
     override fun clearContext() = ax?.clearContext() ?: Unit
     override fun initTagSettings(pref: SharedPreferences) = ax?.initTagSettings(pref) ?: Unit
@@ -46,7 +44,6 @@ internal class SafeApiViewingAccessor : ApiViewingAccessor {
 
 interface ApiViewingAccessor {
     fun initUnit(context: Context)
-    fun clearApps(activity: ComponentActivity)
     fun clearTags()
     fun clearContext()
     fun initTagSettings(pref: SharedPreferences)
