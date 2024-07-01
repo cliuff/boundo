@@ -84,4 +84,9 @@ class AppListOptionsOwner {
             prefs?.let { AppTag.loadTagSettings(it, false) }
         }
     }
+
+    fun checkPrefsChanged(context: Context): Boolean {
+        val p = prefs ?: return false
+        return EasyAccess.load(context, p, false)
+    }
 }

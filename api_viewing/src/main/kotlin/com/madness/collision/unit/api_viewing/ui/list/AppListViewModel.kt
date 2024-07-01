@@ -92,6 +92,8 @@ class AppListViewModel : ViewModel() {
     private val mutAppList = MutableStateFlow<List<ApiViewingApp>>(emptyList())
     @Deprecated(message = "")
     val appList: StateFlow<List<ApiViewingApp>> by ::mutAppList
+    private val mutAppListId = MutableStateFlow(0)
+    val appListId: StateFlow<Int> by ::mutAppListId
     private val multiSrcApps: MultiSrcApps
     /** the category that is eventually displayed */
     private var terminalSrcCat: ListSrcCat = ListSrcCat.Platform
@@ -266,6 +268,15 @@ class AppListViewModel : ViewModel() {
             optionsOwner.setApiMode(apiMode)
             val sortedList = multiSrcApps[terminalSrcCat].setOptions(apiMode = apiMode).getList()
             mutAppList.update { sortedList }
+        }
+    }
+
+    fun checkListPrefs(context: Context) {
+        viewModelScope.launch(Dispatchers.Default) {
+            if (optionsOwner.checkPrefsChanged(context)) {
+                // trigger list prefs update
+                mutAppListId.update { it + 1 }
+            }
         }
     }
 

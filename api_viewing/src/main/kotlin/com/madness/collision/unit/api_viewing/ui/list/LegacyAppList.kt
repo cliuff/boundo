@@ -58,6 +58,7 @@ import kotlin.math.roundToInt
 @Composable
 fun LegacyAppList(
     appList: List<ApiViewingApp>,
+    appListPrefs: Int,
     options: AppListOptions,
     loadedCats: Set<ListSrcCat>,
     headerState: ListHeaderState,
@@ -90,13 +91,23 @@ fun LegacyAppList(
                 .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
                 .background(MaterialTheme.colorScheme.background))
 
+            var lastAppList: List<ApiViewingApp> by remember { mutableStateOf(emptyList()) }
+            var lastAppListPrefs by remember { mutableIntStateOf(0) }
             val backdropPadding = with(LocalDensity.current) { 20.dp.toPx().roundToInt() }
-            AppListView {
-                getAdapter().topCover = headerState.headerHeight + backdropPadding
-                getAdapter().setSortMethod(options.listOrder.code)
-                updateList(appList)
-                getRecyclerView().removeOnScrollListener(scrollListener)
-                getRecyclerView().addOnScrollListener(scrollListener)
+            var listFragment: AppListFragment? by remember { mutableStateOf(null) }
+            AndroidFragment<AppListFragment>(modifier = Modifier.fillMaxSize()) { listFragment = it }
+            LaunchedEffect(listFragment, appList, appListPrefs) {
+                listFragment?.run {
+                    getAdapter().topCover = headerState.headerHeight + backdropPadding
+                    getAdapter().setSortMethod(options.listOrder.code)
+                    if (appList !== lastAppList || appListPrefs != lastAppListPrefs) {
+                        lastAppListPrefs = appListPrefs
+                        lastAppList = appList
+                        updateList(appList)
+                    }
+                    getRecyclerView().removeOnScrollListener(scrollListener)
+                    getRecyclerView().addOnScrollListener(scrollListener)
+                }
             }
         }
 
@@ -110,13 +121,6 @@ fun LegacyAppList(
             headerState = headerState,
         )
     }
-}
-
-@Composable
-private fun AppListView(update: AppListFragment.() -> Unit) {
-    var listFragment: AppListFragment? by remember { mutableStateOf(null) }
-    AndroidFragment<AppListFragment>(modifier = Modifier.fillMaxSize()) { listFragment = it }
-    LaunchedEffect(update) { listFragment?.update() }
 }
 
 private class AppListOnScrollListener : RecyclerView.OnScrollListener() {

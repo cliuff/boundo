@@ -48,6 +48,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -102,6 +103,14 @@ open class AppListFragment : ComposeUnit(), Democratic {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (lifecycleEventTime.compareValues(Lifecycle.Event.ON_PAUSE, Lifecycle.Event.ON_CREATE) > 0) {
+            val viewModel by viewModels<AppListViewModel>()
+            context?.let(viewModel::checkListPrefs)
+        }
+    }
+
     @RequiresApi(Build.VERSION_CODES.N)
     private fun handleDragEvent(event: DragEvent) {
         fun ClipData.toQueryOrUris() = run {
@@ -144,6 +153,7 @@ open class AppListFragment : ComposeUnit(), Democratic {
 fun AppList(paddingValues: PaddingValues) {
     val viewModel = viewModel<AppListViewModel>()
     val appList by viewModel.appList.collectAsStateWithLifecycle()
+    val appListPrefs by viewModel.appListId.collectAsStateWithLifecycle()
     val opUiState by viewModel.opUiState.collectAsStateWithLifecycle()
     AppListScaffold(
         listState = rememberAppListState(viewModel),
@@ -152,6 +162,7 @@ fun AppList(paddingValues: PaddingValues) {
     ) { loadedCats, contentPadding ->
         LegacyAppList(
             appList = appList,
+            appListPrefs = appListPrefs,
             options = opUiState.options,
             loadedCats = loadedCats,
             headerState = rememberListHeaderState(ListSrcCat.Platform, viewModel),
