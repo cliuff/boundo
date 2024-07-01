@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Clifford Liu
+ * Copyright 2024 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,41 +14,41 @@
  * limitations under the License.
  */
 
-package com.madness.collision.unit.api_viewing.main
+package com.madness.collision.unit.api_viewing.ui.list
 
 import android.content.Intent
 import android.content.pm.PackageInfo
 import android.os.Bundle
 import com.madness.collision.unit.api_viewing.AccessAV
 
-class LaunchMethod(val mode: Int) {
+class LaunchMethod(
+    val mode: Int,
+    val textExtra: String? = null,
+    val dataStreamExtra: PackageInfo? = null,
+) {
     companion object {
         const val EXTRA_DATA_STREAM = AccessAV.EXTRA_DATA_STREAM
         const val EXTRA_LAUNCH_MODE = AccessAV.EXTRA_LAUNCH_MODE
         const val LAUNCH_MODE_NORMAL = 0
         const val LAUNCH_MODE_SEARCH = AccessAV.LAUNCH_MODE_SEARCH
-
-        /**
-         * from url link sharing
-         */
+        /** From url link sharing */
         const val LAUNCH_MODE_LINK = AccessAV.LAUNCH_MODE_LINK
-    }
 
-    var textExtra: String? = null
-        private set
-    var dataStreamExtra: PackageInfo? = null
-        private set
-
-    constructor(bundle: Bundle?) : this(when {
-        bundle == null -> LAUNCH_MODE_NORMAL
-        // below: from share action
-        bundle.getInt(EXTRA_LAUNCH_MODE, LAUNCH_MODE_NORMAL) == LAUNCH_MODE_LINK -> LAUNCH_MODE_LINK
-        // below: from text processing activity or text sharing
-        else -> LAUNCH_MODE_SEARCH
-    }) {
-        when (mode) {
-            LAUNCH_MODE_SEARCH -> textExtra = bundle?.getString(Intent.EXTRA_TEXT) ?: ""
-            LAUNCH_MODE_LINK -> dataStreamExtra = bundle?.getParcelable(EXTRA_DATA_STREAM)
+        operator fun invoke(bundle: Bundle?): LaunchMethod {
+            val mode = when {
+                bundle == null -> LAUNCH_MODE_NORMAL
+                // below: from share action
+                bundle.getInt(EXTRA_LAUNCH_MODE, 0) == LAUNCH_MODE_LINK -> LAUNCH_MODE_LINK
+                // below: from text processing activity or text sharing
+                else -> LAUNCH_MODE_SEARCH
+            }
+            return when (mode) {
+                LAUNCH_MODE_SEARCH ->
+                    LaunchMethod(mode, textExtra = bundle?.getString(Intent.EXTRA_TEXT) ?: "")
+                LAUNCH_MODE_LINK ->
+                    LaunchMethod(mode, dataStreamExtra = bundle?.getParcelable(EXTRA_DATA_STREAM))
+                else -> LaunchMethod(mode)
+            }
         }
     }
 }

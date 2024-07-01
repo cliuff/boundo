@@ -43,6 +43,7 @@ data class AppPkgChanges(
 
 interface AppRepository {
     suspend fun addApp(app: ApiViewingApp)
+    fun getApp(pkgName: String): ApiViewingApp?
     fun getApps(unit: Int): List<ApiViewingApp>
     fun queryApps(query: String): List<ApiViewingApp>
     fun getChangedPackages(context: Context, timestamp: Long): AppPkgChanges
@@ -52,6 +53,10 @@ interface AppRepository {
 class AppRepoImpl(private val appDao: AppDao, private val lifecycleOwner: LifecycleOwner) : AppRepository {
     override suspend fun addApp(app: ApiViewingApp) {
         appDao.insert(app)
+    }
+
+    override fun getApp(pkgName: String): ApiViewingApp? {
+        return appDao.selectApp(pkgName)
     }
 
     override fun getApps(unit: Int): List<ApiViewingApp> {

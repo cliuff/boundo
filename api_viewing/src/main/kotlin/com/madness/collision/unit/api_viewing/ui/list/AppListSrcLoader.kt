@@ -21,6 +21,7 @@ import android.net.Uri
 import android.provider.DocumentsContract
 import com.madness.collision.chief.chiefContext
 import com.madness.collision.unit.api_viewing.AppTag
+import com.madness.collision.unit.api_viewing.Utils
 import com.madness.collision.unit.api_viewing.apps.AppQueryUseCase
 import com.madness.collision.unit.api_viewing.apps.AppRepository
 import com.madness.collision.unit.api_viewing.data.ApiUnit
@@ -93,10 +94,23 @@ class AppListSrcLoader(
                         }
                     }
                 }
+                is AppListSrc.SharedApk -> {
+                    apkRetriever.resolvePackage(src.pkgInfo) { app ->
+                        app ?: return@resolvePackage
+                        getAppList(src.cat).addItem(src, app)
+                        trySend(getAppList(src.cat).getList())
+                    }
+                }
                 is AppListSrc.TagFilter -> send(src.apply(chiefContext))
                 is AppListSrc.DataSourceQuery -> {
-                    val appList = getAppList(src.targetCat).getList()
-                    val filterList = AppQueryUseCase().filterInMemoryList(appList, src.value)
+                    val filterList = if (src.targetCat == null) {
+                        val p = Utils.checkStoreLink(src.value)
+                        if (p != null) listOfNotNull(appRepo.getApp(p))
+                        else appRepo.queryApps(src.value)
+                    } else {
+                        val appList = getAppList(src.targetCat).getList()
+                        AppQueryUseCase().filterInMemoryList(appList, src.value)
+                    }
                     getAppList(src.cat).addAllItems(src, filterList)
                     send(getAppList(src.cat).getList())
                 }

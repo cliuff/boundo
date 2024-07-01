@@ -16,6 +16,7 @@
 
 package com.madness.collision.unit.api_viewing.ui.list
 
+import android.content.pm.PackageInfo
 import android.net.Uri
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.util.StringUtils
@@ -83,12 +84,16 @@ sealed interface AppListSrc {
         companion object Key : ListSrcKey<DragAndDrop>
         override val key: ListSrcKey<DragAndDrop> = Key
     }
+    class SharedApk(val pkgInfo: PackageInfo) : AppListSrc {
+        companion object Key : ListSrcKey<SharedApk>
+        override val key: ListSrcKey<SharedApk> = Key
+    }
 
     class TagFilter(val targetCat: ListSrcCat, val checkedTags: Map<String, Boolean>) : AppListSrc {
         companion object Key : ListSrcKey<TagFilter>
         override val key: ListSrcKey<TagFilter> = Key
     }
-    class DataSourceQuery(val targetCat: ListSrcCat, val value: String) : AppListSrc {
+    class DataSourceQuery(val targetCat: ListSrcCat?, val value: String) : AppListSrc {
         companion object Key : ListSrcKey<DataSourceQuery>
         override val key: ListSrcKey<DataSourceQuery> = Key
     }
@@ -108,6 +113,7 @@ val ListSrcKey<*>.cat: ListSrcCat
         AppListSrc.SelectApks -> ListSrcCat.Temporary
         AppListSrc.SelectVolume -> ListSrcCat.Temporary
         AppListSrc.DragAndDrop -> ListSrcCat.Temporary
+        AppListSrc.SharedApk -> ListSrcCat.Temporary
         AppListSrc.TagFilter -> ListSrcCat.Filter
         AppListSrc.DataSourceQuery -> ListSrcCat.Filter
     }
@@ -119,6 +125,7 @@ val ListSrcKeys: List<ListSrcKey<*>>
         AppListSrc.SelectApks,
         AppListSrc.SelectVolume,
         AppListSrc.DragAndDrop,
+        AppListSrc.SharedApk,
         AppListSrc.TagFilter,
         AppListSrc.DataSourceQuery,
     )

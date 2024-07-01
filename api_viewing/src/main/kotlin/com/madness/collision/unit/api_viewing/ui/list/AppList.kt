@@ -92,6 +92,14 @@ open class AppListFragment : ComposeUnit(), Democratic {
                     .show(childFragmentManager, FilePop.TAG)
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
+
+        LaunchMethod(arguments).run {
+            if (mode == LaunchMethod.LAUNCH_MODE_SEARCH && textExtra != null) {
+                viewModel.toggleListSrc(AppListSrc.DataSourceQuery(null, textExtra))
+            } else if (mode == LaunchMethod.LAUNCH_MODE_LINK && dataStreamExtra != null) {
+                viewModel.toggleListSrc(AppListSrc.SharedApk(dataStreamExtra))
+            }
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
