@@ -1,28 +1,29 @@
 [versions]
 # plugins
-androidGradlePlugin = "8.3.2"  # 8.3.2-Iguana Patch 2
+androidGradlePlugin = "8.4.2"  # 8.4.2-Jellyfish Patch 2
 kotlin = "2.0.0"
 googleKsp = "2.0.0-1.0.22"
 googlePlayServicesOSSLicensesPlugin = "0.10.6"
 
-kotlinCoroutines = "1.8.0"
+kotlinCoroutines = "1.8.1"
 
-androidxTestCore = "1.5.0"
-androidxTestRunner = "1.5.2"
-androidxTestExtJunit = "1.1.5"
-androidxTestEspresso = "3.5.1"
+androidxTestCore = "1.6.1"
+androidxTestRunner = "1.6.1"
+androidxTestExtJunit = "1.2.1"
+androidxTestEspresso = "3.6.1"
 
-androidxCore = "1.12.0"
-androidxCoreSplashScreen = "1.1.0-alpha02"
-androidxComposeBom = "2024.05.00"
-androidxActivity = "1.8.2"
-androidxAppcompat = "1.6.1"
-androidxLifecycle = "2.7.0"
-androidxRoom = "2.6.0"
+androidxCore = "1.13.1"
+androidxCoreSplashScreen = "1.1.0-rc01"
+androidxComposeBom = "2024.06.00"
+androidxActivity = "1.9.0"
+androidxAppcompat = "1.7.0"
+androidxLifecycle = "2.8.3"
+androidxRoom = "2.6.1"
 androidxNavigation = "2.6.0"
 androidxCoreTesting = "2.2.0"
-androidxFragment = "1.8.0"
-androidxWindow = "1.2.0"
+androidxFragment = "1.8.1"
+androidxWindow = "1.3.0"
+
 androidxDrawerLayout = "1.2.0"
 androidxSwipeRefreshLayout = "1.1.0"
 androidxConstraintLayout = "2.1.4"
@@ -68,8 +69,8 @@ appIconLoader = "1.5.0"
 # Superellipse shape for Compose
 smoothCornerCompose = "v1.0.0"
 haze = "0.7.2"
-libCheckerRules = "35.3"
-googleSmali = "3.0.5"
+libCheckerRules = "36.1"
+googleSmali = "3.0.7"
 ldapsdk = "6.0.11"
 
 [libraries]
