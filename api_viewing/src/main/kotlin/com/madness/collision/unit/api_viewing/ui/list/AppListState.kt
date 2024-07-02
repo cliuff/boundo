@@ -57,6 +57,7 @@ class CompOptionsEventHandlerImpl(
 ) : CompositeOptionsEventHandler {
     override fun shareList() = viewModel.exportAppList(context)
     override fun showSettings() = context.showPage(MyBridge.getSettings())
+    override fun updateTags(id: String, state: Boolean?) = viewModel.updateTagFilter(id, state)
     override fun toggleSrc(src: AppListSrc) = viewModel.toggleListSrc(src)
 
     override fun toggleApks() {

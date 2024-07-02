@@ -51,32 +51,38 @@ import com.madness.collision.unit.api_viewing.tag.app.AppTagManager
 import com.madness.collision.unit.api_viewing.tag.app.getFullLabel
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
 
-class ListTagState {
+class ListTagState(private var initTags: Map<String, Boolean> = emptyMap()) {
     private lateinit var mutStateList: SnapshotStateList<Boolean?>
     val stateList: SnapshotStateList<Boolean?> get() = mutStateList
 
-    fun init(size: Int) {
-        mutStateList = List<Boolean?>(size) { null }.toMutableStateList()
+    fun init(tagIds: List<String>) {
+        mutStateList = List(tagIds.size) { i -> initTags[tagIds[i]] }.toMutableStateList()
+        initTags = emptyMap()
     }
 }
 
 @Composable
-fun AppListTags(tagState: ListTagState) {
+fun AppListTags(tagState: ListTagState, onStateChanged: (String, Boolean?) -> Unit) {
     val context = LocalContext.current
-    val tags = remember(tagState) { getTagEntries(context).also { tagState.init(it.size) } }
+    val tags = remember(tagState) {
+        getTagEntries(context).also { tagState.init(it.map(TagsEntry::id)) }
+    }
     val checkStateList = tagState.stateList
-    Tags(tags = tags, checkStateList = checkStateList, onCheckChanged = checkStateList::set)
+    Tags(tags = tags, checkStateList = checkStateList, onCheckChanged = { i, state ->
+        checkStateList[i] = state
+        onStateChanged(tags[i].id, state)
+    })
 }
 
 private fun getTagEntries(context: Context): List<TagsEntry> {
     val rankedTags = AppTagManager.tags.values.sortedBy { it.rank }
     return rankedTags.map { tagInfo ->
         val label = tagInfo.getFullLabel(context)?.toString() ?: ""
-        TagsEntry(label, tagInfo.icon.drawableResId)
+        TagsEntry(tagInfo.id, label, tagInfo.icon.drawableResId)
     }
 }
 
-private class TagsEntry(val label: String, val iconResId: Int?)
+private class TagsEntry(val id: String, val label: String, val iconResId: Int?)
 
 @Composable
 private fun Tags(
@@ -111,6 +117,7 @@ private fun TagItem(
 ) {
     Row(
         modifier = Modifier
+            .fillMaxWidth()
             .combinedClickable(onClick = onClick, onLongClick = onLongClick)
             .padding(horizontal = 5.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -142,10 +149,10 @@ private fun TagItem(
 private fun TagsPreview() {
     val tags = remember {
         listOf(
-            TagsEntry("Tag 0", null),
-            TagsEntry("Tag 1", null),
-            TagsEntry("Tag 2", null),
-            TagsEntry("Tag 3", null),
+            TagsEntry("", "Tag 0", null),
+            TagsEntry("", "Tag 1", null),
+            TagsEntry("", "Tag 2", null),
+            TagsEntry("", "Tag 3", null),
         )
     }
     val checkStateList = remember { listOf(null, true, false, true).toMutableStateList() }

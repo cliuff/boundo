@@ -60,6 +60,7 @@ import com.madness.collision.util.dev.PreviewCombinedColorLayout
 interface CompositeOptionsEventHandler : ListOptionsEventHandler {
     fun shareList()
     fun showSettings()
+    fun updateTags(id: String, state: Boolean?)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -77,7 +78,10 @@ fun ListOptionsDialog(isShown: Int, options: AppListOptions, eventHandler: Compo
 
 @Composable
 private fun SheetContent(options: AppListOptions, eventHandler: CompositeOptionsEventHandler) {
-    val tagState = remember { ListTagState() }
+    val tagState = remember {
+        val filter = options.srcSet.filterIsInstance<AppListSrc.TagFilter>().firstOrNull()
+        ListTagState(filter?.checkedTags.orEmpty())
+    }
     ListOptionsPager(
         actions = {
             PagerAction(icon = Icons.Outlined.Share, onClick = eventHandler::shareList)
@@ -97,7 +101,7 @@ private fun SheetContent(options: AppListOptions, eventHandler: CompositeOptions
                 }
             }
             1 -> {
-                AppListTags(tagState = tagState)
+                AppListTags(tagState = tagState, onStateChanged = eventHandler::updateTags)
             }
         }
     }
@@ -154,6 +158,7 @@ private fun PseudoCompOptionsEventHandler() =
         ListOptionsEventHandler by PseudoListOptionsEventHandler() {
         override fun shareList() {}
         override fun showSettings() {}
+        override fun updateTags(id: String, state: Boolean?) {}
     }
 
 @PreviewCombinedColorLayout

@@ -247,6 +247,27 @@ class AppListViewModel : ViewModel() {
         }
     }
 
+    fun updateTagFilter(tagId: String, checkedState: Boolean?) {
+        val srcSet = opUiState.value.options.srcSet
+        val filter = srcSet.filterIsInstance<AppListSrc.TagFilter>().firstOrNull()
+        val updatedTags = filter?.checkedTags.orEmpty()
+            .run { if (checkedState == null) minus(tagId) else plus(tagId to checkedState) }
+        if (updatedTags.isEmpty()) {
+            optionsOwner.reloadTagSettings()
+            // remove existing src instance
+            filter?.let(::toggleListSrc)
+        } else if (terminalSrcCat == AppListSrc.TagFilter.cat) {
+            val cat = when (val src = srcSet.find { it.cat == ListSrcCat.Filter }) {
+                is AppListSrc.DataSourceQuery -> src.targetCat ?: ListSrcCat.Platform
+                is AppListSrc.TagFilter -> src.targetCat
+                else -> error("ListSrcCat.Filter not found or matched")
+            }
+            toggleListSrc(AppListSrc.TagFilter(cat, updatedTags))
+        } else {
+            toggleListSrc(AppListSrc.TagFilter(terminalSrcCat, updatedTags))
+        }
+    }
+
     fun setListOrder(order: AppListOrder) {
         if (order == opUiState.value.options.listOrder) return
         mutOpUiState.update {
