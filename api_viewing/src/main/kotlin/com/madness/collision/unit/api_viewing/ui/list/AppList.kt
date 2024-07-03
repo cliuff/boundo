@@ -29,6 +29,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -39,12 +40,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -55,9 +58,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.madness.collision.Democratic
 import com.madness.collision.R
+import com.madness.collision.chief.app.BoundoTheme
 import com.madness.collision.chief.app.rememberColorScheme
+import com.madness.collision.chief.lang.mapIf
 import com.madness.collision.unit.api_viewing.ComposeUnit
 import com.madness.collision.util.FilePop
+import com.madness.collision.util.dev.PreviewCombinedColorLayout
 import com.madness.collision.util.notifyBriefly
 import com.madness.collision.util.os.OsUtils
 import kotlinx.coroutines.flow.filterIsInstance
@@ -155,17 +161,19 @@ fun AppList(paddingValues: PaddingValues) {
     val appList by viewModel.appList.collectAsStateWithLifecycle()
     val appListPrefs by viewModel.appListId.collectAsStateWithLifecycle()
     val opUiState by viewModel.opUiState.collectAsStateWithLifecycle()
+    val headerState = rememberListHeaderState(ListSrcCat.Platform, viewModel)
     AppListScaffold(
         listState = rememberAppListState(viewModel),
         eventHandler = rememberCompOptionsEventHandler(viewModel),
-        paddingValues = paddingValues
+        paddingValues = paddingValues,
+        contentOffsetProgress = -headerState.headerOffsetY,
     ) { loadedCats, contentPadding ->
         LegacyAppList(
             appList = appList,
             appListPrefs = appListPrefs,
             options = opUiState.options,
             loadedCats = loadedCats,
-            headerState = rememberListHeaderState(ListSrcCat.Platform, viewModel),
+            headerState = headerState,
             paddingValues = contentPadding,
         )
     }
@@ -197,16 +205,25 @@ private fun AppListScaffold(
     listState: AppListState,
     eventHandler: CompositeOptionsEventHandler,
     paddingValues: PaddingValues,
+    contentOffsetProgress: Int,
     content: @Composable (Set<ListSrcCat>, PaddingValues) -> Unit
 ) {
     var showListOptions by remember { mutableIntStateOf(0) }
+    val toolbarHeight = with(LocalDensity.current) { 100.dp.toPx() }
+    val toolbarOpacity by remember(contentOffsetProgress) {
+        derivedStateOf {
+            (contentOffsetProgress / toolbarHeight)
+                .coerceIn(0f, 0.96f).mapIf({ it <= 0.06f }, { 0f })
+        }
+    }
 
     Scaffold(
         topBar = {
             AppListBar(
                 isRefreshing = listState.isRefreshing,
                 windowInsets = WindowInsets(top = 28.dp),
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surface.copy(alpha = toolbarOpacity))
             ) {
                 AppListBarAction(
                     icon = Icons.Outlined.CheckCircle,
@@ -226,4 +243,27 @@ private fun AppListScaffold(
             }
         }
     )
+}
+
+@PreviewCombinedColorLayout
+@Composable
+private fun AppListPreview() {
+    val listState = remember {
+        val options = AppListOptions(
+            listOf(AppListSrc.SystemApps), AppListOrder.UpdateTime, AppApiMode.Target)
+        AppListStateImpl(
+            initIsRefreshing = false,
+            initSrcCats = emptySet(),
+            initOpUiState = AppListOpUiState(options)
+        )
+    }
+    BoundoTheme {
+        AppListScaffold(
+            listState = listState,
+            eventHandler = remember { PseudoCompOptionsEventHandler() },
+            paddingValues = PaddingValues(),
+            contentOffsetProgress = 50,
+            content = { _, _ -> Box(Modifier.fillMaxSize().background(Color.DarkGray)) }
+        )
+    }
 }

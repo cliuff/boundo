@@ -153,7 +153,7 @@ private fun PagerAction(icon: ImageVector, onClick: () -> Unit) {
     )
 }
 
-private fun PseudoCompOptionsEventHandler() =
+internal fun PseudoCompOptionsEventHandler(): CompositeOptionsEventHandler =
     object : CompositeOptionsEventHandler,
         ListOptionsEventHandler by PseudoListOptionsEventHandler() {
         override fun shareList() {}
