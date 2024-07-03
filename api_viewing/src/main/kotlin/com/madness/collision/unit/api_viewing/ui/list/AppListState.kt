@@ -126,6 +126,7 @@ class ListHeaderStateImpl(
     override fun showStats(options: AppListOptions) {
         getStatsFragment(options)?.let(context::showPage)
     }
+    override fun onQueryChange(query: String) = viewModel.setQueryFilter(query)
 }
 
 private fun getStatsFragment(options: AppListOptions): StatisticsFragment? {

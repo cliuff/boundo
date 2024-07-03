@@ -235,8 +235,13 @@ class AppListViewModel : ViewModel() {
     }
 
     fun setQueryFilter(query: CharSequence) {
-        if (terminalSrcCat == AppListSrc.DataSourceQuery.cat) {
-            val cat = when (val src = opUiState.value.options.srcSet.find { it.cat == ListSrcCat.Filter }) {
+        val srcSet = opUiState.value.options.srcSet
+        val filter = srcSet.filterIsInstance<AppListSrc.DataSourceQuery>().firstOrNull()
+        if (query.isBlank()) {
+            // remove existing src instance
+            filter?.let(::toggleListSrc)
+        } else if (terminalSrcCat == AppListSrc.DataSourceQuery.cat) {
+            val cat = when (val src = srcSet.find { it.cat == ListSrcCat.Filter }) {
                 is AppListSrc.DataSourceQuery -> src.targetCat
                 is AppListSrc.TagFilter -> src.targetCat
                 else -> error("ListSrcCat.Filter not found or matched")

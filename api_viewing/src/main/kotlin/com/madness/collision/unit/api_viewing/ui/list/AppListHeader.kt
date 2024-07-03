@@ -34,18 +34,22 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Android
 import androidx.compose.material.icons.outlined.PieChart
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.twotone.Android
 import androidx.compose.material.icons.twotone.PieChart
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SearchBar
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
@@ -55,9 +59,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -77,6 +83,7 @@ interface ListHeaderState {
     fun updateOffsetY(scrollY: Int)
     fun showStats(options: AppListOptions)
     fun showSystemModules()
+    fun onQueryChange(query: String)
 }
 
 @Composable
@@ -104,6 +111,7 @@ fun AppListSwitchHeader(
             statsSizeLabel = headerState.statsSize.takeIf { it > 0 }?.toString().orEmpty(),
             onClickDevInfo = headerState::showSystemModules,
             onClickStats = { headerState.showStats(options) },
+            onQueryChange = headerState::onQueryChange,
         )
         if (loadedSrc.isNotEmpty() && loadedSrc.singleOrNull() != ListSrcCat.Platform) {
             AppSrcTypeSwitcher(
@@ -115,7 +123,6 @@ fun AppListSwitchHeader(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppListHeader(
     modifier: Modifier = Modifier,
@@ -124,6 +131,7 @@ fun AppListHeader(
     statsSizeLabel: String,
     onClickDevInfo: () -> Unit,
     onClickStats: () -> Unit,
+    onQueryChange: (String) -> Unit,
     headerType: Int = 0,
 ) {
     Column(modifier = modifier) {
@@ -148,33 +156,41 @@ fun AppListHeader(
         }
 
         var query by remember { mutableStateOf("") }
-        var isActive by remember { mutableStateOf(false) }
-        SearchBar(
-            modifier = Modifier.fillMaxWidth(),
-            query = query,
-            onQueryChange = { query = it },
-            onSearch = {},
-            active = isActive,
-            onActiveChange = { isActive = it },
-            placeholder = {
-                Text(
-                    text = stringResource(com.madness.collision.R.string.sdk_search_hint),
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f),
-                    fontSize = 14.sp,
-                    lineHeight = 14.sp,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-            },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Outlined.Search,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                )
-            },
-            content = {},
-        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Surface(shape = CircleShape, color = MaterialTheme.colorScheme.surface) {
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = query,
+                onValueChange = { v -> query = v; onQueryChange(v) },
+                placeholder = {
+                    Text(
+                        text = stringResource(com.madness.collision.R.string.sdk_search_hint),
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f),
+                        fontSize = 14.sp,
+                        lineHeight = 14.sp,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                },
+                leadingIcon = {
+                    Icon(
+                        modifier = Modifier.padding(start = 4.dp),
+                        imageVector = Icons.Outlined.Search,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                    )
+                },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                keyboardActions = KeyboardActions(onSearch = {}),
+                colors = TextFieldDefaults.colors(
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                ),
+            )
+        }
 
         if (headerType == 1) {
             Spacer(modifier = Modifier.height(10.dp))
@@ -338,6 +354,7 @@ private fun HeaderPreview() {
             statsSizeLabel = "231",
             onClickDevInfo = { },
             onClickStats = { },
+            onQueryChange = {},
         )
     }
 }
