@@ -64,14 +64,13 @@ interface ListOptionsEventHandler {
 }
 
 @Composable
-fun AppListOptions(options: AppListOptions, eventHandler: ListOptionsEventHandler) {
+fun AppListOptions(
+    modifier: Modifier = Modifier,
+    options: AppListOptions,
+    eventHandler: ListOptionsEventHandler
+) {
     val horizontalPadding = 20.dp
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surface)
-            .padding(vertical = 20.dp)
-    ) {
+    Column(modifier = modifier.fillMaxWidth()) {
         Text(
             modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 13.dp),
             text = "Choose app sources",
@@ -168,6 +167,7 @@ fun AppListOptions(options: AppListOptions, eventHandler: ListOptionsEventHandle
                 )
             }
         }
+        Spacer(modifier = Modifier.height(5.dp))
     }
 }
 
@@ -259,6 +259,7 @@ private fun AppListOptionsPreview() {
     }
     BoundoTheme {
         AppListOptions(
+            modifier = Modifier.background(MaterialTheme.colorScheme.surface),
             options = options,
             eventHandler = remember { PseudoListOptionsEventHandler() }
         )
