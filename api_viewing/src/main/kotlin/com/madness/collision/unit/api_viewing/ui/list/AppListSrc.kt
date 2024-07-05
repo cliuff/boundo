@@ -76,7 +76,7 @@ sealed interface AppListSrc {
         companion object Key : ListSrcKey<SelectApks>
         override val key: ListSrcKey<SelectApks> = Key
     }
-    class SelectVolume(val uri: Uri?) : AppListSrc {
+    class SelectVolume(val uri: Uri) : AppListSrc {
         companion object Key : ListSrcKey<SelectVolume>
         override val key: ListSrcKey<SelectVolume> = Key
     }

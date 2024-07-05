@@ -79,13 +79,10 @@ class AppListSrcLoader(
                 AppListSrc.SystemApps -> addApps(src, ApiUnit.SYS)?.let { send(it) }
                 AppListSrc.UserApps -> addApps(src, ApiUnit.USER)?.let { send(it) }
                 AppListSrc.DeviceApks -> TODO()
-                is AppListSrc.SelectApks -> // todo empty case
+                is AppListSrc.SelectApks ->
                     for (uri in src.uriList) addApk(src, uri)
-                is AppListSrc.SelectVolume -> {
-                    if (src.uri != null) {
-                        apkRetriever.fromUri(src.uri) { addApk(src, it) }
-                    }
-                }
+                is AppListSrc.SelectVolume ->
+                    apkRetriever.fromUri(src.uri) { addApk(src, it) }
                 is AppListSrc.DragAndDrop -> {
                     for (itemUri in src.uriList) {
                         when (DocumentsContract.isDocumentUri(chiefContext, itemUri)) {

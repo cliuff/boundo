@@ -78,6 +78,8 @@ class CompOptionsEventHandlerImpl(
     override fun setApiMode(apiMode: AppApiMode) = viewModel.setApiMode(apiMode)
 }
 
+private typealias GetContentsContract = ActivityResultContracts.GetMultipleContents
+
 private class OpenVolumeContract : ActivityResultContracts.OpenDocumentTree() {
     override fun createIntent(context: Context, input: Uri?): Intent {
         return super.createIntent(context, input).apply {
@@ -90,11 +92,17 @@ private class OpenVolumeContract : ActivityResultContracts.OpenDocumentTree() {
 
 @Composable
 fun rememberCompOptionsEventHandler(viewModel: AppListViewModel): CompositeOptionsEventHandler {
-    val conLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetMultipleContents()) {
-        viewModel.toggleListSrc(AppListSrc.SelectApks(it))
+    val conLauncher = rememberLauncherForActivityResult(GetContentsContract()) { uriList ->
+        when {
+            uriList.isEmpty() -> Unit  // ignore invalid selection silently
+            else -> viewModel.toggleListSrc(AppListSrc.SelectApks(uriList))
+        }
     }
-    val volLauncher = rememberLauncherForActivityResult(OpenVolumeContract()) {
-        viewModel.toggleListSrc(AppListSrc.SelectVolume(it))
+    val volLauncher = rememberLauncherForActivityResult(OpenVolumeContract()) { uri ->
+        when {
+            uri == null -> Unit  // ignore invalid selection silently
+            else -> viewModel.toggleListSrc(AppListSrc.SelectVolume(uri))
+        }
     }
     val context = LocalContext.current
     return remember { CompOptionsEventHandlerImpl(viewModel, conLauncher, volLauncher, context) }
