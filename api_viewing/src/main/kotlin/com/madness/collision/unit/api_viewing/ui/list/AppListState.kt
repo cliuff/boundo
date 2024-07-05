@@ -113,22 +113,15 @@ fun rememberCompOptionsEventHandler(viewModel: AppListViewModel): CompositeOptio
 class ListHeaderStateImpl(
     override val devInfoLabel: String,
     override val devInfoDesc: String,
-    initListCat: ListSrcCat,
     private val viewModel: AppListViewModel,
     private val context: Context,
 ) : ListHeaderState {
     private var scrollY by mutableIntStateOf(0)
-    private var mutListCat by mutableStateOf(initListCat)
     override var headerHeight: Int by mutableIntStateOf(0)
     override val headerOffsetY: Int by derivedStateOf { -(scrollY.coerceIn(0, headerHeight)) }
     override var statsSize: Int by mutableIntStateOf(0)
-    override var listCat: ListSrcCat
-        get() = mutListCat
-        set(value) {
-            mutListCat = value
-            viewModel.setListSrcCat(value)
-        }
 
+    override fun setTerminalCat(cat: ListSrcCat) = viewModel.setListSrcCat(cat)
     override fun updateOffsetY(scrollY: Int) { this.scrollY = scrollY }
     override fun showSystemModules() = context.showPage<SystemModulesFragment>()
     override fun showStats(options: AppListOptions) {
@@ -160,11 +153,11 @@ private fun getAndroidVer(context: Context): Pair<String?, String> {
 }
 
 @Composable
-fun rememberListHeaderState(initListCat: ListSrcCat, viewModel: AppListViewModel): ListHeaderState {
+fun rememberListHeaderState(viewModel: AppListViewModel): ListHeaderState {
     val context = LocalContext.current
     return remember {
         val (ver, desc) = getAndroidVer(context)
-        ListHeaderStateImpl(ver.orEmpty(), desc, initListCat, viewModel, context)
+        ListHeaderStateImpl(ver.orEmpty(), desc, viewModel, context)
     }
 }
 
@@ -172,11 +165,9 @@ fun rememberListHeaderState(initListCat: ListSrcCat, viewModel: AppListViewModel
 @Stable
 class AppListStateImpl(
     initIsRefreshing: Boolean,
-    initSrcCats: Set<ListSrcCat>,
     initOpUiState: AppListOpUiState
 ) : AppListState {
     override var isRefreshing: Boolean by mutableStateOf(initIsRefreshing)
-    override var loadedCats: Set<ListSrcCat> by mutableStateOf(initSrcCats)
     override var opUiState: AppListOpUiState by mutableStateOf(initOpUiState)
 }
 
@@ -189,15 +180,13 @@ fun rememberAppListState(viewModel: AppListViewModel): AppListState {
         // set refreshing to true when initializing
         AppListStateImpl(
             initIsRefreshing = true,
-            initSrcCats = setOf(ListSrcCat.Platform),
             initOpUiState = viewModel.opUiState.value
         )
     }
     LaunchedEffect(Unit) {
         viewModel.init(context, lifecycleOwner, mainViewModel.timestamp)
-        viewModel.isLoadingSrc.onEach(listState::isRefreshing::set).launchIn(this)
-        viewModel.loadedSrcCats.onEach(listState::loadedCats::set).launchIn(this)
         viewModel.opUiState.onEach(listState::opUiState::set).launchIn(this)
+        viewModel.appSrcState.onEach { listState.isRefreshing = it.isLoadingSrc }.launchIn(this)
     }
     return listState
 }

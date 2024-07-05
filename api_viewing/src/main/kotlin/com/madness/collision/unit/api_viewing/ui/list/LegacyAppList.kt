@@ -67,7 +67,7 @@ fun LegacyAppList(
     appList: List<ApiViewingApp>,
     appListPrefs: Int,
     options: AppListOptions,
-    loadedCats: Set<ListSrcCat>,
+    appSrcState: AppSrcState,
     headerState: ListHeaderState,
     paddingValues: PaddingValues,
 ) {
@@ -146,7 +146,7 @@ fun LegacyAppList(
         AppListSwitchHeader(
             modifier = Modifier.padding(top = contentInsetTop),
             options = options,
-            loadedSrc = loadedCats,
+            appSrcState = appSrcState,
             headerState = headerState,
         )
     }

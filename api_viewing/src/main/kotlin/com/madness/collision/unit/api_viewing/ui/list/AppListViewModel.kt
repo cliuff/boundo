@@ -35,16 +35,15 @@ import com.madness.collision.util.F
 import com.madness.collision.util.ui.PackageInfo
 import com.opencsv.CSVWriter
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -74,6 +73,12 @@ data class AppListOptions(
 typealias AppListUiState = List<GuiArt>
 data class AppListOpUiState(val options: AppListOptions)
 
+data class AppSrcState(
+    val terminalCat: ListSrcCat,
+    val isLoadingSrc: Boolean,
+    val loadedCats: Set<ListSrcCat>,
+)
+
 sealed interface AppListEvent {
     class ShareAppList(val file: File) : AppListEvent
 }
@@ -94,9 +99,13 @@ class AppListViewModel : ViewModel() {
     val appList: StateFlow<List<ApiViewingApp>> by ::mutAppList
     private val mutAppListId = MutableStateFlow(0)
     val appListId: StateFlow<Int> by ::mutAppListId
+    private val mutAppsModNotifier = MutableStateFlow(0)
+    private val mutSrcState: MutableStateFlow<AppSrcState>
+    val appSrcState: StateFlow<AppSrcState> by ::mutSrcState
     private val multiSrcApps: MultiSrcApps
     /** the category that is eventually displayed */
-    private var terminalSrcCat: ListSrcCat = ListSrcCat.Platform
+    private val terminalSrcCat: ListSrcCat
+        get() = appSrcState.value.terminalCat
 
     private val mutOpUiState: MutableStateFlow<AppListOpUiState>
     val opUiState: StateFlow<AppListOpUiState> by ::mutOpUiState
@@ -106,17 +115,12 @@ class AppListViewModel : ViewModel() {
     private val mutEvents = MutableSharedFlow<AppListEvent>()
     val events: SharedFlow<AppListEvent> = mutEvents.asSharedFlow()
 
-    val isLoadingSrc: Flow<Boolean>
-        get() = srcLoader.loadingSrcFlow.map { it.isNotEmpty() }
-    val loadedSrcCats: Flow<Set<ListSrcCat>>
-        get() = srcLoader.loadingSrcFlow.map {
-            ListSrcCat.entries.filter { c -> multiSrcApps[c].isNotEmpty() }.toSet()
-        }
-
     init {
         val options = AppListOptions(emptyList(), AppListOrder.UpdateTime, AppApiMode.Target)
         multiSrcApps = MultiSrcApps(options.listOrder, options.apiMode)
         mutOpUiState = MutableStateFlow(AppListOpUiState(options))
+        val appSrcState = AppSrcState(ListSrcCat.Platform, false, emptySet())
+        mutSrcState = MutableStateFlow(appSrcState)
         appListRepo.apps.onEach { r -> mutUiState.update { r.toGui() } }.launchIn(viewModelScope)
 //        viewModelScope.launch(Dispatchers.Default) { appListRepo.fetchNewData(chiefPkgMan) }
     }
@@ -146,6 +150,24 @@ class AppListViewModel : ViewModel() {
             }
             val options = optionsOwner.getOptions(context)
             mutOpUiState.update { AppListOpUiState(options) }
+
+            val srcFlow = combine(srcLoader.loadingSrcFlow, mutAppsModNotifier) { loadingSrcSet, _ ->
+                loadingSrcSet.isNotEmpty() to
+                        ListSrcCat.entries.filter { c -> multiSrcApps[c].isNotEmpty() }.toSet()
+            }
+            srcFlow
+                .onEach src@{ (isLoadingSrc, loadedCats) ->
+                    mutSrcState.update { currValue ->
+                        val e1 = isLoadingSrc == currValue.isLoadingSrc
+                        val e2 = loadedCats == currValue.loadedCats
+                        when {
+                            e1 && e2 -> currValue
+                            e2 -> currValue.copy(isLoadingSrc = isLoadingSrc)
+                            else -> currValue.copy(isLoadingSrc = isLoadingSrc, loadedCats = loadedCats)
+                        }
+                    }
+                }
+                .launchIn(this)
 
             multiSrcApps[ListSrcCat.Platform].setOptions(options.listOrder, options.apiMode)
             val flows = buildList(options.srcSet.size) {
@@ -184,7 +206,7 @@ class AppListViewModel : ViewModel() {
     }
 
     fun setListSrcCat(cat: ListSrcCat) {
-        terminalSrcCat = cat
+        mutSrcState.update { it.copy(terminalCat = cat) }
         mutAppList.update { multiSrcApps[cat].getList() }
     }
 
@@ -202,6 +224,7 @@ class AppListViewModel : ViewModel() {
             optionsOwner.setListSrc(src, newSrcSet)
             if (src in srcSet) {
                 multiSrcApps[src.cat].removeAppSrc(src)
+                mutAppsModNotifier.update { it + 1 }
                 if (src.cat == ListSrcCat.Platform) {
                     val platformList = multiSrcApps[ListSrcCat.Platform].getList()
                     launch { mutAppListStats = appStatsTracker.updateDeviceAppsCount(platformList) }
@@ -209,7 +232,7 @@ class AppListViewModel : ViewModel() {
                 val srcCat = src.cat.takeIf { multiSrcApps[it].isNotEmpty() }
                     ?: ListSrcCat.entries.find { multiSrcApps[it].isNotEmpty() }
                     ?: ListSrcCat.Platform
-                terminalSrcCat = srcCat
+                mutSrcState.update { it.copy(terminalCat = srcCat) }
                 mutAppList.update { multiSrcApps[srcCat].getList() }
             } else {
                 // only one filter can be active at a time
@@ -228,7 +251,7 @@ class AppListViewModel : ViewModel() {
                     .catch { it.printStackTrace() }
                     .launchIn(this)
                     .invokeOnCompletion { onFinish?.invoke() }
-                terminalSrcCat = src.cat
+                mutSrcState.update { it.copy(terminalCat = src.cat) }
                 mutAppList.update { multiSrcApps[src.cat].getList() }
             }
         }

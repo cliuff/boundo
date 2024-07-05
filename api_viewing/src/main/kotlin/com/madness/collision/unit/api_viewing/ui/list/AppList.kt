@@ -160,19 +160,20 @@ fun AppList(paddingValues: PaddingValues) {
     val viewModel = viewModel<AppListViewModel>()
     val appList by viewModel.appList.collectAsStateWithLifecycle()
     val appListPrefs by viewModel.appListId.collectAsStateWithLifecycle()
+    val appSrcState by viewModel.appSrcState.collectAsStateWithLifecycle()
     val opUiState by viewModel.opUiState.collectAsStateWithLifecycle()
-    val headerState = rememberListHeaderState(ListSrcCat.Platform, viewModel)
+    val headerState = rememberListHeaderState(viewModel)
     AppListScaffold(
         listState = rememberAppListState(viewModel),
         eventHandler = rememberCompOptionsEventHandler(viewModel),
         paddingValues = paddingValues,
         contentOffsetProgress = -headerState.headerOffsetY,
-    ) { loadedCats, contentPadding ->
+    ) { contentPadding ->
         LegacyAppList(
             appList = appList,
             appListPrefs = appListPrefs,
             options = opUiState.options,
-            loadedCats = loadedCats,
+            appSrcState = appSrcState,
             headerState = headerState,
             paddingValues = contentPadding,
         )
@@ -195,7 +196,6 @@ private fun AppListV2(paddingValues: PaddingValues) {
 @Stable
 interface AppListState {
     val isRefreshing: Boolean
-    val loadedCats: Set<ListSrcCat>
     val opUiState: AppListOpUiState
 }
 
@@ -206,7 +206,7 @@ private fun AppListScaffold(
     eventHandler: CompositeOptionsEventHandler,
     paddingValues: PaddingValues,
     contentOffsetProgress: Int,
-    content: @Composable (Set<ListSrcCat>, PaddingValues) -> Unit
+    content: @Composable (PaddingValues) -> Unit
 ) {
     var showListOptions by remember { mutableIntStateOf(0) }
     val toolbarHeight = with(LocalDensity.current) { 100.dp.toPx() }
@@ -234,7 +234,7 @@ private fun AppListScaffold(
         },
         content = { contentPadding ->
             Box() {
-                content(listState.loadedCats, contentPadding)
+                content(contentPadding)
                 ListOptionsDialog(
                     isShown = showListOptions,
                     options = listState.opUiState.options,
@@ -253,7 +253,6 @@ private fun AppListPreview() {
             listOf(AppListSrc.SystemApps), AppListOrder.UpdateTime, AppApiMode.Target)
         AppListStateImpl(
             initIsRefreshing = false,
-            initSrcCats = emptySet(),
             initOpUiState = AppListOpUiState(options)
         )
     }
@@ -263,7 +262,7 @@ private fun AppListPreview() {
             eventHandler = remember { PseudoCompOptionsEventHandler() },
             paddingValues = PaddingValues(),
             contentOffsetProgress = 50,
-            content = { _, _ -> Box(Modifier.fillMaxSize().background(Color.DarkGray)) }
+            content = { _ -> Box(Modifier.fillMaxSize().background(Color.DarkGray)) }
         )
     }
 }

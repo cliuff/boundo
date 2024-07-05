@@ -79,7 +79,7 @@ interface ListHeaderState {
     val devInfoLabel: String
     val devInfoDesc: String
     var statsSize: Int
-    var listCat: ListSrcCat
+    fun setTerminalCat(cat: ListSrcCat)
     fun updateOffsetY(scrollY: Int)
     fun showStats(options: AppListOptions)
     fun showSystemModules()
@@ -90,7 +90,7 @@ interface ListHeaderState {
 fun AppListSwitchHeader(
     modifier: Modifier = Modifier,
     options: AppListOptions,
-    loadedSrc: Set<ListSrcCat>,
+    appSrcState: AppSrcState,
     headerState: ListHeaderState,
 ) {
     val headerOffset by animateIntOffsetAsState(
@@ -113,11 +113,12 @@ fun AppListSwitchHeader(
             onClickStats = { headerState.showStats(options) },
             onQueryChange = headerState::onQueryChange,
         )
+        val loadedSrc = appSrcState.loadedCats
         if (loadedSrc.isNotEmpty() && loadedSrc.singleOrNull() != ListSrcCat.Platform) {
             AppSrcTypeSwitcher(
                 types = loadedSrc.associateWith { it.name },
-                selType = headerState.listCat,
-                onSelType = { headerState.listCat = it },
+                selType = appSrcState.terminalCat,
+                onSelType = headerState::setTerminalCat,
             )
         }
     }
