@@ -20,8 +20,6 @@ import android.content.res.TypedArray
 import androidx.core.content.res.use
 
 object P {
-    const val APP_MARGIN_BOTTOM_MIN = 50f
-
     const val AT_TIME_HOUR = "atTimeHour"
     const val AT_TIME_MINUTE = "atTimeMinute"
 

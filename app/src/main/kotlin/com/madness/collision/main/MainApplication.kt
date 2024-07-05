@@ -49,7 +49,6 @@ class MainApplication : Application(), Thread.UncaughtExceptionHandler, ImageLoa
     var insetBottom: Int = 0
     var insetStart: Int = 0
     var insetEnd: Int = 0
-    var minBottomMargin: IntArray = intArrayOf(-1, -1)
     /**
      * Having a primary color that is close to black.
      * Dark themes are tailored for use in low-light environments.

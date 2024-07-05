@@ -20,6 +20,7 @@ import android.os.Build
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -40,6 +41,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -53,6 +56,7 @@ import com.madness.collision.unit.api_viewing.Utils
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.list.AppListFragment
 import com.madness.collision.unit.api_viewing.seal.SealMaker
+import com.madness.collision.util.AppUtils.asBottomMargin
 import com.madness.collision.util.F
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.haze
@@ -123,6 +127,20 @@ fun LegacyAppList(
                 .background(MaterialTheme.colorScheme.background))
         }
 
+        // some shade to make status bar visible
+        Column() {
+            Box(modifier = Modifier
+                .fillMaxWidth()
+                .background(brush = Brush.verticalGradient(
+                    0f to Color(0x10000000), 1f to Color(0x09000000)))
+                .height(paddingValues.calculateTopPadding()))
+            Box(modifier = Modifier
+                .fillMaxWidth()
+                .background(brush = Brush.verticalGradient(
+                    0f to Color(0x09000000), 1f to Color(0x00000000)))
+                .height(30.dp))
+        }
+
         var lastAppList: List<ApiViewingApp> by remember { mutableStateOf(emptyList()) }
         var lastAppListPrefs by remember { mutableIntStateOf(0) }
         val backdropPadding = with(LocalDensity.current) { 20.dp.toPx().roundToInt() }
@@ -131,6 +149,8 @@ fun LegacyAppList(
         LaunchedEffect(listFragment, appList, appListPrefs) {
             listFragment?.run {
                 getAdapter().topCover = headerState.headerHeight + backdropPadding
+                val bottomPaddingPx = paddingValues.calculateBottomPadding().value * density.density
+                getAdapter().bottomCover = asBottomMargin(bottomPaddingPx.roundToInt())
                 getAdapter().setSortMethod(options.listOrder.code)
                 if (appList !== lastAppList || appListPrefs != lastAppListPrefs) {
                     lastAppListPrefs = appListPrefs

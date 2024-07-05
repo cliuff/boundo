@@ -17,23 +17,20 @@
 package com.madness.collision.util
 
 import androidx.fragment.app.Fragment
-import com.madness.collision.util.MathUtils.boundMin
+import kotlin.math.max
 import kotlin.math.roundToInt
 
 object AppUtils {
+    private var minMarginCache: Int = -1
+
     /**
      * Set minimum bottom margin
      */
     fun Fragment.asBottomMargin(margin: Int): Int {
-        val index = 0
-        var minBottomMargin = mainApplication.minBottomMargin[index]
-        if (minBottomMargin < 0) {
+        if (minMarginCache < 0) {
             val context = context ?: return margin
-            val pref = P.APP_MARGIN_BOTTOM_MIN
-            minBottomMargin = X.size(context, pref, X.DP).roundToInt()
-            mainApplication.minBottomMargin[index] = minBottomMargin
+            minMarginCache = X.size(context, 50f, X.DP).roundToInt()
         }
-        val minMargin = minBottomMargin + mainApplication.insetBottom
-        return margin.boundMin(minMargin)
+        return max(margin, minMarginCache + mainApplication.insetBottom)
     }
 }
