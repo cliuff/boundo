@@ -21,11 +21,27 @@ interface Expression {
 
     // &&, and
     operator fun times(other: Expression): Expression {
-        return Statement(this, other, Operator.AND)
+        return CompExpression(this, other, Operator.AND)
     }
 
     // ||, or
     operator fun plus(other: Expression): Expression {
-        return Statement(this, other, Operator.OR)
+        return CompExpression(this, other, Operator.OR)
+    }
+}
+
+fun interface Operator {
+    fun operate(exp1: Expression, exp2: Expression): Boolean
+
+    companion object {
+        val AND = Operator { exp1, exp2 -> exp1.express() && exp2.express() }
+        val OR = Operator { exp1, exp2 -> exp1.express() || exp2.express() }
+    }
+}
+
+// CompositeExpression
+class CompExpression(val exp1: Expression, val exp2: Expression, val op: Operator) : Expression {
+    override fun express(): Boolean {
+        return op.operate(exp1, exp2)
     }
 }

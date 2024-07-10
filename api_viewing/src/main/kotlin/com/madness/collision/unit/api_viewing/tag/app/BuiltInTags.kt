@@ -17,6 +17,7 @@
 package com.madness.collision.unit.api_viewing.tag.app
 
 import android.content.Context
+import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.util.Log
@@ -116,6 +117,19 @@ internal fun builtInTags(): Map<String, AppTagInfo> = listOf(
         desc = R.string.av_tag_result_system_module.resultDesc,
         availability = sdkAvailable(OsUtils.Q),
         expressing = commonExpressing { it.moduleInfo != null }
+    ),
+    AppTagInfo(
+        id = AppTagInfo.ID_APP_CATEGORY, category = 0.cat, icon = "CAT".icon,
+        label = R.string.av_tag_category.labels, rank = "211",
+        desc = R.string.av_tag_result_category.resultDesc,
+        valueExpressing = exp@{ _, res ->
+            val cat = res.app.category ?: return@exp null
+            if (OsUtils.dissatisfy(OsUtils.O)) return@exp null
+            ApplicationInfo.getCategoryTitle(res.context, cat)?.toString()
+        },
+        expressing = commonExpressing {
+            it.category != null && it.category != ApplicationInfo.CATEGORY_UNDEFINED
+        }
     ),
     AppTagInfo(
         id = AppTagInfo.ID_TYPE_OVERLAY, category = 0.cat, icon = "RRO".icon,

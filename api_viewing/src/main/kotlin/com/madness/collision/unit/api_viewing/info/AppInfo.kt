@@ -46,18 +46,14 @@ internal class ExpressedTag(
 internal object AppInfo {
     private fun getTagViewInfo(tag: AppTagInfo, res: AppTagInfo.Resources, context: Context) = run m@{
         if (tag.requisites?.all { it.checker(res) } == false) return@m null
-        val express = tag.toExpressible().setRes(res).express()
+        val (expVal, express) = tag.toExpressible().setRes(res).run { expressValueOrNull() to express() }
         val viewInfo = AppTag.getTagViewInfo(tag, res, context) {
-            it.label.run {
-                normal ?: return@run null
-                if (express) (full ?: normal) else normal
-            }
+            // use express value as tag label
+            if (expVal != null) AppTagInfo.Label(string = expVal)
+            else it.label.run { if (express) (full ?: normal) else normal }
         }
         viewInfo ?: return@m null
-        val desc = run {
-            val checkDesc = tag.desc?.checkResultDesc ?: return@run null
-            checkDesc(res).get(context)?.toString()
-        }
+        val desc = tag.desc?.checkResultDesc?.let { chk -> chk(res).get(context)?.toString() }
         (tag to viewInfo) to (express to desc)
     }
 

@@ -34,7 +34,8 @@ internal class AppTagInfo(
     val availability: Availability = Available,
     // requisites will be prepared if isAvailable is true
     val requisites: List<Requisite>? = null,
-    val expressing: Expressing,
+    val valueExpressing: ValueExpressing? = null,
+    @Deprecated("") val expressing: Expressing,
 ) : Expression {
     var iconKey: String? = null
 
@@ -100,7 +101,10 @@ internal class AppTagInfo(
         val loader: suspend (Resources) -> Unit,
     )
 
+    @Deprecated("Use ValueExpressing instead to express non-binary values.")
     fun interface Expressing : (ExpressibleTag, Resources) -> Boolean
+
+    fun interface ValueExpressing : (ExpressibleTag, Resources) -> String?
 
     companion object {
         const val RANK_UNSPECIFIED = "\u0000"  // NULL
@@ -121,6 +125,7 @@ internal class AppTagInfo(
         const val ID_APP_SYSTEM = "avTagsValPriSys"
         const val ID_APP_SYSTEM_CORE = "avTagsValSysCore"
         const val ID_APP_SYSTEM_MODULE = "avTagsValSysMod"
+        const val ID_APP_CATEGORY = "avTagsValCat"
         const val ID_TYPE_OVERLAY = "avTagsValTypeOverlay"
         const val ID_TYPE_INSTANT = "avTagsValTypeInstant"
         const val ID_TYPE_WEB_APK = "avTagsValTypeWebApk"
@@ -159,6 +164,7 @@ internal class AppTagInfo(
             ID_APP_SYSTEM,
             ID_APP_SYSTEM_CORE,
             ID_APP_SYSTEM_MODULE,
+            ID_APP_CATEGORY,
             ID_TYPE_OVERLAY,
             ID_TYPE_INSTANT,
             ID_TYPE_WEB_APK,
@@ -225,6 +231,12 @@ internal fun AppTagInfo.isAvailable(context: Context) = availability(context)
 
 internal class ExpressibleTag(private val tagInfo: AppTagInfo, var isAnti: Boolean = false) : Expression {
     var res: AppTagInfo.Resources? = null
+
+    fun expressValueOrNull(): String? {
+        val res = res ?: return null
+        val exp = tagInfo.valueExpressing ?: return null
+        return exp(this, res)
+    }
 
     override fun express(): Boolean {
         val res = res ?: return false

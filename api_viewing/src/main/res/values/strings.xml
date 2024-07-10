@@ -167,4 +167,6 @@
     <string name="av_tag_result_predictive_back">This app supports predictive back animations on this device</string>
     <string name="av_osmod">System modules</string>
     <string name="av_osmod_title">System Modules</string>
+    <string name="av_tag_category">App category</string>
+    <string name="av_tag_result_category">The category this app fits into</string>
 </resources>

@@ -123,6 +123,8 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
     var isCoreApp: Boolean? = null
     @Ignore
     var isBackCallbackEnabled: Boolean? = null
+    @Ignore
+    var category: Int? = null
 
     val isJetpackComposed: Boolean
         get() = jetpackComposed == 1
@@ -167,6 +169,7 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
         moduleInfo = null
         isCoreApp = null
         isBackCallbackEnabled = null
+        category = null
     }
 
     fun initExtraIgnored(context: Context, pkgInfo: PackageInfo) {
@@ -266,6 +269,7 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Parc
         moduleInfo = PkgInfo.getModuleInfo(packageName, context)
         isCoreApp = PkgInfo.getIsCoreApp(pkgInfo)
         isBackCallbackEnabled = isOnBackInvokedCallbackEnabled(pkgInfo.applicationInfo, context)
+        category = if (OsUtils.satisfy(OsUtils.O)) pkgInfo.applicationInfo.category else null
     }
 
     fun initArchive(context: Context, pkgInfo: PackageInfo): ApiViewingApp {

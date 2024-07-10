@@ -104,6 +104,7 @@
         android:supportsRtl="true"
         android:theme="@style/LaunchScreen"
         android:enableOnBackInvokedCallback="@bool/appOnBackInvokedCallbackEnabled"
+        android:appCategory="productivity"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
 
         <!-- Activities -->
