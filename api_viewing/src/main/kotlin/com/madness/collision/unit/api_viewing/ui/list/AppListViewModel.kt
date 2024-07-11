@@ -35,6 +35,7 @@ import com.madness.collision.util.F
 import com.madness.collision.util.ui.PackageInfo
 import com.opencsv.CSVWriter
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -47,6 +48,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
 import java.io.File
 import java.io.FileWriter
 
@@ -221,6 +223,10 @@ class AppListViewModel : ViewModel() {
             opUiState.value.run { copy(options = options.copy(srcSet = newSrcSet.toList())) }
         }
         viewModelScope.launch(Dispatchers.Default) {
+            // try to wait for init to complete (otherwise abort) when called from LaunchMethod
+            if (!::srcLoader.isInitialized) withTimeout(200) {
+                while (!::srcLoader.isInitialized) delay(5)
+            }
             optionsOwner.setListSrc(src, newSrcSet)
             if (src in srcSet) {
                 multiSrcApps[src.cat].removeAppSrc(src)

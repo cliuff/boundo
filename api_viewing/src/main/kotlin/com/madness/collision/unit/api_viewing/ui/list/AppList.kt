@@ -69,6 +69,7 @@ import com.madness.collision.util.os.OsUtils
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 open class AppListFragment : ComposeUnit(), Democratic {
     override val id: String = "AV"
@@ -101,11 +102,15 @@ open class AppListFragment : ComposeUnit(), Democratic {
             .launchIn(viewLifecycleOwner.lifecycleScope)
 
         LaunchMethod(arguments).run {
-            if (mode == LaunchMethod.LAUNCH_MODE_SEARCH && textExtra != null) {
-                viewModel.toggleListSrc(AppListSrc.DataSourceQuery(null, textExtra))
+            val src = if (mode == LaunchMethod.LAUNCH_MODE_SEARCH && textExtra != null) {
+                AppListSrc.DataSourceQuery(null, textExtra)
             } else if (mode == LaunchMethod.LAUNCH_MODE_LINK && dataStreamExtra != null) {
-                viewModel.toggleListSrc(AppListSrc.SharedApk(dataStreamExtra))
+                AppListSrc.SharedApk(dataStreamExtra)
+            } else {
+                return@run
             }
+            // launch in default context and wait for view model init completed
+            lifecycleScope.launch { viewModel.toggleListSrc(src) }
         }
     }
 

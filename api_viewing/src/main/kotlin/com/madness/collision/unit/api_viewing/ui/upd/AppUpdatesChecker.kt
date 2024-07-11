@@ -60,9 +60,9 @@ class AppUpdatesChecker {
     suspend fun getSections(
         changedLimit: Int, usedLimit: Int,
         context: Context, lifecycleOwner: LifecycleOwner): Map<AppUpdatesIndex, List<*>> {
-        val (lastUpdPkg, lastUpdUsed) = lastUpdatesData!!
+        val (lastUpdPkg, lastUpdUsed) = lastUpdatesData?.pkg to lastUpdatesData?.used
         val sections = mutableMapOf<AppUpdatesIndex, List<*>>()
-        if (lastUpdPkg.hasPkgChanges) {
+        if (lastUpdPkg?.hasPkgChanges == true) {
             val pkgRecords = lastUpdPkg.records
             val mChangedPackages = pkgRecords.changedPackages
             val previousRecords = pkgRecords.previousRecords
@@ -78,8 +78,8 @@ class AppUpdatesChecker {
             }
         }
 
-        val usedPkgList = lastUpdUsed.usedPkgNames
-        if (lastUpdUsed.isUsedPkgNamesChanged) {
+        if (lastUpdUsed?.isUsedPkgNamesChanged == true) {
+            val usedPkgList = lastUpdUsed.usedPkgNames
             val usedSize = min(usedPkgList.size, usedLimit)
             val packages = usedPkgList.subList(0, usedSize)
                 .mapNotNull { MiscApp.getPackageInfo(context, packageName = it) }

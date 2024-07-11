@@ -173,9 +173,10 @@ fun AppSrcTypeSwitcher(
     selType: ListSrcCat,
     onSelType: (ListSrcCat) -> Unit
 ) {
-    if (types.isNotEmpty()) {
+    val selIndex = types.keys.indexOf(selType)
+    if (types.isNotEmpty() && selIndex >= 0) {
         PrimaryScrollableTabRow(
-            selectedTabIndex = types.keys.indexOf(selType),
+            selectedTabIndex = selIndex,
             divider = {},
             containerColor = Color.Transparent
         ) {
