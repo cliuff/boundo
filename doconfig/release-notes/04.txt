@@ -1,5 +1,16 @@
 
 
+- **4.2.0** 24071219
+<en-US>
+- Revamped app API page
+- New tag: app category
+</en-US>
+<zh-CN>
+- 全新应用API页面
+- 全新应用类别标签
+</zh-CN>
+
+
 - **4.1.5** 24021713
 <en-US>
 - App API： support for Android 15 / Vanilla Ice Cream
