@@ -150,4 +150,23 @@
     <string name="av_tag_result_type_instant">This app runs without being installed</string>
     <string name="av_tag_result_type_web_apk">This is a Chromium WebAPK</string>
     <string name="av_tag_result_predictive_back">This app supports predictive back animations on this device</string>
+    <string name="av_osmod">System modules</string>
+    <string name="av_osmod_title">System Modules</string>
+    <string name="av_tag_category">App category</string>
+    <string name="av_tag_result_category">The category this app fits into</string>
+    <string name="av_main_stats">List stats</string>
+    <string name="av_main_cat_platform">Installed</string>
+    <string name="av_main_cat_storage">On-device</string>
+    <string name="av_main_cat_temporary">Selected</string>
+    <string name="av_main_cat_filter">Filtered</string>
+    <string name="av_options_tab_options">List options</string>
+    <string name="av_options_tab_tags">Tag filter</string>
+    <string name="av_options_src">Choose app sources</string>
+    <string name="av_options_order">List ordering</string>
+    <string name="av_options_api_mode">List API mode</string>
+    <string name="av_options_cat_app">Installed apps</string>
+    <string name="av_options_cat_apk">APK files</string>
+    <string name="av_options_api_compile">Compile API</string>
+    <string name="av_options_api_target">Target API</string>
+    <string name="av_options_api_min">Min. API</string>
 </resources>

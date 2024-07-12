@@ -129,4 +129,23 @@
     <string name="av_tag_result_type_instant">แอพนี้ทำงานโดยไม่ต้องติดตั้ง</string>
     <string name="av_tag_result_type_web_apk">นี่คือ Chromium WebAPK</string>
     <string name="av_tag_result_predictive_back">แอพนี้รองรับแอนิเมชั่นย้อนกลับแบบคาดคะเนบนอุปกรณ์นี้</string>
+    <string name="av_osmod">โมดูลระบบ</string>
+    <string name="av_osmod_title">โมดูลระบบ</string>
+    <string name="av_tag_category">หมวดหมู่แอพ</string>
+    <string name="av_tag_result_category">หมวดหมู่ที่แอปนี้พอดี</string>
+    <string name="av_main_stats">สถิติรายการ</string>
+    <string name="av_main_cat_platform">ติดตั้งแล้ว</string>
+    <string name="av_main_cat_storage">บนอุปกรณ์</string>
+    <string name="av_main_cat_temporary">เลือกแล้ว</string>
+    <string name="av_main_cat_filter">กรองแล้ว</string>
+    <string name="av_options_tab_options">ตัวเลือกรายการ</string>
+    <string name="av_options_tab_tags">ตัวกรองแท็ก</string>
+    <string name="av_options_src">เลือกแหล่งที่มาของแอป</string>
+    <string name="av_options_order">รายการสั่งซื้อ</string>
+    <string name="av_options_api_mode">แสดงรายการโหมด API</string>
+    <string name="av_options_cat_app">แอพที่ติดตั้ง</string>
+    <string name="av_options_cat_apk">ไฟล์เอพีเค</string>
+    <string name="av_options_api_compile">คอมไพล์ API</string>
+    <string name="av_options_api_target">API เป้าหมาย</string>
+    <string name="av_options_api_min">นาที. เอพีไอ</string>
 </resources>

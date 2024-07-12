@@ -159,12 +159,14 @@ private fun ListOptionsPager(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Spacer(modifier = Modifier.width(8.dp))
-                val labels = remember { arrayOf("List options", "Tag filter") }
+                val labels = remember {
+                    arrayOf(R.string.av_options_tab_options, R.string.av_options_tab_tags)
+                }
                 for (i in labels.indices) {
                     key(i) {
                         PagerTab(
                             isSelected = i == tabIndex,
-                            label = labels[i],
+                            label = stringResource(labels[i]),
                             onClick = { tabIndex = i }
                         )
                     }

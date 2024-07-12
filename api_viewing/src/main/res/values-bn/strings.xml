@@ -129,4 +129,23 @@
     <string name="av_tag_result_type_instant">এই অ্যাপটি ইনস্টল না করেই চলে</string>
     <string name="av_tag_result_type_web_apk">এটি একটি Chromium WebAPK</string>
     <string name="av_tag_result_predictive_back">এই অ্যাপটি এই ডিভাইসে ভবিষ্যদ্বাণীমূলক ব্যাক অ্যানিমেশন সমর্থন করে</string>
+    <string name="av_osmod">সিস্টেম মডিউল</string>
+    <string name="av_osmod_title">সিস্টেম মডিউল</string>
+    <string name="av_tag_category">অ্যাপ বিভাগ</string>
+    <string name="av_tag_result_category">এই অ্যাপটি যে বিভাগে ফিট করে</string>
+    <string name="av_main_stats">তালিকা পরিসংখ্যান</string>
+    <string name="av_main_cat_platform">ইনস্টল করা হয়েছে</string>
+    <string name="av_main_cat_storage">ডিভাইসে</string>
+    <string name="av_main_cat_temporary">নির্বাচিত</string>
+    <string name="av_main_cat_filter">ফিল্টার করা হয়েছে</string>
+    <string name="av_options_tab_options">তালিকা বিকল্প</string>
+    <string name="av_options_tab_tags">ট্যাগ ফিল্টার</string>
+    <string name="av_options_src">অ্যাপ্লিকেশন উত্স চয়ন করুন</string>
+    <string name="av_options_order">তালিকা ক্রম</string>
+    <string name="av_options_api_mode">তালিকা API মোড</string>
+    <string name="av_options_cat_app">ইনস্টল করা অ্যাপস</string>
+    <string name="av_options_cat_apk">APK ফাইল</string>
+    <string name="av_options_api_compile">কম্পাইল API</string>
+    <string name="av_options_api_target">টার্গেট API</string>
+    <string name="av_options_api_min">মিন. API</string>
 </resources>

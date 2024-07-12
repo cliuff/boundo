@@ -69,6 +69,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.madness.collision.chief.app.BoundoTheme
+import com.madness.collision.unit.api_viewing.R
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
 import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape
 
@@ -116,7 +117,14 @@ fun AppListSwitchHeader(
         val loadedSrc = appSrcState.loadedCats
         if (loadedSrc.isNotEmpty() && loadedSrc.singleOrNull() != ListSrcCat.Platform) {
             AppSrcTypeSwitcher(
-                types = loadedSrc.associateWith { it.name },
+                types = loadedSrc.associateWith { cat ->
+                    when (cat) {
+                        ListSrcCat.Platform -> stringResource(R.string.av_main_cat_platform)
+                        ListSrcCat.Storage -> stringResource(R.string.av_main_cat_storage)
+                        ListSrcCat.Temporary -> stringResource(R.string.av_main_cat_temporary)
+                        ListSrcCat.Filter -> stringResource(R.string.av_main_cat_filter)
+                    }
+                },
                 selType = appSrcState.terminalCat,
                 onSelType = headerState::setTerminalCat,
             )
@@ -149,7 +157,7 @@ fun AppListHeader(
                 TextLabelAction(
                     modifier = Modifier.weight(2f),
                     icon = Icons.TwoTone.PieChart,
-                    titleLabel = "List stats",
+                    titleLabel = stringResource(R.string.av_main_stats),
                     valueLabel = statsSizeLabel,
                     onClick = onClickStats
                 )

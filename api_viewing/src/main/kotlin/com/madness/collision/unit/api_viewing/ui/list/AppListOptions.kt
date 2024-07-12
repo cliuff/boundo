@@ -73,7 +73,7 @@ fun AppListOptions(
     Column(modifier = modifier.fillMaxWidth()) {
         Text(
             modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 13.dp),
-            text = "Choose app sources",
+            text = stringResource(R.string.av_options_src),
             color = MaterialTheme.colorScheme.onSurface,
             fontSize = 15.sp,
             lineHeight = 17.sp,
@@ -93,7 +93,7 @@ fun AppListOptions(
                 AppSrcItem(
                     selected = listSrc in selSrcSet,
                     label = srcLabel,
-                    category = "Installed app",
+                    category = stringResource(R.string.av_options_cat_app),
                     onClick = { eventHandler.toggleSrc(listSrc) },
                 )
             }
@@ -102,7 +102,7 @@ fun AppListOptions(
             AppSrcItem(
                 selected = selSrcSet.any { it is AppListSrc.SelectApks },
                 label = stringResource(MainR.string.apiDisplayFile),
-                category = "APK files",
+                category = stringResource(R.string.av_options_cat_apk),
                 onClick = eventHandler::toggleApks,
             )
 
@@ -110,7 +110,7 @@ fun AppListOptions(
             AppSrcItem(
                 selected = selSrcSet.any { it is AppListSrc.SelectVolume },
                 label = stringResource(MainR.string.apiDisplayVolume),
-                category = "APK files",
+                category = stringResource(R.string.av_options_cat_apk),
                 onClick = eventHandler::toggleFolder,
             )
         }
@@ -118,7 +118,7 @@ fun AppListOptions(
         Spacer(modifier = Modifier.height(12.dp))
         Text(
             modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 13.dp),
-            text = "List ordering",
+            text = stringResource(R.string.av_options_order),
             color = MaterialTheme.colorScheme.onSurface,
             fontSize = 15.sp,
             lineHeight = 17.sp,
@@ -145,7 +145,7 @@ fun AppListOptions(
         Spacer(modifier = Modifier.height(12.dp))
         Text(
             modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 13.dp),
-            text = "List API mode",
+            text = stringResource(R.string.av_options_api_mode),
             color = MaterialTheme.colorScheme.onSurface,
             fontSize = 15.sp,
             lineHeight = 17.sp,
@@ -154,15 +154,14 @@ fun AppListOptions(
             .horizontalScroll(rememberScrollState())
             .padding(horizontal = horizontalPadding)) {
             for ((i, mode) in AppApiMode.entries.withIndex()) {
-                val modeLabel = when (mode) {
-                    AppApiMode.Compile -> "Compile API"
-                    AppApiMode.Target -> "Target API"
-                    AppApiMode.Minimum -> "Min. API"
-                }
                 if (i > 0) Spacer(modifier = Modifier.width(12.dp))
                 OrderItem(
                     selected = options.apiMode == mode,
-                    label = modeLabel,
+                    label = when (mode) {
+                        AppApiMode.Compile -> stringResource(R.string.av_options_api_compile)
+                        AppApiMode.Target -> stringResource(R.string.av_options_api_target)
+                        AppApiMode.Minimum -> stringResource(R.string.av_options_api_min)
+                    },
                     onClick = { eventHandler.setApiMode(mode) }
                 )
             }

@@ -129,4 +129,23 @@
     <string name="av_tag_result_type_instant">Bu uygulama kurulmadan çalışır</string>
     <string name="av_tag_result_type_web_apk">Bu bir Chromium WebAPK\'sıdır</string>
     <string name="av_tag_result_predictive_back">Bu uygulama, bu cihazda tahmine dayalı geri animasyonları destekler</string>
+    <string name="av_osmod">Sistem modülleri</string>
+    <string name="av_osmod_title">Sistem Modülleri</string>
+    <string name="av_tag_category">Uygulama kategorisi</string>
+    <string name="av_tag_result_category">Bu uygulamanın uyduğu kategori</string>
+    <string name="av_main_stats">İstatistikleri listele</string>
+    <string name="av_main_cat_platform">Kurulmuş</string>
+    <string name="av_main_cat_storage">Cihazda</string>
+    <string name="av_main_cat_temporary">Seçildi</string>
+    <string name="av_main_cat_filter">Filtrelendi</string>
+    <string name="av_options_tab_options">Liste seçenekleri</string>
+    <string name="av_options_tab_tags">Etiket filtresi</string>
+    <string name="av_options_src">Uygulama kaynaklarını seçin</string>
+    <string name="av_options_order">Liste sıralaması</string>
+    <string name="av_options_api_mode">API modunu listele</string>
+    <string name="av_options_cat_app">Yüklü uygulamalar</string>
+    <string name="av_options_cat_apk">APK dosyaları</string>
+    <string name="av_options_api_compile">API\'yi derle</string>
+    <string name="av_options_api_target">Hedef API</string>
+    <string name="av_options_api_min">Min. API\'si</string>
 </resources>

@@ -161,4 +161,23 @@
     <string name="av_tag_result_type_instant">يعمل هذا التطبيق بدون تثبيته</string>
     <string name="av_tag_result_type_web_apk">هذا هو Chromium WebAPK</string>
     <string name="av_tag_result_predictive_back">يدعم هذا التطبيق الرسوم المتحركة الخلفية التنبؤية على هذا الجهاز</string>
+    <string name="av_osmod">وحدات النظام</string>
+    <string name="av_osmod_title">وحدات النظام</string>
+    <string name="av_tag_category">فئة التطبيق</string>
+    <string name="av_tag_result_category">الفئة التي يناسبها هذا التطبيق</string>
+    <string name="av_main_stats">احصائيات القائمة</string>
+    <string name="av_main_cat_platform">المثبتة</string>
+    <string name="av_main_cat_storage">على الجهاز</string>
+    <string name="av_main_cat_temporary">المحدد</string>
+    <string name="av_main_cat_filter">تمت تصفيته</string>
+    <string name="av_options_tab_options">خيارات القائمة</string>
+    <string name="av_options_tab_tags">مرشح العلامة</string>
+    <string name="av_options_src">اختر مصادر التطبيق</string>
+    <string name="av_options_order">ترتيب القائمة</string>
+    <string name="av_options_api_mode">وضع قائمة API</string>
+    <string name="av_options_cat_app">التطبيقات المثبتة</string>
+    <string name="av_options_cat_apk">ملفات APK</string>
+    <string name="av_options_api_compile">ترجمة API</string>
+    <string name="av_options_api_target">واجهة برمجة التطبيقات المستهدفة</string>
+    <string name="av_options_api_min">دقيقة. واجهة برمجة التطبيقات</string>
 </resources>

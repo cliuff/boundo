@@ -129,4 +129,23 @@
     <string name="av_tag_result_type_instant">हे अॅप इंस्टॉल केल्याशिवाय चालते</string>
     <string name="av_tag_result_type_web_apk">हे Chromium WebAPK आहे</string>
     <string name="av_tag_result_predictive_back">हे अॅप या डिव्हाइसवर भविष्य सांगणाऱ्या बॅक अॅनिमेशनला सपोर्ट करते</string>
+    <string name="av_osmod">सिस्टम मॉड्यूल्स</string>
+    <string name="av_osmod_title">सिस्टम मॉड्यूल्स</string>
+    <string name="av_tag_category">ॲप श्रेणी</string>
+    <string name="av_tag_result_category">हे ॲप ज्या श्रेणीमध्ये बसते</string>
+    <string name="av_main_stats">यादी आकडेवारी</string>
+    <string name="av_main_cat_platform">स्थापित केले</string>
+    <string name="av_main_cat_storage">ऑन-डिव्हाइस</string>
+    <string name="av_main_cat_temporary">निवडले</string>
+    <string name="av_main_cat_filter">फिल्टर केले</string>
+    <string name="av_options_tab_options">पर्यायांची यादी करा</string>
+    <string name="av_options_tab_tags">टॅग फिल्टर</string>
+    <string name="av_options_src">ॲप स्रोत निवडा</string>
+    <string name="av_options_order">यादी क्रमवारी</string>
+    <string name="av_options_api_mode">सूची API मोड</string>
+    <string name="av_options_cat_app">इंस्टॉल केलेले ॲप्स</string>
+    <string name="av_options_cat_apk">APK फायली</string>
+    <string name="av_options_api_compile">API संकलित करा</string>
+    <string name="av_options_api_target">लक्ष्य API</string>
+    <string name="av_options_api_min">मि. API</string>
 </resources>

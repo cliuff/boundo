@@ -129,4 +129,23 @@
     <string name="av_tag_result_type_instant">यह ऐप बिना इंस्टॉल किए चलता है</string>
     <string name="av_tag_result_type_web_apk">यह एक क्रोमियम वेबएपीके है</string>
     <string name="av_tag_result_predictive_back">यह ऐप इस डिवाइस पर पूर्वानुमानित बैक एनिमेशन का समर्थन करता है</string>
+    <string name="av_osmod">सिस्टम मॉड्यूल</string>
+    <string name="av_osmod_title">सिस्टम मॉड्यूल</string>
+    <string name="av_tag_category">ऐप श्रेणी</string>
+    <string name="av_tag_result_category">यह ऐप किस श्रेणी में आता है</string>
+    <string name="av_main_stats">सूची आँकड़े</string>
+    <string name="av_main_cat_platform">इंस्टॉल किया गया</string>
+    <string name="av_main_cat_storage">ऑन-डिवाइस</string>
+    <string name="av_main_cat_temporary">चयनित</string>
+    <string name="av_main_cat_filter">फ़िल्टर किया गया</string>
+    <string name="av_options_tab_options">सूची विकल्प</string>
+    <string name="av_options_tab_tags">टैग फ़िल्टर</string>
+    <string name="av_options_src">ऐप स्रोत चुनें</string>
+    <string name="av_options_order">सूची क्रम</string>
+    <string name="av_options_api_mode">सूची API मोड</string>
+    <string name="av_options_cat_app">इंस्टॉल किए गए ऐप</string>
+    <string name="av_options_cat_apk">APK फ़ाइलें</string>
+    <string name="av_options_api_compile">संकलन API</string>
+    <string name="av_options_api_target">लक्ष्य API</string>
+    <string name="av_options_api_min">न्यूनतम API</string>
 </resources>

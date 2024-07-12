@@ -160,4 +160,23 @@
     <string name="av_tag_result_type_instant">این برنامه بدون نصب اجرا می شود</string>
     <string name="av_tag_result_type_web_apk">این یک WebAPK کرومیوم است</string>
     <string name="av_tag_result_predictive_back">این برنامه از انیمیشن‌های پیش‌بینی‌کننده برگشت در این دستگاه پشتیبانی می‌کند</string>
+    <string name="av_osmod">ماژول های سیستم</string>
+    <string name="av_osmod_title">ماژول های سیستم</string>
+    <string name="av_tag_category">دسته برنامه</string>
+    <string name="av_tag_result_category">دسته ای که این برنامه در آن قرار می گیرد</string>
+    <string name="av_main_stats">لیست آمار</string>
+    <string name="av_main_cat_platform">نصب شده است</string>
+    <string name="av_main_cat_storage">روی دستگاه</string>
+    <string name="av_main_cat_temporary">انتخاب شد</string>
+    <string name="av_main_cat_filter">فیلتر شده</string>
+    <string name="av_options_tab_options">گزینه ها را فهرست کنید</string>
+    <string name="av_options_tab_tags">فیلتر برچسب</string>
+    <string name="av_options_src">منابع برنامه را انتخاب کنید</string>
+    <string name="av_options_order">لیست سفارش</string>
+    <string name="av_options_api_mode">حالت API را فهرست کنید</string>
+    <string name="av_options_cat_app">برنامه های نصب شده</string>
+    <string name="av_options_cat_apk">فایل های APK</string>
+    <string name="av_options_api_compile">API را کامپایل کنید</string>
+    <string name="av_options_api_target">API هدف</string>
+    <string name="av_options_api_min">حداقل API</string>
 </resources>

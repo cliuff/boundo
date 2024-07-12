@@ -157,4 +157,21 @@
     <string name="av_tag_result_predictive_back">该应用在此设备上支持预测性返回手势动画</string>
     <string name="av_osmod">系统模块</string>
     <string name="av_osmod_title">系统模块</string>
+    <string name="av_tag_category">应用类别</string>
+    <string name="av_tag_result_category">该应用所符合的类别</string>
+    <string name="av_main_stats">应用统计</string>
+    <string name="av_main_cat_platform">已安装应用</string>
+    <string name="av_main_cat_storage">设备 APK</string>
+    <string name="av_main_cat_temporary">选取 APK</string>
+    <string name="av_main_cat_filter">筛选应用</string>
+    <string name="av_options_tab_options">列表选项</string>
+    <string name="av_options_tab_tags">标签筛选</string>
+    <string name="av_options_src">选择应用来源</string>
+    <string name="av_options_order">列表排序</string>
+    <string name="av_options_api_mode">列表 API 模式</string>
+    <string name="av_options_cat_app">已安装应用</string>
+    <string name="av_options_cat_apk">APK 文件</string>
+    <string name="av_options_api_compile">编译 API</string>
+    <string name="av_options_api_target">目标 API</string>
+    <string name="av_options_api_min">最低 API</string>
 </resources>

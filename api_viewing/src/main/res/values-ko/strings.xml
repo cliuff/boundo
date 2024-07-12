@@ -129,4 +129,23 @@
     <string name="av_tag_result_type_instant">이 앱은 설치 없이 실행됩니다.</string>
     <string name="av_tag_result_type_web_apk">Chromium WebAPK입니다.</string>
     <string name="av_tag_result_predictive_back">이 앱은 이 기기에서 예상되는 역방향 애니메이션을 지원합니다.</string>
+    <string name="av_osmod">시스템 모듈</string>
+    <string name="av_osmod_title">시스템 모듈</string>
+    <string name="av_tag_category">앱 카테고리</string>
+    <string name="av_tag_result_category">이 앱이 적합한 카테고리</string>
+    <string name="av_main_stats">통계 나열</string>
+    <string name="av_main_cat_platform">설치됨</string>
+    <string name="av_main_cat_storage">기기 내</string>
+    <string name="av_main_cat_temporary">선택된</string>
+    <string name="av_main_cat_filter">거르는</string>
+    <string name="av_options_tab_options">목록 옵션</string>
+    <string name="av_options_tab_tags">태그 필터</string>
+    <string name="av_options_src">앱 소스 선택</string>
+    <string name="av_options_order">목록 순서</string>
+    <string name="av_options_api_mode">목록 API 모드</string>
+    <string name="av_options_cat_app">설치된 앱</string>
+    <string name="av_options_cat_apk">APK 파일</string>
+    <string name="av_options_api_compile">API 컴파일</string>
+    <string name="av_options_api_target">타겟 API</string>
+    <string name="av_options_api_min">최소 API</string>
 </resources>

@@ -129,4 +129,23 @@
     <string name="av_tag_result_type_instant">Это приложение работает без установки</string>
     <string name="av_tag_result_type_web_apk">Это Chromium WebAPK</string>
     <string name="av_tag_result_predictive_back">Это приложение поддерживает интеллектуальную анимацию назад на этом устройстве.</string>
+    <string name="av_osmod">Системные модули</string>
+    <string name="av_osmod_title">Системные модули</string>
+    <string name="av_tag_category">Категория приложения</string>
+    <string name="av_tag_result_category">Категория, к которой относится это приложение</string>
+    <string name="av_main_stats">Получение списка статистики</string>
+    <string name="av_main_cat_platform">Установлен</string>
+    <string name="av_main_cat_storage">На устройстве</string>
+    <string name="av_main_cat_temporary">Выбрано</string>
+    <string name="av_main_cat_filter">Отфильтровано</string>
+    <string name="av_options_tab_options">Список опций</string>
+    <string name="av_options_tab_tags">Фильтр тегов</string>
+    <string name="av_options_src">Выберите источники приложений</string>
+    <string name="av_options_order">Порядок списка</string>
+    <string name="av_options_api_mode">Список режимов API</string>
+    <string name="av_options_cat_app">Установленные приложения</string>
+    <string name="av_options_cat_apk">APK-файлы</string>
+    <string name="av_options_api_compile">Скомпилировать API</string>
+    <string name="av_options_api_target">Целевой API</string>
+    <string name="av_options_api_min">Мин. API</string>
 </resources>

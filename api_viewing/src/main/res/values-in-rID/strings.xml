@@ -129,4 +129,23 @@
     <string name="av_tag_result_type_instant">Aplikasi ini berjalan tanpa diinstal</string>
     <string name="av_tag_result_type_web_apk">Ini adalah APK Web Chromium</string>
     <string name="av_tag_result_predictive_back">Aplikasi ini mendukung animasi kembali prediktif pada perangkat ini</string>
+    <string name="av_osmod">Modul sistem</string>
+    <string name="av_osmod_title">Modul Sistem</string>
+    <string name="av_tag_category">Kategori aplikasi</string>
+    <string name="av_tag_result_category">Kategori yang cocok dengan aplikasi ini</string>
+    <string name="av_main_stats">Daftar statistik</string>
+    <string name="av_main_cat_platform">Dipasang</string>
+    <string name="av_main_cat_storage">Di perangkat</string>
+    <string name="av_main_cat_temporary">Terpilih</string>
+    <string name="av_main_cat_filter">Tersaring</string>
+    <string name="av_options_tab_options">Opsi daftar</string>
+    <string name="av_options_tab_tags">penyaring tanda</string>
+    <string name="av_options_src">Pilih sumber aplikasi</string>
+    <string name="av_options_order">Daftar pemesanan</string>
+    <string name="av_options_api_mode">Daftar mode API</string>
+    <string name="av_options_cat_app">Aplikasi yang diinstal</string>
+    <string name="av_options_cat_apk">file APK</string>
+    <string name="av_options_api_compile">Kompilasi API</string>
+    <string name="av_options_api_target">API sasaran</string>
+    <string name="av_options_api_min">Minimal. API</string>
 </resources>

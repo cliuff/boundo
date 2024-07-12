@@ -129,4 +129,23 @@
     <string name="av_tag_result_type_instant">Αυτή η εφαρμογή εκτελείται χωρίς να εγκατασταθεί</string>
     <string name="av_tag_result_type_web_apk">Αυτό είναι ένα Chromium WebAPK</string>
     <string name="av_tag_result_predictive_back">Αυτή η εφαρμογή υποστηρίζει προγνωστικά κινούμενα σχέδια σε αυτήν τη συσκευή</string>
+    <string name="av_osmod">Μονάδες συστήματος</string>
+    <string name="av_osmod_title">Ενότητες συστήματος</string>
+    <string name="av_tag_category">Κατηγορία εφαρμογών</string>
+    <string name="av_tag_result_category">Η κατηγορία στην οποία εντάσσεται αυτή η εφαρμογή</string>
+    <string name="av_main_stats">Λίστα στατιστικών</string>
+    <string name="av_main_cat_platform">Εγκατεστημένο</string>
+    <string name="av_main_cat_storage">Στη συσκευή</string>
+    <string name="av_main_cat_temporary">Επιλεγμένο</string>
+    <string name="av_main_cat_filter">Φιλτραρισμένο</string>
+    <string name="av_options_tab_options">Λίστα επιλογών</string>
+    <string name="av_options_tab_tags">Φίλτρο ετικέτας</string>
+    <string name="av_options_src">Επιλέξτε πηγές εφαρμογών</string>
+    <string name="av_options_order">Παραγγελία λίστας</string>
+    <string name="av_options_api_mode">Λειτουργία API λίστας</string>
+    <string name="av_options_cat_app">Εγκατεστημένες εφαρμογές</string>
+    <string name="av_options_cat_apk">Αρχεία APK</string>
+    <string name="av_options_api_compile">Μεταγλώττιση API</string>
+    <string name="av_options_api_target">API στόχος</string>
+    <string name="av_options_api_min">Ελάχ. API</string>
 </resources>

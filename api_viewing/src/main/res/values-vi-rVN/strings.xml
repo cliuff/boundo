@@ -129,4 +129,23 @@
     <string name="av_tag_result_type_instant">Ứng dụng này chạy mà không cần cài đặt</string>
     <string name="av_tag_result_type_web_apk">Đây là một Chromium WebAPK</string>
     <string name="av_tag_result_predictive_back">Ứng dụng này hỗ trợ hoạt ảnh quay lại dự đoán trên thiết bị này</string>
+    <string name="av_osmod">Mô-đun hệ thống</string>
+    <string name="av_osmod_title">Mô-đun hệ thống</string>
+    <string name="av_tag_category">Danh mục ứng dụng</string>
+    <string name="av_tag_result_category">Danh mục ứng dụng này phù hợp</string>
+    <string name="av_main_stats">Thống kê danh sách</string>
+    <string name="av_main_cat_platform">Cài đặt</string>
+    <string name="av_main_cat_storage">Trên thiết bị</string>
+    <string name="av_main_cat_temporary">Đã chọn</string>
+    <string name="av_main_cat_filter">Đã lọc</string>
+    <string name="av_options_tab_options">Tùy chọn danh sách</string>
+    <string name="av_options_tab_tags">Bộ lọc thẻ</string>
+    <string name="av_options_src">Chọn nguồn ứng dụng</string>
+    <string name="av_options_order">Thứ tự danh sách</string>
+    <string name="av_options_api_mode">Chế độ API liệt kê</string>
+    <string name="av_options_cat_app">Ứng dụng đã cài đặt</string>
+    <string name="av_options_cat_apk">Tệp APK</string>
+    <string name="av_options_api_compile">Biên dịch API</string>
+    <string name="av_options_api_target">API mục tiêu</string>
+    <string name="av_options_api_min">Tối thiểu. API</string>
 </resources>

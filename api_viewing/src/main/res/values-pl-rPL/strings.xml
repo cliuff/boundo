@@ -129,4 +129,23 @@
     <string name="av_tag_result_type_instant">Ta aplikacja działa bez instalacji</string>
     <string name="av_tag_result_type_web_apk">To jest WebAPK Chromium</string>
     <string name="av_tag_result_predictive_back">Ta aplikacja obsługuje predykcyjne animacje pleców na tym urządzeniu</string>
+    <string name="av_osmod">Moduły systemu</string>
+    <string name="av_osmod_title">Moduły systemu</string>
+    <string name="av_tag_category">Kategoria aplikacji</string>
+    <string name="av_tag_result_category">Kategoria, do której pasuje ta aplikacja</string>
+    <string name="av_main_stats">Lista statystyk</string>
+    <string name="av_main_cat_platform">Zainstalowany</string>
+    <string name="av_main_cat_storage">Na urządzeniu</string>
+    <string name="av_main_cat_temporary">Wybrany</string>
+    <string name="av_main_cat_filter">Przefiltrowany</string>
+    <string name="av_options_tab_options">Opcje listy</string>
+    <string name="av_options_tab_tags">Filtr tagów</string>
+    <string name="av_options_src">Wybierz źródła aplikacji</string>
+    <string name="av_options_order">Porządkowanie listy</string>
+    <string name="av_options_api_mode">Tryb interfejsu API listy</string>
+    <string name="av_options_cat_app">Zainstalowane aplikacje</string>
+    <string name="av_options_cat_apk">Pliki APK</string>
+    <string name="av_options_api_compile">Skompiluj API</string>
+    <string name="av_options_api_target">Docelowe API</string>
+    <string name="av_options_api_min">Min. API</string>
 </resources>

@@ -129,4 +129,23 @@
     <string name="av_tag_result_type_instant">ਇਹ ਐਪ ਇੰਸਟਾਲ ਕੀਤੇ ਬਿਨਾਂ ਚੱਲਦੀ ਹੈ</string>
     <string name="av_tag_result_type_web_apk">ਇਹ ਇੱਕ Chromium WebAPK ਹੈ</string>
     <string name="av_tag_result_predictive_back">ਇਹ ਐਪ ਇਸ ਡਿਵਾਈਸ \'ਤੇ ਭਵਿੱਖਬਾਣੀ ਬੈਕ ਐਨੀਮੇਸ਼ਨਾਂ ਦਾ ਸਮਰਥਨ ਕਰਦੀ ਹੈ</string>
+    <string name="av_osmod">ਸਿਸਟਮ ਮੋਡੀਊਲ</string>
+    <string name="av_osmod_title">ਸਿਸਟਮ ਮੋਡੀਊਲ</string>
+    <string name="av_tag_category">ਐਪ ਸ਼੍ਰੇਣੀ</string>
+    <string name="av_tag_result_category">ਇਹ ਐਪ ਜਿਸ ਸ਼੍ਰੇਣੀ ਵਿੱਚ ਫਿੱਟ ਹੈ</string>
+    <string name="av_main_stats">ਸੂਚੀ ਅੰਕੜੇ</string>
+    <string name="av_main_cat_platform">ਸਥਾਪਿਤ ਕੀਤਾ</string>
+    <string name="av_main_cat_storage">ਡੀਵਾਈਸ \'ਤੇ</string>
+    <string name="av_main_cat_temporary">ਚੁਣਿਆ ਹੋਇਆ</string>
+    <string name="av_main_cat_filter">ਫਿਲਟਰ ਕੀਤਾ</string>
+    <string name="av_options_tab_options">ਸੂਚੀ ਵਿਕਲਪ</string>
+    <string name="av_options_tab_tags">ਟੈਗ ਫਿਲਟਰ</string>
+    <string name="av_options_src">ਐਪ ਸਰੋਤ ਚੁਣੋ</string>
+    <string name="av_options_order">ਸੂਚੀ ਕ੍ਰਮ</string>
+    <string name="av_options_api_mode">ਸੂਚੀ API ਮੋਡ</string>
+    <string name="av_options_cat_app">ਸਥਾਪਤ ਕੀਤੀਆਂ ਐਪਾਂ</string>
+    <string name="av_options_cat_apk">ਏਪੀਕੇ ਫਾਈਲਾਂ</string>
+    <string name="av_options_api_compile">ਕੰਪਾਇਲ API</string>
+    <string name="av_options_api_target">ਟਾਰਗੇਟ API</string>
+    <string name="av_options_api_min">ਘੱਟੋ-ਘੱਟ API</string>
 </resources>

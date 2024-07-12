@@ -129,4 +129,23 @@
     <string name="av_tag_result_type_instant">Cette application s\'exécute sans être installée</string>
     <string name="av_tag_result_type_web_apk">Ceci est un Chrome WebAPK</string>
     <string name="av_tag_result_predictive_back">Cette application prend en charge les animations de retour prédictives sur cet appareil</string>
+    <string name="av_osmod">Modules système</string>
+    <string name="av_osmod_title">Modules système</string>
+    <string name="av_tag_category">Catégorie d\'application</string>
+    <string name="av_tag_result_category">La catégorie dans laquelle cette application appartient</string>
+    <string name="av_main_stats">Liste des statistiques</string>
+    <string name="av_main_cat_platform">installée</string>
+    <string name="av_main_cat_storage">Sur l\'appareil</string>
+    <string name="av_main_cat_temporary">Choisi</string>
+    <string name="av_main_cat_filter">Filtré</string>
+    <string name="av_options_tab_options">Options de liste</string>
+    <string name="av_options_tab_tags">Filtre de balises</string>
+    <string name="av_options_src">Choisir les sources de l\'application</string>
+    <string name="av_options_order">Ordre des listes</string>
+    <string name="av_options_api_mode">Mode API de liste</string>
+    <string name="av_options_cat_app">Applications installées</string>
+    <string name="av_options_cat_apk">Fichiers APK</string>
+    <string name="av_options_api_compile">API de compilation</string>
+    <string name="av_options_api_target">API cible</string>
+    <string name="av_options_api_min">Min. API</string>
 </resources>

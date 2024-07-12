@@ -153,4 +153,23 @@
     <string name="av_tag_result_type_instant">該應用可免安裝運行</string>
     <string name="av_tag_result_type_web_apk">該應用是 Chromium WebAPK</string>
     <string name="av_tag_result_predictive_back">該應用在此設備上支持預測性返回手勢動畫</string>
+    <string name="av_osmod">系統模組</string>
+    <string name="av_osmod_title">系統模組</string>
+    <string name="av_tag_category">應用類別</string>
+    <string name="av_tag_result_category">該應用程式所符合的類別</string>
+    <string name="av_main_stats">應用統計</string>
+    <string name="av_main_cat_platform">已安裝應用</string>
+    <string name="av_main_cat_storage">設備 APK</string>
+    <string name="av_main_cat_temporary">選取 APK</string>
+    <string name="av_main_cat_filter">篩選應用</string>
+    <string name="av_options_tab_options">清單選項</string>
+    <string name="av_options_tab_tags">標籤篩選</string>
+    <string name="av_options_src">選擇應用來源</string>
+    <string name="av_options_order">列表排序</string>
+    <string name="av_options_api_mode">列表 API 模式</string>
+    <string name="av_options_cat_app">已安裝應用</string>
+    <string name="av_options_cat_apk">APK 檔</string>
+    <string name="av_options_api_compile">編譯 API</string>
+    <string name="av_options_api_target">目標 API</string>
+    <string name="av_options_api_min">最低 API</string>
 </resources>

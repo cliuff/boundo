@@ -129,4 +129,23 @@
     <string name="av_tag_result_type_instant">このアプリはインストールしなくても実行されます</string>
     <string name="av_tag_result_type_web_apk">これは Chromium WebAPK です</string>
     <string name="av_tag_result_predictive_back">このアプリは、このデバイスでの予測バックアニメーションをサポートしています</string>
+    <string name="av_osmod">システム モジュール</string>
+    <string name="av_osmod_title">システム モジュール</string>
+    <string name="av_tag_category">アプリ カテゴリ</string>
+    <string name="av_tag_result_category">このアプリが該当するカテゴリ</string>
+    <string name="av_main_stats">リストの統計情報</string>
+    <string name="av_main_cat_platform">インストール済み</string>
+    <string name="av_main_cat_storage">デバイス上</string>
+    <string name="av_main_cat_temporary">選択済み</string>
+    <string name="av_main_cat_filter">フィルター済み</string>
+    <string name="av_options_tab_options">リスト オプション</string>
+    <string name="av_options_tab_tags">タグ フィルター</string>
+    <string name="av_options_src">アプリ ソースの選択</string>
+    <string name="av_options_order">リストの順序</string>
+    <string name="av_options_api_mode">リスト API モード</string>
+    <string name="av_options_cat_app">インストール済みアプリ</string>
+    <string name="av_options_cat_apk">APK ファイル</string>
+    <string name="av_options_api_compile">API のコンパイル</string>
+    <string name="av_options_api_target">ターゲット API</string>
+    <string name="av_options_api_min">最小 API</string>
 </resources>

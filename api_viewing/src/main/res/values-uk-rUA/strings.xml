@@ -128,4 +128,23 @@
     <string name="av_tag_result_type_instant">Ця програма працює без встановлення</string>
     <string name="av_tag_result_type_web_apk">Це Chromium WebAPK</string>
     <string name="av_tag_result_predictive_back">Ця програма підтримує інтелектуальну анімацію на цьому пристрої</string>
+    <string name="av_osmod">Системні модулі</string>
+    <string name="av_osmod_title">Системні модулі</string>
+    <string name="av_tag_category">Категорія програми</string>
+    <string name="av_tag_result_category">Категорія, до якої відноситься ця програма</string>
+    <string name="av_main_stats">Список статистики</string>
+    <string name="av_main_cat_platform">встановлено</string>
+    <string name="av_main_cat_storage">На пристрої</string>
+    <string name="av_main_cat_temporary">Вибране</string>
+    <string name="av_main_cat_filter">Відфільтрований</string>
+    <string name="av_options_tab_options">Список варіантів</string>
+    <string name="av_options_tab_tags">Фільтр тегів</string>
+    <string name="av_options_src">Виберіть джерела програми</string>
+    <string name="av_options_order">Упорядкування списку</string>
+    <string name="av_options_api_mode">Режим API списку</string>
+    <string name="av_options_cat_app">Встановлені програми</string>
+    <string name="av_options_cat_apk">файли APK</string>
+    <string name="av_options_api_compile">Скомпілювати API</string>
+    <string name="av_options_api_target">Цільовий API</string>
+    <string name="av_options_api_min">Хв. API</string>
 </resources>
