@@ -18,7 +18,6 @@ package com.madness.collision.unit.api_viewing.database
 
 import android.content.Context
 import androidx.lifecycle.*
-import com.madness.collision.unit.api_viewing.apps.copyTo
 import com.madness.collision.unit.api_viewing.apps.toRecApps
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import kotlinx.coroutines.*
@@ -76,7 +75,7 @@ object DataMaintainer {
                 return when (result) {
                     is ApiViewingApp -> {
                         AppMaintainer.get(context, lifecycleOwner, dao).apply {
-                            result.copyTo(this)
+                            assignPersistentFieldsFrom(result, deepCopy = false)
                             initIgnored(context)
                         }
                     }

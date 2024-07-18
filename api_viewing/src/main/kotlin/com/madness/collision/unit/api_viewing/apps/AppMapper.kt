@@ -18,7 +18,6 @@ package com.madness.collision.unit.api_viewing.apps
 
 import android.content.Context
 import android.content.pm.PackageInfo
-import android.os.Parcel
 import androidx.lifecycle.LifecycleOwner
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.database.AppMaintainer
@@ -47,17 +46,10 @@ suspend fun List<*>.toRecApps(context: Context, anApp: ApiViewingApp) = coroutin
         if (item !is ApiViewingApp) return@mapIndexedNotNull null
         async(Dispatchers.Default) {
             val app = if (index == lastIndex) anApp else anApp.clone() as ApiViewingApp
-            item.copyTo(app)
+            app.assignPersistentFieldsFrom(item, deepCopy = false)
             // get application info one at a time, may be optimized
             app.initIgnored(context)
             app
         }
     }.map { it.await() }
-}
-
-fun ApiViewingApp.copyTo(other: ApiViewingApp) {
-    val parcel = Parcel.obtain()
-    writeToParcel(parcel, 0)
-    parcel.setDataPosition(0)
-    other.readParcel(parcel)
 }
