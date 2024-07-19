@@ -165,8 +165,9 @@ sealed interface AppType {
 fun ApiViewingApp.getAppType(pkgInfo: PackageInfo): AppType {
     if (isWebApk()) return AppType.WebApk
     pkgInfo.getOverlayTarget().onSuccess { t -> if (t != null) return AppType.Overlay(t) }
-    if (OsUtils.satisfy(OsUtils.O)) {
-        pkgInfo.applicationInfo.isInstantApp().onSuccess { i -> if (i) return AppType.InstantApp }
+    val applicationInfo = pkgInfo.applicationInfo
+    if (applicationInfo != null && OsUtils.satisfy(OsUtils.O)) {
+        applicationInfo.isInstantApp().onSuccess { i -> if (i) return AppType.InstantApp }
     }
     return AppType.Common
 }

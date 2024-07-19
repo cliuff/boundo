@@ -44,7 +44,7 @@ class AppListRepoImpl : AppListRepository {
         // todo save package info
         launch {
             val arts = platformList.await()
-                .map { p -> ArtImpl(p.packageName, p.applicationInfo.loadLabel(pm).toString()) }
+                .map { p -> ArtImpl(p.packageName, p.applicationInfo?.loadLabel(pm)?.toString() ?: "") }
                 .sortedWithUtilsBy(ArtImpl::label)
             mutAppsFlow.update { arts }
         }

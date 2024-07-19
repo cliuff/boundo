@@ -114,7 +114,8 @@ internal object AppTagInflater {
             e.printStackTrace()
             return null
         }
-        val req = ImageRequest.Builder(context).data(AppIconPackageInfo(pkgInfo)).build()
+        val appIc = pkgInfo.applicationInfo?.let { AppIconPackageInfo(pkgInfo, it) } ?: return null
+        val req = ImageRequest.Builder(context).data(appIc).build()
         val iconDrawable = runBlocking { Coil.imageLoader(context).execute(req).drawable }
         return if (iconDrawable != null) ensureTagIcon(context, pkgName, iconDrawable) else null
     }

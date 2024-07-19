@@ -153,14 +153,16 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Clon
         updateTime = info.lastUpdateTime
         apiUnit = when {
             archive -> ApiUnit.APK
-            (info.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM) != 0 -> ApiUnit.SYS
+            (info.applicationInfo?.flags ?: 0) and ApplicationInfo.FLAG_SYSTEM != 0 -> ApiUnit.SYS
             else -> ApiUnit.USER
         }
-        appPackage = AppPackage(info.applicationInfo)
-        targetAPI = info.applicationInfo.targetSdkVersion
-        minAPI = when {
-            OsUtils.satisfy(OsUtils.N) -> info.applicationInfo.minSdkVersion
-            else -> ManifestUtil.getMinSdk(appPackage.basePath).toIntOrNull() ?: -1 // fix cloneable
+        info.applicationInfo?.let { appInfo ->
+            appPackage = AppPackage(appInfo)
+            targetAPI = appInfo.targetSdkVersion
+            minAPI = when {
+                OsUtils.satisfy(OsUtils.N) -> appInfo.minSdkVersion
+                else -> ManifestUtil.getMinSdk(appPackage.basePath).toIntOrNull() ?: -1 // fix cloneable
+            }
         }
         isLaunchable = context.packageManager.getLaunchIntentForPackage(packageName) != null
 
@@ -184,20 +186,24 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Clon
 
     private fun loadFreshProperties(pkgInfo: PackageInfo, context: Context) {
         val applicationInfo = pkgInfo.applicationInfo
-        uid = applicationInfo.uid
-        name = AppInfoProcessor.loadName(context, applicationInfo, false)
-        if (OsUtils.satisfy(OsUtils.S)) {
-            compileAPI = applicationInfo.compileSdkVersion
-            compileApiCodeName = applicationInfo.compileSdkVersionCodename
-        } else {
-            compileAPI = ManifestUtil.getCompileSdk(appPackage.basePath).toIntOrNull() ?: -1 // fix cloneable
+        if (applicationInfo != null) {
+            uid = applicationInfo.uid
+            name = AppInfoProcessor.loadName(context, applicationInfo, false)
+            if (OsUtils.satisfy(OsUtils.S)) {
+                compileAPI = applicationInfo.compileSdkVersion
+                compileApiCodeName = applicationInfo.compileSdkVersionCodename
+            } else {
+                compileAPI = ManifestUtil.getCompileSdk(appPackage.basePath).toIntOrNull() ?: -1 // fix cloneable
+            }
         }
         appType = getAppType(pkgInfo)
         // todo enhance module and isOnBackInvokedCallbackEnabled checking performance
         moduleInfo = PkgInfo.getModuleInfo(packageName, context)
         isCoreApp = PkgInfo.getIsCoreApp(pkgInfo)
-        isBackCallbackEnabled = isOnBackInvokedCallbackEnabled(pkgInfo.applicationInfo, context)
-        category = if (OsUtils.satisfy(OsUtils.O)) pkgInfo.applicationInfo.category else null
+        if (applicationInfo != null) {
+            isBackCallbackEnabled = isOnBackInvokedCallbackEnabled(applicationInfo, context)
+            category = if (OsUtils.satisfy(OsUtils.O)) applicationInfo.category else null
+        }
     }
 
     fun getApplicationInfo(context: Context): ApplicationInfo? {

@@ -150,8 +150,9 @@ interface CompactPackageInfo : PackageInfo, ApplicationInfo {
     override val applicationInfo: ApplicationInfo get() = this
 }
 
-class AppIconPackageInfo(pack: android.content.pm.PackageInfo): CompactPackageInfo {
-    private val app = pack.applicationInfo
+class AppIconPackageInfo(
+    pack: android.content.pm.PackageInfo,
+    private val app: android.content.pm.ApplicationInfo): CompactPackageInfo {
     override val handleable: Boolean = true
     override val verCode: Long = PackageInfoCompat.getLongVersionCode(pack)
     override val uid: Int = app.uid

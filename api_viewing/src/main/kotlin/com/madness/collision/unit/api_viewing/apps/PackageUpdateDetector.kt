@@ -56,7 +56,7 @@ class PackageUpdateDetector(private val getApps: (List<String>) -> List<ApiViewi
         PackageInfoCompat.getLongVersionCode(info) != record.verCode -> true
         info.versionName != record.verName -> true
         // apex has version in path
-        info.applicationInfo.publicSourceDir.orEmpty() != record.appPackage.basePath -> true
+        info.applicationInfo?.publicSourceDir.orEmpty() != record.appPackage.basePath -> true
         else -> false
     }
 }

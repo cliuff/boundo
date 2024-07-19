@@ -132,10 +132,14 @@ private fun ExternalActions() {
         val pm = context.packageManager
         val sortedOwners = owners.customSorted sort@{ o ->
             val pi = piList[o.packageName] ?: return@sort ""
-            pi.applicationInfo.loadLabel(pm).toString()
+            pi.applicationInfo?.loadLabel(pm)?.toString() ?: ""
         }
         val ownerMap = sortedOwners.associateByTo(LinkedHashMap()) { it.packageName }
-        val packs = sortedOwners.map { o -> piList[o.packageName]?.let { AppIconPackageInfo(it) } }
+        val packs = sortedOwners.map { o ->
+            val pi = piList[o.packageName] ?: return@map null
+            val ai = pi.applicationInfo ?: return@map null
+            AppIconPackageInfo(pi, ai)
+        }
         ownerMap to packs
     }
     Row(
