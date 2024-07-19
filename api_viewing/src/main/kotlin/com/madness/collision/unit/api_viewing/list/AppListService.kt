@@ -220,8 +220,8 @@ internal class AppListService(private val serviceContext: Context? = null) {
 
         val signatures = when {
             OsUtils.satisfy(OsUtils.P) -> when (pi.signingInfo?.hasMultipleSigners()) {
-                true -> pi.signingInfo.apkContentsSigners
-                false -> pi.signingInfo.signingCertificateHistory
+                true -> pi.signingInfo?.apkContentsSigners.orEmpty()
+                false -> pi.signingInfo?.signingCertificateHistory.orEmpty()
                 null -> pi.sigLegacy.orEmpty()
             }
             else -> pi.sigLegacy.orEmpty()

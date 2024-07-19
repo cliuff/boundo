@@ -28,7 +28,7 @@ internal object BlurUtils {
     @RequiresApi(OsUtils.S)
     fun blur(src: Bitmap, radiusX: Float, radiusY: Float): Bitmap? {
         // create result bitmap
-        val output = Bitmap.createBitmap(src.width, src.height, src.config)
+        val output = Bitmap.createBitmap(src.width, src.height, src.config ?: Bitmap.Config.ARGB_8888)
         // create canvas from result bitmap
         val canvas = Canvas(output)
         // check hardware acceleration

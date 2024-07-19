@@ -59,8 +59,8 @@ object MiscApp {
 
     fun getPackageArchiveInfo(context: Context, path: String): PackageInfo? {
         return PackageCompat.getArchivePackage(context.packageManager, path)?.apply {
-            applicationInfo.sourceDir = path
-            applicationInfo.publicSourceDir = path
+            applicationInfo?.sourceDir = path
+            applicationInfo?.publicSourceDir = path
         }
     }
 
@@ -69,6 +69,6 @@ object MiscApp {
      */
     fun isAppAvailable(context: Context, packageName: String, errorMsg: Pair<String, String>? = null): Boolean {
         val pi = getPackageInfo(context, packageName = packageName, errorMsg = errorMsg) ?: return false
-        return pi.applicationInfo.enabled
+        return pi.applicationInfo?.enabled == true
     }
 }
