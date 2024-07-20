@@ -24,7 +24,6 @@ import android.graphics.drawable.Drawable
 import androidx.core.content.pm.PackageInfoCompat
 import androidx.room.*
 import com.madness.collision.misc.MiscApp
-import com.madness.collision.unit.api_viewing.Utils
 import com.madness.collision.unit.api_viewing.info.AppType
 import com.madness.collision.unit.api_viewing.info.PkgInfo
 import com.madness.collision.unit.api_viewing.info.getAppType
@@ -89,14 +88,6 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Clon
 
     @Ignore var uid: Int = -1
     @Ignore var name: String = ""
-    @Ignore var targetSDK: String = ""
-    @Ignore var minSDK: String = ""
-    @Ignore var targetSDKDisplay: String = ""
-    @Ignore var minSDKDisplay: String = ""
-    @Ignore var targetSDKDouble: Double = -1.0
-    @Ignore var minSDKDouble: Double = -1.0
-    @Ignore var targetSDKLetter: Char = '?'
-    @Ignore var minSDKLetter: Char = '?'
 
     val adaptiveIcon: Boolean
         get() = iconInfo?.run { listOf(system, normal, round).any { it.isDefined && it.isAdaptive } } == true
@@ -134,7 +125,6 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Clon
         compileAPI = -1
         compileApiCodeName = null
         name = ""
-        initApiVer()
         appType = AppType.Common
         moduleInfo = null
         isCoreApp = null
@@ -167,21 +157,6 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Clon
         isLaunchable = context.packageManager.getLaunchIntentForPackage(packageName) != null
 
         loadFreshProperties(info, context)
-        initApiVer()
-    }
-
-    private fun initApiVer() {
-        // target API ver
-        targetSDK = Utils.getAndroidVersionByAPI(targetAPI, false)
-        targetSDKDouble = if (targetSDK.isNotEmpty()) targetSDK.toDouble() else -1.0  // fix cloneable
-        targetSDKDisplay = targetSDK
-        targetSDKLetter = Utils.getAndroidLetterByAPI(targetAPI)
-
-        // min API ver
-        minSDK = Utils.getAndroidVersionByAPI(minAPI, false)
-        minSDKDouble = if (minSDK.isNotEmpty()) minSDK.toDouble() else -1.0  // fix cloneable
-        minSDKDisplay = minSDK
-        minSDKLetter = Utils.getAndroidLetterByAPI(minAPI)
     }
 
     private fun loadFreshProperties(pkgInfo: PackageInfo, context: Context) {

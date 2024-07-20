@@ -471,8 +471,6 @@ private fun WithAppPreview(content: @Composable () -> Unit) {
             minAPI = 10000
             targetAPI = 10000
             compileAPI = 10000
-            minSDKDisplay = "6"
-            targetSDKDisplay = "12"
             appPackage = AppPackage(listOf("config.en.apk", "config.zh.apk", "config.es.apk"))
         }
     }

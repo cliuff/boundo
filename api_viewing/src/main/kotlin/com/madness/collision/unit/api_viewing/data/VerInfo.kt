@@ -26,9 +26,9 @@ import com.madness.collision.util.toAdapted
 internal class VerInfo(val api: Int, sdk: String, val letter: Char) {
 
     companion object {
-        fun targetDisplay(app: ApiViewingApp) = VerInfo(app.targetAPI, app.targetSDKDisplay, app.targetSDKLetter)
+        fun targetDisplay(app: ApiViewingApp) = VerInfo(app.targetAPI, isExact = false)
 
-        fun minDisplay(app: ApiViewingApp) = VerInfo(app.minAPI, app.minSDKDisplay, app.minSDKLetter)
+        fun minDisplay(app: ApiViewingApp) = VerInfo(app.minAPI, isExact = false)
     }
 
     private var codeName: String? = null

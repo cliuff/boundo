@@ -41,10 +41,8 @@ class AppQueryUseCase {
             // match package name
             if (info.packageName.lowercase(locale).contains(compInput)) return@filter true
             // match Android API or version
-            val ver = info.run {
-                if (EasyAccess.isViewingTarget) VerInfo(targetAPI, targetSDK, targetSDKLetter)
-                else VerInfo(minAPI, minSDK, minSDKLetter)
-            }
+            val ver = if (EasyAccess.isViewingTarget) VerInfo.targetDisplay(info)
+            else VerInfo.minDisplay(info)
             query == ver.apiText || ver.sdk.startsWith(query)
         }
     }
