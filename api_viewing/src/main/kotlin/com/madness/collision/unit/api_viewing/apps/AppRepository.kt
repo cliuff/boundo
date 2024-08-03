@@ -29,6 +29,7 @@ import com.madness.collision.chief.chiefContext
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.database.AppDao
+import com.madness.collision.unit.api_viewing.database.AppDaoProxy
 import com.madness.collision.unit.api_viewing.database.RecordMaintainer
 import com.madness.collision.unit.api_viewing.database.maintainer.RecordMtn
 import kotlinx.coroutines.Dispatchers
@@ -48,6 +49,21 @@ interface AppRepository {
     fun queryApps(query: String): List<ApiViewingApp>
     fun getChangedPackages(context: Context, timestamp: Long): AppPkgChanges
     fun maintainRecords(context: Context)
+}
+
+internal object AppRepo {
+    fun dumb(context: Context) = DumbAppRepo(AppDaoProxy(context))
+    fun impl(context: Context, lifecycleOwner: LifecycleOwner) =
+        AppRepoImpl(AppDaoProxy(context), lifecycleOwner)
+}
+
+class DumbAppRepo(private val appDao: AppDao) : AppRepository {
+    override fun addApp(app: ApiViewingApp) = appDao.insert(app)
+    override fun getApp(pkgName: String) = appDao.selectApp(pkgName)
+    override fun getApps(unit: Int) = appDao.selectApps(unit)
+    override fun queryApps(query: String) = error("No-op")
+    override fun getChangedPackages(context: Context, timestamp: Long) = error("No-op")
+    override fun maintainRecords(context: Context) = error("No-op")
 }
 
 class AppRepoImpl(private val appDao: AppDao, private val lifecycleOwner: LifecycleOwner) : AppRepository {

@@ -17,81 +17,60 @@
 package com.madness.collision.unit.api_viewing.database
 
 import android.content.Context
-import androidx.lifecycle.*
+import com.madness.collision.unit.api_viewing.apps.DumbAppRepo
 import com.madness.collision.unit.api_viewing.apps.toRecApps
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
-import kotlinx.coroutines.*
+import kotlinx.coroutines.runBlocking
 import java.lang.reflect.InvocationHandler
 import java.lang.reflect.Method
 import java.lang.reflect.Proxy
-import java.util.concurrent.atomic.AtomicReference
 
+internal class InterceptException(message: String?) : RuntimeException(message)
+
+private abstract class Interceptor : InvocationHandler, Cloneable {
+    abstract fun getDao(): AppDao?
+    public override fun clone(): Any = super.clone()
+}
+
+internal fun AppDaoProxy(context: Context) =
+    AppDaoProxy(context, AppRoom.getDatabase(context).appDao())
 
 /**
  * [AppDao] proxy to convert query result to [ApiViewingApp] proxy
- * and initialize ignored properties
+ * and initialize ignored properties.
  */
-object DataMaintainer {
-    class InterceptException(message: String?) : RuntimeException(message)
+internal fun AppDaoProxy(context: Context, baseDao: AppDao): AppDao {
+    val interceptor = object : Interceptor() {
+        override fun getDao(): AppDao? = baseDao
 
-    abstract class Interceptor : InvocationHandler, Cloneable {
-        abstract fun getDao(): AppDao?
-
-        public override fun clone(): Any {
-            return super.clone()
-        }
-    }
-
-    fun getDefault(context: Context): AppDao {
-        return AppRoom.getDatabase(context).appDao()
-    }
-
-    fun get(context: Context, lifecycleOwner: LifecycleOwner, dao: AppDao? = null): AppDao {
-        val scopeWrapper = AtomicReference(lifecycleOwner.lifecycleScope)
-        val daoWrapper = AtomicReference(dao ?: getDefault(context))
-        AppMaintainer.registerCleaner(lifecycleOwner) {
-            scopeWrapper.set(null)
-            daoWrapper.set(null)
-        }
-        return get(context, lifecycleOwner, { daoWrapper.get() })
-    }
-
-    /**
-     * Check [AppDao] method invocations
-     */
-    private fun get(context: Context, lifecycleOwner: LifecycleOwner, daoGetter: () -> AppDao?): AppDao {
-        val interceptor = object : Interceptor() {
-            override fun getDao(): AppDao? = daoGetter()
-
-            override fun invoke(proxy: Any?, method: Method?, args: Array<out Any>?): Any? {
-                method ?: throw InterceptException("method is null")
-                val dao = getDao() ?: throw InterceptException("DAO is null")
-                val result = try {
-                    if (args == null) method.invoke(dao) else method.invoke(dao, *args)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    throw InterceptException("invocation failure")
-                }
-                return when (result) {
-                    is ApiViewingApp -> {
-                        AppMaintainer.get(context, lifecycleOwner, dao).apply {
-                            assignPersistentFieldsFrom(result, deepCopy = false)
-                            initIgnored(context)
-                        }
+        override fun invoke(proxy: Any?, method: Method?, args: Array<out Any>?): Any? {
+            method ?: throw InterceptException("method is null")
+            val dao = getDao() ?: throw InterceptException("DAO is null")
+            val result = try {
+                if (args == null) method.invoke(dao) else method.invoke(dao, *args)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                throw InterceptException("invocation failure")
+            }
+            return when (result) {
+                is ApiViewingApp -> {
+                    DumbAppRepo(dao).getMaintainedApp().apply {
+                        assignPersistentFieldsFrom(result, deepCopy = false)
+                        initIgnored(context)
                     }
-                    is List<*> -> {
-                        // assume the whole list is ApiViewingApp if the first one is,
-                        // otherwise assume none of it is
-                        if (result.isNotEmpty() && result[0] !is ApiViewingApp) return result
-                        val anApp = AppMaintainer.get(context, lifecycleOwner, dao)
-                        runBlocking { result.toRecApps(context, anApp) }
-                    }
-                    else -> result
                 }
+                is List<*> -> {
+                    // assume the whole list is ApiViewingApp if the first one is,
+                    // otherwise assume none of it is
+                    if (result.isNotEmpty() && result[0] !is ApiViewingApp) return result
+                    val anApp = DumbAppRepo(dao).getMaintainedApp()
+                    runBlocking { result.toRecApps(context, anApp) }
+                }
+                else -> result
             }
         }
-        val clazz = AppDao::class.java
-        val proxy = Proxy.newProxyInstance(clazz.classLoader, arrayOf(clazz), interceptor) as AppDao
-        return SafeAppDaoProxy(proxy)
     }
+    val clazz = AppDao::class.java
+    val proxy = Proxy.newProxyInstance(clazz.classLoader, arrayOf(clazz), interceptor) as AppDao
+    return SafeAppDaoProxy(proxy)
 }

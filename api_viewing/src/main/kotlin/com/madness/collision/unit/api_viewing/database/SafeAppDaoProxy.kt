@@ -24,7 +24,7 @@ class SafeAppDaoProxy(private val dao: AppDao) : AppDao {
     private inline fun <R> safely(block: () -> R, onError: () -> R): R {
         return try {
             block()
-        } catch (e: DataMaintainer.InterceptException) {
+        } catch (e: InterceptException) {
             e.printStackTrace()
             onError()
         }

@@ -24,12 +24,11 @@ import com.madness.collision.unit.api_viewing.AppListStats
 import com.madness.collision.unit.api_viewing.AppStatsTracker
 import com.madness.collision.unit.api_viewing.apps.AppListRepoImpl
 import com.madness.collision.unit.api_viewing.apps.AppListRepository
-import com.madness.collision.unit.api_viewing.apps.AppRepoImpl
+import com.madness.collision.unit.api_viewing.apps.AppRepo
 import com.madness.collision.unit.api_viewing.apps.AppRepository
 import com.madness.collision.unit.api_viewing.apps.AppUpdatesLists
 import com.madness.collision.unit.api_viewing.apps.CodingArtifact
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
-import com.madness.collision.unit.api_viewing.database.DataMaintainer
 import com.madness.collision.unit.api_viewing.util.ApkRetriever
 import com.madness.collision.util.F
 import com.madness.collision.util.ui.PackageInfo
@@ -137,8 +136,7 @@ class AppListViewModel : ViewModel() {
     }
 
     fun init(context: Context, lifecycleOwner: LifecycleOwner, sessionTimestamp: Long) {
-        val dao = DataMaintainer.get(context, lifecycleOwner)
-        val appRepo = AppRepoImpl(dao, lifecycleOwner)
+        val appRepo = AppRepo.impl(context, lifecycleOwner)
         val loader = object : AppListLoader {
             override val appRepo: AppRepository = appRepo
             override val apkRetriever: ApkRetriever = ApkRetriever(context)

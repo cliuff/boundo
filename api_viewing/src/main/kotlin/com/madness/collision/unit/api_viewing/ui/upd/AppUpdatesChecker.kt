@@ -19,11 +19,10 @@ package com.madness.collision.unit.api_viewing.ui.upd
 import android.content.Context
 import androidx.lifecycle.LifecycleOwner
 import com.madness.collision.misc.MiscApp
-import com.madness.collision.unit.api_viewing.apps.AppRepoImpl
+import com.madness.collision.unit.api_viewing.apps.AppRepo
 import com.madness.collision.unit.api_viewing.apps.AppUpdatesLists
 import com.madness.collision.unit.api_viewing.apps.AppUpdatesUseCase
 import com.madness.collision.unit.api_viewing.apps.toMtnPkgApps
-import com.madness.collision.unit.api_viewing.database.DataMaintainer
 import kotlin.math.min
 
 data class AppUpdatesData(val pkg: AppUpdatesLists.Pkg, val used: AppUpdatesLists.Used)
@@ -35,8 +34,7 @@ class AppUpdatesChecker {
     fun isCheckNeeded(): Boolean = lastUpdatesData == null
 
     fun checkNewUpdate(mainTimestamp: Long, context: Context, lifecycleOwner: LifecycleOwner): Boolean? {
-        val dao = DataMaintainer.get(context.applicationContext, lifecycleOwner)
-        val appRepo = AppRepoImpl(dao, lifecycleOwner)
+        val appRepo = AppRepo.impl(context.applicationContext, lifecycleOwner)
         val useCase = AppUpdatesUseCase(appRepo, AppUpdatesLists.updatesSession)
 
         val (lastUpdPkg, lastUpdUsed) = lastUpdatesData?.pkg to lastUpdatesData?.used
