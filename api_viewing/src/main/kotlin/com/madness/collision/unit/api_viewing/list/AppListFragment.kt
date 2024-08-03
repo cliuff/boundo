@@ -33,7 +33,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.madness.collision.unit.api_viewing.MyUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
-import com.madness.collision.unit.api_viewing.database.DataMaintainer
 import com.madness.collision.unit.api_viewing.databinding.AvListBinding
 import com.madness.collision.unit.api_viewing.ui.info.AppInfoFragment
 import com.madness.collision.util.*
@@ -67,7 +66,7 @@ internal class AppListFragment : TaggedFragment(), Filterable, AppInfoFragment.C
 
             override fun findInAll(pkgName: String): ApiViewingApp? {
                 return appList.find { it.packageName == pkgName }
-                    ?: DataMaintainer.get(mContext, viewLifecycleOwner).selectApp(pkgName)
+                    ?: viewModel.getApp(mContext, pkgName)
             }
         }
     }

@@ -16,10 +16,13 @@
 
 package com.madness.collision.unit.api_viewing.list
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.madness.collision.unit.api_viewing.apps.AppQueryUseCase
+import com.madness.collision.unit.api_viewing.apps.AppRepo
+import com.madness.collision.unit.api_viewing.apps.AppRepository
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 
 internal class AppListViewModel : ViewModel() {
@@ -29,6 +32,7 @@ internal class AppListViewModel : ViewModel() {
     val apps4Display: LiveData<List<ApiViewingApp>> by ::apps4DisplayInternal
     // Reserve app list to restore after filter
     private var reservedApps: List<ApiViewingApp>? = null
+    private var appRepo: AppRepository? = null
 
     fun updateApps4Display(list: List<ApiViewingApp>) {
         apps4DisplayInternal.value = list.toList()
@@ -46,5 +50,10 @@ internal class AppListViewModel : ViewModel() {
     fun filterApps(charSequence: CharSequence, isAddition: Boolean): List<ApiViewingApp> {
         val appList = if (isAddition) apps4Display.value.orEmpty() else reservedApps.orEmpty()
         return AppQueryUseCase().filterInMemoryList(appList, charSequence.toString())
+    }
+
+    fun getApp(context: Context, pkgName: String): ApiViewingApp? {
+        val repo = appRepo ?: AppRepo.dumb(context).also { appRepo = it }
+        return repo.getApp(pkgName)
     }
 }

@@ -16,6 +16,7 @@
 
 package com.madness.collision.unit.api_viewing.ui.info
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -52,9 +53,9 @@ import com.madness.collision.R
 import com.madness.collision.chief.app.ComposeViewOwner
 import com.madness.collision.chief.app.rememberColorScheme
 import com.madness.collision.main.MainViewModel
+import com.madness.collision.unit.api_viewing.apps.AppRepo
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
-import com.madness.collision.unit.api_viewing.database.DataMaintainer
 import com.madness.collision.unit.api_viewing.list.AppInfoPage
 import com.madness.collision.unit.api_viewing.list.AppListService
 import com.madness.collision.unit.api_viewing.list.LocalAppSwitcherHandler
@@ -208,6 +209,11 @@ class AppInfoFragment() : BottomSheetDialogFragment(), SystemBarMaintainerOwner 
         }
     }
 
+    // todo move to view model
+    private fun getApp(context: Context, pkgName: String): ApiViewingApp? {
+        return AppRepo.dumb(context).getApp(pkgName)
+    }
+
     @Composable
     private fun AppInfoPageContent(colorScheme: ColorScheme) {
         var switchPair: Pair<ApiViewingApp?, Int> by remember { mutableStateOf(infoApp to 0) }
@@ -215,10 +221,9 @@ class AppInfoFragment() : BottomSheetDialogFragment(), SystemBarMaintainerOwner 
         val scope = rememberCoroutineScope()
         val context = LocalContext.current
         if (switchPair.first == null) {
-            val lifecycleOwner = this
             SideEffect {
                 scope.launch(Dispatchers.Default) {
-                    val a = DataMaintainer.get(context, lifecycleOwner).selectApp(appPkgName)
+                    val a = getApp(context, appPkgName)
                     switchPair = a to switchPair.second
                 }
             }

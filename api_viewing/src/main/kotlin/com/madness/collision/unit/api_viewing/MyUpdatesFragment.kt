@@ -34,9 +34,9 @@ import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.madness.collision.diy.SpanAdapter
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.Updatable
+import com.madness.collision.unit.api_viewing.apps.AppRepo
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
-import com.madness.collision.unit.api_viewing.database.DataMaintainer
 import com.madness.collision.unit.api_viewing.databinding.AvUpdSectionBinding
 import com.madness.collision.unit.api_viewing.databinding.AvUpdatesBinding
 import com.madness.collision.unit.api_viewing.list.*
@@ -116,9 +116,14 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable, AppInfoFragment.
 
             override fun findInAll(pkgName: String): ApiViewingApp? {
                 return secAppList.find { it.packageName == pkgName }
-                    ?: DataMaintainer.get(mContext, viewLifecycleOwner).selectApp(pkgName)
+                    ?: getApp(mContext, pkgName)
             }
         }
+    }
+
+    // todo move to view model
+    private fun getApp(context: Context, pkgName: String): ApiViewingApp? {
+        return AppRepo.dumb(context).getApp(pkgName)
     }
 
     override fun onAppChanged(app: ApiViewingApp) {
