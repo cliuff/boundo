@@ -221,7 +221,7 @@ internal class MyUpdatesFragment : TaggedFragment(), Updatable, AppInfoFragment.
                 else -> 6
             }
 
-            updatesChecker.getSections(changedLimit, usedLimit, mContext, this@MyUpdatesFragment)
+            updatesChecker.getSections(changedLimit, usedLimit, mContext)
                 .forEach { (index, list) -> sections[index.code] = list }
             diffMutex.withLock { updateDiff(sections) }
             val hasUpdates = sections.any { it.value.isNotEmpty() }

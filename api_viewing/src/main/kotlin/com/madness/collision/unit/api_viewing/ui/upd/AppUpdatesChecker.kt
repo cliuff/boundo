@@ -22,7 +22,7 @@ import com.madness.collision.misc.MiscApp
 import com.madness.collision.unit.api_viewing.apps.AppRepo
 import com.madness.collision.unit.api_viewing.apps.AppUpdatesLists
 import com.madness.collision.unit.api_viewing.apps.AppUpdatesUseCase
-import com.madness.collision.unit.api_viewing.apps.toMtnPkgApps
+import com.madness.collision.unit.api_viewing.apps.toPkgApps
 import kotlin.math.min
 
 data class AppUpdatesData(val pkg: AppUpdatesLists.Pkg, val used: AppUpdatesLists.Used)
@@ -56,8 +56,7 @@ class AppUpdatesChecker {
     }
 
     suspend fun getSections(
-        changedLimit: Int, usedLimit: Int,
-        context: Context, lifecycleOwner: LifecycleOwner): Map<AppUpdatesIndex, List<*>> {
+        changedLimit: Int, usedLimit: Int, context: Context): Map<AppUpdatesIndex, List<*>> {
         val (lastUpdPkg, lastUpdUsed) = lastUpdatesData?.pkg to lastUpdatesData?.used
         val sections = mutableMapOf<AppUpdatesIndex, List<*>>()
         if (lastUpdPkg?.hasPkgChanges == true) {
@@ -71,7 +70,7 @@ class AppUpdatesChecker {
                 val compareTime = updatesSession.secondLastRetrievalTime
                 val listLimitSize = min(mChangedPackages.size, changedLimit)
                 AppUpdatesClassifier(mChangedPackages, mPreviousRecords)
-                    .getUpdateLists(context, detectNew, compareTime, listLimitSize, lifecycleOwner)
+                    .getUpdateLists(context, detectNew, compareTime, listLimitSize)
                     .forEach { (type, list) -> sections[type] = list }
             }
         }
@@ -81,7 +80,8 @@ class AppUpdatesChecker {
             val usedSize = min(usedPkgList.size, usedLimit)
             val packages = usedPkgList.subList(0, usedSize)
                 .mapNotNull { MiscApp.getPackageInfo(context, packageName = it) }
-            sections[AppUpdatesIndex.USE] = packages.toMtnPkgApps(context, lifecycleOwner)
+            val anApp = AppRepo.dumb(context).getMaintainedApp()
+            sections[AppUpdatesIndex.USE] = packages.toPkgApps(context, anApp)
         }
         return sections
     }

@@ -30,6 +30,7 @@ import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.database.AppDao
 import com.madness.collision.unit.api_viewing.database.AppDaoProxy
+import com.madness.collision.unit.api_viewing.database.MaintainedApp
 import com.madness.collision.unit.api_viewing.database.RecordMaintainer
 import com.madness.collision.unit.api_viewing.database.maintainer.RecordMtn
 import kotlinx.coroutines.Dispatchers
@@ -43,9 +44,10 @@ data class AppPkgChanges(
 )
 
 interface AppRepository {
-    suspend fun addApp(app: ApiViewingApp)
+    fun addApp(app: ApiViewingApp)
     fun getApp(pkgName: String): ApiViewingApp?
     fun getApps(unit: Int): List<ApiViewingApp>
+    fun getMaintainedApp(): ApiViewingApp
     fun queryApps(query: String): List<ApiViewingApp>
     fun getChangedPackages(context: Context, timestamp: Long): AppPkgChanges
     fun maintainRecords(context: Context)
@@ -61,13 +63,14 @@ class DumbAppRepo(private val appDao: AppDao) : AppRepository {
     override fun addApp(app: ApiViewingApp) = appDao.insert(app)
     override fun getApp(pkgName: String) = appDao.selectApp(pkgName)
     override fun getApps(unit: Int) = appDao.selectApps(unit)
+    override fun getMaintainedApp(): ApiViewingApp = MaintainedApp(::addApp)
     override fun queryApps(query: String) = error("No-op")
     override fun getChangedPackages(context: Context, timestamp: Long) = error("No-op")
     override fun maintainRecords(context: Context) = error("No-op")
 }
 
 class AppRepoImpl(private val appDao: AppDao, private val lifecycleOwner: LifecycleOwner) : AppRepository {
-    override suspend fun addApp(app: ApiViewingApp) {
+    override fun addApp(app: ApiViewingApp) {
         appDao.insert(app)
     }
 
@@ -80,6 +83,10 @@ class AppRepoImpl(private val appDao: AppDao, private val lifecycleOwner: Lifecy
         return appDao.selectApps(unit)
     }
 
+    override fun getMaintainedApp(): ApiViewingApp {
+        return MaintainedApp(::addApp)
+    }
+
     override fun queryApps(query: String): List<ApiViewingApp> {
         if (query.isBlank()) return emptyList()
         val q = query.trim()
@@ -88,7 +95,7 @@ class AppRepoImpl(private val appDao: AppDao, private val lifecycleOwner: Lifecy
 
     private fun fetchAppsFromPlatform(context: Context, unit: Int): List<ApiViewingApp> {
         val packages = PlatformAppsFetcher(context).withSession(includeApex = false).getRawList()
-        val apps = runBlocking { packages.toMtnPkgApps(context, lifecycleOwner) }
+        val apps = runBlocking { packages.toPkgApps(context, getMaintainedApp()) }
         appDao.insert(apps)
         return when (unit) {
             ApiUnit.USER, ApiUnit.SYS -> apps.filter { it.apiUnit == unit }

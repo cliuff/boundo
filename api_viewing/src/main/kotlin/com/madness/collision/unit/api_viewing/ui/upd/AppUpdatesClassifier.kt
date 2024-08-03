@@ -18,10 +18,9 @@ package com.madness.collision.unit.api_viewing.ui.upd
 
 import android.content.Context
 import android.content.pm.PackageInfo
-import androidx.lifecycle.LifecycleOwner
+import com.madness.collision.unit.api_viewing.apps.AppRepo
 import com.madness.collision.unit.api_viewing.apps.toPkgApps
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
-import com.madness.collision.unit.api_viewing.database.AppMaintainer
 import com.madness.collision.unit.api_viewing.ui.list.AppApiMode
 import com.madness.collision.unit.api_viewing.ui.list.AppListOrder
 import com.madness.collision.unit.api_viewing.ui.list.getComparator
@@ -44,11 +43,10 @@ class AppUpdatesClassifier(
     private val previousRecords: Map<String, ApiViewingApp>) {
 
     suspend fun getUpdateLists(
-        context: Context, detectNew: Boolean, compareUpdateTime: Long,
-        listLimitSize: Int, lifecycleOwner: LifecycleOwner
+        context: Context, detectNew: Boolean, compareUpdateTime: Long, listLimitSize: Int
     ): Map<AppUpdatesIndex, List<*>> = coroutineScope {
         val sections = mutableMapOf<AppUpdatesIndex, List<*>>()
-        val anApp = AppMaintainer.get(context, lifecycleOwner)
+        val anApp = AppRepo.dumb(context).getMaintainedApp()
         val packages = changedPkgList.subList(0, listLimitSize)
         val appList = packages.toPkgApps(context, anApp.clone() as ApiViewingApp)
 

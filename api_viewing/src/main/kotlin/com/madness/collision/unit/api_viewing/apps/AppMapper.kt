@@ -18,16 +18,10 @@ package com.madness.collision.unit.api_viewing.apps
 
 import android.content.Context
 import android.content.pm.PackageInfo
-import androidx.lifecycle.LifecycleOwner
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
-import com.madness.collision.unit.api_viewing.database.AppMaintainer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
-
-/** Map to maintained apps */
-suspend fun List<PackageInfo>.toMtnPkgApps(context: Context, lifecycleOwner: LifecycleOwner) =
-    toPkgApps(context, AppMaintainer.get(context, lifecycleOwner))
 
 suspend fun List<PackageInfo>.toPkgApps(context: Context, anApp: ApiViewingApp) = coroutineScope {
     val lastIndex = lastIndex

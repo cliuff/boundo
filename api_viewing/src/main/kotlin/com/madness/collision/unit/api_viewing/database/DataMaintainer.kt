@@ -74,3 +74,13 @@ internal fun AppDaoProxy(context: Context, baseDao: AppDao): AppDao {
     val proxy = Proxy.newProxyInstance(clazz.classLoader, arrayOf(clazz), interceptor) as AppDao
     return SafeAppDaoProxy(proxy)
 }
+
+
+/** [ApiViewingApp] proxy to update database record. */
+internal class MaintainedApp(private val onRetrieved: MaintainedApp.() -> Unit) : ApiViewingApp() {
+    // Update record after [ApiViewingApp.retrieveConsuming] invocation
+    override fun retrieveConsuming(target: Int, arg: Any?) {
+        super.retrieveConsuming(target, arg)
+        onRetrieved(this)
+    }
+}
