@@ -29,8 +29,7 @@ import com.madness.collision.chief.chiefContext
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.database.AppDao
-import com.madness.collision.unit.api_viewing.database.AppDaoProxy
-import com.madness.collision.unit.api_viewing.database.MaintainedApp
+import com.madness.collision.unit.api_viewing.database.AppRoom
 import com.madness.collision.unit.api_viewing.database.RecordMaintainer
 import com.madness.collision.unit.api_viewing.database.maintainer.RecordMtn
 import kotlinx.coroutines.Dispatchers
@@ -54,49 +53,59 @@ interface AppRepository {
 }
 
 internal object AppRepo {
-    fun dumb(context: Context) = DumbAppRepo(AppDaoProxy(context))
-    fun impl(context: Context, lifecycleOwner: LifecycleOwner) =
-        AppRepoImpl(AppDaoProxy(context), lifecycleOwner)
+    fun dumb(context: Context): DumbAppRepo {
+        val dao = AppRoom.getDatabase(context).appDao()
+        return DumbAppRepo(AppMediatorRepo(dao, context))
+    }
+
+    fun impl(context: Context, lifecycleOwner: LifecycleOwner): AppRepoImpl {
+        val dao = AppRoom.getDatabase(context).appDao()
+        return AppRepoImpl(dao, lifecycleOwner, AppMediatorRepo(dao, context))
+    }
 }
 
-class DumbAppRepo(private val appDao: AppDao) : AppRepository {
-    override fun addApp(app: ApiViewingApp) = appDao.insert(app)
-    override fun getApp(pkgName: String) = appDao.selectApp(pkgName)
-    override fun getApps(unit: Int) = appDao.selectApps(unit)
-    override fun getMaintainedApp(): ApiViewingApp = MaintainedApp(::addApp)
+class DumbAppRepo(private val medRepo: AppMediatorRepo) : AppRepository {
+    override fun addApp(app: ApiViewingApp) = medRepo.add(app)
+    override fun getApp(pkgName: String) = medRepo.get(pkgName)
+    override fun getApps(unit: Int) = medRepo.get(unit)
+    override fun getMaintainedApp(): ApiViewingApp = medRepo.getMaintainedApp()
     override fun queryApps(query: String) = error("No-op")
     override fun getChangedPackages(context: Context, timestamp: Long) = error("No-op")
     override fun maintainRecords(context: Context) = error("No-op")
 }
 
-class AppRepoImpl(private val appDao: AppDao, private val lifecycleOwner: LifecycleOwner) : AppRepository {
+class AppRepoImpl(
+    private val appDao: AppDao,
+    private val lifecycleOwner: LifecycleOwner,
+    private val medRepo: AppMediatorRepo
+) : AppRepository {
     override fun addApp(app: ApiViewingApp) {
-        appDao.insert(app)
+        medRepo.add(app)
     }
 
     override fun getApp(pkgName: String): ApiViewingApp? {
-        return appDao.selectApp(pkgName)
+        return medRepo.get(pkgName)
     }
 
     override fun getApps(unit: Int): List<ApiViewingApp> {
         if ((appDao.selectCount() ?: 0) == 0) return fetchAppsFromPlatform(chiefContext, unit)
-        return appDao.selectApps(unit)
+        return medRepo.get(unit)
     }
 
     override fun getMaintainedApp(): ApiViewingApp {
-        return MaintainedApp(::addApp)
+        return medRepo.getMaintainedApp()
     }
 
     override fun queryApps(query: String): List<ApiViewingApp> {
         if (query.isBlank()) return emptyList()
         val q = query.trim()
-        return appDao.selectAllApps().filter { it.name.contains(q, ignoreCase = true) }
+        return medRepo.getAll().filter { it.name.contains(q, ignoreCase = true) }
     }
 
     private fun fetchAppsFromPlatform(context: Context, unit: Int): List<ApiViewingApp> {
         val packages = PlatformAppsFetcher(context).withSession(includeApex = false).getRawList()
         val apps = runBlocking { packages.toPkgApps(context, getMaintainedApp()) }
-        appDao.insert(apps)
+        medRepo.add(apps)
         return when (unit) {
             ApiUnit.USER, ApiUnit.SYS -> apps.filter { it.apiUnit == unit }
             else -> apps
@@ -155,7 +164,7 @@ class AppRepoImpl(private val appDao: AppDao, private val lifecycleOwner: Lifecy
         if (RecordMtn.shouldDiff(context) && lifecycle.currentState >= Lifecycle.State.INITIALIZED) {
             // run asynchronously (bind to lifecycle following DAO)
             lifecycle.coroutineScope.launch(Dispatchers.Default) {
-                val dataDiff = RecordMtn.diff(context, allPackages, dao.selectAllApps())
+                val dataDiff = RecordMtn.diff(context, allPackages, medRepo.getAll(init = false))
                 yield()  // cooperative
                 RecordMtn.apply(context, dataDiff, allPackages, dao)
             }
@@ -173,13 +182,13 @@ class AppRepoImpl(private val appDao: AppDao, private val lifecycleOwner: Lifecy
             }
         }
 
-        val updateDetector = PackageUpdateDetector(dao::selectApps)
+        val updateDetector = PackageUpdateDetector { pkgs -> medRepo.get(pkgs, init = false) }
         val re = updateDetector.getUpdatedPackages(allPackages, changeTimestamp)
         // get past records
         val previous = when (dao.selectCount()) {
             null -> null
             0 -> emptyList()
-            else -> dao.selectApps(re.map { it.packageName })
+            else -> medRepo.get(re.map { it.packageName })
         }
         return AppPkgChanges(previous, re).also { finally() }
     }

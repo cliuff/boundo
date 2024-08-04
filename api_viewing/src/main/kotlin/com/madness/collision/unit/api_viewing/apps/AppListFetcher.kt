@@ -24,7 +24,6 @@ import android.util.Log
 import com.madness.collision.chief.chiefContext
 import com.madness.collision.misc.PackageCompat
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
-import com.madness.collision.unit.api_viewing.database.AppRoom
 import com.madness.collision.util.PermissionUtils
 import com.madness.collision.util.os.OsUtils
 import java.io.File
@@ -135,7 +134,6 @@ class StorageAppsFetcher(private val context: Context) : AppListFetcher<ApiViewi
     companion object : AppListFetcher<ApiViewingApp> by StorageAppsFetcher(chiefContext)
 
     override fun getRawList(): List<ApiViewingApp> {
-        val dao = AppRoom.getDatabase(context).appDao()
-        return dao.selectAllApps()
+        return AppRepo.dumb(context).getApps(0)
     }
 }

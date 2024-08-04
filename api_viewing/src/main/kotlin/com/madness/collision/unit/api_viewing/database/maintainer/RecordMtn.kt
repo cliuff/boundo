@@ -22,6 +22,7 @@ import android.util.Log
 import androidx.core.content.edit
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
+import com.madness.collision.unit.api_viewing.data.toEntities
 import com.madness.collision.unit.api_viewing.database.AppDao
 import com.madness.collision.unit.api_viewing.database.AppRoom
 import com.madness.collision.util.P
@@ -84,7 +85,7 @@ object RecordMtn {
                 val pack = allPackages.getOrNull(index) ?: return@inApp null
                 ApiViewingApp(context, pack, preloadProcess = true, archive = false)
             }
-            dao.insert(insertApps)
+            dao.insert(insertApps.toEntities())
         }
     }
 }

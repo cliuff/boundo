@@ -19,6 +19,7 @@ package com.madness.collision.unit.api_viewing.database
 import android.content.Context
 import android.content.pm.PackageInfo
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
+import com.madness.collision.unit.api_viewing.data.toEntities
 
 /**
  * update database record
@@ -47,7 +48,7 @@ internal class RecordMaintainer<T>(private val context: Context, private val dao
             if (updateTime <= recordedUpdateTime) return@mapNotNull null
             getApp(it)
         }
-        dao.insert(apps)
+        dao.insert(apps.toEntities())
     }
 
     /**
