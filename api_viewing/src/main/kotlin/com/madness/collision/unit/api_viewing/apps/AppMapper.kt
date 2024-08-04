@@ -21,29 +21,18 @@ import android.content.pm.PackageInfo
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 
+/** Convert to [ApiViewingApp]s and [init()][ApiViewingApp.init]. */
 suspend fun List<PackageInfo>.toPkgApps(context: Context, anApp: ApiViewingApp) = coroutineScope {
-    val lastIndex = lastIndex
-    mapIndexed { index, packageInfo ->
-        async(Dispatchers.Default) {
-            val app = if (index == lastIndex) anApp else anApp.clone() as ApiViewingApp
-            app.init(context, packageInfo, preloadProcess = true, archive = false)
-            app
+    // clone apps all at once, potentially faster?
+    val apps = Array(size) { i -> if (i == lastIndex) anApp else anApp.clone() as ApiViewingApp }
+    val arr = Array(size) { i ->
+        async(Dispatchers.IO) {
+            apps[i].apply { init(context, get(i), preloadProcess = true, archive = false) }
         }
-    }.map { it.await() }
-}
-
-suspend fun List<*>.toRecApps(context: Context, anApp: ApiViewingApp) = coroutineScope {
-    val lastIndex = lastIndex
-    mapIndexedNotNull { index, item ->
-        if (item !is ApiViewingApp) return@mapIndexedNotNull null
-        async(Dispatchers.Default) {
-            val app = if (index == lastIndex) anApp else anApp.clone() as ApiViewingApp
-            app.assignPersistentFieldsFrom(item, deepCopy = false)
-            // get application info one at a time, may be optimized
-            app.initIgnored(context)
-            app
-        }
-    }.map { it.await() }
+    }
+    // use array to avoid toTypedArray() conversion
+    awaitAll(*arr)
 }

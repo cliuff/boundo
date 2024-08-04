@@ -41,24 +41,6 @@ open class ApiViewingApp(var packageName: String) : Cloneable {
         const val packagePackageInstaller = "com.google.android.packageinstaller"
     }
 
-    fun assignPersistentFieldsFrom(other: ApiViewingApp, deepCopy: Boolean) {
-        packageName = other.packageName
-        verName = other.verName
-        verCode = other.verCode
-        compileAPI = other.compileAPI
-        compileApiCodeName = other.compileApiCodeName
-        targetAPI = other.targetAPI
-        minAPI = other.minAPI
-        apiUnit = other.apiUnit
-        updateTime = other.updateTime
-        isNativeLibrariesRetrieved = other.isNativeLibrariesRetrieved
-        nativeLibraries = if (!deepCopy) other.nativeLibraries else other.nativeLibraries.copyOf()
-        isLaunchable = other.isLaunchable
-        appPackage = if (!deepCopy) other.appPackage else AppPackage(other.appPackage.apkPaths)
-        jetpackComposed = other.jetpackComposed
-        iconInfo = if (!deepCopy) other.iconInfo else other.iconInfo?.copy()
-    }
-
     var verName: String = ""
     var verCode: Long = 0L
     @Ignore var compileAPI: Int = -1
