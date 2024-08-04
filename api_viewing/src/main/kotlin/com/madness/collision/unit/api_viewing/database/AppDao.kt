@@ -18,22 +18,21 @@ package com.madness.collision.unit.api_viewing.database
 
 import androidx.room.*
 import com.madness.collision.unit.api_viewing.data.ApiUnit
-import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 
 @Dao
 interface AppDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(vararg app: ApiViewingApp)
+    fun insert(vararg app: AppEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(apps: List<ApiViewingApp>)
+    fun insert(apps: List<AppEntity>)
 
     @Delete
-    fun delete(vararg app: ApiViewingApp)
+    fun delete(vararg app: AppEntity)
 
     @Delete
-    fun delete(apps: List<ApiViewingApp>)
+    fun delete(apps: List<AppEntity>)
 
     @Query("DELETE FROM app WHERE packageName = :packageName")
     fun deletePackageName(vararg packageName: String)
@@ -53,20 +52,20 @@ interface AppDao {
     @Query("DELETE FROM app")
     fun deleteAll()
 
-    fun selectAllApps(): List<ApiViewingApp> = selectApps(ApiUnit.ALL_APPS)
+    fun selectAllApps(): List<AppEntity> = selectApps(ApiUnit.ALL_APPS)
 
-    fun selectUserApps(): List<ApiViewingApp> = selectApps(ApiUnit.USER)
+    fun selectUserApps(): List<AppEntity> = selectApps(ApiUnit.USER)
 
-    fun selectSystemApps(): List<ApiViewingApp> = selectApps(ApiUnit.SYS)
+    fun selectSystemApps(): List<AppEntity> = selectApps(ApiUnit.SYS)
 
     @Query("SELECT * FROM app WHERE (:unit = ${ApiUnit.ALL_APPS}) OR (apiUnit = :unit) ORDER BY packageName ASC")
-    fun selectApps(unit: Int): List<ApiViewingApp>
+    fun selectApps(unit: Int): List<AppEntity>
 
     @Query("SELECT * FROM app WHERE packageName = :packageName")
-    fun selectApp(packageName: String): ApiViewingApp?
+    fun selectApp(packageName: String): AppEntity?
 
     @Query("SELECT * FROM app WHERE packageName IN (:packageNames)")
-    fun selectApps(packageNames: List<String>): List<ApiViewingApp>
+    fun selectApps(packageNames: List<String>): List<AppEntity>
 
     @Query("SELECT COUNT(*) > 1 FROM app WHERE packageName = :packageName")
     fun selectIsExist(packageName: String): Boolean

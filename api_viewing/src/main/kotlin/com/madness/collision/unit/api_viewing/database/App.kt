@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Clifford Liu
+ * Copyright 2024 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,49 @@
 
 package com.madness.collision.unit.api_viewing.database
 
+import androidx.room.ColumnInfo
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
 import com.madness.collision.unit.api_viewing.data.AppPackage
 import com.madness.collision.unit.api_viewing.util.ApkUtil
 import com.madness.collision.util.jsonSimpleTo
 import com.madness.collision.util.simpleToJson
 
-internal class Converters {
+data class ApiViewingIconInfo(
+    @Embedded(prefix = "icS_")  // SystemICon from API (modified by system, may be from an icon pack)
+    val system: ApiViewingIconDetails,
+    @Embedded(prefix = "icN_")  // NormalICon from APK (unmodified original app icon)
+    val normal: ApiViewingIconDetails,
+    @Embedded(prefix = "icR_")  // RoundICon from APK (unmodified original app icon)
+    val round: ApiViewingIconDetails,
+)
+
+class ApiViewingIconDetails(val isDefined: Boolean, val isAdaptive: Boolean)
+
+@Entity(tableName = "app")
+class AppEntity(
+    @PrimaryKey
+    val packageName: String,
+    val verName: String,
+    val verCode: Long,
+    val targetAPI: Int,
+    val minAPI: Int,
+    val apiUnit: Int,
+    val updateTime: Long,
+    val isNativeLibrariesRetrieved: Boolean,
+    val nativeLibraries: BooleanArray,
+    val isLaunchable: Boolean,
+    val appPackage: AppPackage,
+    @ColumnInfo(defaultValue = "-1")
+    val jetpackComposed: Int,
+    @Embedded
+    val iconInfo: ApiViewingIconInfo?,
+)
+
+
+internal class AppConverters {
 
     @TypeConverter
     fun booleanArrayToString(array: BooleanArray): String {

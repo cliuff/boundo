@@ -19,7 +19,6 @@ package com.madness.collision.unit.api_viewing.database
 import android.content.Context
 import androidx.room.*
 import androidx.room.migration.AutoMigrationSpec
-import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.database.maintainer.DiffChange
 import com.madness.collision.unit.api_viewing.database.maintainer.DiffConverters
 import com.madness.collision.unit.api_viewing.database.maintainer.DiffDao
@@ -27,7 +26,7 @@ import com.madness.collision.unit.api_viewing.database.maintainer.DiffDao
 @Database(
     version = 6,
     exportSchema = true,
-    entities = [ApiViewingApp::class, DiffChange::class],
+    entities = [AppEntity::class, DiffChange::class],
     autoMigrations = [
         AutoMigration(from = 1, to = 2),
         AutoMigration(from = 2, to = 3, spec = AppNameMigrationSpec::class),
@@ -36,7 +35,7 @@ import com.madness.collision.unit.api_viewing.database.maintainer.DiffDao
         AutoMigration(from = 5, to = 6),
     ]
 )
-@TypeConverters(Converters::class, DiffConverters::class)
+@TypeConverters(AppConverters::class, DiffConverters::class)
 internal abstract class AppRoom : RoomDatabase() {
     abstract fun appDao(): AppDao
     abstract fun diffDao(): DiffDao

@@ -22,8 +22,10 @@ import android.content.pm.PackageInfo
 import android.graphics.drawable.AdaptiveIconDrawable
 import android.graphics.drawable.Drawable
 import androidx.core.content.pm.PackageInfoCompat
-import androidx.room.*
+import androidx.room.Ignore
 import com.madness.collision.misc.MiscApp
+import com.madness.collision.unit.api_viewing.database.ApiViewingIconDetails
+import com.madness.collision.unit.api_viewing.database.ApiViewingIconInfo
 import com.madness.collision.unit.api_viewing.info.AppType
 import com.madness.collision.unit.api_viewing.info.PkgInfo
 import com.madness.collision.unit.api_viewing.info.getAppType
@@ -32,19 +34,7 @@ import com.madness.collision.unit.api_viewing.util.ApkUtil
 import com.madness.collision.unit.api_viewing.util.ManifestUtil
 import com.madness.collision.util.os.OsUtils
 
-data class ApiViewingIconInfo(
-    @Embedded(prefix = "icS_")  // SystemICon from API (modified by system, may be from an icon pack)
-    val system: ApiViewingIconDetails,
-    @Embedded(prefix = "icN_")  // NormalICon from APK (unmodified original app icon)
-    val normal: ApiViewingIconDetails,
-    @Embedded(prefix = "icR_")  // RoundICon from APK (unmodified original app icon)
-    val round: ApiViewingIconDetails,
-)
-
-class ApiViewingIconDetails(val isDefined: Boolean, val isAdaptive: Boolean)
-
-@Entity(tableName = "app")
-open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Cloneable {
+open class ApiViewingApp(var packageName: String) : Cloneable {
 
     companion object {
         const val packagePlayStore = "com.android.vending"
@@ -81,9 +71,7 @@ open class ApiViewingApp(@PrimaryKey @ColumnInfo var packageName: String) : Clon
     var nativeLibraries: BooleanArray = BooleanArray(ApkUtil.NATIVE_LIB_SUPPORT_SIZE) { false }
     var isLaunchable: Boolean = false
     var appPackage: AppPackage = AppPackage("")
-    @ColumnInfo(defaultValue = "-1")
     var jetpackComposed: Int = -1
-    @Embedded
     var iconInfo: ApiViewingIconInfo? = null
 
     @Ignore var uid: Int = -1
