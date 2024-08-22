@@ -31,7 +31,6 @@ import androidx.lifecycle.lifecycleScope
 import com.madness.collision.base.BaseActivity
 import com.madness.collision.databinding.ActivityMainBinding
 import com.madness.collision.diy.WindowInsets
-import com.madness.collision.main.updates.UpdatesFragment
 import com.madness.collision.misc.MiscMain
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.api_viewing.AccessAV
@@ -150,7 +149,7 @@ class MainActivity : BaseActivity(), SystemBarMaintainerOwner {
         mainFragment = fragment
         if (launchItem != null) {
             fragment.arguments = Bundle().apply {
-                putInt(UpdatesFragment.ARG_MODE, UpdatesFragment.MODE_NO_UPDATES)
+                putInt("mode" /* ARG_MODE */, 1 /* MODE_NO_UPDATES */)
             }
         }
         if (fragment.isAdded.not()) {

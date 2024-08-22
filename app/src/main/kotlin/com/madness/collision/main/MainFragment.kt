@@ -116,8 +116,7 @@ class MainFragment : TaggedFragment(), Democratic, UpdatesFragment.Listener {
         navFragments = arrayOf(
             lazy {
                 f ?: run {
-                    updatesMode ?: return@run UpdatesFragment()
-                    UpdatesFragment.newInstance(updatesMode)
+                    Fragment()
                 }
             },
         )
