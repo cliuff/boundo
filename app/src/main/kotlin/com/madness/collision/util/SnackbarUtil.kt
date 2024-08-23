@@ -20,10 +20,8 @@ import android.content.Context
 import android.view.View
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
-import com.madness.collision.R
 import com.madness.collision.util.notice.ToastUtils
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -72,7 +70,7 @@ fun Fragment.notifyBriefly(textResId: Int, shouldDelay: Boolean = false) {
 }
 
 private fun ComponentActivity.notify(textResId: Int, shouldLastLong: Boolean, shouldDelay: Boolean) {
-    val view = this.findViewById<CoordinatorLayout>(R.id.mainFrame) ?: this.window.decorView.rootView
+    val view = this.window.decorView.rootView
     val context = this
     notify(textResId, shouldLastLong, shouldDelay, view, context)
 }
