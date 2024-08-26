@@ -37,6 +37,7 @@ import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.database.AppRoom
 import com.madness.collision.unit.api_viewing.info.LibRules
 import com.madness.collision.unit.api_viewing.tag.app.AppTagInfo
+import com.madness.collision.unit.api_viewing.ui.home.AppHomeFragment
 import com.madness.collision.unit.api_viewing.util.ApkRetriever
 import com.madness.collision.unit.api_viewing.util.PrefUtil
 import com.madness.collision.util.P
@@ -161,5 +162,9 @@ class ApiViewingAccessorImpl : ApiViewingAccessor {
         AppRoom.clearInstance()
         room.close()
         return context.deleteDatabase(name)
+    }
+
+    override fun getHomeFragment(): Fragment {
+        return AppHomeFragment()
     }
 }

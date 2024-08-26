@@ -50,6 +50,9 @@ import kotlin.random.Random
 typealias MainFragment = androidx.fragment.app.Fragment
 
 class MainActivity : BaseActivity(), SystemBarMaintainerOwner {
+
+    private fun MainFragment(): MainFragment = AccessAV.getHomeFragment()
+
     companion object {
         /**
          * the activity to launch
