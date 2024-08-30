@@ -147,12 +147,17 @@ private fun UpdatesList(sections: AppUpdatesUiState, paddingValues: PaddingValue
                 if (secIndex == AppUpdatesIndex.UPG) {
                     items(secList) { updateItem ->
                         if (updateItem is Upgrade) {
-                            AppItem(
+                            AppUpdateItem(
                                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 5.dp),
                                 name = updateItem.new.name,
-                                timestamp = updateItem.new.updateTime,
                                 apiInfo = remember(updateItem) { VerInfo.targetDisplay(updateItem.new) },
-                                iconInfo = remember(updateItem) { AppPackageInfo(context, updateItem.new) }
+                                iconInfo = remember(updateItem) { AppPackageInfo(context, updateItem.new) },
+                                newApi = remember(updateItem) { VerInfo(updateItem.targetApi.second) },
+                                oldApi = remember(updateItem) { VerInfo(updateItem.targetApi.first) },
+                                newVer = remember(updateItem) { AppInstallVersion(updateItem.versionCode.second, updateItem.versionName.second, "") },
+                                oldVer = remember(updateItem) { AppInstallVersion(updateItem.versionCode.first, updateItem.versionName.first, "") },
+                                newTimestamp = updateItem.updateTime.second,
+                                oldTimestamp = updateItem.updateTime.first,
                             )
                         }
                     }

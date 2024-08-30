@@ -41,6 +41,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.LayoutDirection
@@ -90,38 +91,27 @@ private fun AppDetails(
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            val sdkTitles = remember {
-                arrayOf(
-                    R.string.av_list_info_min_sdk,
-                    MainR.string.apiSdkTarget,
-                    R.string.av_list_info_compile_sdk,
-                )
+            val apis = remember(verInfoList) {
+                verInfoList.mapIndexedNotNull { i, v ->
+                    if (v.api >= OsUtils.A) i to v else null
+                }
             }
-            val context = LocalContext.current
-            val isInspected = LocalInspectionMode.current
-            val apis = remember {
-                verInfoList.zip(sdkTitles) { ver, titleId ->
-                    if (ver.api < OsUtils.A) return@zip null
-                    val color = when {
-                        EasyAccess.isSweet -> SealMaker.getItemColorText(ver.api)
-                        else -> 0xFFF5F5F5.toInt()
-                    }
-                    val title = context.getString(titleId)
-                    val displayApi = if (isInspected) ver.api.toString() else ver.apiText
-                    Triple("$title $displayApi", ver.displaySdk, Color(color))
-                }.filterNotNull()
-            }
-            val dividerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.15f)
-            apis.forEachIndexed { index, (label, sdk, color) ->
-                if (index > 0) {
-                    Divider(modifier = Modifier.size(width = 0.5.dp, height = 24.dp), color = dividerColor)
+            apis.forEachIndexed { i, (vi, ver) ->
+                if (i > 0) {
+                    Divider(
+                        modifier = Modifier.size(width = 0.5.dp, height = 24.dp),
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.15f)
+                    )
                 }
                 AppSdkItem(
                     modifier = Modifier.weight(1f),
-                    label = label,
-                    ver = sdk,
-                    color = color,
-                    verInfoList[index].letterOrDev,
+                    ver = ver,
+                    title = when (vi) {
+                        0 -> stringResource(R.string.av_list_info_min_sdk)
+                        1 -> stringResource(MainR.string.apiSdkTarget)
+                        2 -> stringResource(R.string.av_list_info_compile_sdk)
+                        else -> "SDK"
+                    }
                 )
             }
         }
@@ -165,11 +155,34 @@ private fun AppDetails(
 }
 
 @Composable
-private fun AppSdkItem(modifier: Modifier = Modifier, label: String, ver: String, color: Color, sealIndex: Char) {
+internal fun AppSdkItem(modifier: Modifier = Modifier, ver: VerInfo, title: String) {
+    val sealIndex = ver.letterOrDev
+    AppSdkItem(modifier, ver, title, sealIndex, rememberApiSeal(sealIndex))
+}
+
+@Composable
+internal fun AppSdkItem(modifier: Modifier = Modifier, ver: VerInfo, title: String, sealIndex: Char, sealFile: File?) {
+    AppSdkItem(
+        modifier = modifier,
+        label = when {
+            LocalInspectionMode.current -> "$title ${ver.api}"
+            else -> "$title ${ver.apiText}"
+        },
+        ver = ver.displaySdk,
+        color = Color(when {
+            EasyAccess.isSweet -> SealMaker.getItemColorText(ver.api)
+            else -> 0xFFF5F5F5.toInt()
+        }),
+        sealIndex = sealIndex,
+        sealFile = sealFile,
+    )
+}
+
+@Composable
+fun rememberApiSeal(sealIndex: Char): File? {
     var sealFile: File? by remember(sealIndex) {
         // load initial value
-        val file = SealMaker.getBlurredCacheFile(sealIndex)
-        mutableStateOf(file)
+        mutableStateOf(SealMaker.getBlurredCacheFile(sealIndex))
     }
     if (sealFile == null) {
         val context = LocalContext.current
@@ -178,6 +191,11 @@ private fun AppSdkItem(modifier: Modifier = Modifier, label: String, ver: String
             sealFile = SealMaker.getBlurredFile(context, sealIndex, itemWidth)
         }
     }
+    return sealFile
+}
+
+@Composable
+fun AppSdkItem(modifier: Modifier = Modifier, label: String, ver: String, color: Color, sealIndex: Char, sealFile: File?) {
     Column(
         modifier = modifier.padding(horizontal = 3.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
