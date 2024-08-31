@@ -57,10 +57,6 @@ object MyBridge: Bridge() {
         return MyUnit().apply { arguments = args[0] as Bundle? }
     }
 
-    override fun getUpdates(): UpdatesProvider {
-        return MyUpdatesProvider()
-    }
-
     override fun getSettings(): Fragment {
         return Page<PrefAv>(MainR.string.apiViewer)
     }
