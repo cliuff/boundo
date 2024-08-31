@@ -16,12 +16,15 @@
 
 package com.madness.collision.unit.api_viewing.ui.upd
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
+import android.provider.Settings
 import android.util.Log
 import android.view.View
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import com.madness.collision.chief.app.ComposeFragment
@@ -30,8 +33,10 @@ import com.madness.collision.diy.SpanAdapter
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.list.AppPopOwner
+import com.madness.collision.unit.api_viewing.list.pop
 import com.madness.collision.unit.api_viewing.list.updateState
 import com.madness.collision.unit.api_viewing.ui.info.AppInfoFragment
+import com.madness.collision.util.hasUsageAccess
 
 class AppUpdatesFragment : ComposeFragment(), AppInfoFragment.Callback {
     private val viewModel: AppUpdatesViewModel by viewModels()
@@ -103,7 +108,38 @@ class AppUpdatesFragment : ComposeFragment(), AppInfoFragment.Callback {
     @Composable
     override fun ComposeContent() {
         MaterialTheme(colorScheme = rememberColorScheme()) {
-            AppUpdatesPage(paddingValues = rememberContentPadding())
+            AppUpdatesPage(
+                paddingValues = rememberContentPadding(),
+                eventHandler = rememberUpdatesEventHandler()
+            )
+        }
+    }
+
+    @Composable
+    private fun rememberUpdatesEventHandler(): AppUpdatesEventHandler {
+        return remember {
+            object : AppUpdatesEventHandler {
+                override fun hasUsageAccess(): Boolean {
+                    return context?.hasUsageAccess == true
+                }
+
+                override fun showAppInfo(app: ApiViewingApp) {
+                    popOwner.pop(this@AppUpdatesFragment, app)
+                }
+
+                override fun showAppListPage() {
+                }
+
+                override fun showUsageAccessSettings() {
+                    val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
+                }
+
+                override fun showAppSettings() {
+                    // todo access app settings page
+                }
+            }
         }
     }
 }

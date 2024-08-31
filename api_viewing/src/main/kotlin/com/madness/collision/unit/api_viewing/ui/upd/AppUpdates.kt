@@ -16,15 +16,20 @@
 
 package com.madness.collision.unit.api_viewing.ui.upd
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyGridScope
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Settings
@@ -36,41 +41,56 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.madness.collision.chief.app.BoundoTheme
-import com.madness.collision.unit.api_viewing.R
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.AppPackageInfo
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.upgrade.Upgrade
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
 
+@Stable
+interface AppUpdatesEventHandler {
+    fun hasUsageAccess(): Boolean
+    fun showAppInfo(app: ApiViewingApp)
+    fun showAppListPage()
+    fun showUsageAccessSettings()
+    fun showAppSettings()
+}
+
 @Composable
-fun AppUpdatesPage(paddingValues: PaddingValues) {
+fun AppUpdatesPage(paddingValues: PaddingValues, eventHandler: AppUpdatesEventHandler) {
     val viewModel: AppUpdatesViewModel = viewModel()
     val sections by viewModel.uiState.collectAsStateWithLifecycle()
     Scaffold(
         topBar = {
-            UpdatesAppBar(windowInsets = WindowInsets(top = paddingValues.calculateTopPadding()))
+            UpdatesAppBar(
+                onClickRefresh = {},
+                onClickSettings = eventHandler::showAppSettings,
+                windowInsets = WindowInsets(top = paddingValues.calculateTopPadding()),
+            )
         },
         content = { contentPadding ->
-            if (sections.isNotEmpty()) {
+            val hasUsageAccess = eventHandler.hasUsageAccess()
+            if (sections.isNotEmpty() || !hasUsageAccess) {
                 UpdatesList(
                     sections = sections,
+                    columnCount = viewModel.columnCount,
                     paddingValues = PaddingValues(
                         top = contentPadding.calculateTopPadding(),
-                        bottom = paddingValues.calculateBottomPadding()
-                    )
+                        bottom = paddingValues.calculateBottomPadding() + 120.dp
+                    ),
+                    onClickApp = eventHandler::showAppInfo,
+                    onClickViewMore = eventHandler::showAppListPage,
+                    onClickUsageAccess = eventHandler::showUsageAccessSettings
+                        .takeIf { !hasUsageAccess },
                 )
             } else {
                 Text("Nada")
@@ -81,11 +101,15 @@ fun AppUpdatesPage(paddingValues: PaddingValues) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun UpdatesAppBar(windowInsets: WindowInsets = WindowInsets(0)) {
+private fun UpdatesAppBar(
+    onClickRefresh: () -> Unit,
+    onClickSettings: () -> Unit,
+    windowInsets: WindowInsets = WindowInsets(0),
+) {
     TopAppBar(
         title = {},
         actions = {
-            IconButton(onClick = {}) {
+            IconButton(onClick = onClickRefresh) {
                 Icon(
                     imageVector = Icons.Outlined.Refresh,
                     contentDescription = null,
@@ -93,7 +117,7 @@ private fun UpdatesAppBar(windowInsets: WindowInsets = WindowInsets(0)) {
                     tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
                 )
             }
-            IconButton(onClick = {}) {
+            IconButton(onClick = onClickSettings) {
                 Icon(
                     imageVector = Icons.Outlined.Settings,
                     contentDescription = null,
@@ -108,29 +132,65 @@ private fun UpdatesAppBar(windowInsets: WindowInsets = WindowInsets(0)) {
 }
 
 @Composable
-private fun UpdatesList(sections: AppUpdatesUiState, paddingValues: PaddingValues) {
-    LazyColumn(contentPadding = paddingValues) {
+private fun UpdatesList(
+    sections: AppUpdatesUiState,
+    columnCount: Int,
+    paddingValues: PaddingValues,
+    onClickApp: (ApiViewingApp) -> Unit,
+    onClickViewMore: () -> Unit,
+    onClickUsageAccess: (() -> Unit)?,
+) {
+    LazyVerticalGrid(columns = GridCells.Fixed(columnCount), contentPadding = paddingValues) {
         for ((secIndex, secList) in sections) {
             if (secList.isNotEmpty()) {
-                item(key = secIndex) {
-                    UpdateSectionTitle(text = updateIndexLabel(secIndex))
+                item(key = secIndex, span = { GridItemSpan(maxLineSpan) }) {
+                    UpdateSectionTitle(
+                        modifier = Modifier
+                            .padding(top = 5.dp)
+                            .padding(horizontal = 20.dp, vertical = 5.dp),
+                        text = updateIndexLabel(secIndex)
+                    )
                 }
-                sectionItems(secIndex, secList)
+                sectionItems(secIndex, secList, onClickApp)
+            }
+        }
+        if (sections.any { (_, list) -> list.isNotEmpty() }) {
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                MoreUpdatesButton(
+                    modifier = Modifier
+                        .padding(top = 5.dp)
+                        .padding(horizontal = 20.dp, vertical = 4.dp),
+                    onClick = onClickViewMore,
+                )
+            }
+        }
+        if (onClickUsageAccess != null) {
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                UsageAccessRequest(
+                    modifier = Modifier
+                        .widthIn(max = 450.dp)
+                        .fillMaxWidth()
+                        .clickable(onClick = onClickUsageAccess)
+                        .padding(horizontal = 20.dp, vertical = 8.dp),
+                )
             }
         }
     }
 }
 
-private fun LazyListScope.sectionItems(
+private fun LazyGridScope.sectionItems(
     secIndex: AppUpdatesIndex,
     secList: List<*>,
+    onClickApp: (ApiViewingApp) -> Unit,
 ) {
     if (secIndex == AppUpdatesIndex.UPG) {
         items(secList) { upd ->
             if (upd is Upgrade) {
                 val context = LocalContext.current
                 AppUpdateItem(
-                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 5.dp),
+                    modifier = Modifier
+                        .padding(horizontal = 12.dp, vertical = 5.dp)
+                        .clickable { onClickApp(upd.new) },
                     name = upd.new.name,
                     apiInfo = remember(upd) { VerInfo.targetDisplay(upd.new) },
                     iconInfo = remember(upd) { AppPackageInfo(context, upd.new) },
@@ -148,7 +208,9 @@ private fun LazyListScope.sectionItems(
             if (app is ApiViewingApp) {
                 val context = LocalContext.current
                 AppItem(
-                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 5.dp),
+                    modifier = Modifier
+                        .padding(horizontal = 12.dp, vertical = 5.dp)
+                        .clickable { onClickApp(app) },
                     name = app.name,
                     timestamp = app.updateTime,
                     apiInfo = remember(app) { VerInfo.targetDisplay(app) },
@@ -160,40 +222,19 @@ private fun LazyListScope.sectionItems(
 }
 
 @Composable
-@ReadOnlyComposable
-private fun updateIndexLabel(index: AppUpdatesIndex): String {
-    return stringResource(when (index) {
-        AppUpdatesIndex.NEW -> R.string.av_upd_new
-        AppUpdatesIndex.UPG -> R.string.av_upd_upg
-        AppUpdatesIndex.VER -> R.string.av_upd_ver_upd
-        AppUpdatesIndex.PCK -> R.string.av_upd_pck_upd
-        AppUpdatesIndex.REC -> R.string.av_updates_recents
-        AppUpdatesIndex.USE -> R.string.av_upd_used
-    })
-}
-
-@Composable
-private fun UpdateSectionTitle(text: String) {
-    Text(
-        modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
-        text = text,
-        fontSize = 13.sp,
-        lineHeight = 13.sp,
-        overflow = TextOverflow.Ellipsis,
-        maxLines = 1,
-    )
-}
-
-@Composable
 @PreviewCombinedColorLayout
 private fun AppUpdatesPreview() {
     BoundoTheme {
         Scaffold(
-            topBar = { UpdatesAppBar() },
+            topBar = { UpdatesAppBar(onClickRefresh = {}, onClickSettings = {}) },
             content = { contentPadding ->
                 UpdatesList(
                     sections = emptyMap(),
+                    columnCount = 1,
                     paddingValues = PaddingValues(top = contentPadding.calculateTopPadding()),
+                    onClickApp = {},
+                    onClickViewMore = {},
+                    onClickUsageAccess = {},
                 )
             }
         )
