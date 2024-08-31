@@ -16,8 +16,6 @@
 
 package com.madness.collision.unit.api_viewing.ui.upd
 
-import android.os.Bundle
-import android.view.View
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -25,6 +23,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Refresh
@@ -46,42 +45,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.madness.collision.chief.app.ComposeFragment
-import com.madness.collision.chief.app.rememberColorScheme
-import com.madness.collision.main.MainViewModel
+import com.madness.collision.chief.app.BoundoTheme
 import com.madness.collision.unit.api_viewing.R
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.AppPackageInfo
-import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.upgrade.Upgrade
-
-class AppUpdatesFragment : ComposeFragment() {
-    private val viewModel: AppUpdatesViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        context?.let(EasyAccess::init)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        if (savedInstanceState == null) {
-            val mainViewModel: MainViewModel by activityViewModels()
-            viewModel.checkUpdates(mainViewModel.timestamp, requireContext(), this)
-        }
-    }
-
-    @Composable
-    override fun ComposeContent() {
-        MaterialTheme(colorScheme = rememberColorScheme()) {
-            AppUpdatesPage(paddingValues = rememberContentPadding())
-        }
-    }
-}
+import com.madness.collision.util.dev.PreviewCombinedColorLayout
 
 @Composable
 fun AppUpdatesPage(paddingValues: PaddingValues) {
@@ -137,43 +109,51 @@ private fun UpdatesAppBar(windowInsets: WindowInsets = WindowInsets(0)) {
 
 @Composable
 private fun UpdatesList(sections: AppUpdatesUiState, paddingValues: PaddingValues) {
-    val context = LocalContext.current
     LazyColumn(contentPadding = paddingValues) {
         for ((secIndex, secList) in sections) {
             if (secList.isNotEmpty()) {
                 item(key = secIndex) {
                     UpdateSectionTitle(text = updateIndexLabel(secIndex))
                 }
-                if (secIndex == AppUpdatesIndex.UPG) {
-                    items(secList) { updateItem ->
-                        if (updateItem is Upgrade) {
-                            AppUpdateItem(
-                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 5.dp),
-                                name = updateItem.new.name,
-                                apiInfo = remember(updateItem) { VerInfo.targetDisplay(updateItem.new) },
-                                iconInfo = remember(updateItem) { AppPackageInfo(context, updateItem.new) },
-                                newApi = remember(updateItem) { VerInfo(updateItem.targetApi.second) },
-                                oldApi = remember(updateItem) { VerInfo(updateItem.targetApi.first) },
-                                newVer = remember(updateItem) { AppInstallVersion(updateItem.versionCode.second, updateItem.versionName.second, "") },
-                                oldVer = remember(updateItem) { AppInstallVersion(updateItem.versionCode.first, updateItem.versionName.first, "") },
-                                newTimestamp = updateItem.updateTime.second,
-                                oldTimestamp = updateItem.updateTime.first,
-                            )
-                        }
-                    }
-                } else {
-                    items(secList) { updateItem ->
-                        if (updateItem is ApiViewingApp) {
-                            AppItem(
-                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 5.dp),
-                                name = updateItem.name,
-                                timestamp = updateItem.updateTime,
-                                apiInfo = remember(updateItem) { VerInfo.targetDisplay(updateItem) },
-                                iconInfo = remember(updateItem) { AppPackageInfo(context, updateItem) }
-                            )
-                        }
-                    }
-                }
+                sectionItems(secIndex, secList)
+            }
+        }
+    }
+}
+
+private fun LazyListScope.sectionItems(
+    secIndex: AppUpdatesIndex,
+    secList: List<*>,
+) {
+    if (secIndex == AppUpdatesIndex.UPG) {
+        items(secList) { upd ->
+            if (upd is Upgrade) {
+                val context = LocalContext.current
+                AppUpdateItem(
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 5.dp),
+                    name = upd.new.name,
+                    apiInfo = remember(upd) { VerInfo.targetDisplay(upd.new) },
+                    iconInfo = remember(upd) { AppPackageInfo(context, upd.new) },
+                    newApi = remember(upd) { VerInfo(upd.targetApi.second) },
+                    oldApi = remember(upd) { VerInfo(upd.targetApi.first) },
+                    newVer = remember(upd) { AppInstallVersion(upd.versionCode.second, upd.versionName.second, "") },
+                    oldVer = remember(upd) { AppInstallVersion(upd.versionCode.first, upd.versionName.first, "") },
+                    newTimestamp = upd.updateTime.second,
+                    oldTimestamp = upd.updateTime.first,
+                )
+            }
+        }
+    } else {
+        items(secList) { app ->
+            if (app is ApiViewingApp) {
+                val context = LocalContext.current
+                AppItem(
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 5.dp),
+                    name = app.name,
+                    timestamp = app.updateTime,
+                    apiInfo = remember(app) { VerInfo.targetDisplay(app) },
+                    iconInfo = remember(app) { AppPackageInfo(context, app) }
+                )
             }
         }
     }
@@ -202,4 +182,20 @@ private fun UpdateSectionTitle(text: String) {
         overflow = TextOverflow.Ellipsis,
         maxLines = 1,
     )
+}
+
+@Composable
+@PreviewCombinedColorLayout
+private fun AppUpdatesPreview() {
+    BoundoTheme {
+        Scaffold(
+            topBar = { UpdatesAppBar() },
+            content = { contentPadding ->
+                UpdatesList(
+                    sections = emptyMap(),
+                    paddingValues = PaddingValues(top = contentPadding.calculateTopPadding()),
+                )
+            }
+        )
+    }
 }
