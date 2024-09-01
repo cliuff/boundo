@@ -35,6 +35,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.fragment.compose.AndroidFragment
@@ -68,7 +69,7 @@ interface AppHomeNav {
 
 @Composable
 fun AppHomePage(paddingValues: PaddingValues) {
-    var selNavIndex by remember { mutableIntStateOf(0) }
+    var selNavIndex by rememberSaveable { mutableIntStateOf(0) }
     var homeNav: AppHomeNav? by remember { mutableStateOf(null) }
     if (selNavIndex != 0 && homeNav != null) {
         BackHandler { selNavIndex = 0; homeNav?.navBack() }

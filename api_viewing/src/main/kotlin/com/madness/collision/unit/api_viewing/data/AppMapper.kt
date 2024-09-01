@@ -40,7 +40,8 @@ fun ApiViewingApp.toEntity() =
         iconInfo = iconInfo
     )
 
-fun AppEntity.toEntityApp(app: ApiViewingApp = ApiViewingApp(packageName)): ApiViewingApp {
+fun AppEntity.toEntityApp(app: ApiViewingApp = ApiViewingApp()): ApiViewingApp {
+    app.packageName = packageName
     app.verName = verName
     app.verCode = verCode
     app.targetAPI = targetAPI

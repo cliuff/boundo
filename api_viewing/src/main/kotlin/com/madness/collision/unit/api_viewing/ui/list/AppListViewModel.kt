@@ -271,7 +271,12 @@ class AppListViewModel : ViewModel() {
             val cat = when (val src = srcSet.find { it.cat == ListSrcCat.Filter }) {
                 is AppListSrc.DataSourceQuery -> src.targetCat
                 is AppListSrc.TagFilter -> src.targetCat
-                else -> error("ListSrcCat.Filter not found or matched")
+                else -> {
+                    // case is reached in unknown situations
+                    IllegalStateException("ListSrcCat.Filter not found or matched ($src)")
+                        .printStackTrace()
+                    ListSrcCat.Platform
+                }
             }
             toggleListSrc(AppListSrc.DataSourceQuery(cat, query.toString()))
         } else {
@@ -292,7 +297,11 @@ class AppListViewModel : ViewModel() {
             val cat = when (val src = srcSet.find { it.cat == ListSrcCat.Filter }) {
                 is AppListSrc.DataSourceQuery -> src.targetCat ?: ListSrcCat.Platform
                 is AppListSrc.TagFilter -> src.targetCat
-                else -> error("ListSrcCat.Filter not found or matched")
+                else -> {
+                    IllegalStateException("ListSrcCat.Filter not found or matched ($src)")
+                        .printStackTrace()
+                    ListSrcCat.Platform
+                }
             }
             toggleListSrc(AppListSrc.TagFilter(cat, updatedTags))
         } else {

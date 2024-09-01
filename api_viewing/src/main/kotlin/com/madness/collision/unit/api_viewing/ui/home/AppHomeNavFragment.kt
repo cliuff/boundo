@@ -17,6 +17,7 @@
 package com.madness.collision.unit.api_viewing.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +27,8 @@ import androidx.fragment.app.commit
 import com.madness.collision.unit.api_viewing.ui.list.AppListFragment
 import com.madness.collision.unit.api_viewing.ui.upd.AppUpdatesFragment
 
+private val HomeNavContainerId: Int = View.generateViewId()
+
 /** Navigate between fragments. */
 class AppHomeNavFragment : Fragment(), AppHomeNav {
     private val navFgmClasses = arrayOf(AppUpdatesFragment::class, AppListFragment::class)
@@ -33,7 +36,8 @@ class AppHomeNavFragment : Fragment(), AppHomeNav {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return FragmentContainerView(inflater.context).apply { id = View.generateViewId() }
+        // container's id must be constant across configuration changes to restore fragments
+        return FragmentContainerView(inflater.context).apply { id = HomeNavContainerId }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -67,9 +71,16 @@ class AppHomeNavFragment : Fragment(), AppHomeNav {
                 hide(lastVisFragment)
             }
             if (targetFragment != null) {
-                show(targetFragment)
+                if (targetFragment.run { isHidden && view != null }) {
+                    show(targetFragment)
+                } else if (targetFragment.isAdded) {
+                    remove(targetFragment)
+                    add(HomeNavContainerId, targetFragment, navFgmTags[index])
+                } else {
+                    Log.d("AppHomeNavFragment", "Target fragment is in a weird state.")
+                }
             } else {
-                add(view?.id ?: 0, navFgmClasses[index].java, null, navFgmTags[index])
+                add(HomeNavContainerId, navFgmClasses[index].java, null, navFgmTags[index])
             }
             setReorderingAllowed(true)
         }
