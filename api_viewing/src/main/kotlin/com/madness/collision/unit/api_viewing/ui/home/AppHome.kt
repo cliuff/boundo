@@ -16,11 +16,7 @@
 
 package com.madness.collision.unit.api_viewing.ui.home
 
-import android.os.Bundle
-import android.view.View
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.twotone.List
@@ -44,20 +40,10 @@ import com.madness.collision.chief.app.rememberColorScheme
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
 
 class AppHomeFragment : ComposeFragment() {
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        mainViewModel.insetTop.observe(viewLifecycleOwner) { insetTop ->
-            mainViewModel.contentWidthTop.value = insetTop
-        }
-        mainViewModel.insetBottom.observe(viewLifecycleOwner) { insetBottom ->
-            mainViewModel.contentWidthBottom.value = insetBottom
-        }
-    }
-
     @Composable
     override fun ComposeContent() {
         MaterialTheme(colorScheme = rememberColorScheme()) {
-            AppHomePage(paddingValues = rememberContentPadding())
+            AppHomePage()
         }
     }
 }
@@ -68,7 +54,7 @@ interface AppHomeNav {
 }
 
 @Composable
-fun AppHomePage(paddingValues: PaddingValues) {
+fun AppHomePage() {
     var selNavIndex by rememberSaveable { mutableIntStateOf(0) }
     var homeNav: AppHomeNav? by remember { mutableStateOf(null) }
     if (selNavIndex != 0 && homeNav != null) {
@@ -79,7 +65,6 @@ fun AppHomePage(paddingValues: PaddingValues) {
             HomeNavigationBar(
                 selectedIndex = selNavIndex,
                 onSelectItem = { i -> selNavIndex = i; homeNav?.setNavPage(i) },
-                windowInsets = WindowInsets(bottom = paddingValues.calculateBottomPadding())
             )
         },
         content = { contentPadding ->
@@ -93,9 +78,8 @@ private fun HomeNavigationBar(
     modifier: Modifier = Modifier,
     selectedIndex: Int,
     onSelectItem: (Int) -> Unit,
-    windowInsets: WindowInsets = WindowInsets(0),
 ) {
-    NavigationBar(modifier = modifier, windowInsets = windowInsets) {
+    NavigationBar(modifier = modifier) {
         NavigationBarItem(
             selected = selectedIndex == 0,
             onClick = { onSelectItem(0) },

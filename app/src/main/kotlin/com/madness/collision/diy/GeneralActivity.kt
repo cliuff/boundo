@@ -17,9 +17,6 @@
 package com.madness.collision.diy
 
 import android.graphics.Rect
-import android.os.Bundle
-import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import com.madness.collision.util.os.OsUtils
 
 
@@ -68,39 +65,4 @@ class WindowInsets {
         return Rect(insets.systemWindowInsetLeft, insets.systemWindowInsetTop,
                 insets.systemWindowInsetRight, insets.systemWindowInsetBottom)
     }
-}
-
-
-/**
- * 实现状态栏透明
- * 使用方法：继承这个类并实现 {@link #consumeInsets(Rect) consumeInsets} 方法
- */
-internal abstract class GeneralActivity : AppCompatActivity() {
-    private var mWindowInsets: WindowInsets = WindowInsets()
-    val windowInsets: WindowInsets
-        get() = mWindowInsets
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-//        SystemUtil.applyEdge2Edge(window)
-        applyInsets()
-    }
-
-    /**
-     * 获得状态栏高度、导航栏高度等
-     */
-    private fun applyInsets() {
-        val root = window.decorView.rootView
-        root!!.setOnApplyWindowInsetsListener { v, insets ->
-            val isRtl = if (v.isLayoutDirectionResolved) v.layoutDirection == View.LAYOUT_DIRECTION_RTL else false
-            mWindowInsets = WindowInsets(insets, isRtl)
-            consumeInsets(windowInsets)
-            return@setOnApplyWindowInsetsListener insets
-        }
-    }
-
-    /**
-     * 响应窗口 insets
-     */
-    protected abstract fun consumeInsets(insets: WindowInsets)
 }
