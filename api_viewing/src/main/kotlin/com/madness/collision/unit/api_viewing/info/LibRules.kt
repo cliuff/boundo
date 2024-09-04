@@ -44,7 +44,7 @@ private val PackCompType.libType
 
 object LibRules {
     /** The [LibCheckerRules][LCRules] version [LibRules] is compatible with. */
-    private const val CompatVersion = "36.1"
+    private const val CompatVersion = "37.1"
 
     fun init(context: Context) {
         when (val v = BuildConfig.LIBCHECKER_RULES_VER) {

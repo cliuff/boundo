@@ -69,7 +69,7 @@ fun LibPage(
     val context = LocalContext.current
     val itemCollection = remember(pkgName) { PackCompCollection() }
     var itemCollectionNotifier by remember(pkgName) { mutableStateOf(0) }
-    val notifierCollection = remember(itemCollectionNotifier) { itemCollection }
+    val notifierCollection = remember(itemCollectionNotifier) { itemCollection.clone() }
     val listTypeIndexMap = remember(itemCollectionNotifier) {
         compTypeList.withIndex().associate { (i, type) ->
             i to itemCollection.getTypeIndex(type)

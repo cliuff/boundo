@@ -11,7 +11,7 @@ Designed for Android enthusiasts, Boundo is available on **Android** and **Wear 
 ### Develop
 **Requirements**
 - Android Studio `Koala Patch 2` (AGP `8.5.2`)
-- Java `17`, Kotlin `2.0.0`, Gradle Wrapper `8.10`
+- Java `17`, Kotlin `2.0.20`, Gradle Wrapper `8.10`
 
 **Configure automatic signing**
 - **Copy** the file named `custom.properties.template` in `doconfig` directory,

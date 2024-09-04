@@ -79,7 +79,7 @@ enum class PackCompType {
 
 class CompSectionCollection : SectionMapCollection<CompSection, PackComponent>()
 
-class PackCompCollection : SectionMapCollection<PackCompType, CompSectionCollection>() {
+class PackCompCollection : SectionMapCollection<PackCompType, CompSectionCollection>(), Cloneable {
     enum class State { None, Loaded }
     private val typeState: MutableMap<PackCompType, State> = mutableMapOf()
 
@@ -89,6 +89,10 @@ class PackCompCollection : SectionMapCollection<PackCompType, CompSectionCollect
 
     fun setTypeState(type: PackCompType, state: State) {
         typeState[type] = state
+    }
+
+    public override fun clone(): PackCompCollection {
+        return super.clone() as PackCompCollection
     }
 }
 
