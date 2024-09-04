@@ -35,10 +35,13 @@ import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.list.AppPopOwner
 import com.madness.collision.unit.api_viewing.list.pop
 import com.madness.collision.unit.api_viewing.list.updateState
+import com.madness.collision.unit.api_viewing.ui.home.AppHomeNavPage
+import com.madness.collision.unit.api_viewing.ui.home.AppHomeNavPageImpl
 import com.madness.collision.unit.api_viewing.ui.info.AppInfoFragment
 import com.madness.collision.util.hasUsageAccess
 
-class AppUpdatesFragment : ComposeFragment(), AppInfoFragment.Callback {
+class AppUpdatesFragment : ComposeFragment(), AppInfoFragment.Callback,
+    AppHomeNavPage by AppHomeNavPageImpl() {
     private val viewModel: AppUpdatesViewModel by viewModels()
     private var updatesCheckResumeTime: Long = 0L
     private var updatesCheckTime: Long = 0L
@@ -109,7 +112,7 @@ class AppUpdatesFragment : ComposeFragment(), AppInfoFragment.Callback {
     override fun ComposeContent() {
         MaterialTheme(colorScheme = rememberColorScheme()) {
             AppUpdatesPage(
-                paddingValues = rememberContentPadding(),
+                paddingValues = navContentPadding,
                 eventHandler = rememberUpdatesEventHandler()
             )
         }

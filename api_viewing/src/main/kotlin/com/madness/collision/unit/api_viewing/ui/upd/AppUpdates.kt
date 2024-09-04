@@ -84,8 +84,8 @@ fun AppUpdatesPage(paddingValues: PaddingValues, eventHandler: AppUpdatesEventHa
                     sections = sections,
                     columnCount = viewModel.columnCount,
                     paddingValues = PaddingValues(
-                        top = contentPadding.calculateTopPadding(),
-                        bottom = paddingValues.calculateBottomPadding() + 120.dp
+                        top = contentPadding.calculateTopPadding() + 5.dp,
+                        bottom = paddingValues.calculateBottomPadding() + 20.dp
                     ),
                     onClickApp = eventHandler::showAppInfo,
                     onClickViewMore = eventHandler::showAppListPage,

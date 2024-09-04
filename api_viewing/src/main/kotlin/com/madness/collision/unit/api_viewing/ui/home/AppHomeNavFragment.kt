@@ -21,18 +21,40 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.commit
 import com.madness.collision.unit.api_viewing.ui.list.AppListFragment
 import com.madness.collision.unit.api_viewing.ui.upd.AppUpdatesFragment
+import kotlin.reflect.KClass
+
+interface AppHomeNavPage {
+    /** Padding for this page's content. */
+    var navContentPadding: PaddingValues
+}
+
+class AppHomeNavPageImpl : AppHomeNavPage {
+    override var navContentPadding: PaddingValues by mutableStateOf(PaddingValues())
+}
 
 private val HomeNavContainerId: Int = View.generateViewId()
 
 /** Navigate between fragments. */
 class AppHomeNavFragment : Fragment(), AppHomeNav {
-    private val navFgmClasses = arrayOf(AppUpdatesFragment::class, AppListFragment::class)
+    private val navFgmClasses: Array<KClass<out Fragment>> =
+        arrayOf(AppUpdatesFragment::class, AppListFragment::class)
     private val navFgmTags = navFgmClasses.map { klass -> "AppHome_" + klass.simpleName }
+    private var lastContentPadding: PaddingValues? = null
+
+    fun setContentPadding(paddingValues: PaddingValues) {
+        lastContentPadding = paddingValues
+        childFragmentManager.fragments.filterIsInstance<AppHomeNavPage>()
+            .forEach { page -> page.navContentPadding = paddingValues }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -83,6 +105,14 @@ class AppHomeNavFragment : Fragment(), AppHomeNav {
                 add(HomeNavContainerId, navFgmClasses[index].java, null, navFgmTags[index])
             }
             setReorderingAllowed(true)
+        }
+
+        // enqueue action (after async commit) to set content padding of newly added page
+        if (targetFragment == null) {
+            view?.post {
+                val fgm = fgmManager.findFragmentByTag(navFgmTags[index])
+                if (fgm is AppHomeNavPage) lastContentPadding?.let { fgm.navContentPadding = it }
+            }
         }
     }
 

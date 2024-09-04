@@ -27,6 +27,7 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -68,7 +69,14 @@ fun AppHomePage() {
             )
         },
         content = { contentPadding ->
-            AndroidFragment<AppHomeNavFragment>(modifier = Modifier.fillMaxSize()) { homeNav = it }
+            var navFragment: AppHomeNavFragment? by remember { mutableStateOf(null) }
+            AndroidFragment<AppHomeNavFragment>(modifier = Modifier.fillMaxSize()) { navFgm ->
+                homeNav = navFgm
+                navFragment = navFgm
+            }
+            LaunchedEffect(navFragment, contentPadding) {
+                navFragment?.setContentPadding(contentPadding)
+            }
         }
     )
 }

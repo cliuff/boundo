@@ -62,6 +62,8 @@ import com.madness.collision.chief.app.BoundoTheme
 import com.madness.collision.chief.app.rememberColorScheme
 import com.madness.collision.chief.lang.mapIf
 import com.madness.collision.unit.api_viewing.ComposeUnit
+import com.madness.collision.unit.api_viewing.ui.home.AppHomeNavPage
+import com.madness.collision.unit.api_viewing.ui.home.AppHomeNavPageImpl
 import com.madness.collision.util.FilePop
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
 import com.madness.collision.util.notifyBriefly
@@ -71,7 +73,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-open class AppListFragment : ComposeUnit(), Democratic {
+open class AppListFragment : ComposeUnit(), Democratic, AppHomeNavPage by AppHomeNavPageImpl() {
     override val id: String = "AV"
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
@@ -155,7 +157,7 @@ open class AppListFragment : ComposeUnit(), Democratic {
     @Composable
     override fun ComposeContent() {
         MaterialTheme(colorScheme = rememberColorScheme()) {
-            AppList(paddingValues = rememberContentPadding())
+            AppList(paddingValues = navContentPadding)
         }
     }
 }
@@ -226,7 +228,7 @@ private fun AppListScaffold(
         topBar = {
             AppListBar(
                 isRefreshing = listState.isRefreshing,
-                windowInsets = WindowInsets(top = 28.dp),
+                windowInsets = WindowInsets(top = paddingValues.calculateTopPadding()),
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface.copy(alpha = toolbarOpacity))
             ) {
@@ -239,7 +241,9 @@ private fun AppListScaffold(
         },
         content = { contentPadding ->
             Box() {
-                content(contentPadding)
+                content(PaddingValues(
+                    top = contentPadding.calculateTopPadding() + 5.dp,
+                    bottom = paddingValues.calculateBottomPadding() + 20.dp))
                 ListOptionsDialog(
                     isShown = showListOptions,
                     options = listState.opUiState.options,
