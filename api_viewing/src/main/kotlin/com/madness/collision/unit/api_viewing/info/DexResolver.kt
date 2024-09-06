@@ -18,11 +18,7 @@ package com.madness.collision.unit.api_viewing.info
 
 import com.android.tools.smali.dexlib2.DexFileFactory
 import com.android.tools.smali.dexlib2.Opcodes
-import com.android.tools.smali.dexlib2.dexbacked.DexBackedDexFile
 import com.android.tools.smali.dexlib2.dexbacked.ZipDexContainer
-import com.android.tools.smali.dexlib2.iface.DexFile
-import com.android.tools.smali.dexlib2.iface.MultiDexContainer
-import com.android.tools.smali.dexlib2.iface.MultiDexContainer.DexEntry
 import java.io.File
 import java.util.LinkedList
 import java.util.TreeSet
@@ -40,7 +36,7 @@ import java.util.zip.ZipFile
  *   reduction in execution time: over 50% on Pixel 4, over 70% on Pixel 3;
  *   reduction in allocations   : over 70% on Pixel 4, over 85% on Pixel 3;
  */
-class ExtensionDexContainer(file: File, opcodes: Opcodes) : ZipDexContainer(file, opcodes) {
+open class ExtensionDexContainer(file: File, opcodes: Opcodes) : ZipDexContainer(file, opcodes) {
     override fun isDex(zipFile: ZipFile, zipEntry: ZipEntry): Boolean {
         return zipEntry.name.endsWith(".dex") && super.isDex(zipFile, zipEntry)
     }
@@ -53,17 +49,13 @@ object DexContainerFactory {
      * Dalvik executable (DEX) is compiled by D8 dexer,
      * and its version is determined by min SDK.
      */
-    fun load(apkPath: String, minSdk: Int = -1): MultiDexContainer<DexBackedDexFile> {
+    fun load(apkPath: String, minSdk: Int = -1): EnumDexContainer {
         val file = File(apkPath)
         if (file.exists().not()) throw RuntimeException("file does not exist")
         val opcodes = if (minSdk >= 0) Opcodes.forApi(minSdk) else Opcodes.getDefault()
-        return ExtensionDexContainer(file, opcodes).takeIf { it.isZipFile }
+        return EnumDexContainer(file, opcodes).takeIf { it.isZipFile }
             ?: throw RuntimeException("not a zip file")
     }
-}
-
-inline fun <T : DexFile> MultiDexContainer<T>.forEachDexEntry(action: (entry: DexEntry<T>) -> Unit) {
-    dexEntryNames.forEach { getEntry(it)?.let(action) }
 }
 
 object DexResolver {
@@ -72,7 +64,7 @@ object DexResolver {
     //   reduction in allocations   : over 55% on Pixel 4, Pixel 3
     fun loadDexLib(apkPath: String) = kotlin.runCatching {
         val pkgSet = TreeSet<String>()
-        DexContainerFactory.load(apkPath).forEachDexEntry { entry ->
+        DexContainerFactory.load(apkPath).dexEntrySeq.forEach { entry ->
             entry.dexFile.classes.mapNotNullTo(pkgSet) { mapToPackage(it.type) }
         }
         pkgSet.toList()
@@ -82,7 +74,7 @@ object DexResolver {
         // many class types will share the same package name,
         // use a tree set to eliminate duplicates and sort them
         val pkgSet = TreeSet<String>()
-        DexContainerFactory.load(apkPath).forEachDexEntry { entry ->
+        DexContainerFactory.load(apkPath).dexEntrySeq.forEach { entry ->
             entry.dexFile.classes.mapNotNullTo(pkgSet) { mapToPackage(it.type) }
         }
         // apply data conversion on the distinct set to avoid duplicated operations,
@@ -102,7 +94,7 @@ object DexResolver {
     }
 
     fun findPackage(apkPath: String, targetPkg: String) = kotlin.runCatching {
-        DexContainerFactory.load(apkPath).forEachDexEntry { entry ->
+        DexContainerFactory.load(apkPath).dexEntrySeq.forEach { entry ->
             for (classDef in entry.dexFile.classes) {
                 val pkg = mapToPackage(classDef.type) ?: continue
                 if (pkg.startsWith(targetPkg)) return@runCatching true
