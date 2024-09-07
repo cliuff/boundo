@@ -122,9 +122,8 @@ class AppUpdatesFragment : ComposeFragment(), AppInfoFragment.Callback,
     private fun rememberUpdatesEventHandler(): AppUpdatesEventHandler {
         return remember {
             object : AppUpdatesEventHandler {
-                override fun hasUsageAccess(): Boolean {
-                    return context?.hasUsageAccess == true
-                }
+                override fun hasUsageAccess() = context?.hasUsageAccess == true
+                override fun refreshUpdates() = moderatedUpdatesCheck()
 
                 override fun showAppInfo(app: ApiViewingApp) {
                     popOwner.pop(this@AppUpdatesFragment, app)

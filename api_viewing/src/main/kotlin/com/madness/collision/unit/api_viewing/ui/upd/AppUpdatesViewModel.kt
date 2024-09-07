@@ -33,10 +33,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-typealias AppUpdatesUiState = Map<AppUpdatesIndex, List<*>>
+typealias AppUpdatesSections = Map<AppUpdatesIndex, List<*>>
+data class AppUpdatesUiState(val isLoading: Boolean, val sections: AppUpdatesSections)
 
 class AppUpdatesViewModel : ViewModel() {
-    private val mutUiState: MutableStateFlow<AppUpdatesUiState> = MutableStateFlow(emptyMap())
+    private val mutUiState: MutableStateFlow<AppUpdatesUiState> =
+        MutableStateFlow(AppUpdatesUiState(false, emptyMap()))
     val uiState: StateFlow<AppUpdatesUiState> = mutUiState.asStateFlow()
     private var appRepo: AppRepository? = null
     private val updatesChecker = AppUpdatesChecker()
@@ -51,11 +53,13 @@ class AppUpdatesViewModel : ViewModel() {
     }
 
     fun checkUpdates(timestamp: Long, context: Context, lifecycleOwner: LifecycleOwner) {
-        if (!updatesChecker.isCheckNeeded()) return
+        if (uiState.value.isLoading) return
         viewModelScope.launch(Dispatchers.IO) {
             mutexUpdatesCheck.withLock check@{
-                if (!updatesChecker.isCheckNeeded()) return@check
-                updatesChecker.checkNewUpdate(timestamp, context, lifecycleOwner)
+                mutUiState.update { it.copy(isLoading = true) }
+                if (updatesChecker.isCheckNeeded()) {
+                    updatesChecker.checkNewUpdate(timestamp, context, lifecycleOwner)
+                }
                 val sections = updatesChecker.getSections(
                     changedLimit = 15 * columnCount,
                     usedLimit = if (columnCount <= 1) 5 else 6,
@@ -70,7 +74,7 @@ class AppUpdatesViewModel : ViewModel() {
                         }
                     }
                 }
-                mutUiState.update { sections }
+                mutUiState.update { it.copy(isLoading = false, sections = sections) }
             }
         }
     }

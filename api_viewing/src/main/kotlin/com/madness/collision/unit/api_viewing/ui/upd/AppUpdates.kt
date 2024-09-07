@@ -45,6 +45,7 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -59,6 +60,7 @@ import com.madness.collision.util.dev.PreviewCombinedColorLayout
 @Stable
 interface AppUpdatesEventHandler {
     fun hasUsageAccess(): Boolean
+    fun refreshUpdates()
     fun showAppInfo(app: ApiViewingApp)
     fun showAppListPage()
     fun showUsageAccessSettings()
@@ -68,11 +70,13 @@ interface AppUpdatesEventHandler {
 @Composable
 fun AppUpdatesPage(paddingValues: PaddingValues, eventHandler: AppUpdatesEventHandler) {
     val viewModel: AppUpdatesViewModel = viewModel()
-    val sections by viewModel.uiState.collectAsStateWithLifecycle()
+    val updatesUiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val (isLoading, sections) = updatesUiState
     Scaffold(
         topBar = {
             UpdatesAppBar(
-                onClickRefresh = {},
+                refreshing = isLoading,
+                onClickRefresh = eventHandler::refreshUpdates,
                 onClickSettings = eventHandler::showAppSettings,
                 windowInsets = WindowInsets(top = paddingValues.calculateTopPadding()),
             )
@@ -102,6 +106,7 @@ fun AppUpdatesPage(paddingValues: PaddingValues, eventHandler: AppUpdatesEventHa
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun UpdatesAppBar(
+    refreshing: Boolean,
     onClickRefresh: () -> Unit,
     onClickSettings: () -> Unit,
     windowInsets: WindowInsets = WindowInsets(0),
@@ -109,7 +114,8 @@ private fun UpdatesAppBar(
     TopAppBar(
         title = {},
         actions = {
-            IconButton(onClick = onClickRefresh) {
+            val rotation by rememberOvershootRotation(refreshing)
+            IconButton(modifier = Modifier.rotate(rotation), onClick = onClickRefresh) {
                 Icon(
                     imageVector = Icons.Outlined.Refresh,
                     contentDescription = null,
@@ -133,7 +139,7 @@ private fun UpdatesAppBar(
 
 @Composable
 private fun UpdatesList(
-    sections: AppUpdatesUiState,
+    sections: AppUpdatesSections,
     columnCount: Int,
     paddingValues: PaddingValues,
     onClickApp: (ApiViewingApp) -> Unit,
@@ -226,7 +232,7 @@ private fun LazyGridScope.sectionItems(
 private fun AppUpdatesPreview() {
     BoundoTheme {
         Scaffold(
-            topBar = { UpdatesAppBar(onClickRefresh = {}, onClickSettings = {}) },
+            topBar = { UpdatesAppBar(refreshing = true, onClickRefresh = {}, onClickSettings = {}) },
             content = { contentPadding ->
                 UpdatesList(
                     sections = emptyMap(),
