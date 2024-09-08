@@ -17,6 +17,8 @@
 package com.madness.collision.unit.api_viewing.ui.upd
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -33,6 +35,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -43,10 +46,13 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -65,6 +71,8 @@ interface AppUpdatesEventHandler {
     fun showAppListPage()
     fun showUsageAccessSettings()
     fun showAppSettings()
+    @Composable
+    fun UnitBar(width: Dp)
 }
 
 @Composable
@@ -74,12 +82,19 @@ fun AppUpdatesPage(paddingValues: PaddingValues, eventHandler: AppUpdatesEventHa
     val (isLoading, sections) = updatesUiState
     Scaffold(
         topBar = {
-            UpdatesAppBar(
-                refreshing = isLoading,
-                onClickRefresh = eventHandler::refreshUpdates,
-                onClickSettings = eventHandler::showAppSettings,
-                windowInsets = WindowInsets(top = paddingValues.calculateTopPadding()),
-            )
+            BoxWithConstraints {
+                UpdatesAppBar(
+                    refreshing = isLoading,
+                    onClickRefresh = eventHandler::refreshUpdates,
+                    onClickSettings = eventHandler::showAppSettings,
+                    windowInsets = WindowInsets(top = paddingValues.calculateTopPadding()),
+                ) {
+                    val width = maxWidth - 40.dp
+                    Box(modifier = Modifier.widthIn(max = width)) {
+                        with(eventHandler) { UnitBar(width = width) }
+                    }
+                }
+            }
         },
         content = { contentPadding ->
             val hasUsageAccess = eventHandler.hasUsageAccess()
@@ -110,11 +125,13 @@ private fun UpdatesAppBar(
     onClickRefresh: () -> Unit,
     onClickSettings: () -> Unit,
     windowInsets: WindowInsets = WindowInsets(0),
+    unitBarContent: @Composable () -> Unit,
 ) {
     TopAppBar(
         title = {},
         actions = {
             val rotation by rememberOvershootRotation(refreshing)
+            var showUnitBar by remember { mutableStateOf(false) }
             IconButton(modifier = Modifier.rotate(rotation), onClick = onClickRefresh) {
                 Icon(
                     imageVector = Icons.Outlined.Refresh,
@@ -123,13 +140,16 @@ private fun UpdatesAppBar(
                     tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
                 )
             }
-            IconButton(onClick = onClickSettings) {
+            IconButton(onClick = { showUnitBar = true }) {
                 Icon(
                     imageVector = Icons.Outlined.Settings,
                     contentDescription = null,
                     modifier = Modifier.size(22.dp),
                     tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
                 )
+            }
+            DropdownMenu(expanded = showUnitBar, onDismissRequest = { showUnitBar = false }) {
+                unitBarContent()
             }
             Spacer(modifier = Modifier.width(5.dp))
         },
@@ -232,7 +252,9 @@ private fun LazyGridScope.sectionItems(
 private fun AppUpdatesPreview() {
     BoundoTheme {
         Scaffold(
-            topBar = { UpdatesAppBar(refreshing = true, onClickRefresh = {}, onClickSettings = {}) },
+            topBar = {
+                UpdatesAppBar(refreshing = true, onClickRefresh = {}, onClickSettings = {}) {}
+            },
             content = { contentPadding ->
                 UpdatesList(
                     sections = emptyMap(),

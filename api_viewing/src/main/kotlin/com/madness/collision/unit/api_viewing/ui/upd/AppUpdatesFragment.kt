@@ -25,6 +25,7 @@ import android.view.View
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.unit.Dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import com.madness.collision.chief.app.ComposeFragment
@@ -139,7 +140,12 @@ class AppUpdatesFragment : ComposeFragment(), AppInfoFragment.Callback,
                 }
 
                 override fun showAppSettings() {
-                    // todo access app settings page
+                    mainAppHome?.showAppSettings()
+                }
+
+                @Composable
+                override fun UnitBar(width: Dp) {
+                    mainAppHome?.run { UnitBar(width) }
                 }
             }
         }

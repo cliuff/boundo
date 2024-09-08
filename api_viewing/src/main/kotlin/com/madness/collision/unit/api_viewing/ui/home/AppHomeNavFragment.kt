@@ -28,16 +28,19 @@ import androidx.compose.runtime.setValue
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.commit
+import com.madness.collision.main.MainAppHome
 import com.madness.collision.unit.api_viewing.ui.list.AppListFragment
 import com.madness.collision.unit.api_viewing.ui.upd.AppUpdatesFragment
 import kotlin.reflect.KClass
 
 interface AppHomeNavPage {
+    var mainAppHome: MainAppHome?
     /** Padding for this page's content. */
     var navContentPadding: PaddingValues
 }
 
 class AppHomeNavPageImpl : AppHomeNavPage {
+    override var mainAppHome: MainAppHome? = null
     override var navContentPadding: PaddingValues by mutableStateOf(PaddingValues())
 }
 
@@ -111,7 +114,11 @@ class AppHomeNavFragment : Fragment(), AppHomeNav {
         if (targetFragment == null) {
             view?.post {
                 val fgm = fgmManager.findFragmentByTag(navFgmTags[index])
-                if (fgm is AppHomeNavPage) lastContentPadding?.let { fgm.navContentPadding = it }
+                if (fgm is AppHomeNavPage) {
+                    // find MainAppHome from host fragment or activity
+                    fgm.mainAppHome = (parentFragment as? MainAppHome) ?: (activity as? MainAppHome)
+                    lastContentPadding?.let { fgm.navContentPadding = it }
+                }
             }
         }
     }

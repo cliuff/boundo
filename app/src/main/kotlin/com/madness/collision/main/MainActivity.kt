@@ -24,6 +24,8 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.Window
 import androidx.activity.viewModels
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.Dp
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.flowWithLifecycle
@@ -32,6 +34,7 @@ import com.madness.collision.base.BaseActivity
 import com.madness.collision.databinding.ActivityMainBinding
 import com.madness.collision.diy.WindowInsets
 import com.madness.collision.misc.MiscMain
+import com.madness.collision.settings.SettingsFragment
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.api_viewing.AccessAV
 import com.madness.collision.util.*
@@ -47,11 +50,27 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.random.Random
 
+/** Functionalities for a home page. */
+interface MainAppHome {
+    fun showAppSettings()
+    @Composable
+    fun UnitBar(width: Dp)
+}
+
 typealias MainFragment = androidx.fragment.app.Fragment
 
-class MainActivity : BaseActivity(), SystemBarMaintainerOwner {
+class MainActivity : BaseActivity(), SystemBarMaintainerOwner, MainAppHome {
 
     private fun MainFragment(): MainFragment = AccessAV.getHomeFragment()
+
+    override fun showAppSettings() {
+        viewModel.displayFragment(SettingsFragment())
+    }
+
+    @Composable
+    override fun UnitBar(width: Dp) {
+        UnitBarPage(viewModel, width)
+    }
 
     companion object {
         /**
