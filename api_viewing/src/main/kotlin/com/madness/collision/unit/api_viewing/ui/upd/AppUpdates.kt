@@ -60,8 +60,11 @@ import com.madness.collision.chief.app.BoundoTheme
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.AppPackageInfo
 import com.madness.collision.unit.api_viewing.data.VerInfo
+import com.madness.collision.unit.api_viewing.info.AppInfo
+import com.madness.collision.unit.api_viewing.info.ExpIcon
 import com.madness.collision.unit.api_viewing.upgrade.Upgrade
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
+import kotlinx.coroutines.flow.map
 
 @Stable
 interface AppUpdatesEventHandler {
@@ -213,6 +216,12 @@ private fun LazyGridScope.sectionItems(
         items(secList) { upd ->
             if (upd is Upgrade) {
                 val context = LocalContext.current
+                val tagGroup = remember(upd) {
+                    AppInfo.getExpTags(upd.new, context).map { tags ->
+                        val (ic, tx) = tags.partition { t -> t.icon !is ExpIcon.Text }
+                        AppTagGroup(ic, tx)
+                    }
+                }
                 AppUpdateItem(
                     modifier = Modifier
                         .padding(horizontal = 12.dp, vertical = 5.dp)
@@ -220,6 +229,7 @@ private fun LazyGridScope.sectionItems(
                     name = upd.new.name,
                     apiInfo = remember(upd) { VerInfo.targetDisplay(upd.new) },
                     iconInfo = remember(upd) { AppPackageInfo(context, upd.new) },
+                    tagGroup = tagGroup.collectAsStateWithLifecycle(EmptyTagGroup).value,
                     newApi = remember(upd) { VerInfo(upd.targetApi.second) },
                     oldApi = remember(upd) { VerInfo(upd.targetApi.first) },
                     newVer = remember(upd) { AppInstallVersion(upd.versionCode.second, upd.versionName.second, "") },
@@ -233,6 +243,12 @@ private fun LazyGridScope.sectionItems(
         items(secList) { app ->
             if (app is ApiViewingApp) {
                 val context = LocalContext.current
+                val tagGroup = remember(app) {
+                    AppInfo.getExpTags(app, context).map { tags ->
+                        val (ic, tx) = tags.partition { t -> t.icon !is ExpIcon.Text }
+                        AppTagGroup(ic, tx)
+                    }
+                }
                 AppItem(
                     modifier = Modifier
                         .padding(horizontal = 12.dp, vertical = 5.dp)
@@ -240,7 +256,8 @@ private fun LazyGridScope.sectionItems(
                     name = app.name,
                     timestamp = app.updateTime,
                     apiInfo = remember(app) { VerInfo.targetDisplay(app) },
-                    iconInfo = remember(app) { AppPackageInfo(context, app) }
+                    iconInfo = remember(app) { AppPackageInfo(context, app) },
+                    tagGroup = tagGroup.collectAsStateWithLifecycle(EmptyTagGroup).value,
                 )
             }
         }

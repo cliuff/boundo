@@ -31,7 +31,13 @@ import com.madness.collision.unit.api_viewing.tag.app.get
 import com.madness.collision.unit.api_viewing.tag.app.toExpressible
 import com.madness.collision.unit.api_viewing.tag.inflater.AppTagInflater
 import com.madness.collision.util.os.OsUtils
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import java.io.File
+import java.util.TreeSet
 import kotlin.io.path.Path
 import kotlin.io.path.name
 
@@ -104,6 +110,41 @@ internal object AppInfo {
             val updatedValue = updates.sortedBy { it.intrinsic.rank }
             updateValue(updatedValue)
         }
+    }
+
+    private fun tagsByStage(app: ApiViewingApp, context: Context) = flow {
+        // inflate tags that do not have requisite first
+        val directTagIds = AppTagManager.tags.mapNotNull { (id, tag) ->
+            id.takeIf { tag.requisites == null }
+        }
+        emit(directTagIds to AppTagInfo.Resources(context, app))
+        // ensure resources and inflate requisite tags
+        val inflatedTagIds = directTagIds.toHashSet()
+        val res = AppTag.ensureRequisitesAsync(context, app) { _, tagIds, res ->
+            inflatedTagIds.addAll(tagIds)
+            emit(tagIds to res)
+        }
+        // inflate any tag left (should be none)
+        val leftTagIds = (AppTagManager.tags.keys - inflatedTagIds)
+        if (leftTagIds.isNotEmpty()) emit(leftTagIds to res)
+    }
+
+    /** Tags to display in app list. */
+    fun getExpTags(app: ApiViewingApp, context: Context): Flow<List<ExpTag>> {
+        val mapToExp = { tags: Collection<String>, res: AppTagInfo.Resources ->
+            // Tag inflating: selected and expressed true (no anti-ed tag icon support yet).
+            tags.mapNotNull(AppTagManager.tags::get)
+                // make sure all requisites are satisfied
+                .filter { tag -> tag.requisites.orEmpty().all { req -> req.checker(res) } }
+                // selected and expressed true
+                .filter { tag -> with(AppTag) { tag.selExpressed(res) } }
+                .mapNotNull { tag -> tag.toCompactTag(res) }
+        }
+        val aggregateTags = TreeSet(compareBy(ExpTag::rank))
+        return tagsByStage(app, context)
+            .map { (tags, res) -> mapToExp(tags, res) }
+            .map { tags -> aggregateTags.addAll(tags); aggregateTags.toList() }
+            .flowOn(Dispatchers.Default)
     }
 
     fun getApkSizeList(pkg: AppPackage, context: Context): List<Pair<String, String?>> {

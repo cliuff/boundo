@@ -197,6 +197,10 @@ internal object AppTag {
         return false
     }
 
+    fun AppTagInfo.selExpressed(res: AppTagInfo.Resources): Boolean {
+        return displayingTags[id].isSelected && express(res)
+    }
+
     private fun getTagViewInfo(tagInfo: AppTagInfo, res: AppTagInfo.Resources, context: Context): AppTagInflater.TagInfo? {
         return getTagViewInfo(tagInfo, res, context) { it.label.normal }
     }

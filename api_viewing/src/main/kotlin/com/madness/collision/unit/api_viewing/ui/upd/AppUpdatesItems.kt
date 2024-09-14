@@ -20,9 +20,11 @@ import android.content.pm.PackageManager
 import android.text.format.DateUtils
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,6 +34,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -44,6 +47,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -61,6 +65,8 @@ import coil.compose.AsyncImage
 import com.madness.collision.chief.app.BoundoTheme
 import com.madness.collision.unit.api_viewing.R
 import com.madness.collision.unit.api_viewing.data.VerInfo
+import com.madness.collision.unit.api_viewing.info.ExpIcon
+import com.madness.collision.unit.api_viewing.info.ExpTag
 import com.madness.collision.unit.api_viewing.seal.SealMaker
 import com.madness.collision.unit.api_viewing.ui.info.AppSdkItem
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
@@ -74,6 +80,7 @@ internal fun AppItem(
     name: String,
     apiInfo: VerInfo,
     iconInfo: PackageInfo,
+    tagGroup: AppTagGroup,
     timestamp: Long,
 ) {
     val context = LocalContext.current
@@ -87,6 +94,7 @@ internal fun AppItem(
         time = updateTime,
         apiText = apiInfo.displaySdk,
         iconInfo = iconInfo,
+        tagGroup = tagGroup,
         cardColor = remember(apiInfo.api) { Color(SealMaker.getItemColorBack(context, apiInfo.api)) },
         apiColor = remember(apiInfo.api) { Color(SealMaker.getItemColorAccent(context, apiInfo.api)) },
     )
@@ -98,6 +106,7 @@ internal fun AppUpdateItem(
     name: String,
     apiInfo: VerInfo,
     iconInfo: PackageInfo,
+    tagGroup: AppTagGroup,
     newApi: VerInfo,
     oldApi: VerInfo,
     newVer: AppInstallVersion,
@@ -116,6 +125,7 @@ internal fun AppUpdateItem(
         modifier = modifier,
         name = name,
         iconInfo = iconInfo,
+        tagGroup = tagGroup,
         cardColor = remember(apiInfo.api) { Color(SealMaker.getItemColorBack(context, apiInfo.api)) },
         newApi = newApi,
         oldApi = oldApi,
@@ -125,12 +135,13 @@ internal fun AppUpdateItem(
 }
 
 @Composable
-fun AppItem(
+internal fun AppItem(
     modifier: Modifier = Modifier,
     name: String,
     time: String?,
     apiText: String,
     iconInfo: PackageInfo,
+    tagGroup: AppTagGroup,
     cardColor: Color,
     apiColor: Color,
 ) {
@@ -156,7 +167,12 @@ fun AppItem(
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 2,
                 )
+                if (tagGroup.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(4.dp))
+                    AppTagRow(tagGroup = tagGroup)
+                }
                 if (time != null) {
+                    Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = time,
                         color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f),
@@ -185,6 +201,7 @@ internal fun AppUpdateItem(
     modifier: Modifier = Modifier,
     name: String,
     iconInfo: PackageInfo,
+    tagGroup: AppTagGroup,
     cardColor: Color,
     newApi: VerInfo,
     oldApi: VerInfo,
@@ -210,7 +227,7 @@ internal fun AppUpdateItem(
             ) {
                 AppIcon(modifier = Modifier.size(32.dp), iconInfo = iconInfo)
                 Spacer(modifier = Modifier.width(8.dp))
-                Column() {
+                Column(verticalArrangement = Arrangement.Center) {
                     Text(
                         text = name,
                         color = MaterialTheme.colorScheme.onBackground,
@@ -219,13 +236,9 @@ internal fun AppUpdateItem(
                         overflow = TextOverflow.Ellipsis,
                         maxLines = 1,
                     )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        ImageTag(image = null)
-                        Spacer(modifier = Modifier.width(4.dp))
-                        TextTag(text = "64-bit")
-                        Spacer(modifier = Modifier.width(4.dp))
-                        TextTag(text = "CORE")
+                    if (tagGroup.isNotEmpty()) {
+                        Spacer(modifier = Modifier.height(4.dp))
+                        AppTagRow(tagGroup = tagGroup)
                     }
                 }
             }
@@ -283,22 +296,69 @@ fun AppIcon(modifier: Modifier = Modifier, iconInfo: PackageInfo) {
     }
 }
 
+@Immutable
+data class AppTagGroup(val icons: List<ExpTag>, val text: List<ExpTag>)
+
+val EmptyTagGroup = AppTagGroup(icons = emptyList(), text = emptyList())
+
+fun AppTagGroup.isNotEmpty() = !isEmpty()
+fun AppTagGroup.isEmpty() = icons.isEmpty() && text.isEmpty()
+
 @Composable
-private fun ImageTag(image: Any?) {
+private fun AppTagRow(modifier: Modifier = Modifier, tagGroup: AppTagGroup) {
+    val (iconTags, textTags) = tagGroup
+    Row(
+        modifier = modifier.clip(RoundedCornerShape(5.dp)).horizontalScroll(rememberScrollState()),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        if (iconTags.isNotEmpty()) {
+            Row(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(5.dp))
+                    .background(MaterialTheme.colorScheme.background.copy(alpha = 0.4f))
+                    .padding(horizontal = 3.dp, vertical = 1.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                for (i in iconTags.indices) {
+                    if (i > 0) Spacer(modifier = Modifier.width(2.5.dp))
+                    key(iconTags[i].rank) { ExpIcon(icon = iconTags[i].icon) }
+                }
+            }
+        }
+        if (iconTags.isNotEmpty() && textTags.isNotEmpty()) {
+            Spacer(modifier = Modifier.width(4.dp))
+        }
+        for (i in textTags.indices) {
+            if (i > 0) Spacer(modifier = Modifier.width(4.dp))
+            key(textTags[i].rank) { ExpIcon(icon = textTags[i].icon) }
+        }
+    }
+}
+
+@Composable
+private fun ExpIcon(icon: ExpIcon) {
+    when (icon) {
+        is ExpIcon.Res -> ImageTag(image = icon.id)
+        is ExpIcon.App -> ImageTag(image = icon.bitmap)
+        is ExpIcon.Text -> TextTag(text = icon.value.toString())
+    }
+}
+
+@Composable
+private fun ImageTag(image: Any?, imagePadding: PaddingValues = PaddingValues()) {
     Box(
-        modifier = Modifier
-            .padding(horizontal = 3.dp, vertical = 1.dp),
+        modifier = Modifier,
         contentAlignment = Alignment.Center,
     ) {
         if (LocalInspectionMode.current) {
             Image(
-                modifier = Modifier.height(12.dp),
+                modifier = Modifier.height(12.dp).padding(imagePadding),
                 painter = painterResource(R.drawable.ic_cmp_72),
                 contentDescription = null,
             )
         } else {
             AsyncImage(
-                modifier = Modifier.height(12.dp),
+                modifier = Modifier.height(12.dp).padding(imagePadding),
                 model = image,
                 contentDescription = null,
             )
@@ -383,6 +443,7 @@ private fun AppUpdateItemPreview() {
                     modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
                     name = "Boundo",
                     iconInfo = PseudoAppIconInfo(),
+                    tagGroup = EmptyTagGroup,
                     cardColor = Color(0xffe0ffd0),
                     newApi = VerInfo(35),
                     oldApi = VerInfo(34),
@@ -395,6 +456,7 @@ private fun AppUpdateItemPreview() {
                     time = "1 day ago",
                     apiText = "15",
                     iconInfo = PseudoAppIconInfo(),
+                    tagGroup = EmptyTagGroup,
                     cardColor = Color(0xffe0ffd0),
                     apiColor = Color(0xffbde1a4),
                 )
