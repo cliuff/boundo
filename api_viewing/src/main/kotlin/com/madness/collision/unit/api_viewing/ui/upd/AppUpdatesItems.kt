@@ -17,7 +17,6 @@
 package com.madness.collision.unit.api_viewing.ui.upd
 
 import android.content.pm.PackageManager
-import android.text.format.DateUtils
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
@@ -58,6 +57,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.madness.collision.chief.app.BoundoTheme
 import com.madness.collision.unit.api_viewing.R
@@ -67,71 +67,64 @@ import com.madness.collision.unit.api_viewing.info.ExpIcon
 import com.madness.collision.unit.api_viewing.info.ExpTag
 import com.madness.collision.unit.api_viewing.seal.SealMaker
 import com.madness.collision.unit.api_viewing.ui.comp.sealFileOf
+import com.madness.collision.unit.api_viewing.ui.upd.item.ApiUpdGuiArt
 import com.madness.collision.unit.api_viewing.ui.upd.item.AppApiUpdate
 import com.madness.collision.unit.api_viewing.ui.upd.item.AppInstallVersion
+import com.madness.collision.unit.api_viewing.ui.upd.item.UpdGuiArt
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
 import com.madness.collision.util.ui.CompactPackageInfo
 import com.madness.collision.util.ui.PackageInfo
+import kotlinx.coroutines.flow.map
 import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape
 
 @Composable
-internal fun AppItem(
-    modifier: Modifier = Modifier,
-    name: String,
-    apiInfo: VerInfo,
-    iconInfo: PackageInfo,
-    tagGroup: AppTagGroup,
-    timestamp: Long,
-) {
+internal fun AppItem(art: UpdGuiArt, modifier: Modifier = Modifier) {
     val context = LocalContext.current
-    val updateTime = remember(timestamp) {
-        DateUtils.getRelativeTimeSpanString(
-            timestamp, System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS).toString()
+    val tagGroup = remember(art) {
+        art.expTags.map { tags ->
+            val (ic, tx) = tags.partition { t -> t.icon !is ExpIcon.Text }
+            AppTagGroup(ic, tx)
+        }
+    }
+    val (backColor, accentColor) = remember(art) {
+        SealMaker.getItemColorBack(context, art.apiInfo.api) to
+                SealMaker.getItemColorAccent(context, art.apiInfo.api)
     }
     AppItem(
         modifier = modifier,
-        name = name,
-        time = updateTime,
-        apiText = apiInfo.displaySdk,
-        sealLetter = apiInfo.letterOrDev,
-        iconInfo = iconInfo,
-        tagGroup = tagGroup,
-        cardColor = remember(apiInfo.api) { Color(SealMaker.getItemColorBack(context, apiInfo.api)) },
-        apiColor = remember(apiInfo.api) { Color(SealMaker.getItemColorAccent(context, apiInfo.api)) },
+        name = art.label,
+        time = art.updateTime,
+        apiText = art.apiInfo.displaySdk,
+        sealLetter = art.apiInfo.letterOrDev,
+        iconInfo = art.iconPkgInfo,
+        tagGroup = tagGroup.collectAsStateWithLifecycle(EmptyTagGroup).value,
+        cardColor = Color(backColor),
+        apiColor = Color(accentColor),
     )
 }
 
 @Composable
-internal fun AppUpdateItem(
-    modifier: Modifier = Modifier,
-    name: String,
-    apiInfo: VerInfo,
-    iconInfo: PackageInfo,
-    tagGroup: AppTagGroup,
-    newApi: VerInfo,
-    oldApi: VerInfo,
-    newVer: AppInstallVersion,
-    oldVer: AppInstallVersion,
-    newTimestamp: Long,
-    oldTimestamp: Long,
-) {
+internal fun AppUpdateItem(art: ApiUpdGuiArt, modifier: Modifier = Modifier) {
     val context = LocalContext.current
-    val times = remember(newTimestamp, oldTimestamp) {
-        listOf(newTimestamp, oldTimestamp).map { timestamp ->
-            DateUtils.getRelativeTimeSpanString(
-                timestamp, System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS).toString()
+    val tagGroup = remember(art) {
+        art.expTags.map { tags ->
+            val (ic, tx) = tags.partition { t -> t.icon !is ExpIcon.Text }
+            AppTagGroup(ic, tx)
         }
+    }
+    val backColor = remember(art) {
+        SealMaker.getItemColorBack(context, art.newApiInfo.api)
     }
     AppUpdateItem(
         modifier = modifier,
-        name = name,
-        iconInfo = iconInfo,
-        tagGroup = tagGroup,
-        cardColor = remember(apiInfo.api) { Color(SealMaker.getItemColorBack(context, apiInfo.api)) },
-        newApi = newApi,
-        oldApi = oldApi,
-        newVer = remember(newVer) { newVer.copy(time = times[0]) },
-        oldVer = remember(oldVer) { oldVer.copy(time = times[1]) },
+        name = art.label,
+        iconInfo = art.iconPkgInfo,
+        tagGroup = tagGroup.collectAsStateWithLifecycle(EmptyTagGroup).value,
+        cardColor = Color(backColor),
+        newApi = art.newApiInfo,
+        oldApi = art.oldApiInfo,
+        newVer = art.newVersion,
+        oldVer = art.oldVersion,
     )
 }
 
