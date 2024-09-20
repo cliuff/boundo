@@ -17,7 +17,6 @@
 package com.madness.collision.unit.api_viewing.ui.info
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
@@ -27,9 +26,9 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.KeyboardArrowLeft
 import androidx.compose.material.icons.outlined.KeyboardArrowRight
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -79,8 +78,8 @@ fun AppSwitcher(modifier: Modifier = Modifier, handler: AppSwitcherHandler) {
                 .clickable(
                     enabled = previousApp != null,
                     onClick = { handler.loadPrevious() },
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = rememberRipple(bounded = false),
+                    interactionSource = null,
+                    indication = ripple(bounded = false),
                 )
                 .padding(vertical = 20.dp)
                 .padding(start = 8.dp, end = 30.dp),
@@ -107,8 +106,8 @@ fun AppSwitcher(modifier: Modifier = Modifier, handler: AppSwitcherHandler) {
                 .clickable(
                     enabled = nextApp != null,
                     onClick = { handler.loadNext() },
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = rememberRipple(bounded = false),
+                    interactionSource = null,
+                    indication = ripple(bounded = false),
                 )
                 .padding(vertical = 20.dp)
                 .padding(start = 30.dp, end = 8.dp),

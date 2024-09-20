@@ -19,7 +19,6 @@ package com.madness.collision.unit.audio_timer
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -42,14 +41,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ChevronRight
 import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.material.icons.rounded.Stop
-import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -160,8 +158,8 @@ private fun TimerStatus(status: Boolean, timerController: AudioTimerController) 
                 modifier = Modifier
                     .clickable(
                         onClick = { timerController.stopTimer() },
-                        interactionSource = MutableInteractionSource(),
-                        indication = rememberRipple(bounded = false),
+                        interactionSource = null,
+                        indication = ripple(bounded = false),
                     )
                     .clip(CircleShape)
                     .background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.26f))
@@ -183,7 +181,6 @@ private fun TimerStatus(status: Boolean, timerController: AudioTimerController) 
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SetTimer(timerController: AudioTimerController, onStart: () -> Unit) {
     val viewModel: AtUnitViewModel = viewModel()
@@ -216,7 +213,7 @@ private fun SetTimer(timerController: AudioTimerController, onStart: () -> Unit)
                     imeAction = ImeAction.Next,
                 ),
                 shape = AbsoluteSmoothCornerShape(10.dp, 60),
-                colors = TextFieldDefaults.textFieldColors(
+                colors = TextFieldDefaults.colors(
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                 ),
@@ -254,7 +251,7 @@ private fun SetTimer(timerController: AudioTimerController, onStart: () -> Unit)
                     imeAction = ImeAction.Done,
                 ),
                 shape = AbsoluteSmoothCornerShape(10.dp, 60),
-                colors = TextFieldDefaults.textFieldColors(
+                colors = TextFieldDefaults.colors(
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                 ),

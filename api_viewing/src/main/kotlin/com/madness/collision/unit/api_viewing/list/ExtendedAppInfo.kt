@@ -17,16 +17,15 @@
 package com.madness.collision.unit.api_viewing.list
 
 import androidx.compose.foundation.*
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -278,8 +277,8 @@ private fun ExternalActionItem(packInfo: AppIconPackageInfo?, onClick: () -> Uni
                 modifier = Modifier
                     .clickable(
                         onClick = onClick,
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = rememberRipple(bounded = false),
+                        interactionSource = null,
+                        indication = ripple(bounded = false),
                     )
                     .size(40.dp),
                 painter = rememberAsyncImagePainter(packInfo),

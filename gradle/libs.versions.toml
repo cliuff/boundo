@@ -2,26 +2,27 @@
 # plugins
 androidGradlePlugin = "8.6.1"  # 8.6.1-Koala Feature Drop Patch 1
 kotlin = "2.0.20"
-googleKsp = "2.0.20-1.0.24"
+googleKsp = "2.0.20-1.0.25"
 googlePlayServicesOSSLicensesPlugin = "0.10.6"
 
-kotlinCoroutines = "1.8.1"
+kotlinCoroutines = "1.9.0"
 
 androidxTestCore = "1.6.1"
-androidxTestRunner = "1.6.1"
+androidxTestRunner = "1.6.2"
 androidxTestExtJunit = "1.2.1"
 androidxTestEspresso = "3.6.1"
 
 androidxCore = "1.13.1"
 androidxCoreSplashScreen = "1.1.0-rc01"
-androidxComposeBom = "2024.06.00"
-androidxActivity = "1.9.1"
+androidxComposeBom = "2024.09.02"
+androidxActivity = "1.9.2"
+androidxFragment = "1.8.3"
+androidxLifecycle = "2.8.6"
+
 androidxAppcompat = "1.7.0"
-androidxLifecycle = "2.8.4"
 androidxRoom = "2.6.1"
-androidxNavigation = "2.6.0"
+androidxNavigation = "2.8.1"
 androidxCoreTesting = "2.2.0"
-androidxFragment = "1.8.2"
 androidxWindow = "1.3.0"
 
 androidxDrawerLayout = "1.2.0"
@@ -70,7 +71,7 @@ appIconLoader = "1.5.0"
 smoothCornerCompose = "v1.0.0"
 haze = "0.7.3"
 libCheckerRules = "37.1"
-googleSmali = "3.0.7"
+googleSmali = "3.0.8"
 ldapsdk = "6.0.11"
 
 [libraries]
