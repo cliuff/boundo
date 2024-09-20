@@ -62,6 +62,7 @@ import com.madness.collision.unit.api_viewing.data.AppPackageInfo
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.info.AppInfo
 import com.madness.collision.unit.api_viewing.info.ExpIcon
+import com.madness.collision.unit.api_viewing.ui.upd.item.AppInstallVersion
 import com.madness.collision.unit.api_viewing.upgrade.Upgrade
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
 import kotlinx.coroutines.flow.map

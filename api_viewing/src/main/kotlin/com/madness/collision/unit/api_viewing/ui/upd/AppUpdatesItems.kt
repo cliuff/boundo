@@ -37,11 +37,8 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.KeyboardDoubleArrowRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -57,7 +54,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -71,7 +67,8 @@ import com.madness.collision.unit.api_viewing.info.ExpIcon
 import com.madness.collision.unit.api_viewing.info.ExpTag
 import com.madness.collision.unit.api_viewing.seal.SealMaker
 import com.madness.collision.unit.api_viewing.ui.comp.sealFileOf
-import com.madness.collision.unit.api_viewing.ui.info.AppSdkItem
+import com.madness.collision.unit.api_viewing.ui.upd.item.AppApiUpdate
+import com.madness.collision.unit.api_viewing.ui.upd.item.AppInstallVersion
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
 import com.madness.collision.util.ui.CompactPackageInfo
 import com.madness.collision.util.ui.PackageInfo
@@ -283,40 +280,8 @@ internal fun AppUpdateItem(
                 }
             }
             Column(modifier = Modifier.padding(horizontal = 8.dp, vertical = 12.dp)) {
-                AppApiUpdate(newApi = newApi, oldApi = oldApi)
-                Spacer(modifier = Modifier.height(12.dp))
-                AppInstallation(verCode = newVer.code, verName = newVer.name, time = newVer.time)
-                AppInstallation(verCode = oldVer.code, verName = oldVer.name, time = oldVer.time)
+                AppApiUpdate(newApi = newApi, oldApi = oldApi, newVer = newVer, oldVer = oldVer)
             }
-        }
-    }
-}
-
-@Composable
-private fun AppApiUpdate(newApi: VerInfo, oldApi: VerInfo) {
-    Row(
-        horizontalArrangement = Arrangement.SpaceAround,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        val targetTitle = stringResource(com.madness.collision.R.string.apiSdkTarget)
-        if (!LocalInspectionMode.current) {
-            AppSdkItem(ver = oldApi, title = targetTitle)
-        } else {
-            AppSdkItem(ver = oldApi, title = targetTitle, sealIndex = 'u', sealFile = null)
-        }
-        Icon(
-            modifier = Modifier
-                .padding(horizontal = 8.dp)
-                .padding(bottom = 12.dp)
-                .size(24.dp),
-            imageVector = Icons.Outlined.KeyboardDoubleArrowRight,
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.75f),
-        )
-        if (!LocalInspectionMode.current) {
-            AppSdkItem(ver = newApi, title = targetTitle)
-        } else {
-            AppSdkItem(ver = newApi, title = targetTitle, sealIndex = 'v', sealFile = null)
         }
     }
 }
@@ -427,43 +392,6 @@ private fun TextTag(text: String) {
     }
 }
 
-@Immutable
-data class AppInstallVersion(val code: Long, val name: String?, val time: String)
-
-@Composable
-private fun AppInstallation(verCode: Long, verName: String?, time: String) {
-    Row() {
-        Text(
-            text = verCode.toString(),
-            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f),
-            fontSize = 9.sp,
-            lineHeight = 10.sp,
-            overflow = TextOverflow.Ellipsis,
-            maxLines = 1,
-        )
-        if (verName != null) {
-            Spacer(modifier = Modifier.width(4.dp))
-            Text(
-                text = verName,
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f),
-                fontSize = 9.sp,
-                lineHeight = 10.sp,
-                overflow = TextOverflow.Ellipsis,
-                maxLines = 1,
-            )
-        }
-        Spacer(modifier = Modifier.width(4.dp))
-        Text(
-            text = time,
-            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f),
-            fontSize = 9.sp,
-            lineHeight = 10.sp,
-            overflow = TextOverflow.Ellipsis,
-            maxLines = 1,
-        )
-    }
-}
-
 internal fun PseudoAppIconInfo(): PackageInfo =
     object : CompactPackageInfo {
         override val handleable: Boolean = true
@@ -489,6 +417,19 @@ private fun AppUpdateItemPreview() {
                     oldApi = VerInfo(34),
                     newVer = AppInstallVersion(135L, "3.906r", "1h ago"),
                     oldVer = AppInstallVersion(134L, "3.786r", "12h ago"),
+                )
+                AppUpdateItem(
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
+                    name = "Boundo",
+                    iconInfo = PseudoAppIconInfo(),
+                    tagGroup = EmptyTagGroup,
+                    cardColor = Color(0xffe0ffd0),
+                    newApi = VerInfo(35),
+                    oldApi = VerInfo(34),
+                    newVer = AppInstallVersion(
+                        135L, "3.906rfdfvhskfjsnnvsslkfjdiofusd_rel", "1h ago"),
+                    oldVer = AppInstallVersion(
+                        134L, "3.786rfdfvhskfjsnnvsslkfjdiofusd_rel", "12h ago"),
                 )
                 AppItem(
                     modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
