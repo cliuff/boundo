@@ -47,6 +47,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -64,10 +65,12 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.madness.collision.chief.app.BoundoTheme
 import com.madness.collision.unit.api_viewing.R
+import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.info.ExpIcon
 import com.madness.collision.unit.api_viewing.info.ExpTag
 import com.madness.collision.unit.api_viewing.seal.SealMaker
+import com.madness.collision.unit.api_viewing.ui.comp.sealFileOf
 import com.madness.collision.unit.api_viewing.ui.info.AppSdkItem
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
 import com.madness.collision.util.ui.CompactPackageInfo
@@ -93,6 +96,7 @@ internal fun AppItem(
         name = name,
         time = updateTime,
         apiText = apiInfo.displaySdk,
+        sealLetter = apiInfo.letterOrDev,
         iconInfo = iconInfo,
         tagGroup = tagGroup,
         cardColor = remember(apiInfo.api) { Color(SealMaker.getItemColorBack(context, apiInfo.api)) },
@@ -140,6 +144,7 @@ internal fun AppItem(
     name: String,
     time: String?,
     apiText: String,
+    sealLetter: Char,
     iconInfo: PackageInfo,
     tagGroup: AppTagGroup,
     cardColor: Color,
@@ -149,50 +154,85 @@ internal fun AppItem(
         modifier = modifier,
         colors = CardDefaults.elevatedCardColors(containerColor = cardColor),
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            AppIcon(
-                modifier = Modifier.size(54.dp).padding(2.dp),
-                iconInfo = iconInfo
-            )
-            Spacer(modifier = Modifier.width(10.dp))
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = name,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    fontSize = 14.sp,
-                    lineHeight = 16.sp,
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 2,
-                )
-                if (tagGroup.isNotEmpty()) {
-                    Spacer(modifier = Modifier.height(4.dp))
-                    AppTagRow(tagGroup = tagGroup)
-                }
-                if (time != null) {
-                    Spacer(modifier = Modifier.height(2.dp))
-                    Text(
-                        text = time,
-                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f),
-                        fontSize = 9.sp,
-                        lineHeight = 13.sp,
-                        overflow = TextOverflow.Ellipsis,
-                        maxLines = 1,
-                    )
+        Box(contentAlignment = Alignment.Center) {
+            if (EasyAccess.isSweet) {
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    val seal by sealFileOf(sealLetter)
+                    if (seal != null) {
+                        Spacer(modifier = Modifier.fillMaxWidth(0.65f))
+                        AsyncImage(
+                            model = seal,
+                            modifier = Modifier.size(45.dp),
+                            contentDescription = null,
+                            alpha = 0.35f,
+                        )
+                    }
                 }
             }
-            Text(
-                modifier = Modifier.widthIn(min = 40.dp),
-                text = apiText,
-                color = apiColor,
-                fontSize = 25.sp,
-                lineHeight = 25.sp,
-                overflow = TextOverflow.Ellipsis,
-                maxLines = 1,
+            AppItemContent(
+                name = name,
+                time = time,
+                apiText = apiText,
+                iconInfo = iconInfo,
+                tagGroup = tagGroup,
+                apiColor = apiColor,
             )
         }
+    }
+}
+
+@Composable
+private fun AppItemContent(
+    name: String,
+    time: String?,
+    apiText: String,
+    iconInfo: PackageInfo,
+    tagGroup: AppTagGroup,
+    apiColor: Color,
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        AppIcon(
+            modifier = Modifier.size(54.dp).padding(2.dp),
+            iconInfo = iconInfo
+        )
+        Spacer(modifier = Modifier.width(10.dp))
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = name,
+                color = MaterialTheme.colorScheme.onBackground,
+                fontSize = 14.sp,
+                lineHeight = 16.sp,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 2,
+            )
+            if (tagGroup.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(4.dp))
+                AppTagRow(tagGroup = tagGroup)
+            }
+            if (time != null) {
+                Spacer(modifier = Modifier.height(2.dp))
+                Text(
+                    text = time,
+                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f),
+                    fontSize = 9.sp,
+                    lineHeight = 13.sp,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1,
+                )
+            }
+        }
+        Text(
+            modifier = Modifier.widthIn(min = 40.dp),
+            text = apiText,
+            color = apiColor,
+            fontSize = 25.sp,
+            lineHeight = 25.sp,
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1,
+        )
     }
 }
 
@@ -455,6 +495,7 @@ private fun AppUpdateItemPreview() {
                     name = "Boundo",
                     time = "1 day ago",
                     apiText = "15",
+                    sealLetter = 'v',
                     iconInfo = PseudoAppIconInfo(),
                     tagGroup = EmptyTagGroup,
                     cardColor = Color(0xffe0ffd0),

@@ -56,6 +56,7 @@ import com.madness.collision.unit.api_viewing.seal.SealManager
 import com.madness.collision.unit.api_viewing.tag.app.AppTagInfo
 import com.madness.collision.unit.api_viewing.tag.app.AppTagManager
 import com.madness.collision.unit.api_viewing.tag.inflater.AppTagInflater
+import com.madness.collision.unit.api_viewing.ui.comp.sealFileOf
 import com.madness.collision.unit.api_viewing.ui.info.AppDetailsContent
 import com.madness.collision.unit.api_viewing.ui.info.AppSwitcher
 import com.madness.collision.unit.api_viewing.ui.info.AppSwitcherHandler
@@ -72,7 +73,6 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape
-import java.io.File
 import kotlin.math.roundToInt
 
 @Composable
@@ -343,19 +343,7 @@ val LocalAppSwitcherHandler = staticCompositionLocalOf<AppSwitcherHandler> {
 @Composable
 private fun AppHeaderContent(cardColor: Color, modifier: Modifier = Modifier) {
     val app = LocalApp.current
-    val sealVerInfo = remember { VerInfo.targetDisplay(app) }
-    var seal: File? by remember {
-        // load initial value
-        val file = if (EasyAccess.isSweet) SealMaker.getSealCacheFile(sealVerInfo.letterOrDev) else null
-        mutableStateOf(file)
-    }
     val context = LocalContext.current
-    if (seal == null && EasyAccess.isSweet) {
-        val itemWidth = with(LocalDensity.current) { 45.dp.roundToPx() }
-        LaunchedEffect(Unit) {
-            seal = SealMaker.getSealFile(context, sealVerInfo.letterOrDev, itemWidth)
-        }
-    }
     val switcherHandler = LocalAppSwitcherHandler.current
     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterStart) {
         AppSwitcher(modifier = Modifier.fillMaxWidth(), handler = switcherHandler)
@@ -384,13 +372,17 @@ private fun AppHeaderContent(cardColor: Color, modifier: Modifier = Modifier) {
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.weight(1f),
             )
-            if (seal != null) {
-                Spacer(modifier = Modifier.width(6.dp))
-                AsyncImage(
-                    model = seal,
-                    modifier = Modifier.size(40.dp),
-                    contentDescription = null,
-                )
+            if (EasyAccess.isSweet) {
+                val sealVerInfo = remember { VerInfo.targetDisplay(app) }
+                val seal by sealFileOf(sealVerInfo.letterOrDev)
+                if (seal != null) {
+                    Spacer(modifier = Modifier.width(6.dp))
+                    AsyncImage(
+                        model = seal,
+                        modifier = Modifier.size(40.dp),
+                        contentDescription = null,
+                    )
+                }
             }
         }
     }
