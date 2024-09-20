@@ -1,6 +1,6 @@
 [versions]
 # plugins
-androidGradlePlugin = "8.5.2"  # 8.5.2-Koala Patch 2
+androidGradlePlugin = "8.6.1"  # 8.6.1-Koala Feature Drop Patch 1
 kotlin = "2.0.20"
 googleKsp = "2.0.20-1.0.24"
 googlePlayServicesOSSLicensesPlugin = "0.10.6"
