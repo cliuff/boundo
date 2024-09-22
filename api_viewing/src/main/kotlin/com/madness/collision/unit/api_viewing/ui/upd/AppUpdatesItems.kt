@@ -103,6 +103,7 @@ internal fun AppItem(art: UpdGuiArt, modifier: Modifier = Modifier) {
         tagGroup = tagGroup.collectAsStateWithLifecycle(EmptyTagGroup).value,
         cardColor = Color(backColor),
         apiColor = Color(accentColor),
+        onClick = art.onClick,
     )
 }
 
@@ -128,6 +129,7 @@ internal fun AppUpdateItem(art: ApiUpdGuiArt, modifier: Modifier = Modifier) {
         oldApi = art.oldApiInfo,
         newVer = art.newVersion,
         oldVer = art.oldVersion,
+        onClick = art.onClick,
     )
 }
 
@@ -142,9 +144,11 @@ internal fun AppItem(
     tagGroup: AppTagGroup,
     cardColor: Color,
     apiColor: Color,
+    onClick: () -> Unit,
 ) {
     Card(
         modifier = modifier,
+        onClick = onClick,
         colors = CardDefaults.elevatedCardColors(containerColor = cardColor),
     ) {
         Box(contentAlignment = Alignment.Center) {
@@ -240,6 +244,7 @@ internal fun AppUpdateItem(
     oldApi: VerInfo,
     newVer: AppInstallVersion,
     oldVer: AppInstallVersion,
+    onClick: () -> Unit,
 ) {
     val containerColor = when (LocalInspectionMode.current) {
         true -> if (isSystemInDarkTheme()) Color(0xFF101010) else Color.White
@@ -251,6 +256,7 @@ internal fun AppUpdateItem(
     }
     Card(
         modifier = modifier,
+        onClick = onClick,
         shape = AbsoluteSmoothCornerShape(20.dp, 60),
         colors = CardDefaults.elevatedCardColors(containerColor = containerColor),
         border = BorderStroke(0.5.dp, cardBorderColor),
@@ -422,6 +428,7 @@ private fun AppUpdateItemPreview() {
                     oldApi = VerInfo(34),
                     newVer = AppInstallVersion(135L, "3.906r", "1h ago"),
                     oldVer = AppInstallVersion(134L, "3.786r", "12h ago"),
+                    onClick = {},
                 )
                 AppUpdateItem(
                     modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
@@ -435,6 +442,7 @@ private fun AppUpdateItemPreview() {
                         135L, "3.906rfdfvhskfjsnnvsslkfjdiofusd_rel", "1h ago"),
                     oldVer = AppInstallVersion(
                         134L, "3.786rfdfvhskfjsnnvsslkfjdiofusd_rel", "12h ago"),
+                    onClick = {},
                 )
                 AppItem(
                     modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
@@ -446,6 +454,7 @@ private fun AppUpdateItemPreview() {
                     tagGroup = EmptyTagGroup,
                     cardColor = Color(0xffe0ffd0),
                     apiColor = Color(0xffbde1a4),
+                    onClick = {},
                 )
             }
         }

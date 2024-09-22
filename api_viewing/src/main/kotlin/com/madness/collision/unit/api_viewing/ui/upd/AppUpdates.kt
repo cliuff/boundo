@@ -29,11 +29,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyGridScope
+import androidx.compose.foundation.lazy.grid.LazyGridItemSpanScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.rounded.Refresh
@@ -43,16 +48,18 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -116,8 +123,11 @@ fun AppUpdatesPage(paddingValues: PaddingValues, eventHandler: AppUpdatesEventHa
                     onClickUsageAccess = eventHandler::showUsageAccessSettings
                         .takeIf { !hasUsageAccess },
                 )
-            } else {
-                Text("Nada")
+            } else if (!isLoading) {
+                UpdateNothing(modifier = Modifier.fillMaxWidth().padding(PaddingValues(
+                    top = contentPadding.calculateTopPadding() + 5.dp,
+                    bottom = paddingValues.calculateBottomPadding() + 20.dp
+                )))
             }
         }
     )
@@ -191,65 +201,142 @@ private fun UpdatesList(
     onClickViewMore: () -> Unit,
     onClickUsageAccess: (() -> Unit)?,
 ) {
-    LazyVerticalGrid(columns = GridCells.Fixed(columnCount), contentPadding = paddingValues) {
-        for ((secIndex, secList) in sections) {
-            if (secList.isNotEmpty()) {
-                item(key = secIndex, span = { GridItemSpan(maxLineSpan) }) {
-                    UpdateSectionTitle(
-                        modifier = Modifier
-                            .padding(top = 5.dp)
-                            .padding(horizontal = 20.dp, vertical = 5.dp),
-                        text = updateIndexLabel(secIndex)
-                    )
+    var lastSectionCount by remember { mutableIntStateOf(0) }
+    val contentPadding = PaddingValues(
+        top = paddingValues.calculateTopPadding(),
+        bottom = paddingValues.calculateBottomPadding(),
+        start = 10.dp, end = 10.dp
+    )
+    if (columnCount <= 1) {
+        // use lazy column for simpler (thus faster) impl
+        val listState = rememberLazyListState()
+        LazyColumn(state = listState, contentPadding = contentPadding) {
+            for ((secIndex, secList) in sections) {
+                if (secList.isNotEmpty()) {
+                    item(key = "@upd.sec${secIndex.ordinal}") {
+                        UpdatesSectionTitle(index = secIndex, Modifier.animateItem())
+                    }
+                    sectionItems(secIndex, secList, onClickApp) { list, key, content ->
+                        items(list, key) { item -> content(item, Modifier.animateItem()) }
+                    }
                 }
-                sectionItems(secIndex, secList, onClickApp)
+            }
+            if (sections.any { (_, list) -> list.isNotEmpty() }) {
+                item(key = "@upd.btn1") {
+                    UpdatesRedirectButton(type = 1, onClickViewMore, Modifier.animateItem())
+                }
+            }
+            if (onClickUsageAccess != null) {
+                item(key = "@upd.btn2") {
+                    UpdatesRedirectButton(type = 2, onClickUsageAccess, Modifier.animateItem())
+                }
             }
         }
-        if (sections.any { (_, list) -> list.isNotEmpty() }) {
-            item(span = { GridItemSpan(maxLineSpan) }) {
-                MoreUpdatesButton(
-                    modifier = Modifier
-                        .padding(top = 5.dp)
-                        .padding(horizontal = 20.dp, vertical = 4.dp),
-                    onClick = onClickViewMore,
-                )
+        LaunchedEffect(sections) {
+            // scroll to the top of the new list from existing usage access button
+            if (lastSectionCount == 0 && sections.isNotEmpty()) listState.scrollToItem(0)
+            lastSectionCount = sections.size
+        }
+    } else {
+        val gridState = rememberLazyGridState()
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(columnCount),
+            state = gridState, contentPadding = contentPadding) {
+            for ((secIndex, secList) in sections) {
+                if (secList.isNotEmpty()) {
+                    item(key = "@upd.sec${secIndex.ordinal}", span = MaxLineSpan) {
+                        UpdatesSectionTitle(index = secIndex, Modifier.animateItem())
+                    }
+                    sectionItems(secIndex, secList, onClickApp) { list, key, content ->
+                        items(list, key) { item -> content(item, Modifier.animateItem()) }
+                    }
+                }
+            }
+            if (sections.any { (_, list) -> list.isNotEmpty() }) {
+                item(key = "@upd.btn1", span = MaxLineSpan) {
+                    // wrap content button in a grid cell
+                    Box { UpdatesRedirectButton(type = 1, onClickViewMore, Modifier.animateItem()) }
+                }
+            }
+            if (onClickUsageAccess != null) {
+                // placeholder to make usage access button be positioned in a new row's cell
+                item(key = "@upd.row1", span = MaxLineSpan) {
+                    Spacer(modifier = Modifier.animateItem())
+                }
+                item(key = "@upd.btn2") {
+                    UpdatesRedirectButton(type = 2, onClickUsageAccess, Modifier.animateItem())
+                }
             }
         }
-        if (onClickUsageAccess != null) {
-            item(span = { GridItemSpan(maxLineSpan) }) {
-                UsageAccessRequest(
-                    modifier = Modifier
-                        .widthIn(max = 450.dp)
-                        .fillMaxWidth()
-                        .clickable(onClick = onClickUsageAccess)
-                        .padding(horizontal = 20.dp, vertical = 8.dp),
-                )
-            }
+        LaunchedEffect(sections) {
+            // scroll to the top of the new list from existing usage access button
+            if (lastSectionCount == 0 && sections.isNotEmpty()) gridState.scrollToItem(0)
+            lastSectionCount = sections.size
         }
     }
 }
 
-private fun LazyGridScope.sectionItems(
+private val MaxLineSpan: LazyGridItemSpanScope.() -> GridItemSpan
+        = { GridItemSpan(maxLineSpan) }
+
+@Composable
+private fun UpdatesSectionTitle(index: AppUpdatesIndex, modifier: Modifier = Modifier) {
+    UpdateSectionTitle(
+        modifier = modifier
+            .padding(top = 5.dp)
+            .padding(horizontal = 20.dp, vertical = 5.dp),
+        text = updateIndexLabel(index)
+    )
+}
+
+@Composable
+private fun UpdatesRedirectButton(type: Int, onClick: () -> Unit, modifier: Modifier = Modifier) {
+    when (type) {
+        1 -> {
+            MoreUpdatesButton(
+                modifier = modifier
+                    .padding(top = 5.dp)
+                    .padding(horizontal = 20.dp, vertical = 4.dp),
+                onClick = onClick,
+            )
+        }
+        2 -> {
+            UsageAccessRequest(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 10.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .clickable(onClick = onClick)
+                    .padding(horizontal = 10.dp, vertical = 8.dp),
+            )
+        }
+    }
+}
+
+private inline fun <T> sectionItems(
     secIndex: AppUpdatesIndex,
-    secList: List<*>,
-    onClickApp: (ApiViewingApp) -> Unit,
+    secList: List<T>,
+    noinline onClickApp: (ApiViewingApp) -> Unit,
+    items: (items: List<T>, key: (T) -> Any, itemContent: @Composable (T, Modifier) -> Unit) -> Unit,
 ) {
     if (secIndex == AppUpdatesIndex.UPG) {
-        items(secList) { upd ->
+        items(secList, { upd -> (upd as Upgrade).new.packageName + secIndex.ordinal }
+        ) { upd, modifier ->
             if (upd is Upgrade) {
                 val context = LocalContext.current
                 AppUpdateItem(
-                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 5.dp),
+                    modifier = modifier.padding(horizontal = 5.dp, vertical = 5.dp),
                     art = remember(upd) { upd.toGuiArt(context) { onClickApp(upd.new) } },
                 )
             }
         }
     } else {
-        items(secList) { app ->
+        items(secList, { upd -> (upd as ApiViewingApp).packageName + secIndex.ordinal }
+        ) { app, modifier ->
             if (app is ApiViewingApp) {
                 val context = LocalContext.current
                 AppItem(
-                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 5.dp),
+                    modifier = modifier.padding(horizontal = 5.dp, vertical = 5.dp),
                     art = remember(app) { app.toGuiArt(context) { onClickApp(app) } },
                 )
             }

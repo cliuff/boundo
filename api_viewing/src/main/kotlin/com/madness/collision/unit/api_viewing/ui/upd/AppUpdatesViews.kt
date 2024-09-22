@@ -40,6 +40,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -56,6 +57,19 @@ fun updateIndexLabel(index: AppUpdatesIndex): String {
         AppUpdatesIndex.REC -> R.string.av_updates_recents
         AppUpdatesIndex.USE -> R.string.av_upd_used
     })
+}
+
+@Composable
+fun UpdateNothing(modifier: Modifier = Modifier) {
+    Box(modifier = modifier, contentAlignment = Alignment.TopCenter) {
+        Text(
+            text = stringResource(com.madness.collision.R.string.text_no_content),
+            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.75f),
+            fontSize = 13.sp,
+            lineHeight = 15.sp,
+            textAlign = TextAlign.Center,
+        )
+    }
 }
 
 @Composable
