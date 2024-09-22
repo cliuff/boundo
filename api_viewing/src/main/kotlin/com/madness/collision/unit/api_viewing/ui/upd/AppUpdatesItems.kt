@@ -17,9 +17,11 @@
 package com.madness.collision.unit.api_viewing.ui.upd
 
 import android.content.pm.PackageManager
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -72,6 +74,7 @@ import com.madness.collision.unit.api_viewing.ui.upd.item.AppApiUpdate
 import com.madness.collision.unit.api_viewing.ui.upd.item.AppInstallVersion
 import com.madness.collision.unit.api_viewing.ui.upd.item.UpdGuiArt
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
+import com.madness.collision.util.mainApplication
 import com.madness.collision.util.ui.CompactPackageInfo
 import com.madness.collision.util.ui.PackageInfo
 import kotlinx.coroutines.flow.map
@@ -238,11 +241,19 @@ internal fun AppUpdateItem(
     newVer: AppInstallVersion,
     oldVer: AppInstallVersion,
 ) {
+    val containerColor = when (LocalInspectionMode.current) {
+        true -> if (isSystemInDarkTheme()) Color(0xFF101010) else Color.White
+        false -> if (mainApplication.isDarkTheme) Color(0xFF101010) else Color.White
+    }
+    val cardBorderColor = when (LocalInspectionMode.current) {
+        true -> if (isSystemInDarkTheme()) Color(0xFF191919) else Color(0xFFF0F0F0)
+        false -> if (mainApplication.isDarkTheme) Color(0xFF191919) else Color(0xFFF0F0F0)
+    }
     Card(
         modifier = modifier,
         shape = AbsoluteSmoothCornerShape(20.dp, 60),
-        colors = CardDefaults.elevatedCardColors(containerColor = Color.White),
-        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 0.1.dp),
+        colors = CardDefaults.elevatedCardColors(containerColor = containerColor),
+        border = BorderStroke(0.5.dp, cardBorderColor),
     ) {
         Column(modifier = Modifier.padding(horizontal = 4.dp, vertical = 4.dp)) {
             Row(
@@ -376,6 +387,7 @@ private fun TextTag(text: String) {
     ) {
         Text(
             text = text,
+            color = MaterialTheme.colorScheme.onBackground,
             fontSize = 6.sp,
             lineHeight = 6.sp,
             fontWeight = FontWeight.Bold,

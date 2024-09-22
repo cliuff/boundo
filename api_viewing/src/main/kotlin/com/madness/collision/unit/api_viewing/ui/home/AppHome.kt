@@ -35,6 +35,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.fragment.compose.AndroidFragment
 import com.madness.collision.chief.app.ComposeFragment
 import com.madness.collision.chief.app.rememberColorScheme
@@ -68,6 +69,7 @@ fun AppHomePage() {
                 onSelectItem = { i -> selNavIndex = i; homeNav?.setNavPage(i) },
             )
         },
+        containerColor = Color.Transparent,
         content = { contentPadding ->
             var navFragment: AppHomeNavFragment? by remember { mutableStateOf(null) }
             AndroidFragment<AppHomeNavFragment>(modifier = Modifier.fillMaxSize()) { navFgm ->

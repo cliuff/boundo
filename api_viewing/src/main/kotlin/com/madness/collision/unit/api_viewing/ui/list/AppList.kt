@@ -239,6 +239,7 @@ private fun AppListScaffold(
                 )
             }
         },
+        containerColor = Color.Transparent,
         content = { contentPadding ->
             Box() {
                 content(PaddingValues(

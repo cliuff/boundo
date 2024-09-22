@@ -19,6 +19,7 @@ package com.madness.collision.unit.api_viewing.ui.list
 import android.os.Build
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -29,7 +30,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -59,6 +59,7 @@ import com.madness.collision.unit.api_viewing.list.AppListFragment
 import com.madness.collision.unit.api_viewing.seal.SealMaker
 import com.madness.collision.util.AppUtils.asBottomMargin
 import com.madness.collision.util.F
+import com.madness.collision.util.mainApplication
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.haze
 import dev.chrisbanes.haze.hazeChild
@@ -126,13 +127,17 @@ fun LegacyAppList(
                 .height(contentHeight + headerOverlapSize)
                 .hazeChild(hazeState))
 
+            val backdropColor = when (LocalInspectionMode.current) {
+                true -> if (isSystemInDarkTheme()) Color.Black else Color.White
+                false -> if (mainApplication.isDarkTheme) Color.Black else Color.White
+            }
             // backdrop for app list, overlaps on the blurred background
             Box(modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = contentHeight)
                 .height(backdropHeight)
                 .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
-                .background(MaterialTheme.colorScheme.background))
+                .background(backdropColor))
         }
 
         // some shade to make status bar visible
