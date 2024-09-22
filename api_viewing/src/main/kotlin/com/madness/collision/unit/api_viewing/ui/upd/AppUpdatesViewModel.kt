@@ -57,15 +57,15 @@ class AppUpdatesViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             mutexUpdatesCheck.withLock check@{
                 mutUiState.update { it.copy(isLoading = true) }
-                if (updatesChecker.isCheckNeeded()) {
-                    updatesChecker.checkNewUpdate(timestamp, context, lifecycleOwner)
-                }
+                updatesChecker.checkNewUpdate(timestamp, context, lifecycleOwner)
                 val sections = updatesChecker.getSections(
                     changedLimit = 15 * columnCount,
                     usedLimit = if (columnCount <= 1) 5 else 6,
                     context = context
                 )
-                sectionsAppList = sections.flatMap { (_, list) ->
+                // todo preserve sections but exclude conflicts
+                val updSections = uiState.value.sections + sections
+                sectionsAppList = updSections.flatMap { (_, list) ->
                     list.mapNotNull { item ->
                         when (item) {
                             is ApiViewingApp -> item
@@ -74,7 +74,7 @@ class AppUpdatesViewModel : ViewModel() {
                         }
                     }
                 }
-                mutUiState.update { it.copy(isLoading = false, sections = sections) }
+                mutUiState.update { it.copy(isLoading = false, sections = updSections) }
             }
         }
     }

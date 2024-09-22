@@ -31,8 +31,6 @@ class AppUpdatesChecker {
     private var lastUpdatesData: AppUpdatesData? = null
     private val updatesSession by AppUpdatesLists::updatesSession
 
-    fun isCheckNeeded(): Boolean = lastUpdatesData == null
-
     fun checkNewUpdate(mainTimestamp: Long, context: Context, lifecycleOwner: LifecycleOwner): Boolean? {
         val appRepo = AppRepo.impl(context.applicationContext, lifecycleOwner)
         val useCase = AppUpdatesUseCase(appRepo, AppUpdatesLists.updatesSession)
@@ -58,7 +56,7 @@ class AppUpdatesChecker {
     suspend fun getSections(
         changedLimit: Int, usedLimit: Int, context: Context): Map<AppUpdatesIndex, List<*>> {
         val (lastUpdPkg, lastUpdUsed) = lastUpdatesData?.pkg to lastUpdatesData?.used
-        val sections = mutableMapOf<AppUpdatesIndex, List<*>>()
+        val sections = sortedMapOf<AppUpdatesIndex, List<*>>(compareBy(AppUpdatesIndex::code))
         if (lastUpdPkg?.hasPkgChanges == true) {
             val pkgRecords = lastUpdPkg.records
             val mChangedPackages = pkgRecords.changedPackages
@@ -82,6 +80,12 @@ class AppUpdatesChecker {
                 .mapNotNull { MiscApp.getPackageInfo(context, packageName = it) }
             val anApp = AppRepo.dumb(context).getMaintainedApp()
             sections[AppUpdatesIndex.USE] = packages.toPkgApps(context, anApp)
+        }
+        val iterator = sections.iterator()
+        while (iterator.hasNext()) {
+            if (iterator.next().value.isEmpty()) {
+                iterator.remove()
+            }
         }
         return sections
     }
