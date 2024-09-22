@@ -110,15 +110,13 @@ class AppHomeNavFragment : Fragment(), AppHomeNav {
             setReorderingAllowed(true)
         }
 
-        // enqueue action (after async commit) to set content padding of newly added page
-        if (targetFragment == null) {
-            view?.post {
-                val fgm = fgmManager.findFragmentByTag(navFgmTags[index])
-                if (fgm is AppHomeNavPage) {
-                    // find MainAppHome from host fragment or activity
-                    fgm.mainAppHome = (parentFragment as? MainAppHome) ?: (activity as? MainAppHome)
-                    lastContentPadding?.let { fgm.navContentPadding = it }
-                }
+        // enqueue action (after async commit) to set content padding of restored/newly added page
+        view?.post {
+            val fgm = fgmManager.findFragmentByTag(navFgmTags[index])
+            if (fgm is AppHomeNavPage) {
+                // find MainAppHome from host fragment or activity
+                fgm.mainAppHome = (parentFragment as? MainAppHome) ?: (activity as? MainAppHome)
+                lastContentPadding?.let { fgm.navContentPadding = it }
             }
         }
     }

@@ -16,6 +16,10 @@
 
 package com.madness.collision.unit.api_viewing.ui.home
 
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
@@ -42,6 +46,14 @@ import com.madness.collision.chief.app.rememberColorScheme
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
 
 class AppHomeFragment : ComposeFragment() {
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        // create empty view for legacy NoUpdatesMode
+        if (arguments?.getInt("mode") == 1) return View(inflater.context)
+        return super.onCreateView(inflater, container, savedInstanceState)
+    }
+
     @Composable
     override fun ComposeContent() {
         MaterialTheme(colorScheme = rememberColorScheme()) {

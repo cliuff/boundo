@@ -55,7 +55,7 @@ import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape
 import kotlin.math.ceil
 
 @Composable
-fun UnitBarPage(mainViewModel: MainViewModel, width: Dp) {
+fun UnitBarPage(modifier: Modifier = Modifier, mainViewModel: MainViewModel, width: Dp) {
     val context = LocalContext.current
     val descriptions = remember {
         val pinnedUnits = DescRetriever(context).includePinState().doFilter()
@@ -65,7 +65,7 @@ fun UnitBarPage(mainViewModel: MainViewModel, width: Dp) {
         (pinned + frequent).filterNot { desc -> desc.unitName == Unit.UNIT_NAME_API_VIEWING }
     }
     val scope = rememberCoroutineScope()
-    Updates(width, descriptions) { unitName ->
+    Updates(width, descriptions, modifier) { unitName ->
         if (unitName == "app_settings") {
             mainViewModel.displayFragment(SettingsFragment())
         } else {

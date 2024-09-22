@@ -24,7 +24,9 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.Window
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.view.WindowInsetsCompat
@@ -69,7 +71,7 @@ class MainActivity : BaseActivity(), SystemBarMaintainerOwner, MainAppHome {
 
     @Composable
     override fun UnitBar(width: Dp) {
-        UnitBarPage(viewModel, width)
+        UnitBarPage(modifier = Modifier.fillMaxWidth(), viewModel, width)
     }
 
     companion object {

@@ -101,7 +101,9 @@ fun AppUpdatesPage(paddingValues: PaddingValues, eventHandler: AppUpdatesEventHa
                     windowInsets = WindowInsets(top = paddingValues.calculateTopPadding()),
                 ) {
                     val width = maxWidth - 40.dp
-                    Box(modifier = Modifier.widthIn(max = width)) {
+                    // set min width to fix too small popup on some devices (e.g. xiaomi)
+                    val min = if (maxWidth >= 600.dp) 500.dp else if (maxWidth >= 360.dp) 320.dp else width
+                    Box(modifier = Modifier.widthIn(min = min, max = width)) {
                         with(eventHandler) { UnitBar(width = width) }
                     }
                 }
