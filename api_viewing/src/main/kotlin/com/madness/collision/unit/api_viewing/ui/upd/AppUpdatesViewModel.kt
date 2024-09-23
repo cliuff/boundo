@@ -20,6 +20,8 @@ import android.content.Context
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.madness.collision.chief.auth.PermissionState
+import com.madness.collision.unit.api_viewing.apps.AppListPermission
 import com.madness.collision.unit.api_viewing.apps.AppRepo
 import com.madness.collision.unit.api_viewing.apps.AppRepository
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
@@ -34,11 +36,30 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
 typealias AppUpdatesSections = Map<AppUpdatesIndex, List<*>>
-data class AppUpdatesUiState(val isLoading: Boolean, val sections: AppUpdatesSections)
+
+data class AppUpdatesPermState(
+    val canQueryAllPkgs: Boolean,
+    /** [AppListPermission.QueryAllPackages] or [AppListPermission.GetInstalledApps]. */
+    val queryPermission: String?,
+    /** Whether we should request runtime permission, or ask the user to change settings. */
+    val canReqRuntimePerm: Boolean,
+)
+
+data class AppUpdatesUiState(
+    val isLoading: Boolean,
+    val sections: AppUpdatesSections,
+    val perm: AppUpdatesPermState,
+)
 
 class AppUpdatesViewModel : ViewModel() {
-    private val mutUiState: MutableStateFlow<AppUpdatesUiState> =
-        MutableStateFlow(AppUpdatesUiState(false, emptyMap()))
+    private val mutUiState: MutableStateFlow<AppUpdatesUiState> = kotlin.run {
+        val perm = AppUpdatesPermState(
+            canQueryAllPkgs = true,
+            queryPermission = null,
+            canReqRuntimePerm = false,
+        )
+        MutableStateFlow(AppUpdatesUiState(isLoading = false, sections = emptyMap(), perm = perm))
+    }
     val uiState: StateFlow<AppUpdatesUiState> = mutUiState.asStateFlow()
     private var appRepo: AppRepository? = null
     private val updatesChecker = AppUpdatesChecker()
@@ -52,11 +73,38 @@ class AppUpdatesViewModel : ViewModel() {
         this.columnCount = columnCount.coerceAtLeast(1)
     }
 
+    fun setAllPkgsQueryResult(state: PermissionState) {
+        mutUiState.update { curr ->
+            curr.copy(perm = when (state) {
+                PermissionState.Granted ->
+                    curr.perm.copy(canQueryAllPkgs = true)
+                is PermissionState.ShowRationale ->
+                    curr.perm.copy(canQueryAllPkgs = false, canReqRuntimePerm = true)
+                is PermissionState.Denied ->
+                    curr.perm.copy(canQueryAllPkgs = false, canReqRuntimePerm = true)
+                is PermissionState.PermanentlyDenied ->
+                    curr.perm.copy(canQueryAllPkgs = false, canReqRuntimePerm = false)
+            })
+        }
+    }
+
     fun checkUpdates(timestamp: Long, context: Context, lifecycleOwner: LifecycleOwner) {
         if (uiState.value.isLoading) return
         viewModelScope.launch(Dispatchers.IO) {
             mutexUpdatesCheck.withLock check@{
+                // update loading state
                 mutUiState.update { it.copy(isLoading = true) }
+                // check all packages query permission first,
+                // but continue querying anyway to retrieve partial result
+                val perm = AppListPermission.queryAllPackagesOrNull(context)
+                mutUiState.update { curr ->
+                    curr.copy(perm = curr.perm.copy(
+                        canQueryAllPkgs = perm == null,
+                        queryPermission = perm,
+                        canReqRuntimePerm = perm == AppListPermission.GetInstalledApps,
+                    ))
+                }
+
                 updatesChecker.checkNewUpdate(timestamp, context, lifecycleOwner)
                 val sections = updatesChecker.getSections(
                     changedLimit = 15 * columnCount,

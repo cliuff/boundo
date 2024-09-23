@@ -17,6 +17,7 @@
 package com.madness.collision.unit.api_viewing.ui.upd
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,6 +29,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.icons.rounded.Warning
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -37,6 +41,8 @@ import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -45,6 +51,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.madness.collision.unit.api_viewing.R
+import com.madness.collision.util.mainApplication
+import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape
 
 @Composable
 @ReadOnlyComposable
@@ -149,5 +157,63 @@ fun UsageAccessRequest(modifier: Modifier = Modifier) {
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.75f),
         )
+    }
+}
+
+@Composable
+fun QueryInstalledAppsRequest(modifier: Modifier = Modifier, onClick: () -> Unit) {
+    val contentColor = when (LocalInspectionMode.current) {
+        true -> if (isSystemInDarkTheme()) MaterialTheme.colorScheme.onSurface else Color.White
+        false -> if (mainApplication.isDarkTheme) MaterialTheme.colorScheme.onSurface else Color.White
+    }
+    val containerColor = when (LocalInspectionMode.current) {
+        true -> if (isSystemInDarkTheme()) Color(0xFF381000) else Color(0xFFFF6F00)
+        false -> if (mainApplication.isDarkTheme) Color(0xFF381000) else Color(0xFFFF6F00)
+    }
+    Card(
+        modifier = modifier,
+        onClick = onClick,
+        shape = AbsoluteSmoothCornerShape(10.dp, 60),
+        colors = CardDefaults.elevatedCardColors(containerColor = containerColor),
+        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 0.5.dp)
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 15.dp, vertical = 14.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                modifier = Modifier.size(28.dp),
+                imageVector = Icons.Rounded.Warning,
+                contentDescription = null,
+                tint = contentColor.copy(alpha = 0.9f),
+            )
+            Spacer(modifier = Modifier.width(12.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = "Query installed apps",
+                    color = contentColor.copy(0.95f),
+                    fontSize = 13.sp,
+                    lineHeight = 17.sp,
+                    fontWeight = FontWeight.Bold,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1,
+                )
+                Text(
+                    text = "Grant access to analyze all your apps",
+                    color = contentColor.copy(alpha = 0.92f),
+                    fontSize = 12.sp,
+                    lineHeight = 14.sp,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 2,
+                )
+            }
+            Spacer(modifier = Modifier.width(4.dp))
+            Icon(
+                modifier = Modifier.size(22.dp),
+                imageVector = Icons.AutoMirrored.Rounded.ArrowForward,
+                contentDescription = null,
+                tint = contentColor.copy(alpha = 0.92f),
+            )
+        }
     }
 }

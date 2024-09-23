@@ -81,6 +81,7 @@ interface AppUpdatesEventHandler {
     fun showAppInfo(app: ApiViewingApp)
     fun showAppListPage()
     fun showUsageAccessSettings()
+    fun requestAllPkgsQuery(permission: String?)
     fun showAppSettings()
     @Composable
     fun UnitBar(width: Dp)
@@ -90,7 +91,7 @@ interface AppUpdatesEventHandler {
 fun AppUpdatesPage(paddingValues: PaddingValues, eventHandler: AppUpdatesEventHandler) {
     val viewModel: AppUpdatesViewModel = viewModel()
     val updatesUiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val (isLoading, sections) = updatesUiState
+    val (isLoading, sections, permState) = updatesUiState
     Scaffold(
         topBar = {
             BoxWithConstraints {
@@ -123,7 +124,11 @@ fun AppUpdatesPage(paddingValues: PaddingValues, eventHandler: AppUpdatesEventHa
                     onClickApp = eventHandler::showAppInfo,
                     onClickViewMore = eventHandler::showAppListPage,
                     onClickUsageAccess = eventHandler::showUsageAccessSettings
-                        .takeIf { !hasUsageAccess },
+                        // hide usage access when all pkgs query not granted yet
+                        .takeIf { !hasUsageAccess && permState.canQueryAllPkgs },
+                    onClickInstalledAppsQuery =
+                        { eventHandler.requestAllPkgsQuery(permState.queryPermission) }
+                        .takeIf { !permState.canQueryAllPkgs },
                 )
             } else if (!isLoading) {
                 UpdateNothing(modifier = Modifier.fillMaxWidth().padding(PaddingValues(
@@ -202,6 +207,7 @@ private fun UpdatesList(
     onClickApp: (ApiViewingApp) -> Unit,
     onClickViewMore: () -> Unit,
     onClickUsageAccess: (() -> Unit)?,
+    onClickInstalledAppsQuery: (() -> Unit)?,
 ) {
     var lastSectionCount by remember { mutableIntStateOf(0) }
     val contentPadding = PaddingValues(
@@ -213,6 +219,11 @@ private fun UpdatesList(
         // use lazy column for simpler (thus faster) impl
         val listState = rememberLazyListState()
         LazyColumn(state = listState, contentPadding = contentPadding) {
+            if (onClickInstalledAppsQuery != null) {
+                item(key = "@upd.btn0") {
+                    UpdatesRedirectButton(type = 3, onClickInstalledAppsQuery, Modifier.animateItem())
+                }
+            }
             for ((secIndex, secList) in sections) {
                 if (secList.isNotEmpty()) {
                     item(key = "@upd.sec${secIndex.ordinal}") {
@@ -244,6 +255,15 @@ private fun UpdatesList(
         LazyVerticalGrid(
             columns = GridCells.Fixed(columnCount),
             state = gridState, contentPadding = contentPadding) {
+            if (onClickInstalledAppsQuery != null) {
+                // placeholder to make installed apps query button be positioned in a new row's cell
+                item(key = "@upd.row0", span = MaxLineSpan) {
+                    Spacer(modifier = Modifier.animateItem())
+                }
+                item(key = "@upd.btn0") {
+                    UpdatesRedirectButton(type = 3, onClickInstalledAppsQuery, Modifier.animateItem())
+                }
+            }
             for ((secIndex, secList) in sections) {
                 if (secList.isNotEmpty()) {
                     item(key = "@upd.sec${secIndex.ordinal}", span = MaxLineSpan) {
@@ -312,6 +332,15 @@ private fun UpdatesRedirectButton(type: Int, onClick: () -> Unit, modifier: Modi
                     .padding(horizontal = 10.dp, vertical = 8.dp),
             )
         }
+        3 -> {
+            QueryInstalledAppsRequest(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp)
+                    .padding(horizontal = 10.dp),
+                onClick = onClick,
+            )
+        }
     }
 }
 
@@ -362,6 +391,7 @@ private fun AppUpdatesPreview() {
                     onClickApp = {},
                     onClickViewMore = {},
                     onClickUsageAccess = {},
+                    onClickInstalledAppsQuery = {},
                 )
             }
         )

@@ -42,6 +42,8 @@
     <!-- query apps on Android 11 -->
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
         tools:ignore="QueryAllPackagesPermission" />
+    <!-- query apps on Chinese phones -->
+    <uses-permission android:name="com.android.permission.GET_INSTALLED_APPS"/>
     <!-- used for InstallSourceInfo.getOriginatingPackageName, granted to system apps only -->
     <uses-permission android:name="android.permission.INSTALL_PACKAGES"
         tools:ignore="ProtectedPermissions" />

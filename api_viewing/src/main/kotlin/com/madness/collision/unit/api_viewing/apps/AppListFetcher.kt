@@ -20,14 +20,37 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.madness.collision.chief.chiefContext
+import com.madness.collision.chief.chiefPkgMan
 import com.madness.collision.misc.PackageCompat
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.util.PermissionUtils
 import com.madness.collision.util.os.OsUtils
 import java.io.File
 import kotlin.time.measureTimedValue
+
+object AppListPermission {
+    @RequiresApi(Build.VERSION_CODES.R)
+    const val QueryAllPackages = Manifest.permission.QUERY_ALL_PACKAGES
+    /** Chinese exclusive permission defined in《T/TAF 108-2022 移动终端应用软件列表权限实施指南》. */
+    const val GetInstalledApps: String = "com.android.permission.GET_INSTALLED_APPS"
+    /** Name of the package in which Chinese exclusive [GetInstalledApps] permission is defined. */
+    val GetInstalledAppsPkg: String? = runCatching {
+        chiefPkgMan.getPermissionInfo(GetInstalledApps, 0)?.packageName }.getOrNull()
+
+    /** @return The permission required to be granted, or null. */
+    fun queryAllPackagesOrNull(context: Context): String? {
+        val permissions = when {
+            GetInstalledAppsPkg != null -> PermissionUtils.check(context, arrayOf(GetInstalledApps))
+            OsUtils.satisfy(OsUtils.R) -> PermissionUtils.check(context, arrayOf(QueryAllPackages))
+            else -> emptyList()
+        }
+        return permissions.firstOrNull()
+    }
+}
 
 enum class AppListFetcherType { Platform, Storage, Memory }
 sealed interface AppListResult {
@@ -67,13 +90,9 @@ class PlatformAppsFetcher(private val context: Context) : AppListFetcher<Package
 }
 
 private fun queryAllPkgsCheck(context: Context): Boolean {
-    if (OsUtils.satisfy(OsUtils.R)) {
-        val permission = Manifest.permission.QUERY_ALL_PACKAGES
-        val isGranted = PermissionUtils.check(context, arrayOf(permission)).isEmpty()
-        if (!isGranted) Log.d("AppListFetcher", "$permission not granted")
-        return isGranted
-    }
-    return true
+    val permission = AppListPermission.queryAllPackagesOrNull(context)
+    if (permission != null) Log.d("AppListFetcher", "$permission not granted")
+    return permission == null
 }
 
 
