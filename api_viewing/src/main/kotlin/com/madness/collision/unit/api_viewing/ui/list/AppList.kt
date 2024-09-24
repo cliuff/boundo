@@ -29,6 +29,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -48,6 +50,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -228,7 +231,10 @@ private fun AppListScaffold(
         topBar = {
             AppListBar(
                 isRefreshing = listState.isRefreshing,
-                windowInsets = WindowInsets(top = paddingValues.calculateTopPadding()),
+                windowInsets = WindowInsets(
+                    top = paddingValues.calculateTopPadding(),
+                    left = paddingValues.calculateLeftPadding(LocalLayoutDirection.current),
+                    right = paddingValues.calculateRightPadding(LocalLayoutDirection.current)),
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface.copy(alpha = toolbarOpacity))
             ) {
@@ -243,6 +249,8 @@ private fun AppListScaffold(
         content = { contentPadding ->
             Box() {
                 content(PaddingValues(
+                    start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
+                    end = paddingValues.calculateEndPadding(LocalLayoutDirection.current),
                     top = contentPadding.calculateTopPadding() + 5.dp,
                     bottom = paddingValues.calculateBottomPadding() + 20.dp))
                 ListOptionsDialog(

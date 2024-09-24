@@ -24,6 +24,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -64,7 +67,9 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -99,7 +104,10 @@ fun AppUpdatesPage(paddingValues: PaddingValues, eventHandler: AppUpdatesEventHa
                     refreshing = isLoading,
                     onClickRefresh = eventHandler::refreshUpdates,
                     onClickSettings = eventHandler::showAppSettings,
-                    windowInsets = WindowInsets(top = paddingValues.calculateTopPadding()),
+                    windowInsets = WindowInsets(
+                        top = paddingValues.calculateTopPadding(),
+                        left = paddingValues.calculateLeftPadding(LocalLayoutDirection.current),
+                        right = paddingValues.calculateRightPadding(LocalLayoutDirection.current)),
                 ) {
                     val width = maxWidth - 40.dp
                     // set min width to fix too small popup on some devices (e.g. xiaomi)
@@ -118,6 +126,8 @@ fun AppUpdatesPage(paddingValues: PaddingValues, eventHandler: AppUpdatesEventHa
                     sections = sections,
                     columnCount = viewModel.columnCount,
                     paddingValues = PaddingValues(
+                        start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
+                        end = paddingValues.calculateEndPadding(LocalLayoutDirection.current),
                         top = contentPadding.calculateTopPadding() + 5.dp,
                         bottom = paddingValues.calculateBottomPadding() + 20.dp
                     ),
@@ -146,7 +156,7 @@ private fun UpdatesAppBar(
     refreshing: Boolean,
     onClickRefresh: () -> Unit,
     onClickSettings: () -> Unit,
-    windowInsets: WindowInsets = WindowInsets(0),
+    windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
     unitBarContent: @Composable () -> Unit,
 ) {
     val appBarColor = when (LocalInspectionMode.current) {
@@ -186,7 +196,10 @@ private fun UpdatesAppBar(
                 DropdownMenu(expanded = showUnitBar, onDismissRequest = { showUnitBar = false }) {
                     unitBarContent()
                 }
-                Spacer(modifier = Modifier.width(5.dp))
+                val endPadding = windowInsets.asPaddingValues()
+                    .calculateEndPadding(LocalLayoutDirection.current)
+                    .let { if (it >= 5.dp) 2.dp else 5.dp }
+                Spacer(modifier = Modifier.width(endPadding))
             },
             windowInsets = windowInsets,
             colors = TopAppBarDefaults.topAppBarColors(
@@ -210,11 +223,14 @@ private fun UpdatesList(
     onClickInstalledAppsQuery: (() -> Unit)?,
 ) {
     var lastSectionCount by remember { mutableIntStateOf(0) }
-    val contentPadding = PaddingValues(
-        top = paddingValues.calculateTopPadding(),
-        bottom = paddingValues.calculateBottomPadding(),
-        start = 10.dp, end = 10.dp
-    )
+    val contentPadding = paddingValues.run {
+        PaddingValues(
+            top = calculateTopPadding(),
+            bottom = calculateBottomPadding(),
+            start = 3.dp + calculateStartPadding(LocalLayoutDirection.current).coerceAtLeast(7.dp),
+            end = 3.dp + calculateEndPadding(LocalLayoutDirection.current).coerceAtLeast(7.dp),
+        )
+    }
     if (columnCount <= 1) {
         // use lazy column for simpler (thus faster) impl
         val listState = rememberLazyListState()

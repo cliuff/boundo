@@ -24,6 +24,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -48,6 +50,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.fragment.compose.AndroidFragment
@@ -159,8 +162,15 @@ fun LegacyAppList(
         val backdropPadding = with(LocalDensity.current) { 20.dp.roundToPx() }
         val bottomPadding = with(density) { paddingValues.calculateBottomPadding().roundToPx() }
 
+        val contentPadding = paddingValues.run {
+            PaddingValues(
+                start = calculateStartPadding(LocalLayoutDirection.current),
+                end = calculateEndPadding(LocalLayoutDirection.current),
+            )
+        }
         var listFragment: AppListFragment? by remember { mutableStateOf(null) }
-        AndroidFragment<AppListFragment>(modifier = Modifier.fillMaxSize()) { listFragment = it }
+        AndroidFragment<AppListFragment>(
+            modifier = Modifier.fillMaxSize().padding(contentPadding)) { listFragment = it }
         LaunchedEffect(listFragment, headerState.headerHeight, paddingValues) {
             listFragment?.run {
                 getAdapter().topCover = headerState.headerHeight + backdropPadding
@@ -197,7 +207,7 @@ fun LegacyAppList(
 
         // header must be on top of fragment to be able to interact with
         AppListSwitchHeader(
-            modifier = Modifier.padding(top = contentInsetTop),
+            modifier = Modifier.padding(top = contentInsetTop).padding(contentPadding),
             options = options,
             appSrcState = appSrcState,
             headerState = headerState,

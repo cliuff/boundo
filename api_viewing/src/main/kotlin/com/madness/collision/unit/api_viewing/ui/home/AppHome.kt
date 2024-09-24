@@ -21,13 +21,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.union
+import androidx.compose.foundation.layout.waterfall
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.twotone.List
 import androidx.compose.material.icons.twotone.Home
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -74,14 +81,18 @@ fun AppHomePage() {
     if (selNavIndex != 0 && homeNav != null) {
         BackHandler { selNavIndex = 0; homeNav?.navBack() }
     }
+    val homeInsets = WindowInsets.systemBars.union(WindowInsets.waterfall)
     Scaffold(
         bottomBar = {
             HomeNavigationBar(
                 selectedIndex = selNavIndex,
                 onSelectItem = { i -> selNavIndex = i; homeNav?.setNavPage(i) },
+                windowInsets = homeInsets
+                    .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom),
             )
         },
         containerColor = Color.Transparent,
+        contentWindowInsets = homeInsets,
         content = { contentPadding ->
             var navFragment: AppHomeNavFragment? by remember { mutableStateOf(null) }
             AndroidFragment<AppHomeNavFragment>(modifier = Modifier.fillMaxSize()) { navFgm ->
@@ -100,8 +111,9 @@ private fun HomeNavigationBar(
     modifier: Modifier = Modifier,
     selectedIndex: Int,
     onSelectItem: (Int) -> Unit,
+    windowInsets: WindowInsets = NavigationBarDefaults.windowInsets,
 ) {
-    NavigationBar(modifier = modifier) {
+    NavigationBar(modifier = modifier, windowInsets = windowInsets) {
         NavigationBarItem(
             selected = selectedIndex == 0,
             onClick = { onSelectItem(0) },

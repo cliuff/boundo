@@ -30,6 +30,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -60,6 +62,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -70,7 +73,7 @@ import com.madness.collision.util.dev.PreviewCombinedColorLayout
 @Composable
 fun AppListBar(
     isRefreshing: Boolean,
-    windowInsets: WindowInsets = WindowInsets(0),
+    windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
     colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
     primaryAction: @Composable () -> Unit,
 ) {
@@ -100,7 +103,10 @@ fun AppListBar(
                     content = { primaryAction() },
                 )
             }
-            Spacer(modifier = Modifier.width(5.dp))
+            val endPadding = windowInsets.asPaddingValues()
+                .calculateEndPadding(LocalLayoutDirection.current)
+                .let { if (it >= 5.dp) 2.dp else 5.dp }
+            Spacer(modifier = Modifier.width(endPadding))
         },
         windowInsets = windowInsets,
         colors = colors,

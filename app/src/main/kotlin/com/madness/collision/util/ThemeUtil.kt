@@ -27,7 +27,9 @@ import android.os.PowerManager
 import android.util.TypedValue
 import androidx.core.content.res.use
 import com.madness.collision.R
+import com.madness.collision.main.MainActivity
 import com.madness.collision.unit.themed_wallpaper.ThemedWallpaperEasyAccess
+import com.madness.collision.util.os.OsUtils
 import java.io.File
 import java.util.*
 
@@ -116,7 +118,15 @@ object ThemeUtil {
         // entriesDarkTheme and valuesDarkTheme are recycled during the call
         val darkIndex = P.getPrefIndex(darkValue, valuesDarkTheme)
         val darkThemeId = resources.obtainTypedArray(R.array.prefExteriorDarkThemeRes).use {
-            it.getResourceId(darkIndex, -1)
+            val id = it.getResourceId(darkIndex, -1)
+            // workaround to allow all cutouts for main activity only, available on API 30+
+            when {
+                context !is MainActivity -> id
+                OsUtils.dissatisfy(OsUtils.R) -> id
+                id == R.style.AppTheme_Black -> R.style.BlackCutoutsAppTheme
+                id == R.style.AppTheme_BlackGray -> R.style.BlackGrayCutoutsAppTheme
+                else -> R.style.BlackCutoutsAppTheme
+            }
         }
 
         val isAlways = planValue == resources.getString(R.string.prefExteriorDarkPlanValueAlways)
@@ -135,7 +145,15 @@ object ThemeUtil {
         val valuesLightTheme = resources.obtainTypedArray(R.array.prefExteriorLightThemeValues)
         val lightIndex = P.getPrefIndex(lightValue, valuesLightTheme)
         val lightThemeId = resources.obtainTypedArray(R.array.prefExteriorLightThemeRes).use {
-            it.getResourceId(lightIndex, -1)
+            val id = it.getResourceId(lightIndex, -1)
+            // workaround to allow all cutouts for main activity only, available on API 30+
+            when {
+                context !is MainActivity -> id
+                OsUtils.dissatisfy(OsUtils.R) -> id
+                id == R.style.AppTheme -> R.style.CutoutsAppTheme
+                id == R.style.AppTheme_CnRed -> R.style.RedCutoutsAppTheme
+                else -> R.style.CutoutsAppTheme
+            }
         }
 
         val keyBS = resources.getString(R.string.prefExteriorKeyDarkByBatterySaver)
