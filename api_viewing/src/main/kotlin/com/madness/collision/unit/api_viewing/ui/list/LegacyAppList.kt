@@ -56,6 +56,7 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.compose.AndroidFragment
 import androidx.recyclerview.widget.RecyclerView
 import coil.compose.rememberAsyncImagePainter
+import com.madness.collision.chief.lang.runIf
 import com.madness.collision.unit.api_viewing.Utils
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.list.AppListFragment
@@ -130,6 +131,10 @@ fun LegacyAppList(
                 .height(contentHeight + headerOverlapSize)
                 .hazeChild(hazeState))
 
+            // remove corners for asymmetric paddings (e.g. landscape with 3-button nav)
+            val flatBackdrop = LocalLayoutDirection.current.let { di ->
+                paddingValues.run { calculateStartPadding(di) != calculateEndPadding(di) }
+            }
             val backdropColor = when (LocalInspectionMode.current) {
                 true -> if (isSystemInDarkTheme()) Color.Black else Color.White
                 false -> if (mainApplication.isDarkTheme) Color.Black else Color.White
@@ -139,7 +144,8 @@ fun LegacyAppList(
                 .fillMaxWidth()
                 .padding(top = contentHeight)
                 .height(backdropHeight)
-                .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
+                .runIf({ !flatBackdrop },
+                    { clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)) })
                 .background(backdropColor))
         }
 

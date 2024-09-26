@@ -97,9 +97,12 @@ fun BottomSheetBehavior<*>.configure(context: Context) {
     val windowSize = SystemUtil.getRuntimeWindowSize(context)
     val totalHeight = windowSize.y
     val heightLeft = totalHeight / 5
-    peekHeight = totalHeight - (if (heightLeft >= preservedHeight) heightLeft else preservedHeight)
-    // set width to the largest
-    maxWidth = windowSize.x
+    peekHeight = (totalHeight - (if (heightLeft >= preservedHeight) heightLeft else preservedHeight))
+        .coerceAtMost(X.size(context, 800f, X.DP).roundToInt())
+    // reserve 40dp padding for 640dp max width, otherwise set width to the largest
+    if (windowSize.x <= X.size(context, 680f, X.DP).roundToInt()) {
+        maxWidth = windowSize.x
+    }
 }
 
 fun Fragment.ensureAdded(containerId: Int, fragment: Fragment, isCommitNow: Boolean = false) {

@@ -66,6 +66,15 @@ class AppHomeNavFragment : Fragment(), AppHomeNav {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        if (savedInstanceState != null) {
+            // init restored nav pages
+            childFragmentManager.fragments.filterIsInstance<AppHomeNavPage>()
+                .forEach { page ->
+                    // find MainAppHome from host fragment or activity
+                    page.mainAppHome = (parentFragment as? MainAppHome) ?: (activity as? MainAppHome)
+                    lastContentPadding?.let { page.navContentPadding = it }
+                }
+        }
         if (savedInstanceState == null) {
             setNavPage(0)
         }

@@ -21,8 +21,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.systemBars
@@ -36,6 +42,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationRail
+import androidx.compose.material3.NavigationRailDefaults
+import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -47,7 +56,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.fragment.compose.AndroidFragment
+import androidx.fragment.compose.FragmentState
+import androidx.fragment.compose.rememberFragmentState
 import com.madness.collision.chief.app.ComposeFragment
 import com.madness.collision.chief.app.rememberColorScheme
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
@@ -77,33 +90,69 @@ interface AppHomeNav {
 @Composable
 fun AppHomePage() {
     var selNavIndex by rememberSaveable { mutableIntStateOf(0) }
-    var homeNav: AppHomeNav? by remember { mutableStateOf(null) }
+    val (homeNav, setHomeNav) = remember { mutableStateOf<AppHomeNav?>(null) }
     if (selNavIndex != 0 && homeNav != null) {
-        BackHandler { selNavIndex = 0; homeNav?.navBack() }
+        BackHandler { selNavIndex = 0; homeNav.navBack() }
     }
     val homeInsets = WindowInsets.systemBars.union(WindowInsets.waterfall)
-    Scaffold(
-        bottomBar = {
-            HomeNavigationBar(
-                selectedIndex = selNavIndex,
-                onSelectItem = { i -> selNavIndex = i; homeNav?.setNavPage(i) },
-                windowInsets = homeInsets
-                    .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom),
+    // todo retain nav fragment across layout changes
+    val navFragmentState = rememberFragmentState()
+    BoxWithConstraints {
+        // window size classes, expanded: rail, medium/compact: rail in landscape
+        // prefer nav rail in split screen mode (50dp bonus size)
+        if (maxWidth >= 840.dp || maxWidth + 50.dp >= maxHeight) {
+            Row() {
+                HomeNavigationRail(
+                    selectedIndex = selNavIndex,
+                    onSelectItem = { i -> selNavIndex = i; homeNav?.setNavPage(i) },
+                    windowInsets = homeInsets
+                        .only(WindowInsetsSides.Vertical + WindowInsetsSides.Start),
+                )
+                Box {
+                    val contentInsets = homeInsets
+                        .only(WindowInsetsSides.Vertical + WindowInsetsSides.End)
+                    val contentPadding = contentInsets.asPaddingValues()
+                    HomeNavFragment(navFragmentState, contentPadding, setHomeNav)
+                }
+            }
+        } else {
+            Scaffold(
+                bottomBar = {
+                    HomeNavigationBar(
+                        selectedIndex = selNavIndex,
+                        onSelectItem = { i -> selNavIndex = i; homeNav?.setNavPage(i) },
+                        windowInsets = homeInsets
+                            .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom),
+                    )
+                },
+                containerColor = Color.Transparent,
+                contentWindowInsets = homeInsets,
+                content = { contentPadding ->
+                    HomeNavFragment(navFragmentState, contentPadding, setHomeNav)
+                }
             )
-        },
-        containerColor = Color.Transparent,
-        contentWindowInsets = homeInsets,
-        content = { contentPadding ->
-            var navFragment: AppHomeNavFragment? by remember { mutableStateOf(null) }
-            AndroidFragment<AppHomeNavFragment>(modifier = Modifier.fillMaxSize()) { navFgm ->
-                homeNav = navFgm
-                navFragment = navFgm
-            }
-            LaunchedEffect(navFragment, contentPadding) {
-                navFragment?.setContentPadding(contentPadding)
-            }
+        }
+    }
+}
+
+@Composable
+private fun HomeNavFragment(
+    fragmentState: FragmentState = rememberFragmentState(),
+    contentPadding: PaddingValues = PaddingValues(0.dp),
+    onUpdate: (AppHomeNavFragment) -> Unit,
+) {
+    var navFragment: AppHomeNavFragment? by remember { mutableStateOf(null) }
+    AndroidFragment<AppHomeNavFragment>(
+        modifier = Modifier.fillMaxSize(),
+        fragmentState = fragmentState,
+        onUpdate = { navFgm ->
+            onUpdate(navFgm)
+            navFragment = navFgm
         }
     )
+    LaunchedEffect(navFragment, contentPadding) {
+        navFragment?.setContentPadding(contentPadding)
+    }
 }
 
 @Composable
@@ -127,6 +176,29 @@ private fun HomeNavigationBar(
     }
 }
 
+@Composable
+private fun HomeNavigationRail(
+    modifier: Modifier = Modifier,
+    selectedIndex: Int,
+    onSelectItem: (Int) -> Unit,
+    windowInsets: WindowInsets = NavigationRailDefaults.windowInsets,
+) {
+    NavigationRail(modifier = modifier, windowInsets = windowInsets) {
+        Spacer(modifier = Modifier.weight(1f))
+        NavigationRailItem(
+            selected = selectedIndex == 0,
+            onClick = { onSelectItem(0) },
+            icon = { Icon(Icons.TwoTone.Home, contentDescription = null) }
+        )
+        NavigationRailItem(
+            selected = selectedIndex == 1,
+            onClick = { onSelectItem(1) },
+            icon = { Icon(Icons.AutoMirrored.TwoTone.List, contentDescription = null) }
+        )
+        Spacer(modifier = Modifier.weight(1f))
+    }
+}
+
 @PreviewCombinedColorLayout
 @Composable
 private fun AppHomePreview() {
@@ -135,5 +207,16 @@ private fun AppHomePreview() {
             bottomBar = { HomeNavigationBar(selectedIndex = 0, onSelectItem = {}) },
             content = { _ -> },
         )
+    }
+}
+
+@Composable
+@Preview(showBackground = true)
+private fun AppHomeNavRailPreview() {
+    MaterialTheme {
+        Row() {
+            HomeNavigationRail(selectedIndex = 0, onSelectItem = {})
+            Box(modifier = Modifier.fillMaxSize())
+        }
     }
 }
