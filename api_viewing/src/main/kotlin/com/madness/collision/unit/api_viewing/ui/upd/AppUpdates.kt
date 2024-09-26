@@ -54,6 +54,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
@@ -109,9 +110,16 @@ fun AppUpdatesPage(paddingValues: PaddingValues, eventHandler: AppUpdatesEventHa
                         left = paddingValues.calculateLeftPadding(LocalLayoutDirection.current),
                         right = paddingValues.calculateRightPadding(LocalLayoutDirection.current)),
                 ) {
-                    val width = maxWidth - 40.dp
+                    val horizontalPadding = LocalLayoutDirection.current.let { di ->
+                        paddingValues.run { calculateLeftPadding(di) + calculateRightPadding(di) }
+                    }
+                    val width = maxWidth - horizontalPadding - 40.dp
                     // set min width to fix too small popup on some devices (e.g. xiaomi)
-                    val min = if (maxWidth >= 600.dp) 500.dp else if (maxWidth >= 360.dp) 320.dp else width
+                    val min = when {
+                        maxWidth - horizontalPadding >= 600.dp -> 500.dp
+                        maxWidth - horizontalPadding >= 360.dp -> 320.dp
+                        else -> width
+                    }
                     Box(modifier = Modifier.widthIn(min = min, max = width)) {
                         with(eventHandler) { UnitBar(width = width) }
                     }
@@ -121,26 +129,39 @@ fun AppUpdatesPage(paddingValues: PaddingValues, eventHandler: AppUpdatesEventHa
         containerColor = if (mainApplication.isDarkTheme) Color(0xFF050505) else Color(0xFFFCFCFC),
         content = { contentPadding ->
             val hasUsageAccess = eventHandler.hasUsageAccess()
-            if (sections.isNotEmpty() || !hasUsageAccess) {
-                UpdatesList(
-                    sections = sections,
-                    columnCount = viewModel.columnCount,
-                    paddingValues = PaddingValues(
-                        start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
-                        end = paddingValues.calculateEndPadding(LocalLayoutDirection.current),
-                        top = contentPadding.calculateTopPadding() + 5.dp,
-                        bottom = paddingValues.calculateBottomPadding() + 20.dp
-                    ),
-                    onClickApp = eventHandler::showAppInfo,
-                    onClickViewMore = eventHandler::showAppListPage,
-                    onClickUsageAccess = eventHandler::showUsageAccessSettings
-                        // hide usage access when all pkgs query not granted yet
-                        .takeIf { !hasUsageAccess && permState.canQueryAllPkgs },
-                    onClickInstalledAppsQuery =
-                        { eventHandler.requestAllPkgsQuery(permState.queryPermission) }
-                        .takeIf { !permState.canQueryAllPkgs },
-                )
-            } else if (!isLoading) {
+            BoxWithConstraints {
+                val horizontalPadding = LocalLayoutDirection.current.let { di ->
+                    paddingValues.run { calculateLeftPadding(di) + calculateRightPadding(di) }
+                }
+                val appItemStyle = when {
+                    viewModel.columnCount > 1 -> DefaultAppItemStyle
+                    maxWidth - horizontalPadding >= 360.dp -> DefaultAppItemStyle
+                    else -> CompactAppItemStyle
+                }
+                CompositionLocalProvider(LocalAppItemStyle provides appItemStyle) {
+                    // always show list to animate appear/disappear
+                    // if (sections.isNotEmpty() || !hasUsageAccess)
+                    UpdatesList(
+                        sections = sections,
+                        columnCount = viewModel.columnCount,
+                        paddingValues = PaddingValues(
+                            start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
+                            end = paddingValues.calculateEndPadding(LocalLayoutDirection.current),
+                            top = contentPadding.calculateTopPadding() + 5.dp,
+                            bottom = paddingValues.calculateBottomPadding() + 20.dp
+                        ),
+                        onClickApp = eventHandler::showAppInfo,
+                        onClickViewMore = eventHandler::showAppListPage,
+                        onClickUsageAccess = eventHandler::showUsageAccessSettings
+                            // hide usage access when all pkgs query not granted yet
+                            .takeIf { !hasUsageAccess && permState.canQueryAllPkgs },
+                        onClickInstalledAppsQuery =
+                            { eventHandler.requestAllPkgsQuery(permState.queryPermission) }
+                            .takeIf { !permState.canQueryAllPkgs },
+                    )
+                }
+            }
+            if (!isLoading) {
                 UpdateNothing(modifier = Modifier.fillMaxWidth().padding(PaddingValues(
                     top = contentPadding.calculateTopPadding() + 5.dp,
                     bottom = paddingValues.calculateBottomPadding() + 20.dp

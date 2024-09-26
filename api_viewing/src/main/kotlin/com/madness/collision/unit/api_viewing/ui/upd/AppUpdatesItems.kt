@@ -40,23 +40,29 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -133,6 +139,34 @@ internal fun AppUpdateItem(art: ApiUpdGuiArt, modifier: Modifier = Modifier) {
     )
 }
 
+@Stable
+val DefaultAppItemStyle: AppItemStyle =
+    AppItemStyle(
+        iconSize = 48.dp,
+        sealSize = 45.dp,
+        nameTextStyle = TextStyle(fontSize = 14.sp, lineHeight = 16.sp),
+        apiTextStyle = TextStyle(fontSize = 25.sp, lineHeight = 27.sp),
+    )
+
+@Stable
+val CompactAppItemStyle: AppItemStyle =
+    AppItemStyle(
+        iconSize = 36.dp,
+        sealSize = 36.dp,
+        nameTextStyle = TextStyle(fontSize = 11.sp, lineHeight = 13.sp),
+        apiTextStyle = TextStyle(fontSize = 20.sp, lineHeight = 22.sp),
+    )
+
+@Immutable
+data class AppItemStyle(
+    val iconSize: Dp,
+    val sealSize: Dp,
+    val nameTextStyle: TextStyle? = null,
+    val apiTextStyle: TextStyle? = null,
+)
+
+val LocalAppItemStyle = compositionLocalOf { DefaultAppItemStyle }
+
 @Composable
 internal fun AppItem(
     modifier: Modifier = Modifier,
@@ -144,26 +178,27 @@ internal fun AppItem(
     tagGroup: AppTagGroup,
     cardColor: Color,
     apiColor: Color,
+    style: AppItemStyle = LocalAppItemStyle.current,
     onClick: () -> Unit,
 ) {
     Card(
         modifier = modifier,
         onClick = onClick,
+        shape = AbsoluteSmoothCornerShape(18.dp, 80),
         colors = CardDefaults.elevatedCardColors(containerColor = cardColor),
     ) {
         Box(contentAlignment = Alignment.Center) {
             if (EasyAccess.isSweet) {
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    val seal by sealFileOf(sealLetter)
-                    if (seal != null) {
-                        Spacer(modifier = Modifier.fillMaxWidth(0.65f))
-                        AsyncImage(
-                            model = seal,
-                            modifier = Modifier.size(45.dp),
-                            contentDescription = null,
-                            alpha = 0.35f,
-                        )
-                    }
+                val seal by sealFileOf(sealLetter)
+                if (seal != null) {
+                    AsyncImage(
+                        modifier = Modifier
+                            .size(style.sealSize)
+                            .align(BiasAlignment(0.4f, 0f)),
+                        model = seal,
+                        contentDescription = null,
+                        alpha = 0.35f,
+                    )
                 }
             }
             AppItemContent(
@@ -173,6 +208,7 @@ internal fun AppItem(
                 iconInfo = iconInfo,
                 tagGroup = tagGroup,
                 apiColor = apiColor,
+                style = style,
             )
         }
     }
@@ -186,13 +222,14 @@ private fun AppItemContent(
     iconInfo: PackageInfo,
     tagGroup: AppTagGroup,
     apiColor: Color,
+    style: AppItemStyle = DefaultAppItemStyle,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         AppIcon(
-            modifier = Modifier.size(54.dp).padding(2.dp),
+            modifier = Modifier.padding(2.dp).size(style.iconSize),
             iconInfo = iconInfo
         )
         Spacer(modifier = Modifier.width(10.dp))
@@ -200,8 +237,7 @@ private fun AppItemContent(
             Text(
                 text = name,
                 color = MaterialTheme.colorScheme.onBackground,
-                fontSize = 14.sp,
-                lineHeight = 16.sp,
+                style = style.nameTextStyle ?: LocalTextStyle.current,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 2,
             )
@@ -213,7 +249,7 @@ private fun AppItemContent(
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = time,
-                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f),
+                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
                     fontSize = 9.sp,
                     lineHeight = 13.sp,
                     overflow = TextOverflow.Ellipsis,
@@ -221,15 +257,16 @@ private fun AppItemContent(
                 )
             }
         }
-        Text(
-            modifier = Modifier.widthIn(min = 40.dp),
-            text = apiText,
-            color = apiColor,
-            fontSize = 25.sp,
-            lineHeight = 25.sp,
-            overflow = TextOverflow.Ellipsis,
-            maxLines = 1,
-        )
+        Box(modifier = Modifier.padding(2.dp).widthIn(min = style.iconSize)) {
+            Text(
+                modifier = Modifier.align(BiasAlignment(-0.5f, 0f)),
+                text = apiText,
+                color = apiColor,
+                style = style.apiTextStyle ?: LocalTextStyle.current,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1,
+            )
+        }
     }
 }
 
@@ -257,7 +294,7 @@ internal fun AppUpdateItem(
     Card(
         modifier = modifier,
         onClick = onClick,
-        shape = AbsoluteSmoothCornerShape(20.dp, 60),
+        shape = AbsoluteSmoothCornerShape(18.dp, 80),
         colors = CardDefaults.elevatedCardColors(containerColor = containerColor),
         border = BorderStroke(0.5.dp, cardBorderColor),
     ) {

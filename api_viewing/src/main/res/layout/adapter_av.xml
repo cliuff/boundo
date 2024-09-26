@@ -39,11 +39,11 @@
 
         <ImageView
             android:id="@+id/avAdapterSeal"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/avListAdapterSealHeight"
+            android:adjustViewBounds="true"
             tools:src="@drawable/seal_t"
             android:alpha="0.35"
-            android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.7"

@@ -16,6 +16,7 @@
 
 <resources>
     <dimen name="avListAdapterLogoHeight">40dp</dimen>
+    <dimen name="avListAdapterSealHeight">36dp</dimen>
     <dimen name="avListAdapterNameSize">11sp</dimen>
     <dimen name="avListAdapterApiSize">20sp</dimen>
     <dimen name="avStatsAdapterLogoTextSize">18sp</dimen>
