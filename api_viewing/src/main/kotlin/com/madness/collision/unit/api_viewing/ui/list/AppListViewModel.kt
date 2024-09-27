@@ -273,6 +273,7 @@ class AppListViewModel : ViewModel() {
                 is AppListSrc.TagFilter -> src.targetCat
                 else -> {
                     // case is reached in unknown situations
+                    // presumably when list did not finish loading due to some issues
                     IllegalStateException("ListSrcCat.Filter not found or matched ($src)")
                         .printStackTrace()
                     ListSrcCat.Platform

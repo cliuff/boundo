@@ -29,7 +29,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.Dp
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import com.madness.collision.BuildConfig
 import com.madness.collision.chief.app.ComposeFragment
 import com.madness.collision.chief.app.rememberColorScheme
@@ -85,15 +84,11 @@ class AppUpdatesFragment : ComposeFragment(), AppInfoFragment.Callback,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel.setUpdatesColumnCount(SpanAdapter.getSpanCount(this, 290f))
-        if (savedInstanceState == null) {
-            moderatedUpdatesCheck()
-        }
     }
 
     override fun onResume() {
         super.onResume()
-        if (lifecycleEventTime.compareValues(Lifecycle.Event.ON_PAUSE, Lifecycle.Event.ON_CREATE) > 0
-            && SystemClock.uptimeMillis() - updatesCheckResumeTime > 30_000) {
+        if (SystemClock.uptimeMillis() - updatesCheckResumeTime > 30_000) {
             updatesCheckResumeTime = SystemClock.uptimeMillis()
             moderatedUpdatesCheck()
         }
@@ -149,8 +144,16 @@ class AppUpdatesFragment : ComposeFragment(), AppInfoFragment.Callback,
     private fun rememberUpdatesEventHandler(): AppUpdatesEventHandler {
         return remember {
             object : AppUpdatesEventHandler {
+                private var refreshTime: Long = 0L
+
                 override fun hasUsageAccess() = context?.hasUsageAccess == true
-                override fun refreshUpdates() = moderatedUpdatesCheck()
+
+                override fun refreshUpdates() {
+                    if (SystemClock.uptimeMillis() - refreshTime > 500) {
+                        refreshTime = SystemClock.uptimeMillis()
+                        moderatedUpdatesCheck()
+                    }
+                }
 
                 override fun showAppInfo(app: ApiViewingApp) {
                     popOwner.pop(this@AppUpdatesFragment, app)

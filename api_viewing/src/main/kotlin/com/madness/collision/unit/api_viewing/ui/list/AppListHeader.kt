@@ -105,6 +105,7 @@ fun AppListSwitchHeader(
             .offset { headerOffset }
             .then(modifier)
     ) {
+        var isQuerying: Boolean by remember { mutableStateOf(false) }
         AppListHeader(
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
             devInfoLabel = headerState.devInfoLabel,
@@ -112,7 +113,8 @@ fun AppListSwitchHeader(
             statsSizeLabel = headerState.statsSize.takeIf { it > 0 }?.toString().orEmpty(),
             onClickDevInfo = headerState::showSystemModules,
             onClickStats = { headerState.showStats(options) },
-            onQueryChange = headerState::onQueryChange,
+            queryEnabled = !appSrcState.isLoadingSrc || isQuerying,
+            onQueryChange = { q -> isQuerying = true; headerState.onQueryChange(q) },
         )
         val loadedSrc = appSrcState.loadedCats
         if (loadedSrc.isNotEmpty() && loadedSrc.singleOrNull() != ListSrcCat.Platform) {
@@ -140,6 +142,7 @@ fun AppListHeader(
     statsSizeLabel: String,
     onClickDevInfo: () -> Unit,
     onClickStats: () -> Unit,
+    queryEnabled: Boolean,
     onQueryChange: (String) -> Unit,
     headerType: Int = 0,
 ) {
@@ -171,6 +174,7 @@ fun AppListHeader(
                 modifier = Modifier.fillMaxWidth(),
                 value = query,
                 onValueChange = { v -> query = v; onQueryChange(v) },
+                enabled = queryEnabled,
                 placeholder = {
                     Text(
                         text = stringResource(com.madness.collision.R.string.sdk_search_hint),
@@ -363,6 +367,7 @@ private fun HeaderPreview() {
             statsSizeLabel = "231",
             onClickDevInfo = { },
             onClickStats = { },
+            queryEnabled = true,
             onQueryChange = {},
         )
     }
