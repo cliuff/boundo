@@ -96,7 +96,6 @@ private fun BottomSheet(onDismiss: () -> Unit, sheetState: SheetState, content: 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
-        containerColor = MaterialTheme.colorScheme.background,
         content = { content() },
         dragHandle = {
             Box(

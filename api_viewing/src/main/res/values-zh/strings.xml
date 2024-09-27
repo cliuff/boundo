@@ -174,4 +174,6 @@
     <string name="av_options_api_compile">编译 API</string>
     <string name="av_options_api_target">目标 API</string>
     <string name="av_options_api_min">最低 API</string>
+    <string name="av_upd_installed_query">查询已安装的应用</string>
+    <string name="av_upd_installed_query_msg">授予权限以分析您所有的应用</string>
 </resources>

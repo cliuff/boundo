@@ -90,18 +90,16 @@ private fun Tags(
     checkStateList: SnapshotStateList<Boolean?>,
     onCheckChanged: (tagIndex: Int, newState: Boolean?) -> Unit,
 ) {
-    Surface(modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-            for ((i, tag) in tags.withIndex()) {
-                val checkState = checkStateList[i]
-                TagItem(
-                    checkState = checkState,
-                    icon = tag.iconResId,
-                    label = tag.label,
-                    onClick = { onCheckChanged(i, if (checkState == null) true else null) },
-                    onLongClick = { onCheckChanged(i, checkState == false) },
-                )
-            }
+    Column(modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState())) {
+        for ((i, tag) in tags.withIndex()) {
+            val checkState = checkStateList[i]
+            TagItem(
+                checkState = checkState,
+                icon = tag.iconResId,
+                label = tag.label,
+                onClick = { onCheckChanged(i, if (checkState == null) true else null) },
+                onLongClick = { onCheckChanged(i, checkState == false) },
+            )
         }
     }
 }
@@ -157,6 +155,8 @@ private fun TagsPreview() {
     }
     val checkStateList = remember { listOf(null, true, false, true).toMutableStateList() }
     BoundoTheme {
-        Tags(tags = tags, checkStateList = checkStateList, onCheckChanged = { _, _ -> })
+        Surface {
+            Tags(tags = tags, checkStateList = checkStateList, onCheckChanged = { _, _ -> })
+        }
     }
 }

@@ -16,7 +16,9 @@
 
 package com.madness.collision.unit.api_viewing.ui.upd
 
-import androidx.compose.foundation.clickable
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -56,6 +58,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -63,7 +66,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -161,9 +163,12 @@ fun AppUpdatesPage(paddingValues: PaddingValues, eventHandler: AppUpdatesEventHa
                     )
                 }
             }
-            if (!isLoading) {
+            // skip the default not loading state before loading updates
+            var init by remember { mutableIntStateOf(0) }; SideEffect { init++ }
+            val isNothing = sections.isEmpty() && hasUsageAccess && !isLoading && init > 0
+            AnimatedVisibility(visible = isNothing, enter = fadeIn(), exit = fadeOut()) {
                 UpdateNothing(modifier = Modifier.fillMaxWidth().padding(PaddingValues(
-                    top = contentPadding.calculateTopPadding() + 5.dp,
+                    top = contentPadding.calculateTopPadding() + 13.dp,
                     bottom = paddingValues.calculateBottomPadding() + 20.dp
                 )))
             }
@@ -271,11 +276,6 @@ private fun UpdatesList(
                     }
                 }
             }
-            if (sections.any { (_, list) -> list.isNotEmpty() }) {
-                item(key = "@upd.btn1") {
-                    UpdatesRedirectButton(type = 1, onClickViewMore, Modifier.animateItem())
-                }
-            }
             if (onClickUsageAccess != null) {
                 item(key = "@upd.btn2") {
                     UpdatesRedirectButton(type = 2, onClickUsageAccess, Modifier.animateItem())
@@ -311,12 +311,6 @@ private fun UpdatesList(
                     }
                 }
             }
-            if (sections.any { (_, list) -> list.isNotEmpty() }) {
-                item(key = "@upd.btn1", span = MaxLineSpan) {
-                    // wrap content button in a grid cell
-                    Box { UpdatesRedirectButton(type = 1, onClickViewMore, Modifier.animateItem()) }
-                }
-            }
             if (onClickUsageAccess != null) {
                 // placeholder to make usage access button be positioned in a new row's cell
                 item(key = "@upd.row1", span = MaxLineSpan) {
@@ -343,7 +337,7 @@ private fun UpdatesSectionTitle(index: AppUpdatesIndex, modifier: Modifier = Mod
     UpdateSectionTitle(
         modifier = modifier
             .padding(top = 5.dp)
-            .padding(horizontal = 20.dp, vertical = 5.dp),
+            .padding(horizontal = 10.dp, vertical = 5.dp),
         text = updateIndexLabel(index)
     )
 }
@@ -355,7 +349,7 @@ private fun UpdatesRedirectButton(type: Int, onClick: () -> Unit, modifier: Modi
             MoreUpdatesButton(
                 modifier = modifier
                     .padding(top = 5.dp)
-                    .padding(horizontal = 20.dp, vertical = 4.dp),
+                    .padding(horizontal = 5.dp, vertical = 4.dp),
                 onClick = onClick,
             )
         }
@@ -363,10 +357,9 @@ private fun UpdatesRedirectButton(type: Int, onClick: () -> Unit, modifier: Modi
             UsageAccessRequest(
                 modifier = modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 10.dp)
-                    .clip(RoundedCornerShape(10.dp))
-                    .clickable(onClick = onClick)
-                    .padding(horizontal = 10.dp, vertical = 8.dp),
+                    .padding(top = 5.dp)
+                    .padding(horizontal = 5.dp, vertical = 5.dp),
+                onClick = onClick,
             )
         }
         3 -> {
@@ -374,7 +367,7 @@ private fun UpdatesRedirectButton(type: Int, onClick: () -> Unit, modifier: Modi
                 modifier = modifier
                     .fillMaxWidth()
                     .padding(top = 8.dp)
-                    .padding(horizontal = 10.dp),
+                    .padding(horizontal = 5.dp, vertical = 5.dp),
                 onClick = onClick,
             )
         }
@@ -424,7 +417,7 @@ private fun AppUpdatesPreview() {
                 UpdatesList(
                     sections = emptyMap(),
                     columnCount = 1,
-                    paddingValues = PaddingValues(top = contentPadding.calculateTopPadding()),
+                    paddingValues = PaddingValues(top = contentPadding.calculateTopPadding() + 5.dp),
                     onClickApp = {},
                     onClickViewMore = {},
                     onClickUsageAccess = {},

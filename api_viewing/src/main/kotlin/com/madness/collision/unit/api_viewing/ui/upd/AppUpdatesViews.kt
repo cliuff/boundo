@@ -17,6 +17,7 @@
 package com.madness.collision.unit.api_viewing.ui.upd
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,6 +27,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.Info
@@ -112,9 +114,12 @@ fun MoreUpdatesButton(modifier: Modifier = Modifier, onClick: () -> Unit) {
 }
 
 @Composable
-fun UsageAccessRequest(modifier: Modifier = Modifier) {
+fun UsageAccessRequest(modifier: Modifier = Modifier, onClick: () -> Unit) {
     Row(
-        modifier = modifier,
+        modifier = modifier
+            .clip(RoundedCornerShape(10.dp))
+            .clickable(onClick = onClick)
+            .padding(horizontal = 6.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
@@ -190,7 +195,7 @@ fun QueryInstalledAppsRequest(modifier: Modifier = Modifier, onClick: () -> Unit
             Spacer(modifier = Modifier.width(12.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = "Query installed apps",
+                    text = stringResource(R.string.av_upd_installed_query),
                     color = contentColor.copy(0.95f),
                     fontSize = 13.sp,
                     lineHeight = 17.sp,
@@ -199,7 +204,7 @@ fun QueryInstalledAppsRequest(modifier: Modifier = Modifier, onClick: () -> Unit
                     maxLines = 1,
                 )
                 Text(
-                    text = "Grant access to analyze all your apps",
+                    text = stringResource(R.string.av_upd_installed_query_msg),
                     color = contentColor.copy(alpha = 0.92f),
                     fontSize = 12.sp,
                     lineHeight = 14.sp,

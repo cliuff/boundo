@@ -184,4 +184,6 @@
     <string name="av_options_api_compile">Compile API</string>
     <string name="av_options_api_target">Target API</string>
     <string name="av_options_api_min">Min. API</string>
+    <string name="av_upd_installed_query">Query installed apps</string>
+    <string name="av_upd_installed_query_msg">Grant access to analyze all your apps</string>
 </resources>
