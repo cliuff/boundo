@@ -107,7 +107,8 @@ private fun Updates(
     val actualBoxPadding = expectedBoxPadding - horizontalItemMargin
     val itemsLayoutWidth = maxWidth - actualBoxPadding * 2
     val maxColumnCount = (itemsLayoutWidth / minItemSize).toInt().coerceAtLeast(1)
-    val rowSize = ceil(descriptions.size / maxColumnCount.toFloat()).toInt()
+    // desc list size +1 for hardcoded settings item
+    val rowSize = ceil(descriptions.size + 1 / maxColumnCount.toFloat()).toInt()
     Column(modifier = modifier.padding(horizontal = actualBoxPadding)) {
         for (i in 0..<rowSize) {
             Row {

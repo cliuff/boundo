@@ -71,7 +71,7 @@ class MainActivity : BaseActivity(), SystemBarMaintainerOwner, MainAppHome {
 
     @Composable
     override fun UnitBar(width: Dp) {
-        UnitBarPage(modifier = Modifier.fillMaxWidth(), viewModel, width)
+        UnitBarPage(mainViewModel = viewModel, width = width)
     }
 
     companion object {

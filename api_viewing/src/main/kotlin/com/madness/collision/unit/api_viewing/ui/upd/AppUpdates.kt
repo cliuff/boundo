@@ -23,6 +23,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -33,7 +34,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -43,15 +43,19 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.rounded.Refresh
-import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -69,11 +73,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.coerceAtLeast
+import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Popup
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.madness.collision.chief.app.BoundoTheme
@@ -115,16 +123,21 @@ fun AppUpdatesPage(paddingValues: PaddingValues, eventHandler: AppUpdatesEventHa
                     val horizontalPadding = LocalLayoutDirection.current.let { di ->
                         paddingValues.run { calculateLeftPadding(di) + calculateRightPadding(di) }
                     }
-                    val width = maxWidth - horizontalPadding - 40.dp
-                    // set min width to fix too small popup on some devices (e.g. xiaomi)
-                    val min = when {
-                        maxWidth - horizontalPadding >= 600.dp -> 500.dp
-                        maxWidth - horizontalPadding >= 360.dp -> 320.dp
-                        else -> width
+                    val maxContentWidth = maxWidth - horizontalPadding
+                    val barWidth = when {
+                        maxContentWidth >= 360.dp -> (maxContentWidth - 40.dp).coerceAtMost(400.dp)
+                        else -> maxContentWidth - 20.dp
                     }
-                    Box(modifier = Modifier.widthIn(min = min, max = width)) {
-                        with(eventHandler) { UnitBar(width = width) }
-                    }
+                    Box(
+                        modifier = Modifier
+                            .width(barWidth)
+                            // scrollable in small split screen
+                            .verticalScroll(rememberScrollState())
+                            .padding(vertical = 12.dp),
+                        content = {
+                            with(eventHandler) { UnitBar(width = barWidth) }
+                        }
+                    )
                 }
             }
         },
@@ -219,8 +232,14 @@ private fun UpdatesAppBar(
                         tint = appBarIconColor,
                     )
                 }
-                DropdownMenu(expanded = showUnitBar, onDismissRequest = { showUnitBar = false }) {
-                    unitBarContent()
+                if (showUnitBar) {
+                    Popup(
+                        offset = with(LocalDensity.current) { IntOffset(0, 40.dp.roundToPx()) },
+                        onDismissRequest = { showUnitBar = false },
+                    ) {
+                        // reserve 8dp padding for all 4 sides
+                        PopupCard(modifier = Modifier.padding(8.dp)) { unitBarContent() }
+                    }
                 }
                 val endPadding = windowInsets.asPaddingValues()
                     .calculateEndPadding(LocalLayoutDirection.current)
@@ -236,6 +255,17 @@ private fun UpdatesAppBar(
             color = appBarDividerColor.copy(alpha = 0.3f),
         )
     }
+}
+
+@Composable
+private fun PopupCard(modifier: Modifier = Modifier, content: @Composable ColumnScope.() -> Unit) {
+    Card(
+        modifier = modifier,
+        shape = RoundedCornerShape(20.dp),
+        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 3.dp),
+        colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.surface),
+        content = content,
+    )
 }
 
 @Composable
