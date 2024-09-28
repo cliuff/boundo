@@ -48,6 +48,9 @@ private val HomeNavContainerId: Int = View.generateViewId()
 
 /** Navigate between fragments. */
 class AppHomeNavFragment : Fragment(), AppHomeNav {
+    companion object {
+        const val ARG_NAV_PAGE = "AppHomeNavPage"
+    }
     private val navFgmClasses: Array<KClass<out Fragment>> =
         arrayOf(AppUpdatesFragment::class, AppListFragment::class)
     private val navFgmTags = navFgmClasses.map { klass -> "AppHome_" + klass.simpleName }
@@ -76,7 +79,8 @@ class AppHomeNavFragment : Fragment(), AppHomeNav {
                 }
         }
         if (savedInstanceState == null) {
-            setNavPage(0)
+            val indexArg = arguments?.getInt(ARG_NAV_PAGE) ?: 0
+            setNavPage(indexArg.coerceIn(navFgmClasses.indices))
         }
     }
 
