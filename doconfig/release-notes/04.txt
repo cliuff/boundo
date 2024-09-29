@@ -1,5 +1,20 @@
 
 
+- **4.3.0** 24092910
+<en-US>
+- Brand new app home page
+- Brand new app API update UI
+- Fix a few crashes in app API page
+- Optimize layout for tablets
+</en-US>
+<zh-CN>
+- 全新应用主页面
+- 全新应用 API 更新界面
+- 修复应用 API 页面少数崩溃
+- 优化平板设备界面布局
+</zh-CN>
+
+
 - **4.2.0** 24071219
 <en-US>
 - Revamped app API page
