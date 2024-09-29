@@ -232,9 +232,11 @@ private fun AppItemContent(
             modifier = Modifier.padding(2.dp).size(style.iconSize),
             iconInfo = iconInfo
         )
-        Spacer(modifier = Modifier.width(10.dp))
+        Spacer(modifier = Modifier.width(7.dp))
         Column(modifier = Modifier.weight(1f)) {
             Text(
+                // 3dp extracted from spacer to align with tag row's content
+                modifier = Modifier.padding(start = 3.dp),
                 text = name,
                 color = MaterialTheme.colorScheme.onBackground,
                 style = style.nameTextStyle ?: LocalTextStyle.current,
@@ -248,6 +250,7 @@ private fun AppItemContent(
             if (time != null) {
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
+                    modifier = Modifier.padding(start = 3.dp),
                     text = time,
                     color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
                     fontSize = 9.sp,
@@ -310,9 +313,11 @@ internal fun AppUpdateItem(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 AppIcon(modifier = Modifier.size(32.dp), iconInfo = iconInfo)
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(5.dp))
                 Column(verticalArrangement = Arrangement.Center) {
                     Text(
+                        // 3dp extracted from spacer to align with tag row's content
+                        modifier = Modifier.padding(start = 3.dp),
                         text = name,
                         color = MaterialTheme.colorScheme.onBackground,
                         fontSize = 12.sp,

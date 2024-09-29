@@ -34,6 +34,7 @@ import androidx.compose.material.icons.outlined.KeyboardDoubleArrowRight
 import androidx.compose.material.icons.outlined.Update
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -46,8 +47,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.madness.collision.chief.app.BoundoTheme
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.ui.info.AppSdkItem
+import com.madness.collision.util.dev.PreviewCombinedColorLayout
 
 @Composable
 internal fun AppApiUpdate(
@@ -57,14 +60,14 @@ internal fun AppApiUpdate(
     oldVer: AppInstallVersion,
 ) {
     Row(
-        modifier = Modifier.widthIn(max = 310.dp).fillMaxWidth(),
+        modifier = Modifier.widthIn(max = 320.dp).fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         val targetTitle = stringResource(com.madness.collision.R.string.apiSdkTarget)
         Column(
             // weight(1f) for equal widths
-            modifier = Modifier.weight(1f, fill = false).padding(horizontal = 8.dp),
+            modifier = Modifier.weight(1f).padding(horizontal = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             if (!LocalInspectionMode.current) {
@@ -82,7 +85,7 @@ internal fun AppApiUpdate(
             tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.75f),
         )
         Column(
-            modifier = Modifier.weight(1f, fill = false).padding(horizontal = 8.dp),
+            modifier = Modifier.weight(1f).padding(horizontal = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             if (!LocalInspectionMode.current) {
@@ -100,7 +103,7 @@ internal fun AppApiUpdate(
 private fun AppInstallationColumn(verCode: Long, verName: String?, time: String) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         val verNo = verCode.toString()
-        if (verName == null || verName.length <= time.length) {
+        if (verName == null || (verNo.length < 7 && verName.length <= time.length)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 if (verName != null) {
                     AppUpdVerName(modifier = Modifier.weight(1f, fill = false), ver = verName)
@@ -110,7 +113,7 @@ private fun AppInstallationColumn(verCode: Long, verName: String?, time: String)
             }
             Spacer(modifier = Modifier.height(1.dp))
             AppUpdTime(time = time)
-        } else if (verNo.length >= time.length - 2) {
+        } else if (verNo.length >= 7 || verNo.length >= time.length - 2) {
             AppUpdVerName(ver = verName, maxLines = 2)
             Spacer(modifier = Modifier.height(1.dp))
             AppUpdVerNo(ver = verNo)
@@ -196,5 +199,43 @@ private fun AppVersionType(type: String) {
             overflow = TextOverflow.Ellipsis,
             maxLines = 1,
         )
+    }
+}
+
+@Composable
+@PreviewCombinedColorLayout
+private fun ApiUpdatePreview() {
+    BoundoTheme {
+        Surface {
+            Column(modifier = Modifier.fillMaxWidth().padding(vertical = 14.dp)) {
+                AppApiUpdate(
+                    newApi = VerInfo(35),
+                    oldApi = VerInfo(34),
+                    newVer = AppInstallVersion(10235L, "1.1.1", "2 days ago"),
+                    oldVer = AppInstallVersion(10234L, "1.0.1", "Mar 11, 2024"),
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                AppApiUpdate(
+                    newApi = VerInfo(35),
+                    oldApi = VerInfo(34),
+                    newVer = AppInstallVersion(10234568L, "1.1.123456789", "2 days ago"),
+                    oldVer = AppInstallVersion(10234567L, "1.0.123456789", "Mar 11, 2024"),
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                AppApiUpdate(
+                    newApi = VerInfo(35),
+                    oldApi = VerInfo(34),
+                    newVer = AppInstallVersion(102345681L, "2024-09-02", "Sep 17, 2024"),
+                    oldVer = AppInstallVersion(102345671L, "2024-06-01", "Mar 11, 2024"),
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                AppApiUpdate(
+                    newApi = VerInfo(35),
+                    oldApi = VerInfo(34),
+                    newVer = AppInstallVersion(102345681L, "15", "Sep 17, 2024"),
+                    oldVer = AppInstallVersion(102345671L, "2024-06-01 S+", "Mar 11, 2024"),
+                )
+            }
+        }
     }
 }
