@@ -85,6 +85,8 @@ import com.madness.collision.util.ui.PackageInfo
 import kotlinx.coroutines.flow.map
 import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape
 
+val LocalAppItemPrefs = compositionLocalOf { 0 }
+
 @Composable
 internal fun AppItem(art: UpdGuiArt, modifier: Modifier = Modifier) {
     val context = LocalContext.current

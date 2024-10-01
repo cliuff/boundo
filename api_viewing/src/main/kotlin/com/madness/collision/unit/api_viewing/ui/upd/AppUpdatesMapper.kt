@@ -59,3 +59,9 @@ internal fun ApiViewingApp.toGuiArt(context: Context, onClick: () -> Unit): UpdG
         onClick = onClick,
     )
 }
+
+internal fun ApiUpdGuiArt.withUpdatedTags(app: ApiViewingApp, context: Context) =
+    copy(expTags = AppInfo.getExpTags(app, context))
+
+internal fun UpdGuiArt.withUpdatedTags(app: ApiViewingApp, context: Context) =
+    copy(expTags = AppInfo.getExpTags(app, context))

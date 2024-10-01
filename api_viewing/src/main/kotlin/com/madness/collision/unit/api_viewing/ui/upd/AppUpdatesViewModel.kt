@@ -61,6 +61,10 @@ class AppUpdatesViewModel : ViewModel() {
         MutableStateFlow(AppUpdatesUiState(isLoading = false, sections = emptyMap(), perm = perm))
     }
     val uiState: StateFlow<AppUpdatesUiState> = mutUiState.asStateFlow()
+    private val mutAppListId = MutableStateFlow(0)
+    val appListId: StateFlow<Int> = mutAppListId.asStateFlow()
+    private val optionsOwner = AppUpdatesOptionsOwner()
+    private var updatesOptions: AppUpdatesOptions? = null
     private var appRepo: AppRepository? = null
     private val updatesChecker = AppUpdatesChecker()
     private val mutexUpdatesCheck = Mutex()
@@ -94,6 +98,9 @@ class AppUpdatesViewModel : ViewModel() {
             mutexUpdatesCheck.withLock check@{
                 // update loading state
                 mutUiState.update { it.copy(isLoading = true) }
+                if (updatesOptions == null) {
+                    updatesOptions = optionsOwner.getOptions(context)
+                }
                 // check all packages query permission first,
                 // but continue querying anyway to retrieve partial result
                 val perm = AppListPermission.queryAllPackagesOrNull(context)
@@ -130,5 +137,14 @@ class AppUpdatesViewModel : ViewModel() {
     fun getApp(context: Context, pkgName: String): ApiViewingApp? {
         val repo = appRepo ?: AppRepo.dumb(context).also { appRepo = it }
         return repo.getApp(pkgName)
+    }
+
+    fun checkListPrefs(context: Context) {
+        viewModelScope.launch(Dispatchers.Default) {
+            if (optionsOwner.checkPrefsChanged(context)) {
+                // trigger list prefs update
+                mutAppListId.update { it + 1 }
+            }
+        }
     }
 }

@@ -29,6 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.Dp
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import com.madness.collision.BuildConfig
 import com.madness.collision.chief.app.ComposeFragment
 import com.madness.collision.chief.app.rememberColorScheme
@@ -37,7 +38,6 @@ import com.madness.collision.chief.auth.PermissionState
 import com.madness.collision.diy.SpanAdapter
 import com.madness.collision.unit.api_viewing.apps.AppListPermission
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
-import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.list.AppPopOwner
 import com.madness.collision.unit.api_viewing.list.pop
 import com.madness.collision.unit.api_viewing.list.updateState
@@ -77,17 +77,15 @@ class AppUpdatesFragment : ComposeFragment(), AppInfoFragment.Callback,
         popOwner.updateState(app)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        context?.let(EasyAccess::init)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel.setUpdatesColumnCount(SpanAdapter.getSpanCount(this, 290f))
     }
 
     override fun onResume() {
         super.onResume()
+        if (lifecycleEventTime.compareValues(Lifecycle.Event.ON_PAUSE, Lifecycle.Event.ON_CREATE) > 0) {
+            context?.let(viewModel::checkListPrefs)
+        }
         if (SystemClock.uptimeMillis() - updatesCheckResumeTime > 30_000) {
             updatesCheckResumeTime = SystemClock.uptimeMillis()
             moderatedUpdatesCheck()

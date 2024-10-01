@@ -86,6 +86,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.madness.collision.chief.app.BoundoTheme
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
+import com.madness.collision.unit.api_viewing.ui.upd.item.ApiUpdGuiArt
+import com.madness.collision.unit.api_viewing.ui.upd.item.UpdGuiArt
 import com.madness.collision.unit.api_viewing.upgrade.Upgrade
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
 import com.madness.collision.util.mainApplication
@@ -107,6 +109,7 @@ interface AppUpdatesEventHandler {
 fun AppUpdatesPage(paddingValues: PaddingValues, eventHandler: AppUpdatesEventHandler) {
     val viewModel: AppUpdatesViewModel = viewModel()
     val updatesUiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val appListPrefs by viewModel.appListId.collectAsStateWithLifecycle()
     val (isLoading, sections, permState) = updatesUiState
     Scaffold(
         topBar = {
@@ -153,7 +156,10 @@ fun AppUpdatesPage(paddingValues: PaddingValues, eventHandler: AppUpdatesEventHa
                     maxWidth - horizontalPadding >= 360.dp -> DefaultAppItemStyle
                     else -> CompactAppItemStyle
                 }
-                CompositionLocalProvider(LocalAppItemStyle provides appItemStyle) {
+                CompositionLocalProvider(
+                    LocalAppItemStyle provides appItemStyle,
+                    LocalAppItemPrefs provides appListPrefs,
+                ) {
                     // always show list to animate appear/disappear
                     // if (sections.isNotEmpty() || !hasUsageAccess)
                     UpdatesList(
@@ -415,9 +421,19 @@ private inline fun <T> sectionItems(
         ) { upd, modifier ->
             if (upd is Upgrade) {
                 val context = LocalContext.current
+                val itemPrefs = LocalAppItemPrefs.current
+                var lastArt: ApiUpdGuiArt? by remember { mutableStateOf(null) }
+                val art = remember(upd, itemPrefs) {
+                    val art = lastArt
+                    val updatedArt = when {
+                        itemPrefs > 0 && art != null -> art.withUpdatedTags(upd.new, context)
+                        else -> upd.toGuiArt(context) { onClickApp(upd.new) }
+                    }
+                    updatedArt.also { lastArt = it }
+                }
                 AppUpdateItem(
                     modifier = modifier.padding(horizontal = 5.dp, vertical = 5.dp),
-                    art = remember(upd) { upd.toGuiArt(context) { onClickApp(upd.new) } },
+                    art = art,
                 )
             }
         }
@@ -426,9 +442,19 @@ private inline fun <T> sectionItems(
         ) { app, modifier ->
             if (app is ApiViewingApp) {
                 val context = LocalContext.current
+                val itemPrefs = LocalAppItemPrefs.current
+                var lastArt: UpdGuiArt? by remember { mutableStateOf(null) }
+                val art = remember(app, itemPrefs) {
+                    val art = lastArt
+                    val updatedArt = when {
+                        itemPrefs > 0 && art != null -> art.withUpdatedTags(app, context)
+                        else -> app.toGuiArt(context) { onClickApp(app) }
+                    }
+                    updatedArt.also { lastArt = it }
+                }
                 AppItem(
                     modifier = modifier.padding(horizontal = 5.dp, vertical = 5.dp),
-                    art = remember(app) { app.toGuiArt(context) { onClickApp(app) } },
+                    art = art,
                 )
             }
         }
