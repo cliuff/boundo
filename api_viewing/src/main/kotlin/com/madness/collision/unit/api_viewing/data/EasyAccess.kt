@@ -23,9 +23,6 @@ import com.madness.collision.unit.api_viewing.util.PrefUtil
 import com.madness.collision.util.P
 
 internal object EasyAccess {
-    var isSweet: Boolean = false
-    val shouldShowDesserts: Boolean
-        get() = isSweet
     var shouldIncludeDisabled = false
     /**
      * indicate that in viewing target api mode
@@ -48,10 +45,6 @@ internal object EasyAccess {
         var isChanged = false
         isViewingTarget = prefSettings.getBoolean(PrefUtil.AV_VIEWING_TARGET, PrefUtil.AV_VIEWING_TARGET_DEFAULT).also {
             isChanged = isChanged || it != isViewingTarget
-            if (isLazy && isChanged) return true
-        }
-        isSweet = prefSettings.getBoolean(PrefUtil.AV_SWEET, PrefUtil.AV_SWEET_DEFAULT).also {
-            isChanged = isChanged || it != isSweet
             if (isLazy && isChanged) return true
         }
         shouldIncludeDisabled = prefSettings.getBoolean(PrefUtil.AV_INCLUDE_DISABLED, PrefUtil.AV_INCLUDE_DISABLED_DEFAULT).also {

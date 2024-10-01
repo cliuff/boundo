@@ -29,11 +29,9 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.google.android.material.card.MaterialCardView
 import com.madness.collision.diy.SandwichAdapter
-import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.databinding.AdapterAvStatsBinding
 import com.madness.collision.unit.api_viewing.seal.SealMaker
-import com.madness.collision.unit.api_viewing.seal.SealManager
 import com.madness.collision.util.X
 import com.madness.collision.util.adapted
 import com.madness.collision.util.alterMargin
@@ -76,11 +74,7 @@ internal class StatsAdapter(context: Context) : SandwichAdapter<StatsAdapter.Hol
     val indexOffset: Int
         get() = spanCount
 
-    private val shouldShowDesserts = EasyAccess.isSweet
-//    private val sweetElevation = if (shouldShowDesserts) X.size(context, 1f, X.DP) else 0f
-    private val sweetMargin = if (shouldShowDesserts) X.size(context, 5f, X.DP).roundToInt() else 0
-    private val innerMargin: Float
-        get() = if (EasyAccess.shouldShowDesserts) 5f else 2f
+    private val sweetMargin = X.size(context, 5f, X.DP).roundToInt()
     private val itemLength: Int = X.size(context, 45f, X.DP).roundToInt()
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
@@ -88,14 +82,14 @@ internal class StatsAdapter(context: Context) : SandwichAdapter<StatsAdapter.Hol
 
     override fun onCreateBodyItemViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val binding = AdapterAvStatsBinding.inflate(inflater, parent, false)
-        return if (shouldShowDesserts) Holder(binding, sweetMargin) else Holder(binding)
+        return Holder(binding, sweetMargin)
     }
 
     override fun onMakeBody(holder: Holder, index: Int) {
         val statsCount = stats.valueAt(index)
         val verInfo = VerInfo(stats.keyAt(index), true)
 
-        optimizeSideMargin(index, 15f, innerMargin, holder.card)
+        optimizeSideMargin(index, 15f, 5f, holder.card)
 
         holder.version.text = when {
             verInfo.api == OsUtils.DEV -> "Android Preview"
@@ -107,25 +101,21 @@ internal class StatsAdapter(context: Context) : SandwichAdapter<StatsAdapter.Hol
         // display a dot when API bigger than 99 (longer than 2 digits)
         val logoText = if (verInfo.api > 99) "•" else verInfo.apiText
         holder.logoText.text = logoText
-        if (EasyAccess.isSweet) {
-            val colorText = SealMaker.getItemColorText(verInfo.api)
-            holder.logoText.setTextColor(colorText)
-        }
+        val colorText = SealMaker.getItemColorText(verInfo.api)
+        holder.logoText.setTextColor(colorText)
         scope.launch(Dispatchers.Main) {
             val seal = SealMaker.getBlurredFile(context, verInfo.letterOrDev, itemLength)
             seal?.let { holder.logoBack.load(it) }
         }
 
-        if (shouldShowDesserts){
-            holder.count.setTextColor(SealMaker.getItemColorAccent(context, verInfo.api))
-            val itemBack = SealMaker.getItemColorBack(context, verInfo.api)
-            holder.card.setCardBackgroundColor(itemBack)
+        holder.count.setTextColor(SealMaker.getItemColorAccent(context, verInfo.api))
+        val itemBack = SealMaker.getItemColorBack(context, verInfo.api)
+        holder.card.setCardBackgroundColor(itemBack)
 
-            scope.launch(Dispatchers.Main) {
-                val seal = SealMaker.getSealFile(context, verInfo.letterOrDev, itemLength)
-                holder.seal.isVisible = seal != null
-                seal?.let { holder.seal.load(it) }
-            }
+        scope.launch(Dispatchers.Main) {
+            val seal = SealMaker.getSealFile(context, verInfo.letterOrDev, itemLength)
+            holder.seal.isVisible = seal != null
+            seal?.let { holder.seal.load(it) }
         }
 
         val codename = when {

@@ -55,14 +55,11 @@ import com.madness.collision.chief.app.rememberColorScheme
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.api_viewing.apps.AppRepo
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
-import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.list.AppInfoPage
 import com.madness.collision.unit.api_viewing.list.AppListService
 import com.madness.collision.unit.api_viewing.list.LocalAppSwitcherHandler
 import com.madness.collision.unit.api_viewing.seal.SealMaker
-import com.madness.collision.util.ThemeUtil
 import com.madness.collision.util.configure
-import com.madness.collision.util.mainApplication
 import com.madness.collision.util.os.DialogFragmentSystemBarMaintainer
 import com.madness.collision.util.os.SystemBarMaintainer
 import com.madness.collision.util.os.SystemBarMaintainerOwner
@@ -235,11 +232,7 @@ class AppInfoFragment() : BottomSheetDialogFragment(), SystemBarMaintainerOwner 
             val a = switchPair.first
             if (a != null) {
                 LaunchedEffect(pkgName) {
-                    val color = when {
-                        EasyAccess.isSweet -> SealMaker.getItemColorBack(context, a.targetAPI)
-                        mainApplication.isPaleTheme -> 0xFFF7FFE9.toInt()
-                        else -> ThemeUtil.getColor(context, R.attr.colorASurface)
-                    }
+                    val color = SealMaker.getItemColorBack(context, a.targetAPI)
                     setBackgroundColor(color)
                 }
                 // use parent instead of child fragment manager to show dialog after dismiss()

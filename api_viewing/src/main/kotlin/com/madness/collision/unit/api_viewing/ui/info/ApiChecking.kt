@@ -51,7 +51,6 @@ import coil.compose.AsyncImage
 import com.madness.collision.R as MainR
 import com.madness.collision.unit.api_viewing.R
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
-import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.seal.SealMaker
 import com.madness.collision.util.os.OsUtils
@@ -169,10 +168,7 @@ internal fun AppSdkItem(modifier: Modifier = Modifier, ver: VerInfo, title: Stri
             else -> "$title ${ver.apiText}"
         },
         ver = ver.displaySdk,
-        color = Color(when {
-            EasyAccess.isSweet -> SealMaker.getItemColorText(ver.api)
-            else -> 0xFFF5F5F5.toInt()
-        }),
+        color = Color(SealMaker.getItemColorText(ver.api)),
         sealIndex = sealIndex,
         sealFile = sealFile,
     )

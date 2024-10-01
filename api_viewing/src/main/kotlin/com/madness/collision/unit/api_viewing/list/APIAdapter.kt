@@ -95,19 +95,11 @@ internal open class APIAdapter(context: Context, private val listener: Listener,
 
     protected val inflater: LayoutInflater = LayoutInflater.from(context)
     private var sortMethod: Int = MyUnit.SORT_POSITION_API_LOW
-    private val sweetMargin by lazy { X.size(context, 5f, X.DP).roundToInt() }
-    private val plainMargin by lazy { X.size(context, 2f, X.DP).roundToInt() }
     protected val loadPref: EasyAccess = EasyAccess
-    private val margin: Int
-        get() = if (loadPref.shouldShowDesserts) sweetMargin else plainMargin
-    private val innerMargin: Float
-        get() = if (loadPref.shouldShowDesserts) 5f else 2f
+    private val margin: Int = X.size(context, 5f, X.DP).roundToInt()
     protected open val shouldShowTime: Boolean
         get() = sortMethod == MyUnit.SORT_POSITION_API_TIME
     protected val itemLength: Int = X.size(context, 45f, X.DP).roundToInt()
-    private val _colorSurface by lazy { ThemeUtil.getColor(context, R.attr.colorASurface) }
-    protected val colorSurface: Int
-        get() = if (loadPref.shouldShowDesserts) _colorSurface else 0
 
     fun setSortMethod(sortMethod: Int): APIAdapter {
         this.sortMethod = sortMethod
@@ -139,7 +131,7 @@ internal open class APIAdapter(context: Context, private val listener: Listener,
 //        if (shouldShowDesserts && !holder.card.cardBackgroundColor.isOpaque) {
 //            holder.card.setCardBackgroundColor(colorSurface)
 //        }
-        optimizeSideMargin(index, 15f, innerMargin, holder.card)
+        optimizeSideMargin(index, 15f, 5f, holder.card)
         holder.card.alterMargin(top = margin, bottom = margin)
         val appInfo = apps[index]
         holder.name.text = appInfo.name
@@ -153,20 +145,14 @@ internal open class APIAdapter(context: Context, private val listener: Listener,
         else VerInfo.minDisplay(appInfo)
         holder.api.text = verInfo.displaySdk
 
-        if (loadPref.shouldShowDesserts) {
-            holder.api.setTextColor(SealManager.getItemColorAccent(context, verInfo.api))
-            val itemBack = SealManager.getItemColorBack(context, verInfo.api)
-            holder.card.setCardBackgroundColor(itemBack)
+        holder.api.setTextColor(SealManager.getItemColorAccent(context, verInfo.api))
+        val itemBack = SealManager.getItemColorBack(context, verInfo.api)
+        holder.card.setCardBackgroundColor(itemBack)
 
-            scope.launch(Dispatchers.Main) {
-                val seal = SealMaker.getSealFile(context, verInfo.letterOrDev, itemLength)
-                holder.seal.isVisible = seal != null
-                seal?.let { holder.seal.load(it) }
-            }
-        } else {
-            holder.api.setTextColor(holder.name.textColors)
-            holder.seal.visibility = View.GONE
-            holder.card.setCardBackgroundColor(colorSurface)
+        scope.launch(Dispatchers.Main) {
+            val seal = SealMaker.getSealFile(context, verInfo.letterOrDev, itemLength)
+            holder.seal.isVisible = seal != null
+            seal?.let { holder.seal.load(it) }
         }
 
         bindUpdateTime(holder, appInfo)

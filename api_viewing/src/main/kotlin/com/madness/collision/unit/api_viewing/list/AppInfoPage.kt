@@ -45,7 +45,6 @@ import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.DialogFragment
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
-import com.madness.collision.R
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.api_viewing.data.*
 import com.madness.collision.unit.api_viewing.env.GooglePlayAppInfoOwner
@@ -62,7 +61,6 @@ import com.madness.collision.unit.api_viewing.ui.info.AppSwitcher
 import com.madness.collision.unit.api_viewing.ui.info.AppSwitcherHandler
 import com.madness.collision.unit.api_viewing.ui.info.LibPage
 import com.madness.collision.unit.api_viewing.ui.info.TagDetailsList
-import com.madness.collision.util.ThemeUtil
 import com.madness.collision.util.dev.DarkPreview
 import com.madness.collision.util.dev.StandardPreview
 import com.madness.collision.util.mainApplication
@@ -101,13 +99,7 @@ private fun AppInfoPage(
     val app = LocalApp.current
     val context = LocalContext.current
     val verInfo = remember { listOf(VerInfo.minDisplay(app), VerInfo.targetDisplay(app), VerInfo(app.compileAPI)) }
-    val itemColor = remember {
-        when {
-            EasyAccess.isSweet -> SealMaker.getItemColorBack(context, app.targetAPI)
-            mainApplication.isPaleTheme -> 0xFFF7FFE9.toInt()
-            else -> ThemeUtil.getColor(context, R.attr.colorASurface)
-        }
-    }
+    val itemColor = remember { SealMaker.getItemColorBack(context, app.targetAPI) }
     val updateTime = remember {
         run {
             if (app.isArchive) return@run null
@@ -372,17 +364,15 @@ private fun AppHeaderContent(cardColor: Color, modifier: Modifier = Modifier) {
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.weight(1f),
             )
-            if (EasyAccess.isSweet) {
-                val sealVerInfo = remember { VerInfo.targetDisplay(app) }
-                val seal by sealFileOf(sealVerInfo.letterOrDev)
-                if (seal != null) {
-                    Spacer(modifier = Modifier.width(6.dp))
-                    AsyncImage(
-                        model = seal,
-                        modifier = Modifier.size(40.dp),
-                        contentDescription = null,
-                    )
-                }
+            val sealVerInfo = remember { VerInfo.targetDisplay(app) }
+            val seal by sealFileOf(sealVerInfo.letterOrDev)
+            if (seal != null) {
+                Spacer(modifier = Modifier.width(6.dp))
+                AsyncImage(
+                    model = seal,
+                    modifier = Modifier.size(40.dp),
+                    contentDescription = null,
+                )
             }
         }
     }

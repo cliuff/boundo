@@ -69,7 +69,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.madness.collision.chief.app.BoundoTheme
 import com.madness.collision.unit.api_viewing.R
-import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.info.ExpIcon
 import com.madness.collision.unit.api_viewing.info.ExpTag
@@ -188,18 +187,16 @@ internal fun AppItem(
         colors = CardDefaults.elevatedCardColors(containerColor = cardColor),
     ) {
         Box(contentAlignment = Alignment.Center) {
-            if (EasyAccess.isSweet) {
-                val seal by sealFileOf(sealLetter)
-                if (seal != null) {
-                    AsyncImage(
-                        modifier = Modifier
-                            .size(style.sealSize)
-                            .align(BiasAlignment(0.4f, 0f)),
-                        model = seal,
-                        contentDescription = null,
-                        alpha = 0.35f,
-                    )
-                }
+            val seal by sealFileOf(sealLetter)
+            if (seal != null) {
+                AsyncImage(
+                    modifier = Modifier
+                        .size(style.sealSize)
+                        .align(BiasAlignment(0.4f, 0f)),
+                    model = seal,
+                    contentDescription = null,
+                    alpha = 0.35f,
+                )
             }
             AppItemContent(
                 name = name,

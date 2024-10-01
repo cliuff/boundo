@@ -97,10 +97,7 @@ internal class ChartFragment: TaggedFragment(){
                 else -> apiVer.sdk
             },
             color = SealMaker.getItemColorForIllustration(context, apiVer.api),
-            icon = when {
-                !EasyAccess.isSweet -> null
-                else -> loadApiIcon(apiVer.letterOrDev, iconSize, itemLength, context)
-            },
+            icon = loadApiIcon(apiVer.letterOrDev, iconSize, itemLength, context),
         )
     }
 

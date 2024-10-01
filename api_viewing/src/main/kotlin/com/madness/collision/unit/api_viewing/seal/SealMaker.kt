@@ -26,7 +26,6 @@ import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 import com.madness.collision.R
 import com.madness.collision.unit.api_viewing.Utils
-import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.util.*
 import com.madness.collision.util.os.OsUtils
 import com.madness.collision.util.ui.appContext
@@ -42,7 +41,6 @@ typealias SealManager = SealMaker
 object SealMaker {
 
     fun getAndroidCodenameImageRes(letter: Char): Int {
-        if (!EasyAccess.isSweet) return 0
         return when (letter) {
             'v' -> MyR.drawable.seal_v
             'u' -> MyR.drawable.seal_u
@@ -81,10 +79,6 @@ object SealMaker {
     }
 
     private fun itemColorInfo(context: Context, apiLevel: Int, isAccent: Boolean, isForIllustration: Boolean = false): Int {
-        if (!EasyAccess.shouldShowDesserts && !isForIllustration) {
-            val attrRes = if (isAccent) android.R.attr.textColor else R.attr.colorASurface
-            return ThemeUtil.getColor(context, attrRes)
-        }
         val level = when (apiLevel) {
             OsUtils.DEV -> when (Utils.getDevCodenameLetter()) {
                 'v' -> OsUtils.V
@@ -195,7 +189,6 @@ object SealMaker {
 
     private fun mapToBlurredIndex(index: Char): BlurredIndex {
         val value = when {
-            !EasyAccess.isSweet -> '?'
             getAndroidCodenameImageRes(index) != 0 -> index
             else -> '?'
         }
