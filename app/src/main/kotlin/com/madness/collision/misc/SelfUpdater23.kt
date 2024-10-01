@@ -21,7 +21,7 @@ import androidx.core.content.edit
 import com.madness.collision.unit.api_viewing.AccessAV
 
 class SelfUpdater23 {
-    val maxVerCode = 24060815
+    val maxVerCode = 24100110
     fun apply(oldVerCode: Int, prefSettings: SharedPreferences) {
         // check illegal version code
         if (oldVerCode < 0) return
@@ -32,6 +32,9 @@ class SelfUpdater23 {
         if (oldVerCode < 24060815) {
             val keys = listOf("apiAPKPreload", "SDKCircularIcon", "APIPackageRoundIcon", "AVClip2Round")
             prefSettings.edit { keys.forEach(::remove) }
+        }
+        if (oldVerCode < 24100110) {
+            prefSettings.edit { remove("AVSweet") }
         }
     }
 }

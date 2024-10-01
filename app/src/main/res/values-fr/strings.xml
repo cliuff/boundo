@@ -143,7 +143,6 @@
     <string name="fileActionsShare">Partager</string>
     <string name="fileActionsSave">Sauvegarder</string>
     <string name="textWaitASecond">Chargement, veuillez patienter une seconde</string>
-    <string name="prefSettingsSweet">Afficher les desserts</string>
     <string name="apiDetailsPackageName">"Nom du paquet: "</string>
     <string name="prefSettingsAvIncludeDisabled">Inclure les applications désactivées</string>
     <string name="prefSettingsThemeCnRed">Not so red</string>

@@ -61,7 +61,6 @@
     <string name="prefSettingsThemeCnRed">أحمر</string>
     <string name="prefSettingsAvIncludeDisabled">تشمل التطبيقات المعوقين</string>
     <string name="apiDetailsPackageName">"اسم الحزمة: "</string>
-    <string name="prefSettingsSweet">عرض الحلويات</string>
     <string name="textWaitASecond">التحميل ، يرجى الانتظار ثانية</string>
     <string name="fileActionsSave">حفظ</string>
     <string name="fileActionsShare">شارك</string>

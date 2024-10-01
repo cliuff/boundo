@@ -152,7 +152,6 @@
     <string name="notifyChannelGroupApp">應用</string>
     <string name="notifyChannelGroupAppDesc">應用相關通知</string>
     <string name="textWaitASecond">加載中，請稍候</string>
-    <string name="prefSettingsSweet">顯示甜點</string>
     <string name="apiDetailsPackageName">包名：</string>
     <string name="prefSettingsAvIncludeDisabled">包含已禁用的應用</string>
     <string name="av_details_native_libs">原生庫：</string>

@@ -152,7 +152,6 @@
     <string name="notifyChannelGroupApp">Εφαρμογή</string>
     <string name="notifyChannelGroupAppDesc">Ειδοποιήσεις σχετικά με την εφαρμογή</string>
     <string name="textWaitASecond">Φόρτωση, περιμένετε λίγο</string>
-    <string name="prefSettingsSweet">Δείξτε επιδόρπια</string>
     <string name="prefSettingsAvIncludeDisabled">Συμπεριλάβετε απενεργοποιημένες εφαρμογές</string>
     <string name="twLiveWallpaperDesc">Μετάβαση σε σκοτεινή ταπετσαρία αυτόματα όταν είναι ενεργοποιημένο το σκοτεινό θέμα</string>
     <string name="unit_desc_tw">• Κάντε την ταπετσαρία σας να συμμορφώνεται με το σκοτεινό θέμα Android 10 εφαρμόζοντας αυτόματα μια ταπετσαρία σκούρου χρώματος</string>

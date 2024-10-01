@@ -150,7 +150,6 @@
     <string name="notifyChannelGroupApp">応用</string>
     <string name="notifyChannelGroupAppDesc">アプリケーション関連の通知</string>
     <string name="textWaitASecond">読み込み中。。。待って下さい</string>
-    <string name="prefSettingsSweet">デザートを表示</string>
     <string name="apiDetailsPackageName">パッケージ名：</string>
     <string name="prefSettingsAvIncludeDisabled">無効になっているアプリが含まれています</string>
     <string name="av_details_native_libs">ネイティブライブラリ：</string>

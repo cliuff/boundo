@@ -143,7 +143,6 @@
     <string name="fileActionsShare">Dzielić</string>
     <string name="fileActionsSave">Ratować</string>
     <string name="textWaitASecond">Ładowanie, poczekaj chwilę</string>
-    <string name="prefSettingsSweet">Pokaż desery</string>
     <string name="apiDetailsPackageName">"Nazwa pakietu: "</string>
     <string name="prefSettingsAvIncludeDisabled">Uwzględnij wyłączone aplikacje</string>
     <string name="prefSettingsThemeCnRed">Nie tak czerwony</string>

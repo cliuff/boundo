@@ -31,11 +31,6 @@
         android:summary="@string/av_pref_displaying_summary"
         android:title="@string/av_pref_displaying">
 
-        <androidx.preference.SwitchPreference
-            android:defaultValue="@bool/avSweetDefault"
-            android:key="@string/avSweet"
-            android:title="@string/prefSettingsSweet" />
-
         <androidx.preference.Preference
             android:key="@string/avTags"
             android:title="@string/av_settings_tags" />

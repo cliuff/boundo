@@ -143,7 +143,6 @@
     <string name="fileActionsShare">Share</string>
     <string name="fileActionsSave">Save</string>
     <string name="textWaitASecond">Loading, please wait a second</string>
-    <string name="prefSettingsSweet">Show desserts</string>
     <string name="apiDetailsPackageName">"Package name: "</string>
     <string name="prefSettingsAvIncludeDisabled">Include disabled apps</string>
     <string name="prefSettingsThemeCnRed">Not so red</string>

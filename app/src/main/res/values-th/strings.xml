@@ -61,7 +61,6 @@
     <string name="prefSettingsThemeCnRed">สีแดง</string>
     <string name="prefSettingsAvIncludeDisabled">รวมแอพที่ปิดใช้งาน</string>
     <string name="apiDetailsPackageName">"ชื่อแพ็คเกจ: "</string>
-    <string name="prefSettingsSweet">แสดงของหวาน</string>
     <string name="textWaitASecond">กำลังโหลดโปรดรอสักครู่</string>
     <string name="fileActionsSave">บันทึก</string>
     <string name="fileActionsShare">หุ้น</string>

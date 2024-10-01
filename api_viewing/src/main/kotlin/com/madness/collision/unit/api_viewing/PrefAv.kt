@@ -20,17 +20,12 @@ import android.os.Bundle
 import androidx.core.content.edit
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.SwitchPreference
 import com.madness.collision.main.showPage
 import com.madness.collision.unit.api_viewing.tag.app.AppTagManager
 import com.madness.collision.unit.api_viewing.tag.app.getFullLabel
 import com.madness.collision.unit.api_viewing.ui.pref.DiffHistoryFragment
-import com.madness.collision.unit.api_viewing.util.PrefUtil
-import com.madness.collision.util.F
 import com.madness.collision.util.P
 import com.madness.collision.util.PopupUtil
-import com.madness.collision.util.X
-import com.madness.collision.util.findPref
 
 internal class PrefAv: PreferenceFragmentCompat() {
     companion object {
@@ -43,20 +38,6 @@ internal class PrefAv: PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         preferenceManager.sharedPreferencesName = P.PREF_SETTINGS
         setPreferencesFromResource(R.xml.pref_settings_av, rootKey)
-        findPref<SwitchPreference>(PrefUtil.AV_SWEET)?.apply {
-            updatePrefSweet(this.isChecked)
-            onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                if(newValue is Boolean) updatePrefSweet(newValue)
-                true
-            }
-        }
-    }
-
-    private fun updatePrefSweet(newValue: Boolean) {
-        if (!newValue) {
-            val context = context ?: return
-            X.deleteFolder(F.createFile(F.valCachePubAvSeal(context)))
-        }
     }
 
     override fun onPreferenceTreeClick(preference: Preference): Boolean {

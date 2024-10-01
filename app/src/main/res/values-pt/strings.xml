@@ -61,7 +61,6 @@
     <string name="prefSettingsThemeCnRed">Vermelho</string>
     <string name="prefSettingsAvIncludeDisabled">Incluir aplicativos desativados</string>
     <string name="apiDetailsPackageName">"Nome do pacote: "</string>
-    <string name="prefSettingsSweet">Mostrar sobremesas</string>
     <string name="textWaitASecond">Carregando, aguarde um segundo</string>
     <string name="fileActionsSave">Salve </string>
     <string name="fileActionsShare">Compartilhar</string>

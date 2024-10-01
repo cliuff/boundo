@@ -150,7 +150,6 @@
     <string name="notifyChannelGroupApp">신청</string>
     <string name="notifyChannelGroupAppDesc">응용 프로그램 관련 알림</string>
     <string name="textWaitASecond">로딩 중 기다려주세요</string>
-    <string name="prefSettingsSweet">디저트보기</string>
     <string name="apiDetailsPackageName">"패키지 이름 : "</string>
     <string name="prefSettingsAvIncludeDisabled">비활성화 된 앱 포함</string>
     <string name="av_details_native_libs">"기본 라이브러리 : "</string>

@@ -18,8 +18,6 @@ package com.madness.collision.unit.api_viewing.util
 
 internal object PrefUtil {
     const val AV_TAGS = "AvTags"
-    const val AV_SWEET = "AVSweet"
-    const val AV_SWEET_DEFAULT = true
     const val AV_VIEWING_TARGET = "AVViewingTarget"
     const val AV_VIEWING_TARGET_DEFAULT = true
     const val AV_INCLUDE_DISABLED = "AVIncludeDisabled"
