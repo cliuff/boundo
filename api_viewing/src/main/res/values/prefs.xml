@@ -18,8 +18,6 @@
 <resources>
 
     <!-- preference keys -->
-    <string name="avIncludeDisabled" translatable="false">AVIncludeDisabled</string>
-    <bool name="avIncludeDisabledDefault">false</bool>
     <string name="avTags" translatable="false">AvTags</string>
     <string name="avDiffHistory" translatable="false">AvDiffHistory</string>
     <!-- preference keys -->

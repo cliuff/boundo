@@ -144,7 +144,6 @@
     <string name="fileActionsSave">صرفه جویی</string>
     <string name="textWaitASecond">در حال بارگیری، لطفاً یک ثانیه صبر کنید</string>
     <string name="apiDetailsPackageName">"نام بسته: "</string>
-    <string name="prefSettingsAvIncludeDisabled">شامل برنامه های غیرفعال شده</string>
     <string name="prefSettingsThemeCnRed">نه چندان قرمز</string>
     <string name="unitsManager">مدیر واحد</string>
     <string name="units">واحدها</string>

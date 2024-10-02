@@ -62,9 +62,6 @@
     <string name="av_ai">نماد تطبیقی</string>
     <string name="av_tag_has_splits">&#8207;Android App Bundle</string>
     <string name="av_apks_select_folder">پوشه ای را برای اسکن انتخاب کنید</string>
-    <string name="av_pref_loading">در حال بارگذاری لیست</string>
-    <string name="av_pref_loading_summary">به صورت دستی بازخوانی کنید تا تغییرات ایجاد شود</string>
-    <string name="av_pref_displaying_summary">تغییرات به صورت خودکار فعال می شوند</string>
     <string name="av_pref_displaying">نمایش لیست</string>
     <string name="av_adapter_tag_hidden">پنهان شده است</string>
     <string name="av_settings_tag_hidden">نماد برنامه در راه‌انداز نشان داده نمی‌شود</string>

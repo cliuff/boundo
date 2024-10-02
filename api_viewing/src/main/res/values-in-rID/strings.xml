@@ -62,9 +62,6 @@
     <string name="av_ai">Ikon adaptif</string>
     <string name="av_tag_has_splits">Bundel Aplikasi Android</string>
     <string name="av_apks_select_folder">Pilih folder untuk dipindai</string>
-    <string name="av_pref_loading">Pemuatan daftar</string>
-    <string name="av_pref_loading_summary">Segarkan secara manual untuk memicu perubahan</string>
-    <string name="av_pref_displaying_summary">Perubahan dipicu secara otomatis</string>
     <string name="av_pref_displaying">Menampilkan daftar</string>
     <string name="av_adapter_tag_hidden">Tersembunyi</string>
     <string name="av_settings_tag_hidden">Ikon aplikasi tidak ditampilkan di peluncur</string>

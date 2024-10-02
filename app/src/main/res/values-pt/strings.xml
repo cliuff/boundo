@@ -59,7 +59,6 @@
     <string name="units">Unidades</string>
     <string name="unitsManager">Gerente de unidade</string>
     <string name="prefSettingsThemeCnRed">Vermelho</string>
-    <string name="prefSettingsAvIncludeDisabled">Incluir aplicativos desativados</string>
     <string name="apiDetailsPackageName">"Nome do pacote: "</string>
     <string name="textWaitASecond">Carregando, aguarde um segundo</string>
     <string name="fileActionsSave">Salve </string>

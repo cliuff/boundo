@@ -153,7 +153,6 @@
     <string name="notifyChannelGroupAppDesc">應用相關通知</string>
     <string name="textWaitASecond">加載中，請稍候</string>
     <string name="apiDetailsPackageName">包名：</string>
-    <string name="prefSettingsAvIncludeDisabled">包含已禁用的應用</string>
     <string name="av_details_native_libs">原生庫：</string>
     <string name="twLiveWallpaperDesc">開啟黑暗模式時自動更換暗色調壁紙</string>
     <string name="unit_desc_tw">• 設置亮色調和暗色調壁紙，壁紙隨安卓10的黑暗模式而變化</string>

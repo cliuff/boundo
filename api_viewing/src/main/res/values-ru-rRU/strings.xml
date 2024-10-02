@@ -62,12 +62,9 @@
     <string name="av_ai">Адаптивный значок</string>
     <string name="av_tag_has_splits">Android App Bundle</string>
     <string name="av_apks_select_folder">Выберите папку для сканирования</string>
-    <string name="av_pref_loading">Загрузка списка</string>
     <string name="av_pref_displaying">Отображение списка</string>
     <string name="av_adapter_tag_hidden">скрытый</string>
     <string name="av_settings_tag_hidden">Значок приложения не отображается в панели запуска</string>
-    <string name="av_pref_loading_summary">Обновление вручную, чтобы вызвать изменения</string>
-    <string name="av_pref_displaying_summary">Изменения запускаются автоматически</string>
     <string name="av_main_filter_tip">Попробуйте долго нажимать на тег</string>
     <string name="av_main_option_device_api">API устройства</string>
     <string name="av_main_device_api_api">Уровень API</string>

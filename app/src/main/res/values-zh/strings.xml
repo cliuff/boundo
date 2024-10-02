@@ -145,7 +145,6 @@
     <string name="fileActionsShare">分享</string>
     <string name="textWaitASecond">加载中，请稍候</string>
     <string name="apiDetailsPackageName">包名：</string>
-    <string name="prefSettingsAvIncludeDisabled">包含已禁用的应用</string>
     <string name="prefSettingsThemeCnRed">红得泛橙</string>
     <string name="unitsManager">组件管理</string>
     <string name="units">组件</string>

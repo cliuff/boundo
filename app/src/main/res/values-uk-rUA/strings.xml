@@ -145,7 +145,6 @@
     <string name="fileActionsSave">Зберегти</string>
     <string name="textWaitASecond">Завантажується, зачекайте секунду</string>
     <string name="apiDetailsPackageName">"Назва пакета: "</string>
-    <string name="prefSettingsAvIncludeDisabled">Включити відключені програми</string>
     <string name="prefSettingsThemeCnRed">Не такий червоний</string>
     <string name="unitsManager">Менеджер підрозділу</string>
     <string name="units">одиниці</string>

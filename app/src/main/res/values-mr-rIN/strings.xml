@@ -144,7 +144,6 @@
     <string name="fileActionsSave">जतन करा</string>
     <string name="textWaitASecond">लोड होत आहे, कृपया एक सेकंद प्रतीक्षा करा</string>
     <string name="apiDetailsPackageName">"पॅकेज नाव: "</string>
-    <string name="prefSettingsAvIncludeDisabled">अक्षम केलेले अॅप्स समाविष्ट करा</string>
     <string name="prefSettingsThemeCnRed">इतका लाल नाही</string>
     <string name="unitsManager">युनिट मॅनेजर</string>
     <string name="units">युनिट्स</string>

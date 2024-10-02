@@ -62,12 +62,9 @@
     <string name="av_ai">ไอคอนการปรับตัว</string>
     <string name="av_tag_has_splits">Android App Bundle</string>
     <string name="av_apks_select_folder">เลือกโฟลเดอร์ที่จะสแกน</string>
-    <string name="av_pref_loading">กำลังโหลดรายการ</string>
     <string name="av_pref_displaying">รายการที่แสดง</string>
     <string name="av_adapter_tag_hidden">ซ่อนเร้น</string>
     <string name="av_settings_tag_hidden">ไอคอนแอปไม่แสดงในตัวเรียกใช้งาน</string>
-    <string name="av_pref_loading_summary">รีเฟรชด้วยตนเองเพื่อเรียกการเปลี่ยนแปลง</string>
-    <string name="av_pref_displaying_summary">การเปลี่ยนแปลงจะถูกเรียกใช้โดยอัตโนมัติ</string>
     <string name="av_main_filter_tip">ลองกดแท็กเป็นเวลานาน</string>
     <string name="av_main_option_device_api">API อุปกรณ์</string>
     <string name="av_main_device_api_api">ระดับ API</string>

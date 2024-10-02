@@ -62,9 +62,6 @@
     <string name="av_ai">Ikona adaptacyjna</string>
     <string name="av_tag_has_splits">Pakiet aplikacji na Androida</string>
     <string name="av_apks_select_folder">Wybierz folder do skanowania</string>
-    <string name="av_pref_loading">Ładowanie listy</string>
-    <string name="av_pref_loading_summary">Odśwież ręcznie, aby wywołać zmiany</string>
-    <string name="av_pref_displaying_summary">Zmiany są uruchamiane automatycznie</string>
     <string name="av_pref_displaying">Wyświetlanie listy</string>
     <string name="av_adapter_tag_hidden">Ukryty</string>
     <string name="av_settings_tag_hidden">Ikona aplikacji nie jest wyświetlana w programie uruchamiającym</string>

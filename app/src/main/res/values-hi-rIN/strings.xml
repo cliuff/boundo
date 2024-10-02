@@ -144,7 +144,6 @@
     <string name="fileActionsSave">बचाना</string>
     <string name="textWaitASecond">लोड हो रहा है, कृपया एक सेकंड प्रतीक्षा करें</string>
     <string name="apiDetailsPackageName">"पैकेज का नाम: "</string>
-    <string name="prefSettingsAvIncludeDisabled">अक्षम ऐप्स शामिल करें</string>
     <string name="prefSettingsThemeCnRed">इतना लाल नहीं</string>
     <string name="unitsManager">यूनिट मैनेजर</string>
     <string name="units">इकाइयों</string>

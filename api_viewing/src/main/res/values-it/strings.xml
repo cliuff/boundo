@@ -62,12 +62,9 @@
     <string name="av_ai">Icona adattiva</string>
     <string name="av_tag_has_splits">Android App Bundle</string>
     <string name="av_apks_select_folder">Seleziona una cartella da scansionare</string>
-    <string name="av_pref_loading">Caricamento elenco</string>
     <string name="av_pref_displaying">Elenco visualizzato</string>
     <string name="av_adapter_tag_hidden">Nascosto</string>
     <string name="av_settings_tag_hidden">Icona dell\'app non visualizzata nel programma di avvio</string>
-    <string name="av_pref_loading_summary">Aggiorna manualmente per attivare le modifiche</string>
-    <string name="av_pref_displaying_summary">Le modifiche vengono attivate automaticamente</string>
     <string name="av_main_filter_tip">Prova a premere a lungo un tag</string>
     <string name="av_main_option_device_api">API del dispositivo</string>
     <string name="av_main_device_api_api">Livello API</string>

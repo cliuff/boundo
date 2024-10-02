@@ -20,8 +20,6 @@ internal object PrefUtil {
     const val AV_TAGS = "AvTags"
     const val AV_VIEWING_TARGET = "AVViewingTarget"
     const val AV_VIEWING_TARGET_DEFAULT = true
-    const val AV_INCLUDE_DISABLED = "AVIncludeDisabled"
-    const val AV_INCLUDE_DISABLED_DEFAULT = false
     const val AV_SORT_ITEM = "SDKCheckSortSpinnerSelection"
     const val AV_LIST_SRC_ITEM = "SDKCheckDisplaySpinnerSelection"
 }

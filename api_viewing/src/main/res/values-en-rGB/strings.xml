@@ -62,9 +62,6 @@
     <string name="av_ai">Adaptive icon</string>
     <string name="av_tag_has_splits">Android App Bundle</string>
     <string name="av_apks_select_folder">Select a folder to scan</string>
-    <string name="av_pref_loading">List loading</string>
-    <string name="av_pref_loading_summary">Manually refresh to trigger changes</string>
-    <string name="av_pref_displaying_summary">Changes are triggered automatically</string>
     <string name="av_pref_displaying">List displaying</string>
     <string name="av_adapter_tag_hidden">Hidden</string>
     <string name="av_settings_tag_hidden">App icon not shown in launcher</string>

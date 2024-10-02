@@ -151,7 +151,6 @@
     <string name="notifyChannelGroupAppDesc">응용 프로그램 관련 알림</string>
     <string name="textWaitASecond">로딩 중 기다려주세요</string>
     <string name="apiDetailsPackageName">"패키지 이름 : "</string>
-    <string name="prefSettingsAvIncludeDisabled">비활성화 된 앱 포함</string>
     <string name="av_details_native_libs">"기본 라이브러리 : "</string>
     <string name="twLiveWallpaperDesc">어두운 모드가 켜져있을 때 어두운 배경 화면을 자동으로 변경</string>
     <string name="unit_desc_tw">• 밝고 어두운 톤 배경 화면을 설정하면 배경 화면이 Android 10의 어두운 모드로 변경됩니다.</string>

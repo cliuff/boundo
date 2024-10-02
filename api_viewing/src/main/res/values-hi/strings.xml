@@ -62,9 +62,6 @@
     <string name="av_ai">अनुकूली आइकन</string>
     <string name="av_tag_has_splits">Android ऐप बंडल</string>
     <string name="av_apks_select_folder">स्कैन करने के लिए एक फ़ोल्डर चुनें</string>
-    <string name="av_pref_loading">सूची लोड हो रहा है</string>
-    <string name="av_pref_loading_summary">परिवर्तनों को ट्रिगर करने के लिए मैन्युअल रूप से रीफ़्रेश करें</string>
-    <string name="av_pref_displaying_summary">परिवर्तन स्वचालित रूप से ट्रिगर होते हैं</string>
     <string name="av_pref_displaying">सूची प्रदर्शित करना</string>
     <string name="av_adapter_tag_hidden">छुपे हुए</string>
     <string name="av_settings_tag_hidden">लॉन्चर में ऐप आइकन नहीं दिखाया गया</string>

@@ -62,9 +62,6 @@
     <string name="av_ai">अनुकूली चिन्ह</string>
     <string name="av_tag_has_splits">Android अॅप बंडल</string>
     <string name="av_apks_select_folder">स्कॅन करण्यासाठी फोल्डर निवडा</string>
-    <string name="av_pref_loading">सूची लोड होत आहे</string>
-    <string name="av_pref_loading_summary">बदल ट्रिगर करण्यासाठी व्यक्तिचलितपणे रीफ्रेश करा</string>
-    <string name="av_pref_displaying_summary">बदल आपोआप ट्रिगर होतात</string>
     <string name="av_pref_displaying">सूची प्रदर्शित करणे</string>
     <string name="av_adapter_tag_hidden">लपलेले</string>
     <string name="av_settings_tag_hidden">लाँचरमध्ये अॅप चिन्ह दर्शविले नाही</string>

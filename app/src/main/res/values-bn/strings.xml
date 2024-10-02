@@ -144,7 +144,6 @@
     <string name="fileActionsSave">সংরক্ষণ</string>
     <string name="textWaitASecond">লোড হচ্ছে, অনুগ্রহ করে এক সেকেন্ড অপেক্ষা করুন</string>
     <string name="apiDetailsPackageName">"প্যাকেজের নাম: "</string>
-    <string name="prefSettingsAvIncludeDisabled">অক্ষম অ্যাপ্লিকেশন অন্তর্ভুক্ত করুন</string>
     <string name="prefSettingsThemeCnRed">তেমন লাল নয়</string>
     <string name="unitsManager">ইউনিট ম্যানেজার</string>
     <string name="units">ইউনিট</string>

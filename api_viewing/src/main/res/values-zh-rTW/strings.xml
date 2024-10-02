@@ -62,12 +62,9 @@
     <string name="av_ai">自適性圖示</string>
     <string name="av_tag_has_splits">Android 應用程式套件組合</string>
     <string name="av_apks_select_folder">選取要掃描的資料夾</string>
-    <string name="av_pref_loading">正在載入清單</string>
     <string name="av_pref_displaying">清單顯示</string>
     <string name="av_adapter_tag_hidden">隱藏</string>
     <string name="av_settings_tag_hidden">不在啟動器顯示圖示</string>
-    <string name="av_pref_loading_summary">手動重新整理以觸發變更</string>
-    <string name="av_pref_displaying_summary">自動觸發變更</string>
     <string name="av_main_filter_tip">嘗試長按標籤</string>
     <string name="av_settings_tag_huawei_push">華為推送</string>
     <string name="av_settings_tag_xiaomi_push">小米推送</string>

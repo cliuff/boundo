@@ -62,12 +62,9 @@
     <string name="av_ai">Ícone adaptável</string>
     <string name="av_tag_has_splits">Android App Bundle</string>
     <string name="av_apks_select_folder">Selecione uma pasta para digitalizar</string>
-    <string name="av_pref_loading">Carregamento da lista</string>
     <string name="av_pref_displaying">Lista exibida</string>
     <string name="av_adapter_tag_hidden">Escondido</string>
     <string name="av_settings_tag_hidden">Ícone do aplicativo não mostrado no iniciador</string>
-    <string name="av_pref_loading_summary">Atualizar manualmente para acionar alterações</string>
-    <string name="av_pref_displaying_summary">As alterações são acionadas automaticamente</string>
     <string name="av_main_filter_tip">Tente manter pressionada uma tag</string>
     <string name="av_main_option_device_api">API do dispositivo</string>
     <string name="av_main_device_api_api">Nível API</string>

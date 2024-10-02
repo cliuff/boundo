@@ -91,7 +91,6 @@
     <string name="prefExteriorForceDarkDescDetail">Force Dark es una característica para que los desarrolladores implementen rápidamente un tema oscuro. Al establecer forceDarkAllowed en verdadero, una aplicación obtiene un tema oscuro automáticamente. Y el desarrollador modificará aún más ciertas partes de la interfaz que no son ideales y establecerá forceDarkAllowed en falso en esas partes. Habilitar Override Force-dark hará que el sistema ignore el valor forceDarkAllowed, causando un mal funcionamiento del tema oscuro bien implementado.</string>
     <string name="prefExteriorLightTheme">Tema claro</string>
     <string name="prefExteriorThemes">Temas</string>
-    <string name="prefSettingsAvIncludeDisabled">Incluir aplicaciones deshabilitadas</string>
     <string name="prefSettingsTheme">Tema</string>
     <string name="prefSettingsThemeAuto">Predeterminado del sistema</string>
     <string name="prefSettingsThemeBlack">Tono negro</string>

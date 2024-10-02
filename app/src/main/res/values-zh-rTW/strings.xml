@@ -153,7 +153,6 @@
     <string name="notifyChannelGroupAppDesc">應用程式相關通知</string>
     <string name="textWaitASecond">正在載入，請稍候</string>
     <string name="apiDetailsPackageName">套件名稱：</string>
-    <string name="prefSettingsAvIncludeDisabled">包含已停用的應用程式</string>
     <string name="av_details_native_libs">原生程式庫：</string>
     <string name="twLiveWallpaperDesc">開啟深色主題時自動切換深色桌布</string>
     <string name="unit_desc_tw">• 套用淺色和深色桌布，桌布隨 Android 10 的深色模式變化</string>

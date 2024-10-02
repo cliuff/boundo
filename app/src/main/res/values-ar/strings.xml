@@ -59,7 +59,6 @@
     <string name="units">وحدات</string>
     <string name="unitsManager">مدير وحدة</string>
     <string name="prefSettingsThemeCnRed">أحمر</string>
-    <string name="prefSettingsAvIncludeDisabled">تشمل التطبيقات المعوقين</string>
     <string name="apiDetailsPackageName">"اسم الحزمة: "</string>
     <string name="textWaitASecond">التحميل ، يرجى الانتظار ثانية</string>
     <string name="fileActionsSave">حفظ</string>

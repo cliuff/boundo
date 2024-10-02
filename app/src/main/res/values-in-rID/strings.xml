@@ -144,7 +144,6 @@
     <string name="fileActionsSave">Menyimpan</string>
     <string name="textWaitASecond">Sedang memuat, harap tunggu sebentar</string>
     <string name="apiDetailsPackageName">"Nama paket: "</string>
-    <string name="prefSettingsAvIncludeDisabled">Sertakan aplikasi yang dinonaktifkan</string>
     <string name="prefSettingsThemeCnRed">Tidak begitu merah</string>
     <string name="unitsManager">Manajer Unit</string>
     <string name="units">Satuan</string>

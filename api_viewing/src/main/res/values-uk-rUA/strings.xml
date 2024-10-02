@@ -61,9 +61,6 @@
     <string name="av_ai">Адаптивний значок</string>
     <string name="av_tag_has_splits">Android App Bundle</string>
     <string name="av_apks_select_folder">Виберіть папку для сканування</string>
-    <string name="av_pref_loading">Завантаження списку</string>
-    <string name="av_pref_loading_summary">Оновіть вручну, щоб ініціювати зміни</string>
-    <string name="av_pref_displaying_summary">Зміни запускаються автоматично</string>
     <string name="av_pref_displaying">Відображення списку</string>
     <string name="av_adapter_tag_hidden">Прихований</string>
     <string name="av_settings_tag_hidden">Значок програми не відображається на панелі запуску</string>

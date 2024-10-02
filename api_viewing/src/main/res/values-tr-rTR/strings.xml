@@ -62,12 +62,9 @@
     <string name="av_ai">Uyarlanabilir simge</string>
     <string name="av_tag_has_splits">Android App Bundle</string>
     <string name="av_apks_select_folder">Taranacak klasörü seçin</string>
-    <string name="av_pref_loading">Liste yükleniyor</string>
     <string name="av_pref_displaying">Liste gösteriliyor</string>
     <string name="av_adapter_tag_hidden">Gizli</string>
     <string name="av_settings_tag_hidden">Uygulama simgesi başlatıcıda gösterilmiyor</string>
-    <string name="av_pref_loading_summary">Değişiklikleri tetiklemek için manuel olarak yenileme</string>
-    <string name="av_pref_displaying_summary">Değişiklikler otomatik olarak tetiklenir</string>
     <string name="av_main_filter_tip">Bir etikete uzun süre basmayı deneyin</string>
     <string name="av_main_option_device_api">Cihaz API</string>
     <string name="av_main_device_api_api">API seviyesi</string>

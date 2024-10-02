@@ -59,7 +59,6 @@
     <string name="units">หน่วย</string>
     <string name="unitsManager">ผู้จัดการหน่วย</string>
     <string name="prefSettingsThemeCnRed">สีแดง</string>
-    <string name="prefSettingsAvIncludeDisabled">รวมแอพที่ปิดใช้งาน</string>
     <string name="apiDetailsPackageName">"ชื่อแพ็คเกจ: "</string>
     <string name="textWaitASecond">กำลังโหลดโปรดรอสักครู่</string>
     <string name="fileActionsSave">บันทึก</string>

@@ -62,9 +62,6 @@
     <string name="av_ai">ਅਨੁਕੂਲਿਤ ਪ੍ਰਤੀਕ</string>
     <string name="av_tag_has_splits">Android ਐਪ ਬੰਡਲ</string>
     <string name="av_apks_select_folder">ਸਕੈਨ ਕਰਨ ਲਈ ਇੱਕ ਫੋਲਡਰ ਚੁਣੋ</string>
-    <string name="av_pref_loading">ਸੂਚੀ ਲੋਡ ਹੋ ਰਹੀ ਹੈ</string>
-    <string name="av_pref_loading_summary">ਤਬਦੀਲੀਆਂ ਨੂੰ ਟਰਿੱਗਰ ਕਰਨ ਲਈ ਹੱਥੀਂ ਰਿਫ੍ਰੈਸ਼ ਕਰੋ</string>
-    <string name="av_pref_displaying_summary">ਤਬਦੀਲੀਆਂ ਆਟੋਮੈਟਿਕ ਹੀ ਸ਼ੁਰੂ ਹੋ ਜਾਂਦੀਆਂ ਹਨ</string>
     <string name="av_pref_displaying">ਸੂਚੀ ਦਿਖਾਈ ਜਾ ਰਹੀ ਹੈ</string>
     <string name="av_adapter_tag_hidden">ਲੁਕਿਆ ਹੋਇਆ</string>
     <string name="av_settings_tag_hidden">ਐਪ ਆਈਕਨ ਲਾਂਚਰ ਵਿੱਚ ਨਹੀਂ ਦਿਖਾਇਆ ਗਿਆ</string>

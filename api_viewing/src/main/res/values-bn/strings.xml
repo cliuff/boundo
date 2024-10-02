@@ -62,9 +62,6 @@
     <string name="av_ai">অভিযোজিত আইকন</string>
     <string name="av_tag_has_splits">অ্যান্ড্রয়েড অ্যাপ বান্ডেল</string>
     <string name="av_apks_select_folder">স্ক্যান করার জন্য একটি ফোল্ডার নির্বাচন করুন</string>
-    <string name="av_pref_loading">তালিকা লোড হচ্ছে</string>
-    <string name="av_pref_loading_summary">পরিবর্তনগুলি ট্রিগার করতে ম্যানুয়ালি রিফ্রেশ করুন</string>
-    <string name="av_pref_displaying_summary">পরিবর্তন স্বয়ংক্রিয়ভাবে ট্রিগার হয়</string>
     <string name="av_pref_displaying">তালিকা প্রদর্শন করা হচ্ছে</string>
     <string name="av_adapter_tag_hidden">গোপন</string>
     <string name="av_settings_tag_hidden">অ্যাপ আইকন লঞ্চারে দেখানো হয়নি</string>

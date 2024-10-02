@@ -152,7 +152,6 @@
     <string name="notifyChannelGroupApp">Uygulama</string>
     <string name="notifyChannelGroupAppDesc">Uygulama ile ilgili bildirimler</string>
     <string name="textWaitASecond">Yükleniyor, lütfen bir saniye bekleyin</string>
-    <string name="prefSettingsAvIncludeDisabled">Devre dışı bırakılan uygulamaları dahil et</string>
     <string name="twLiveWallpaperDesc">Karanlık tema etkinleştirildiğinde otomatik olarak karanlık duvar kağıdına geç</string>
     <string name="unit_desc_tw">• Otomatik olarak koyu renkli bir duvar kağıdı uygulayarak duvar kağıdınızın Android 10 karanlık temasına uymasını sağlayın</string>
     <string name="unit_desc_at">• Sesin çalmasını durdurun</string>

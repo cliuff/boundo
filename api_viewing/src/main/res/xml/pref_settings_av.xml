@@ -18,17 +18,6 @@
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <androidx.preference.PreferenceCategory
-        android:summary="@string/av_pref_loading_summary"
-        android:title="@string/av_pref_loading">
-
-        <androidx.preference.SwitchPreference
-            android:defaultValue="@bool/avIncludeDisabledDefault"
-            android:key="@string/avIncludeDisabled"
-            android:title="@string/prefSettingsAvIncludeDisabled" />
-    </androidx.preference.PreferenceCategory>
-
-    <androidx.preference.PreferenceCategory
-        android:summary="@string/av_pref_displaying_summary"
         android:title="@string/av_pref_displaying">
 
         <androidx.preference.Preference

@@ -105,7 +105,6 @@
     <string name="prefExteriorForceDarkDescDetail">Force Dark - это возможность для разработчиков быстро реализовать темную тему. Если для ForceDarkAllowed задано значение true, приложение автоматически получает темную тему. Кроме того, разработчик будет модифицировать определенные части интерфейса, которые не являются идеальными, и установить для ForceDarkAllowed значение false для этих частей. Включение переопределения Force-dark заставит систему игнорировать значение forceDarkAllowed, что приведет к неправильной работе хорошо реализованной темной темы.</string>
     <string name="prefExteriorLightTheme">Яркая тема</string>
     <string name="prefExteriorThemes">Темы</string>
-    <string name="prefSettingsAvIncludeDisabled">Включить отключенные приложения</string>
     <string name="prefSettingsTheme">тема</string>
     <string name="prefSettingsThemeAuto">Следуйте системе</string>
     <string name="prefSettingsThemeBlack">черный</string>
