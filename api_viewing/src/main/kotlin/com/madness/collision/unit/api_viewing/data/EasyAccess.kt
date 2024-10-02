@@ -16,43 +16,9 @@
 
 package com.madness.collision.unit.api_viewing.data
 
-import android.content.Context
-import android.content.SharedPreferences
-import com.madness.collision.unit.api_viewing.AppTag
-import com.madness.collision.unit.api_viewing.util.PrefUtil
-import com.madness.collision.util.P
-
 internal object EasyAccess {
-    var shouldIncludeDisabled = false
     /**
      * indicate that in viewing target api mode
      */
     var isViewingTarget = false
-
-    fun init(context: Context, prefSettings: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)) {
-        load(context, prefSettings, false)
-    }
-
-    fun isChanged(context: Context, prefSettings: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)): Boolean {
-        return load(context, prefSettings, true)
-    }
-
-    /**
-     * @param isLazy whether to fast detect change. True to detect change, false to enforce complete loading.
-     * @return whether there is change
-     */
-    fun load(context: Context, prefSettings: SharedPreferences = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE), isLazy: Boolean): Boolean {
-        var isChanged = false
-        isViewingTarget = prefSettings.getBoolean(PrefUtil.AV_VIEWING_TARGET, PrefUtil.AV_VIEWING_TARGET_DEFAULT).also {
-            isChanged = isChanged || it != isViewingTarget
-            if (isLazy && isChanged) return true
-        }
-        shouldIncludeDisabled = prefSettings.getBoolean(PrefUtil.AV_INCLUDE_DISABLED, PrefUtil.AV_INCLUDE_DISABLED_DEFAULT).also {
-            isChanged = isChanged || it != shouldIncludeDisabled
-            if (isLazy && isChanged) return true
-        }
-
-        isChanged = AppTag.loadTagSettings(prefSettings, isLazy) || isChanged
-        return isChanged
-    }
 }

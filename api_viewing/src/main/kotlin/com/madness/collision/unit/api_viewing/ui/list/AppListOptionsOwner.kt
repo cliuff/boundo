@@ -27,6 +27,7 @@ import com.madness.collision.util.P
 
 class AppListOptionsOwner {
     private var prefs: SharedPreferences? = null
+    private var lastTagStates: Map<String, TriStateSelectable> = emptyMap()
 
     fun getOptions(context: Context): AppListOptions {
         val prefs = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE).also { prefs = it }
@@ -39,9 +40,16 @@ class AppListOptionsOwner {
             3 -> listOf(AppListSrc.DeviceApks)
             else -> listOf(AppListSrc.SystemApps, AppListSrc.UserApps)
         }
-        EasyAccess.init(context, prefs)
-        val apiMode = if (EasyAccess.isViewingTarget) AppApiMode.Target else AppApiMode.Minimum
+        val isTargetApi = prefs.getBoolean(PrefUtil.AV_VIEWING_TARGET, PrefUtil.AV_VIEWING_TARGET_DEFAULT)
+        val apiMode = if (isTargetApi) AppApiMode.Target else AppApiMode.Minimum
+        EasyAccess.isViewingTarget = apiMode != AppApiMode.Minimum
+        loadTagSettings(prefs)
         return AppListOptions(savedSrcSet, AppListOrderOrDefault(sortItem), apiMode)
+    }
+
+    private fun loadTagSettings(prefs: SharedPreferences): Map<String, TriStateSelectable> {
+        AppTag.loadTagSettings(prefs, false)
+        return AppTag.getTagSettings().also { lastTagStates = it }
     }
 
     fun setListSrc(changedSrc: AppListSrc, newSrcSet: Set<AppListSrc>) {
@@ -80,13 +88,14 @@ class AppListOptionsOwner {
         if (checkedTags != null) {
             val settings = checkedTags.mapValues { en -> TriStateSelectable(en.key, en.value) }
             AppTag.loadTagSettings(settings, false)
+            lastTagStates = AppTag.getTagSettings()
         } else {
-            prefs?.let { AppTag.loadTagSettings(it, false) }
+            prefs?.let(::loadTagSettings)
         }
     }
 
     fun checkPrefsChanged(context: Context): Boolean {
         val p = prefs ?: return false
-        return EasyAccess.load(context, p, false)
+        return lastTagStates != loadTagSettings(p)
     }
 }

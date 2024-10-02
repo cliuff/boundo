@@ -18,23 +18,40 @@ package com.madness.collision.unit.api_viewing.ui.upd
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.madness.collision.unit.api_viewing.AppTag
+import com.madness.collision.unit.api_viewing.TriStateSelectable
 import com.madness.collision.unit.api_viewing.data.EasyAccess
 import com.madness.collision.unit.api_viewing.ui.list.AppApiMode
+import com.madness.collision.unit.api_viewing.util.PrefUtil
 import com.madness.collision.util.P
 
 typealias AppUpdatesOptions = AppApiMode
 
 class AppUpdatesOptionsOwner {
     private var prefs: SharedPreferences? = null
+    private var lastApiMode: AppApiMode = AppApiMode.Target
+    private var lastTagStates: Map<String, TriStateSelectable> = emptyMap()
 
     fun getOptions(context: Context): AppUpdatesOptions {
         val prefs = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE).also { prefs = it }
-        EasyAccess.init(context, prefs)
-        return if (EasyAccess.isViewingTarget) AppApiMode.Target else AppApiMode.Minimum
+        loadTagSettings(prefs)
+        return getApiMode(prefs).also { EasyAccess.isViewingTarget = it != AppApiMode.Minimum }
+    }
+
+    private fun getApiMode(prefs: SharedPreferences): AppApiMode {
+        val isTargetApi = prefs.getBoolean(PrefUtil.AV_VIEWING_TARGET, PrefUtil.AV_VIEWING_TARGET_DEFAULT)
+        val apiMode = if (isTargetApi) AppApiMode.Target else AppApiMode.Minimum
+        return apiMode.also { lastApiMode = it }
+    }
+
+    private fun loadTagSettings(prefs: SharedPreferences): Map<String, TriStateSelectable> {
+        AppTag.loadTagSettings(prefs, false)
+        return AppTag.getTagSettings().also { lastTagStates = it }
     }
 
     fun checkPrefsChanged(context: Context): Boolean {
         val p = prefs ?: return false
-        return EasyAccess.load(context, p, false)
+        val isApiModeChanged = lastApiMode != getApiMode(p)
+        return lastTagStates != loadTagSettings(p) || isApiModeChanged
     }
 }

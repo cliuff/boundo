@@ -261,16 +261,12 @@ internal object AppTag {
         return isChanged
     }
 
-    private fun loadTriStateTagSettings(tagSettings: Map<String, TriStateSelectable>, isLazy: Boolean): Boolean {
+    fun loadTagSettings(tagSettings: Map<String, TriStateSelectable>, isLazy: Boolean): Boolean {
         var isChanged = false
         AppTagInfo.IdGroup.BUILT_IN.forEach {
             isChanged = (tagSettings.changed(it, isLazy) ?: return true) || isChanged
         }
         return isChanged
-    }
-
-    fun loadTagSettings(tagSettings: Map<String, TriStateSelectable>, isLazy: Boolean): Boolean {
-        return loadTriStateTagSettings(tagSettings, isLazy)
     }
 
     fun loadTagSettings(prefSettings: SharedPreferences, isLazy: Boolean): Boolean {
@@ -279,5 +275,9 @@ internal object AppTag {
             TriStateSelectable(it, true)
         }
         return loadTagSettings(triStateMap, isLazy)
+    }
+
+    fun getTagSettings(): Map<String, TriStateSelectable> {
+        return LinkedHashMap(displayingTags)
     }
 }
