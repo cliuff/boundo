@@ -18,11 +18,13 @@ package com.madness.collision.misc
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.pm.ShortcutManager
 import androidx.core.content.edit
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.madness.collision.BuildConfig
 import com.madness.collision.settings.LanguageMan
+import com.madness.collision.settings.instant.Instant
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.api_viewing.AccessAV
 import com.madness.collision.util.*
@@ -116,6 +118,17 @@ internal object MiscMain {
         if (ver == NotificationsUtil.NO) return
         NotificationsUtil.updateAllGroups(context)
         NotificationsUtil.updateAllChannels(context)
+    }
+
+    fun registerImmortalEntry(context: Context) {
+        // ensure quick immortal access for debug builds
+        if (BuildConfig.DEBUG && OsUtils.satisfy(OsUtils.N_MR1)) {
+            val manager = context.getSystemService(ShortcutManager::class.java) ?: return
+            Instant(context, manager).run {
+                val isExisting = dynamicShortcuts.any { s -> s.id == P.SC_ID_IMMORTAL }
+                if (!isExisting) addDynamicShortcuts(P.SC_ID_IMMORTAL)
+            }
+        }
     }
 
 }

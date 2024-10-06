@@ -247,6 +247,7 @@ class MainActivity : BaseActivity(), SystemBarMaintainerOwner, MainAppHome {
             }
         }
         MiscMain.registerNotificationChannels(context, prefSettings)
+        MiscMain.registerImmortalEntry(context)
 
 //        prHandler = PermissionRequestHandler(this)
 //        SettingsFunc.check4Update(this, null, prHandler)

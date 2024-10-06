@@ -16,6 +16,7 @@
 
 package com.madness.collision.unit.api_viewing.apps
 
+import android.app.usage.UsageStats
 import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.content.Intent
@@ -65,15 +66,15 @@ class UsedPkgChecker {
         val currentTime = System.currentTimeMillis()
         val rawList = getUsed(context, currentTime - 60_000 * 5, currentTime)
         val x = getExclusions(context)
-        return rawList.asSequence().filterNot { it in x }.take(10).toList()
+        return rawList.asSequence().map { it.packageName }
+            .filterNot(x::contains).distinct().take(10).toList()
     }
 
     // requires PACKAGE_USAGE_STATS permission
-    private fun getUsed(context: Context, beginTime: Long, endTime: Long): List<String> {
+    private fun getUsed(context: Context, beginTime: Long, endTime: Long): List<UsageStats> {
         val manager = context.getSystemService<UsageStatsManager>() ?: return emptyList()
         val stats = manager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, beginTime, endTime)
         if (stats.isNullOrEmpty()) return emptyList()
-        val st = stats.filter { it.lastTimeUsed > 0 }.sortedByDescending { it.lastTimeUsed }
-        return st.map { it.packageName }
+        return stats.filter { it.lastTimeUsed > 0 }.sortedByDescending { it.lastTimeUsed }
     }
 }

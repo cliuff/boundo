@@ -232,9 +232,9 @@ internal fun builtInTags(): Map<String, AppTagInfo> = listOf(
     AppTagInfo(
         id = AppTagInfo.ID_MSG_OPPO, category = 0.cat, icon = R.drawable.ic_oppo_72.icon,
         label = R.string.av_settings_tag_oppo_push.labels, rank = "36",
-        desc = "com.heytap.mcssdk.AppPushService".serviceResultDesc,
+        desc = "com.heytap.msp.push.service.DataMessageCallbackService".serviceResultDesc,
         requisites = pkgServicesRequisite().list,
-        expressing = serviceExpressing("com.heytap.mcssdk.AppPushService")
+        expressing = serviceExpressing("com.heytap.msp.push.service.DataMessageCallbackService")
     ).apply { iconKey = "oop" },
     AppTagInfo(
         id = AppTagInfo.ID_MSG_VIVO, category = 0.cat, icon = R.drawable.ic_vivo_72.icon,
