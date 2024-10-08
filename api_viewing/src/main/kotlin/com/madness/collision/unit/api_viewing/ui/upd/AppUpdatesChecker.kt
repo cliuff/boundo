@@ -17,55 +17,37 @@
 package com.madness.collision.unit.api_viewing.ui.upd
 
 import android.content.Context
-import androidx.lifecycle.LifecycleOwner
 import com.madness.collision.misc.MiscApp
-import com.madness.collision.unit.api_viewing.apps.AppRepo
-import com.madness.collision.unit.api_viewing.apps.AppUpdatesLists
-import com.madness.collision.unit.api_viewing.apps.AppUpdatesUseCase
+import com.madness.collision.unit.api_viewing.apps.UpdateRepository
+import com.madness.collision.unit.api_viewing.apps.UsedPkgChecker
 import com.madness.collision.unit.api_viewing.apps.toPkgApps
+import com.madness.collision.util.hasUsageAccess
 import kotlin.math.min
 
-data class AppUpdatesData(val pkg: AppUpdatesLists.Pkg, val used: AppUpdatesLists.Used)
+class AppUpdatesChecker(private val updateRepo: UpdateRepository) {
+    private val usedChecker = UsedPkgChecker()
+    private var isFreshInstall: Boolean? = null
+    // the latest retrieval, set per retrieval
+    private var lastRetrievalTime: Long = -1L
 
-class AppUpdatesChecker {
-    private var lastUpdatesData: AppUpdatesData? = null
-    private val updatesSession by AppUpdatesLists::updatesSession
-
-    fun checkNewUpdate(mainTimestamp: Long, context: Context, lifecycleOwner: LifecycleOwner): Boolean? {
-        val appRepo = AppRepo.impl(context.applicationContext, lifecycleOwner)
-        val useCase = AppUpdatesUseCase(appRepo, AppUpdatesLists.updatesSession)
-
-        val (lastUpdPkg, lastUpdUsed) = lastUpdatesData?.pkg to lastUpdatesData?.used
-        val lastChangedRecords = lastUpdPkg?.lastChangedRecords.orEmpty()
-        val pkg = useCase.getPkgListChanges(context, mainTimestamp, lastChangedRecords)
-
-        // recreate from language switching or orientation change (configuration changes)
-        val lastUsed = if (updatesSession.isBrandNewSession) null else lastUpdUsed?.usedPkgNames
-        val used = useCase.getUsedListChanges(context, lastUsed)
-        lastUpdatesData = AppUpdatesData(pkg, used)
-
-        if (used.isUsedPkgNamesChanged) return true
-        if (pkg.records.changedPackages.isEmpty()) {
-            // always show usage access request
-            if (!used.hasUsageAccess) return true
-            if (used.usedPkgNames.isEmpty()) return null
-        }
-        return pkg.hasPkgChanges
-    }
-
-    suspend fun getSections(
+    suspend fun checkNewUpdate(
         changedLimit: Int, usedLimit: Int, context: Context): Map<AppUpdatesIndex, List<*>> {
-        val (lastUpdPkg, lastUpdUsed) = lastUpdatesData?.pkg to lastUpdatesData?.used
+        // app opened the first time in lifetime
+        val isFreshInstall = isFreshInstall
+            ?: (updateRepo.getPkgChangedTime() == -1L).also { isFreshInstall = it }
+        val (pkg, time) = updateRepo.getChangedPackages(context, isFreshInstall)
+        val secondLastRetrievalTime = lastRetrievalTime
+        lastRetrievalTime = time
+        val usedPackages = if (context.hasUsageAccess) usedChecker.get(context) else emptyList()
+
         val sections = sortedMapOf<AppUpdatesIndex, List<*>>(compareBy(AppUpdatesIndex::code))
-        if (lastUpdPkg?.hasPkgChanges == true) {
-            val pkgRecords = lastUpdPkg.records
-            val mChangedPackages = pkgRecords.changedPackages
-            val previousRecords = pkgRecords.previousRecords
+        if (true) {
+            val (previousRecords, mChangedPackages) = pkg
             val noRecords = previousRecords == null
             val mPreviousRecords = previousRecords?.associateBy { it.packageName } ?: emptyMap()
             if (mChangedPackages.isNotEmpty()) {
-                val detectNew = updatesSession.isNewApp || noRecords
-                val compareTime = updatesSession.secondLastRetrievalTime
+                val detectNew = isFreshInstall || noRecords
+                val compareTime = secondLastRetrievalTime
                 val listLimitSize = min(mChangedPackages.size, changedLimit)
                 AppUpdatesClassifier(mChangedPackages, mPreviousRecords)
                     .getUpdateLists(context, detectNew, compareTime, listLimitSize)
@@ -73,12 +55,11 @@ class AppUpdatesChecker {
             }
         }
 
-        if (lastUpdUsed?.isUsedPkgNamesChanged == true) {
-            val usedPkgList = lastUpdUsed.usedPkgNames
-            val usedSize = min(usedPkgList.size, usedLimit)
-            val packages = usedPkgList.subList(0, usedSize)
+        if (usedPackages.isNotEmpty()) {
+            val usedSize = min(usedPackages.size, usedLimit)
+            val packages = usedPackages.subList(0, usedSize)
                 .mapNotNull { MiscApp.getPackageInfo(context, packageName = it) }
-            val anApp = AppRepo.dumb(context).getMaintainedApp()
+            val anApp = updateRepo.getMaintainedApp()
             sections[AppUpdatesIndex.USE] = packages.toPkgApps(context, anApp)
         }
         val iterator = sections.iterator()

@@ -26,7 +26,6 @@ import com.madness.collision.unit.api_viewing.apps.AppListRepoImpl
 import com.madness.collision.unit.api_viewing.apps.AppListRepository
 import com.madness.collision.unit.api_viewing.apps.AppRepo
 import com.madness.collision.unit.api_viewing.apps.AppRepository
-import com.madness.collision.unit.api_viewing.apps.AppUpdatesLists
 import com.madness.collision.unit.api_viewing.apps.CodingArtifact
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.util.ApkRetriever
@@ -145,9 +144,7 @@ class AppListViewModel : ViewModel() {
         srcLoader = AppListSrcLoader(loader, optionsOwner)
 
         viewModelScope.launch(Dispatchers.Default) {
-            if (AppUpdatesLists.updatesSession.isNewSession(sessionTimestamp)) {
-                appRepo.maintainRecords(context)
-            }
+            appRepo.maintainRecords(context)
             val options = optionsOwner.getOptions(context)
             mutOpUiState.update { AppListOpUiState(options) }
 
