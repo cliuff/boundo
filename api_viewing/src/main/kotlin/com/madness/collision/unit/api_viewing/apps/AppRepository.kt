@@ -37,18 +37,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.yield
 
-data class AppPkgChanges(
-    val previousRecords: List<ApiViewingApp>?,
-    val changedPackages: List<PackageInfo>
-)
-
 interface AppRepository {
     fun addApp(app: ApiViewingApp)
     fun getApp(pkgName: String): ApiViewingApp?
     fun getApps(unit: Int): List<ApiViewingApp>
     fun getMaintainedApp(): ApiViewingApp
     fun queryApps(query: String): List<ApiViewingApp>
-    fun getChangedPackages(context: Context, timestamp: Long): AppPkgChanges
     fun maintainRecords(context: Context)
 }
 
@@ -70,7 +64,6 @@ class DumbAppRepo(private val medRepo: AppMediatorRepo) : AppRepository {
     override fun getApps(unit: Int) = medRepo.get(unit)
     override fun getMaintainedApp(): ApiViewingApp = medRepo.getMaintainedApp()
     override fun queryApps(query: String) = error("No-op")
-    override fun getChangedPackages(context: Context, timestamp: Long) = error("No-op")
     override fun maintainRecords(context: Context) = error("No-op")
 }
 
@@ -135,18 +128,6 @@ class AppRepoImpl(
         }
     }
 
-    override fun getChangedPackages(context: Context, timestamp: Long): AppPkgChanges {
-//        return if (X.aboveOn(X.O)) {
-//            getChangedPackageNames(context).mapNotNull { getPackageInfo(context, it) }
-//        } else {
-//        }
-
-        val allPackages = PlatformAppsFetcher(context).withSession(includeApex = false).getRawList()
-        val result = detectPkgChanges(allPackages, timestamp, appDao, context)
-        maintainRecords(allPackages, context)
-        return result
-    }
-
     override fun maintainRecords(context: Context) {
         val allPackages = PlatformAppsFetcher(context).withSession(includeApex = false).getRawList()
         maintainRecords(allPackages, context)
@@ -169,27 +150,5 @@ class AppRepoImpl(
                 RecordMtn.apply(context, dataDiff, allPackages, dao)
             }
         }
-    }
-
-    private fun detectPkgChanges(allPackages: List<PackageInfo>, timestamp: Long, dao: AppDao, context: Context): AppPkgChanges {
-        val (changeTimestamp, finally) = if (timestamp != 0L) {
-            timestamp to { }
-        } else {
-            val pref = com.madness.collision.util.P
-            val sp = context.getSharedPreferences(pref.PREF_SETTINGS, Context.MODE_PRIVATE)
-            sp.getLong(pref.PACKAGE_CHANGED_TIMESTAMP, System.currentTimeMillis()) to {
-                sp.edit { putLong(pref.PACKAGE_CHANGED_TIMESTAMP, System.currentTimeMillis()) }
-            }
-        }
-
-        val updateDetector = PackageUpdateDetector { pkgs -> medRepo.get(pkgs, init = false) }
-        val re = updateDetector.getUpdatedPackages(allPackages, changeTimestamp)
-        // get past records
-        val previous = when (dao.selectCount()) {
-            null -> null
-            0 -> emptyList()
-            else -> medRepo.get(re.map { it.packageName })
-        }
-        return AppPkgChanges(previous, re).also { finally() }
     }
 }

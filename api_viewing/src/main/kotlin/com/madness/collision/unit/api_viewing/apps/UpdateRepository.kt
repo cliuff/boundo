@@ -18,9 +18,17 @@ package com.madness.collision.unit.api_viewing.apps
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.pm.PackageInfo
 import androidx.core.content.edit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
+import com.madness.collision.unit.api_viewing.database.AppDao
+import com.madness.collision.unit.api_viewing.database.AppRoom
 import com.madness.collision.util.P
+
+data class AppPkgChanges(
+    val previousRecords: List<ApiViewingApp>?,
+    val changedPackages: List<PackageInfo>
+)
 
 interface UpdateRepository {
     fun getPkgChangedTime(): Long
@@ -28,8 +36,21 @@ interface UpdateRepository {
     fun getMaintainedApp(): ApiViewingApp
 }
 
+internal object UpdateRepo {
+    fun impl(
+        context: Context, appRepo: AppRepository, pkgProvider: PackageInfoProvider): UpdateRepoImpl {
+        val dao = AppRoom.getDatabase(context).appDao()
+        val mediator = AppMediatorRepo(dao, context.applicationContext)
+        val prefs = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
+        return UpdateRepoImpl(dao, appRepo, mediator, pkgProvider, prefs)
+    }
+}
+
 class UpdateRepoImpl(
+    private val appDao: AppDao,
     private val appRepo: AppRepository,
+    private val medRepo: AppMediatorRepo,
+    private val pkgProvider: PackageInfoProvider,
     private val settingsPrefs: SharedPreferences,
 ) : UpdateRepository {
     // timestamp to retrieve app updates, set the first retrieval
@@ -48,15 +69,27 @@ class UpdateRepoImpl(
             }
             val currentTime = System.currentTimeMillis()
             // use last persisted timestamp to retrieve updates then persist current time
-            val result = appRepo.getChangedPackages(context, lastTimestamp)
+            val result = detectChanges(pkgProvider.getAll(), lastTimestamp)
             settingsPrefs.edit { putLong(P.PACKAGE_CHANGED_TIMESTAMP, currentTime) }
             lastAppTimestamp = lastTimestamp
             result to currentTime
         } else {
             val currentTime = System.currentTimeMillis()
             // use last the same timestamp used the last time to retrieve updates
-            appRepo.getChangedPackages(context, lastAppTimestamp) to currentTime
+            detectChanges(pkgProvider.getAll(), lastAppTimestamp) to currentTime
         }
+    }
+
+    private fun detectChanges(allPackages: List<PackageInfo>, timestamp: Long): AppPkgChanges {
+        val updateDetector = PackageUpdateDetector { pkgs -> medRepo.get(pkgs, init = false) }
+        val updPkgs = updateDetector.getUpdatedPackages(allPackages, timestamp)
+        // init = false: ignored properties of past records are not used
+        val previous = when (appDao.selectCount()) {
+            null -> null
+            0 -> emptyList()
+            else -> medRepo.get(updPkgs.map { it.packageName }, init = false)
+        }
+        return AppPkgChanges(previous, updPkgs)
     }
 
     override fun getMaintainedApp(): ApiViewingApp {

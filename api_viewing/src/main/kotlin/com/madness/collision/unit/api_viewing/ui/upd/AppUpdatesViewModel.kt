@@ -24,10 +24,10 @@ import com.madness.collision.chief.auth.PermissionState
 import com.madness.collision.unit.api_viewing.apps.AppListPermission
 import com.madness.collision.unit.api_viewing.apps.AppRepo
 import com.madness.collision.unit.api_viewing.apps.AppRepository
-import com.madness.collision.unit.api_viewing.apps.UpdateRepoImpl
+import com.madness.collision.unit.api_viewing.apps.PlatformAppProvider
+import com.madness.collision.unit.api_viewing.apps.UpdateRepo
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.upgrade.Upgrade
-import com.madness.collision.util.P
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -116,8 +116,9 @@ class AppUpdatesViewModel : ViewModel() {
 
                 val appRepo = appRepo ?: AppRepo.impl(context, lifecycleOwner).also { appRepo = it }
                 val updatesChecker = updatesChecker ?: kotlin.run {
-                    val prefs = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
-                    AppUpdatesChecker(UpdateRepoImpl(appRepo, prefs)).also { updatesChecker = it }
+                    val pkgProvider = PlatformAppProvider(context)
+                    val updRepo = UpdateRepo.impl(context, appRepo, pkgProvider)
+                    AppUpdatesChecker(updRepo).also { updatesChecker = it }
                 }
 
                 val sections = updatesChecker.checkNewUpdate(
