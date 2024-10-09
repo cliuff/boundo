@@ -114,9 +114,9 @@ class AppUpdatesViewModel : ViewModel() {
                     ))
                 }
 
-                val appRepo = appRepo ?: AppRepo.impl(context, lifecycleOwner).also { appRepo = it }
                 val updatesChecker = updatesChecker ?: kotlin.run {
                     val pkgProvider = PlatformAppProvider(context)
+                    val appRepo = appRepo ?: AppRepo.impl(context, pkgProvider).also { appRepo = it }
                     val updRepo = UpdateRepo.impl(context, appRepo, pkgProvider)
                     AppUpdatesChecker(updRepo).also { updatesChecker = it }
                 }
@@ -127,7 +127,10 @@ class AppUpdatesViewModel : ViewModel() {
                     context = context
                 )
                 // todo preserve sections but exclude conflicts
-                val updSections = uiState.value.sections + sections
+                val updSections = uiState.value.sections
+                    .toSortedMap(compareBy(AppUpdatesIndex::code))
+                    .apply { putAll(sections) }
+
                 sectionsAppList = updSections.flatMap { (_, list) ->
                     list.mapNotNull { item ->
                         when (item) {

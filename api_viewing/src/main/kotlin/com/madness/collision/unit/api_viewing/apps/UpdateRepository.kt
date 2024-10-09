@@ -24,6 +24,10 @@ import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.database.AppDao
 import com.madness.collision.unit.api_viewing.database.AppRoom
 import com.madness.collision.util.P
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 
 data class AppPkgChanges(
     val previousRecords: List<ApiViewingApp>?,
@@ -42,7 +46,8 @@ internal object UpdateRepo {
         val dao = AppRoom.getDatabase(context).appDao()
         val mediator = AppMediatorRepo(dao, context.applicationContext)
         val prefs = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
-        return UpdateRepoImpl(dao, appRepo, mediator, pkgProvider, prefs)
+        val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+        return UpdateRepoImpl(dao, appRepo, mediator, pkgProvider, prefs, coroutineScope)
     }
 }
 
@@ -52,6 +57,7 @@ class UpdateRepoImpl(
     private val medRepo: AppMediatorRepo,
     private val pkgProvider: PackageInfoProvider,
     private val settingsPrefs: SharedPreferences,
+    private val coroutineScope: CoroutineScope,
 ) : UpdateRepository {
     // timestamp to retrieve app updates, set the first retrieval
     private var lastAppTimestamp: Long = -1L
@@ -61,7 +67,7 @@ class UpdateRepoImpl(
     }
 
     override fun getChangedPackages(context: Context, isFreshInstall: Boolean): Pair<AppPkgChanges, Long> {
-        return if (lastAppTimestamp == -1L) {
+        val changes = if (lastAppTimestamp == -1L) {
             val lastTimestamp = when {
                 // display recent updates in last week if no history (by default)
                 isFreshInstall -> System.currentTimeMillis() - 604_800_000
@@ -78,6 +84,12 @@ class UpdateRepoImpl(
             // use last the same timestamp used the last time to retrieve updates
             detectChanges(pkgProvider.getAll(), lastAppTimestamp) to currentTime
         }
+
+        // maintain records asynchronously
+        coroutineScope.launch {
+            appRepo.maintainRecords(context)
+        }
+        return changes
     }
 
     private fun detectChanges(allPackages: List<PackageInfo>, timestamp: Long): AppPkgChanges {

@@ -27,6 +27,7 @@ import com.madness.collision.unit.api_viewing.apps.AppListRepository
 import com.madness.collision.unit.api_viewing.apps.AppRepo
 import com.madness.collision.unit.api_viewing.apps.AppRepository
 import com.madness.collision.unit.api_viewing.apps.CodingArtifact
+import com.madness.collision.unit.api_viewing.apps.PlatformAppProvider
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.util.ApkRetriever
 import com.madness.collision.util.F
@@ -135,7 +136,7 @@ class AppListViewModel : ViewModel() {
     }
 
     fun init(context: Context, lifecycleOwner: LifecycleOwner, sessionTimestamp: Long) {
-        val appRepo = AppRepo.impl(context, lifecycleOwner)
+        val appRepo = AppRepo.impl(context, PlatformAppProvider(context))
         val loader = object : AppListLoader {
             override val appRepo: AppRepository = appRepo
             override val apkRetriever: ApkRetriever = ApkRetriever(context)
@@ -144,7 +145,12 @@ class AppListViewModel : ViewModel() {
         srcLoader = AppListSrcLoader(loader, optionsOwner)
 
         viewModelScope.launch(Dispatchers.Default) {
-            appRepo.maintainRecords(context)
+            // maintain records asynchronously
+            val mtnJob = when {
+                appRepo.lastMaintenanceTime > 0 -> null
+                else -> launch { appRepo.maintainRecords(context) }
+            }
+
             val options = optionsOwner.getOptions(context)
             mutOpUiState.update { AppListOpUiState(options) }
 
@@ -165,6 +171,9 @@ class AppListViewModel : ViewModel() {
                     }
                 }
                 .launchIn(this)
+
+            // wait before loading any platform src
+            mtnJob?.join()
 
             multiSrcApps[ListSrcCat.Platform].setOptions(options.listOrder, options.apiMode)
             val flows = buildList(options.srcSet.size) {

@@ -22,9 +22,6 @@ import android.os.Build
 import android.provider.Settings
 import androidx.annotation.RequiresApi
 import androidx.core.content.edit
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.coroutineScope
 import com.madness.collision.chief.chiefContext
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
@@ -32,10 +29,11 @@ import com.madness.collision.unit.api_viewing.database.AppDao
 import com.madness.collision.unit.api_viewing.database.AppRoom
 import com.madness.collision.unit.api_viewing.database.RecordMaintainer
 import com.madness.collision.unit.api_viewing.database.maintainer.RecordMtn
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.yield
+import java.lang.ref.WeakReference
 
 interface AppRepository {
     fun addApp(app: ApiViewingApp)
@@ -43,18 +41,24 @@ interface AppRepository {
     fun getApps(unit: Int): List<ApiViewingApp>
     fun getMaintainedApp(): ApiViewingApp
     fun queryApps(query: String): List<ApiViewingApp>
-    fun maintainRecords(context: Context)
+    suspend fun maintainRecords(context: Context)
 }
 
 internal object AppRepo {
+    // enable unified state sharing of repo
+    private var cachedRepo: WeakReference<AppRepoImpl> = WeakReference(null)
+
     fun dumb(context: Context): DumbAppRepo {
         val dao = AppRoom.getDatabase(context).appDao()
-        return DumbAppRepo(AppMediatorRepo(dao, context))
+        return DumbAppRepo(AppMediatorRepo(dao, context.applicationContext))
     }
 
-    fun impl(context: Context, lifecycleOwner: LifecycleOwner): AppRepoImpl {
+    fun impl(context: Context, pkgProvider: PackageInfoProvider): AppRepoImpl {
+        cachedRepo.get()?.let { return it }
         val dao = AppRoom.getDatabase(context).appDao()
-        return AppRepoImpl(dao, lifecycleOwner, AppMediatorRepo(dao, context))
+        val mediator = AppMediatorRepo(dao, context.applicationContext)
+        return AppRepoImpl(dao, mediator, pkgProvider)
+            .also { cachedRepo = WeakReference(it) }
     }
 }
 
@@ -64,14 +68,18 @@ class DumbAppRepo(private val medRepo: AppMediatorRepo) : AppRepository {
     override fun getApps(unit: Int) = medRepo.get(unit)
     override fun getMaintainedApp(): ApiViewingApp = medRepo.getMaintainedApp()
     override fun queryApps(query: String) = error("No-op")
-    override fun maintainRecords(context: Context) = error("No-op")
+    override suspend fun maintainRecords(context: Context) = error("No-op")
 }
 
 class AppRepoImpl(
     private val appDao: AppDao,
-    private val lifecycleOwner: LifecycleOwner,
-    private val medRepo: AppMediatorRepo
+    private val medRepo: AppMediatorRepo,
+    private val pkgProvider: PackageInfoProvider,
 ) : AppRepository {
+    private val mutexMtn = Mutex()
+    var lastMaintenanceTime: Long = -1L
+        private set
+
     override fun addApp(app: ApiViewingApp) {
         medRepo.add(app)
     }
@@ -96,7 +104,7 @@ class AppRepoImpl(
     }
 
     private fun fetchAppsFromPlatform(context: Context, unit: Int): List<ApiViewingApp> {
-        val packages = PlatformAppsFetcher(context).withSession(includeApex = false).getRawList()
+        val packages = pkgProvider.getAll()
         val apps = runBlocking { packages.toPkgApps(context, getMaintainedApp()) }
         medRepo.add(apps)
         return when (unit) {
@@ -128,27 +136,24 @@ class AppRepoImpl(
         }
     }
 
-    override fun maintainRecords(context: Context) {
-        val allPackages = PlatformAppsFetcher(context).withSession(includeApex = false).getRawList()
-        maintainRecords(allPackages, context)
-    }
+    override suspend fun maintainRecords(context: Context) = mutexMtn.withLock {
+        val allPackages = pkgProvider.getAll()
+        yield()  // cooperative
 
-    private fun maintainRecords(allPackages: List<PackageInfo>, context: Context) {
         // update records
         val dao = appDao
         RecordMaintainer<PackageInfo>(context, dao).run {
             update(allPackages)
             checkRemoval(allPackages)
         }
+        lastMaintenanceTime = System.currentTimeMillis()
+        yield()  // cooperative
+
         // Maintainer diff
-        val lifecycle = lifecycleOwner.lifecycle
-        if (RecordMtn.shouldDiff(context) && lifecycle.currentState >= Lifecycle.State.INITIALIZED) {
-            // run asynchronously (bind to lifecycle following DAO)
-            lifecycle.coroutineScope.launch(Dispatchers.Default) {
-                val dataDiff = RecordMtn.diff(context, allPackages, medRepo.getAll(init = false))
-                yield()  // cooperative
-                RecordMtn.apply(context, dataDiff, allPackages, dao)
-            }
+        if (RecordMtn.shouldDiff(context)) {
+            val dataDiff = RecordMtn.diff(context, allPackages, medRepo.getAll(init = false))
+            yield()  // cooperative
+            RecordMtn.apply(context, dataDiff, allPackages, dao)
         }
     }
 }

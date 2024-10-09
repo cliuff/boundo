@@ -91,9 +91,12 @@ class AppUpdatesClassifier(
         val upgradesA = upgradePackages
             .mapNotNull { (prev, p) -> Upgrade.get(prev, appSet[p.packageName]!!) }
         // get missing apps and missing upgrades
-        val getApps = getPackages.map { (_, p) -> p }.toPkgApps(context, anApp)
+        val getApps = getPackages
+            .mapNotNull { (prev, p) -> p.takeIf { prev.targetAPI != p.applicationInfo?.targetSdkVersion } }
+            .toPkgApps(context, anApp)
+            .associateBy(ApiViewingApp::packageName)
         val upgradesB = getPackages
-            .mapIndexedNotNull { i, (prev, _) -> Upgrade.get(prev, getApps[i]) }
+            .mapNotNull { (prev, _) -> getApps[prev.packageName]?.let { Upgrade.get(prev, it) } }
         return upgradesA + upgradesB
     }
 }
