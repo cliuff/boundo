@@ -33,6 +33,7 @@ import com.madness.collision.unit.api_viewing.info.isOnBackInvokedCallbackEnable
 import com.madness.collision.unit.api_viewing.util.ApkUtil
 import com.madness.collision.unit.api_viewing.util.ManifestUtil
 import com.madness.collision.util.os.OsUtils
+import java.lang.ref.WeakReference
 
 open class ApiViewingApp(var packageName: String) : Cloneable {
 
@@ -66,6 +67,25 @@ open class ApiViewingApp(var packageName: String) : Cloneable {
     @Ignore var isCoreApp: Boolean? = null
     @Ignore var isBackCallbackEnabled: Boolean? = null
     @Ignore var category: Int? = null
+
+    @Ignore private var pkgInstallerRef: String? = null
+    // store a weak reference to enable temporary data caching
+    @Ignore private var pkgInfoRef: WeakReference<PackageInfo> = WeakReference(null)
+    @Ignore private var serviceFamilyClassesRef: WeakReference<Set<String>> = WeakReference(null)
+
+    val isPkgInstallerLoaded: Boolean
+        get() = pkgInstallerRef != null
+    val isPkgInstallerNull: Boolean
+        get() = pkgInstallerRef == "@null"
+    var pkgInstaller: String?
+        get() = pkgInstallerRef?.takeUnless { it == "@null" }
+        set(value) { pkgInstallerRef = value ?: "@null" }
+    var pkgInfo: PackageInfo?
+        get() = pkgInfoRef.get()
+        set(value) { pkgInfoRef = WeakReference(value) }
+    var serviceFamilyClasses: Set<String>?
+        get() = serviceFamilyClassesRef.get()
+        set(value) { serviceFamilyClassesRef = WeakReference(value) }
 
     val isJetpackComposed: Boolean
         get() = jetpackComposed == 1

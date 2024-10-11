@@ -20,12 +20,15 @@ import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.content.pm.ServiceInfo
 import android.util.Log
 import com.madness.collision.misc.PackageCompat
 import com.madness.collision.unit.api_viewing.R
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.info.AppType
+import com.madness.collision.unit.api_viewing.info.DexLibSuperFinder
+import com.madness.collision.unit.api_viewing.info.LoadSuperFinder
 import com.madness.collision.unit.api_viewing.list.AppListService
 import com.madness.collision.unit.api_viewing.tag.inflater.AppTagInflater
 import com.madness.collision.unit.api_viewing.util.ManifestUtil
@@ -37,7 +40,7 @@ internal fun builtInTags(): Map<String, AppTagInfo> = listOf(
         label = R.string.apiDetailsInstallGP.labels, rank = "10",  // todo dynamic label
         desc = installerResultDesc,
         requisites = pkgInstallerRequisite().list,
-        expressing = expressing { res -> res.pkgInstaller == ApiViewingApp.packagePlayStore }
+        expressing = expressing { res -> res.app.pkgInstaller == ApiViewingApp.packagePlayStore }
     ).apply { iconKey = ApiViewingApp.packagePlayStore },
     AppTagInfo(
         id = AppTagInfo.ID_APP_INSTALLER, category = 0.cat, icon = AppTagInfo.Icon(isDynamic = true),
@@ -45,7 +48,7 @@ internal fun builtInTags(): Map<String, AppTagInfo> = listOf(
         desc = installerResultDesc,
         requisites = pkgInstallerRequisite().list,
         expressing = expressing { res ->
-            val installer = res.pkgInstaller ?: return@expressing false
+            val installer = res.app.pkgInstaller ?: return@expressing false
             installer != ApiViewingApp.packagePlayStore
         }
     ),
@@ -234,7 +237,10 @@ internal fun builtInTags(): Map<String, AppTagInfo> = listOf(
         label = R.string.av_settings_tag_oppo_push.labels, rank = "36",
         desc = "com.heytap.msp.push.service.DataMessageCallbackService".serviceResultDesc,
         requisites = pkgServicesRequisite().list,
-        expressing = serviceExpressing("com.heytap.msp.push.service.DataMessageCallbackService")
+        expressing = serviceExpressing(
+            "com.heytap.msp.push.service.DataMessageCallbackService",
+            "com.heytap.mcssdk.AppPushService",
+        )
     ).apply { iconKey = "oop" },
     AppTagInfo(
         id = AppTagInfo.ID_MSG_VIVO, category = 0.cat, icon = R.drawable.ic_vivo_72.icon,
@@ -346,7 +352,7 @@ private val CharSequence.packageResultDesc: AppTagInfo.Description
 
 private val installerResultDesc: AppTagInfo.Description
     get() = AppTagInfo.Description(checkResultDesc = {
-        val name = AppListService().getInstallerName(it.context, it.pkgInstaller)
+        val name = AppListService().getInstallerName(it.context, it.app.pkgInstaller)
         it.context.getString(R.string.av_tag_result_installer, name).label
     })
 
@@ -372,9 +378,10 @@ private fun commonExpressing(checker: (ApiViewingApp) -> Boolean)
     checker.invoke(res.app)
 }
 
-private fun serviceExpressing(comp: String)
+private fun serviceExpressing(vararg comp: String)
         : ExpressibleTag.(AppTagInfo.Resources) -> Boolean = expressing { res ->
-    res.pkgInfo?.services?.any { it.name == comp } == true
+    val serviceClasses = res.app.serviceFamilyClasses.orEmpty()
+    comp.any(serviceClasses::contains)
 }
 
 private val AppTagInfo.Requisite.list: List<AppTagInfo.Requisite>
@@ -401,7 +408,7 @@ private fun xiaomiMsgExpressing() = expressing { res ->
     }
     if (checkerMethod != null) {
         try {
-            checkerMethod.invoke(null, context, res.pkgInfo)
+            checkerMethod.invoke(null, context, res.app.pkgInfo)
             true
         } catch (e: Throwable) {
             val message = e.cause?.message
@@ -440,14 +447,14 @@ private fun appIconRequisite(): AppTagInfo.Requisite = AppTagInfo.Requisite(
 
 private fun pkgServicesRequisite(): AppTagInfo.Requisite = AppTagInfo.Requisite(
     id = "ReqPkgServices",
-    checker = { res -> res.pkgInfo?.services != null }, // todo store res somewhere
+    checker = { res -> res.app.serviceFamilyClasses != null },
     loader = { res ->
         val app = res.app
         val pm = res.context.packageManager
         val flagGetDisabled = if (OsUtils.satisfy(OsUtils.N)) PackageManager.MATCH_DISABLED_COMPONENTS
         else flagGetDisabledLegacy()
         val extraFlags = PackageManager.GET_SERVICES or PackageManager.GET_RECEIVERS or flagGetDisabled
-        res.pkgInfo = try {
+        app.pkgInfo = try {
             when {
                 app.isArchive -> PackageCompat.getArchivePackage(pm, app.appPackage.basePath, extraFlags)
                 else -> PackageCompat.getInstalledPackage(pm, app.packageName, extraFlags)
@@ -458,6 +465,12 @@ private fun pkgServicesRequisite(): AppTagInfo.Requisite = AppTagInfo.Requisite(
         }?.apply {
             if (services == null) services = emptyArray()
         }
+
+        // services declared in manifests are not guaranteed to be found in DEX files
+        val services = app.pkgInfo?.services?.run { mapTo(HashSet(size), ServiceInfo::name) }.orEmpty()
+        // external archives are not read-only files, so use DexLibSuperFinder for them
+        val finder = if (res.app.isArchive) DexLibSuperFinder() else LoadSuperFinder()
+        app.serviceFamilyClasses = finder.resolve(app.appPackage.apkPaths, services)
     }
 )
 
@@ -472,12 +485,22 @@ private fun thirdPartyPkgRequisite(): AppTagInfo.Requisite = AppTagInfo.Requisit
 
 private fun pkgInstallerRequisite(): AppTagInfo.Requisite = AppTagInfo.Requisite(
     id = "ReqPkgInstaller",
-    checker = { res -> res.app.isArchive || res.isPkgInstallerRetrieved }, // todo store result
+    checker = { res ->
+        when {
+            res.app.isArchive -> true
+            res.app.isPkgInstallerNull -> true
+            // ensure dynamic requisite properties
+            else -> res.dynamicRequisiteLabels.containsKey("ReqPkgInstaller")
+        }
+    },
     loader = { res ->
         val context = res.context
         val app = res.app
         // must enable package installer to know unknown installer, which in turn invalidate package installer
-        val installer = if (OsUtils.satisfy(OsUtils.R)) {
+        val installer = if (app.isPkgInstallerLoaded) {
+            // avoid duplicated loading while ensuring dynamic requisite properties
+            app.pkgInstaller
+        } else if (OsUtils.satisfy(OsUtils.R)) {
             try {
                 context.packageManager.getInstallSourceInfo(app.packageName)
             } catch (e: PackageManager.NameNotFoundException) {
@@ -488,8 +511,7 @@ private fun pkgInstallerRequisite(): AppTagInfo.Requisite = AppTagInfo.Requisite
             getInstallerLegacy(context, app)
         }
         if (installer == null) {
-            res.pkgInstaller = null
-            res.isPkgInstallerRetrieved = true
+            app.pkgInstaller = null
             return@Requisite
         }
         // real name should be used when showing tag name
@@ -509,8 +531,7 @@ private fun pkgInstallerRequisite(): AppTagInfo.Requisite = AppTagInfo.Requisite
 //        }
         // initialize installer that is neither Google Play Store nor Android Package Installer
         AppTagInflater.ensureTagIcon(context, installer)
-        res.pkgInstaller = installer
-        res.isPkgInstallerRetrieved = true
+        app.pkgInstaller = installer
         val reqId = "ReqPkgInstaller"
         res.dynamicRequisiteLabels[reqId] = installer
         res.dynamicRequisiteIconKeys[reqId] = installer

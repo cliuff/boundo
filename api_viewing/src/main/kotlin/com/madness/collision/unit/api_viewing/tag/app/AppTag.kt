@@ -17,7 +17,6 @@
 package com.madness.collision.unit.api_viewing.tag.app
 
 import android.content.Context
-import android.content.pm.PackageInfo
 import android.graphics.drawable.Drawable
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.tag.Expression
@@ -81,9 +80,6 @@ internal class AppTagInfo(
     class Resources(
         val context: Context,
         val app: ApiViewingApp,
-        var pkgInfo: PackageInfo? = null,
-        var pkgInstaller: String? = null,
-        var isPkgInstallerRetrieved: Boolean = false,
         // requisite ID as key, values are requisite (rather than tag) bound
         val dynamicRequisiteIconKeys: MutableMap<String, String> = hashMapOf(),
         val dynamicRequisiteLabels: MutableMap<String, String> = hashMapOf(),
