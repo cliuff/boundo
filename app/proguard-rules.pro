@@ -44,7 +44,7 @@
 -keep class * extends com.madness.collision.unit.Bridge { *; }
 
 # Xiaomi push detection
--keep class com.xiaomi.mipush.sdk.v {
+-keep class com.xiaomi.mipush.sdk.m {
  void d(...);
 }
 # keep the class and specified members from being renamed only
