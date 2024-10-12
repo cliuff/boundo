@@ -81,18 +81,5 @@ dependencies {
 
     listOf(libs.mockito, libs.googleTruth, libs.googleTruthExtensions, libs.junit4).forEach { testImplementation(it) }
 
-    listOf(
-        libs.androidxTestCore,
-        libs.androidxTestRunner,
-        libs.androidxTestExtJunit,
-        libs.androidxTestEspresso,
-        libs.androidxCoreTesting,
-        libs.androidxRoomTesting,
-        libs.mockito,
-        libs.googleTruth,
-        libs.googleTruthExtensions,
-        libs.junit4,
-    ).forEach { androidTestImplementation(it) }
-
     ksp(libs.androidxRoomCompiler)
 }

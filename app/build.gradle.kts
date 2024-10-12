@@ -116,9 +116,6 @@ android {
         // but continue the build even when errors are found:
         abortOnError = false
     }
-    testOptions {
-        unitTests.isIncludeAndroidResources = true
-    }
     buildFeatures {
         buildConfig = true
         viewBinding = true
@@ -197,20 +194,5 @@ dependencies {
     debugImplementation(libs.androidxComposeUiTooling)
 
     listOf(libs.mockito, libs.googleTruth, libs.googleTruthExtensions, libs.junit4).forEach { testImplementation(it) }
-
-    listOf(
-        libs.androidxTestCore,
-        libs.androidxTestRunner,
-        libs.androidxTestExtJunit,
-        libs.androidxTestEspresso,
-        libs.androidxCoreTesting,
-        libs.androidxRoomTesting,
-//            libs.androidxNavigationTesting,
-//            libs.androidxWorkTesting,
-        libs.mockito,
-        libs.googleTruth,
-        libs.googleTruthExtensions,
-        libs.junit4,
-    ).forEach { androidTestImplementation(it) }
 
 }
