@@ -77,6 +77,8 @@ dependencies {
     ).forEach { implementation(it) }
     implementation(libs.bundles.dynamicFeatureBasics)
 
+    debugImplementation(libs.androidxComposeUiTooling)
+
     listOf(libs.mockito, libs.googleTruth, libs.googleTruthExtensions, libs.junit4).forEach { testImplementation(it) }
 
     listOf(

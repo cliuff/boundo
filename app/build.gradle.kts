@@ -151,9 +151,8 @@ dependencies {
         libs.androidxComposeMaterialIcons,
         libs.androidxComposeMaterialIconsExtended,
         libs.androidxComposeAnimation,
-        libs.androidxComposeUiTooling,
+        libs.androidxComposeUiToolingPreview,
         libs.androidxComposeViewModel,
-        libs.androidxComposeUiTest,
         libs.androidxActivity,
         libs.androidxAppcompat,
         libs.androidxFragment,
@@ -194,6 +193,8 @@ dependencies {
         libs.appIconLoader,
         libs.smoothCornerCompose,
     ).forEach { implementation(it) }
+
+    debugImplementation(libs.androidxComposeUiTooling)
 
     listOf(libs.mockito, libs.googleTruth, libs.googleTruthExtensions, libs.junit4).forEach { testImplementation(it) }
 

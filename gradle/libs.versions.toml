@@ -95,6 +95,7 @@ androidxComposeMaterialIcons = { module = "androidx.compose.material:material" }
 androidxComposeMaterialIconsExtended = { module = "androidx.compose.material:material-icons-extended" }
 androidxComposeAnimation = { module = "androidx.compose.animation:animation" }
 # Tooling support (Previews, etc.)
+androidxComposeUiToolingPreview = { module = "androidx.compose.ui:ui-tooling-preview" }
 androidxComposeUiTooling = { module = "androidx.compose.ui:ui-tooling" }
 # Integration with ViewModels
 androidxComposeViewModel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
@@ -196,9 +197,8 @@ dynamicFeatureBasics = [
     "androidxComposeMaterialIcons",
     "androidxComposeMaterialIconsExtended",
     "androidxComposeAnimation",
-    "androidxComposeUiTooling",
+    "androidxComposeUiToolingPreview",
     "androidxComposeViewModel",
-    "androidxComposeUiTest",
     "androidxActivity",
     "androidxAppcompat",
     "androidxFragment",
