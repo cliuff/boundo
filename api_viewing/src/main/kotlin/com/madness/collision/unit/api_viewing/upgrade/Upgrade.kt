@@ -17,23 +17,7 @@
 package com.madness.collision.unit.api_viewing.upgrade
 
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
+import com.madness.collision.unit.api_viewing.data.UpdatedApp
 
-class Upgrade(val new: ApiViewingApp) {
-
-    companion object {
-        fun get(previous: ApiViewingApp, new: ApiViewingApp): Upgrade? {
-            if (previous.targetAPI == new.targetAPI) return null
-            return Upgrade(new).apply {
-                versionName = previous.verName to new.verName
-                versionCode = previous.verCode to new.verCode
-                updateTime = previous.updateTime to new.updateTime
-                targetApi = previous.targetAPI to new.targetAPI
-            }
-        }
-    }
-
-    lateinit var versionName: Pair<String, String>
-    lateinit var versionCode: Pair<Long, Long>
-    lateinit var updateTime: Pair<Long, Long>
-    lateinit var targetApi: Pair<Int, Int>
-}
+typealias Upgrade = UpdatedApp.Upgrade
+val Upgrade.new: ApiViewingApp get() = app

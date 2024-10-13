@@ -86,9 +86,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.madness.collision.chief.app.BoundoTheme
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
+import com.madness.collision.unit.api_viewing.data.UpdatedApp
 import com.madness.collision.unit.api_viewing.ui.upd.item.ApiUpdGuiArt
 import com.madness.collision.unit.api_viewing.ui.upd.item.UpdGuiArt
 import com.madness.collision.unit.api_viewing.upgrade.Upgrade
+import com.madness.collision.unit.api_viewing.upgrade.new
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
 import com.madness.collision.util.mainApplication
 
@@ -410,7 +412,7 @@ private fun UpdatesRedirectButton(type: Int, onClick: () -> Unit, modifier: Modi
     }
 }
 
-private inline fun <T> sectionItems(
+private inline fun <T : UpdatedApp> sectionItems(
     secIndex: AppUpdatesIndex,
     secList: List<T>,
     noinline onClickApp: (ApiViewingApp) -> Unit,
@@ -438,9 +440,10 @@ private inline fun <T> sectionItems(
             }
         }
     } else {
-        items(secList, { upd -> (upd as ApiViewingApp).packageName + secIndex.ordinal }
-        ) { app, modifier ->
-            if (app is ApiViewingApp) {
+        items(secList, { upd -> upd.app.packageName + secIndex.ordinal }
+        ) { upd, modifier ->
+            val app = upd.app
+            if (true) {
                 val context = LocalContext.current
                 val itemPrefs = LocalAppItemPrefs.current
                 var lastArt: UpdGuiArt? by remember { mutableStateOf(null) }

@@ -27,7 +27,7 @@ import com.madness.collision.unit.api_viewing.apps.AppRepository
 import com.madness.collision.unit.api_viewing.apps.PlatformAppProvider
 import com.madness.collision.unit.api_viewing.apps.UpdateRepo
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
-import com.madness.collision.unit.api_viewing.upgrade.Upgrade
+import com.madness.collision.unit.api_viewing.data.UpdatedApp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -36,8 +36,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import java.util.EnumMap
 
-typealias AppUpdatesSections = Map<AppUpdatesIndex, List<*>>
+typealias AppUpdatesSections = Map<AppUpdatesIndex, List<UpdatedApp>>
 
 data class AppUpdatesPermState(
     val canQueryAllPkgs: Boolean,
@@ -126,23 +127,48 @@ class AppUpdatesViewModel : ViewModel() {
                     usedLimit = if (columnCount <= 1) 5 else 6,
                     context = context
                 )
-                // todo preserve sections but exclude conflicts
-                val updSections = uiState.value.sections
-                    .toSortedMap(compareBy(AppUpdatesIndex::code))
-                    .apply { putAll(sections) }
+                val updSections = mergeSections(uiState.value.sections, sections)
 
                 sectionsAppList = updSections.flatMap { (_, list) ->
-                    list.mapNotNull { item ->
-                        when (item) {
-                            is ApiViewingApp -> item
-                            is Upgrade -> item.new
-                            else -> null
-                        }
-                    }
+                    list.map(UpdatedApp::app)
                 }
                 mutUiState.update { it.copy(isLoading = false, sections = updSections) }
             }
         }
+    }
+
+    private fun mergeSections(
+        preSections: AppUpdatesSections, newSections: AppUpdatesSections): AppUpdatesSections {
+        if (preSections.isEmpty()) return newSections
+        if (newSections.isEmpty()) return preSections
+        // merge all sections except USE from pre and new sections
+        val mergedUpdates = EnumMap<AppUpdatesIndex, List<UpdatedApp>>(AppUpdatesIndex::class.java)
+        AppUpdatesIndex.entries
+            .filter { it != AppUpdatesIndex.USE }
+            .forEach { i ->
+                val (preList, newList) = preSections[i].orEmpty() to newSections[i].orEmpty()
+                val newPkgs = newList.mapTo(HashSet(newList.size)) { it.app.packageName }
+                val merged = newList + preList.filter { it.app.packageName !in newPkgs }
+                if (merged.isNotEmpty()) mergedUpdates[i] = merged
+            }
+        // remove items from REC that are in other sections
+        mergedUpdates[AppUpdatesIndex.REC]?.let { recList ->
+            val updPkgs = buildSet {
+                for ((i, list) in mergedUpdates) {
+                    if (i == AppUpdatesIndex.REC) continue
+                    for (upd in list) add(upd.app.packageName)
+                }
+            }
+            if (updPkgs.isNotEmpty()) {
+                val filteredRec = recList.filter { it.app.packageName !in updPkgs }
+                if (filteredRec.isNotEmpty()) mergedUpdates[AppUpdatesIndex.REC] = filteredRec
+                if (filteredRec.isEmpty()) mergedUpdates.remove(AppUpdatesIndex.REC)
+            }
+        }
+        // add USE section from new sections
+        val usedList = newSections[AppUpdatesIndex.USE]
+        if (!usedList.isNullOrEmpty()) mergedUpdates[AppUpdatesIndex.USE] = usedList
+        return mergedUpdates
     }
 
     fun getApp(context: Context, pkgName: String): ApiViewingApp? {

@@ -21,6 +21,7 @@ import android.content.pm.PackageInfo
 import com.madness.collision.unit.api_viewing.apps.AppRepo
 import com.madness.collision.unit.api_viewing.apps.toPkgApps
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
+import com.madness.collision.unit.api_viewing.data.UpdatedApp
 import com.madness.collision.unit.api_viewing.ui.list.AppApiMode
 import com.madness.collision.unit.api_viewing.ui.list.AppListOrder
 import com.madness.collision.unit.api_viewing.ui.list.getComparator
@@ -44,16 +45,17 @@ class AppUpdatesClassifier(
 
     suspend fun getUpdateLists(
         context: Context, detectNew: Boolean, compareUpdateTime: Long, listLimitSize: Int
-    ): Map<AppUpdatesIndex, List<*>> = coroutineScope {
-        val sections = mutableMapOf<AppUpdatesIndex, List<*>>()
+    ): Map<AppUpdatesIndex, List<UpdatedApp>> = coroutineScope {
+        val sections = mutableMapOf<AppUpdatesIndex, List<UpdatedApp>>()
         val anApp = AppRepo.dumb(context).getMaintainedApp()
         val packages = changedPkgList.subList(0, listLimitSize)
         val appList = packages.toPkgApps(context, anApp.clone() as ApiViewingApp)
 
         val cLists = async {
             val comparator = AppListOrder.UpdateTime.getComparator(AppApiMode.Target)
+                .let { comp -> compareBy(comp, UpdatedApp::app) }
             classify(appList, detectNew, compareUpdateTime)
-                .map { (type, list) -> async { type to list.sortedWith(comparator) } }
+                .map { (type, list) -> async { type to list.map(UpdatedApp::General).sortedWith(comparator) } }
                 .awaitAll()
         }
         val upgradeList = async {

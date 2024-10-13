@@ -21,6 +21,7 @@ import com.madness.collision.misc.MiscApp
 import com.madness.collision.unit.api_viewing.apps.UpdateRepository
 import com.madness.collision.unit.api_viewing.apps.UsedPkgChecker
 import com.madness.collision.unit.api_viewing.apps.toPkgApps
+import com.madness.collision.unit.api_viewing.data.UpdatedApp
 import com.madness.collision.util.hasUsageAccess
 import kotlin.math.min
 
@@ -31,7 +32,7 @@ class AppUpdatesChecker(private val updateRepo: UpdateRepository) {
     private var lastRetrievalTime: Long = -1L
 
     suspend fun checkNewUpdate(
-        changedLimit: Int, usedLimit: Int, context: Context): Map<AppUpdatesIndex, List<*>> {
+        changedLimit: Int, usedLimit: Int, context: Context): Map<AppUpdatesIndex, List<UpdatedApp>> {
         // app opened the first time in lifetime
         val isFreshInstall = isFreshInstall
             ?: (updateRepo.getPkgChangedTime() == -1L).also { isFreshInstall = it }
@@ -40,7 +41,8 @@ class AppUpdatesChecker(private val updateRepo: UpdateRepository) {
         lastRetrievalTime = time
         val usedPackages = if (context.hasUsageAccess) usedChecker.get(context) else emptyList()
 
-        val sections = sortedMapOf<AppUpdatesIndex, List<*>>(compareBy(AppUpdatesIndex::code))
+        val sections = sortedMapOf<AppUpdatesIndex, List<UpdatedApp>>(compareBy(AppUpdatesIndex::code))
+        // todo check if packages are changed to avoid undesirable triggers, see AppUpdatesUseCase
         if (true) {
             val (previousRecords, mChangedPackages) = pkg
             val noRecords = previousRecords == null
@@ -61,6 +63,7 @@ class AppUpdatesChecker(private val updateRepo: UpdateRepository) {
                 .mapNotNull { MiscApp.getPackageInfo(context, packageName = it) }
             val anApp = updateRepo.getMaintainedApp()
             sections[AppUpdatesIndex.USE] = packages.toPkgApps(context, anApp)
+                .map(UpdatedApp::General)
         }
         val iterator = sections.iterator()
         while (iterator.hasNext()) {

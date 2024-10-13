@@ -26,6 +26,7 @@ import com.madness.collision.unit.api_viewing.ui.upd.item.ApiUpdGuiArt
 import com.madness.collision.unit.api_viewing.ui.upd.item.AppInstallVersion
 import com.madness.collision.unit.api_viewing.ui.upd.item.UpdGuiArt
 import com.madness.collision.unit.api_viewing.upgrade.Upgrade
+import com.madness.collision.unit.api_viewing.upgrade.new
 
 internal fun Upgrade.toGuiArt(context: Context, onClick: () -> Unit): ApiUpdGuiArt {
     val times = updateTime.toList().map { timestamp ->
