@@ -18,12 +18,17 @@ package com.madness.collision.chief.graphics
 
 import android.graphics.Bitmap
 import android.graphics.Path
+import android.graphics.drawable.AdaptiveIconDrawable
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.util.Log
+import android.util.TypedValue
 import androidx.compose.ui.graphics.asAndroidPath
 import androidx.compose.ui.graphics.vector.PathParser
+import com.madness.collision.chief.chiefContext
+import com.madness.collision.util.os.OsUtils
 import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.math.roundToInt
 
 object MiuiIconCustomizer {
     fun getIconMaskPath(): Path? {
@@ -72,9 +77,19 @@ object MiuiIconCustomizer {
     fun generateStyledIcon(baseIcon: Drawable): BitmapDrawable? {
         if (inaccessibleMiuiStyledIcon.get()) return null
         try {
-            val styledIcon = Class.forName("miui.content.res.IconCustomizer")
+            val gen = Class.forName("miui.content.res.IconCustomizer")
                 .getDeclaredMethod("generateIconStyleDrawable", Drawable::class.java)
-                .apply { isAccessible = true }.invoke(null, baseIcon)
+                .apply { isAccessible = true }
+            // convert AdaptiveIconDrawables to work on HyperOS
+            val nonAdaptiveIcon =
+                if (OsUtils.satisfy(OsUtils.O) && baseIcon is AdaptiveIconDrawable) {
+                    val res = chiefContext.resources
+                    val size = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 72f, res.displayMetrics)
+                    BitmapDrawable(res, AdaptiveIconLoader.loadRectAdaptiveIcon(baseIcon, size.roundToInt()))
+                } else {
+                    baseIcon
+                }
+            val styledIcon = gen.invoke(null, nonAdaptiveIcon)
             if (styledIcon != null && styledIcon is BitmapDrawable) {
                 inaccessibleMiuiStyledIcon.set(false)
                 return styledIcon

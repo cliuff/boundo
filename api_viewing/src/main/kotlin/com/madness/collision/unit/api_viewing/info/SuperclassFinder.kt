@@ -20,27 +20,33 @@ interface SuperclassFinder {
 /** Find superclasses by [PathClassLoader]. Must be used for read-only files. */
 class LoadSuperFinder : SuperclassFinder {
     override fun resolve(apks: List<String>, names: Set<String>): Set<String> {
+        if (apks.isEmpty()) return names
         if (names.isEmpty()) return emptySet()
-        val appDexPath = apks.joinToString(File.pathSeparator)
-        val loader = PathClassLoader(appDexPath, ClassLoader.getSystemClassLoader())
-        return buildSet(names.size) {
+        val classes = HashSet<String>(names.size * 2)
+        classes.addAll(names)
+        try {
+            val appDexPath = apks.joinToString(File.pathSeparator)
+            val loader = PathClassLoader(appDexPath, ClassLoader.getSystemClassLoader())
             for (service in names) {
-                add(service)
                 try {
                     val klass = Class.forName(service, false, loader)
-                    klass.superclass?.name?.let(::add)
+                    klass.superclass?.name?.let(classes::add)
                 } catch (_: ClassNotFoundException) {
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
             }
+        } catch (e: Throwable) {
+            e.printStackTrace()
         }
+        return classes
     }
 }
 
 /** Find superclasses by [DexContainerFactory], iteratively. */
 class DexLibSuperFinder : SuperclassFinder {
     override fun resolve(apks: List<String>, names: Set<String>): Set<String> {
+        if (apks.isEmpty()) return names
         if (names.isEmpty()) return emptySet()
         val superclasses = ArrayList<String>(names.size)
         try {
@@ -56,7 +62,7 @@ class DexLibSuperFinder : SuperclassFinder {
                     }
                 }
             }
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             e.printStackTrace()
         }
         return names + superclasses

@@ -1,34 +1,18 @@
-<!--
-  ~ Copyright 2021 Clifford Liu
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
-  ~     http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  -->
-
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="72dp"
     android:height="72dp"
     android:viewportWidth="72"
     android:viewportHeight="72">
   <path
-      android:pathData="M42.0946,28.5173 L36.7014,33.5389 31.6952,23.4368 34.2814,17.6282c0.6537,-1.1586 1.7227,-1.174 2.3763,0z"
-      android:fillColor="#FFA000"/>
+      android:pathData="m27.815,62.419c2.301,0.926 4.798,1.476 7.42,1.567 3.548,0.124 6.922,-0.61 9.938,-2.003 -3.617,-1.421 -6.892,-3.499 -9.688,-6.083 -1.812,2.901 -4.492,5.193 -7.669,6.518z"
+      android:fillColor="#ff9100"/>
   <path
-      android:pathData="M36.7036,33.5367 L16.53,52.3002 31.6974,23.4368Z"
-      android:fillColor="#F57F17"/>
+      android:pathData="M35.484,55.902C29.102,50 25.231,41.457 25.558,32.088c0.011,-0.304 0.027,-0.608 0.046,-0.912 -1.143,-0.296 -2.336,-0.476 -3.564,-0.519 -1.758,-0.061 -3.46,0.157 -5.067,0.609 -1.704,2.984 -2.732,6.408 -2.86,10.075 -0.331,9.465 5.397,17.734 13.701,21.079 3.177,-1.325 5.857,-3.614 7.669,-6.518z"
+      android:fillColor="#ffc400"/>
   <path
-      android:pathData="m48.0081,20.8374c0.9663,-0.9204 1.961,-0.6099 2.2124,0.6974L55.465,52.0467 38.07,62.4898c-0.6099,0.341 -2.2277,0.4744 -2.2277,0.4744 0,0 -1.4713,-0.1793 -2.0353,-0.4897L16.53,52.3002Z"
-      android:fillColor="#FFCA28"/>
+      android:pathData="m35.484,55.901c1.484,-2.374 2.383,-5.158 2.488,-8.157 0.275,-7.889 -5.028,-14.675 -12.368,-16.569 -0.019,0.304 -0.035,0.608 -0.046,0.912 -0.327,9.37 3.544,17.912 9.926,23.814z"
+      android:fillColor="#ff9100"/>
   <path
-      android:pathData="M31.6974,23.4368 L16.53,52.3002 23.2895,10.1123c0.2536,-1.3073 0.9947,-1.4407 1.6636,-0.282z"
-      android:fillColor="#FFA000"/>
+      android:pathData="m37.151,9c-4.18,3.349 -7.482,7.765 -9.479,12.852 -1.143,2.914 -1.862,6.044 -2.072,9.325 7.34,1.894 12.644,8.68 12.368,16.569 -0.105,2.999 -1.007,5.78 -2.488,8.157 2.795,2.586 6.071,4.662 9.688,6.083 7.26,-3.356 12.41,-10.577 12.709,-19.118 0.193,-5.534 -1.933,-10.466 -4.937,-14.629C49.767,23.837 37.151,9 37.151,9Z"
+      android:fillColor="#dd2c00"/>
 </vector>
