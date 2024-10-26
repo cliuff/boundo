@@ -21,6 +21,7 @@
         <item name="colorPrimary">?colorAPrimary</item>
         <item name="colorPrimaryDark">?colorAPrimary</item>
         <!-- allow system bar cutouts only by default (excluding horizontal ones e.g. waterfall) -->
+        <!-- LAYOUT_IN_DISPLAY_CUTOUT_MODE_DEFAULT is available on API 28+ -->
         <item name="android:windowLayoutInDisplayCutoutMode" tools:ignore="NewApi">default</item>
         <item name="android:windowSoftInputMode">stateHidden|adjustPan</item>
         <item name="android:windowContentTransitions">true</item>
@@ -59,10 +60,8 @@
 <!--        <item name="windowSplashScreenBackground">#FFFFFF</item>-->
 <!--    </style>-->
 
-    <style name="LaunchScreenBase" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="LaunchScreenBaseAny" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="themeId">@style/LaunchScreen</item>
-        <!-- allow all cutouts for the splash screen (including horizontal ones e.g. waterfall) -->
-        <item name="android:windowLayoutInDisplayCutoutMode" tools:ignore="NewApi">always</item>
         <item name="android:statusBarColor">?android:attr/colorBackground</item>
         <item name="android:navigationBarColor">?android:attr/colorBackground</item>
 <!--        <item name="android:textColor">?android:attr/textColorPrimary</item>-->
@@ -76,15 +75,12 @@
 <!--        <item name="android:windowSplashScreenBackground" tools:targetApi="s">?android:attr/colorBackground</item>-->
     </style>
 
+    <style name="LaunchScreenBase" parent="LaunchScreenBaseAny" />
+
     <style name="LaunchScreen" parent="LaunchScreenBase">
         <item name="isDarkTheme">false</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
-    </style>
-
-    <style name="CutoutsAppTheme" parent="AppTheme">
-        <!-- allow all cutouts (including horizontal ones e.g. waterfall) -->
-        <item name="android:windowLayoutInDisplayCutoutMode" tools:ignore="NewApi">always</item>
     </style>
 
     <style name="AppTheme" parent="AppThemeBase">
@@ -124,10 +120,6 @@
         <item name="colorScrollbar">@color/scrollbarAWhite</item>
     </style>
 
-    <style name="RedCutoutsAppTheme" parent="AppTheme.CnRed">
-        <item name="android:windowLayoutInDisplayCutoutMode" tools:ignore="NewApi">always</item>
-    </style>
-
     <style name="AppTheme.CnRed" parent="AppThemeBase">
         <item name="themeId">@style/AppTheme.CnRed</item>
         <item name="material3">@style/Theme.Material3.Light.NoActionBar</item>
@@ -165,10 +157,6 @@
         <item name="colorScrollbar">@color/scrollbarACnRed</item>
     </style>
 
-    <style name="BlackCutoutsAppTheme" parent="AppTheme.Black">
-        <item name="android:windowLayoutInDisplayCutoutMode" tools:ignore="NewApi">always</item>
-    </style>
-
     <style name="AppTheme.Black" parent="AppThemeBase">
         <item name="themeId">@style/AppTheme.Black</item>
         <item name="material3">@style/Theme.Material3.Dark.NoActionBar</item>
@@ -204,10 +192,6 @@
         <item name="colorActionAlertBack">@color/actionAlertVBackABlack</item>
         <item name="colorActionPass">@color/actionPassABlack</item>
         <item name="colorScrollbar">@color/scrollbarABlack</item>
-    </style>
-
-    <style name="BlackGrayCutoutsAppTheme" parent="AppTheme.BlackGray">
-        <item name="android:windowLayoutInDisplayCutoutMode" tools:ignore="NewApi">always</item>
     </style>
 
     <style name="AppTheme.BlackGray" parent="AppThemeBase">
