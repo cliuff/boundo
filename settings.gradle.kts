@@ -23,4 +23,5 @@ dependencyResolutionManagement {
     }
 }
 
+include(":mods:org")
 include(":app", ":api_viewing", ":wearable")
