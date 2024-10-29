@@ -1,6 +1,12 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.google.ksp)
+}
+
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+    arg("room.generateKotlin", "true")
 }
 
 android {
@@ -35,6 +41,9 @@ android {
 
 dependencies {
     implementation(libs.androidxCoreKtx)
+    implementation(libs.androidxRoomRuntime)
+    implementation(libs.androidxRoom)
+    ksp(libs.androidxRoomCompiler)
 
     testImplementation(libs.junit4)
 }
