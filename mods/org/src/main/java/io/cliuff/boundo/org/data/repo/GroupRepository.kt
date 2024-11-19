@@ -18,6 +18,7 @@ package io.cliuff.boundo.org.data.repo
 
 import io.cliuff.boundo.org.data.model.toEntity
 import io.cliuff.boundo.org.data.model.toModel
+import io.cliuff.boundo.org.data.model.toUpdate
 import io.cliuff.boundo.org.db.dao.OrgGroupDao
 import io.cliuff.boundo.org.db.model.OrgAppEntity
 import io.cliuff.boundo.org.model.OrgGroup
@@ -26,6 +27,7 @@ import kotlinx.coroutines.flow.map
 
 interface GroupRepository {
     suspend fun addGroup(collId: Int, group: OrgGroup)
+    suspend fun updateGroup(group: OrgGroup)
     suspend fun removeGroup(collId: Int, group: OrgGroup)
     fun getGroups(collId: Int): Flow<List<OrgGroup>>
 }
@@ -33,6 +35,10 @@ interface GroupRepository {
 class GroupRepoImpl(private val groupDao: OrgGroupDao) : GroupRepository {
     override suspend fun addGroup(collId: Int, group: OrgGroup) {
         groupDao.insert(group.toEntity(collId))
+    }
+
+    override suspend fun updateGroup(group: OrgGroup) {
+        groupDao.update(group.toUpdate())
     }
 
     override suspend fun removeGroup(collId: Int, group: OrgGroup) {
