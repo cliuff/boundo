@@ -34,7 +34,7 @@ class CompCollRepoImpl(private val collDao: OrgCollDao) : CompCollRepository {
             coll ?: return@coll null
             val groups = coll.groupEntities.map { group ->
                 val pkgSet = group.appEntities
-                    .run { mapTo(HashSet(size), OrgAppEntity::pkgName) }
+                    .map(OrgAppEntity::toModel)
                 group.groupEnt.toModel(pkgSet)
             }
             CompColl(id = coll.collEnt.id, name = coll.collEnt.name, groups = groups)

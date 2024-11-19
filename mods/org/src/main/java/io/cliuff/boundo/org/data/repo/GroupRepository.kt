@@ -19,6 +19,7 @@ package io.cliuff.boundo.org.data.repo
 import io.cliuff.boundo.org.data.model.toEntity
 import io.cliuff.boundo.org.data.model.toModel
 import io.cliuff.boundo.org.data.model.toUpdate
+import io.cliuff.boundo.org.db.dao.OrgAppDao
 import io.cliuff.boundo.org.db.dao.OrgGroupDao
 import io.cliuff.boundo.org.db.model.OrgAppEntity
 import io.cliuff.boundo.org.model.OrgGroup
@@ -26,15 +27,33 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 interface GroupRepository {
-    suspend fun addGroup(collId: Int, group: OrgGroup)
+    suspend fun addGroupAndApps(collId: Int, group: OrgGroup): Int
+    suspend fun updateGroupAndApps(group: OrgGroup)
     suspend fun updateGroup(group: OrgGroup)
     suspend fun removeGroup(collId: Int, group: OrgGroup)
     fun getGroups(collId: Int): Flow<List<OrgGroup>>
 }
 
-class GroupRepoImpl(private val groupDao: OrgGroupDao) : GroupRepository {
-    override suspend fun addGroup(collId: Int, group: OrgGroup) {
-        groupDao.insert(group.toEntity(collId))
+class GroupRepoImpl(
+    private val groupDao: OrgGroupDao,
+    private val appDao: OrgAppDao,
+) : GroupRepository {
+
+    override suspend fun addGroupAndApps(collId: Int, group: OrgGroup): Int {
+        val gid = groupDao.insert(group.toEntity(collId)).toInt()
+        if (gid > 0) {
+            val apps = group.apps.map { app -> app.toEntity(gid) }
+            appDao.insertAll(apps)
+        }
+        return gid
+    }
+
+    override suspend fun updateGroupAndApps(group: OrgGroup) {
+        groupDao.update(group.toUpdate())
+        if (group.id > 0) {
+            val apps = group.apps.map { app -> app.toEntity(group.id) }
+            appDao.insertAll(apps)
+        }
     }
 
     override suspend fun updateGroup(group: OrgGroup) {
@@ -49,7 +68,7 @@ class GroupRepoImpl(private val groupDao: OrgGroupDao) : GroupRepository {
         return groupDao.selectColl(collId).map { entities ->
             entities.map { ent ->
                 val pkgSet = ent.appEntities
-                    .run { mapTo(HashSet(size), OrgAppEntity::pkgName) }
+                    .map(OrgAppEntity::toModel)
                 ent.groupEnt.toModel(pkgSet)
             }
         }

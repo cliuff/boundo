@@ -18,6 +18,7 @@ package io.cliuff.boundo.org.data.model
 
 import io.cliuff.boundo.org.db.model.OrgGroupEntity
 import io.cliuff.boundo.org.db.model.OrgGroupUpdate
+import io.cliuff.boundo.org.model.OrgApp
 import io.cliuff.boundo.org.model.OrgGroup
 
 fun OrgGroup.toUpdate() =
@@ -33,9 +34,9 @@ fun OrgGroup.toEntity(collId: Int) =
         name = name,
     )
 
-fun OrgGroupEntity.toModel(pkgs: Set<String>) =
+fun OrgGroupEntity.toModel(apps: List<OrgApp>) =
     OrgGroup(
         id = id,
         name = name,
-        pkgs = pkgs,
+        apps = apps,
     )
