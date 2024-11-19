@@ -19,5 +19,5 @@ package io.cliuff.boundo.org.model
 data class OrgGroup(
     val id: Int,
     val name: String,
-    val pkgs: Set<String>,
+    val apps: List<OrgApp>,
 )
