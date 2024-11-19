@@ -17,7 +17,14 @@
 package io.cliuff.boundo.org.data.model
 
 import io.cliuff.boundo.org.db.model.OrgGroupEntity
+import io.cliuff.boundo.org.db.model.OrgGroupUpdate
 import io.cliuff.boundo.org.model.OrgGroup
+
+fun OrgGroup.toUpdate() =
+    OrgGroupUpdate(
+        id = id,
+        name = name,
+    )
 
 fun OrgGroup.toEntity(collId: Int) =
     OrgGroupEntity(

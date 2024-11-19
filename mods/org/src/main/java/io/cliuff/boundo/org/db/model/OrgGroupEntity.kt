@@ -43,3 +43,11 @@ class OrgGroupEntity(
     @ColumnInfo(name = "name")
     val name: String,
 )
+
+// Omit collId.
+class OrgGroupUpdate(
+    @ColumnInfo(name = "_id")
+    val id: Int,
+    @ColumnInfo(name = "name")
+    val name: String,
+)

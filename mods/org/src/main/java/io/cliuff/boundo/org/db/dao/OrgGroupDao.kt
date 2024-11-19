@@ -22,15 +22,20 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Update
 import io.cliuff.boundo.org.db.model.AppGroup
 import io.cliuff.boundo.org.db.model.OrgGroupEntity
+import io.cliuff.boundo.org.db.model.OrgGroupUpdate
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface OrgGroupDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(group: OrgGroupEntity)
+    suspend fun insert(group: OrgGroupEntity): Long
+
+    @Update(entity = OrgGroupEntity::class)
+    suspend fun update(group: OrgGroupUpdate)
 
     @Delete
     suspend fun delete(group: OrgGroupEntity)
