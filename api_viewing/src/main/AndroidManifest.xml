@@ -47,5 +47,13 @@
     <!-- used for InstallSourceInfo.getOriginatingPackageName, granted to system apps only -->
     <uses-permission android:name="android.permission.INSTALL_PACKAGES"
         tools:ignore="ProtectedPermissions" />
+
+    <application>
+        <!-- Service to run in a separate process to isolate native exceptions. -->
+        <service
+            android:name=".tag.app.TagRequisiteService"
+            android:process=":tag_req"
+            android:exported="false" />
+    </application>
 </manifest>
 

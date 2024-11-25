@@ -28,11 +28,12 @@ import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.info.AppType
 import com.madness.collision.unit.api_viewing.info.DexLibSuperFinder
-import com.madness.collision.unit.api_viewing.info.LoadSuperFinder
 import com.madness.collision.unit.api_viewing.list.AppListService
 import com.madness.collision.unit.api_viewing.tag.inflater.AppTagInflater
 import com.madness.collision.unit.api_viewing.util.ManifestUtil
 import com.madness.collision.util.os.OsUtils
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.withTimeout
 
 internal fun builtInTags(): Map<String, AppTagInfo> = listOf(
     AppTagInfo(
@@ -469,8 +470,27 @@ private fun pkgServicesRequisite(): AppTagInfo.Requisite = AppTagInfo.Requisite(
         // services declared in manifests are not guaranteed to be found in DEX files
         val services = app.pkgInfo?.services?.run { mapTo(HashSet(size), ServiceInfo::name) }.orEmpty()
         // external archives are not read-only files, so use DexLibSuperFinder for them
-        val finder = if (res.app.isArchive) DexLibSuperFinder() else LoadSuperFinder()
-        app.serviceFamilyClasses = finder.resolve(app.appPackage.apkPaths, services)
+        if (res.app.isArchive) {
+            val finder = DexLibSuperFinder()
+            app.serviceFamilyClasses = finder.resolve(app.appPackage.apkPaths, services)
+        } else {
+            // todo move instance into res
+            val reqRunner = TagRequisiteRunner(res.context).init()
+            app.serviceFamilyClasses = try {
+                withTimeout(20_000) { reqRunner.findSuperclass(app.appPackage.apkPaths, services) }
+                    ?: DexLibSuperFinder().resolve(app.appPackage.apkPaths, services)
+            } catch (e: TimeoutCancellationException) {
+                // unrecoverable exceptions in remote also results in timeout
+                e.printStackTrace()
+                // fallback to dex lib
+                DexLibSuperFinder().resolve(app.appPackage.apkPaths, services)
+            } catch (e: Exception) {
+                // error with binding or the like
+                e.printStackTrace()
+                // fallback to dex lib
+                DexLibSuperFinder().resolve(app.appPackage.apkPaths, services)
+            }
+        }
     }
 )
 
