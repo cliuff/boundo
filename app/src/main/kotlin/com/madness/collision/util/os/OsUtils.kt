@@ -20,6 +20,7 @@ import android.os.Build
 
 object OsUtils {
     const val DEV = Build.VERSION_CODES.CUR_DEVELOPMENT
+    const val Baklava = 36
     const val V = Build.VERSION_CODES.VANILLA_ICE_CREAM
     const val U = Build.VERSION_CODES.UPSIDE_DOWN_CAKE
     const val T = Build.VERSION_CODES.TIRAMISU
