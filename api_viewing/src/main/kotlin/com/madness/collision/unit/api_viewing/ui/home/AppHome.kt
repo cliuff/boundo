@@ -56,12 +56,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
+import androidx.core.view.WindowCompat
 import androidx.fragment.compose.AndroidFragment
 import androidx.fragment.compose.FragmentState
 import androidx.fragment.compose.rememberFragmentState
 import com.madness.collision.chief.app.ComposeFragment
 import com.madness.collision.chief.app.rememberColorScheme
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class AppHomeFragment : ComposeFragment() {
 
@@ -72,26 +76,40 @@ class AppHomeFragment : ComposeFragment() {
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
+    private fun setStatusBarDarkIcon(isDark: Boolean) {
+        val view = view ?: return
+        val window = activity?.window ?: return
+        WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = isDark
+    }
+
     @Composable
     override fun ComposeContent() {
         MaterialTheme(colorScheme = rememberColorScheme()) {
-            AppHomePage()
+            AppHomePage(onStatusBarDarkIconChange = ::setStatusBarDarkIcon)
         }
     }
 }
 
 @Stable
 interface AppHomeNav {
+    /** Status bar icons color of nav pages. */
+    val statusBarDarkIcon: StateFlow<Boolean>
     fun setNavPage(index: Int)
     fun navBack()
 }
 
 @Composable
-fun AppHomePage() {
+fun AppHomePage(onStatusBarDarkIconChange: (Boolean) -> Unit) {
     var selNavIndex by rememberSaveable { mutableIntStateOf(0) }
     val (homeNav, setHomeNav) = remember { mutableStateOf<AppHomeNav?>(null) }
     if (selNavIndex != 0 && homeNav != null) {
         BackHandler { selNavIndex = 0; homeNav.navBack() }
+    }
+    LaunchedEffect(homeNav) statusBar@{
+        val nav = homeNav ?: return@statusBar
+        nav.statusBarDarkIcon
+            .onEach(onStatusBarDarkIconChange)
+            .launchIn(this)
     }
     val homeInsets = WindowInsets.systemBars.union(WindowInsets.waterfall)
     BoxWithConstraints {

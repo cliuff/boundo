@@ -41,6 +41,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -65,19 +66,25 @@ import com.madness.collision.chief.app.BoundoTheme
 import com.madness.collision.chief.app.rememberColorScheme
 import com.madness.collision.chief.lang.mapIf
 import com.madness.collision.unit.api_viewing.ComposeUnit
+import com.madness.collision.unit.api_viewing.Utils
 import com.madness.collision.unit.api_viewing.ui.home.AppHomeNavPage
 import com.madness.collision.unit.api_viewing.ui.home.AppHomeNavPageImpl
+import com.madness.collision.util.F
 import com.madness.collision.util.FilePop
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
+import com.madness.collision.util.mainApplication
 import com.madness.collision.util.notifyBriefly
 import com.madness.collision.util.os.OsUtils
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 open class AppListFragment : ComposeUnit(), Democratic, AppHomeNavPage by AppHomeNavPageImpl() {
     override val id: String = "AV"
+
+    private var listHeaderDarkIcon: Boolean = false
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
 //        mainViewModel.configNavigation(toolbar, iconColor)
@@ -86,7 +93,23 @@ open class AppListFragment : ComposeUnit(), Democratic, AppHomeNavPage by AppHom
         return true
     }
 
+    private fun getListHeaderDarkIcon(context: Context): Boolean {
+        val f = F.createFile(F.valFilePubExterior(context), "Art_ListHeader.jpg")
+        // light status bar icons for custom header images
+        if (f.exists()) return false
+        val sealIndex = Utils.getDevCodenameLetter()
+            ?: Utils.getAndroidLetterByAPI(Build.VERSION.SDK_INT)
+        return when (sealIndex) {
+            'm', 'n', 'q', 'u' -> true
+            else -> false
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        context?.let { ctx ->
+            val isDark = getListHeaderDarkIcon(ctx).also { listHeaderDarkIcon = it }
+            setStatusBarDarkIcon(isDark)
+        }
         democratize(mainViewModel)
         if (OsUtils.satisfy(OsUtils.N)) {
             composeViewOwner.getView()?.setOnDragListener { _, event ->
@@ -160,13 +183,22 @@ open class AppListFragment : ComposeUnit(), Democratic, AppHomeNavPage by AppHom
     @Composable
     override fun ComposeContent() {
         MaterialTheme(colorScheme = rememberColorScheme()) {
-            AppList(paddingValues = navContentPadding)
+            AppList(
+                paddingValues = navContentPadding,
+                onAppBarOpacityChange = { opacity ->
+                    val isDark = when {
+                        opacity < 0.4f -> listHeaderDarkIcon
+                        else -> mainApplication.isPaleTheme
+                    }
+                    setStatusBarDarkIcon(isDark)
+                },
+            )
         }
     }
 }
 
 @Composable
-fun AppList(paddingValues: PaddingValues) {
+fun AppList(paddingValues: PaddingValues, onAppBarOpacityChange: (Float) -> Unit = {}) {
     val viewModel = viewModel<AppListViewModel>()
     val appList by viewModel.appList.collectAsStateWithLifecycle()
     val appListPrefs by viewModel.appListId.collectAsStateWithLifecycle()
@@ -178,6 +210,7 @@ fun AppList(paddingValues: PaddingValues) {
         eventHandler = rememberCompOptionsEventHandler(viewModel),
         paddingValues = paddingValues,
         contentOffsetProgress = -headerState.headerOffsetY,
+        onAppBarOpacityChange = onAppBarOpacityChange,
     ) { contentPadding ->
         LegacyAppList(
             appList = appList,
@@ -216,15 +249,20 @@ private fun AppListScaffold(
     eventHandler: CompositeOptionsEventHandler,
     paddingValues: PaddingValues,
     contentOffsetProgress: Int,
+    onAppBarOpacityChange: (Float) -> Unit = {},
     content: @Composable (PaddingValues) -> Unit
 ) {
     var showListOptions by remember { mutableIntStateOf(0) }
     val toolbarHeight = with(LocalDensity.current) { 100.dp.toPx() }
+    val headerHeight = (toolbarHeight * 1.8f).roundToInt()
     val toolbarOpacity by remember(contentOffsetProgress) {
         derivedStateOf {
-            (contentOffsetProgress / toolbarHeight)
+            ((contentOffsetProgress - headerHeight) / toolbarHeight)
                 .coerceIn(0f, 0.96f).mapIf({ it <= 0.06f }, { 0f })
         }
+    }
+    LaunchedEffect(toolbarOpacity) {
+        onAppBarOpacityChange(toolbarOpacity)
     }
 
     Scaffold(

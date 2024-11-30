@@ -45,6 +45,7 @@ import com.madness.collision.unit.api_viewing.ui.home.AppHomeNavPage
 import com.madness.collision.unit.api_viewing.ui.home.AppHomeNavPageImpl
 import com.madness.collision.unit.api_viewing.ui.info.AppInfoFragment
 import com.madness.collision.util.hasUsageAccess
+import com.madness.collision.util.mainApplication
 
 class AppUpdatesFragment : ComposeFragment(), AppInfoFragment.Callback,
     AppHomeNavPage by AppHomeNavPageImpl() {
@@ -78,6 +79,7 @@ class AppUpdatesFragment : ComposeFragment(), AppInfoFragment.Callback,
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        setStatusBarDarkIcon(mainApplication.isPaleTheme)
         viewModel.setUpdatesColumnCount(SpanAdapter.getSpanCount(this, 290f))
     }
 

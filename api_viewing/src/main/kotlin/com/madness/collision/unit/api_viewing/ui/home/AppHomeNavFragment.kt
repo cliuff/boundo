@@ -28,20 +28,42 @@ import androidx.compose.runtime.setValue
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.commit
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.coroutineScope
+import androidx.lifecycle.flowWithLifecycle
 import com.madness.collision.main.MainAppHome
 import com.madness.collision.unit.api_viewing.ui.list.AppListFragment
 import com.madness.collision.unit.api_viewing.ui.upd.AppUpdatesFragment
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 import kotlin.reflect.KClass
 
 interface AppHomeNavPage {
     var mainAppHome: MainAppHome?
     /** Padding for this page's content. */
     var navContentPadding: PaddingValues
+    /** Status bar icons color of this page. */
+    val statusBarDarkIcon: StateFlow<Boolean>
+    /**
+     * Update status bar icons color for this page.
+     * Setting the same values will be ignored. */
+    fun setStatusBarDarkIcon(isDark: Boolean)
 }
 
 class AppHomeNavPageImpl : AppHomeNavPage {
     override var mainAppHome: MainAppHome? = null
     override var navContentPadding: PaddingValues by mutableStateOf(PaddingValues())
+    private val mutStatusBarDarkIcon = MutableStateFlow(false)
+    override val statusBarDarkIcon: StateFlow<Boolean> = mutStatusBarDarkIcon.asStateFlow()
+
+    override fun setStatusBarDarkIcon(isDark: Boolean) {
+        mutStatusBarDarkIcon.update { isDark }
+    }
 }
 
 private val HomeNavContainerId: Int = View.generateViewId()
@@ -55,6 +77,9 @@ class AppHomeNavFragment : Fragment(), AppHomeNav {
         arrayOf(AppUpdatesFragment::class, AppListFragment::class)
     private val navFgmTags = navFgmClasses.map { klass -> "AppHome_" + klass.simpleName }
     private var lastContentPadding: PaddingValues? = null
+    private val mutStatusBarDarkIcon = MutableStateFlow(false)
+    override val statusBarDarkIcon: StateFlow<Boolean> = mutStatusBarDarkIcon.asStateFlow()
+    private val statusBarDarkIconJobs: Array<Job?> = arrayOfNulls(navFgmClasses.size)
 
     fun setContentPadding(paddingValues: PaddingValues) {
         lastContentPadding = paddingValues
@@ -76,6 +101,7 @@ class AppHomeNavFragment : Fragment(), AppHomeNav {
                     // find MainAppHome from host fragment or activity
                     page.mainAppHome = (parentFragment as? MainAppHome) ?: (activity as? MainAppHome)
                     lastContentPadding?.let { page.navContentPadding = it }
+                    collectStatusBarDarkIcon(page)
                 }
         }
         if (savedInstanceState == null) {
@@ -130,8 +156,30 @@ class AppHomeNavFragment : Fragment(), AppHomeNav {
                 // find MainAppHome from host fragment or activity
                 fgm.mainAppHome = (parentFragment as? MainAppHome) ?: (activity as? MainAppHome)
                 lastContentPadding?.let { fgm.navContentPadding = it }
+                collectStatusBarDarkIcon(fgm, index)
             }
         }
+    }
+
+    private fun collectStatusBarDarkIcon(page: AppHomeNavPage, index: Int = -1) {
+        val i = when (index) {
+            in statusBarDarkIconJobs.indices -> index
+            else -> navFgmClasses.indexOf((page as Fragment)::class)
+        }
+        if (i !in statusBarDarkIconJobs.indices) {
+            IllegalStateException("Nav page index [$i] is not in range [${statusBarDarkIconJobs.indices}].")
+                .printStackTrace()
+            return
+        }
+        // Cancel the old job and collect anew,
+        // this will update flow with new page's value when switching to a different page.
+        statusBarDarkIconJobs[i]?.cancel()
+        val lifecycle = viewLifecycleOwner.lifecycle
+        page.statusBarDarkIcon
+            .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+            .onEach { darkIcon -> mutStatusBarDarkIcon.update { darkIcon } }
+            .launchIn(lifecycle.coroutineScope)
+            .also { statusBarDarkIconJobs[i] = it }
     }
 
     override fun navBack() {
