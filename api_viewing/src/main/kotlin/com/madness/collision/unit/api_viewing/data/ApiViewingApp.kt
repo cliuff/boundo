@@ -71,7 +71,9 @@ open class ApiViewingApp(var packageName: String) : Cloneable {
     @Ignore private var pkgInstallerRef: String? = null
     // store a weak reference to enable temporary data caching
     @Ignore private var pkgInfoRef: WeakReference<PackageInfo> = WeakReference(null)
-    @Ignore private var serviceFamilyClassesRef: WeakReference<Set<String>> = WeakReference(null)
+    // services of 500 apps only consume a couple MB of memory, store them to avoid expensive re-computation
+    @Ignore private var serviceFamilyClassesRef: Set<String>? = null
+    @Ignore private var miPushSdkCheckRef: Int = -1
 
     val isPkgInstallerLoaded: Boolean
         get() = pkgInstallerRef != null
@@ -84,8 +86,12 @@ open class ApiViewingApp(var packageName: String) : Cloneable {
         get() = pkgInfoRef.get()
         set(value) { pkgInfoRef = WeakReference(value) }
     var serviceFamilyClasses: Set<String>?
-        get() = serviceFamilyClassesRef.get()
-        set(value) { serviceFamilyClassesRef = WeakReference(value) }
+        by ::serviceFamilyClassesRef
+    val isMiPushSdkChecked: Boolean
+        get() = miPushSdkCheckRef != -1
+    var isMiPushEnabled: Boolean?
+        get() = when (miPushSdkCheckRef) { 1 -> true; 0 -> false; else -> null }
+        set(value) { miPushSdkCheckRef = value?.compareTo(false) ?: -2 }
 
     val isJetpackComposed: Boolean
         get() = jetpackComposed == 1

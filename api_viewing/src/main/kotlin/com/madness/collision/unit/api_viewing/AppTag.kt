@@ -27,6 +27,8 @@ import com.madness.collision.unit.api_viewing.tag.app.toExpressible
 import com.madness.collision.unit.api_viewing.tag.inflater.AppTagInflater
 import com.madness.collision.unit.api_viewing.util.PrefUtil
 import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 internal object AppTag {
 
@@ -38,6 +40,7 @@ internal object AppTag {
 
     private val displayingTagsPrivate = mutableMapOf<String, TriStateSelectable>()
     private val displayingTags: TagStateMap = TagStateMap(displayingTagsPrivate)
+    private val tagReqMutex: MutableMap<String, Mutex> = hashMapOf()
 
     fun clearCache() = AppTagInflater.clearCache()
 
@@ -71,10 +74,15 @@ internal object AppTag {
     suspend fun ensureRequisites(context: Context, app: ApiViewingApp): AppTagInfo.Resources {
         val res = AppTagInfo.Resources(context, app)
         getGroupedRequisites().forEach { (p, tagIds) ->
-            val (_, requisite) = p
+            val (reqId, requisite) = p
             if (requisite.checker(res)) return@forEach // continue
             if (tagIds.all { displayingTags[it].isDeselected }) return@forEach // continue
-            requisite.loader(res)
+            val mutex = tagReqMutex[reqId] ?: Mutex()
+            mutex.withLock {
+                tagReqMutex[reqId] = mutex
+                requisite.run { if (!checker(res)) loader(res) }
+                tagReqMutex.remove(reqId, mutex)
+            }
         }
         return res
     }
@@ -108,9 +116,14 @@ internal object AppTag {
             p.second.checker(res) || (filter != null && filter(tagIds).not())
         }
         val uncheckedDeferred = unchecked.map { (p, tagIds) ->
-            val (_, requisite) = p
+            val (reqId, requisite) = p
             async(Dispatchers.Default) {
-                requisite.loader(res)
+                val mutex = tagReqMutex[reqId] ?: Mutex()
+                mutex.withLock {
+                    tagReqMutex[reqId] = mutex
+                    requisite.run { if (!checker(res)) loader(res) }
+                    tagReqMutex.remove(reqId, mutex)
+                }
                 requisite to tagIds
             }
         }

@@ -33,6 +33,7 @@ import com.madness.collision.unit.api_viewing.tag.inflater.AppTagInflater
 import com.madness.collision.unit.api_viewing.util.ManifestUtil
 import com.madness.collision.util.os.OsUtils
 import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withTimeout
 
 internal fun builtInTags(): Map<String, AppTagInfo> = listOf(
@@ -223,7 +224,7 @@ internal fun builtInTags(): Map<String, AppTagInfo> = listOf(
         id = AppTagInfo.ID_MSG_XIAOMI, category = 0.cat, icon = R.drawable.ic_xiaomi_72.icon,
         label = R.string.av_settings_tag_xiaomi_push.labels, rank = "34",
         desc = "com.xiaomi.mipush.sdk.MessageHandleService".mipushServiceResultDesc,
-        requisites = pkgServicesRequisite().list,
+        requisites = listOf(pkgServicesRequisite(), xiaomiMsgRequisite()),
         expressing = xiaomiMsgExpressing()
     ).apply { iconKey = "mip" },
     AppTagInfo(
@@ -392,6 +393,18 @@ private val AppTagInfo.Requisite.list: List<AppTagInfo.Requisite>
 // Private functions
 
 private fun xiaomiMsgExpressing() = expressing { res ->
+    when (val enabled = res.app.isMiPushEnabled) {
+        true, false -> enabled
+        null -> serviceExpressing("com.xiaomi.mipush.sdk.MessageHandleService").invoke(this, res)
+    }
+}
+
+private fun xiaomiMsgRequisite(): AppTagInfo.Requisite =
+    AppTagInfo.Requisite(
+        id = "ReqXiaomiMsg",
+        checker = { res -> res.app.isMiPushSdkChecked },
+    ) { res ->
+
     val context = res.context
     val app = res.app
     // "com.xiaomi.mipush.sdk.ManifestChecker" to "checkServices"
@@ -407,8 +420,16 @@ private fun xiaomiMsgExpressing() = expressing { res ->
         e.printStackTrace()
         null
     }
-    if (checkerMethod != null) {
+    app.isMiPushEnabled = checkerMethod?.let {
         try {
+            // wait for services, throw exception on timeout
+            withTimeout(10_000) {
+                while (true) {
+                    if (app.pkgInfo?.services != null) break
+                    if (app.serviceFamilyClasses != null) break
+                    delay(25)
+                }
+            }
             checkerMethod.invoke(null, context, res.app.pkgInfo)
             true
         } catch (e: Throwable) {
@@ -419,8 +440,6 @@ private fun xiaomiMsgExpressing() = expressing { res ->
             Log.w("av.main.tag", "$message ($appPackage, $appName $appVer)")
             false
         }
-    } else {
-        serviceExpressing("com.xiaomi.mipush.sdk.MessageHandleService").invoke(this, res)
     }
 }
 
@@ -476,6 +495,7 @@ private fun pkgServicesRequisite(): AppTagInfo.Requisite = AppTagInfo.Requisite(
         } else {
             // todo move instance into res
             val reqRunner = TagRequisiteRunner(res.context).init()
+            // todo reduce service set to only ones of interest, to save more memory
             app.serviceFamilyClasses = try {
                 withTimeout(20_000) { reqRunner.findSuperclass(app.appPackage.apkPaths, services) }
                     ?: DexLibSuperFinder().resolve(app.appPackage.apkPaths, services)
