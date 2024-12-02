@@ -17,6 +17,7 @@
 package com.madness.collision.unit.api_viewing.ui.upd
 
 import android.content.Intent
+import android.graphics.RectF
 import android.net.Uri
 import android.os.Bundle
 import android.os.SystemClock
@@ -24,10 +25,13 @@ import android.provider.Settings
 import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import androidx.core.os.BundleCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import com.madness.collision.BuildConfig
@@ -76,6 +80,15 @@ class AppUpdatesFragment : ComposeFragment(), AppInfoFragment.Callback,
 
     override fun onAppChanged(app: ApiViewingApp) {
         popOwner.updateState(app)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let { args ->
+            // set initial content padding to use for avoiding visual flicker
+            BundleCompat.getParcelable(args, AppHomeNavPage.ARG_CONTENT_PADDING, RectF::class.java)
+                ?.run { navContentPadding = PaddingValues.Absolute(left.dp, top.dp, right.dp, bottom.dp) }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

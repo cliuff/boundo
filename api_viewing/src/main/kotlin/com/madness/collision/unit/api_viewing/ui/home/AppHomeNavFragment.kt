@@ -16,6 +16,7 @@
 
 package com.madness.collision.unit.api_viewing.ui.home
 
+import android.graphics.RectF
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -25,6 +26,10 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
+import androidx.core.os.BundleCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.commit
@@ -53,6 +58,10 @@ interface AppHomeNavPage {
      * Update status bar icons color for this page.
      * Setting the same values will be ignored. */
     fun setStatusBarDarkIcon(isDark: Boolean)
+
+    companion object {
+        const val ARG_CONTENT_PADDING: String = "NavPageContentPadding"
+    }
 }
 
 class AppHomeNavPageImpl : AppHomeNavPage {
@@ -72,6 +81,7 @@ private val HomeNavContainerId: Int = View.generateViewId()
 class AppHomeNavFragment : Fragment(), AppHomeNav {
     companion object {
         const val ARG_NAV_PAGE = "AppHomeNavPage"
+        const val ARG_CONTENT_PADDING: String = AppHomeNavPage.ARG_CONTENT_PADDING
     }
     private val navFgmClasses: Array<KClass<out Fragment>> =
         arrayOf(AppUpdatesFragment::class, AppListFragment::class)
@@ -85,6 +95,15 @@ class AppHomeNavFragment : Fragment(), AppHomeNav {
         lastContentPadding = paddingValues
         childFragmentManager.fragments.filterIsInstance<AppHomeNavPage>()
             .forEach { page -> page.navContentPadding = paddingValues }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let { args ->
+            // set initial content padding for the first page to use
+            BundleCompat.getParcelable(args, ARG_CONTENT_PADDING, RectF::class.java)
+                ?.run { lastContentPadding = PaddingValues.Absolute(left.dp, top.dp, right.dp, bottom.dp) }
+        }
     }
 
     override fun onCreateView(
@@ -144,7 +163,16 @@ class AppHomeNavFragment : Fragment(), AppHomeNav {
                     Log.d("AppHomeNavFragment", "Target fragment is in a weird state.")
                 }
             } else {
-                add(HomeNavContainerId, navFgmClasses[index].java, null, navFgmTags[index])
+                val direction = when {
+                    view?.isLayoutDirectionResolved != true -> LayoutDirection.Ltr
+                    view?.layoutDirection == View.LAYOUT_DIRECTION_RTL -> LayoutDirection.Rtl
+                    else -> LayoutDirection.Ltr
+                }
+                val paddingRect = (lastContentPadding ?: PaddingValues()).toRectF(direction)
+                // pass content padding as arg to newly created nav pages,
+                // only the initial page definitely needs this arg to avoid visual flicker.
+                val args = bundleOf(AppHomeNavPage.ARG_CONTENT_PADDING to paddingRect)
+                add(HomeNavContainerId, navFgmClasses[index].java, args, navFgmTags[index])
             }
             setReorderingAllowed(true)
         }

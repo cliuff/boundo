@@ -16,6 +16,7 @@
 
 package com.madness.collision.unit.api_viewing.ui.home
 
+import android.graphics.RectF
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -53,7 +54,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.core.view.WindowCompat
@@ -141,11 +144,24 @@ fun AppHomePage(onStatusBarDarkIconChange: (Boolean) -> Unit) {
             },
             contentWindowInsets = homeInsets,
             content = { contentPadding ->
-                DisposableEffect(Unit) { onDispose { setHomeNav(null) } }
-                HomeNavFragment(selNavIndex, contentPadding = contentPadding, onUpdate = setHomeNav)
+                // delay one frame to get correct padding with window insets
+                var show by remember { mutableStateOf(false) }
+                LaunchedEffect(Unit) { show = true }
+                if (show) {
+                    DisposableEffect(Unit) { onDispose { setHomeNav(null) } }
+                    HomeNavFragment(selNavIndex, contentPadding = contentPadding, onUpdate = setHomeNav)
+                }
             }
         )
     }
+}
+
+fun PaddingValues.toRectF(direction: LayoutDirection): RectF {
+    return RectF(
+        calculateLeftPadding(direction).value,
+        calculateTopPadding().value,
+        calculateRightPadding(direction).value,
+        calculateBottomPadding().value)
 }
 
 @Composable
@@ -156,11 +172,17 @@ private fun HomeNavFragment(
     contentPadding: PaddingValues = PaddingValues(0.dp),
     onUpdate: (AppHomeNavFragment) -> Unit,
 ) {
+    val paddingRect = contentPadding.toRectF(LocalLayoutDirection.current)
     var navFragment: AppHomeNavFragment? by remember { mutableStateOf(null) }
     AndroidFragment<AppHomeNavFragment>(
         modifier = modifier,
         fragmentState = fragmentState,
-        arguments = remember { bundleOf(AppHomeNavFragment.ARG_NAV_PAGE to selectedPageIndex) },
+        arguments = remember {
+            bundleOf(
+                AppHomeNavFragment.ARG_NAV_PAGE to selectedPageIndex,
+                AppHomeNavFragment.ARG_CONTENT_PADDING to paddingRect,
+            )
+        },
         onUpdate = { navFgm ->
             onUpdate(navFgm)
             navFragment = navFgm

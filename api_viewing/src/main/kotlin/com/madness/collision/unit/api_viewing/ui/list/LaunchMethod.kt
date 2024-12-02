@@ -37,6 +37,7 @@ class LaunchMethod(
         operator fun invoke(bundle: Bundle?): LaunchMethod {
             val mode = when {
                 bundle == null -> LAUNCH_MODE_NORMAL
+                bundle.containsKey(EXTRA_LAUNCH_MODE).not() -> LAUNCH_MODE_NORMAL
                 // below: from share action
                 bundle.getInt(EXTRA_LAUNCH_MODE, 0) == LAUNCH_MODE_LINK -> LAUNCH_MODE_LINK
                 // below: from text processing activity or text sharing
