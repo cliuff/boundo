@@ -1,5 +1,16 @@
 
 
+- **4.3.2** 24120312
+<en-US>
+- App API: support Android 16 Baklava
+- App API: enhance push services detection
+</en-US>
+<zh-CN>
+- 应用API：现已支持安卓16/Baklava
+- 应用API：优化应用通知推送服务检测
+</zh-CN>
+
+
 - **4.3.0** 24092910
 <en-US>
 - Brand new app home page

@@ -62,7 +62,7 @@ internal fun AppApiUpdate(
     Row(
         modifier = Modifier.widthIn(max = 320.dp).fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.Top,
     ) {
         val targetTitle = stringResource(com.madness.collision.R.string.apiSdkTarget)
         Column(
@@ -79,7 +79,7 @@ internal fun AppApiUpdate(
             AppInstallationColumn(verCode = oldVer.code, verName = oldVer.name, time = oldVer.time)
         }
         Icon(
-            modifier = Modifier.padding(bottom = 12.dp).size(24.dp),
+            modifier = Modifier.padding(bottom = 12.dp).size(24.dp).align(Alignment.CenterVertically),
             imageVector = Icons.Outlined.KeyboardDoubleArrowRight,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.75f),
@@ -103,7 +103,7 @@ internal fun AppApiUpdate(
 private fun AppInstallationColumn(verCode: Long, verName: String?, time: String) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         val verNo = verCode.toString()
-        if (verName == null || (verNo.length < 7 && verName.length <= time.length)) {
+        if (verName == null || (verNo.length < 7 && verName.count { it != '.' } <= 8)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 if (verName != null) {
                     AppUpdVerName(modifier = Modifier.weight(1f, fill = false), ver = verName)
@@ -213,6 +213,13 @@ private fun ApiUpdatePreview() {
                     oldApi = VerInfo(34),
                     newVer = AppInstallVersion(10235L, "1.1.1", "2 days ago"),
                     oldVer = AppInstallVersion(10234L, "1.0.1", "Mar 11, 2024"),
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                AppApiUpdate(
+                    newApi = VerInfo(34),
+                    oldApi = VerInfo(33),
+                    newVer = AppInstallVersion(667L, "10.41.12.15", "51分钟前"),
+                    oldVer = AppInstallVersion(663L, "10.41.0.4", "2024年10月21日"),
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 AppApiUpdate(
