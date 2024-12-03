@@ -10,7 +10,7 @@ Designed for Android enthusiasts, Boundo is available on **Android** and **Wear 
 
 ### Develop
 **Requirements**
-- Android Studio `Koala Feature Drop Patch 1` (AGP `8.6.1`)
+- Android Studio `Ladybug` (AGP `8.7.3`)
 - Java `17`, Kotlin `2.0.21`, Gradle Wrapper `8.10`
 
 **Configure automatic signing**
