@@ -24,15 +24,15 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 interface CollRepository {
-    suspend fun addCollection(coll: CollInfo)
+    suspend fun addCollection(coll: CollInfo): Int
     suspend fun removeCollection(coll: CollInfo)
     fun getCollections(): Flow<List<CollInfo>>
 }
 
 class CollRepoImpl(private val collDao: OrgCollDao) : CollRepository {
 
-    override suspend fun addCollection(coll: CollInfo) {
-        collDao.insert(coll.toEntity())
+    override suspend fun addCollection(coll: CollInfo): Int {
+        return collDao.insert(coll.toEntity()).toInt()
     }
 
     override suspend fun removeCollection(coll: CollInfo) {

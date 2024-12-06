@@ -23,6 +23,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.madness.collision.chief.app.prop
 import com.madness.collision.unit.api_viewing.apps.PlatformAppProvider
+import io.cliuff.boundo.org.data.repo.CollRepository
+import io.cliuff.boundo.org.data.repo.GroupRepository
+import io.cliuff.boundo.org.data.repo.OrgCollRepo
+import io.cliuff.boundo.org.model.CollInfo
+import io.cliuff.boundo.org.model.OrgApp
+import io.cliuff.boundo.org.model.OrgGroup
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -51,10 +57,13 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
     val uiState: StateFlow<GroupUiState>
     /** App label: non-empty or null. */
     private var pkgLabelMap: Map<String, String?> = emptyMap()
+    private var collRepo: CollRepository? = null
+    private var groupRepo: GroupRepository? = null
     /** Coll ID to add group in. */
     private var modCollId: Int = -1
     /** Group ID to modify. */
     private var modGroupId: Int = -1
+    private var submittedGroupId: Int = -1
 
     private val savedObj: GroupSavedState = GroupSavedState(savedState)
 
@@ -74,6 +83,8 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
         if (modGroupId > 0) this.modGroupId = modGroupId
         viewModelScope.launch(Dispatchers.IO) {
             mutUiState.update { it.copy(isLoading = true) }
+            val collRepo = collRepo ?: OrgCollRepo.coll(context).also { collRepo = it }
+            val groupRepo = groupRepo ?: OrgCollRepo.group(context).also { groupRepo = it }
 
             val pkgMgr = context.packageManager
             val pkgs = PlatformAppProvider(context).getAll()
@@ -95,5 +106,47 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
     /** Label: non-empty label, or package name. */
     fun getPkgLabel(pkg: String): String {
         return pkgLabelMap[pkg] ?: pkg
+    }
+
+    fun setPkgSelected(pkg: String, isSelected: Boolean) {
+        val currentState = uiState.value
+        val selPkgSet = currentState.selPkgs
+        val hasSelPkg = pkg in selPkgSet
+        val newSel = when {
+            isSelected && !hasSelPkg -> selPkgSet + pkg
+            !isSelected && hasSelPkg -> selPkgSet - pkg
+            else -> return
+        }
+        savedObj.selPkgs = newSel
+        val newState = currentState.copy(selPkgs = newSel)
+        mutUiState.update { newState }
+    }
+
+    fun submitEdits() {
+        if (submittedGroupId > 0) return
+        val collRepo = collRepo ?: return
+        val groupRepo = groupRepo ?: return
+        val state = uiState.value
+        val modCid = modCollId
+        val modGid = modGroupId
+        viewModelScope.launch(Dispatchers.IO) {
+            val collId = if (modCid <= 0) {
+                val createColl = CollInfo(0, "Unnamed Coll", 0)
+                collRepo.addCollection(createColl)
+            } else {
+                modCid
+            }
+            if (modGid <= 0) {
+                if (collId > 0) {
+                    val updGroup = OrgGroup(0, state.groupName, state.selPkgs.map(::OrgApp))
+                    val gid = groupRepo.addGroupAndApps(collId, updGroup)
+                    if (gid > 0) submittedGroupId = gid
+                }
+            } else {
+                val updGroup = OrgGroup(modGid, state.groupName, state.selPkgs.map(::OrgApp))
+                groupRepo.updateGroupAndApps(updGroup)
+                submittedGroupId = modGid
+            }
+        }
     }
 }

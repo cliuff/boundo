@@ -30,7 +30,7 @@ import kotlinx.coroutines.flow.Flow
 interface OrgCollDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(coll: OrgCollEntity)
+    suspend fun insert(coll: OrgCollEntity): Long
 
     @Delete
     suspend fun delete(coll: OrgCollEntity)

@@ -29,4 +29,9 @@ object OrgCollRepo {
         val db = OrgRoom.getDatabase(context)
         return CompCollRepoImpl(db.collDao())
     }
+
+    fun group(context: Context): GroupRepository {
+        val db = OrgRoom.getDatabase(context)
+        return GroupRepoImpl(db.groupDao(), db.appDao())
+    }
 }
