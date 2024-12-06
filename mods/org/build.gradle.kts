@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.ksp)
+    // implement parcelable interface by using annotation
+    id("kotlin-parcelize")
 }
 
 ksp {

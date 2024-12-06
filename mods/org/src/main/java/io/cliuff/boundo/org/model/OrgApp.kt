@@ -16,6 +16,10 @@
 
 package io.cliuff.boundo.org.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class OrgApp(
     val pkg: String,
-)
+) : Parcelable

@@ -16,15 +16,20 @@
 
 package io.cliuff.boundo.org.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class CollInfo(
     val id: Int,
     val name: String,
     val groupCount: Int,
-)
+) : Parcelable
 
 /** Composite collection. */
+@Parcelize
 data class CompColl(
     val id: Int,
     val name: String,
     val groups: List<OrgGroup>,
-)
+) : Parcelable
