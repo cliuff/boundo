@@ -16,7 +16,9 @@
 
 package com.madness.collision.unit.api_viewing.ui.org.coll
 
+import android.content.pm.PackageInfo
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -25,6 +27,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -40,7 +43,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -52,21 +57,32 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
 import com.madness.collision.chief.app.BoundoTheme
 import com.madness.collision.main.showPage
 import com.madness.collision.unit.api_viewing.ui.org.group.GroupEditorFragment
+import com.madness.collision.unit.api_viewing.ui.org.group.GroupInfoFragment
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
+import com.madness.collision.util.ui.AppIconPackageInfo
 import io.cliuff.boundo.org.model.CompColl
 
 @Composable
 fun OrgCollPage(contentPadding: PaddingValues = PaddingValues()) {
     val viewModel = viewModel<OrgCollViewModel>()
+    val context = LocalContext.current
+    LaunchedEffect(Unit) { viewModel.init(context) }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val (isLoading, coll) = uiState
-    val context = LocalContext.current
     OrgCollScaffold(
         onClickAdd = {
-            context.showPage<GroupEditorFragment>()
+            if (coll != null) {
+                // add group for coll
+                context.showPage<GroupEditorFragment> {
+                    putString(GroupEditorFragment.ARG_COLL_GROUP_ID, "${coll.id}:0")
+                }
+            } else {
+                context.showPage<GroupEditorFragment>()
+            }
         },
         contentWindowInsets = WindowInsets(
             top = contentPadding.calculateTopPadding() + 10.dp,
@@ -78,6 +94,12 @@ fun OrgCollPage(contentPadding: PaddingValues = PaddingValues()) {
             OrgCollContent(
                 modifier = Modifier.fillMaxWidth(),
                 coll = coll,
+                onClickGroup = { i, id ->
+                    context.showPage<GroupInfoFragment> {
+                        putParcelable(GroupInfoFragment.ARG_COLL_GROUP, coll.groups.getOrNull(i))
+                        putString(GroupInfoFragment.ARG_COLL_GROUP_ID, "${coll.id}:$id")
+                    }
+                },
                 contentPadding = innerPadding,
             )
         } else {
@@ -122,15 +144,26 @@ private fun OrgCollScaffold(
 @Composable
 private fun OrgCollContent(
     coll: CompColl,
+    onClickGroup: (i: Int, id: Int) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
 ) {
+    val viewModel = viewModel<OrgCollViewModel>()
+    val groupPkgs = remember(coll.groups) {
+        coll.groups.map { group ->
+            group.apps.take(3).mapNotNull { app -> viewModel.getPkg(app.pkg) }
+        }
+    }
     LazyColumn(modifier = modifier, contentPadding = contentPadding) {
         item {
             CollectionName(name = coll.name)
         }
         itemsIndexed(coll.groups) { i, group ->
-            CollGroup(name = group.name)
+            CollGroup(
+                name = group.name,
+                apps = groupPkgs[i],
+                onClick = { onClickGroup(i, group.id) },
+            )
         }
     }
 }
@@ -147,9 +180,12 @@ private fun CollectionName(name: String) {
 }
 
 @Composable
-private fun CollGroup(name: String) {
+private fun CollGroup(name: String, apps: List<PackageInfo>, onClick: () -> Unit) {
     Column(
-        modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(horizontal = 20.dp, vertical = 12.dp),
     ) {
         Text(
             text = name,
@@ -159,26 +195,27 @@ private fun CollGroup(name: String) {
         )
         Spacer(modifier = Modifier.height(20.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Box(
-                modifier = Modifier
-                    .size(28.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f))
-            )
-            Spacer(modifier = Modifier.width(12.dp))
-            Box(
-                modifier = Modifier
-                    .size(28.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f))
-            )
-            Spacer(modifier = Modifier.width(12.dp))
-            Box(
-                modifier = Modifier
-                    .size(28.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f))
-            )
+            for (i in apps.indices) {
+                val app = apps[i]
+                val icPkg = remember { app.applicationInfo?.let { AppIconPackageInfo(app, it) } }
+                if (i > 0) {
+                    Spacer(modifier = Modifier.width(12.dp))
+                }
+                if (icPkg != null) {
+                    AsyncImage(
+                        modifier = Modifier.width(28.dp).heightIn(max = 28.dp),
+                        model = icPkg,
+                        contentDescription = null,
+                    )
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .size(28.dp)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f))
+                    )
+                }
+            }
         }
     }
 }
@@ -193,6 +230,7 @@ private fun OrgCollPreview() {
         ) {
             OrgCollContent(
                 coll = coll,
+                onClickGroup = { _, _ -> },
                 modifier = Modifier.fillMaxWidth(),
                 contentPadding = PaddingValues(top = 10.dp, bottom = 20.dp),
             )
