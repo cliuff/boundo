@@ -16,16 +16,32 @@
 
 package com.madness.collision.unit.api_viewing.ui.org.group
 
+import android.os.Bundle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import com.madness.collision.chief.app.ComposeFragment
 import com.madness.collision.chief.app.rememberColorScheme
 
 class GroupEditorFragment : ComposeFragment() {
+    companion object {
+        /** Group ID to modify, a string formatted as "collId:groupId". */
+        const val ARG_COLL_GROUP_ID: String = "ArgCollGroupId"
+    }
+
+    private var collGroupId: Pair<Int, Int>? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val argId = arguments?.getString(ARG_COLL_GROUP_ID)
+        val match = argId?.let("""(\d+):(\d+)""".toRegex()::matchEntire)
+        collGroupId = match?.run { groupValues[1].toInt() to groupValues[2].toInt() }
+    }
+
     @Composable
     override fun ComposeContent() {
+        val (collId, groupId) = collGroupId ?: (-1 to -1)
         MaterialTheme(colorScheme = rememberColorScheme()) {
-            GroupEditorPage()
+            GroupEditorPage(modCollId = collId, modGroupId = groupId)
         }
     }
 }
