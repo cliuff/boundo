@@ -16,6 +16,8 @@
 
 package io.cliuff.boundo.org.data.model
 
+import io.cliuff.boundo.org.db.model.AppGroup
+import io.cliuff.boundo.org.db.model.OrgAppEntity
 import io.cliuff.boundo.org.db.model.OrgGroupEntity
 import io.cliuff.boundo.org.db.model.OrgGroupUpdate
 import io.cliuff.boundo.org.model.OrgApp
@@ -40,3 +42,6 @@ fun OrgGroupEntity.toModel(apps: List<OrgApp>) =
         name = name,
         apps = apps,
     )
+
+fun AppGroup.toModel() =
+    groupEnt.toModel(apps = appEntities.map(OrgAppEntity::toModel))

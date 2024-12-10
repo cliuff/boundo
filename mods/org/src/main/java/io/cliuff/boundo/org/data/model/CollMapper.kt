@@ -16,6 +16,8 @@
 
 package io.cliuff.boundo.org.data.model
 
+import io.cliuff.boundo.org.db.model.AppColl
+import io.cliuff.boundo.org.db.model.AppGroup
 import io.cliuff.boundo.org.db.model.OrgCollEntity
 import io.cliuff.boundo.org.model.CollInfo
 import io.cliuff.boundo.org.model.CompColl
@@ -38,6 +40,13 @@ fun CompColl.toEntity() =
     OrgCollEntity(
         id = id,
         name = name,
+    )
+
+fun AppColl.toModel() =
+    CompColl(
+        id = collEnt.id,
+        name = collEnt.name,
+        groups = groupEntities.map(AppGroup::toModel),
     )
 
 

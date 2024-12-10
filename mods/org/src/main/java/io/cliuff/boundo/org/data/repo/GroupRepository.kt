@@ -21,7 +21,7 @@ import io.cliuff.boundo.org.data.model.toModel
 import io.cliuff.boundo.org.data.model.toUpdate
 import io.cliuff.boundo.org.db.dao.OrgAppDao
 import io.cliuff.boundo.org.db.dao.OrgGroupDao
-import io.cliuff.boundo.org.db.model.OrgAppEntity
+import io.cliuff.boundo.org.db.model.AppGroup
 import io.cliuff.boundo.org.model.OrgGroup
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -66,11 +66,7 @@ class GroupRepoImpl(
 
     override fun getGroups(collId: Int): Flow<List<OrgGroup>> {
         return groupDao.selectColl(collId).map { entities ->
-            entities.map { ent ->
-                val pkgSet = ent.appEntities
-                    .map(OrgAppEntity::toModel)
-                ent.groupEnt.toModel(pkgSet)
-            }
+            entities.map(AppGroup::toModel)
         }
     }
 }

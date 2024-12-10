@@ -33,10 +33,13 @@ interface OrgCollDao {
     suspend fun insert(coll: OrgCollEntity): Long
 
     @Delete
-    suspend fun delete(coll: OrgCollEntity)
+    suspend fun delete(coll: OrgCollEntity): Int
 
     @Query("SELECT * FROM org_coll")
     fun selectAll(): Flow<List<OrgCollEntity>>
+
+    @Query("SELECT * FROM org_coll")
+    fun selectAllComp(): Flow<List<AppColl>>
 
     @Transaction
     @Query("SELECT * FROM org_coll WHERE _id=:collId")

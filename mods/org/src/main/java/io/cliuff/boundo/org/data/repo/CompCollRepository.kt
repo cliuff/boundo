@@ -16,28 +16,36 @@
 
 package io.cliuff.boundo.org.data.repo
 
+import io.cliuff.boundo.org.data.model.toEntity
 import io.cliuff.boundo.org.data.model.toModel
 import io.cliuff.boundo.org.db.dao.OrgCollDao
-import io.cliuff.boundo.org.db.model.OrgAppEntity
+import io.cliuff.boundo.org.db.model.AppColl
 import io.cliuff.boundo.org.model.CompColl
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 interface CompCollRepository {
-    fun getCompCollection(): Flow<CompColl?>
+    fun getCompCollection(collId: Int): Flow<CompColl?>
+    fun getCompCollections(): Flow<List<CompColl>>
+    suspend fun removeCompCollection(coll: CompColl): Boolean
 }
 
 class CompCollRepoImpl(private val collDao: OrgCollDao) : CompCollRepository {
 
-    override fun getCompCollection(): Flow<CompColl?> {
-        return collDao.select(1).map coll@{ coll ->
-            coll ?: return@coll null
-            val groups = coll.groupEntities.map { group ->
-                val pkgSet = group.appEntities
-                    .map(OrgAppEntity::toModel)
-                group.groupEnt.toModel(pkgSet)
-            }
-            CompColl(id = coll.collEnt.id, name = coll.collEnt.name, groups = groups)
+    override fun getCompCollection(collId: Int): Flow<CompColl?> {
+        return collDao.select(collId).map { compEnt ->
+            compEnt?.toModel()
         }
+    }
+
+    override fun getCompCollections(): Flow<List<CompColl>> {
+        return collDao.selectAllComp().map { compEnts ->
+            compEnts.map(AppColl::toModel)
+        }
+    }
+
+    override suspend fun removeCompCollection(coll: CompColl): Boolean {
+        // delete related foreign table records automatically
+        return collDao.delete(coll.toEntity()) > 0
     }
 }
