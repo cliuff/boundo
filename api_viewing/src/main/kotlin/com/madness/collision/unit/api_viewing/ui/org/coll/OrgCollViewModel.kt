@@ -26,9 +26,11 @@ import io.cliuff.boundo.org.data.repo.OrgCollRepo
 import io.cliuff.boundo.org.model.CompColl
 import io.cliuff.boundo.org.model.OrgApp
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -37,23 +39,29 @@ import kotlinx.coroutines.launch
 data class OrgCollUiState(
     val isLoading: Boolean,
     val coll: CompColl?,
+    val collList: List<CompColl>,
 )
 
 class OrgCollViewModel : ViewModel() {
     private val mutUiState: MutableStateFlow<OrgCollUiState> =
-        MutableStateFlow(OrgCollUiState(isLoading = false, coll = null))
+        MutableStateFlow(OrgCollUiState(isLoading = false, coll = null, collList = emptyList()))
     val uiState: StateFlow<OrgCollUiState> = mutUiState.asStateFlow()
     private var compCollRepo: CompCollRepository? = null
     private var groupPkgs: Map<String, PackageInfo> = emptyMap()
+    private var selCollJob: Job? = null
 
     fun init(context: Context) {
         viewModelScope.launch(Dispatchers.IO) {
             mutUiState.update { it.copy(isLoading = true) }
             val repo = compCollRepo ?: OrgCollRepo.compColl(context).also { compCollRepo = it }
-            repo.getCompCollection()
-                .onEach { coll ->
-                    groupPkgs = coll?.getGroupPkgs(context).orEmpty()
-                    mutUiState.update { it.copy(isLoading = false, coll = coll) }
+            repo.getCompCollections()
+                .onEach { collList ->
+                    mutUiState.update { it.copy(collList = collList) }
+                    if (uiState.value.coll == null) {
+                        collList.firstOrNull()?.let { coll ->
+                            selectColl(coll, context)
+                        }
+                    }
                 }
                 .launchIn(this)
         }
@@ -61,6 +69,26 @@ class OrgCollViewModel : ViewModel() {
 
     fun getPkg(pkgName: String): PackageInfo? {
         return groupPkgs[pkgName]
+    }
+
+    fun selectColl(coll: CompColl, context: Context) {
+        val repo = compCollRepo ?: return
+        selCollJob?.cancel()
+        repo.getCompCollection(coll.id)
+            .onEach { co ->
+                groupPkgs = co?.getGroupPkgs(context).orEmpty()
+                mutUiState.update { it.copy(isLoading = false, coll = co) }
+            }
+            .flowOn(Dispatchers.IO)
+            .launchIn(viewModelScope)
+            .also { selCollJob = it }
+    }
+
+    fun deleteColl(coll: CompColl) {
+        val repo = compCollRepo ?: return
+        viewModelScope.launch(Dispatchers.IO) {
+            val isOk = repo.removeCompCollection(coll)
+        }
     }
 }
 

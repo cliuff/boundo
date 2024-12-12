@@ -16,6 +16,8 @@
 
 package com.madness.collision.unit.api_viewing.ui.org
 
+import android.os.Bundle
+import android.view.View
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import com.madness.collision.chief.app.ComposeFragment
@@ -23,9 +25,15 @@ import com.madness.collision.chief.app.rememberColorScheme
 import com.madness.collision.unit.api_viewing.ui.home.AppHomeNavPage
 import com.madness.collision.unit.api_viewing.ui.home.AppHomeNavPageImpl
 import com.madness.collision.unit.api_viewing.ui.org.coll.OrgCollPage
+import com.madness.collision.util.mainApplication
 
 /** App organization. */
 class AppOrgFragment : ComposeFragment(), AppHomeNavPage by AppHomeNavPageImpl() {
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        setStatusBarDarkIcon(mainApplication.isPaleTheme)
+    }
+
     @Composable
     override fun ComposeContent() {
         MaterialTheme(colorScheme = rememberColorScheme()) {

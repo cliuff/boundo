@@ -25,9 +25,12 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.add
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -49,8 +52,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -59,6 +62,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.madness.collision.chief.app.BoundoTheme
+import com.madness.collision.chief.app.asInsets
 import com.madness.collision.main.showPage
 import com.madness.collision.unit.api_viewing.ui.org.group.GroupEditorFragment
 import com.madness.collision.unit.api_viewing.ui.org.group.GroupInfoFragment
@@ -72,8 +76,18 @@ fun OrgCollPage(contentPadding: PaddingValues = PaddingValues()) {
     val context = LocalContext.current
     LaunchedEffect(Unit) { viewModel.init(context) }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val (isLoading, coll) = uiState
+    val (isLoading, coll, collList) = uiState
     OrgCollScaffold(
+        topBar = {
+            OrgCollAppBar(
+                collList = collList,
+                selectedColl = coll,
+                onClickColl = { coll -> viewModel.selectColl(coll, context) },
+                onActionDelete = { coll?.let(viewModel::deleteColl) },
+                windowInsets = contentPadding.asInsets()
+                    .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
+            )
+        },
         onClickAdd = {
             if (coll != null) {
                 // add group for coll
@@ -84,11 +98,8 @@ fun OrgCollPage(contentPadding: PaddingValues = PaddingValues()) {
                 context.showPage<GroupEditorFragment>()
             }
         },
-        contentWindowInsets = WindowInsets(
-            top = contentPadding.calculateTopPadding() + 10.dp,
-            bottom = contentPadding.calculateBottomPadding() + 20.dp,
-            left = contentPadding.calculateLeftPadding(LocalLayoutDirection.current),
-            right = contentPadding.calculateRightPadding(LocalLayoutDirection.current)),
+        contentWindowInsets = contentPadding.asInsets()
+            .add(WindowInsets(top = 10.dp, bottom = 20.dp)),
     ) { innerPadding ->
         if (coll != null) {
             OrgCollContent(
@@ -121,11 +132,13 @@ fun OrgCollPage(contentPadding: PaddingValues = PaddingValues()) {
 
 @Composable
 private fun OrgCollScaffold(
-    onClickAdd: () -> Unit,
+    topBar: @Composable () -> Unit = {},
+    onClickAdd: () -> Unit = {},
     contentWindowInsets: WindowInsets = ScaffoldDefaults.contentWindowInsets,
     content: @Composable (PaddingValues) -> Unit,
 ) {
     Scaffold(
+        topBar = topBar,
         floatingActionButton = {
             FloatingActionButton(
                 onClick = onClickAdd,
@@ -136,6 +149,7 @@ private fun OrgCollScaffold(
                 )
             }
         },
+        containerColor = Color.Transparent,
         contentWindowInsets = contentWindowInsets,
         content = content,
     )
@@ -158,7 +172,7 @@ private fun OrgCollContent(
         item {
             CollectionName(name = coll.name)
         }
-        itemsIndexed(coll.groups) { i, group ->
+        itemsIndexed(coll.groups, key = { _, g -> g.id }) { i, group ->
             CollGroup(
                 name = group.name,
                 apps = groupPkgs[i],
@@ -224,15 +238,16 @@ private fun CollGroup(name: String, apps: List<PackageInfo>, onClick: () -> Unit
 @PreviewCombinedColorLayout
 private fun OrgCollPreview() {
     val coll = CompColl(id = 0, name = "Collection 1", groups = emptyList())
+    val coll1 = CompColl(id = 1, name = "Collection 2", groups = emptyList())
     BoundoTheme {
         OrgCollScaffold(
-            onClickAdd = {},
-        ) {
+            topBar = { OrgCollAppBar(collList = listOf(coll, coll1), selectedColl = coll) },
+        ) { innerPadding ->
             OrgCollContent(
                 coll = coll,
                 onClickGroup = { _, _ -> },
                 modifier = Modifier.fillMaxWidth(),
-                contentPadding = PaddingValues(top = 10.dp, bottom = 20.dp),
+                contentPadding = innerPadding,
             )
         }
     }
