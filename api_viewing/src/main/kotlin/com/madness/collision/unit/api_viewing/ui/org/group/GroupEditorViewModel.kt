@@ -23,6 +23,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.madness.collision.chief.app.prop
 import com.madness.collision.unit.api_viewing.apps.PlatformAppProvider
+import com.madness.collision.unit.api_viewing.info.PkgInfo
 import io.cliuff.boundo.org.data.repo.CollRepository
 import io.cliuff.boundo.org.data.repo.GroupRepository
 import io.cliuff.boundo.org.data.repo.OrgCollRepo
@@ -49,6 +50,8 @@ data class GroupUiState(
     val groupName: String,
     val selPkgs: Set<String>,
     val installedApps: List<PackageInfo>,
+    /** A list of the end (exclusive) indices of grouping. Index <= 0 indicates an empty group. */
+    val installedAppsGrouping: List<Int>,
     val isLoading: Boolean,
 )
 
@@ -72,6 +75,7 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
             groupName = savedObj.groupName ?: "",
             selPkgs = savedObj.selPkgs ?: emptySet(),
             installedApps = emptyList(),
+            installedAppsGrouping = emptyList(),
             isLoading = false,
         )
         mutUiState = MutableStateFlow(state)
@@ -94,11 +98,26 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
                 p.packageName to label?.takeUnless { it.isEmpty() }
             }
             pkgLabelMap = labels
-            val sortedPkgs = pkgs.sortedBy { labels[it.packageName] ?: it.packageName }
+            val launcherPkgs = pkgs.mapNotNullTo(HashSet()) { p ->
+                p.packageName.takeIf { pkgMgr.getLaunchIntentForPackage(it) != null }
+            }
+            val overlayPkgs = pkgs.mapNotNullTo(HashSet()) { p ->
+                p.packageName.takeIf { PkgInfo.getOverlayTarget(p) != null }
+            }
+            val comparator = compareByDescending<PackageInfo> { it.packageName in launcherPkgs }
+                .thenBy { it.packageName in overlayPkgs }
+                .thenBy { labels[it.packageName] ?: it.packageName }
+            val sortedPkgs = pkgs.sortedWith(comparator)
+            val sortedGrouping = listOf(launcherPkgs.size, pkgs.size - overlayPkgs.size, pkgs.size)
 
             savedObj.groupName = "Unnamed Group"
             mutUiState.update {
-                it.copy(groupName = "Unnamed Group", installedApps = sortedPkgs, isLoading = false)
+                it.copy(
+                    groupName = "Unnamed Group",
+                    installedApps = sortedPkgs,
+                    installedAppsGrouping = sortedGrouping,
+                    isLoading = false,
+                )
             }
         }
     }

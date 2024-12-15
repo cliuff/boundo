@@ -17,21 +17,14 @@
 package com.madness.collision.unit.api_viewing.ui.org.group
 
 import android.content.pm.PackageInfo
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
@@ -43,15 +36,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.AsyncImage
 import com.madness.collision.chief.app.BoundoTheme
+import com.madness.collision.unit.api_viewing.ui.org.coll.CollAppHeading
+import com.madness.collision.unit.api_viewing.ui.org.coll.CollAppItem
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
 import com.madness.collision.util.ui.AppIconPackageInfo
 import io.cliuff.boundo.org.model.OrgApp
@@ -69,7 +61,7 @@ fun GroupInfoPage(group: OrgGroup? = null, modCollId: Int = -1, modGroupId: Int 
     LaunchedEffect(Unit) { viewModel.init(context, modCollId, modGroupId) }
     val eventHandler = rememberGroupInfoEventHandler(viewModel)
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val (groupName, selPkgs, installedApps, isLoading) = uiState
+    val (groupName, selPkgs, installedApps, _, isLoading) = uiState
     val groupPkgs = remember(group) { group?.apps?.map(OrgApp::pkg)?.toSet() }
     GroupContent(
         modifier = Modifier.fillMaxWidth(),
@@ -115,7 +107,7 @@ private fun GroupContent(
 
         if (selectedApps.isNotEmpty()) {
             item(key = "@group.sec.sel") {
-                GroupSectionTitle(
+                CollAppHeading(
                     modifier = Modifier
                         .animateItem()
                         .padding(horizontal = 20.dp)
@@ -126,7 +118,7 @@ private fun GroupContent(
         }
         items(selectedApps, key = { app -> app.packageName + "$" }) { app ->
             val icPkg = app.applicationInfo?.let { AppIconPackageInfo(app, it) }
-            GroupItem(
+            CollAppItem(
                 modifier = Modifier.animateItem().padding(horizontal = 20.dp, vertical = 8.dp),
                 name = eventHandler.getAppLabel(app.packageName),
                 iconModel = icPkg,
@@ -169,54 +161,6 @@ private fun GroupName(name: String, modifier: Modifier = Modifier) {
         fontSize = 15.sp,
         lineHeight = 17.sp,
     )
-}
-
-@Composable
-private fun GroupSectionTitle(name: String, modifier: Modifier = Modifier) {
-    Text(
-        modifier = modifier,
-        text = name,
-        color = MaterialTheme.colorScheme.onSurface,
-        fontSize = 13.sp,
-        lineHeight = 15.sp,
-        fontWeight = FontWeight.Medium,
-    )
-}
-
-@Composable
-private fun GroupItem(
-    name: String,
-    iconModel: Any?,
-    modifier: Modifier = Modifier,
-) {
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        if (iconModel != null) {
-            AsyncImage(
-                modifier = Modifier.width(36.dp).heightIn(max = 36.dp),
-                model = iconModel,
-                contentDescription = null,
-            )
-        } else {
-            Box(
-                modifier = Modifier
-                    .size(36.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f))
-            )
-        }
-        Spacer(modifier = Modifier.width(12.dp))
-        Text(
-            modifier = Modifier.weight(1f),
-            text = name,
-            color = MaterialTheme.colorScheme.onSurface,
-            fontSize = 14.sp,
-            lineHeight = 16.sp,
-            fontWeight = FontWeight.Medium,
-        )
-    }
 }
 
 internal fun PseudoGroupInfoEventHandler() =

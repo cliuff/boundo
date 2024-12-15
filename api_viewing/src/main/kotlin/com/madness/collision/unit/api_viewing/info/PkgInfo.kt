@@ -177,6 +177,10 @@ object PkgInfo {
         return pkgInfo.isCoreApp()
     }
 
+    fun getOverlayTarget(pkgInfo: PackageInfo): String? {
+        return pkgInfo.getOverlayTarget().getOrNull()
+    }
+
     /** Get modules that are available as [packages][PackageManager.getInstalledPackages] */
     fun getPkgModules(context: Context): List<ModuleInfo> {
         if (OsUtils.dissatisfy(OsUtils.Q)) return emptyList()
