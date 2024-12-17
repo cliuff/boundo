@@ -18,33 +18,54 @@ package com.madness.collision.unit.api_viewing.ui.org.group
 
 import android.content.pm.PackageInfo
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.add
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.madness.collision.chief.app.BoundoTheme
+import com.madness.collision.chief.app.asInsets
 import com.madness.collision.unit.api_viewing.ui.org.coll.CollAppHeading
 import com.madness.collision.unit.api_viewing.ui.org.coll.CollAppItem
 import com.madness.collision.unit.api_viewing.ui.org.coll.collAppGroupHeading
@@ -55,26 +76,37 @@ import com.madness.collision.util.ui.AppIconPackageInfo
 @Stable
 interface GroupEditorEventHandler {
     fun getAppLabel(pkgName: String): String
+    fun setGroupName(name: String)
     fun setAppSelected(pkgName: String, selected: Boolean)
     fun submitEdits()
 }
 
 @Composable
-fun GroupEditorPage(modCollId: Int = -1, modGroupId: Int = -1) {
+fun GroupEditorPage(
+    modCollId: Int = -1,
+    modGroupId: Int = -1,
+    contentPadding: PaddingValues = PaddingValues(),
+) {
     val viewModel = viewModel<GroupEditorViewModel>()
     val context = LocalContext.current
     LaunchedEffect(Unit) { viewModel.init(context, modCollId, modGroupId) }
     val eventHandler = rememberGroupEditorEventHandler(viewModel)
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val (groupName, selPkgs, installedApps, installedAppsGrouping, isLoading) = uiState
-    GroupContent(
-        modifier = Modifier.fillMaxWidth(),
-        groupName = groupName,
+    val (groupName, selPkgs, installedApps, installedAppsGrouping, isLoading, _) = uiState
+    GroupScaffold(
         eventHandler = eventHandler,
-        selectedPkgs = selPkgs,
-        installedApps = installedApps,
-        installedAppsGrouping = installedAppsGrouping,
-    )
+        contentWindowInsets = contentPadding.asInsets(),
+    ) { innerPadding ->
+        GroupContent(
+            modifier = Modifier.fillMaxWidth(),
+            groupName = groupName,
+            eventHandler = eventHandler,
+            selectedPkgs = selPkgs,
+            installedApps = installedApps,
+            installedAppsGrouping = installedAppsGrouping,
+            contentPadding = innerPadding,
+        )
+    }
 }
 
 @Composable
@@ -83,12 +115,37 @@ private fun rememberGroupEditorEventHandler(viewModel: GroupEditorViewModel) =
         object : GroupEditorEventHandler {
             override fun getAppLabel(pkgName: String) =
                 viewModel.getPkgLabel(pkgName)
+            override fun setGroupName(name: String) =
+                viewModel.setGroupName(name)
             override fun setAppSelected(pkgName: String, selected: Boolean) =
                 viewModel.setPkgSelected(pkgName, selected)
             override fun submitEdits() =
                 viewModel.submitEdits()
         }
     }
+
+@Composable
+private fun GroupScaffold(
+    eventHandler: GroupEditorEventHandler,
+    contentWindowInsets: WindowInsets = ScaffoldDefaults.contentWindowInsets,
+    content: @Composable (PaddingValues) -> Unit,
+) {
+    Scaffold(
+        bottomBar = {
+            val (isEnabled, setEnabled) = remember { mutableIntStateOf(1) }
+            GroupFooter(
+                onSubmit = { setEnabled(0); eventHandler.submitEdits() },
+                enabled = isEnabled == 1,
+                windowInsets = contentWindowInsets
+                    .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom)
+                    .add(WindowInsets(top = 10.dp, bottom = 20.dp)),
+            )
+        },
+        containerColor = Color.Transparent,
+        contentWindowInsets = contentWindowInsets,
+        content = content,
+    )
+}
 
 @Composable
 private fun GroupContent(
@@ -109,9 +166,10 @@ private fun GroupContent(
     }
     LazyColumn(modifier = modifier, contentPadding = contentPadding) {
         item(key = "@group.header") {
-            GroupHeader(
-                groupName = groupName,
-                onSubmit = eventHandler::submitEdits,
+            GroupName(
+                modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp),
+                name = groupName,
+                onNameChange = eventHandler::setGroupName,
             )
         }
 
@@ -166,39 +224,67 @@ private fun GroupContent(
 }
 
 @Composable
-private fun GroupHeader(groupName: String, onSubmit: () -> Unit) {
-    Column(modifier = Modifier.fillMaxWidth()) {
-        Spacer(modifier = Modifier.height(10.dp))
-        OutlinedButton(
-            modifier = Modifier
-                .align(Alignment.End)
-                .padding(horizontal = 20.dp, vertical = 5.dp),
-            onClick = onSubmit,
-        ) {
-            Text(
-                modifier = Modifier,
-                text = "Add group",
-                color = MaterialTheme.colorScheme.onSurface,
-                fontSize = 13.sp,
-                lineHeight = 15.sp,
-            )
+private fun GroupFooter(
+    onSubmit: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    windowInsets: WindowInsets = NavigationBarDefaults.windowInsets,
+) {
+    Surface(modifier = modifier) {
+        Box(modifier = Modifier.windowInsetsPadding(windowInsets)) {
+            OutlinedButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 5.dp),
+                onClick = onSubmit,
+                enabled = enabled,
+            ) {
+                Text(
+                    text = "Add group",
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontSize = 13.sp,
+                    lineHeight = 15.sp,
+                )
+            }
         }
-        GroupName(
-            modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp),
-            name = groupName,
-        )
     }
 }
 
 @Composable
-private fun GroupName(name: String, modifier: Modifier = Modifier) {
-    Text(
-        modifier = modifier,
-        text = name,
-        color = MaterialTheme.colorScheme.onSurface,
-        fontSize = 15.sp,
-        lineHeight = 17.sp,
-    )
+private fun GroupName(name: String, onNameChange: (String) -> Unit, modifier: Modifier = Modifier) {
+    Column(modifier = modifier) {
+        Text(
+            text = "Group name",
+            color = MaterialTheme.colorScheme.onSurface,
+            fontSize = 18.sp,
+            lineHeight = 20.sp,
+            fontWeight = FontWeight.Medium,
+        )
+        Spacer(modifier = Modifier.height(18.dp))
+        TextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = name,
+            onValueChange = onNameChange,
+            placeholder = {
+                Text(
+                    text = "Enter a name for the new group",
+                    fontSize = 14.sp,
+                    lineHeight = 14.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text, imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions.Default,
+            singleLine = true,
+            shape = RoundedCornerShape(10.dp),
+            colors = TextFieldDefaults.colors(
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+            ),
+        )
+    }
 }
 
 @Composable
@@ -228,6 +314,7 @@ private fun GroupItem(
 internal fun PseudoGroupEditorEventHandler() =
     object : GroupEditorEventHandler {
         override fun getAppLabel(pkgName: String) = ""
+        override fun setGroupName(name: String) {}
         override fun setAppSelected(pkgName: String, selected: Boolean) {}
         override fun submitEdits() {}
     }
@@ -236,13 +323,18 @@ internal fun PseudoGroupEditorEventHandler() =
 @PreviewCombinedColorLayout
 private fun GroupEditorPreview() {
     BoundoTheme {
-        Surface {
-            GroupContent(
-                modifier = Modifier.fillMaxWidth(),
-                groupName = "Preview Group",
-                eventHandler = remember { PseudoGroupEditorEventHandler() },
-                contentPadding = PaddingValues(top = 10.dp, bottom = 20.dp),
-            )
+        val eventHandler = remember { PseudoGroupEditorEventHandler() }
+        Surface(color = MaterialTheme.colorScheme.background) {
+            GroupScaffold(
+                eventHandler = eventHandler,
+            ) { innerPadding ->
+                GroupContent(
+                    modifier = Modifier.fillMaxWidth(),
+                    groupName = "Preview Group",
+                    eventHandler = eventHandler,
+                    contentPadding = innerPadding,
+                )
+            }
         }
     }
 }

@@ -53,6 +53,7 @@ data class GroupUiState(
     /** A list of the end (exclusive) indices of grouping. Index <= 0 indicates an empty group. */
     val installedAppsGrouping: List<Int>,
     val isLoading: Boolean,
+    val isSubmitOk: Boolean,
 )
 
 class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
@@ -77,6 +78,7 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
             installedApps = emptyList(),
             installedAppsGrouping = emptyList(),
             isLoading = false,
+            isSubmitOk = false,
         )
         mutUiState = MutableStateFlow(state)
         uiState = mutUiState.asStateFlow()
@@ -110,10 +112,10 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
             val sortedPkgs = pkgs.sortedWith(comparator)
             val sortedGrouping = listOf(launcherPkgs.size, pkgs.size - overlayPkgs.size, pkgs.size)
 
-            savedObj.groupName = "Unnamed Group"
+            savedObj.groupName = ""
             mutUiState.update {
                 it.copy(
-                    groupName = "Unnamed Group",
+                    groupName = "",
                     installedApps = sortedPkgs,
                     installedAppsGrouping = sortedGrouping,
                     isLoading = false,
@@ -125,6 +127,11 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
     /** Label: non-empty label, or package name. */
     fun getPkgLabel(pkg: String): String {
         return pkgLabelMap[pkg] ?: pkg
+    }
+
+    fun setGroupName(name: String) {
+        savedObj.groupName = name
+        mutUiState.update { it.copy(groupName = name) }
     }
 
     fun setPkgSelected(pkg: String, isSelected: Boolean) {
@@ -155,16 +162,20 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
             } else {
                 modCid
             }
+            val groupName = state.groupName.takeUnless { it.isBlank() } ?: "Unnamed Group"
             if (modGid <= 0) {
                 if (collId > 0) {
-                    val updGroup = OrgGroup(0, state.groupName, state.selPkgs.map(::OrgApp))
+                    val updGroup = OrgGroup(0, groupName, state.selPkgs.map(::OrgApp))
                     val gid = groupRepo.addGroupAndApps(collId, updGroup)
                     if (gid > 0) submittedGroupId = gid
                 }
             } else {
-                val updGroup = OrgGroup(modGid, state.groupName, state.selPkgs.map(::OrgApp))
+                val updGroup = OrgGroup(modGid, groupName, state.selPkgs.map(::OrgApp))
                 groupRepo.updateGroupAndApps(updGroup)
                 submittedGroupId = modGid
+            }
+            if (submittedGroupId > 0) {
+                mutUiState.update { it.copy(isSubmitOk = true) }
             }
         }
     }

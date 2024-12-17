@@ -16,19 +16,35 @@
 
 package com.madness.collision.unit.api_viewing.ui.org.group
 
+import android.content.Context
 import android.os.Bundle
+import android.view.View
+import androidx.appcompat.widget.Toolbar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.coroutineScope
+import androidx.lifecycle.flowWithLifecycle
+import com.madness.collision.Democratic
 import com.madness.collision.chief.app.ComposeFragment
 import com.madness.collision.chief.app.rememberColorScheme
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
-class GroupEditorFragment : ComposeFragment() {
+class GroupEditorFragment : ComposeFragment(), Democratic {
     companion object {
         /** Group ID to modify, a string formatted as "collId:groupId". */
         const val ARG_COLL_GROUP_ID: String = "ArgCollGroupId"
     }
 
     private var collGroupId: Pair<Int, Int>? = null
+
+    override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
+        mainViewModel.configNavigation(toolbar, iconColor)
+        toolbar.title = "Create New Group"
+        return true
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,11 +53,26 @@ class GroupEditorFragment : ComposeFragment() {
         collGroupId = match?.run { groupValues[1].toInt() to groupValues[2].toInt() }
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        democratize(mainViewModel)
+        val viewModel by viewModels<GroupEditorViewModel>()
+        val lifecycle = viewLifecycleOwner.lifecycle
+        viewModel.uiState
+            .flowWithLifecycle(lifecycle)
+            .filter { state -> state.isSubmitOk }
+            .onEach { activity?.onBackPressedDispatcher?.onBackPressed() }
+            .launchIn(lifecycle.coroutineScope)
+    }
+
     @Composable
     override fun ComposeContent() {
         val (collId, groupId) = collGroupId ?: (-1 to -1)
         MaterialTheme(colorScheme = rememberColorScheme()) {
-            GroupEditorPage(modCollId = collId, modGroupId = groupId)
+            GroupEditorPage(
+                modCollId = collId,
+                modGroupId = groupId,
+                contentPadding = rememberContentPadding(),
+            )
         }
     }
 }
