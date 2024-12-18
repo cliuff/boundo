@@ -38,7 +38,7 @@ interface OrgGroupDao {
     suspend fun update(group: OrgGroupUpdate)
 
     @Delete
-    suspend fun delete(group: OrgGroupEntity)
+    suspend fun delete(group: OrgGroupEntity): Int
 
     @Transaction
     @Query("SELECT * FROM org_group WHERE coll_id=:collId")

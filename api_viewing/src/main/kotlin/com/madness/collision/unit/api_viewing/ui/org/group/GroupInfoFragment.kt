@@ -16,15 +16,28 @@
 
 package com.madness.collision.unit.api_viewing.ui.org.group
 
+import android.content.Context
 import android.os.Bundle
+import android.view.MenuItem
+import android.view.View
+import androidx.appcompat.widget.Toolbar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.core.os.BundleCompat
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.coroutineScope
+import androidx.lifecycle.flowWithLifecycle
+import com.madness.collision.Democratic
 import com.madness.collision.chief.app.ComposeFragment
 import com.madness.collision.chief.app.rememberColorScheme
+import com.madness.collision.main.showPage
+import com.madness.collision.unit.api_viewing.R
 import io.cliuff.boundo.org.model.OrgGroup
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
-class GroupInfoFragment : ComposeFragment() {
+class GroupInfoFragment : ComposeFragment(), Democratic {
     companion object {
         /** An instance of [OrgGroup] to view. */
         const val ARG_COLL_GROUP: String = "ArgCollGroup"
@@ -34,6 +47,31 @@ class GroupInfoFragment : ComposeFragment() {
 
     private var collGroup: OrgGroup? = null
     private var collGroupId: Pair<Int, Int>? = null
+    private val viewModel: GroupEditorViewModel by viewModels()
+
+    override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
+        mainViewModel.configNavigation(toolbar, iconColor)
+        toolbar.title = collGroup?.name.orEmpty()
+        inflateAndTint(R.menu.toolbar_org_group, toolbar, iconColor)
+        return true
+    }
+
+    override fun selectOption(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.orgGroupActionUpdate -> {
+                context?.showPage<GroupEditorFragment> {
+                    val (collId, groupId) = collGroupId ?: (-1 to -1)
+                    putString(GroupEditorFragment.ARG_COLL_GROUP_ID, "$collId:$groupId")
+                }
+                return true
+            }
+            R.id.orgGroupActionDelete -> {
+                collGroup?.let(viewModel::remove)
+                return true
+            }
+        }
+        return false
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,11 +81,27 @@ class GroupInfoFragment : ComposeFragment() {
         collGroupId = match?.run { groupValues[1].toInt() to groupValues[2].toInt() }
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        democratize(mainViewModel)
+
+        val viewLifecycle = viewLifecycleOwner.lifecycle
+        viewModel.uiState
+            .flowWithLifecycle(viewLifecycle)
+            .filter { state -> state.isSubmitOk }
+            .onEach { activity?.onBackPressedDispatcher?.onBackPressed() }
+            .launchIn(viewLifecycle.coroutineScope)
+    }
+
     @Composable
     override fun ComposeContent() {
         val (collId, groupId) = collGroupId ?: (-1 to -1)
         MaterialTheme(colorScheme = rememberColorScheme()) {
-            GroupInfoPage(group = collGroup, modCollId = collId, modGroupId = groupId)
+            GroupInfoPage(
+                group = collGroup,
+                modCollId = collId,
+                modGroupId = groupId,
+                contentPadding = rememberContentPadding(),
+            )
         }
     }
 }

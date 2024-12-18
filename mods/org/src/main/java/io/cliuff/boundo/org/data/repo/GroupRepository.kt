@@ -30,7 +30,7 @@ interface GroupRepository {
     suspend fun addGroupAndApps(collId: Int, group: OrgGroup): Int
     suspend fun updateGroupAndApps(group: OrgGroup)
     suspend fun updateGroup(group: OrgGroup)
-    suspend fun removeGroup(collId: Int, group: OrgGroup)
+    suspend fun removeGroup(collId: Int, group: OrgGroup): Boolean
     fun getGroups(collId: Int): Flow<List<OrgGroup>>
 }
 
@@ -60,8 +60,9 @@ class GroupRepoImpl(
         groupDao.update(group.toUpdate())
     }
 
-    override suspend fun removeGroup(collId: Int, group: OrgGroup) {
-        groupDao.delete(group.toEntity(collId))
+    override suspend fun removeGroup(collId: Int, group: OrgGroup): Boolean {
+        // delete related foreign table records automatically
+        return groupDao.delete(group.toEntity(collId)) > 0
     }
 
     override fun getGroups(collId: Int): Flow<List<OrgGroup>> {
