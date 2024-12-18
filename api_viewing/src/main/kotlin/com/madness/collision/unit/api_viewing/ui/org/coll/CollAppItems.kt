@@ -40,8 +40,8 @@ internal fun <T> List<T>.getGroup(grouping: List<Int>, groupIndex: Int): List<T>
     // end index should be greater than 0
     if (grouping[groupIndex] <= 0) return emptyList()
     // iterate backwards to find the first end index > 0
-    val startIndex = (groupIndex - 1 downTo 0).indexOfFirst { i -> grouping[i] > 0 }
-    return subList(grouping.getOrNull(startIndex) ?: 0, grouping[groupIndex])
+    val startIndex = (groupIndex - 1 downTo 0).find { i -> grouping[i] > 0 }
+    return subList(startIndex?.let(grouping::get) ?: 0, grouping[groupIndex])
 }
 
 @Composable
