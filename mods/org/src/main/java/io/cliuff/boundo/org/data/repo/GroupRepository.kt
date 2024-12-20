@@ -31,6 +31,7 @@ interface GroupRepository {
     suspend fun updateGroupAndApps(group: OrgGroup)
     suspend fun updateGroup(group: OrgGroup)
     suspend fun removeGroup(collId: Int, group: OrgGroup): Boolean
+    suspend fun getAppGroups(collId: Int): Map<String, List<OrgGroup>>
     fun getGroups(collId: Int): Flow<List<OrgGroup>>
 }
 
@@ -63,6 +64,12 @@ class GroupRepoImpl(
     override suspend fun removeGroup(collId: Int, group: OrgGroup): Boolean {
         // delete related foreign table records automatically
         return groupDao.delete(group.toEntity(collId)) > 0
+    }
+
+    override suspend fun getAppGroups(collId: Int): Map<String, List<OrgGroup>> {
+        return groupDao.selectOneOffColl(collId).map(AppGroup::toModel)
+            .flatMap { group -> group.apps.map { app -> app.pkg to group } }
+            .groupBy({ (pkg, _) -> pkg }) { (_, group) -> group }
     }
 
     override fun getGroups(collId: Int): Flow<List<OrgGroup>> {

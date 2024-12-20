@@ -17,10 +17,15 @@
 package com.madness.collision.unit.api_viewing.ui.org.coll
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
@@ -32,9 +37,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape
 
 internal fun <T> List<T>.getGroup(grouping: List<Int>, groupIndex: Int): List<T> {
     // end index should be greater than 0
@@ -71,6 +78,7 @@ fun CollAppItem(
     name: String,
     iconModel: Any?,
     modifier: Modifier = Modifier,
+    desc: @Composable () -> Unit = {},
 ) {
     Row(
         modifier = modifier,
@@ -91,12 +99,48 @@ fun CollAppItem(
             )
         }
         Spacer(modifier = Modifier.width(12.dp))
+        Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
+            Text(
+                text = name,
+                color = MaterialTheme.colorScheme.onSurface,
+                fontSize = 14.sp,
+                lineHeight = 16.sp,
+                fontWeight = FontWeight.Medium,
+            )
+            desc()
+        }
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun CollAppGroupRow(names: List<String>) {
+    FlowRow(
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+    ) {
+        for (name in names) {
+            AppGroup(name = name)
+        }
+    }
+}
+
+@Composable
+private fun AppGroup(name: String) {
+    Box(
+        Modifier
+            .clip(AbsoluteSmoothCornerShape(3.dp, 80))
+            .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.075f))
+            .padding(horizontal = 4.dp, vertical = 1.dp),
+    ) {
         Text(
             text = name,
             color = MaterialTheme.colorScheme.onSurface,
-            fontSize = 14.sp,
-            lineHeight = 16.sp,
+            fontSize = 9.sp,
+            lineHeight = 9.sp,
             fontWeight = FontWeight.Medium,
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1,
         )
     }
 }

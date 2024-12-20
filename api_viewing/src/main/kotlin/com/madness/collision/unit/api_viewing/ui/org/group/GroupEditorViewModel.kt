@@ -61,6 +61,7 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
     val uiState: StateFlow<GroupUiState>
     /** App label: non-empty or null. */
     private var pkgLabelMap: Map<String, String?> = emptyMap()
+    private var pkgGroupsMap: Map<String, List<OrgGroup>> = emptyMap()
     private var collRepo: CollRepository? = null
     private var groupRepo: GroupRepository? = null
     /** Coll ID to add group in. */
@@ -112,6 +113,10 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
             val sortedPkgs = pkgs.sortedWith(comparator)
             val sortedGrouping = listOf(launcherPkgs.size, pkgs.size - overlayPkgs.size, pkgs.size)
 
+            if (modCollId > 0) {
+                pkgGroupsMap = groupRepo.getAppGroups(modCollId)
+            }
+
             savedObj.groupName = ""
             mutUiState.update {
                 it.copy(
@@ -127,6 +132,10 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
     /** Label: non-empty label, or package name. */
     fun getPkgLabel(pkg: String): String {
         return pkgLabelMap[pkg] ?: pkg
+    }
+
+    fun getPkgGroups(pkg: String): List<OrgGroup> {
+        return pkgGroupsMap[pkg].orEmpty()
     }
 
     fun setGroupName(name: String) {

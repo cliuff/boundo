@@ -43,10 +43,12 @@ import com.madness.collision.util.dev.PreviewCombinedColorLayout
 import com.madness.collision.util.ui.AppIconPackageInfo
 import io.cliuff.boundo.org.model.CompColl
 import io.cliuff.boundo.org.model.OrgApp
+import io.cliuff.boundo.org.model.OrgGroup
 
 @Stable
 interface GroupInfoEventHandler {
     fun getAppLabel(pkgName: String): String
+    fun getAppGroups(pkgName: String): List<String>
 }
 
 @Composable
@@ -80,6 +82,8 @@ private fun rememberGroupInfoEventHandler(viewModel: GroupEditorViewModel) =
         object : GroupInfoEventHandler {
             override fun getAppLabel(pkgName: String) =
                 viewModel.getPkgLabel(pkgName)
+            override fun getAppGroups(pkgName: String) =
+                viewModel.getPkgGroups(pkgName).map(OrgGroup::name)
         }
     }
 
@@ -116,6 +120,7 @@ private fun GroupContent(
                     name = eventHandler.getAppLabel(app.packageName),
                     selected = app.packageName in selectedPkgs,
                     iconModel = icPkg,
+                    includedGroups = eventHandler.getAppGroups(app.packageName),
                 )
             }
         }
@@ -128,6 +133,7 @@ private fun GroupItem(
     selected: Boolean,
     iconModel: Any?,
     modifier: Modifier = Modifier,
+    includedGroups: List<String> = emptyList(),
 ) {
     Row(
         modifier = modifier,
@@ -137,6 +143,7 @@ private fun GroupItem(
             modifier = Modifier.weight(1f),
             name = name,
             iconModel = iconModel,
+            desc = { CollAppGroupRow(names = includedGroups) },
         )
         Checkbox(
             modifier = Modifier.minimumInteractiveComponentSize(),
@@ -150,6 +157,7 @@ private fun GroupItem(
 internal fun PseudoGroupInfoEventHandler() =
     object : GroupInfoEventHandler {
         override fun getAppLabel(pkgName: String) = ""
+        override fun getAppGroups(pkgName: String) = emptyList<String>()
     }
 
 @Composable

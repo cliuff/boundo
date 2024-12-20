@@ -66,16 +66,19 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.madness.collision.chief.app.BoundoTheme
 import com.madness.collision.chief.app.asInsets
+import com.madness.collision.unit.api_viewing.ui.org.coll.CollAppGroupRow
 import com.madness.collision.unit.api_viewing.ui.org.coll.CollAppHeading
 import com.madness.collision.unit.api_viewing.ui.org.coll.CollAppItem
 import com.madness.collision.unit.api_viewing.ui.org.coll.collAppGroupHeading
 import com.madness.collision.unit.api_viewing.ui.org.coll.getGroup
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
 import com.madness.collision.util.ui.AppIconPackageInfo
+import io.cliuff.boundo.org.model.OrgGroup
 
 @Stable
 interface GroupEditorEventHandler {
     fun getAppLabel(pkgName: String): String
+    fun getAppGroups(pkgName: String): List<String>
     fun setGroupName(name: String)
     fun setAppSelected(pkgName: String, selected: Boolean)
     fun submitEdits()
@@ -115,6 +118,8 @@ private fun rememberGroupEditorEventHandler(viewModel: GroupEditorViewModel) =
         object : GroupEditorEventHandler {
             override fun getAppLabel(pkgName: String) =
                 viewModel.getPkgLabel(pkgName)
+            override fun getAppGroups(pkgName: String) =
+                viewModel.getPkgGroups(pkgName).map(OrgGroup::name)
             override fun setGroupName(name: String) =
                 viewModel.setGroupName(name)
             override fun setAppSelected(pkgName: String, selected: Boolean) =
@@ -192,6 +197,7 @@ private fun GroupContent(
                 selected = app.packageName in selectedPkgs,
                 iconModel = icPkg,
                 onCheckedChange = { chk -> eventHandler.setAppSelected(app.packageName, chk) },
+                includedGroups = eventHandler.getAppGroups(app.packageName),
             )
         }
 
@@ -217,6 +223,7 @@ private fun GroupContent(
                     selected = app.packageName in selectedPkgs,
                     iconModel = icPkg,
                     onCheckedChange = { chk -> eventHandler.setAppSelected(app.packageName, chk) },
+                    includedGroups = eventHandler.getAppGroups(app.packageName),
                 )
             }
         }
@@ -294,6 +301,7 @@ private fun GroupItem(
     iconModel: Any?,
     onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
+    includedGroups: List<String> = emptyList(),
 ) {
     Row(
         modifier = Modifier.clickable { onCheckedChange(!selected) }.then(modifier),
@@ -303,6 +311,7 @@ private fun GroupItem(
             modifier = Modifier.weight(1f),
             name = name,
             iconModel = iconModel,
+            desc = { CollAppGroupRow(names = includedGroups) },
         )
         Checkbox(
             checked = selected,
@@ -314,6 +323,7 @@ private fun GroupItem(
 internal fun PseudoGroupEditorEventHandler() =
     object : GroupEditorEventHandler {
         override fun getAppLabel(pkgName: String) = ""
+        override fun getAppGroups(pkgName: String) = emptyList<String>()
         override fun setGroupName(name: String) {}
         override fun setAppSelected(pkgName: String, selected: Boolean) {}
         override fun submitEdits() {}
