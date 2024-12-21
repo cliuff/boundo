@@ -31,6 +31,10 @@ interface GroupRepository {
     suspend fun updateGroupAndApps(group: OrgGroup)
     suspend fun updateGroup(group: OrgGroup)
     suspend fun removeGroup(collId: Int, group: OrgGroup): Boolean
+    /** Get group by [groupId]. */
+    suspend fun getOneOffGroup(groupId: Int): OrgGroup?
+    /** Get coll groups by [collId]. */
+    suspend fun getOneOffGroups(collId: Int): List<OrgGroup>
     suspend fun getAppGroups(collId: Int): Map<String, List<OrgGroup>>
     fun getGroups(collId: Int): Flow<List<OrgGroup>>
 }
@@ -44,7 +48,8 @@ class GroupRepoImpl(
         val gid = groupDao.insert(group.toEntity(collId)).toInt()
         if (gid > 0) {
             val apps = group.apps.map { app -> app.toEntity(gid) }
-            appDao.insertAll(apps)
+            // replace with new apps instead of inserting all
+            appDao.replace(gid, apps)
         }
         return gid
     }
@@ -53,7 +58,7 @@ class GroupRepoImpl(
         groupDao.update(group.toUpdate())
         if (group.id > 0) {
             val apps = group.apps.map { app -> app.toEntity(group.id) }
-            appDao.insertAll(apps)
+            appDao.replace(group.id, apps)
         }
     }
 
@@ -64,6 +69,14 @@ class GroupRepoImpl(
     override suspend fun removeGroup(collId: Int, group: OrgGroup): Boolean {
         // delete related foreign table records automatically
         return groupDao.delete(group.toEntity(collId)) > 0
+    }
+
+    override suspend fun getOneOffGroup(groupId: Int): OrgGroup? {
+        return groupDao.select(groupId)?.let(AppGroup::toModel)
+    }
+
+    override suspend fun getOneOffGroups(collId: Int): List<OrgGroup> {
+        return groupDao.selectOneOffColl(collId).map(AppGroup::toModel)
     }
 
     override suspend fun getAppGroups(collId: Int): Map<String, List<OrgGroup>> {

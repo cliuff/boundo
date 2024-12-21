@@ -21,6 +21,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import io.cliuff.boundo.org.db.model.OrgAppEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -35,6 +36,22 @@ interface OrgAppDao {
 
     @Delete
     suspend fun delete(app: OrgAppEntity)
+
+    @Query("DELETE FROM org_app WHERE pkg IN (:pkgs)")
+    suspend fun deletePkgs(pkgs: List<String>): Int
+
+    @Transaction
+    suspend fun replace(groupId: Int, entities: List<OrgAppEntity>) {
+        val newPkgs = entities.mapTo(HashSet(), OrgAppEntity::pkgName)
+        val existingPkgs = selectGroupPkgs(groupId)
+        if (existingPkgs.isNotEmpty()) {
+            deletePkgs(existingPkgs - newPkgs)
+        }
+        insertAll(entities)
+    }
+
+    @Query("SELECT pkg FROM org_app WHERE group_id=:groupId")
+    suspend fun selectGroupPkgs(groupId: Int): List<String>
 
     @Query("SELECT * FROM org_app WHERE group_id=:groupId")
     fun selectGroup(groupId: Int): Flow<List<OrgAppEntity>>

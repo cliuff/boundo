@@ -41,6 +41,10 @@ interface OrgGroupDao {
     suspend fun delete(group: OrgGroupEntity): Int
 
     @Transaction
+    @Query("SELECT * FROM org_group WHERE _id=:groupId")
+    suspend fun select(groupId: Int): AppGroup?
+
+    @Transaction
     @Query("SELECT * FROM org_group WHERE coll_id=:collId")
     suspend fun selectOneOffColl(collId: Int): List<AppGroup>
 

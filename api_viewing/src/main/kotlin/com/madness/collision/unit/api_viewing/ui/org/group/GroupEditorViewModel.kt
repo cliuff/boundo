@@ -113,14 +113,17 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
             val sortedPkgs = pkgs.sortedWith(comparator)
             val sortedGrouping = listOf(launcherPkgs.size, pkgs.size - overlayPkgs.size, pkgs.size)
 
-            if (modCollId > 0) {
-                pkgGroupsMap = groupRepo.getAppGroups(modCollId)
-            }
+            pkgGroupsMap = if (modCollId > 0) groupRepo.getAppGroups(modCollId) else emptyMap()
+            val modGroup = if (modGroupId > 0) groupRepo.getOneOffGroup(modGroupId) else null
+            val modGroupName = modGroup?.name ?: ""
+            val modSelPkgs = modGroup?.apps?.run { mapTo(HashSet(size), OrgApp::pkg) } ?: emptySet()
 
-            savedObj.groupName = ""
+            savedObj.groupName = modGroupName
+            savedObj.selPkgs = modSelPkgs
             mutUiState.update {
                 it.copy(
-                    groupName = "",
+                    groupName = modGroupName,
+                    selPkgs = modSelPkgs,
                     installedApps = sortedPkgs,
                     installedAppsGrouping = sortedGrouping,
                     isLoading = false,
@@ -171,7 +174,7 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
             } else {
                 modCid
             }
-            val groupName = state.groupName.takeUnless { it.isBlank() } ?: "Unnamed Group"
+            val groupName = state.groupName.trim().takeUnless { it.isBlank() } ?: "Unnamed Group"
             if (modGid <= 0) {
                 if (collId > 0) {
                     val updGroup = OrgGroup(0, groupName, state.selPkgs.map(::OrgApp))

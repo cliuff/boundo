@@ -97,6 +97,7 @@ fun GroupEditorPage(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val (groupName, selPkgs, installedApps, installedAppsGrouping, isLoading, _) = uiState
     GroupScaffold(
+        submitText = if (modGroupId > 0) "Update group" else "Add group",
         eventHandler = eventHandler,
         contentWindowInsets = contentPadding.asInsets(),
     ) { innerPadding ->
@@ -131,6 +132,7 @@ private fun rememberGroupEditorEventHandler(viewModel: GroupEditorViewModel) =
 
 @Composable
 private fun GroupScaffold(
+    submitText: String,
     eventHandler: GroupEditorEventHandler,
     contentWindowInsets: WindowInsets = ScaffoldDefaults.contentWindowInsets,
     content: @Composable (PaddingValues) -> Unit,
@@ -139,6 +141,7 @@ private fun GroupScaffold(
         bottomBar = {
             val (isEnabled, setEnabled) = remember { mutableIntStateOf(1) }
             GroupFooter(
+                submitText = submitText,
                 onSubmit = { setEnabled(0); eventHandler.submitEdits() },
                 enabled = isEnabled == 1,
                 windowInsets = contentWindowInsets
@@ -232,6 +235,7 @@ private fun GroupContent(
 
 @Composable
 private fun GroupFooter(
+    submitText: String,
     onSubmit: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
@@ -247,7 +251,7 @@ private fun GroupFooter(
                 enabled = enabled,
             ) {
                 Text(
-                    text = "Add group",
+                    text = submitText,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontSize = 13.sp,
                     lineHeight = 15.sp,
@@ -336,6 +340,7 @@ private fun GroupEditorPreview() {
         val eventHandler = remember { PseudoGroupEditorEventHandler() }
         Surface(color = MaterialTheme.colorScheme.background) {
             GroupScaffold(
+                submitText = "Add group",
                 eventHandler = eventHandler,
             ) { innerPadding ->
                 GroupContent(

@@ -42,7 +42,8 @@ class GroupEditorFragment : ComposeFragment(), Democratic {
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
         mainViewModel.configNavigation(toolbar, iconColor)
-        toolbar.title = "Create New Group"
+        val isEditGroup = collGroupId.let { id -> id != null && id.second > 0 }
+        toolbar.title = if (isEditGroup) "Edit Group" else "Create New Group"
         return true
     }
 
