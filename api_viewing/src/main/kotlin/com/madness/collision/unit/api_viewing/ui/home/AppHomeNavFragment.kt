@@ -38,6 +38,7 @@ import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.flowWithLifecycle
 import com.madness.collision.main.MainAppHome
 import com.madness.collision.unit.api_viewing.ui.list.AppListFragment
+import com.madness.collision.unit.api_viewing.ui.org.AppOrgFragment
 import com.madness.collision.unit.api_viewing.ui.upd.AppUpdatesFragment
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -84,7 +85,7 @@ class AppHomeNavFragment : Fragment(), AppHomeNav {
         const val ARG_CONTENT_PADDING: String = AppHomeNavPage.ARG_CONTENT_PADDING
     }
     private val navFgmClasses: Array<KClass<out Fragment>> =
-        arrayOf(AppUpdatesFragment::class, AppListFragment::class)
+        arrayOf(AppUpdatesFragment::class, AppListFragment::class, AppOrgFragment::class)
     private val navFgmTags = navFgmClasses.map { klass -> "AppHome_" + klass.simpleName }
     private var lastContentPadding: PaddingValues? = null
     private val mutStatusBarDarkIcon = MutableStateFlow(false)

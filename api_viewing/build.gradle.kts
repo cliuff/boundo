@@ -55,6 +55,7 @@ android {
 
 dependencies {
     coreLibraryDesugaring(libs.androidDesugaring)
+    implementation(project(":mods:org"))
     implementation(platform(libs.androidxComposeBom))
     listOf(
         fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))),

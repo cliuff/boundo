@@ -34,6 +34,7 @@ import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.layout.waterfall
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.twotone.List
+import androidx.compose.material.icons.twotone.Category
 import androidx.compose.material.icons.twotone.Home
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -106,7 +107,7 @@ fun AppHomePage(onStatusBarDarkIconChange: (Boolean) -> Unit) {
     var selNavIndex by rememberSaveable { mutableIntStateOf(0) }
     val (homeNav, setHomeNav) = remember { mutableStateOf<AppHomeNav?>(null) }
     if (selNavIndex != 0 && homeNav != null) {
-        BackHandler { selNavIndex = 0; homeNav.navBack() }
+        BackHandler { selNavIndex = 0; homeNav.setNavPage(0) }
     }
     LaunchedEffect(homeNav) statusBar@{
         val nav = homeNav ?: return@statusBar
@@ -211,6 +212,11 @@ private fun HomeNavigationBar(
             onClick = { onSelectItem(1) },
             icon = { Icon(Icons.AutoMirrored.TwoTone.List, contentDescription = null) }
         )
+        NavigationBarItem(
+            selected = selectedIndex == 2,
+            onClick = { onSelectItem(2) },
+            icon = { Icon(Icons.TwoTone.Category, contentDescription = null) }
+        )
     }
 }
 
@@ -232,6 +238,11 @@ private fun HomeNavigationRail(
             selected = selectedIndex == 1,
             onClick = { onSelectItem(1) },
             icon = { Icon(Icons.AutoMirrored.TwoTone.List, contentDescription = null) }
+        )
+        NavigationRailItem(
+            selected = selectedIndex == 2,
+            onClick = { onSelectItem(2) },
+            icon = { Icon(Icons.TwoTone.Category, contentDescription = null) }
         )
         Spacer(modifier = Modifier.weight(1f))
     }
