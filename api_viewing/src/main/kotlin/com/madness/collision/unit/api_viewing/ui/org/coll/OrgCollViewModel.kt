@@ -40,11 +40,12 @@ data class OrgCollUiState(
     val isLoading: Boolean,
     val coll: CompColl?,
     val collList: List<CompColl>,
+    val installedPkgsSummary: Pair<Int, Int>?,
 )
 
 class OrgCollViewModel : ViewModel() {
     private val mutUiState: MutableStateFlow<OrgCollUiState> =
-        MutableStateFlow(OrgCollUiState(isLoading = false, coll = null, collList = emptyList()))
+        MutableStateFlow(OrgCollUiState(isLoading = false, coll = null, collList = emptyList(), installedPkgsSummary = null))
     val uiState: StateFlow<OrgCollUiState> = mutUiState.asStateFlow()
     private var compCollRepo: CompCollRepository? = null
     private var groupPkgs: Map<String, PackageInfo> = emptyMap()
@@ -77,7 +78,13 @@ class OrgCollViewModel : ViewModel() {
         repo.getCompCollection(coll.id)
             .onEach { co ->
                 groupPkgs = co?.getGroupPkgs(context).orEmpty()
-                mutUiState.update { it.copy(isLoading = false, coll = co) }
+                val collPkgs = co?.groups.orEmpty()
+                    .run { flatMapTo(HashSet(size)) { it.apps.map(OrgApp::pkg) } }
+                val installedPkgs = PlatformAppProvider(context).getAll()
+                    .run { mapTo(HashSet(size), PackageInfo::packageName) }
+                val intersectPkgs = collPkgs.apply { retainAll(installedPkgs) }
+                val summary = intersectPkgs.size to installedPkgs.size
+                mutUiState.update { it.copy(isLoading = false, coll = co, installedPkgsSummary = summary) }
             }
             .flowOn(Dispatchers.IO)
             .launchIn(viewModelScope)

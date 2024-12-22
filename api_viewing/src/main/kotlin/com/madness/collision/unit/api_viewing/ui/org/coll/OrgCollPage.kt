@@ -71,6 +71,8 @@ import com.madness.collision.unit.api_viewing.ui.org.group.GroupInfoFragment
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
 import com.madness.collision.util.ui.AppIconPackageInfo
 import io.cliuff.boundo.org.model.CompColl
+import io.cliuff.boundo.org.model.OrgApp
+import io.cliuff.boundo.org.model.OrgGroup
 
 @Composable
 fun OrgCollPage(contentPadding: PaddingValues = PaddingValues()) {
@@ -78,7 +80,7 @@ fun OrgCollPage(contentPadding: PaddingValues = PaddingValues()) {
     val context = LocalContext.current
     LaunchedEffect(Unit) { viewModel.init(context) }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val (isLoading, coll, collList) = uiState
+    val (isLoading, coll, collList, installedPkgsSummary) = uiState
     OrgCollScaffold(
         topBar = {
             OrgCollAppBar(
@@ -113,6 +115,7 @@ fun OrgCollPage(contentPadding: PaddingValues = PaddingValues()) {
                         putString(GroupInfoFragment.ARG_COLL_GROUP_ID, "${coll.id}:$id")
                     }
                 },
+                installedAppsSummary = installedPkgsSummary?.let { (a, b) -> "$a/$b" } ?: "N/A",
                 contentPadding = innerPadding,
             )
         } else {
@@ -162,6 +165,7 @@ private fun OrgCollContent(
     coll: CompColl,
     onClickGroup: (i: Int, id: Int) -> Unit,
     modifier: Modifier = Modifier,
+    installedAppsSummary: String = "N/A",
     contentPadding: PaddingValues = PaddingValues(),
 ) {
     val context = LocalContext.current
@@ -173,14 +177,11 @@ private fun OrgCollContent(
     }
     LazyColumn(modifier = modifier, contentPadding = contentPadding) {
         item {
-            CollectionName(name = coll.name)
-        }
-        item {
             CollAppsSummary(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 12.dp, vertical = 10.dp),
-                text = "Installed apps summary (N/A)",
+                text = "Installed apps summary ($installedAppsSummary)",
                 onClick = {
                     context.showPage<CollAppListFragment> {
                         putParcelable(CollAppListFragment.ARG_COLL, coll)
@@ -191,23 +192,15 @@ private fun OrgCollContent(
         }
         itemsIndexed(coll.groups, key = { _, g -> g.id }) { i, group ->
             CollGroup(
-                name = group.name,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 12.dp, vertical = 10.dp),
+                name = "${group.name} (${group.apps.size})",
                 apps = groupPkgs[i],
                 onClick = { onClickGroup(i, group.id) },
             )
         }
     }
-}
-
-@Composable
-private fun CollectionName(name: String) {
-    Text(
-        modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp),
-        text = name,
-        color = MaterialTheme.colorScheme.onSurface,
-        fontSize = 15.sp,
-        lineHeight = 17.sp,
-    )
 }
 
 @Composable
@@ -231,12 +224,13 @@ private fun CollAppsSummary(text: String, onClick: () -> Unit, modifier: Modifie
 }
 
 @Composable
-private fun CollGroup(name: String, apps: List<PackageInfo>, onClick: () -> Unit) {
+private fun CollGroup(name: String, apps: List<PackageInfo>, onClick: () -> Unit, modifier: Modifier = Modifier) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = modifier
+            .clip(RoundedCornerShape(20.dp))
             .clickable(onClick = onClick)
-            .padding(horizontal = 20.dp, vertical = 12.dp),
+            .background(MaterialTheme.colorScheme.surface)
+            .padding(horizontal = 20.dp, vertical = 20.dp),
     ) {
         Text(
             text = name,
@@ -274,8 +268,13 @@ private fun CollGroup(name: String, apps: List<PackageInfo>, onClick: () -> Unit
 @Composable
 @PreviewCombinedColorLayout
 private fun OrgCollPreview() {
-    val coll = CompColl(id = 0, name = "Collection 1", groups = emptyList())
-    val coll1 = CompColl(id = 1, name = "Collection 2", groups = emptyList())
+    val anApp = OrgApp(pkg = "", label = "", labelLocale = "", createTime = 0L, modifyTime = 0L)
+    val groups = listOf(
+        OrgGroup(id = 0, name = "Group 1", createTime = 0L, modifyTime = 0L, apps = listOf(anApp)),
+        OrgGroup(id = 1, name = "Group 2", createTime = 0L, modifyTime = 0L, apps = listOf(anApp)),
+    )
+    val coll = CompColl(id = 0, name = "Collection 1", createTime = 0L, modifyTime = 0L, groups = groups)
+    val coll1 = CompColl(id = 1, name = "Collection 2", createTime = 0L, modifyTime = 0L, groups = emptyList())
     BoundoTheme {
         OrgCollScaffold(
             topBar = { OrgCollAppBar(collList = listOf(coll, coll1), selectedColl = coll) },
