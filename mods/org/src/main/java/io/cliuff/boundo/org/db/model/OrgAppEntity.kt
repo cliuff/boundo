@@ -48,3 +48,17 @@ class OrgAppEntity(
     @ColumnInfo(name = "modify_time")
     val modifyTime: Long,
 )
+
+// Omit createTime.
+class OrgAppUpdate(
+    @ColumnInfo(name = "group_id")
+    val groupId: Int,
+    @ColumnInfo(name = "pkg")
+    val pkgName: String,
+    @ColumnInfo(name = "label")
+    val label: String,
+    @ColumnInfo(name = "label_locale")
+    val labelLocale: String,
+    @ColumnInfo(name = "modify_time")
+    val modifyTime: Long,
+)

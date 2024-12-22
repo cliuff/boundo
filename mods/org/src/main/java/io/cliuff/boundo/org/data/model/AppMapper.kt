@@ -17,6 +17,7 @@
 package io.cliuff.boundo.org.data.model
 
 import io.cliuff.boundo.org.db.model.OrgAppEntity
+import io.cliuff.boundo.org.db.model.OrgAppUpdate
 import io.cliuff.boundo.org.model.OrgApp
 
 fun OrgApp.toEntity(groupId: Int) =
@@ -26,6 +27,15 @@ fun OrgApp.toEntity(groupId: Int) =
         label = label,
         labelLocale = labelLocale,
         createTime = createTime,
+        modifyTime = modifyTime,
+    )
+
+fun OrgAppEntity.toUpdate() =
+    OrgAppUpdate(
+        groupId = groupId,
+        pkgName = pkgName,
+        label = label,
+        labelLocale = labelLocale,
         modifyTime = modifyTime,
     )
 

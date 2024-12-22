@@ -168,21 +168,25 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
         val modCid = modCollId
         val modGid = modGroupId
         viewModelScope.launch(Dispatchers.IO) {
+            val time = System.currentTimeMillis()
             val collId = if (modCid <= 0) {
-                val createColl = CollInfo(0, "Unnamed Coll", 0)
+                val createColl = CollInfo(0, "Unnamed Coll", time, time, 0)
                 collRepo.addCollection(createColl)
             } else {
                 modCid
             }
             val groupName = state.groupName.trim().takeUnless { it.isBlank() } ?: "Unnamed Group"
+            val apps = state.selPkgs.map { pkg ->
+                OrgApp(pkg, pkgLabelMap[pkg] ?: "", "", time, time)
+            }
             if (modGid <= 0) {
                 if (collId > 0) {
-                    val updGroup = OrgGroup(0, groupName, state.selPkgs.map(::OrgApp))
+                    val updGroup = OrgGroup(0, groupName, time, time, apps)
                     val gid = groupRepo.addGroupAndApps(collId, updGroup)
                     if (gid > 0) submittedGroupId = gid
                 }
             } else {
-                val updGroup = OrgGroup(modGid, groupName, state.selPkgs.map(::OrgApp))
+                val updGroup = OrgGroup(modGid, groupName, time, time, apps)
                 groupRepo.updateGroupAndApps(updGroup)
                 submittedGroupId = modGid
             }

@@ -22,7 +22,10 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Update
+import io.cliuff.boundo.org.data.model.toUpdate
 import io.cliuff.boundo.org.db.model.OrgAppEntity
+import io.cliuff.boundo.org.db.model.OrgAppUpdate
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -34,6 +37,9 @@ interface OrgAppDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(apps: List<OrgAppEntity>)
 
+    @Update(entity = OrgAppEntity::class)
+    suspend fun updateAll(updates: List<OrgAppUpdate>)
+
     @Delete
     suspend fun delete(app: OrgAppEntity)
 
@@ -44,10 +50,13 @@ interface OrgAppDao {
     suspend fun replace(groupId: Int, entities: List<OrgAppEntity>) {
         val newPkgs = entities.mapTo(HashSet(), OrgAppEntity::pkgName)
         val existingPkgs = selectGroupPkgs(groupId)
-        if (existingPkgs.isNotEmpty()) {
-            deletePkgs(existingPkgs - newPkgs)
-        }
-        insertAll(entities)
+        val (updPkgs, delPkgs) = existingPkgs.partition(newPkgs::contains)
+        val updPkgSet = updPkgs.toSet()
+        val (updEntities, newEntities) = entities.partition { ent -> ent.pkgName in updPkgSet }
+        val updates = updEntities.map(OrgAppEntity::toUpdate)
+        if (delPkgs.isNotEmpty()) deletePkgs(delPkgs)
+        updateAll(updates)
+        insertAll(newEntities)
     }
 
     @Query("SELECT pkg FROM org_app WHERE group_id=:groupId")
