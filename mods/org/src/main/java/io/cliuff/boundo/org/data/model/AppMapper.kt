@@ -23,9 +23,17 @@ fun OrgApp.toEntity(groupId: Int) =
     OrgAppEntity(
         groupId = groupId,
         pkgName = pkg,
+        label = label,
+        labelLocale = labelLocale,
+        createTime = createTime,
+        modifyTime = modifyTime,
     )
 
 fun OrgAppEntity.toModel() =
     OrgApp(
         pkg = pkgName,
+        label = label,
+        labelLocale = labelLocale,
+        createTime = createTime,
+        modifyTime = modifyTime,
     )

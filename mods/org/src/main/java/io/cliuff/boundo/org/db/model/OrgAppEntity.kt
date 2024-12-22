@@ -39,4 +39,12 @@ class OrgAppEntity(
     val groupId: Int,
     @ColumnInfo(name = "pkg")
     val pkgName: String,
+    @ColumnInfo(name = "label")
+    val label: String,
+    @ColumnInfo(name = "label_locale")
+    val labelLocale: String,
+    @ColumnInfo(name = "create_time")
+    val createTime: Long,
+    @ColumnInfo(name = "modify_time")
+    val modifyTime: Long,
 )

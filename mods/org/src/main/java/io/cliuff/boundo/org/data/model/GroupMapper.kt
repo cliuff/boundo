@@ -27,6 +27,7 @@ fun OrgGroup.toUpdate() =
     OrgGroupUpdate(
         id = id,
         name = name,
+        modifyTime = modifyTime,
     )
 
 fun OrgGroup.toEntity(collId: Int) =
@@ -34,12 +35,16 @@ fun OrgGroup.toEntity(collId: Int) =
         id = id,
         collId = collId,
         name = name,
+        createTime = createTime,
+        modifyTime = modifyTime,
     )
 
 fun OrgGroupEntity.toModel(apps: List<OrgApp>) =
     OrgGroup(
         id = id,
         name = name,
+        createTime = createTime,
+        modifyTime = modifyTime,
         apps = apps,
     )
 

@@ -42,12 +42,18 @@ class OrgGroupEntity(
     val collId: Int,
     @ColumnInfo(name = "name")
     val name: String,
+    @ColumnInfo(name = "create_time")
+    val createTime: Long,
+    @ColumnInfo(name = "modify_time")
+    val modifyTime: Long,
 )
 
-// Omit collId.
+// Omit collId, createTime.
 class OrgGroupUpdate(
     @ColumnInfo(name = "_id")
     val id: Int,
     @ColumnInfo(name = "name")
     val name: String,
+    @ColumnInfo(name = "modify_time")
+    val modifyTime: Long,
 )

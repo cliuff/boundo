@@ -22,4 +22,8 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class OrgApp(
     val pkg: String,
+    val label: String,
+    val labelLocale: String,
+    val createTime: Long,
+    val modifyTime: Long,
 ) : Parcelable

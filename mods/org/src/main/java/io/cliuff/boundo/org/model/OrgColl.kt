@@ -23,6 +23,8 @@ import kotlinx.parcelize.Parcelize
 data class CollInfo(
     val id: Int,
     val name: String,
+    val createTime: Long,
+    val modifyTime: Long,
     val groupCount: Int,
 ) : Parcelable
 
@@ -31,5 +33,7 @@ data class CollInfo(
 data class CompColl(
     val id: Int,
     val name: String,
+    val createTime: Long,
+    val modifyTime: Long,
     val groups: List<OrgGroup>,
 ) : Parcelable

@@ -23,5 +23,7 @@ import kotlinx.parcelize.Parcelize
 data class OrgGroup(
     val id: Int,
     val name: String,
+    val createTime: Long,
+    val modifyTime: Long,
     val apps: List<OrgApp>,
 ) : Parcelable

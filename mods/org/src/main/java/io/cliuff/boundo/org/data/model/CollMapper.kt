@@ -26,12 +26,16 @@ fun CollInfo.toEntity() =
     OrgCollEntity(
         id = id,
         name = name,
+        createTime = createTime,
+        modifyTime = modifyTime,
     )
 
 fun OrgCollEntity.toModel(groupCount: Int) =
     CollInfo(
         id = id,
         name = name,
+        createTime = createTime,
+        modifyTime = modifyTime,
         groupCount = groupCount,
     )
 
@@ -40,12 +44,16 @@ fun CompColl.toEntity() =
     OrgCollEntity(
         id = id,
         name = name,
+        createTime = createTime,
+        modifyTime = modifyTime,
     )
 
 fun AppColl.toModel() =
     CompColl(
         id = collEnt.id,
         name = collEnt.name,
+        createTime = collEnt.createTime,
+        modifyTime = collEnt.modifyTime,
         groups = groupEntities.map(AppGroup::toModel),
     )
 

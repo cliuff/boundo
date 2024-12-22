@@ -27,4 +27,8 @@ class OrgCollEntity(
     val id: Int = 0,
     @ColumnInfo(name = "name")
     val name: String,
+    @ColumnInfo(name = "create_time")
+    val createTime: Long,
+    @ColumnInfo(name = "modify_time")
+    val modifyTime: Long,
 )
