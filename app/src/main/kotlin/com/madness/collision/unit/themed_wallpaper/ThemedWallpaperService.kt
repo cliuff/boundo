@@ -18,6 +18,7 @@ package com.madness.collision.unit.themed_wallpaper
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.graphics.drawable.Drawable
 import android.os.Handler
 import android.os.Looper
@@ -27,6 +28,7 @@ import com.madness.collision.R
 import com.madness.collision.util.P
 import com.madness.collision.util.ThemeUtil
 import com.madness.collision.util.os.OsUtils
+import java.lang.ref.WeakReference
 
 class ThemedWallpaperService : WallpaperService(){
 
@@ -39,6 +41,7 @@ class ThemedWallpaperService : WallpaperService(){
         }
     private var frameGap: Long = 10_000L
     private lateinit var prefSettings: SharedPreferences
+    private val engineRefs: MutableList<WeakReference<ThemedEngine>> = mutableListOf()
 
     override fun onCreate() {
         super.onCreate()
@@ -52,6 +55,17 @@ class ThemedWallpaperService : WallpaperService(){
         }
     }
 
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        val iterator = engineRefs.iterator()
+        while (iterator.hasNext()) {
+            val engine = iterator.next().get()
+            when {
+                engine == null -> iterator.remove()
+                engine.isVisible -> engine.onConfigurationChanged(newConfig)
+            }
+        }
+    }
+
     override fun onCreateEngine(): Engine {
         val context = baseContext
         val shouldChange = ThemeUtil.shouldChangeTheme4ThemedWallpaper(context, prefSettings)
@@ -61,6 +75,7 @@ class ThemedWallpaperService : WallpaperService(){
             ThemeUtil.shouldChangeTheme4ThemedWallpaper(context, prefSettings)
         }
         return ThemedEngine()
+            .also { eng -> engineRefs.add(WeakReference(eng)) }
     }
 
     inner class ThemedEngine: Engine() {
@@ -107,6 +122,10 @@ class ThemedWallpaperService : WallpaperService(){
             super.onSurfaceChanged(holder, format, width, height)
             themedWallpaper.setSize(width, height)
             updateFrame(true)
+        }
+
+        fun onConfigurationChanged(newConfig: Configuration) {
+            updateFrame(false, doCheckNow = true)
         }
 
         private fun updateFrame(change: Boolean, shouldTranslate: Boolean = false, doCheckNow: Boolean = false) {

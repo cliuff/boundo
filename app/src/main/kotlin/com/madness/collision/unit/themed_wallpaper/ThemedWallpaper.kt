@@ -150,11 +150,10 @@ internal class ThemedWallpaper(private var wallpaper: Drawable) {
         lastOffsetStepRatio = offsetStepRatio
         val offsetHor: Float = when {
             extraWidth == 0 -> 0f
-            offsetStepRatio == 1f -> extraWidth * offsetRatio / 2f
-            else -> {
-                val offsetStep = extraWidth * offsetStepRatio
-                offsetStep * offsetRatio
-            }
+            // center the wallpaper when there's only one screen
+            offsetStepRatio <= 0f || offsetStepRatio > 1f -> 0.5f * extraWidth
+            // center the wallpaper and map the offset ratio from [0,1] to [0.5,1]
+            else -> (0.5f + offsetRatio * 0.5f).coerceIn(0.5f, 1f) * extraWidth
         }
         canvas.translate(-offsetHor, -offsetVer)
         drawable.draw(canvas)
