@@ -211,6 +211,14 @@
             android:name=".main.MainPageActivity"
             android:exported="false"
             android:enabled="true" />
+        <!-- Setting windowSoftInputMode, this overrides the one defined in styles.xml. -->
+        <!-- IME/stateAlwaysHidden: always hide IME when opening or navigating back to this activity. -->
+        <!-- IME/adjustResize: resize window and change window insets accordingly. -->
+        <activity
+            android:name=".chief.app.ComposePageActivity"
+            android:enabled="true"
+            android:exported="false"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
         <!-- Tile Services -->
         <provider
             android:name="androidx.core.content.FileProvider"

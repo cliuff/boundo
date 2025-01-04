@@ -27,6 +27,7 @@ import android.os.PowerManager
 import android.util.TypedValue
 import androidx.core.content.res.use
 import com.madness.collision.R
+import com.madness.collision.chief.app.ComposePageActivity
 import com.madness.collision.main.MainActivity
 import com.madness.collision.unit.themed_wallpaper.ThemedWallpaperEasyAccess
 import com.madness.collision.util.os.OsUtils
@@ -121,7 +122,7 @@ object ThemeUtil {
             val id = it.getResourceId(darkIndex, -1)
             // workaround to allow all cutouts for main activity only, available on API 30+
             when {
-                context !is MainActivity -> id
+                context !is MainActivity && context !is ComposePageActivity -> id
                 OsUtils.dissatisfy(OsUtils.R) -> id
                 id == R.style.AppTheme_Black -> R.style.BlackCutoutsAppTheme
                 id == R.style.AppTheme_BlackGray -> R.style.BlackGrayCutoutsAppTheme
@@ -148,7 +149,7 @@ object ThemeUtil {
             val id = it.getResourceId(lightIndex, -1)
             // workaround to allow all cutouts for main activity only, available on API 30+
             when {
-                context !is MainActivity -> id
+                context !is MainActivity && context !is ComposePageActivity -> id
                 OsUtils.dissatisfy(OsUtils.R) -> id
                 id == R.style.AppTheme -> R.style.CutoutsAppTheme
                 id == R.style.AppTheme_CnRed -> R.style.RedCutoutsAppTheme

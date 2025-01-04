@@ -264,9 +264,9 @@ private fun edgeToEdge(maintainer: SystemBarMaintainer, insets: WindowInsets, ne
     val context = maintainer.context ?: return
     val darkIcon = mainApplication.isPaleTheme
     val insetsCompat = WindowInsetsCompat.toWindowInsetsCompat(insets)
-    val navBarInsets = insetsCompat.getInsets(InsetsType.navigationBars())
-    // only the first side is configured
-    val effectiveInset = navBarInsets.run { arrayOf(top, bottom, left, right).find { it > 0 } }
+    // tappableElement inset = 0 for gesture nav bar, and > 0 for 3-button nav bar
+    val isGestureBottomNavBar = insetsCompat.getInsets(InsetsType.tappableElement()).bottom <= 0
+    val effectiveInset = insetsCompat.getInsets(InsetsType.systemBars()).bottom.takeIf { it > 0 }
     val isTransparentNav: Boolean? = effectiveInset?.let { inset ->
         val metrics = context.resources.displayMetrics
         val sizeLimit = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25f, metrics)
@@ -282,7 +282,7 @@ private fun edgeToEdge(maintainer: SystemBarMaintainer, insets: WindowInsets, ne
         }
         bottom {
             color = null
-            isTransparentBar = isTransparentNav
+            isTransparentBar = isGestureBottomNavBar || isTransparentNav != false
             isDarkIcon = darkIcon
             isContrastEnforced = false
             dividerColor = null
