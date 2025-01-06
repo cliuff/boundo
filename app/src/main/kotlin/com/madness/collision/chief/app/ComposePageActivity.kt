@@ -21,9 +21,14 @@ import android.os.Bundle
 import android.view.ViewGroup
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.core.os.BundleCompat
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.madness.collision.chief.chiefContext
+import com.madness.collision.chief.layout.LocalWindowInsets
 import com.madness.collision.util.os.ActivitySystemBarMaintainer
 import com.madness.collision.util.os.SystemBarMaintainer
 import com.madness.collision.util.os.SystemBarMaintainerOwner
@@ -50,6 +55,7 @@ open class ComposePageActivity : BaseActivity(), SystemBarMaintainerOwner {
     }
 
     override val systemBarMaintainer: SystemBarMaintainer = ActivitySystemBarMaintainer(this)
+    private var windowInsetsValue: WindowInsetsCompat by mutableStateOf(WindowInsetsCompat.CONSUMED)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +66,7 @@ open class ComposePageActivity : BaseActivity(), SystemBarMaintainerOwner {
                 val platInsets = insets.toWindowInsets()?.takeIf(::checkInsets)
                 if (platInsets != null) edgeToEdge(platInsets, false)
                 // return the insets as they are, as we only query not consume
-                insets
+                insets.also { windowInsetsValue = it }
             }
         }
 
@@ -72,6 +78,7 @@ open class ComposePageActivity : BaseActivity(), SystemBarMaintainerOwner {
             setContent {
                 CompositionLocalProvider(
                     LocalPageNavController provides navController,
+                    LocalWindowInsets provides windowInsetsValue,
                     content = { route.content() },
                 )
             }

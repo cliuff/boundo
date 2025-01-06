@@ -34,6 +34,7 @@ interface ComposePageRoute : ContentComposable, Parcelable
 
 interface ComposePageNavController {
     fun navigateTo(route: ComposePageRoute)
+    fun navigateBack()
 }
 
 @Suppress("FunctionName")
@@ -50,5 +51,9 @@ internal class CompPageNavControllerImpl(hostActivity: ComponentActivity) : Comp
     override fun navigateTo(route: ComposePageRoute) {
         val intent = ComposePageActivityIntent(route)
         activityRef.get()?.startActivity(intent)
+    }
+
+    override fun navigateBack() {
+        activityRef.get()?.onBackPressedDispatcher?.onBackPressed()
     }
 }
