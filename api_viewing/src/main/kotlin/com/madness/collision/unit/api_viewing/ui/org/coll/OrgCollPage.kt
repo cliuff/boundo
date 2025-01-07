@@ -68,7 +68,6 @@ import com.madness.collision.chief.app.asInsets
 import com.madness.collision.chief.app.LocalPageNavController
 import com.madness.collision.main.showPage
 import com.madness.collision.unit.api_viewing.ui.org.OrgRouteId
-import com.madness.collision.unit.api_viewing.ui.org.group.GroupEditorFragment
 import com.madness.collision.unit.api_viewing.ui.org.group.GroupInfoFragment
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
 import com.madness.collision.util.ui.AppIconPackageInfo
@@ -83,6 +82,7 @@ fun OrgCollPage(contentPadding: PaddingValues = PaddingValues()) {
     LaunchedEffect(Unit) { viewModel.init(context) }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val (isLoading, coll, collList, installedPkgsSummary) = uiState
+    val navController = LocalPageNavController.current
     OrgCollScaffold(
         topBar = {
             OrgCollAppBar(
@@ -95,14 +95,9 @@ fun OrgCollPage(contentPadding: PaddingValues = PaddingValues()) {
             )
         },
         onClickAdd = {
-            if (coll != null) {
-                // add group for coll
-                context.showPage<GroupEditorFragment> {
-                    putString(GroupEditorFragment.ARG_COLL_GROUP_ID, "${coll.id}:0")
-                }
-            } else {
-                context.showPage<GroupEditorFragment>()
-            }
+            // add group for coll, or create a new coll then add
+            val route = OrgRouteId.NewGroup(coll?.id ?: -1)
+            navController.navigateTo(route.asRoute())
         },
         contentWindowInsets = contentPadding.asInsets()
             .add(WindowInsets(top = 10.dp, bottom = 20.dp)),

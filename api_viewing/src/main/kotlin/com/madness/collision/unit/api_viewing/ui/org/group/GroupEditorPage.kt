@@ -41,7 +41,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -65,7 +64,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.madness.collision.chief.app.BoundoTheme
-import com.madness.collision.chief.app.asInsets
+import com.madness.collision.chief.app.LocalPageNavController
+import com.madness.collision.chief.layout.scaffoldWindowInsets
+import com.madness.collision.ui.comp.ClassicTopAppBar
 import com.madness.collision.unit.api_viewing.ui.org.coll.CollAppGroupRow
 import com.madness.collision.unit.api_viewing.ui.org.coll.CollAppHeading
 import com.madness.collision.unit.api_viewing.ui.org.coll.CollAppItem
@@ -88,18 +89,21 @@ interface GroupEditorEventHandler {
 fun GroupEditorPage(
     modCollId: Int = -1,
     modGroupId: Int = -1,
-    contentPadding: PaddingValues = PaddingValues(),
 ) {
     val viewModel = viewModel<GroupEditorViewModel>()
     val context = LocalContext.current
     LaunchedEffect(Unit) { viewModel.init(context, modCollId, modGroupId) }
     val eventHandler = rememberGroupEditorEventHandler(viewModel)
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val (groupName, selPkgs, installedApps, installedAppsGrouping, isLoading, _) = uiState
+    val (groupName, selPkgs, installedApps, installedAppsGrouping, isLoading, isSubmitOk) = uiState
+
+    val navController = LocalPageNavController.current
+    LaunchedEffect(isSubmitOk) { if (isSubmitOk) navController.navigateBack() }
+
     GroupScaffold(
+        title = if (modGroupId > 0) "Edit Group" else "Create New Group",
         submitText = if (modGroupId > 0) "Update group" else "Add group",
         eventHandler = eventHandler,
-        contentWindowInsets = contentPadding.asInsets(),
     ) { innerPadding ->
         GroupContent(
             modifier = Modifier.fillMaxWidth(),
@@ -132,25 +136,34 @@ private fun rememberGroupEditorEventHandler(viewModel: GroupEditorViewModel) =
 
 @Composable
 private fun GroupScaffold(
+    title: String,
     submitText: String,
     eventHandler: GroupEditorEventHandler,
-    contentWindowInsets: WindowInsets = ScaffoldDefaults.contentWindowInsets,
     content: @Composable (PaddingValues) -> Unit,
 ) {
+    val (topBarInsets, bottomBarInsets, contentInsets) =
+        scaffoldWindowInsets(shareCutout = 12.dp, shareStatusBar = 8.dp, shareWaterfall = 8.dp)
     Scaffold(
+        topBar = {
+            ClassicTopAppBar(
+                title = { Text(title) },
+                windowInsets = topBarInsets
+                    .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
+            )
+        },
         bottomBar = {
             val (isEnabled, setEnabled) = remember { mutableIntStateOf(1) }
             GroupFooter(
                 submitText = submitText,
                 onSubmit = { setEnabled(0); eventHandler.submitEdits() },
                 enabled = isEnabled == 1,
-                windowInsets = contentWindowInsets
+                windowInsets = bottomBarInsets
                     .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom)
                     .add(WindowInsets(top = 10.dp, bottom = 20.dp)),
             )
         },
         containerColor = Color.Transparent,
-        contentWindowInsets = contentWindowInsets,
+        contentWindowInsets = contentInsets,
         content = content,
     )
 }
@@ -340,6 +353,7 @@ private fun GroupEditorPreview() {
         val eventHandler = remember { PseudoGroupEditorEventHandler() }
         Surface(color = MaterialTheme.colorScheme.background) {
             GroupScaffold(
+                title = "Unnamed Group",
                 submitText = "Add group",
                 eventHandler = eventHandler,
             ) { innerPadding ->

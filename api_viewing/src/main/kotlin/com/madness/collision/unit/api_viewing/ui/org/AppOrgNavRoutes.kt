@@ -23,6 +23,7 @@ import androidx.compose.runtime.NonRestartableComposable
 import com.madness.collision.chief.app.ComposePageRoute
 import com.madness.collision.chief.app.rememberColorScheme
 import com.madness.collision.unit.api_viewing.ui.org.coll.CollAppListPage
+import com.madness.collision.unit.api_viewing.ui.org.group.GroupEditorPage
 import io.cliuff.boundo.org.model.CompColl
 import kotlinx.parcelize.Parcelize
 
@@ -42,13 +43,37 @@ sealed interface OrgRouteId : RouteId<AppOrgNavRoute>, Parcelable {
 
     override fun asRoute(): AppOrgNavRoute = AppOrgNavRoute(this)
 
+    /** @param collId the collection to add the group to, or create a new collection. */
+    @Parcelize
+    class NewGroup(val collId: Int = -1) : OrgRouteId
+
+    @Parcelize
+    class GroupEditor(val collId: Int, val groupId: Int) : OrgRouteId
+
     @Parcelize
     class CollAppList(val coll: CompColl, val collId: Int = coll.id) : OrgRouteId
+}
+
+/** @param collGroupId Group ID to modify, a string formatted as "collId:groupId". */
+private fun resolveCollGroupId(collGroupId: String): Pair<Int, Int> {
+    val match = collGroupId.let("""(\d+):(\d+)""".toRegex()::matchEntire)
+    val collGroupIdPair = match?.run { groupValues[1].toInt() to groupValues[2].toInt() }
+    return collGroupIdPair ?: (-1 to -1)
 }
 
 @Composable
 private fun OrgRouteId.RouteContent(): Unit =
     when (this) {
+        is OrgRouteId.NewGroup -> {
+            MaterialTheme(colorScheme = rememberColorScheme()) {
+                GroupEditorPage(modCollId = collId)
+            }
+        }
+        is OrgRouteId.GroupEditor -> {
+            MaterialTheme(colorScheme = rememberColorScheme()) {
+                GroupEditorPage(modCollId = collId, modGroupId = groupId)
+            }
+        }
         is OrgRouteId.CollAppList -> {
             MaterialTheme(colorScheme = rememberColorScheme()) {
                 CollAppListPage(coll = coll, modCollId = collId)
