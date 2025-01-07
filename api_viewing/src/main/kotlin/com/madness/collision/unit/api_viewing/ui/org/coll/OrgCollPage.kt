@@ -65,7 +65,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.madness.collision.chief.app.BoundoTheme
 import com.madness.collision.chief.app.asInsets
+import com.madness.collision.chief.app.LocalPageNavController
 import com.madness.collision.main.showPage
+import com.madness.collision.unit.api_viewing.ui.org.OrgRouteId
 import com.madness.collision.unit.api_viewing.ui.org.group.GroupEditorFragment
 import com.madness.collision.unit.api_viewing.ui.org.group.GroupInfoFragment
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
@@ -168,7 +170,6 @@ private fun OrgCollContent(
     installedAppsSummary: String = "N/A",
     contentPadding: PaddingValues = PaddingValues(),
 ) {
-    val context = LocalContext.current
     val viewModel = viewModel<OrgCollViewModel>()
     val groupPkgs = remember(coll.groups) {
         coll.groups.map { group ->
@@ -177,16 +178,15 @@ private fun OrgCollContent(
     }
     LazyColumn(modifier = modifier, contentPadding = contentPadding) {
         item {
+            val navController = LocalPageNavController.current
             CollAppsSummary(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 12.dp, vertical = 10.dp),
                 text = "Installed apps summary ($installedAppsSummary)",
                 onClick = {
-                    context.showPage<CollAppListFragment> {
-                        putParcelable(CollAppListFragment.ARG_COLL, coll)
-                        putString(CollAppListFragment.ARG_COLL_GROUP_ID, "${coll.id}:0")
-                    }
+                    val route = OrgRouteId.CollAppList(coll)
+                    navController.navigateTo(route.asRoute())
                 },
             )
         }
