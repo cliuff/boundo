@@ -193,12 +193,6 @@ class MainActivity : BaseActivity(), SystemBarMaintainerOwner, MainAppHome {
                 if (shouldExit) finish()
             }
             .launchIn(lifecycleScope)
-        viewModel.action.observe(this) {
-            it ?: return@observe
-            if (it.first.isBlank()) return@observe
-            mainApplication.setAction(it)
-            viewModel.action.value = "" to null
-        }
     }
 
     private fun setupUi(context: Context) {

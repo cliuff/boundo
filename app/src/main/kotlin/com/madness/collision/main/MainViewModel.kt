@@ -37,7 +37,6 @@ fun Pair<Fragment, BooleanArray>.toPage() = NavPage(first, second)
 class MainViewModel(private val savedState: SavedStateHandle): ViewModel() {
     private val _democratic: MutableSharedFlow<Democratic> = MutableSharedFlow()
     val democratic: Flow<Democratic> by ::_democratic
-    val action: MutableLiveData<Pair<String, Any?>> = MutableLiveData("" to null)
     private val _insetTop: MutableLiveData<Int> = MutableLiveData(savedState["lastInsetTop"] ?: mainApplication.insetTop)
     val insetTop: LiveData<Int> by ::_insetTop
     val insetBottom: MutableLiveData<Int> = MutableLiveData(mainApplication.insetBottom)

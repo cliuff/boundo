@@ -171,12 +171,6 @@ class MainPageActivity : BaseActivity(), SystemBarMaintainerOwner {
                 if (shouldExit) finish()
             }
             .launchIn(lifecycleScope)
-        mainViewModel.action.observe(this) {
-            it ?: return@observe
-            if (it.first.isBlank()) return@observe
-            mainApplication.setAction(it)
-            mainViewModel.action.value = "" to null
-        }
         mainViewModel.insetTop.observe(this) {
             viewBinding.mainPageToolbar.run {
                 updatePadding(top = it)

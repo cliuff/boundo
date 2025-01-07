@@ -20,9 +20,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.madness.collision.R
@@ -54,11 +52,10 @@ abstract class BaseActivity : AppCompatActivity() {
         val pref = getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
         themeId = loadThemeId(this, pref)
         mainApplication.action
+            // perform action when created, avoid suspending action to perform in onResume/onStart,
+            // causing visual flicker when returning to previous screens before theme switching
             .flowWithLifecycle(lifecycle, Lifecycle.State.CREATED)
-            .onEach { action ->
-                val isStarted = lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)
-                if (isStarted) performAction(action) else suspendAction(action)
-            }
+            .onEach(::performAction)
             .launchIn(lifecycleScope)
     }
 
@@ -86,14 +83,5 @@ abstract class BaseActivity : AppCompatActivity() {
                 recreate()
             }
         }
-    }
-
-    private fun suspendAction(action: AppAction) {
-        lifecycle.addObserver(object : DefaultLifecycleObserver {
-            override fun onStart(owner: LifecycleOwner) {
-                owner.lifecycle.removeObserver(this)
-                performAction(action)
-            }
-        })
     }
 }

@@ -22,13 +22,11 @@ import android.content.res.TypedArray
 import android.os.Bundle
 import androidx.core.content.edit
 import androidx.core.content.res.use
-import androidx.fragment.app.activityViewModels
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
 import com.madness.collision.R
 import com.madness.collision.main.MainActivity
-import com.madness.collision.main.MainViewModel
 import com.madness.collision.util.*
 
 internal class PrefExterior: PreferenceFragmentCompat() {
@@ -41,7 +39,6 @@ internal class PrefExterior: PreferenceFragmentCompat() {
         fun newInstance() = PrefExterior()
     }
 
-    private val mainViewModel: MainViewModel by activityViewModels()
     private lateinit var prefLightTheme: Preference
     private lateinit var prefDarkTheme: Preference
     private lateinit var prefApplyDark: Preference
@@ -210,7 +207,7 @@ internal class PrefExterior: PreferenceFragmentCompat() {
     }
 
     private fun updateTheme(){
-        mainViewModel.action.value = MainActivity.ACTION_EXTERIOR_THEME to null
+        mainApplication.setAction(MainActivity.ACTION_EXTERIOR_THEME to null)
     }
 
     private val summaryProvider = Preference.SummaryProvider<Preference> { preference ->

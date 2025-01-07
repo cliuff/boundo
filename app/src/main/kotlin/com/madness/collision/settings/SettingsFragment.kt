@@ -33,6 +33,7 @@ import com.madness.collision.main.MainActivity
 import com.madness.collision.util.P
 import com.madness.collision.util.PopupUtil
 import com.madness.collision.util.config.LocaleUtils
+import com.madness.collision.util.mainApplication
 import com.madness.collision.util.os.OsUtils
 import java.util.Locale
 
@@ -92,7 +93,7 @@ internal class SettingsFragment : ComposeFragment(), Democratic {
             val newLangTag = LocaleUtils.getRuntimeFirst().toLanguageTag()
             val shouldSwitch = OsUtils.dissatisfy(OsUtils.T) && oldLangTag != newLangTag
             if (shouldSwitch) {
-                mainViewModel.action.value = MainActivity.ACTION_RECREATE to null
+                mainApplication.setAction(MainActivity.ACTION_RECREATE to null)
             }
         }.show()
     }
