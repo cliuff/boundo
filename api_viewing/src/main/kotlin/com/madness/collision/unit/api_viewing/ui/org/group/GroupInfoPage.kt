@@ -17,26 +17,43 @@
 package com.madness.collision.unit.api_viewing.ui.org.group
 
 import android.content.pm.PackageInfo
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.madness.collision.chief.app.BoundoTheme
+import com.madness.collision.chief.app.LocalPageNavController
+import com.madness.collision.chief.layout.scaffoldWindowInsets
+import com.madness.collision.ui.comp.ClassicTopAppBar
+import com.madness.collision.unit.api_viewing.ui.org.OrgRouteId
 import com.madness.collision.unit.api_viewing.ui.org.coll.CollAppHeading
 import com.madness.collision.unit.api_viewing.ui.org.coll.CollAppItem
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
+import com.madness.collision.util.mainApplication
 import com.madness.collision.util.ui.AppIconPackageInfo
 import io.cliuff.boundo.org.model.OrgApp
 import io.cliuff.boundo.org.model.OrgGroup
@@ -51,23 +68,35 @@ fun GroupInfoPage(
     group: OrgGroup? = null,
     modCollId: Int = -1,
     modGroupId: Int = -1,
-    contentPadding: PaddingValues = PaddingValues(),
 ) {
     val viewModel = viewModel<GroupEditorViewModel>()
     val context = LocalContext.current
     LaunchedEffect(Unit) { viewModel.init(context, modCollId, modGroupId) }
     val eventHandler = rememberGroupInfoEventHandler(viewModel)
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val (groupName, selPkgs, installedApps, _, isLoading) = uiState
+    val (groupName, selPkgs, installedApps, _, isLoading, isSubmitOk) = uiState
     val groupPkgs = remember(group) { group?.apps?.map(OrgApp::pkg)?.toSet() }
-    GroupContent(
-        modifier = Modifier.fillMaxWidth(),
-        groupName = group?.name ?: groupName,
-        eventHandler = eventHandler,
-        selectedPkgs = groupPkgs ?: selPkgs,
-        installedApps = installedApps,
-        contentPadding = contentPadding,
-    )
+
+    val navController = LocalPageNavController.current
+    LaunchedEffect(isSubmitOk) { if (isSubmitOk) navController.navigateBack() }
+
+    GroupScaffold(
+        title = group?.name ?: groupName,
+        onActionEdit = {
+            val route = OrgRouteId.GroupEditor(modCollId, modGroupId)
+            navController.navigateTo(route.asRoute())
+        },
+        onActionDelete = { group?.let(viewModel::remove) },
+    ) { innerPadding ->
+        GroupContent(
+            modifier = Modifier.fillMaxWidth(),
+            groupName = group?.name ?: groupName,
+            eventHandler = eventHandler,
+            selectedPkgs = groupPkgs ?: selPkgs,
+            installedApps = installedApps,
+            contentPadding = innerPadding,
+        )
+    }
 }
 
 @Composable
@@ -78,6 +107,49 @@ private fun rememberGroupInfoEventHandler(viewModel: GroupEditorViewModel) =
                 viewModel.getPkgLabel(pkgName)
         }
     }
+
+@Composable
+private fun GroupScaffold(
+    title: String,
+    onActionEdit: () -> Unit,
+    onActionDelete: () -> Unit,
+    content: @Composable (PaddingValues) -> Unit,
+) {
+    val appBarIconColor = when (LocalInspectionMode.current) {
+        true -> if (isSystemInDarkTheme()) Color(0xFFD0D6DB) else Color(0xFF353535)
+        false -> if (mainApplication.isDarkTheme) Color(0xFFD0D6DB) else Color(0xFF353535)
+    }
+    val (topBarInsets, _, contentInsets) =
+        scaffoldWindowInsets(shareCutout = 12.dp, shareStatusBar = 8.dp, shareWaterfall = 8.dp)
+    Scaffold(
+        topBar = {
+            ClassicTopAppBar(
+                title = { Text(title) },
+                actions = {
+                    IconButton(onClick = onActionEdit) {
+                        Icon(
+                            imageVector = Icons.Outlined.Edit,
+                            contentDescription = null,
+                            tint = appBarIconColor,
+                        )
+                    }
+                    IconButton(onClick = onActionDelete) {
+                        Icon(
+                            imageVector = Icons.Outlined.Delete,
+                            contentDescription = null,
+                            tint = appBarIconColor,
+                        )
+                    }
+                },
+                windowInsets = topBarInsets
+                    .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
+            )
+        },
+        containerColor = Color.Transparent,
+        contentWindowInsets = contentInsets,
+        content = content,
+    )
+}
 
 @Composable
 private fun GroupContent(

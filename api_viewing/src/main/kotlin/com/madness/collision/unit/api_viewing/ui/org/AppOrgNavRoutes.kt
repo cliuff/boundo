@@ -24,7 +24,9 @@ import com.madness.collision.chief.app.ComposePageRoute
 import com.madness.collision.chief.app.rememberColorScheme
 import com.madness.collision.unit.api_viewing.ui.org.coll.CollAppListPage
 import com.madness.collision.unit.api_viewing.ui.org.group.GroupEditorPage
+import com.madness.collision.unit.api_viewing.ui.org.group.GroupInfoPage
 import io.cliuff.boundo.org.model.CompColl
+import io.cliuff.boundo.org.model.OrgGroup
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -51,6 +53,9 @@ sealed interface OrgRouteId : RouteId<AppOrgNavRoute>, Parcelable {
     class GroupEditor(val collId: Int, val groupId: Int) : OrgRouteId
 
     @Parcelize
+    class GroupInfo(val group: OrgGroup, val collId: Int, val groupId: Int) : OrgRouteId
+
+    @Parcelize
     class CollAppList(val coll: CompColl, val collId: Int = coll.id) : OrgRouteId
 }
 
@@ -72,6 +77,11 @@ private fun OrgRouteId.RouteContent(): Unit =
         is OrgRouteId.GroupEditor -> {
             MaterialTheme(colorScheme = rememberColorScheme()) {
                 GroupEditorPage(modCollId = collId, modGroupId = groupId)
+            }
+        }
+        is OrgRouteId.GroupInfo -> {
+            MaterialTheme(colorScheme = rememberColorScheme()) {
+                GroupInfoPage(group = group, modCollId = collId, modGroupId = groupId)
             }
         }
         is OrgRouteId.CollAppList -> {

@@ -66,9 +66,7 @@ import coil.compose.AsyncImage
 import com.madness.collision.chief.app.BoundoTheme
 import com.madness.collision.chief.app.asInsets
 import com.madness.collision.chief.app.LocalPageNavController
-import com.madness.collision.main.showPage
 import com.madness.collision.unit.api_viewing.ui.org.OrgRouteId
-import com.madness.collision.unit.api_viewing.ui.org.group.GroupInfoFragment
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
 import com.madness.collision.util.ui.AppIconPackageInfo
 import io.cliuff.boundo.org.model.CompColl
@@ -106,11 +104,10 @@ fun OrgCollPage(contentPadding: PaddingValues = PaddingValues()) {
             OrgCollContent(
                 modifier = Modifier.fillMaxWidth(),
                 coll = coll,
-                onClickGroup = { i, id ->
-                    context.showPage<GroupInfoFragment> {
-                        putParcelable(GroupInfoFragment.ARG_COLL_GROUP, coll.groups.getOrNull(i))
-                        putString(GroupInfoFragment.ARG_COLL_GROUP_ID, "${coll.id}:$id")
-                    }
+                onClickGroup = clickGroup@{ i, id ->
+                    if (i !in coll.groups.indices) return@clickGroup
+                    val route = OrgRouteId.GroupInfo(coll.groups[i], coll.id, id)
+                    navController.navigateTo(route.asRoute())
                 },
                 installedAppsSummary = installedPkgsSummary?.let { (a, b) -> "$a/$b" } ?: "N/A",
                 contentPadding = innerPadding,
