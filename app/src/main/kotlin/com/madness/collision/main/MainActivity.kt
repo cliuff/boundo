@@ -28,11 +28,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.madness.collision.base.BaseActivity
+import com.madness.collision.chief.config.toPx
 import com.madness.collision.databinding.ActivityMainBinding
 import com.madness.collision.diy.WindowInsets
 import com.madness.collision.misc.MiscMain
@@ -199,7 +201,15 @@ class MainActivity : BaseActivity(), SystemBarMaintainerOwner, MainAppHome {
         checkTargetItem()
 
         viewBinding.root.setOnApplyWindowInsetsListener { v, insets ->
-            if (checkInsets(insets)) edgeToEdge(insets, false)
+            if (checkInsets(insets)) {
+                // sync with AppHomePage
+                val toPx: Dp.() -> Float = { toPx(resources.displayMetrics) }
+                val homeNavRail = SystemUtil.getRuntimeWindowSize(context)
+                    .run { x >= 840.dp.toPx() || x + 50.dp.toPx() >= y }
+                edgeToEdge(insets, false) {
+                    bottom { isStableContent = !homeNavRail }
+                }
+            }
             val isRtl = if (v.isLayoutDirectionResolved) v.layoutDirection == View.LAYOUT_DIRECTION_RTL else false
             consumeInsets(WindowInsets(insets, isRtl))
             insets

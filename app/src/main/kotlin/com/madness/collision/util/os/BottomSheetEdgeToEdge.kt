@@ -63,7 +63,7 @@ class BottomSheetEdgeToEdge(
                 } else {
                     ColorUtil.darkenAs(colorSurface, 0.9f)
                 }
-                transparentBar()
+                isStableContent = true
             }
         }
         return isEdgeToEdge

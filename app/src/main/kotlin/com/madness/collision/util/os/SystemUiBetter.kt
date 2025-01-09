@@ -19,12 +19,15 @@ package com.madness.collision.util.os
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Color
 import android.os.Build
-import android.util.TypedValue
+import android.util.DisplayMetrics
+import android.view.View
 import android.view.Window
 import android.view.WindowInsets
 import androidx.core.graphics.Insets
+import androidx.core.util.TypedValueCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.DialogFragment
@@ -71,9 +74,16 @@ abstract class AbstractSystemBarScope<C : SystemUiBarConfig>(private val xConfig
     // used for external direct assignment
     var config: C? = null
 
-    fun transparentBar() {
-        xConfig.isTransparentBar = true
-    }
+    /**
+     * Whether the UI content underneath the system bar is stable,
+     * i.e. not changing with events or user interactions (except config changes).
+     *
+     * | Transparent Bar    | Gesture Nav     | 3-btn Nav   |
+     * |:------------------:|:---------------:|:-----------:|
+     * | Stable UI          | true            | true        |
+     * | Unstable UI        | true            | false       |
+     */
+    var isStableContent: Boolean = false
 
     fun darkIcon() {
         xConfig.isDarkIcon = true
@@ -107,18 +117,42 @@ class SystemBarConfigInfo {
 typealias SystemBarBlock = SystemBarScope.() -> Unit
 
 @SystemUiConfigMarker
-class SystemUiScope(private val configInfo: SystemBarConfigInfo) {
+class SystemUiScope(
+    private val configInfo: SystemBarConfigInfo, insets: WindowInsets, resources: Resources?) {
+
     var isFullscreen by configInfo::isFullscreen
     // 0-top, 1-bottom, 2-start, 3-end
     private val systemBarConfigs by configInfo::systemBarConfigs
+    private val insetsCompat = WindowInsetsCompat.toWindowInsetsCompat(insets)
+    private val layoutDirection = resources?.configuration?.layoutDirection
+    private val displayMetrics = resources?.displayMetrics ?: DisplayMetrics().apply {
+        density = DisplayMetrics.DENSITY_XXHIGH * 1f / DisplayMetrics.DENSITY_DEFAULT
+    }
 
     fun fullscreen() {
         isFullscreen = true
     }
 
+    private inline fun isGestureNav(inset: (Insets) -> Int): Boolean {
+        // tappableElement inset = 0 for gesture nav bar, and > 0 for 3-button nav bar
+        val tappableInsets = insetsCompat.getInsets(InsetsType.tappableElement())
+        if (inset(tappableInsets) == 0) return true
+        val systemBarInsets = insetsCompat.getInsets(InsetsType.systemBars())
+        // always use platform API TypedValue.applyDimension() to account for custom scaling
+        return inset(systemBarInsets) < TypedValueCompat.dpToPx(25f, displayMetrics)
+    }
+
     private fun configSide(index: Int, block: SystemBarBlock) {
         val config = systemBarConfigs[index] ?: SystemUiBarConfig()
         val scope = SystemBarScope(config).apply(block)
+        val inset = when (index) {
+            0 -> Insets::top; 1 -> Insets::bottom
+            2 -> if (layoutDirection == View.LAYOUT_DIRECTION_RTL) Insets::right else Insets::left
+            3 -> if (layoutDirection == View.LAYOUT_DIRECTION_RTL) Insets::left else Insets::right
+            else -> return
+        }
+        // always override isTransparentBar with isStableContent
+        scope.isTransparentBar = scope.isStableContent || isGestureNav(inset)
         // use scope's config instead if it is assigned
         systemBarConfigs[index] = scope.config ?: scope
     }
@@ -182,7 +216,8 @@ private fun configSystemBars(maintainer: SystemBarMaintainer, insets: WindowInse
     val lastConfig = configStack.lastOrNull()
     val configCopy = if (newConfig) lastConfig?.copy() else lastConfig
     val configInfo = configCopy ?: SystemBarConfigInfo()
-    SystemUiScope(configInfo).apply(block)
+    val resources = maintainer.context?.resources
+    SystemUiScope(configInfo, insets, resources).apply(block)
     if (configInfo != lastConfig) configStack.add(configInfo)
     configSystemBars(maintainer, insets)
 }
@@ -261,41 +296,31 @@ private fun configSystemBars(maintainer: SystemBarMaintainer, insets: WindowInse
 }
 
 private fun edgeToEdge(maintainer: SystemBarMaintainer, insets: WindowInsets, newConfig: Boolean, block: SystemUiBlock? = null) {
-    val context = maintainer.context ?: return
     val darkIcon = mainApplication.isPaleTheme
-    val insetsCompat = WindowInsetsCompat.toWindowInsetsCompat(insets)
-    // tappableElement inset = 0 for gesture nav bar, and > 0 for 3-button nav bar
-    val isGestureBottomNavBar = insetsCompat.getInsets(InsetsType.tappableElement()).bottom <= 0
-    val effectiveInset = insetsCompat.getInsets(InsetsType.systemBars()).bottom.takeIf { it > 0 }
-    val isTransparentNav: Boolean? = effectiveInset?.let { inset ->
-        val metrics = context.resources.displayMetrics
-        val sizeLimit = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25f, metrics)
-        inset < sizeLimit
-    }
     configSystemBars(maintainer, insets, newConfig) {
         fullscreen()
         top {
             color = null
-            isTransparentBar = true
+            isStableContent = true
             isDarkIcon = darkIcon
             isContrastEnforced = false
         }
         bottom {
             color = null
-            isTransparentBar = isGestureBottomNavBar || isTransparentNav != false
+            isStableContent = false
             isDarkIcon = darkIcon
             isContrastEnforced = false
             dividerColor = null
         }
         start {
             color = null
-            isTransparentBar = true
+            isStableContent = true
             isDarkIcon = darkIcon
             isContrastEnforced = false
         }
         end {
             color = null
-            isTransparentBar = true
+            isStableContent = true
             isDarkIcon = darkIcon
             isContrastEnforced = false
         }

@@ -121,7 +121,8 @@ class AppHomeNavFragment : Fragment(), AppHomeNav {
                     // find MainAppHome from host fragment or activity
                     page.mainAppHome = (parentFragment as? MainAppHome) ?: (activity as? MainAppHome)
                     lastContentPadding?.let { page.navContentPadding = it }
-                    collectStatusBarDarkIcon(page)
+                    // collect from the active page only to avoid interference from hidden pages
+                    if ((page as Fragment).isHidden.not()) collectStatusBarDarkIcon(page)
                 }
         }
         if (savedInstanceState == null) {
