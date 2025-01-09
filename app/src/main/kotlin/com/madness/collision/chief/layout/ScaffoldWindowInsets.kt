@@ -23,8 +23,11 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.layout.waterfall
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.isSpecified
 import com.madness.collision.chief.lang.runIf
 
 @Composable
@@ -32,6 +35,7 @@ fun scaffoldWindowInsets(
     shareCutout: Dp = 0.dp,
     shareStatusBar: Dp = 0.dp,
     shareWaterfall: Dp = 0.dp,
+    shareSideCutout: Dp = Dp.Unspecified,
 ): List<WindowInsets> {
     // share waterfall insets with content padding
     val pageInsets = WindowInsets.systemBars.union(WindowInsets.ime)
@@ -66,5 +70,20 @@ fun scaffoldWindowInsets(
         })
         // this height is only added to the content when bottom bar is not present
         .add(WindowInsets(bottom = contentCutoutHeight))
-    return listOf(topBarInsets, bottomBarInsets, contentInsets)
+        // add cutout insets to content when side bar is present (top bar is not)
+        .runIf({ shareSideCutout.isSpecified }) { union(topBarCornerCutoutInsets) }
+    val sideBarInsets =
+        if (shareSideCutout.isSpecified) {
+            // union upper cutout height for side bar at the start side
+            val isLtr = LocalLayoutDirection.current == LayoutDirection.Ltr
+            val sideUpperCutoutHeight = cornerCutout.getUpperHeightOrZero(if (isLtr) -1 else 1)
+            pageInsets
+                .union(remainingCutoutInsets.runIf({ shareSideCutout.value > 0f }) {
+                    share(WindowInsets(left = shareSideCutout, right = shareSideCutout))
+                })
+                .union(WindowInsets(top = sideUpperCutoutHeight, bottom = contentCutoutHeight))
+        } else {
+            WindowInsets(0)
+        }
+    return listOf(topBarInsets, bottomBarInsets, contentInsets, sideBarInsets)
 }

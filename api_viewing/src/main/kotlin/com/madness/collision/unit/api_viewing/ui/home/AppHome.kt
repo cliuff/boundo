@@ -29,9 +29,6 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.only
-import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.union
-import androidx.compose.foundation.layout.waterfall
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.twotone.List
 import androidx.compose.material.icons.twotone.Category
@@ -45,6 +42,7 @@ import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailDefaults
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
@@ -60,24 +58,36 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
+import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.compose.AndroidFragment
 import androidx.fragment.compose.FragmentState
 import androidx.fragment.compose.rememberFragmentState
 import com.madness.collision.chief.app.ComposeFragment
 import com.madness.collision.chief.app.rememberColorScheme
+import com.madness.collision.chief.layout.LocalWindowInsets
+import com.madness.collision.chief.layout.scaffoldWindowInsets
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 class AppHomeFragment : ComposeFragment() {
+    private var windowInsetsValue: WindowInsetsCompat by mutableStateOf(WindowInsetsCompat.CONSUMED)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         // create empty view for legacy NoUpdatesMode
         if (arguments?.getInt("mode") == 1) return View(inflater.context)
         return super.onCreateView(inflater, container, savedInstanceState)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        ViewCompat.setOnApplyWindowInsetsListener(view) { _, insets ->
+            // return the insets as they are, as we only query not consume
+            insets.also { windowInsetsValue = it }
+        }
     }
 
     private fun setStatusBarDarkIcon(isDark: Boolean) {
@@ -88,8 +98,11 @@ class AppHomeFragment : ComposeFragment() {
 
     @Composable
     override fun ComposeContent() {
-        MaterialTheme(colorScheme = rememberColorScheme()) {
-            AppHomePage(onStatusBarDarkIconChange = ::setStatusBarDarkIcon)
+        // enables platform insets query from compose (e.g. display cutout calculation)
+        CompositionLocalProvider(LocalWindowInsets provides windowInsetsValue) {
+            MaterialTheme(colorScheme = rememberColorScheme()) {
+                AppHomePage(onStatusBarDarkIconChange = ::setStatusBarDarkIcon)
+            }
         }
     }
 }
@@ -115,7 +128,8 @@ fun AppHomePage(onStatusBarDarkIconChange: (Boolean) -> Unit) {
             .onEach(onStatusBarDarkIconChange)
             .launchIn(this)
     }
-    val homeInsets = WindowInsets.systemBars.union(WindowInsets.waterfall)
+    val (_, bottomBarInsets, contentInsets, sideBarInsets) = scaffoldWindowInsets(
+        shareCutout = 6.dp, shareStatusBar = 8.dp, shareWaterfall = 8.dp, shareSideCutout = 8.dp)
     BoxWithConstraints {
         // window size classes, expanded: rail, medium/compact: rail in landscape
         // prefer nav rail in split screen mode (50dp bonus size)
@@ -128,7 +142,7 @@ fun AppHomePage(onStatusBarDarkIconChange: (Boolean) -> Unit) {
                     HomeNavigationRail(
                         selectedIndex = selNavIndex,
                         onSelectItem = { i -> selNavIndex = i; homeNav?.setNavPage(i) },
-                        windowInsets = homeInsets
+                        windowInsets = sideBarInsets
                             .only(WindowInsetsSides.Vertical + WindowInsetsSides.Start),
                     )
                 }
@@ -138,12 +152,12 @@ fun AppHomePage(onStatusBarDarkIconChange: (Boolean) -> Unit) {
                     HomeNavigationBar(
                         selectedIndex = selNavIndex,
                         onSelectItem = { i -> selNavIndex = i; homeNav?.setNavPage(i) },
-                        windowInsets = homeInsets
+                        windowInsets = bottomBarInsets
                             .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom),
                     )
                 }
             },
-            contentWindowInsets = homeInsets,
+            contentWindowInsets = contentInsets,
             content = { contentPadding ->
                 // delay one frame to get correct padding with window insets
                 var show by remember { mutableStateOf(false) }

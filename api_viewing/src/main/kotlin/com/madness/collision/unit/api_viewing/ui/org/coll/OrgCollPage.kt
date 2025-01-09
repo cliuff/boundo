@@ -34,6 +34,7 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
@@ -140,6 +141,8 @@ private fun OrgCollScaffold(
         topBar = topBar,
         floatingActionButton = {
             FloatingActionButton(
+                modifier = Modifier
+                    .windowInsetsPadding(contentWindowInsets.only(WindowInsetsSides.End)),
                 onClick = onClickAdd,
             ) {
                 Icon(
