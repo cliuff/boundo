@@ -42,8 +42,13 @@ fun ActivityPageNavController(hostActivity: ComponentActivity): ComposePageNavCo
     CompPageNavControllerImpl(hostActivity)
 
 val LocalPageNavController =
-    staticCompositionLocalOf<ComposePageNavController> { error("Nav controller not provided.") }
+    staticCompositionLocalOf<ComposePageNavController> { PseudoNavController() }
 
+
+internal class PseudoNavController : ComposePageNavController {
+    override fun navigateTo(route: ComposePageRoute) = throw NotImplementedError()
+    override fun navigateBack() = throw NotImplementedError()
+}
 
 internal class CompPageNavControllerImpl(hostActivity: ComponentActivity) : ComposePageNavController {
     private val activityRef: WeakReference<ComponentActivity> = WeakReference(hostActivity)

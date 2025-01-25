@@ -55,7 +55,6 @@ import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -77,7 +76,6 @@ fun AppListBar(
     colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
     primaryAction: @Composable () -> Unit,
 ) {
-    val refreshRotation by rememberRefreshRotation(isRefreshing)
     TopAppBar(
         title = { },
         actions = {
@@ -88,6 +86,8 @@ fun AppListBar(
                     exit = shrinkOut() + fadeOut(),
                 ) {
                     IconButton(onClick = {}) {
+                        // refreshing until removed (anim out)
+                        val refreshRotation by rememberRefreshRotation()
                         Icon(
                             imageVector = Icons.Outlined.Refresh,
                             contentDescription = null,
@@ -114,8 +114,7 @@ fun AppListBar(
 }
 
 @Composable
-private fun rememberRefreshRotation(isRefreshing: Boolean): State<Float> {
-    if (!isRefreshing) return remember { mutableFloatStateOf(0f) }
+private fun rememberRefreshRotation(): State<Float> {
     return rememberInfiniteTransition("InfRefreshAnimation").animateFloat(
         initialValue = 0f,
         targetValue = 360f,

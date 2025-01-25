@@ -28,4 +28,4 @@ import androidx.core.view.WindowInsetsCompat
  */
 fun WindowInsets.share(insets: WindowInsets): WindowInsets = exclude(insets)
 
-val LocalWindowInsets = compositionLocalOf<WindowInsetsCompat> { error("Insets not provided.") }
+val LocalWindowInsets = compositionLocalOf<WindowInsetsCompat> { WindowInsetsCompat.CONSUMED }

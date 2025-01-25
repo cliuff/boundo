@@ -28,10 +28,11 @@ import androidx.appcompat.widget.Toolbar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -63,6 +64,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.chief.app.BoundoTheme
+import com.madness.collision.chief.app.asInsets
 import com.madness.collision.chief.app.rememberColorScheme
 import com.madness.collision.chief.lang.mapIf
 import com.madness.collision.unit.api_viewing.ComposeUnit
@@ -269,10 +271,8 @@ private fun AppListScaffold(
         topBar = {
             AppListBar(
                 isRefreshing = listState.isRefreshing,
-                windowInsets = WindowInsets(
-                    top = paddingValues.calculateTopPadding(),
-                    left = paddingValues.calculateLeftPadding(LocalLayoutDirection.current),
-                    right = paddingValues.calculateRightPadding(LocalLayoutDirection.current)),
+                windowInsets = paddingValues.asInsets()
+                    .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface.copy(alpha = toolbarOpacity))
             ) {

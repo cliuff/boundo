@@ -29,6 +29,7 @@ import com.madness.collision.unit.api_viewing.apps.UpdateRepo
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.UpdatedApp
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -61,7 +62,7 @@ class AppUpdatesViewModel : ViewModel() {
             queryPermission = null,
             canReqRuntimePerm = false,
         )
-        MutableStateFlow(AppUpdatesUiState(isLoading = false, sections = emptyMap(), perm = perm))
+        MutableStateFlow(AppUpdatesUiState(isLoading = true, sections = emptyMap(), perm = perm))
     }
     val uiState: StateFlow<AppUpdatesUiState> = mutUiState.asStateFlow()
     private val mutAppListId = MutableStateFlow(0)
@@ -96,8 +97,9 @@ class AppUpdatesViewModel : ViewModel() {
     }
 
     fun checkUpdates(timestamp: Long, context: Context, lifecycleOwner: LifecycleOwner) {
-        if (uiState.value.isLoading) return
+        if (mutexUpdatesCheck.isLocked) return
         viewModelScope.launch(Dispatchers.IO) {
+            if (mutexUpdatesCheck.isLocked) return@launch
             mutexUpdatesCheck.withLock check@{
                 // update loading state
                 mutUiState.update { it.copy(isLoading = true) }
@@ -132,7 +134,9 @@ class AppUpdatesViewModel : ViewModel() {
                 sectionsAppList = updSections.flatMap { (_, list) ->
                     list.map(UpdatedApp::app)
                 }
-                mutUiState.update { it.copy(isLoading = false, sections = updSections) }
+                mutUiState.update { it.copy(sections = updSections) }
+                delay(100)  // delay finish loading state
+                mutUiState.update { it.copy(isLoading = false) }
             }
         }
     }

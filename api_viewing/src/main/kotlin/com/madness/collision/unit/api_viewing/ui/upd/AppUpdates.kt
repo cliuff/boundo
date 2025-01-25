@@ -27,10 +27,12 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -85,6 +87,7 @@ import androidx.compose.ui.window.Popup
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.madness.collision.chief.app.BoundoTheme
+import com.madness.collision.chief.app.asInsets
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.UpdatedApp
 import com.madness.collision.unit.api_viewing.ui.upd.item.ApiUpdGuiArt
@@ -120,10 +123,8 @@ fun AppUpdatesPage(paddingValues: PaddingValues, eventHandler: AppUpdatesEventHa
                     refreshing = isLoading,
                     onClickRefresh = eventHandler::refreshUpdates,
                     onClickSettings = eventHandler::showAppSettings,
-                    windowInsets = WindowInsets(
-                        top = paddingValues.calculateTopPadding(),
-                        left = paddingValues.calculateLeftPadding(LocalLayoutDirection.current),
-                        right = paddingValues.calculateRightPadding(LocalLayoutDirection.current)),
+                    windowInsets = paddingValues.asInsets()
+                        .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
                 ) {
                     val horizontalPadding = LocalLayoutDirection.current.let { di ->
                         paddingValues.run { calculateLeftPadding(di) + calculateRightPadding(di) }
