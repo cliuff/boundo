@@ -71,6 +71,21 @@ private fun ApplicationInfo.isOnBackInvokedCallbackEnabled(): Boolean? {
 }
 
 @SuppressLint("PrivateApi")
+private fun ApplicationInfo.getHiddenPrivateFlags(): Result<Int> {
+    val pkg = this
+    return try {
+        val field = ApplicationInfo::class.java
+            .getDeclaredField("privateFlags")
+            .apply { isAccessible = true }
+        val result = field.getInt(pkg)
+        Result.success(result)
+    } catch (e: Exception) {
+        e.printStackTrace()
+        Result.failure(e)
+    }
+}
+
+@SuppressLint("PrivateApi")
 private fun PackageInfo.isCoreApp(): Boolean? {
     val pkg = this
     return try {
@@ -179,6 +194,10 @@ object PkgInfo {
 
     fun getOverlayTarget(pkgInfo: PackageInfo): String? {
         return pkgInfo.getOverlayTarget().getOrNull()
+    }
+
+    fun getPrivateFlags(appInfo: ApplicationInfo): Int? {
+        return appInfo.getHiddenPrivateFlags().getOrNull()
     }
 
     /** Get modules that are available as [packages][PackageManager.getInstalledPackages] */

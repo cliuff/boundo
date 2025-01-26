@@ -16,6 +16,7 @@
 
 package com.madness.collision.unit.api_viewing.ui.org.coll
 
+import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -25,6 +26,8 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Android
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -38,6 +41,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -55,6 +59,7 @@ import io.cliuff.boundo.org.model.OrgGroup
 @Stable
 interface GroupInfoEventHandler {
     fun getAppLabel(pkgName: String): String
+    fun getAppPartition(pkgName: String): String?
     fun getAppGroups(pkgName: String): List<String>
 }
 
@@ -92,6 +97,8 @@ private fun rememberGroupInfoEventHandler(viewModel: GroupEditorViewModel) =
         object : GroupInfoEventHandler {
             override fun getAppLabel(pkgName: String) =
                 viewModel.getPkgLabel(pkgName)
+            override fun getAppPartition(pkgName: String) =
+                viewModel.getPkgPartition(pkgName)
             override fun getAppGroups(pkgName: String) =
                 viewModel.getPkgGroups(pkgName).map(OrgGroup::name)
         }
@@ -146,11 +153,15 @@ private fun GroupContent(
             }
             items(sectionApps, key = { app -> app.packageName }) { app ->
                 val icPkg = app.applicationInfo?.let { AppIconPackageInfo(app, it) }
+                val isSys = app.applicationInfo?.run { flags and ApplicationInfo.FLAG_SYSTEM != 0 } == true
                 GroupItem(
                     modifier = Modifier.animateItem().padding(horizontal = 20.dp, vertical = 8.dp),
                     name = eventHandler.getAppLabel(app.packageName),
+                    pkgName = app.packageName,
                     selected = app.packageName in selectedPkgs,
                     iconModel = icPkg,
+                    typeText = eventHandler.getAppPartition(app.packageName),
+                    typeIcon = if (isSys) Icons.Outlined.Android else null,
                     includedGroups = eventHandler.getAppGroups(app.packageName),
                 )
             }
@@ -161,9 +172,12 @@ private fun GroupContent(
 @Composable
 private fun GroupItem(
     name: String,
+    pkgName: String,
     selected: Boolean,
     iconModel: Any?,
     modifier: Modifier = Modifier,
+    typeText: String? = null,
+    typeIcon: ImageVector? = null,
     includedGroups: List<String> = emptyList(),
 ) {
     Row(
@@ -174,6 +188,9 @@ private fun GroupItem(
             modifier = Modifier.weight(1f),
             name = name,
             iconModel = iconModel,
+            typeText = typeText,
+            typeIcon = typeIcon,
+            secondaryText = pkgName,
             desc = { CollAppGroupRow(names = includedGroups) },
         )
         Checkbox(
@@ -188,6 +205,7 @@ private fun GroupItem(
 internal fun PseudoGroupInfoEventHandler() =
     object : GroupInfoEventHandler {
         override fun getAppLabel(pkgName: String) = ""
+        override fun getAppPartition(pkgName: String) = null
         override fun getAppGroups(pkgName: String) = emptyList<String>()
     }
 

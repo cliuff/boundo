@@ -26,6 +26,7 @@ import com.madness.collision.chief.lang.runIf
 import com.madness.collision.unit.api_viewing.apps.MultiStageAppList
 import com.madness.collision.unit.api_viewing.apps.PackageLabelProvider
 import com.madness.collision.unit.api_viewing.apps.PkgLabelProviderImpl
+import com.madness.collision.unit.api_viewing.info.PartitionInfo
 import com.madness.collision.unit.api_viewing.ui.org.OrgPkgInfoProvider
 import com.madness.collision.unit.api_viewing.ui.org.OrgPkgLabelProvider
 import io.cliuff.boundo.org.data.repo.CollRepository
@@ -67,6 +68,7 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
     private val mutUiState: MutableStateFlow<GroupUiState>
     val uiState: StateFlow<GroupUiState>
     private var labelProvider: PackageLabelProvider = PkgLabelProviderImpl()
+    private var pkgPartitionMap: Map<String, String> = emptyMap()
     private var pkgGroupsMap: Map<String, List<OrgGroup>> = emptyMap()
     private var collRepo: CollRepository? = null
     private var groupRepo: GroupRepository? = null
@@ -107,6 +109,7 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
                 // skip first stage when modifying group
                 .runIf({ modGroupId > 0 }, { drop(1) })
                 .onEach { (pkgList, grouping) ->
+                    pkgPartitionMap = PartitionInfo.getPkgPartitions(pkgList)
                     mutUiState.update {
                         it.copy(
                             installedApps = pkgList,
@@ -136,6 +139,10 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
     /** Label: non-empty label, or package name. */
     fun getPkgLabel(pkg: String): String {
         return labelProvider.getLabelOrPkg(pkg)
+    }
+
+    fun getPkgPartition(pkg: String): String? {
+        return pkgPartitionMap[pkg]
     }
 
     fun getPkgGroups(pkg: String): List<OrgGroup> {
