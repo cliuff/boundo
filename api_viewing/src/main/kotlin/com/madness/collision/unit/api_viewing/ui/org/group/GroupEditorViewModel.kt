@@ -22,8 +22,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.madness.collision.chief.app.prop
-import com.madness.collision.unit.api_viewing.apps.PlatformAppProvider
-import com.madness.collision.unit.api_viewing.info.PkgInfo
+import com.madness.collision.chief.lang.runIf
+import com.madness.collision.unit.api_viewing.apps.MultiStageAppList
+import com.madness.collision.unit.api_viewing.apps.PackageLabelProvider
+import com.madness.collision.unit.api_viewing.apps.PkgLabelProviderImpl
+import com.madness.collision.unit.api_viewing.ui.org.OrgPkgInfoProvider
+import com.madness.collision.unit.api_viewing.ui.org.OrgPkgLabelProvider
 import io.cliuff.boundo.org.data.repo.CollRepository
 import io.cliuff.boundo.org.data.repo.GroupRepository
 import io.cliuff.boundo.org.data.repo.OrgCollRepo
@@ -34,6 +38,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -59,8 +66,7 @@ data class GroupUiState(
 class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
     private val mutUiState: MutableStateFlow<GroupUiState>
     val uiState: StateFlow<GroupUiState>
-    /** App label: non-empty or null. */
-    private var pkgLabelMap: Map<String, String?> = emptyMap()
+    private var labelProvider: PackageLabelProvider = PkgLabelProviderImpl()
     private var pkgGroupsMap: Map<String, List<OrgGroup>> = emptyMap()
     private var collRepo: CollRepository? = null
     private var groupRepo: GroupRepository? = null
@@ -93,25 +99,23 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
             val collRepo = collRepo ?: OrgCollRepo.coll(context).also { collRepo = it }
             val groupRepo = groupRepo ?: OrgCollRepo.group(context).also { groupRepo = it }
 
+            labelProvider = OrgPkgLabelProvider
+            val pkgInfoProvider = OrgPkgInfoProvider
+            val pkgLabelProvider = OrgPkgLabelProvider
             val pkgMgr = context.packageManager
-            val pkgs = PlatformAppProvider(context).getAll()
-            // load app labels, and sort app list by label
-            val labels: Map<String, String?> = pkgs.associate { p ->
-                val label = p.applicationInfo?.loadLabel(pkgMgr)?.toString()
-                p.packageName to label?.takeUnless { it.isEmpty() }
-            }
-            pkgLabelMap = labels
-            val launcherPkgs = pkgs.mapNotNullTo(HashSet()) { p ->
-                p.packageName.takeIf { pkgMgr.getLaunchIntentForPackage(it) != null }
-            }
-            val overlayPkgs = pkgs.mapNotNullTo(HashSet()) { p ->
-                p.packageName.takeIf { PkgInfo.getOverlayTarget(p) != null }
-            }
-            val comparator = compareByDescending<PackageInfo> { it.packageName in launcherPkgs }
-                .thenBy { it.packageName in overlayPkgs }
-                .thenBy { labels[it.packageName] ?: it.packageName }
-            val sortedPkgs = pkgs.sortedWith(comparator)
-            val sortedGrouping = listOf(launcherPkgs.size, pkgs.size - overlayPkgs.size, pkgs.size)
+            MultiStageAppList.load(pkgInfoProvider, pkgMgr, pkgLabelProvider)
+                // skip first stage when modifying group
+                .runIf({ modGroupId > 0 }, { drop(1) })
+                .onEach { (pkgList, grouping) ->
+                    mutUiState.update {
+                        it.copy(
+                            installedApps = pkgList,
+                            installedAppsGrouping = grouping,
+                            isLoading = false,
+                        )
+                    }
+                }
+                .launchIn(this)
 
             pkgGroupsMap = if (modCollId > 0) groupRepo.getAppGroups(modCollId) else emptyMap()
             val modGroup = if (modGroupId > 0) groupRepo.getOneOffGroup(modGroupId) else null
@@ -124,9 +128,6 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
                 it.copy(
                     groupName = modGroupName,
                     selPkgs = modSelPkgs,
-                    installedApps = sortedPkgs,
-                    installedAppsGrouping = sortedGrouping,
-                    isLoading = false,
                 )
             }
         }
@@ -134,7 +135,7 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
 
     /** Label: non-empty label, or package name. */
     fun getPkgLabel(pkg: String): String {
-        return pkgLabelMap[pkg] ?: pkg
+        return labelProvider.getLabelOrPkg(pkg)
     }
 
     fun getPkgGroups(pkg: String): List<OrgGroup> {
@@ -177,7 +178,7 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
             }
             val groupName = state.groupName.trim().takeUnless { it.isBlank() } ?: "Unnamed Group"
             val apps = state.selPkgs.map { pkg ->
-                OrgApp(pkg, pkgLabelMap[pkg] ?: "", "", time, time)
+                OrgApp(pkg, labelProvider.getLabel(pkg) ?: "", "", time, time)
             }
             if (modGid <= 0) {
                 if (collId > 0) {

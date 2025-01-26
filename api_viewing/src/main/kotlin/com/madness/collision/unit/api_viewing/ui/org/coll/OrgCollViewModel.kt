@@ -20,7 +20,7 @@ import android.content.Context
 import android.content.pm.PackageInfo
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.madness.collision.unit.api_viewing.apps.PlatformAppProvider
+import com.madness.collision.unit.api_viewing.ui.org.OrgPkgInfoProvider
 import io.cliuff.boundo.org.data.repo.CompCollRepository
 import io.cliuff.boundo.org.data.repo.OrgCollRepo
 import io.cliuff.boundo.org.model.CompColl
@@ -80,7 +80,7 @@ class OrgCollViewModel : ViewModel() {
                 groupPkgs = co?.getGroupPkgs(context).orEmpty()
                 val collPkgs = co?.groups.orEmpty()
                     .run { flatMapTo(HashSet(size)) { it.apps.map(OrgApp::pkg) } }
-                val installedPkgs = PlatformAppProvider(context).getAll()
+                val installedPkgs = OrgPkgInfoProvider.getAll()
                     .run { mapTo(HashSet(size), PackageInfo::packageName) }
                 val intersectPkgs = collPkgs.apply { retainAll(installedPkgs) }
                 val summary = intersectPkgs.size to installedPkgs.size
@@ -104,7 +104,7 @@ private fun CompColl.getGroupPkgs(context: Context, limit: Int = 3): Map<String,
     if (pkgSize <= 0) return emptyMap()
 
     val names = groups.flatMapTo(LinkedHashSet(pkgSize)) { it.apps.take(limit).map(OrgApp::pkg) }
-    val pkgs = PlatformAppProvider(context).getAll()
+    val pkgs = OrgPkgInfoProvider.getAll()
     return buildMap(pkgSize) {
         for (p in pkgs) {
             if (p.packageName in names) put(p.packageName, p)
