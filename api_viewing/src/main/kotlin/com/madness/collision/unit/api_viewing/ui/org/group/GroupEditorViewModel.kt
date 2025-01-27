@@ -48,6 +48,8 @@ import kotlinx.coroutines.launch
 // Process death: editGroupName, selectedPkgs, submittedGroupId, scrollPos.
 class GroupSavedState(savedState: SavedStateHandle) {
     private var selPkgList: ArrayList<String>? by savedState.prop()
+    var selCollId: Int? by savedState.prop()
+    var collName: String? by savedState.prop()
     var groupName: String? by savedState.prop()
     var selPkgs: Set<String>?
         get() = selPkgList?.toSet()
@@ -62,6 +64,10 @@ data class GroupUiState(
     val installedAppsGrouping: List<Int>,
     val isLoading: Boolean,
     val isSubmitOk: Boolean,
+    /** Input or selected collection name. */
+    val collName: String,
+    val selColl: CollInfo?,
+    val collList: List<CollInfo>,
 )
 
 class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
@@ -88,6 +94,9 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
             installedAppsGrouping = emptyList(),
             isLoading = false,
             isSubmitOk = false,
+            collName = savedObj.collName ?: "",
+            selColl = null,
+            collList = emptyList(),
         )
         mutUiState = MutableStateFlow(state)
         uiState = mutUiState.asStateFlow()
@@ -133,6 +142,21 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
                     selPkgs = modSelPkgs,
                 )
             }
+
+            // retrieve collections when creating group
+            if (modGroupId <= 0) {
+                collRepo.getCollections()
+                    .onEach { colls ->
+                        mutUiState.update { currValue ->
+                            currValue.copy(
+                                selColl = currValue.selColl ?: savedObj.selCollId
+                                    ?.let { cid -> colls.firstOrNull { it.id == cid } },
+                                collList = colls,
+                            )
+                        }
+                    }
+                    .launchIn(this)
+            }
         }
     }
 
@@ -147,6 +171,16 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
 
     fun getPkgGroups(pkg: String): List<OrgGroup> {
         return pkgGroupsMap[pkg].orEmpty()
+    }
+
+    fun selectColl(coll: CollInfo) {
+        savedObj.selCollId = coll.id
+        mutUiState.update { it.copy(collName = coll.name, selColl = coll) }
+    }
+
+    fun setCollName(name: String) {
+        savedObj.collName = name
+        mutUiState.update { it.copy(collName = name) }
     }
 
     fun setGroupName(name: String) {
@@ -177,8 +211,10 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
         val modGid = modGroupId
         viewModelScope.launch(Dispatchers.IO) {
             val time = System.currentTimeMillis()
-            val collId = if (modCid <= 0) {
-                val createColl = CollInfo(0, "Unnamed Coll", time, time, 0)
+            val isMod = modCid > 0 && state.run { selColl?.id == modCid && selColl.name == collName }
+            val collName = state.collName.trim().takeUnless { it.isBlank() } ?: "Unnamed Coll"
+            val collId = if (modGid <= 0 && !isMod) {
+                val createColl = CollInfo(0, collName, time, time, 0)
                 collRepo.addCollection(createColl)
             } else {
                 modCid

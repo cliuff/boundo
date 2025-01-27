@@ -31,6 +31,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -39,7 +40,12 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Android
+import androidx.compose.material.icons.outlined.ExpandMore
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.OutlinedButton
@@ -53,6 +59,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -78,6 +85,7 @@ import com.madness.collision.unit.api_viewing.ui.org.coll.collAppGroupHeading
 import com.madness.collision.unit.api_viewing.ui.org.coll.getGroup
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
 import com.madness.collision.util.ui.AppIconPackageInfo
+import io.cliuff.boundo.org.model.CollInfo
 import io.cliuff.boundo.org.model.OrgGroup
 
 @Stable
@@ -85,6 +93,8 @@ interface GroupEditorEventHandler {
     fun getAppLabel(pkgName: String): String
     fun getAppPartition(pkgName: String): String?
     fun getAppGroups(pkgName: String): List<String>
+    fun selectColl(coll: CollInfo)
+    fun setCollName(name: String)
     fun setGroupName(name: String)
     fun setAppSelected(pkgName: String, selected: Boolean)
     fun submitEdits()
@@ -100,7 +110,7 @@ fun GroupEditorPage(
     LaunchedEffect(Unit) { viewModel.init(context, modCollId, modGroupId) }
     val eventHandler = rememberGroupEditorEventHandler(viewModel)
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val (groupName, selPkgs, installedApps, installedAppsGrouping, isLoading, isSubmitOk) = uiState
+    val (groupName, selPkgs, installedApps, installedAppsGrouping, isLoading, isSubmitOk, collName, selColl, collList) = uiState
 
     val navController = LocalPageNavController.current
     LaunchedEffect(isSubmitOk) { if (isSubmitOk) navController.navigateBack() }
@@ -112,8 +122,11 @@ fun GroupEditorPage(
     ) { innerPadding ->
         GroupContent(
             modifier = Modifier.fillMaxWidth(),
+            collName = collName,
+            modCollName = modGroupId <= 0,
             groupName = groupName,
             eventHandler = eventHandler,
+            collList = collList,
             selectedPkgs = selPkgs,
             installedApps = installedApps,
             installedAppsGrouping = installedAppsGrouping,
@@ -132,6 +145,10 @@ private fun rememberGroupEditorEventHandler(viewModel: GroupEditorViewModel) =
                 viewModel.getPkgPartition(pkgName)
             override fun getAppGroups(pkgName: String) =
                 viewModel.getPkgGroups(pkgName).map(OrgGroup::name)
+            override fun selectColl(coll: CollInfo) =
+                viewModel.selectColl(coll)
+            override fun setCollName(name: String) =
+                viewModel.setCollName(name)
             override fun setGroupName(name: String) =
                 viewModel.setGroupName(name)
             override fun setAppSelected(pkgName: String, selected: Boolean) =
@@ -177,9 +194,12 @@ private fun GroupScaffold(
 
 @Composable
 private fun GroupContent(
+    collName: String,
     groupName: String,
     eventHandler: GroupEditorEventHandler,
     modifier: Modifier = Modifier,
+    modCollName: Boolean = true,
+    collList: List<CollInfo> = emptyList(),
     selectedPkgs: Set<String> = emptySet(),
     installedApps: List<PackageInfo> = emptyList(),
     installedAppsGrouping: List<Int> = emptyList(),
@@ -193,6 +213,17 @@ private fun GroupContent(
         }
     }
     LazyColumn(modifier = modifier, contentPadding = contentPadding) {
+        if (modCollName) {
+            item(key = "@group.coll") {
+                GroupColl(
+                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp),
+                    name = collName,
+                    collList = collList,
+                    onNameChange = eventHandler::setCollName,
+                    onSelectColl = eventHandler::selectColl,
+                )
+            }
+        }
         item(key = "@group.header") {
             GroupName(
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp),
@@ -290,6 +321,84 @@ private fun GroupFooter(
 }
 
 @Composable
+private fun GroupColl(
+    name: String,
+    collList: List<CollInfo>,
+    onNameChange: (String) -> Unit,
+    onSelectColl: (CollInfo) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier) {
+        Text(
+            text = "Collection name",
+            color = MaterialTheme.colorScheme.onSurface,
+            fontSize = 18.sp,
+            lineHeight = 20.sp,
+            fontWeight = FontWeight.Medium,
+        )
+        Spacer(modifier = Modifier.height(18.dp))
+        TextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = name,
+            onValueChange = onNameChange,
+            placeholder = {
+                Text(
+                    text = "Enter or choose the collection name",
+                    fontSize = 14.sp,
+                    lineHeight = 14.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            },
+            trailingIcon = {
+                if (collList.isNotEmpty()) {
+                    val (showCollList, setShowCollList) = remember { mutableStateOf(false) }
+                    IconButton(onClick = { setShowCollList(true) }) {
+                        Icon(
+                            imageVector = Icons.Outlined.ExpandMore,
+                            contentDescription = null,
+                        )
+                    }
+                    DropdownMenu(expanded = showCollList, onDismissRequest = { setShowCollList(false) }) {
+                        GroupCollItem(collList = collList, onSelectItem = { _, coll ->
+                            setShowCollList(false)
+                            onSelectColl(coll)
+                        })
+                    }
+                }
+            },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text, imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions.Default,
+            singleLine = true,
+            shape = RoundedCornerShape(10.dp),
+            colors = TextFieldDefaults.colors(
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+            ),
+        )
+    }
+}
+
+@Composable
+private fun GroupCollItem(collList: List<CollInfo>, onSelectItem: (Int, CollInfo) -> Unit) {
+    for (i in collList.indices) {
+        DropdownMenuItem(
+            modifier = Modifier.widthIn(min = 180.dp),
+            text = {
+                Text(
+                    text = collList[i].name,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontSize = 13.sp,
+                    lineHeight = 13.sp,
+                )
+            },
+            onClick = { onSelectItem(i, collList[i]) },
+        )
+    }
+}
+
+@Composable
 private fun GroupName(name: String, onNameChange: (String) -> Unit, modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
         Text(
@@ -363,6 +472,8 @@ internal fun PseudoGroupEditorEventHandler() =
         override fun getAppLabel(pkgName: String) = ""
         override fun getAppPartition(pkgName: String) = null
         override fun getAppGroups(pkgName: String) = emptyList<String>()
+        override fun selectColl(coll: CollInfo) {}
+        override fun setCollName(name: String) {}
         override fun setGroupName(name: String) {}
         override fun setAppSelected(pkgName: String, selected: Boolean) {}
         override fun submitEdits() {}
@@ -381,6 +492,7 @@ private fun GroupEditorPreview() {
             ) { innerPadding ->
                 GroupContent(
                     modifier = Modifier.fillMaxWidth(),
+                    collName = "",
                     groupName = "Preview Group",
                     eventHandler = eventHandler,
                     contentPadding = innerPadding,
