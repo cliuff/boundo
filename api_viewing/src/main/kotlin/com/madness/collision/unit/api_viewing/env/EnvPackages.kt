@@ -106,6 +106,30 @@ object EnvPackages {
         }
         return map.values.toList()
     }
+
+    fun getAppStoreOwners(context: Context): List<AppInfoOwner> {
+        val standardOwners = getStandardAppInfoOwners(context)
+        val marketOwners = getMarketAppInfoOwners(context)
+        val map = HashMap<String, AppInfoOwner>(standardOwners.size + marketOwners.size + 2).apply {
+            // Google Play Store itself is a standard owner, this serves as a fallback
+            put(GooglePlayAppInfoOwner.packageName, GooglePlayAppInfoOwner)
+            // put standard owners afterwards to override custom owners, in reversed order
+            // (in case one package / multiple activities, to retain the smaller-index one)
+            putAll(marketOwners.asReversed().associateBy { it.packageName })
+            putAll(standardOwners.asReversed().associateBy { it.packageName })
+            // Xiaomi app store itself is a market owner that blocks app details intent,
+            // use this custom owner instead as a workaround
+            put(XiaomiAppInfoOwner.packageName, XiaomiAppInfoOwner)
+            // remove self owner (though N/A right now)
+            remove(BuildConfig.APPLICATION_ID)
+            // remove unqualified owners
+            for ((invalidPkg, invalidClassName) in UnqualifiedAppInfoOwners) {
+                val addedOwner = get(invalidPkg) as? CompAppInfoOwner ?: continue
+                if (addedOwner.comp.className == invalidClassName) remove(invalidPkg)
+            }
+        }
+        return map.values.toList()
+    }
 }
 
 private const val BaiduSearchFileManager =

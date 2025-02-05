@@ -16,20 +16,30 @@
 
 package com.madness.collision.unit.api_viewing.ui.org.group
 
+import android.content.Context
 import android.content.pm.PackageInfo
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -37,14 +47,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
 import com.madness.collision.chief.app.BoundoTheme
 import com.madness.collision.chief.app.LocalPageNavController
 import com.madness.collision.chief.layout.scaffoldWindowInsets
@@ -61,6 +78,8 @@ import io.cliuff.boundo.org.model.OrgGroup
 @Stable
 interface GroupInfoEventHandler {
     fun getAppLabel(pkgName: String): String
+    fun launchApp(pkgName: String)
+    fun showAppInOwner(pkgName: String, owner: String)
 }
 
 @Composable
@@ -69,12 +88,12 @@ fun GroupInfoPage(
     modCollId: Int = -1,
     modGroupId: Int = -1,
 ) {
-    val viewModel = viewModel<GroupEditorViewModel>()
+    val viewModel = viewModel<GroupInfoViewModel>()
     val context = LocalContext.current
     LaunchedEffect(Unit) { viewModel.init(context, modCollId, modGroupId) }
-    val eventHandler = rememberGroupInfoEventHandler(viewModel)
+    val eventHandler = rememberGroupInfoEventHandler(viewModel, context)
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val (groupName, selPkgs, installedApps, _, isLoading, isSubmitOk) = uiState
+    val (groupName, selPkgs, installedApps, isLoading, isSubmitOk, ownerApps) = uiState
     val groupPkgs = remember(group) { group?.apps?.map(OrgApp::pkg)?.toSet() }
 
     val navController = LocalPageNavController.current
@@ -94,17 +113,25 @@ fun GroupInfoPage(
             eventHandler = eventHandler,
             selectedPkgs = groupPkgs ?: selPkgs,
             installedApps = installedApps,
+            appOwnerApps = ownerApps,
             contentPadding = innerPadding,
         )
     }
 }
 
 @Composable
-private fun rememberGroupInfoEventHandler(viewModel: GroupEditorViewModel) =
+private fun rememberGroupInfoEventHandler(viewModel: GroupInfoViewModel, context: Context) =
     remember<GroupInfoEventHandler> {
         object : GroupInfoEventHandler {
             override fun getAppLabel(pkgName: String) =
                 viewModel.getPkgLabel(pkgName)
+            override fun launchApp(pkgName: String) {
+                context.packageManager.getLaunchIntentForPackage(pkgName)
+                    ?.let(context::startActivity)
+            }
+            override fun showAppInOwner(pkgName: String, owner: String) {
+                viewModel.getAppOwner(owner)?.showAppInfo(pkgName, context)
+            }
         }
     }
 
@@ -158,6 +185,7 @@ private fun GroupContent(
     modifier: Modifier = Modifier,
     selectedPkgs: Set<String> = emptySet(),
     installedApps: List<PackageInfo> = emptyList(),
+    appOwnerApps: List<PackageInfo> = emptyList(),
     contentPadding: PaddingValues = PaddingValues(),
 ) {
     val selectedApps = remember(selectedPkgs, installedApps) {
@@ -166,6 +194,11 @@ private fun GroupContent(
             1 -> installedApps.find { it.packageName in selectedPkgs }?.let(::listOf).orEmpty()
             else -> installedApps.filter { it.packageName in selectedPkgs }
         }
+    }
+    val uninstalledPkgs = remember(selectedPkgs, selectedApps) {
+        if (installedApps.isEmpty() || selectedApps.size >= selectedPkgs.size) return@remember emptyList()
+        val un = selectedPkgs - selectedApps.mapTo(HashSet(selectedApps.size)) { it.packageName }
+        un.toList()
     }
     LazyColumn(modifier = modifier, contentPadding = contentPadding) {
         if (selectedApps.isNotEmpty()) {
@@ -181,11 +214,108 @@ private fun GroupContent(
         }
         items(selectedApps, key = { app -> app.packageName + "$" }) { app ->
             val icPkg = app.applicationInfo?.let { AppIconPackageInfo(app, it) }
-            CollAppItem(
+            GroupItem(
                 modifier = Modifier.animateItem().padding(horizontal = 20.dp, vertical = 8.dp),
                 name = eventHandler.getAppLabel(app.packageName),
+                pkgName = app.packageName,
                 iconModel = icPkg,
+                onLaunch = { eventHandler.launchApp(app.packageName) },
+                onExternal = null,
             )
+        }
+
+        if (uninstalledPkgs.isNotEmpty()) {
+            item(key = "@group.sec.uninstall") {
+                CollAppHeading(
+                    modifier = Modifier
+                        .animateItem()
+                        .padding(horizontal = 20.dp)
+                        .padding(top = 20.dp, bottom = 12.dp),
+                    name = "Uninstalled apps (${uninstalledPkgs.size})",
+                )
+            }
+        }
+        items(uninstalledPkgs, key = { app -> app }) { app ->
+            var showAppOwners by remember { mutableStateOf(false) }
+            GroupItem(
+                modifier = Modifier.animateItem().padding(horizontal = 20.dp, vertical = 8.dp),
+                name = app,
+                pkgName = app,
+                iconModel = null,
+                onLaunch = null,
+                onExternal = { showAppOwners = true },
+            )
+            DropdownMenu(expanded = showAppOwners, onDismissRequest = { showAppOwners = false }) {
+                AppOwners(
+                    appOwnerApps = appOwnerApps,
+                    getOwnerLabel = eventHandler::getAppLabel,
+                    onSelectOwner = { owner -> eventHandler.showAppInOwner(app, owner) },
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun AppOwners(
+    appOwnerApps: List<PackageInfo>,
+    getOwnerLabel: (String) -> String,
+    onSelectOwner: (String) -> Unit,
+) {
+    for (owner in appOwnerApps) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { onSelectOwner(owner.packageName) }
+                .padding(horizontal = 20.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            AsyncImage(
+                modifier = Modifier.width(40.dp).heightIn(max = 40.dp),
+                model = owner.applicationInfo?.let { AppIconPackageInfo(owner, it) },
+                contentDescription = null,
+            )
+            Spacer(Modifier.width(15.dp))
+            Text(
+                text = getOwnerLabel(owner.packageName),
+                color = MaterialTheme.colorScheme.onSurface,
+                fontSize = 14.sp,
+                lineHeight = 16.sp,
+                fontWeight = FontWeight.Normal,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 2,
+            )
+        }
+    }
+}
+
+@Composable
+private fun GroupItem(
+    name: String,
+    pkgName: String,
+    iconModel: Any?,
+    onLaunch: (() -> Unit)?,
+    onExternal: (() -> Unit)?,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        CollAppItem(
+            modifier = Modifier.weight(1f),
+            name = name,
+            iconModel = iconModel,
+            secondaryText = pkgName,
+        )
+        if (onLaunch != null || onExternal != null) {
+            OutlinedButton(
+                modifier = Modifier.sizeIn(minWidth = 36.dp, minHeight = 20.dp),
+                onClick = onLaunch ?: onExternal ?: {},
+                contentPadding = PaddingValues(horizontal = 20.dp, vertical = 5.dp),
+            ) {
+                Text(text = if (onLaunch != null) "Open" else "Install...", fontSize = 12.sp)
+            }
         }
     }
 }
@@ -193,6 +323,8 @@ private fun GroupContent(
 internal fun PseudoGroupInfoEventHandler() =
     object : GroupInfoEventHandler {
         override fun getAppLabel(pkgName: String) = ""
+        override fun launchApp(pkgName: String) {}
+        override fun showAppInOwner(pkgName: String, owner: String) {}
     }
 
 @Composable

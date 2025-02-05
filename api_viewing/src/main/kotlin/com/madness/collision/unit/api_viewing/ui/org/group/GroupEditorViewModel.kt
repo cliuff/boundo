@@ -239,15 +239,4 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
             }
         }
     }
-
-    fun remove(group: OrgGroup) {
-        val groupRepo = groupRepo ?: return
-        val modCid = modCollId
-        viewModelScope.launch(Dispatchers.IO) {
-            if (modCid > 0) {
-                val isOk = groupRepo.removeGroup(modCid, group)
-                if (isOk) mutUiState.update { it.copy(isSubmitOk = true) }
-            }
-        }
-    }
 }
