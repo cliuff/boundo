@@ -18,9 +18,11 @@ package com.madness.collision.unit.api_viewing.ui.org.coll
 
 import android.content.Context
 import android.content.pm.PackageInfo
+import android.os.Environment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.madness.collision.unit.api_viewing.ui.org.OrgPkgInfoProvider
+import io.cliuff.boundo.org.data.io.OrgCollExport
 import io.cliuff.boundo.org.data.repo.CompCollRepository
 import io.cliuff.boundo.org.data.repo.OrgCollRepo
 import io.cliuff.boundo.org.model.CompColl
@@ -95,6 +97,27 @@ class OrgCollViewModel : ViewModel() {
         val repo = compCollRepo ?: return
         viewModelScope.launch(Dispatchers.IO) {
             val isOk = repo.removeCompCollection(coll)
+        }
+    }
+
+    fun importColl(context: Context) {
+        viewModelScope.launch(Dispatchers.IO) {
+            kotlin.runCatching {
+                val file = context.externalCacheDir?.resolve("Import.org.txt")
+                if (file != null && file.exists()) OrgCollExport.fromStream(file.inputStream(), context)
+            }.onFailure(Throwable::printStackTrace)
+        }
+    }
+
+    fun exportColl(coll: CompColl, context: Context) {
+        viewModelScope.launch(Dispatchers.IO) {
+            kotlin.runCatching {
+                val pubFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                if (pubFolder.exists() || pubFolder.mkdirs()) {
+                    val file = pubFolder.resolve("${coll.name}.org.txt")
+                    /*if (file.canWrite())*/ OrgCollExport.toStream(file.outputStream(), coll.id, context)
+                }
+            }.onFailure(Throwable::printStackTrace)
         }
     }
 }

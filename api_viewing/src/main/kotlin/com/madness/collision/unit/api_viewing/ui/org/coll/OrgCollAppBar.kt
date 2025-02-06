@@ -21,8 +21,12 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.MoreVert
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -35,7 +39,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -48,6 +57,8 @@ fun OrgCollAppBar(
     selectedColl: CompColl?,
     onClickColl: (CompColl) -> Unit = {},
     onActionDelete: () -> Unit = {},
+    onActionImport: () -> Unit = {},
+    onActionExport: () -> Unit = {},
     windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
@@ -61,6 +72,7 @@ fun OrgCollAppBar(
                         contentDescription = null,
                     )
                 }
+                OverflowIconButton(onActionImport, onActionExport)
             },
             windowInsets = windowInsets,
         )
@@ -82,6 +94,41 @@ fun OrgCollAppBar(
                     HorizontalDivider()
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun OverflowIconButton(
+    onActionImport: () -> Unit,
+    onActionExport: () -> Unit,
+) {
+    val context = LocalContext.current
+    val impFile = remember { context.externalCacheDir?.resolve("Import.org.txt") }
+    if (impFile?.exists() == true) {
+        var showOptions by remember { mutableStateOf(false) }
+        IconButton(onClick = { showOptions = true }) {
+            Icon(
+                modifier = Modifier.size(22.dp),
+                imageVector = Icons.Outlined.MoreVert,
+                contentDescription = null,
+            )
+        }
+        DropdownMenu(
+            expanded = showOptions,
+            onDismissRequest = { showOptions = false },
+            shape = RoundedCornerShape(10.dp),
+        ) {
+            DropdownMenuItem(
+                modifier = Modifier.widthIn(min = 160.dp),
+                text = { Text(text = "Import collection") },
+                onClick = onActionImport,
+            )
+            DropdownMenuItem(
+                modifier = Modifier.widthIn(min = 160.dp),
+                text = { Text(text = "Export collection") },
+                onClick = onActionExport,
+            )
         }
     }
 }

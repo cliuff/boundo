@@ -89,6 +89,8 @@ fun OrgCollPage(contentPadding: PaddingValues = PaddingValues()) {
                 selectedColl = coll,
                 onClickColl = { coll -> viewModel.selectColl(coll, context) },
                 onActionDelete = { coll?.let(viewModel::deleteColl) },
+                onActionImport = { viewModel.importColl(context) },
+                onActionExport = { coll?.let { viewModel.exportColl(it, context) } },
                 windowInsets = contentPadding.asInsets()
                     .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
             )
