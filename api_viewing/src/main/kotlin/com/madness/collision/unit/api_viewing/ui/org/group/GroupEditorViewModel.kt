@@ -18,10 +18,11 @@ package com.madness.collision.unit.api_viewing.ui.org.group
 
 import android.content.Context
 import android.content.pm.PackageInfo
+import androidx.core.os.bundleOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.madness.collision.chief.app.prop
+import com.madness.collision.chief.app.SavedStateDelegate
 import com.madness.collision.chief.lang.runIf
 import com.madness.collision.unit.api_viewing.apps.MultiStageAppList
 import com.madness.collision.unit.api_viewing.apps.PackageLabelProvider
@@ -36,6 +37,7 @@ import io.cliuff.boundo.org.model.CollInfo
 import io.cliuff.boundo.org.model.OrgApp
 import io.cliuff.boundo.org.model.OrgGroup
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -47,13 +49,19 @@ import kotlinx.coroutines.launch
 
 // Process death: editGroupName, selectedPkgs, submittedGroupId, scrollPos.
 class GroupSavedState(savedState: SavedStateHandle) {
-    private var selPkgList: ArrayList<String>? by savedState.prop()
-    var selCollId: Int? by savedState.prop()
-    var collName: String? by savedState.prop()
-    var groupName: String? by savedState.prop()
-    var selPkgs: Set<String>?
-        get() = selPkgList?.toSet()
-        set(value) = ::selPkgList.set(value?.let(::ArrayList))
+    private val stateDelegate = SavedStateDelegate(savedState)
+    private var selPkgList: ArrayList<String>? by stateDelegate
+    var selCollId: Int? by stateDelegate
+    var collName: String? by stateDelegate
+    var groupName: String? by stateDelegate
+    var selPkgs: Set<String>? = selPkgList?.toSet()
+
+    init {
+        savedState.setSavedStateProvider("GroupSavedStateProvider") {
+            selPkgList = selPkgs?.let(::ArrayList)
+            bundleOf()
+        }
+    }
 }
 
 data class GroupUiState(
@@ -85,6 +93,7 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
     private var submittedGroupId: Int = -1
 
     private val savedObj: GroupSavedState = GroupSavedState(savedState)
+    private var initJob: Job? = null
 
     init {
         val state = GroupUiState(
@@ -103,9 +112,10 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
     }
 
     fun init(context: Context, modCollId: Int, modGroupId: Int) {
+        if (initJob != null) return
         if (modCollId > 0) this.modCollId = modCollId
         if (modGroupId > 0) this.modGroupId = modGroupId
-        viewModelScope.launch(Dispatchers.IO) {
+        initJob = viewModelScope.launch(Dispatchers.IO) {
             mutUiState.update { it.copy(isLoading = true) }
             val collRepo = collRepo ?: OrgCollRepo.coll(context).also { collRepo = it }
             val groupRepo = groupRepo ?: OrgCollRepo.group(context).also { groupRepo = it }
@@ -134,12 +144,10 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
             val modGroupName = modGroup?.name ?: ""
             val modSelPkgs = modGroup?.apps?.run { mapTo(HashSet(size), OrgApp::pkg) } ?: emptySet()
 
-            savedObj.groupName = modGroupName
-            savedObj.selPkgs = modSelPkgs
-            mutUiState.update {
-                it.copy(
-                    groupName = modGroupName,
-                    selPkgs = modSelPkgs,
+            mutUiState.update { currValue ->
+                currValue.copy(
+                    groupName = savedObj.groupName ?: modGroupName,
+                    selPkgs = savedObj.selPkgs ?: modSelPkgs,
                 )
             }
 
@@ -148,9 +156,11 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
                 collRepo.getCollections()
                     .onEach { colls ->
                         mutUiState.update { currValue ->
+                            val coll = currValue.selColl ?: savedObj.selCollId
+                                ?.let { cid -> colls.firstOrNull { it.id == cid } }
                             currValue.copy(
-                                selColl = currValue.selColl ?: savedObj.selCollId
-                                    ?.let { cid -> colls.firstOrNull { it.id == cid } },
+                                collName = coll?.name ?: "",
+                                selColl = coll,
                                 collList = colls,
                             )
                         }

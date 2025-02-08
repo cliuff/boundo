@@ -32,6 +32,7 @@ import io.cliuff.boundo.org.data.repo.OrgCollRepo
 import io.cliuff.boundo.org.model.OrgApp
 import io.cliuff.boundo.org.model.OrgGroup
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -58,6 +59,8 @@ class GroupInfoViewModel(savedState: SavedStateHandle) : ViewModel() {
     /** Group ID to modify. */
     private var modGroupId: Int = -1
 
+    private var initJob: Job? = null
+
     init {
         val state = GroupInfoUiState(
             groupName = "",
@@ -72,9 +75,10 @@ class GroupInfoViewModel(savedState: SavedStateHandle) : ViewModel() {
     }
 
     fun init(context: Context, modCollId: Int, modGroupId: Int) {
+        if (initJob != null) return
         if (modCollId > 0) this.modCollId = modCollId
         if (modGroupId > 0) this.modGroupId = modGroupId
-        viewModelScope.launch(Dispatchers.IO) {
+        initJob = viewModelScope.launch(Dispatchers.IO) {
             mutUiState.update { it.copy(isLoading = true) }
             val groupRepo = groupRepo ?: OrgCollRepo.group(context).also { groupRepo = it }
 

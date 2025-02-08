@@ -19,8 +19,10 @@ package com.madness.collision.unit.api_viewing.ui.org.coll
 import android.content.Context
 import android.content.pm.PackageInfo
 import android.os.Environment
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.madness.collision.chief.app.SavedStateDelegate
 import com.madness.collision.unit.api_viewing.ui.org.OrgPkgInfoProvider
 import io.cliuff.boundo.org.data.io.OrgCollExport
 import io.cliuff.boundo.org.data.repo.CompCollRepository
@@ -38,6 +40,11 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+class CollSavedState(savedState: SavedStateHandle) {
+    private val stateDelegate = SavedStateDelegate(savedState)
+    var selCollId: Int? by stateDelegate
+}
+
 data class OrgCollUiState(
     val isLoading: Boolean,
     val coll: CompColl?,
@@ -45,7 +52,7 @@ data class OrgCollUiState(
     val installedPkgsSummary: Pair<Int, Int>?,
 )
 
-class OrgCollViewModel : ViewModel() {
+class OrgCollViewModel(savedState: SavedStateHandle) : ViewModel() {
     private val mutUiState: MutableStateFlow<OrgCollUiState> =
         MutableStateFlow(OrgCollUiState(isLoading = false, coll = null, collList = emptyList(), installedPkgsSummary = null))
     val uiState: StateFlow<OrgCollUiState> = mutUiState.asStateFlow()
@@ -53,15 +60,21 @@ class OrgCollViewModel : ViewModel() {
     private var groupPkgs: Map<String, PackageInfo> = emptyMap()
     private var selCollJob: Job? = null
 
+    private val savedObj: CollSavedState = CollSavedState(savedState)
+    private var initJob: Job? = null
+
     fun init(context: Context) {
-        viewModelScope.launch(Dispatchers.IO) {
+        if (initJob != null) return
+        initJob = viewModelScope.launch(Dispatchers.IO) {
             mutUiState.update { it.copy(isLoading = true) }
             val repo = compCollRepo ?: OrgCollRepo.compColl(context).also { compCollRepo = it }
             repo.getCompCollections()
                 .onEach { collList ->
                     mutUiState.update { it.copy(collList = collList) }
                     if (uiState.value.coll == null) {
-                        collList.firstOrNull()?.let { coll ->
+                        val selColl = savedObj.selCollId
+                            ?.let { cid -> collList.find { it.id == cid } }
+                        (selColl ?: collList.firstOrNull())?.let { coll ->
                             selectColl(coll, context)
                         }
                     }
@@ -77,6 +90,7 @@ class OrgCollViewModel : ViewModel() {
     fun selectColl(coll: CompColl, context: Context) {
         val repo = compCollRepo ?: return
         selCollJob?.cancel()
+        savedObj.selCollId = coll.id
         repo.getCompCollection(coll.id)
             .onEach { co ->
                 groupPkgs = co?.getGroupPkgs(context).orEmpty()

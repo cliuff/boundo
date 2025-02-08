@@ -17,18 +17,27 @@
 package com.madness.collision.chief.app
 
 import androidx.lifecycle.SavedStateHandle
-import kotlin.reflect.KProperty
 
-@JvmInline
-value class SavedStateEntry<T>(val savedState: SavedStateHandle) {
-    @Suppress("NOTHING_TO_INLINE")
-    inline operator fun getValue(thisRef: Any, property: KProperty<*>): T? =
-        savedState[property.name]
-    @Suppress("NOTHING_TO_INLINE")
-    inline operator fun setValue(thisRef: Any, property: KProperty<*>, value: T) =
-        savedState.set(property.name, value)
+/** Delegate by property. Values must can be stored in [Bundle][android.os.Bundle]. */
+class SavedStateDelegate(private val savedState: SavedStateHandle) : MutableMap<String, Any?> {
+
+    override fun containsKey(key: String): Boolean = true  // required for map delegate
+    override fun get(key: String): Any? = savedState[key]
+    override fun put(key: String, value: Any?): Any? =
+        savedState.get<Any>(key).also { savedState[key] = value }
+
+    override val size: Int
+        get() = throw NotImplementedError()
+    override val keys: MutableSet<String>
+        get() = throw NotImplementedError()
+    override val values: MutableCollection<Any?>
+        get() = throw NotImplementedError()
+    override val entries: MutableSet<MutableMap.MutableEntry<String, Any?>>
+        get() = throw NotImplementedError()
+
+    override fun isEmpty(): Boolean = throw NotImplementedError()
+    override fun containsValue(value: Any?): Boolean = throw NotImplementedError()
+    override fun putAll(from: Map<out String, Any?>) = throw NotImplementedError()
+    override fun remove(key: String): Any = throw NotImplementedError()
+    override fun clear() = throw NotImplementedError()
 }
-
-/** Delegate by property. [T] must be a type that could be stored in [Bundle][android.os.Bundle]. */
-@Suppress("NOTHING_TO_INLINE")
-inline fun <T> SavedStateHandle.prop() = SavedStateEntry<T>(this)
