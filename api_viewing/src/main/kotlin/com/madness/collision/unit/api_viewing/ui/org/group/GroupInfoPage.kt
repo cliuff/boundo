@@ -44,6 +44,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
@@ -69,6 +70,9 @@ import com.madness.collision.ui.comp.ClassicTopAppBar
 import com.madness.collision.unit.api_viewing.ui.org.OrgRouteId
 import com.madness.collision.unit.api_viewing.ui.org.coll.CollAppHeading
 import com.madness.collision.unit.api_viewing.ui.org.coll.CollAppItem
+import com.madness.collision.unit.api_viewing.ui.org.coll.CompactCollAppItemStyle
+import com.madness.collision.unit.api_viewing.ui.org.coll.DetailedCollAppItemStyle
+import com.madness.collision.unit.api_viewing.ui.org.coll.LocalCollAppItemStyle
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
 import com.madness.collision.util.mainApplication
 import com.madness.collision.util.ui.AppIconPackageInfo
@@ -188,6 +192,7 @@ private fun GroupContent(
     appOwnerApps: List<PackageInfo> = emptyList(),
     contentPadding: PaddingValues = PaddingValues(),
 ) {
+    var detailed by remember { mutableStateOf(false) }
     val selectedApps = remember(selectedPkgs, installedApps) {
         when (selectedPkgs.size) {
             0 -> emptyList()
@@ -202,18 +207,22 @@ private fun GroupContent(
     }
     LazyColumn(modifier = modifier, contentPadding = contentPadding) {
         if (selectedApps.isNotEmpty()) {
-            item(key = "@group.sec.sel") {
+            item(key = "@group.sec.sel", contentType = "AppHeading") {
                 CollAppHeading(
                     modifier = Modifier
                         .animateItem()
                         .padding(horizontal = 20.dp)
-                        .padding(top = 20.dp, bottom = 12.dp),
+                        .padding(top = 8.dp, bottom = 0.dp),
                     name = "Group apps (${selectedApps.size})",
+                    changeViewText = if (detailed) "Detailed view" else "Compact view",
+                    onChangeView = { detailed = !detailed },
                 )
             }
         }
-        items(selectedApps, key = { app -> app.packageName + "$" }) { app ->
+        items(selectedApps, key = { app -> app.packageName + "$" }, contentType = { "App" }) { app ->
             val icPkg = app.applicationInfo?.let { AppIconPackageInfo(app, it) }
+            val itemStyle = if (detailed) DetailedCollAppItemStyle else CompactCollAppItemStyle
+            CompositionLocalProvider(LocalCollAppItemStyle provides itemStyle) {
             GroupItem(
                 modifier = Modifier.animateItem().padding(horizontal = 20.dp, vertical = 8.dp),
                 name = eventHandler.getAppLabel(app.packageName),
@@ -222,21 +231,24 @@ private fun GroupContent(
                 onLaunch = { eventHandler.launchApp(app.packageName) },
                 onExternal = null,
             )
+            }
         }
 
         if (uninstalledPkgs.isNotEmpty()) {
-            item(key = "@group.sec.uninstall") {
+            item(key = "@group.sec.uninstall", contentType = "AppHeading") {
                 CollAppHeading(
                     modifier = Modifier
                         .animateItem()
                         .padding(horizontal = 20.dp)
-                        .padding(top = 20.dp, bottom = 12.dp),
+                        .padding(top = 8.dp, bottom = 0.dp),
                     name = "Uninstalled apps (${uninstalledPkgs.size})",
                 )
             }
         }
-        items(uninstalledPkgs, key = { app -> app }) { app ->
+        items(uninstalledPkgs, key = { app -> app }, contentType = { "App" }) { app ->
             var showAppOwners by remember { mutableStateOf(false) }
+            val itemStyle = DetailedCollAppItemStyle
+            CompositionLocalProvider(LocalCollAppItemStyle provides itemStyle) {
             GroupItem(
                 modifier = Modifier.animateItem().padding(horizontal = 20.dp, vertical = 8.dp),
                 name = app,
@@ -245,6 +257,7 @@ private fun GroupContent(
                 onLaunch = null,
                 onExternal = { showAppOwners = true },
             )
+            }
             DropdownMenu(expanded = showAppOwners, onDismissRequest = { showAppOwners = false }) {
                 AppOwners(
                     appOwnerApps = appOwnerApps,

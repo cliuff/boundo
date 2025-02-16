@@ -34,10 +34,12 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -135,25 +137,32 @@ private fun GroupContent(
     installedAppsGrouping: List<Int> = emptyList(),
     contentPadding: PaddingValues = PaddingValues(),
 ) {
+    val detailed = remember(installedAppsGrouping) {
+        List(installedAppsGrouping.size) { false }.toMutableStateList()
+    }
     LazyColumn(modifier = modifier, contentPadding = contentPadding) {
         for (sectionIndex in installedAppsGrouping.indices) {
             val sectionApps = installedApps.getGroup(installedAppsGrouping, sectionIndex)
             val selectedSecPkgSize = sectionApps.count { it.packageName in selectedPkgs }
             if (sectionApps.isNotEmpty()) {
-                item(key = "@group.sec.apps$sectionIndex") {
+                item(key = "@group.sec.apps$sectionIndex", contentType = "AppHeading") {
                     val heading = collAppGroupHeading(sectionIndex)
                     CollAppHeading(
                         modifier = Modifier
                             .animateItem()
                             .padding(horizontal = 20.dp)
-                            .padding(top = 20.dp, bottom = 12.dp),
+                            .padding(top = 8.dp, bottom = 0.dp),
                         name = "$heading ($selectedSecPkgSize/${sectionApps.size})",
+                        changeViewText = if (detailed[sectionIndex]) "Detailed view" else "Compact view",
+                        onChangeView = { detailed[sectionIndex] = !detailed[sectionIndex] },
                     )
                 }
             }
-            items(sectionApps, key = { app -> app.packageName }) { app ->
+            items(sectionApps, key = { app -> app.packageName }, contentType = { "App" }) { app ->
                 val icPkg = app.applicationInfo?.let { AppIconPackageInfo(app, it) }
                 val isSys = app.applicationInfo?.run { flags and ApplicationInfo.FLAG_SYSTEM != 0 } == true
+                val itemStyle = if (detailed[sectionIndex]) DetailedCollAppItemStyle else CompactCollAppItemStyle
+                CompositionLocalProvider(LocalCollAppItemStyle provides itemStyle) {
                 GroupItem(
                     modifier = Modifier.animateItem().padding(horizontal = 20.dp, vertical = 8.dp),
                     name = eventHandler.getAppLabel(app.packageName),
@@ -164,6 +173,7 @@ private fun GroupContent(
                     typeIcon = if (isSys) Icons.Outlined.Android else null,
                     includedGroups = eventHandler.getAppGroups(app.packageName),
                 )
+                }
             }
         }
     }

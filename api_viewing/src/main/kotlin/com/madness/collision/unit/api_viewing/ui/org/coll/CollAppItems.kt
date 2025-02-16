@@ -16,6 +16,8 @@
 
 package com.madness.collision.unit.api_viewing.ui.org.coll
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -30,22 +32,35 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.InlineTextContent
+import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.Placeholder
+import androidx.compose.ui.text.PlaceholderVerticalAlign
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.madness.collision.chief.layout.SubcomposeTargetSize
 import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape
 import com.madness.collision.R as MainR
 
@@ -69,16 +84,55 @@ fun collAppGroupHeading(groupIndex: Int): String =
     }
 
 @Composable
-fun CollAppHeading(name: String, modifier: Modifier = Modifier) {
-    Text(
+fun CollAppHeading(
+    name: String,
+    modifier: Modifier = Modifier,
+    changeViewText: String = "",
+    onChangeView: () -> Unit = {},
+) {
+    Row(
         modifier = modifier,
-        text = name,
-        color = MaterialTheme.colorScheme.onSurface,
-        fontSize = 13.sp,
-        lineHeight = 15.sp,
-        fontWeight = FontWeight.Medium,
-    )
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            modifier = Modifier.weight(1f),
+            text = name,
+            color = MaterialTheme.colorScheme.onSurface,
+            fontSize = 13.sp,
+            lineHeight = 15.sp,
+            fontWeight = FontWeight.Medium,
+        )
+        TextButton(onClick = onChangeView) {
+            Text(
+                text = changeViewText,
+                fontSize = 11.sp,
+                lineHeight = 14.sp,
+            )
+        }
+    }
 }
+
+@Stable
+val CompactCollAppItemStyle: CollAppItemStyle =
+    CollAppItemStyle(
+        showAppTypeLabel = false,
+        showSecondaryText = false,
+    )
+
+@Stable
+val DetailedCollAppItemStyle: CollAppItemStyle =
+    CollAppItemStyle(
+        showAppTypeLabel = true,
+        showSecondaryText = true,
+    )
+
+@Immutable
+data class CollAppItemStyle(
+    val showAppTypeLabel: Boolean,
+    val showSecondaryText: Boolean,
+)
+
+val LocalCollAppItemStyle = compositionLocalOf { CompactCollAppItemStyle }
 
 @Composable
 fun CollAppItem(
@@ -88,6 +142,7 @@ fun CollAppItem(
     typeText: String? = null,
     typeIcon: ImageVector? = null,
     secondaryText: String? = null,
+    style: CollAppItemStyle = LocalCollAppItemStyle.current,
     desc: @Composable () -> Unit = {},
 ) {
     Row(
@@ -110,33 +165,83 @@ fun CollAppItem(
         }
         Spacer(modifier = Modifier.width(12.dp))
         Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    modifier = Modifier.weight(1f, fill = false),
-                    text = name,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    fontSize = 14.sp,
-                    lineHeight = 16.sp,
-                    fontWeight = FontWeight.Medium,
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 1,
-                )
-                if (typeText != null) {
-                    Spacer(modifier = Modifier.width(8.dp))
-                    AppType(text = typeText, icon = typeIcon)
+            InlineAppName(
+                modifier = Modifier.animateContentSize(),
+                name = name,
+                typeText = typeText.takeIf { style.showAppTypeLabel },
+                typeIcon = typeIcon,
+                iconTint = when (typeText) {
+                    "/system", "/system_ext", "/vendor", "/odm", "/apex" ->
+                        colorResource(MainR.color.androidRobotGreen).copy(alpha = 0.85f)
+                    else -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f)
+                },
+            )
+            AnimatedVisibility(visible = style.showSecondaryText) {
+                if (secondaryText != null) {
+                    Text(
+                        text = secondaryText,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.85f),
+                        fontSize = 11.sp,
+                        lineHeight = 13.sp,
+                    )
                 }
-            }
-            if (secondaryText != null) {
-                Text(
-                    text = secondaryText,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.85f),
-                    fontSize = 11.sp,
-                    lineHeight = 13.sp,
-                )
             }
             desc()
         }
     }
+}
+
+@Composable
+private fun InlineAppName(
+    name: String,
+    typeText: String?,
+    typeIcon: ImageVector?,
+    modifier: Modifier = Modifier,
+    iconTint: Color = LocalContentColor.current,
+) {
+    val hasTarget = typeText != null || typeIcon != null
+    val annotatedText = buildAnnotatedString {
+        val nameLength = name.length
+        if (nameLength > 100) {
+            append(name.substring(0, 99))
+            append('…')
+        } else {
+            append(name)
+        }
+        if (hasTarget) appendInlineContent("Target")
+    }
+    val target = @Composable {
+        if (hasTarget) {
+            AppType(
+                modifier = Modifier.padding(start = 8.dp),
+                text = typeText,
+                icon = typeIcon,
+                iconTint = iconTint,
+            )
+        }
+    }
+    SubcomposeTargetSize(
+        modifier = modifier,
+        target = target,
+        content = { (tw, th) ->
+            val inlineContent = if (tw > 0 && th > 0) {
+                with(LocalDensity.current) {
+                    val ph = Placeholder(tw.toSp(), th.toSp(), PlaceholderVerticalAlign.TextCenter)
+                    mapOf("Target" to InlineTextContent(placeholder = ph, children = { target() }))
+                }
+            } else {
+                emptyMap()
+            }
+            Text(
+                text = annotatedText,
+                color = MaterialTheme.colorScheme.onSurface,
+                fontSize = 14.sp,
+                lineHeight = 18.sp,
+                fontWeight = FontWeight.Medium,
+                inlineContent = inlineContent,
+            )
+        },
+    )
 }
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -173,11 +278,17 @@ private fun AppGroup(name: String) {
 }
 
 @Composable
-private fun AppType(text: String, icon: ImageVector? = null) {
+private fun AppType(
+    text: String?,
+    icon: ImageVector?,
+    modifier: Modifier = Modifier,
+    iconTint: Color = LocalContentColor.current,
+) {
     Row(
-        Modifier
+        modifier = modifier
             .border(Dp.Hairline, MaterialTheme.colorScheme.outline.copy(alpha = 0.4f), shape = CircleShape)
             .padding(horizontal = 5.dp, vertical = 1.dp),
+        horizontalArrangement = Arrangement.spacedBy(2.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (icon != null) {
@@ -185,14 +296,10 @@ private fun AppType(text: String, icon: ImageVector? = null) {
                 modifier = Modifier.size(12.dp),
                 imageVector = icon,
                 contentDescription = null,
-                tint = when (text) {
-                    "/system", "/system_ext", "/vendor", "/odm", "/apex" ->
-                        colorResource(MainR.color.androidRobotGreen).copy(alpha = 0.85f)
-                    else -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f)
-                },
+                tint = iconTint,
             )
-            Spacer(modifier = Modifier.width(2.dp))
         }
+        if (text != null)
         Text(
             text = text,
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f),

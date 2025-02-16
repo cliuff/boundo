@@ -55,12 +55,14 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -81,6 +83,9 @@ import com.madness.collision.ui.comp.ClassicTopAppBar
 import com.madness.collision.unit.api_viewing.ui.org.coll.CollAppGroupRow
 import com.madness.collision.unit.api_viewing.ui.org.coll.CollAppHeading
 import com.madness.collision.unit.api_viewing.ui.org.coll.CollAppItem
+import com.madness.collision.unit.api_viewing.ui.org.coll.CompactCollAppItemStyle
+import com.madness.collision.unit.api_viewing.ui.org.coll.DetailedCollAppItemStyle
+import com.madness.collision.unit.api_viewing.ui.org.coll.LocalCollAppItemStyle
 import com.madness.collision.unit.api_viewing.ui.org.coll.collAppGroupHeading
 import com.madness.collision.unit.api_viewing.ui.org.coll.getGroup
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
@@ -205,6 +210,9 @@ private fun GroupContent(
     installedAppsGrouping: List<Int> = emptyList(),
     contentPadding: PaddingValues = PaddingValues(),
 ) {
+    val detailed = remember(installedAppsGrouping) {
+        List(installedAppsGrouping.size + 1) { false }.toMutableStateList()
+    }
     val selectedApps = remember(selectedPkgs, installedApps) {
         when (selectedPkgs.size) {
             0 -> emptyList()
@@ -214,7 +222,7 @@ private fun GroupContent(
     }
     LazyColumn(modifier = modifier, contentPadding = contentPadding) {
         if (modCollName) {
-            item(key = "@group.coll") {
+            item(key = "@group.coll", contentType = "Coll") {
                 GroupColl(
                     modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp),
                     name = collName,
@@ -224,7 +232,7 @@ private fun GroupContent(
                 )
             }
         }
-        item(key = "@group.header") {
+        item(key = "@group.header", contentType = "Group") {
             GroupName(
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp),
                 name = groupName,
@@ -233,19 +241,23 @@ private fun GroupContent(
         }
 
         if (selectedApps.isNotEmpty()) {
-            item(key = "@group.sec.sel") {
+            item(key = "@group.sec.sel", contentType = "AppHeading") {
                 CollAppHeading(
                     modifier = Modifier
                         .animateItem()
                         .padding(horizontal = 20.dp)
-                        .padding(top = 20.dp, bottom = 12.dp),
+                        .padding(top = 8.dp, bottom = 0.dp),
                     name = "Selected apps (${selectedApps.size})",
+                    changeViewText = if (detailed[0]) "Detailed view" else "Compact view",
+                    onChangeView = { detailed[0] = !detailed[0] },
                 )
             }
         }
-        items(selectedApps, key = { app -> app.packageName + "$" }) { app ->
+        items(selectedApps, key = { app -> app.packageName + "$" }, contentType = { "App" }) { app ->
             val icPkg = app.applicationInfo?.let { AppIconPackageInfo(app, it) }
             val isSys = app.applicationInfo?.run { flags and ApplicationInfo.FLAG_SYSTEM != 0 } == true
+            val itemStyle = if (detailed[0]) DetailedCollAppItemStyle else CompactCollAppItemStyle
+            CompositionLocalProvider(LocalCollAppItemStyle provides itemStyle) {
             GroupItem(
                 modifier = Modifier.animateItem().padding(horizontal = 20.dp, vertical = 8.dp),
                 name = eventHandler.getAppLabel(app.packageName),
@@ -257,25 +269,30 @@ private fun GroupContent(
                 onCheckedChange = { chk -> eventHandler.setAppSelected(app.packageName, chk) },
                 includedGroups = eventHandler.getAppGroups(app.packageName),
             )
+            }
         }
 
         for (sectionIndex in installedAppsGrouping.indices) {
             val sectionApps = installedApps.getGroup(installedAppsGrouping, sectionIndex)
             if (sectionApps.isNotEmpty()) {
-                item(key = "@group.sec.apps$sectionIndex") {
+                item(key = "@group.sec.apps$sectionIndex", contentType = "AppHeading") {
                     val heading = collAppGroupHeading(sectionIndex)
                     CollAppHeading(
                         modifier = Modifier
                             .animateItem()
                             .padding(horizontal = 20.dp)
-                            .padding(top = 20.dp, bottom = 12.dp),
+                            .padding(top = 8.dp, bottom = 0.dp),
                         name = "$heading (${sectionApps.size})",
+                        changeViewText = if (detailed[sectionIndex + 1]) "Detailed view" else "Compact view",
+                        onChangeView = { detailed[sectionIndex + 1] = !detailed[sectionIndex + 1] },
                     )
                 }
             }
-            items(sectionApps, key = { app -> app.packageName }) { app ->
+            items(sectionApps, key = { app -> app.packageName }, contentType = { "App" }) { app ->
                 val icPkg = app.applicationInfo?.let { AppIconPackageInfo(app, it) }
                 val isSys = app.applicationInfo?.run { flags and ApplicationInfo.FLAG_SYSTEM != 0 } == true
+                val itemStyle = if (detailed[sectionIndex + 1]) DetailedCollAppItemStyle else CompactCollAppItemStyle
+                CompositionLocalProvider(LocalCollAppItemStyle provides itemStyle) {
                 GroupItem(
                     modifier = Modifier.animateItem().padding(horizontal = 20.dp, vertical = 8.dp),
                     name = eventHandler.getAppLabel(app.packageName),
@@ -287,6 +304,7 @@ private fun GroupContent(
                     onCheckedChange = { chk -> eventHandler.setAppSelected(app.packageName, chk) },
                     includedGroups = eventHandler.getAppGroups(app.packageName),
                 )
+                }
             }
         }
     }
