@@ -86,6 +86,7 @@
     <string name="av_upd_pck_upd">بسته به روز شد</string>
     <string name="av_tag_kotlin">&#8207;Kotlin</string>
     <string name="av_tag_compose">&#8207;Jetpack Compose</string>
+    <string name="av_tag_compose_cmp">&#8207;Compose Multiplatform</string>
     <string name="av_tag_flutter">&#8207;Flutter</string>
     <string name="av_tag_react_native">&#8207;React Native</string>
     <string name="av_tag_xamarin">&#8207;Xamarin</string>

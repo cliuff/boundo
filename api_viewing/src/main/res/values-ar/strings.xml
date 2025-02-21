@@ -86,6 +86,7 @@
     <string name="av_upd_pck_upd">تم تحديث الحزمة</string>
     <string name="av_tag_kotlin">&#1564;Kotlin</string>
     <string name="av_tag_compose">&#1564;Jetpack Compose</string>
+    <string name="av_tag_compose_cmp">&#1564;Compose Multiplatform</string>
     <string name="av_tag_flutter">&#1564;Flutter</string>
     <string name="av_tag_react_native">&#1564;React Native</string>
     <string name="av_tag_xamarin">&#1564;Xamarin</string>

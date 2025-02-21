@@ -112,6 +112,7 @@ internal class AppTagInfo(
         const val ID_TECH_XAMARIN = "avTagsValCpXar"
         const val ID_TECH_KOTLIN = "avTagsValKot"
         const val ID_TECH_X_COMPOSE = "avTagsValXCmp"
+        const val ID_TECH_COMPOSE_CMP = "avTagsValCmp"
         const val ID_PKG_64BIT = "avTagsVal64b"
         const val ID_PKG_ARM32 = "avTagsValPkgArm32"
         const val ID_PKG_ARM64 = "avTagsValPkgArm64"
@@ -151,6 +152,7 @@ internal class AppTagInfo(
             ID_TECH_XAMARIN,
             ID_TECH_KOTLIN,
             ID_TECH_X_COMPOSE,
+            ID_TECH_COMPOSE_CMP,
             ID_PKG_64BIT,
             ID_PKG_ARM32,
             ID_PKG_ARM64,
@@ -186,6 +188,7 @@ internal class AppTagInfo(
             ID_TECH_XAMARIN,
             ID_TECH_KOTLIN,
             ID_TECH_X_COMPOSE,
+            ID_TECH_COMPOSE_CMP,
             ID_PKG_64BIT,
             ID_APP_HIDDEN,
             ID_APP_SYSTEM,

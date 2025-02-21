@@ -70,6 +70,13 @@ internal fun builtInTags(): Map<String, AppTagInfo> = listOf(
         expressing = commonExpressing { it.dexPackageFlags.isJetpackCompose }
     ).apply { iconKey = "xcm" },
     AppTagInfo(
+        id = AppTagInfo.ID_TECH_COMPOSE_CMP, category = 0.cat, icon = R.drawable.ic_compose_cmp_72.icon,
+        label = R.string.av_tag_compose_cmp.labels, rank = "135",
+        desc = "org.jetbrains.compose".packageResultDesc,
+        requisites = thirdPartyPkgRequisite().list,
+        expressing = commonExpressing { it.dexPackageFlags.isComposeMultiplatform }
+    ).apply { iconKey = "cmp" },
+    AppTagInfo(
         id = AppTagInfo.ID_TECH_FLUTTER, category = 0.cat, icon = R.drawable.ic_flutter_72.icon,
         label = R.string.av_tag_flutter.labels, rank = "14",
         desc = "libflutter.so".fileResultDesc,
