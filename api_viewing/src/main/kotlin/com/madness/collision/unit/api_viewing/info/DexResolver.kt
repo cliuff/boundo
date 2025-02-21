@@ -103,6 +103,24 @@ object DexResolver {
         false
     }
 
+    fun findPackages(apkPath: String, vararg targetPkg: String) = kotlin.runCatching {
+        val result = BooleanArray(targetPkg.size)
+        DexContainerFactory.load(apkPath).dexEntrySeq.forEach { entry ->
+            var complete: Boolean
+            for (classDef in entry.dexFile.classes) {
+                val pkg = mapToPackage(classDef.type) ?: continue
+                complete = true
+                for (i in targetPkg.indices) {
+                    if (result[i]) continue
+                    if (pkg.startsWith(targetPkg[i])) result[i] = true
+                    else complete = false
+                }
+                if (complete) return@runCatching result
+            }
+        }
+        result
+    }
+
     // Landroid/app/AppComponentFactory; -> android.app
     private fun mapToPackage(type: String): String? {
         val pkg = kotlin.run {

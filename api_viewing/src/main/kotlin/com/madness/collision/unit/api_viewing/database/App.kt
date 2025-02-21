@@ -51,8 +51,8 @@ class AppEntity(
     val nativeLibraries: BooleanArray,
     val isLaunchable: Boolean,
     val appPackage: AppPackage,
-    @ColumnInfo(defaultValue = "-1")
-    val jetpackComposed: Int,
+    @ColumnInfo(name = "dex_pkgs", defaultValue = "-1")
+    val dexPackageFlags: Int,
     @Embedded
     val iconInfo: ApiViewingIconInfo?,
 )

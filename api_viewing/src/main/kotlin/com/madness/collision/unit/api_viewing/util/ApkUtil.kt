@@ -245,6 +245,17 @@ object ApkUtil {
             .getOrDefault(false)
     }
 
+    fun checkPkg(path: String, vararg packageName: String): BooleanArray {
+        return DexResolver.findPackages(path, *packageName)
+            .onFailure { e ->
+                val eMsg = e::class.simpleName + ": " + e.message
+                val cause = e.cause?.message?.let { " BY $it" } ?: ""
+                val fileName = path.decentApkFileName
+                Log.w("av.util.ApkUtils", "$eMsg$cause (check ${packageName.joinToString()} in $fileName)")
+            }
+            .getOrDefault(BooleanArray(packageName.size))
+    }
+
     private val String.decentApkFileName: String
         get() {
             // index of last separator

@@ -36,7 +36,7 @@ fun ApiViewingApp.toEntity() =
         nativeLibraries = nativeLibraries,
         isLaunchable = isLaunchable,
         appPackage = appPackage,
-        jetpackComposed = jetpackComposed,
+        dexPackageFlags = dexPackageFlags.value,
         iconInfo = iconInfo
     )
 
@@ -52,7 +52,7 @@ fun AppEntity.toEntityApp(app: ApiViewingApp = ApiViewingApp()): ApiViewingApp {
     app.nativeLibraries = nativeLibraries
     app.isLaunchable = isLaunchable
     app.appPackage = appPackage
-    app.jetpackComposed = jetpackComposed
+    app.dexPackageFlags = DexPackageFlags(dexPackageFlags)
     app.iconInfo = iconInfo
     return app
 }

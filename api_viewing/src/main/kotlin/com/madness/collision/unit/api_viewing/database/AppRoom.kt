@@ -24,7 +24,7 @@ import com.madness.collision.unit.api_viewing.database.maintainer.DiffConverters
 import com.madness.collision.unit.api_viewing.database.maintainer.DiffDao
 
 @Database(
-    version = 6,
+    version = 7,
     exportSchema = true,
     entities = [AppEntity::class, DiffChange::class],
     autoMigrations = [
@@ -33,6 +33,7 @@ import com.madness.collision.unit.api_viewing.database.maintainer.DiffDao
         AutoMigration(from = 3, to = 4),
         AutoMigration(from = 4, to = 5, spec = AppIconSetMigrationSpec::class),
         AutoMigration(from = 5, to = 6),
+        AutoMigration(from = 6, to = 7, spec = ComposeMigrationSpec::class),
     ]
 )
 @TypeConverters(AppConverters::class, DiffConverters::class)
@@ -66,3 +67,6 @@ class AppNameMigrationSpec : AutoMigrationSpec
 @DeleteColumn(tableName = "app", columnName = "RICisDefined")
 @DeleteColumn(tableName = "app", columnName = "RICisAdaptive")
 class AppIconSetMigrationSpec : AutoMigrationSpec
+
+@DeleteColumn(tableName = "app", columnName = "jetpackComposed")
+class ComposeMigrationSpec : AutoMigrationSpec

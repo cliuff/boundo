@@ -67,7 +67,7 @@ internal fun builtInTags(): Map<String, AppTagInfo> = listOf(
         label = R.string.av_tag_compose.labels, rank = "13",
         desc = "androidx.compose".packageResultDesc,
         requisites = thirdPartyPkgRequisite().list,
-        expressing = commonExpressing { it.isJetpackComposed }
+        expressing = commonExpressing { it.dexPackageFlags.isJetpackCompose }
     ).apply { iconKey = "xcm" },
     AppTagInfo(
         id = AppTagInfo.ID_TECH_FLUTTER, category = 0.cat, icon = R.drawable.ic_flutter_72.icon,

@@ -54,8 +54,10 @@ open class ApiViewingApp(var packageName: String) : Cloneable {
     var nativeLibraries: BooleanArray = BooleanArray(ApkUtil.NATIVE_LIB_SUPPORT_SIZE) { false }
     var isLaunchable: Boolean = false
     var appPackage: AppPackage = AppPackage("")
-    var jetpackComposed: Int = -1
+    var dexPackageFlags: DexPackageFlags = DexPackageFlags(DexPackageFlags.UNDEFINED)
     var iconInfo: ApiViewingIconInfo? = null
+
+    var retrieveLocks: Array<Any> = Array(2) { Any() }
 
     @Ignore var uid: Int = -1
     @Ignore var name: String = ""
@@ -93,10 +95,8 @@ open class ApiViewingApp(var packageName: String) : Cloneable {
         get() = when (miPushSdkCheckRef) { 1 -> true; 0 -> false; else -> null }
         set(value) { miPushSdkCheckRef = value?.compareTo(false) ?: -2 }
 
-    val isJetpackComposed: Boolean
-        get() = jetpackComposed == 1
     val isThirdPartyPackagesRetrieved: Boolean
-        get() = jetpackComposed == 1 || jetpackComposed == 0
+        get() = dexPackageFlags.isDefined
     val isArchive: Boolean
         get() = apiUnit == ApiUnit.APK
     val isNotArchive: Boolean
@@ -113,6 +113,7 @@ open class ApiViewingApp(var packageName: String) : Cloneable {
     public override fun clone(): Any {
         return (super.clone() as ApiViewingApp).apply {
             nativeLibraries = nativeLibraries.copyOf()
+            retrieveLocks = retrieveLocks.copyOf()
         }
     }
 
@@ -235,17 +236,23 @@ private fun ApiViewingApp.loadNativeLibraries() {
 
 private fun ApiViewingApp.loadThirdPartyPackages() {
     // ensure thread safety, otherwise encounter exceptions during app list loading
-    synchronized(jetpackComposed) {
-        if (isThirdPartyPackagesRetrieved) return
-        val checkResult = appPackage.apkPaths.any {
-            ApkUtil.checkPkg(it, "androidx.compose")
+    synchronized(retrieveLocks[0]) {
+        if (dexPackageFlags.isDefined) return
+        val pkgArr = BooleanArray(2)
+        for (path in appPackage.apkPaths) {
+            val arr = ApkUtil.checkPkg(path, "androidx.compose", "org.jetbrains.compose")
+            for (i in arr.indices) pkgArr[i] = pkgArr[i] || arr[i]
+            if (pkgArr.all { it }) break
         }
-        jetpackComposed = if (checkResult) 1 else 0
+        dexPackageFlags = DexPackageFlags.from(
+            if (pkgArr[0]) DexPackageFlags.JETPACK_COMPOSE else 0,
+            if (pkgArr[1]) DexPackageFlags.COMPOSE_MULTIPLATFORM else 0,
+        )
     }
 }
 
 private fun ApiViewingApp.loadAppIconInfo(iconSet: List<Drawable?>) {
-    synchronized(this) {
+    synchronized(retrieveLocks[1]) {
         if (iconInfo != null) return
         val list = (0..2).map { iconSet.getOrNull(it) }.map { ic ->
             val isDefined = ic != null
