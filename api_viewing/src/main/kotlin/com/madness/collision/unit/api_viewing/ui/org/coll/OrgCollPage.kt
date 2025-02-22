@@ -27,6 +27,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.add
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -35,12 +37,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -56,9 +61,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -74,6 +82,7 @@ import io.cliuff.boundo.org.model.CompColl
 import io.cliuff.boundo.org.model.OrgApp
 import io.cliuff.boundo.org.model.OrgGroup
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OrgCollPage(contentPadding: PaddingValues = PaddingValues()) {
     val viewModel = viewModel<OrgCollViewModel>()
@@ -112,6 +121,7 @@ fun OrgCollPage(contentPadding: PaddingValues = PaddingValues()) {
                     val route = OrgRouteId.GroupInfo(coll.groups[i], coll.id, id)
                     navController.navigateTo(route.asRoute())
                 },
+                getPkgsForGroup = { pkgs -> pkgs.mapNotNull(viewModel::getPkg) },
                 installedAppsSummary = installedPkgsSummary?.let { (a, b) -> "$a/$b" } ?: "N/A",
                 contentPadding = innerPadding,
             )
@@ -134,12 +144,14 @@ fun OrgCollPage(contentPadding: PaddingValues = PaddingValues()) {
 
 @Composable
 private fun OrgCollScaffold(
+    modifier: Modifier = Modifier,
     topBar: @Composable () -> Unit = {},
     onClickAdd: () -> Unit = {},
     contentWindowInsets: WindowInsets = ScaffoldDefaults.contentWindowInsets,
     content: @Composable (PaddingValues) -> Unit,
 ) {
     Scaffold(
+        modifier = modifier,
         topBar = topBar,
         floatingActionButton = {
             FloatingActionButton(
@@ -165,21 +177,28 @@ private fun OrgCollContent(
     onClickGroup: (i: Int, id: Int) -> Unit,
     modifier: Modifier = Modifier,
     installedAppsSummary: String = "N/A",
+    getPkgsForGroup: ((List<String>) -> List<PackageInfo?>) =
+        { pkgs -> arrayOfNulls<PackageInfo>(pkgs.size).toList() },
     contentPadding: PaddingValues = PaddingValues(),
 ) {
-    val viewModel = viewModel<OrgCollViewModel>()
-    val groupPkgs = remember(coll.groups) {
-        coll.groups.map { group ->
-            group.apps.take(3).mapNotNull { app -> viewModel.getPkg(app.pkg) }
-        }
-    }
-    LazyColumn(modifier = modifier, contentPadding = contentPadding) {
-        item {
+    LazyVerticalGrid(
+        modifier = modifier,
+        columns = GridCells.Adaptive(160.dp),
+        contentPadding = contentPadding.run {
+            PaddingValues(
+                top = calculateTopPadding(),
+                bottom = calculateBottomPadding(),
+                start = 3.dp + calculateStartPadding(LocalLayoutDirection.current).coerceAtLeast(4.dp),
+                end = 3.dp + calculateEndPadding(LocalLayoutDirection.current).coerceAtLeast(4.dp),
+            )
+        },
+    ) {
+        item(span = { GridItemSpan(maxLineSpan) }, contentType = "AppsOverview") {
             val navController = LocalPageNavController.current
             CollAppsSummary(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 12.dp, vertical = 10.dp),
+                    .padding(horizontal = 5.dp, vertical = 5.dp),
                 text = "Installed apps summary ($installedAppsSummary)",
                 onClick = {
                     val route = OrgRouteId.CollAppList(coll)
@@ -187,13 +206,14 @@ private fun OrgCollContent(
                 },
             )
         }
-        itemsIndexed(coll.groups, key = { _, g -> g.id }) { i, group ->
+        itemsIndexed(coll.groups, key = { _, g -> g.id }, contentType = { _, _ -> "Group" }) { i, group ->
             CollGroup(
                 modifier = Modifier
+                    .animateItem()
                     .fillMaxWidth()
-                    .padding(horizontal = 12.dp, vertical = 10.dp),
+                    .padding(horizontal = 5.dp, vertical = 5.dp),
                 name = "${group.name} (${group.apps.size})",
-                apps = groupPkgs[i],
+                apps = getPkgsForGroup(group.apps.take(3).map(OrgApp::pkg)),
                 onClick = { onClickGroup(i, group.id) },
             )
         }
@@ -221,7 +241,12 @@ private fun CollAppsSummary(text: String, onClick: () -> Unit, modifier: Modifie
 }
 
 @Composable
-private fun CollGroup(name: String, apps: List<PackageInfo>, onClick: () -> Unit, modifier: Modifier = Modifier) {
+private fun CollGroup(
+    name: String,
+    apps: List<PackageInfo?>,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Column(
         modifier = modifier
             .clip(RoundedCornerShape(20.dp))
@@ -234,12 +259,14 @@ private fun CollGroup(name: String, apps: List<PackageInfo>, onClick: () -> Unit
             color = MaterialTheme.colorScheme.onSurface,
             fontSize = 16.sp,
             lineHeight = 16.sp,
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 2,
         )
         Spacer(modifier = Modifier.height(20.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
             for (i in apps.indices) {
                 val app = apps[i]
-                val icPkg = remember { app.applicationInfo?.let { AppIconPackageInfo(app, it) } }
+                val icPkg = remember { app?.applicationInfo?.let { AppIconPackageInfo(app, it) } }
                 if (i > 0) {
                     Spacer(modifier = Modifier.width(12.dp))
                 }
@@ -253,8 +280,8 @@ private fun CollGroup(name: String, apps: List<PackageInfo>, onClick: () -> Unit
                     Box(
                         modifier = Modifier
                             .size(28.dp)
+                            .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f), shape = CircleShape)
                             .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f))
                     )
                 }
             }
@@ -262,6 +289,7 @@ private fun CollGroup(name: String, apps: List<PackageInfo>, onClick: () -> Unit
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @PreviewCombinedColorLayout
 private fun OrgCollPreview() {
@@ -269,6 +297,8 @@ private fun OrgCollPreview() {
     val groups = listOf(
         OrgGroup(id = 0, name = "Group 1", createTime = 0L, modifyTime = 0L, apps = listOf(anApp)),
         OrgGroup(id = 1, name = "Group 2", createTime = 0L, modifyTime = 0L, apps = listOf(anApp)),
+        OrgGroup(id = 2, name = "Group 3", createTime = 0L, modifyTime = 0L, apps = listOf(anApp)),
+        OrgGroup(id = 3, name = "Group with a Looooooooooooog Name", createTime = 0L, modifyTime = 0L, apps = listOf(anApp)),
     )
     val coll = CompColl(id = 0, name = "Collection 1", createTime = 0L, modifyTime = 0L, groups = groups)
     val coll1 = CompColl(id = 1, name = "Collection 2", createTime = 0L, modifyTime = 0L, groups = emptyList())

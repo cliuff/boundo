@@ -16,35 +16,41 @@
 
 package com.madness.collision.unit.api_viewing.ui.org.coll
 
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.MoreVert
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.PrimaryScrollableTabRow
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -60,10 +66,20 @@ fun OrgCollAppBar(
     onActionImport: () -> Unit = {},
     onActionExport: () -> Unit = {},
     windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
+    scrollBehavior: TopAppBarScrollBehavior? = null,
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
-        TopAppBar(
-            title = {},
+        CenterAlignedTopAppBar(
+            title = {
+                Text(
+                    text = "Organize",
+                    fontSize = 26.sp,
+                    lineHeight = 28.sp,
+                    fontWeight = FontWeight.Medium,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1,
+                )
+            },
             actions = {
                 IconButton(onClick = onActionDelete) {
                     Icon(
@@ -75,23 +91,25 @@ fun OrgCollAppBar(
                 OverflowIconButton(onActionImport, onActionExport)
             },
             windowInsets = windowInsets,
+            colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
+            scrollBehavior = scrollBehavior,
         )
         val selIndex = selectedColl?.let(collList::indexOf) ?: -1
         if (collList.isNotEmpty() && selIndex >= 0) {
-            // PrimaryScrollableTabRow does not fill max width, use our own surface instead
-            Surface() {
-                Column() {
-                    PrimaryScrollableTabRow(selectedTabIndex = selIndex, edgePadding = 20.dp, divider = {}) {
-                        for (i in collList.indices) {
-                            val coll = collList[i]
-                            CollectionTab(
-                                selected = coll == selectedColl,
-                                name = coll.name,
-                                onClick = { onClickColl(coll) },
-                            )
-                        }
-                    }
-                    HorizontalDivider()
+            Row(
+                modifier = Modifier
+                    .horizontalScroll(rememberScrollState())
+                    .padding(horizontal = 18.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalAlignment = Alignment.Bottom,
+            ) {
+                for (i in collList.indices) {
+                    val coll = collList[i]
+                    CollectionTab(
+                        selected = i == selIndex,
+                        name = coll.name,
+                        onClick = { onClickColl(coll) },
+                    )
                 }
             }
         }
@@ -140,17 +158,19 @@ private fun CollectionTab(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Tab(
+    FilterChip(
         modifier = modifier,
         selected = selected,
         onClick = onClick,
-        text = {
+        label = {
             Text(
-                modifier = Modifier.widthIn(max = 200.dp),
+                modifier = Modifier
+                    .widthIn(min = 25.dp, max = 200.dp)
+                    .padding(vertical = 10.dp),
                 text = name,
-                color = MaterialTheme.colorScheme.onSurface,
                 fontSize = 16.sp,
-                lineHeight = 16.sp,
+                lineHeight = 18.sp,
+                textAlign = TextAlign.Center,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
             )
