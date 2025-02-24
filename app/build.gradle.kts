@@ -196,3 +196,49 @@ dependencies {
     listOf(libs.mockito, libs.googleTruth, libs.googleTruthExtensions, libs.junit4).forEach { testImplementation(it) }
 
 }
+
+// Generate universal APK from AAB that includes necessary dynamic modules (dist:module in manifests).
+tasks.register("genUniversalApks") {
+    tasks["printBundleToolVersion"].mustRunAfter("buildUniversalApks")
+    dependsOn("buildUniversalApks", "printBundleToolVersion")
+}
+
+tasks.register<JavaExec>("printBundleToolVersion") {
+    val bundleTool = rootProject.file("doconfig/bundletool.jar")
+    classpath = files(bundleTool)
+    mainClass.set("com.android.tools.build.bundletool.BundleToolMain")
+    args("version")
+    doFirst { print("BundleTool ") }
+}
+
+tasks.register<JavaExec>("buildUniversalApks") {
+    val bundleTool = rootProject.file("doconfig/bundletool.jar")
+    classpath = files(bundleTool)
+    mainClass.set("com.android.tools.build.bundletool.BundleToolMain")
+    val customConfig = getCustomConfig(project)
+    if (customConfig.signing != null) {
+        customConfig.signing?.run {
+            args(
+                "build-apks",
+                "--bundle", file("build/outputs/bundle/release/app-release.aab").absolutePath,
+                "--output", file("build/outputs/app-universal-release.apks").absolutePath,
+                "--ks", store.path,
+                "--ks-pass=pass:${store.password}",
+                "--ks-key-alias", key.alias,
+                "--key-pass=pass:${key.password}",
+                "--overwrite",
+                "--mode=universal",
+            )
+        }
+    } else {
+        args(
+            "build-apks",
+            "--bundle", file("build/outputs/bundle/release/app-release.aab").absolutePath,
+            "--output", file("build/outputs/app-universal-release.apks").absolutePath,
+            "--overwrite",
+            "--mode=universal",
+        )
+    }
+
+    dependsOn("bundleRelease")
+}

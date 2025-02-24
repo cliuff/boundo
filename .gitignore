@@ -34,6 +34,7 @@ google-services.json
 
 
 doconfig/custom.properties
+doconfig/bundletool.jar
 !**/src/**/build
 !**/resources/**/*.apk
 .idea/inspectionProfiles
