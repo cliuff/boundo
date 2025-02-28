@@ -1,4 +1,5 @@
 import com.cliuff.boundo.build.getCustomConfig
+import java.io.ByteArrayOutputStream
 
 plugins {
     alias(libs.plugins.android)
@@ -16,6 +17,25 @@ ksp {
 }
 
 android {
+    var verInc = 0
+    var verCommit: String? = null
+    // ver.inc: property used by CI to enable incremental version by commit count
+    val isIncVer = (findProperty("ver.inc") as? String)?.toBooleanStrictOrNull()
+    if (isIncVer == true) {
+        val commitIncOutput = ByteArrayOutputStream()
+        val commitHashOutput = ByteArrayOutputStream()
+        exec {
+            commandLine("git", "rev-list", "--count", "HEAD")
+            standardOutput = commitIncOutput
+        }
+        exec {
+            commandLine("git", "rev-parse", "--short", "HEAD")
+            standardOutput = commitHashOutput
+        }
+        verInc = commitIncOutput.toString().trim().toInt()
+        verCommit = commitHashOutput.toString().trim()
+    }
+
     buildToolsVersion = "34.0.0"
     sourceSets {
         getByName("main").java.srcDir("src/main/kotlin")
@@ -42,8 +62,9 @@ android {
         applicationId = "com.madness.collision"
         minSdk = 23
         targetSdk = 34
-        versionCode = 24120312
-        versionName = "4.3.2"
+        // versionCode = baseVerCode + (verInc % baseCommitInc)
+        versionCode = 25030100 + (verInc % 540)
+        versionName = listOfNotNull("4.4.0", verCommit).joinToString(separator = "-")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testApplicationId = "${applicationId}.test"
         renderscriptSupportModeEnabled = true

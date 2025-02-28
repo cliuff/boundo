@@ -1,0 +1,89 @@
+name: Android CI
+
+on:
+  push:
+    branches:
+      - main # Trigger on push to main branch
+  pull_request:
+    branches:
+      - main # Trigger on pull request targeting main branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up JDK
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'zulu'
+          cache: gradle
+
+      - name: Setup Gradle wrapper
+        run: chmod +x ./gradlew
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Setup Signing Config
+        run: |
+          echo ${{ secrets.SIGNING_KEYSTORE_BASE64 }} | base64 -d > doconfig/keystore.jks
+          echo packageName=com.madness.collision > doconfig/custom.properties
+          echo signingKeyStorePath=doconfig/keystore.jks >> doconfig/custom.properties
+          echo signingKeyStorePassword=${{ secrets.SIGNING_KEYSTORE_PASSWORD }} >> doconfig/custom.properties
+          echo signingKeyAlias=${{ secrets.SIGNING_KEY_ALIAS }} >> doconfig/custom.properties
+          echo signingKeyPassword=${{ secrets.SIGNING_KEY_PASSWORD }} >> doconfig/custom.properties
+
+      # Cache BundleTool to speed up builds
+      - name: Cache BundleTool
+        id: bundletool-cache
+        uses: actions/cache@v3
+        with:
+          path: doconfig/bundletool.jar
+          key: ${{ runner.os }}-bundletool-v1.18.0
+
+      - name: Setup BundleTool
+        if: steps.bundletool-cache.outputs.cache-hit != 'true'
+        uses: dsaltares/fetch-gh-release-asset@master
+        with:
+          repo: 'google/bundletool'
+          version: 'tags/1.18.0'
+          file: 'bundletool-all-1.18.0.jar'
+          target: 'doconfig/bundletool.jar'
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Cache Gradle Wrapper
+        uses: actions/cache@v3
+        with:
+          path: ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
+
+      # Cache Gradle dependencies to speed up builds
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      # Install dependencies
+      - name: Install dependencies
+        run: ./gradlew dependencies
+
+      # Build the app
+      - name: Build the app
+        run: ./gradlew :app:genUniversalApks -Pver.inc=true
+
+      # If you want to upload the APK as an artifact
+      - name: Upload APK as an artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-release-apks
+          path: app/build/outputs/app-universal-release.apks
