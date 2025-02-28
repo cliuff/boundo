@@ -243,7 +243,7 @@ tasks.register<JavaExec>("buildUniversalApks") {
                 "build-apks",
                 "--bundle", file("build/outputs/bundle/release/app-release.aab").absolutePath,
                 "--output", file("build/outputs/app-universal-release.apks").absolutePath,
-                "--ks", store.path,
+                "--ks", rootProject.file(store.path).absolutePath,
                 "--ks-pass=pass:${store.password}",
                 "--ks-key-alias", key.alias,
                 "--key-pass=pass:${key.password}",
