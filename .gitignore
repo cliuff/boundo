@@ -36,11 +36,12 @@ google-services.json
 doconfig/custom.properties
 doconfig/bundletool.jar
 !**/src/**/build
-!**/resources/**/*.apk
+.idea/deploymentTargetSelector.xml
 .idea/inspectionProfiles
 .idea/migrations.xml
 .idea/markdown-navigator
 .idea/markdown-navigator.xml
+.idea/runConfigurations.xml
 .idea/statistic.xml
 .idea/shelf
 .idea/workspace.xml

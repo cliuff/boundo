@@ -64,14 +64,19 @@ import com.madness.collision.unit.api_viewing.seal.SealMaker
 import com.madness.collision.util.AppUtils.asBottomMargin
 import com.madness.collision.util.F
 import com.madness.collision.util.mainApplication
+import dev.chrisbanes.haze.ExperimentalHazeApi
+import dev.chrisbanes.haze.HazeDefaults
+import dev.chrisbanes.haze.HazeInputScale
 import dev.chrisbanes.haze.HazeState
-import dev.chrisbanes.haze.haze
-import dev.chrisbanes.haze.hazeChild
+import dev.chrisbanes.haze.HazeTint
+import dev.chrisbanes.haze.hazeEffect
+import dev.chrisbanes.haze.hazeSource
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import java.io.File
 import kotlin.math.roundToInt
 
+@OptIn(ExperimentalHazeApi::class)
 @Composable
 fun LegacyAppList(
     appList: List<ApiViewingApp>,
@@ -105,7 +110,7 @@ fun LegacyAppList(
                 modifier = Modifier
                     .fillMaxWidth()
                     .offset { IntOffset(0, (headerState.headerOffsetY * 0.5f).roundToInt()) }
-                    .haze(hazeState),
+                    .hazeSource(hazeState),
                 painter = rememberAsyncImagePainter(imgFile),
                 contentDescription = null,
                 contentScale = ContentScale.Crop
@@ -126,10 +131,16 @@ fun LegacyAppList(
             .offset { IntOffset(0, headerState.headerOffsetY + contentInsetTopPx) }) {
 
             val headerOverlapSize = 30.dp
+            val style = HazeDefaults.style(
+                backgroundColor = Color.Transparent,
+                tint = HazeTint(Color.Transparent),
+            )
             Box(modifier = Modifier
                 .fillMaxWidth()
                 .height(contentHeight + headerOverlapSize)
-                .hazeChild(hazeState))
+                .hazeEffect(hazeState, style) {
+                    inputScale = HazeInputScale.Fixed(0.8f)
+                })
 
             // remove corners for asymmetric paddings (e.g. landscape with 3-button nav)
             val flatBackdrop = LocalLayoutDirection.current.let { di ->
