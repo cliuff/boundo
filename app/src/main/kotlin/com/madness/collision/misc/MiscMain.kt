@@ -23,12 +23,10 @@ import androidx.core.content.edit
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.madness.collision.BuildConfig
-import com.madness.collision.settings.LanguageMan
 import com.madness.collision.settings.instant.Instant
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.api_viewing.AccessAV
 import com.madness.collision.util.*
-import com.madness.collision.util.config.LocaleUtils
 import com.madness.collision.util.os.OsUtils
 import java.io.File
 import kotlin.random.Random
@@ -46,7 +44,8 @@ internal object MiscMain {
     fun ensureUpdate(context: Context, prefSettings: SharedPreferences){
         val verDefault = -1
         val verOri = prefSettings.getInt(P.APPLICATION_V, verDefault)
-        val ver = BuildConfig.VERSION_CODE
+        val updaters = listOf(SelfUpdater23(), SelfUpdater25())
+        val ver = updaters.last().maxVersion
         // below: update registered version
         prefSettings.edit { putInt(P.APPLICATION_V, ver) }
         // below: app gone through update process
@@ -64,10 +63,6 @@ internal object MiscMain {
         }
         // below: app in update process to the newest
         // below: apply actions
-        if (verOri in 0 until 22082119 && OsUtils.satisfy(OsUtils.T)) {
-            val locale = LanguageMan(context).getLocaleOrNull()
-            if (locale != null) LocaleUtils.set(locale)
-        }
         if (verOri in 0 until 22103122) {
             // remove unit config of school timetable
             "school_timetable".let {
@@ -89,8 +84,8 @@ internal object MiscMain {
             val keys = listOf("icsInstructor", "googleCalendarDefault", "iCalendarAppMode", "icsFilePath")
             prefSettings.edit { keys.forEach { remove(it) } }
         }
-        listOf(SelfUpdater23()).forEach { updater ->
-            if (verOri in 0..<updater.maxVerCode) updater.apply(verOri, prefSettings)
+        updaters.forEach { updater ->
+            if (verOri in 0..<updater.maxVersion) updater.apply(verOri, prefSettings)
         }
     }
 

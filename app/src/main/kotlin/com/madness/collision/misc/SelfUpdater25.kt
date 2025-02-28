@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Clifford Liu
+ * Copyright 2025 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,26 +17,16 @@
 package com.madness.collision.misc
 
 import android.content.SharedPreferences
-import androidx.core.content.edit
-import com.madness.collision.unit.api_viewing.AccessAV
 
-class SelfUpdater23 : SelfUpdater {
-    override val maxVersion: Int = 24100215
+class SelfUpdater25 : SelfUpdater {
+    override val maxVersion: Int = 25022816
 
     override fun apply(oldVersion: Int, prefSettings: SharedPreferences) {
-        val oldVerCode = oldVersion
         // check illegal version code
-        if (oldVerCode < 0) return
+        if (oldVersion < 0) return
         // use ifs instead of when to implement fallthrough
-        if (oldVerCode < 23092018) {
-            AccessAV.addModOverlayTags()
-        }
-        if (oldVerCode < 24060815) {
-            val keys = listOf("apiAPKPreload", "SDKCircularIcon", "APIPackageRoundIcon", "AVClip2Round")
-            prefSettings.edit { keys.forEach(::remove) }
-        }
-        if (oldVerCode < 24100215) {
-            prefSettings.edit { remove("AVSweet"); remove("AVIncludeDisabled") }
+        if (oldVersion < 25022816) {
+            Unit
         }
     }
 }
