@@ -48,7 +48,7 @@ android {
             create("Sign4Release") {
                 keyAlias = key.alias
                 keyPassword = key.password
-                storeFile = file(store.path)
+                storeFile = rootProject.file(store.path)
                 storePassword = store.password
             }
         }
