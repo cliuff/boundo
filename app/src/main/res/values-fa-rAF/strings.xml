@@ -1,224 +1,0 @@
-<!--
-  ~ Copyright 2021 Clifford Liu
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
-  ~     http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  -->
-
-<resources>
-    <string name="app_name">&#8207;Boundo</string>
-    <string name="appDesc">بسته‌ای از ابزارها برای انجام برخی کارها برای شما</string>
-    <string name="Main_ToolBar_title_Settings">تنظیمات</string>
-    <string name="Settings_Button_SwitchLanguage">زبان ها</string>
-    <string name="Settings_LanguagePicker_Auto">سیستم را دنبال کنید</string>
-    <string name="Settings_Language_Button_Cancel">لغو کنید</string>
-    <string name="Settings_Language_Dialog_Title">زبان ها</string>
-    <string name="text_alright">خوب</string>
-    <string name="text_allset">پایان</string>
-    <string name="text_forgetit">لغو کنید</string>
-    <string name="Main_TextView_Launcher">فوری</string>
-    <string name="Main_TextView_Advice_Text">در باره</string>
-    <string name="textEmail">پست الکترونیک</string>
-    <string name="Advice_Switch_Debug_Text">حالت مصرف</string>
-    <string name="developertools_cropimage">اصلاح تصویر</string>
-    <string name="toast_permission_storage_denied">لطفاً اجازه بدهید تا بتوانیم داده‌ها را بخوانیم/بنویسیم</string>
-    <string name="apiViewer">برنامه API</string>
-    <string name="text_OK">خوب</string>
-    <string name="text_cancel">لغو کنید</string>
-    <string name="text_done">پایان</string>
-    <string name="text_no_content">بی محتوا</string>
-    <string name="settings_exterior">سبک</string>
-    <string name="exterior_dark_staus">نماد نوار وضعیت تاریک</string>
-    <string name="exterior_dark_navigation">نماد نوار پیمایش تاریک</string>
-    <string name="text_remove">برداشتن</string>
-    <string name="sdk_dialog_details">جزئیات</string>
-    <string name="app_info_name">نام بسته برنامه</string>
-    <string name="text_app_not_installed">برنامه مربوطه نصب نشده است</string>
-    <string name="text_error">خطایی رخ داد</string>
-    <string name="exterior_blur_degree">درجه تاری</string>
-    <string name="text_loading">بارگذاری</string>
-    <string name="sdk_search_hint"><font size="12">نام، بسته، سطح API، نسخه Android</font></string>
-    <string name="instant_manager_intro">میانبرهای برنامه</string>
-    <string name="text_new">جدید</string>
-    <string name="text_copy_link">لینک کپی شد</string>
-    <string name="advice_license">مجوزهای منبع باز</string>
-    <string name="advice_license_details">جزئیات مجوز برای نرم افزار باز که به شکل گیری Boundo کمک می کند</string>
-    <string name="text_copy">کپی 🀄</string>
-    <string name="text_copy_content">محتوا کپی شد</string>
-    <string name="text_apply_background">به عنوان پس زمینه اعمال شود</string>
-    <string name="apiInfoAiSubBack">زمینه</string>
-    <string name="apiInfoAiSubFore">پیش زمینه</string>
-    <string name="apiInfoSubAiDes">نماد تطبیقی به جای محدود شدن به شکل از پیش تعریف شده، با هر شکلی سازگار می شود</string>
-    <string name="text_yes">آره</string>
-    <string name="apiDisplayAPK">فایل‌های APK دستگاه</string>
-    <string name="apiDisplaySys">برنامه های سیستمی</string>
-    <string name="immortalMessage">اوه نه!\nما توسط یک اشکال عصبانی شده‌ایم.\nنگران نباشید، در کیف ما گیر کرده است!\nلاگ را به ما تحویل دهید تا در مورد آن تحقیق کنیم!</string>
-    <string name="immortalBag">ورود به سیستم</string>
-    <string name="immortalRestart">برگرد</string>
-    <string name="immortalMessageMortal">فایل گزارش ایجاد شد</string>
-    <string name="immortalShareTitle">فایل گزارش را به اشتراک بگذارید</string>
-    <string name="immortalSendTitle">فایل لاگ ایمیل به توسعه دهنده</string>
-    <string name="immortalEmailSubject">گزارش موضوع</string>
-    <string name="immortalContact">با ما تماس بگیرید</string>
-    <string name="immortalLocate">مکان یابی کنید</string>
-    <string name="immortalShare">اشتراک گذاری</string>
-    <string name="immortalSend">ارائه</string>
-    <string name="textBugLog">اشکال در ورود به سیستم گرفتار شد</string>
-    <string name="tileColorful">رنگارنگ بمان</string>
-    <string name="apiViewerShort">برنامه API</string>
-    <string name="menuApiSortApiTime">به تازگی به روز شده است</string>
-    <string name="apiSdkTarget">هدف SDK&#8207;</string>
-    <string name="apiSdkMin">حداقل SDK&#8207;</string>
-    <string name="activityTextProcessingApp">مشاهده برنامه های Bnd</string>
-    <string name="res_invalid_input">ورودی نامعتبر</string>
-    <string name="text_sort">مرتب سازی</string>
-    <string name="text_refresh">تازه کردن</string>
-    <string name="textShareApk">APK این برنامه را با دیگران به اشتراک بگذارید</string>
-    <string name="textShareImage">لوگوی این برنامه را با دیگران به اشتراک بگذارید</string>
-    <string name="tileBarCodeScanner">اسکن بارکد</string>
-    <string name="textParentheses">" (%s)"</string>
-    <string name="textColon">"&#8207;: "</string>
-    <string name="textAsk4Notification">لطفاً به ما اجازه نمایش اعلان‌ها را بدهید، ما برای ارائه بهترین تجربه به اعلان‌های نان تست وابسته هستیم. برای اطلاع رسانی دستورالعمل ها، نکات، پیشنهادات، پیام های عملیات موفقیت آمیز و گاهی اوقات پیام های خطا استفاده می شود. اگر بخواهید مجوز اعلان را به ما ندهید، ممکن است در برنامه ما با سردرگمی مواجه شوید.</string>
-    <string name="textGrantPermission">اجازه بدهید</string>
-    <string name="apiDisplayFile">APK ها را انتخاب کنید</string>
-    <string name="textRound">گرد</string>
-    <string name="textRounded">مستطیل گرد</string>
-    <string name="textSquircle">سنجاب</string>
-    <string name="textSelectFromGallery">تصویر را از گالری به صورت دستی انتخاب کنید</string>
-    <string name="textQuality">کیفیت</string>
-    <string name="tileDataUsageAccess">به ما اجازه دسترسی به استفاده را بدهید</string>
-    <string name="tileData">مصرف داده ماهانه</string>
-    <string name="apiDisplayVolume">پوشه فایل را انتخاب کنید</string>
-    <string name="activityApkSharing">API را بررسی کنید</string>
-    <string name="sharingNonApkLink">لینک دانلود apk نیست</string>
-    <string name="textCapturingScreen">تصویربرداری از صفحه نمایش</string>
-    <string name="prefSettingsThemeDefault">سفید ساده</string>
-    <string name="prefSettingsThemeBlack">خیلی سیاه</string>
-    <string name="prefSettingsThemeBlackGray">متریال دیزاین تیره</string>
-    <string name="prefSettingsThemeAuto">سیستم را دنبال کنید</string>
-    <string name="prefSettingsTheme">موضوع</string>
-    <string name="apiDragDropHint">جستجو یا APK</string>
-    <string name="instantTileScannerAlipay">بارکد اسکنر Alipay</string>
-    <string name="instantTileScannerWechat">اسکنر بارکد وی چت</string>
-    <string name="instantTileIntro">کاشی های تنظیمات سریع</string>
-    <string name="textAlways">همیشه</string>
-    <string name="textNever">هرگز</string>
-    <string name="prefExteriorDarkPlanSchedule">زمان سفارشی</string>
-    <string name="prefExteriorThemes">تم ها</string>
-    <string name="prefExteriorLightTheme">تم روشن</string>
-    <string name="prefExteriorDarkTheme">تم تاریک</string>
-    <string name="prefExteriorApplyDark">تم تیره را اعمال کنید</string>
-    <string name="prefExteriorDarkPlan">برنامه</string>
-    <string name="prefExteriorDarkByBatterySaver">توسط بهینه ساز باتری</string>
-    <string name="prefExteriorBackgrounds">پس زمینه ها</string>
-    <string name="prefExteriorDarkByBatterySaverSummaryOn">اگر «بهینه‌سازی باتری» پیاده‌سازی شده است، وقتی روشن است، طرح زمینه تیره را اعمال کنید</string>
-    <string name="prefExteriorDarkByBatterySaverSummaryOff">اگر «بهینه‌سازی باتری» پیاده‌سازی شده است، از تم تیره وقتی روشن است استفاده نکنید، به‌جز برای لغو سیستم</string>
-    <string name="prefExteriorDarkPlanScheduleStart">زمان شروع</string>
-    <string name="prefExteriorDarkPlanScheduleEnd">زمان پایان</string>
-    <string name="textManual">کتابچه راهنمای</string>
-    <string name="instantManual">برای نمایش میانبرهای برنامه، روی نماد برنامه در راه‌انداز به مدت طولانی فشار دهید.\nشاخه اعلان‌ها را پایین بیاورید، جابه‌جایی‌های تنظیمات بالای ناحیه اعلان، کاشی‌های تنظیمات سریع مورد نظر شما هستند.</string>
-    <string name="instantTileScannerMmManual">روی کاشی کلیک کنید تا از صفحه عکس بگیرید و اسکنر WeChat را باز کنید تا به صورت دستی اسکرین شات را برای اسکن انتخاب کنید.</string>
-    <string name="instantTileScannerAlipayManual">برای تصویربرداری از صفحه، روی کاشی کلیک کنید و برای اسکن اسکرین شات، اسکنر Alipay را فراخوانی کنید.</string>
-    <string name="instantTileMDUManual">برای بازخوانی داده ها، روی کاشی کلیک کنید. هنگام افزودن کاشی، از شما خواسته می شود که مجوز دسترسی به استفاده را بدهید.</string>
-    <string name="avAdapterActionsIcon">نماد اشتراک گذاری</string>
-    <string name="avAdapterActionsApk">apk را به اشتراک بگذارید</string>
-    <string name="textFormat">قالب</string>
-    <string name="apiTextSharingSelectApk">apk دانلود شده را انتخاب کنید</string>
-    <string name="notifyChannelServiceDesc">از درخواست سرویس برای شروع فعالیت مطلع شوید</string>
-    <string name="notifyChannelService">درخواست خدمات</string>
-    <string name="prefExteriorForceDarkDesc">برای دریافت بهترین تجربه تاریک، نباید Override Force-dark را در گزینه‌های توسعه‌دهنده فعال کنید</string>
-    <string name="prefExteriorForceDarkDescDetail">Force Dark یک ویژگی برای توسعه دهندگان است تا به سرعت یک تم تیره را پیاده سازی کنند. با تنظیم forceDarkAllowed روی true، یک برنامه به طور خودکار یک تم تیره دریافت می کند. و توسعه‌دهنده بخش‌های خاصی از رابط را که ایده‌آل نیستند، بیشتر تغییر می‌دهد و forceDarkAllowed را در آن بخش‌ها روی false قرار می‌دهد. فعال کردن Override Force-dark باعث می‌شود که سیستم از مقدار forceDarkAllowed چشم پوشی کند و باعث می‌شود یک تم تیره که به خوبی پیاده‌سازی شده است دچار مشکل شود.</string>
-    <string name="notifyChannelGroupApp">برنامه</string>
-    <string name="notifyChannelGroupAppDesc">اعلان های مربوط به برنامه</string>
-    <string name="fileActionsOpen">باز کن</string>
-    <string name="fileActionsShare">اشتراک گذاری</string>
-    <string name="fileActionsSave">صرفه جویی</string>
-    <string name="textWaitASecond">در حال بارگیری، لطفاً یک ثانیه صبر کنید</string>
-    <string name="apiDetailsPackageName">"نام بسته: "</string>
-    <string name="prefSettingsThemeCnRed">نه چندان قرمز</string>
-    <string name="unitsManager">مدیر واحد</string>
-    <string name="units">واحدها</string>
-    <string name="av_details_native_libs">"کتابخانه های بومی: "</string>
-    <string name="twService">تصویر زمینه زنده مضمون</string>
-    <string name="twLiveWallpaperDesc">وقتی تم تیره فعال است، به طور خودکار به کاغذدیواری تیره بروید</string>
-    <string name="activity_av_search">برنامه API</string>
-    <string name="title_api_viewing" translatable="false">App API</string>
-    <string name="main_more">بیشتر</string>
-    <string name="unit_audio_timer">تایمر صوتی</string>
-    <string name="unit_desc_installed">نصب شده است</string>
-    <string name="unit_desc_not_installed">نصب نشده</string>
-    <string name="unit_desc_available">در دسترس</string>
-    <string name="unit_desc_unavailable">غیر قابل دسترسی</string>
-    <string name="unit_desc_install">نصب</string>
-    <string name="unit_desc_uninstall">حذف نصب کنید</string>
-    <string name="unit_desc_av">• سطح Android API همه برنامه‌ها و apk‌های موجود در دستگاه را بررسی کنید\n• پشتیبانی از نماد تطبیقی از همه برنامه‌ها را بررسی کنید\n• آمار API برنامه\n• استخراج APK و نماد\n• جزئیات بسته و جزئیات امضا</string>
-    <string name="unit_desc_im">• تغییر وضوح\n• تغییر قالب: png jpg webp heif\n• تار کردن تصویر</string>
-    <string name="unit_desc_tw">• با اعمال خودکار کاغذدیواری تیره رنگ، کاغذدیواری خود را مطابق با تم تیره Android 10 کنید.</string>
-    <string name="unit_desc_at">• پخش صدا را متوقف کنید</string>
-    <string name="unit_manager_install_success">Play Store در حال پردازش نصب است</string>
-    <string name="unit_manager_uninstall_success">حذف نصب در حالت بیکار انجام می شود</string>
-    <string name="unit_manager_error_network">خطای شبکه</string>
-    <string name="unit_manager_error_module_unavailable">واحد در دسترس نیست</string>
-    <string name="unit_manager_error_api_unavailable">API در دسترس نیست</string>
-    <string name="unit_desc_uninstall_notice">به تعویق انداختن حذف</string>
-    <string name="unit_desc_install_notice">در حال تلاش برای نصب</string>
-    <string name="unit_desc_pin">سنجاق</string>
-    <string name="app_device_controls">کنترل های Boundo</string>
-    <string name="access_sys_usage">به Boundo اجازه دسترسی به داده‌های استفاده را بدهید</string>
-    <string name="text_access_denied">دسترسی رد شد</string>
-    <string name="versatile_device_controls_at_hint_on">برای تنظیم، انگشت خود را بکشید</string>
-    <string name="versatile_device_controls_at_hint_off">برای شروع ضربه بزنید</string>
-    <string name="versatile_device_controls_at_status_off">متوقف شد</string>
-    <string name="versatile_device_controls_at_ctrl_desc_on">توقف تایمر</string>
-    <string name="versatile_device_controls_at_ctrl_desc_off">شروع تایمر</string>
-    <string name="versatile_device_controls_at_status_on">%.0f دقیقه</string>
-    <string name="versatile_device_controls_mdu_ctrl_desc">تازه کردن داده ها</string>
-    <string name="versatile_device_controls_mdu_hint">برای بازخوانی ضربه بزنید</string>
-    <string name="advice_source_code">کد منبع</string>
-    <string name="twWallpaperLight">کاغذ دیواری روشن</string>
-    <string name="twWallpaperDark">کاغذ دیواری تیره</string>
-    <string name="twDesc">این ویژگی به‌عنوان تصویر زمینه زنده به شما ارائه می‌شود.\nوقتی به کاغذدیواری تیره بروید\n1. سیستم تم تیره روشن است\n2. طرح تم تیره در تنظیمات برنامه روی Schedule تنظیم شده است و زمان مناسب است</string>
-    <string name="at_title">تنظیم تایمر</string>
-    <string name="at_hour_hint">ساعت</string>
-    <string name="at_minute_hint">دقیقه</string>
-    <string name="advice_source_sub">به Github تغییر مسیر دهید</string>
-    <string name="unit_desc_requirement_tw">پشتیبانی از تصویر زمینه زنده</string>
-    <string name="unit_device_manager">مدیریت دستگاه</string>
-    <string name="versatile_device_controls_dm_hint_off">برای اتصال ضربه بزنید</string>
-    <string name="versatile_device_controls_dm_hint_on">برای قطع ارتباط ضربه بزنید</string>
-    <string name="versatile_device_controls_dm_ctrl_desc_off">دستگاه را وصل کنید</string>
-    <string name="versatile_device_controls_dm_ctrl_desc_on">دستگاه را قطع کنید</string>
-    <string name="versatile_device_controls_dm_title_unknown">دستگاه ناشناس</string>
-    <string name="dm_main_paired_devices">دستگاه های جفت شده</string>
-    <string name="dm_list_item_state_connecting">برقراری ارتباط…</string>
-    <string name="dm_list_item_state_disconnecting">در حال قطع شدن…</string>
-    <string name="dm_list_item_state_connected">متصل</string>
-    <string name="dm_list_item_state_disconnected">قطع شده</string>
-    <string name="dm_list_item_hint_connected">متصل است، برای قطع ارتباط ضربه بزنید</string>
-    <string name="dm_list_item_hint_disconnected">قطع شد، برای اتصال ضربه بزنید</string>
-    <string name="unit_desc_enable">فعال کردن</string>
-    <string name="unit_desc_disable">غیر فعال کردن</string>
-    <string name="unit_desc_requirement_dm">پشتیبانی از بلوتوث</string>
-    <string name="im_edit_width">عرض</string>
-    <string name="im_edit_height">ارتفاع</string>
-    <string name="im_image_select">تصویر را انتخاب کنید</string>
-    <string name="im_toast_finish">ذخیره شده در گالری</string>
-    <string name="unit_man_disabled">معلول</string>
-    <string name="unit_man_dynamic_feature">ویژگی پویا</string>
-    <string name="about_twitter_account">&#8206;\@libekliff</string>
-    <string name="at_status_running">تایمر در حال اجرا است</string>
-    <string name="at_action_start">شروع تایمر</string>
-    <string name="at_hint_dev_ctrl">دسترسی سریع: تایمر را به کنترل های دستگاه اضافه کنید</string>
-    <string name="settings_dev_ctrl_switch">کنترل های Boundo را فعال کنید</string>
-    <string name="settings_dev_ctrl_switch_desc">توجه: کنترل‌ها را از پانل کنترل‌های دستگاه سیستم اضافه کنید، پس از خاموش شدن این سوئیچ، کنترل‌های اضافه شده پاک می‌شوند</string>
-    <string name="settings_dev_ctrl_list_title">تمام کنترل های موجود</string>
-</resources>
