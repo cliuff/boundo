@@ -4,9 +4,17 @@ on:
   push:
     branches:
       - main # Trigger on push to main branch
+    paths:
+      - '**/src/main/**'
+      - '**/build.gradle.kts'
+      - 'gradle/libs.versions.toml'
   pull_request:
     branches:
       - main # Trigger on pull request targeting main branch
+    paths:
+      - '**/src/main/**'
+      - '**/build.gradle.kts'
+      - 'gradle/libs.versions.toml'
 
 jobs:
   build:
@@ -73,6 +81,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+      - name: Get commit hash and count
+        run: |
+          COMMIT_HASH=$(git rev-parse --short HEAD)
+          COMMIT_COUNT=$(git rev-list --count HEAD)
+          echo "COMMIT_HASH=${COMMIT_HASH}" >> $GITHUB_ENV
+          echo "COMMIT_COUNT=${COMMIT_COUNT}" >> $GITHUB_ENV
+
       # Install dependencies
       - name: Install dependencies
         run: ./gradlew dependencies
@@ -85,5 +100,5 @@ jobs:
       - name: Upload APK as an artifact
         uses: actions/upload-artifact@v4
         with:
-          name: app-release-apks
+          name: app-release-apks-g${{ env.COMMIT_COUNT }}-${{ env.COMMIT_HASH }}
           path: app/build/outputs/app-universal-release.apks
