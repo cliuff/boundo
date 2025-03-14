@@ -16,7 +16,6 @@
   -->
 
 <resources>
-    <string name="app_name">Boundo</string>
     <string name="Advice_Switch_Debug_Text">Modo de consumo</string>
     <string name="Main_TextView_Advice_Text">Información</string>
     <string name="Main_TextView_Launcher">Instantáneo</string>

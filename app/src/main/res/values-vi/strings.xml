@@ -16,7 +16,6 @@
   -->
 
 <resources>
-    <string name="app_name">Boundo</string>
     <string name="appDesc">Một bó các công cụ ràng buộc để làm một số điều cho bạn</string>
     <string name="Main_ToolBar_title_Settings">Cài đặt</string>
     <string name="Settings_Button_SwitchLanguage">Ngôn ngữ</string>

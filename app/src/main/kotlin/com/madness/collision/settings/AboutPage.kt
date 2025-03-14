@@ -126,7 +126,7 @@ private fun BuildDetails() {
         Spacer(modifier = Modifier.height(10.dp))
         val verText = "${BuildConfig.VERSION_NAME}/${BuildConfig.VERSION_CODE}"
         Text(
-            text = stringResource(R.string.app_name),
+            text = stringResource(R.string.app_descriptive_name),
             fontSize = 13.sp,
             lineHeight = 15.sp,
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),

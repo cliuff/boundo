@@ -16,7 +16,6 @@
   -->
 
 <resources>
-    <string name="app_name">Boundo</string>
     <string name="appDesc">Μια δέσμη εργαλείων που θα κάνουν κάποια πράγματα για εσάς</string>
     <string name="Main_ToolBar_title_Settings">Ρυθμίσεις</string>
     <string name="Settings_Button_SwitchLanguage">Γλώσσες</string>

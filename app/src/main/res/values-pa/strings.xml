@@ -15,7 +15,6 @@
   -->
 
 <resources>
-    <string name="app_name">Boundo</string>
     <string name="appDesc">ਔਜ਼ਾਰਾਂ ਦਾ ਇੱਕ ਬੰਡਲ ਤੁਹਾਡੇ ਲਈ ਕੁਝ ਕੰਮ ਕਰਨ ਲਈ ਪਾਬੰਦ ਹੈ</string>
     <string name="Main_ToolBar_title_Settings">ਸੈਟਿੰਗਾਂ</string>
     <string name="Settings_Button_SwitchLanguage">ਭਾਸ਼ਾਵਾਂ</string>

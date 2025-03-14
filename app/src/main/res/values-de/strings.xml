@@ -16,7 +16,6 @@
   -->
 
 <resources>
-    <string name="app_name">Boundo</string>
     <string name="appDesc">Ein Bündel von Werkzeugen, die einige Dinge für Sie erledigen müssen</string>
     <string name="Main_ToolBar_title_Settings">die Einstellungen</string>
     <string name="Settings_Button_SwitchLanguage">Sprachen</string>

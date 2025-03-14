@@ -16,7 +16,6 @@
   -->
 
 <resources>
-    <string name="app_name">Boundo</string>
     <string name="appDesc">Набір інструментів, який зробить деякі речі за вас</string>
     <string name="Main_ToolBar_title_Settings">Налаштування</string>
     <string name="Settings_Button_SwitchLanguage">Мови</string>

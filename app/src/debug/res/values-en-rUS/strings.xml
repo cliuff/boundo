@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="activityTextProcessingApp">View BndM apps</string>
-    <string name="app_name">BoundoM</string>
+    <string name="app_name">MTA-M</string>
+    <string name="app_descriptive_name">Boundo Meta-app M</string>
     <string name="tileBarCodeScanner">Scan barcode M</string>
     <string name="twService">Themed Live Wallpaper M</string>
 </resources>

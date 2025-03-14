@@ -16,7 +16,8 @@
   -->
 
 <resources>
-    <string name="app_name">斑朵</string>
+    <string name="app_name">Meta-app</string>
+    <string name="app_descriptive_name">斑朵 Meta-app</string>
     <string name="Main_ToolBar_title_Settings">设置</string>
     <string name="Settings_Button_SwitchLanguage">语言</string>
     <string name="Settings_LanguagePicker_Auto">跟随系统</string>

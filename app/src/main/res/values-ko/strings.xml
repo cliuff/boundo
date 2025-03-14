@@ -16,7 +16,6 @@
   -->
 
 <resources>
-    <string name="app_name">Boundo</string>
     <string name="appDesc">많은 일을</string>
     <string name="Main_ToolBar_title_Settings">설정</string>
     <string name="Settings_Button_SwitchLanguage">언어</string>
