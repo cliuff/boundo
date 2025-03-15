@@ -30,7 +30,6 @@ import androidx.compose.foundation.layout.add
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
@@ -61,11 +60,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -77,7 +78,15 @@ import com.madness.collision.chief.app.asInsets
 import com.madness.collision.chief.app.LocalPageNavController
 import com.madness.collision.unit.api_viewing.ui.org.OrgRouteId
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
+import com.madness.collision.util.mainApplication
 import com.madness.collision.util.ui.AppIconPackageInfo
+import dev.chrisbanes.haze.ExperimentalHazeApi
+import dev.chrisbanes.haze.HazeInputScale
+import dev.chrisbanes.haze.HazeState
+import dev.chrisbanes.haze.HazeStyle
+import dev.chrisbanes.haze.HazeTint
+import dev.chrisbanes.haze.hazeEffect
+import dev.chrisbanes.haze.hazeSource
 import io.cliuff.boundo.org.model.CompColl
 import io.cliuff.boundo.org.model.OrgApp
 import io.cliuff.boundo.org.model.OrgGroup
@@ -181,6 +190,16 @@ private fun OrgCollContent(
         { pkgs -> arrayOfNulls<PackageInfo>(pkgs.size).toList() },
     contentPadding: PaddingValues = PaddingValues(),
 ) {
+    val surfaceColor = MaterialTheme.colorScheme.surface
+    val hazeStyle = remember(surfaceColor) {
+        HazeStyle(
+            backgroundColor = if (mainApplication.isDarkTheme) Color(0xFF191919) else Color.White,
+            tint = HazeTint(surfaceColor.copy(if (mainApplication.isDarkTheme) 0.5f else 0.3f)),
+            blurRadius = 35.dp,
+            noiseFactor = 0.08f,
+            fallbackTint = HazeTint(surfaceColor),
+        )
+    }
     LazyVerticalGrid(
         modifier = modifier,
         columns = GridCells.Adaptive(160.dp),
@@ -215,6 +234,8 @@ private fun OrgCollContent(
                 name = "${group.name} (${group.apps.size})",
                 apps = getPkgsForGroup(group.apps.take(3).map(OrgApp::pkg)),
                 onClick = { onClickGroup(i, group.id) },
+                appHazeState = remember { HazeState() },
+                appHazeStyle = hazeStyle,
             )
         }
     }
@@ -226,7 +247,7 @@ private fun CollAppsSummary(text: String, onClick: () -> Unit, modifier: Modifie
         modifier = modifier
             .clip(RoundedCornerShape(20.dp))
             .clickable(onClick = onClick)
-            .background(MaterialTheme.colorScheme.surface)
+            .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.75f))
             .padding(horizontal = 20.dp, vertical = 24.dp),
     ) {
         Text(
@@ -240,21 +261,31 @@ private fun CollAppsSummary(text: String, onClick: () -> Unit, modifier: Modifie
     }
 }
 
+@OptIn(ExperimentalHazeApi::class)
 @Composable
 private fun CollGroup(
     name: String,
     apps: List<PackageInfo?>,
     onClick: () -> Unit,
+    appHazeState: HazeState,
     modifier: Modifier = Modifier,
+    appHazeStyle: HazeStyle = HazeStyle.Unspecified,
 ) {
-    Column(
+    SubcomposeLayers(
         modifier = modifier
             .clip(RoundedCornerShape(20.dp))
-            .clickable(onClick = onClick)
-            .background(MaterialTheme.colorScheme.surface)
-            .padding(horizontal = 20.dp, vertical = 20.dp),
+            .clickable(onClick = onClick),
+        lowerLayer = { size ->
+            Box(modifier = Modifier
+                .size(with(LocalDensity.current) { DpSize(size.width.toDp(), size.height.toDp()) })
+                .hazeEffect(appHazeState, style = appHazeStyle) {
+                    inputScale = HazeInputScale.Fixed(0.8f)
+                })
+        },
     ) {
+    Column {
         Text(
+            modifier = Modifier.padding(start = 20.dp, top = 20.dp, end = 4.dp),
             text = name,
             color = MaterialTheme.colorScheme.onSurface,
             fontSize = 16.sp,
@@ -262,8 +293,13 @@ private fun CollGroup(
             overflow = TextOverflow.Ellipsis,
             maxLines = 2,
         )
-        Spacer(modifier = Modifier.height(20.dp))
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .hazeSource(appHazeState)
+                .padding(start = 20.dp, top = 20.dp, end = 4.dp, bottom = 20.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
             for (i in apps.indices) {
                 val app = apps[i]
                 val icPkg = remember { app?.applicationInfo?.let { AppIconPackageInfo(app, it) } }
@@ -286,6 +322,7 @@ private fun CollGroup(
                 }
             }
         }
+    }
     }
 }
 
