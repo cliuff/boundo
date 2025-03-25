@@ -80,11 +80,8 @@
     <string name="av_tag_result_aab">या अॅपसाठी स्प्लिट एपीके आढळतात</string>
     <string name="av_tag_result_sys">हे अॅप सिस्टम अॅप म्हणून स्थापित केले आहे</string>
     <string name="av_tag_result_hidden">या अॅपसाठी कोणतीही लाँचर क्रियाकलाप उपलब्ध नाही</string>
-    <string name="av_tag_result_full_64bit">हे अॅप दोन्ही एआरएम 64-बिट आणि x86 64-बिट सुसंगत आहे</string>
     <string name="av_tag_result_pkg">पॅकेज %s हे APK dex फायलींमध्ये आढळते</string>
     <string name="av_tag_result_installer">हा अॅप %s ने इंस्टॉल केला होता</string>
-    <string name="av_tag_result_dir">फायली APK मध्ये %s अंतर्गत आढळतात</string>
-    <string name="av_tag_result_dir_arm32">फायली APK मध्ये lib/armeabi-v7a किंवा lib/armeabi अंतर्गत आढळतात</string>
     <string name="av_list_info_compile_sdk">SDK संकलित करा</string>
     <string name="av_list_info_min_sdk">किमान SDK</string>
     <string name="av_list_info_aab_total_size">एकूण आकार: %s</string>

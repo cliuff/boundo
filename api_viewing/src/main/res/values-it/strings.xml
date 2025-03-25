@@ -80,11 +80,8 @@
     <string name="av_tag_result_aab">Per questa app sono stati trovati APK divisi</string>
     <string name="av_tag_result_sys">Questa app è installata come app di sistema</string>
     <string name="av_tag_result_hidden">Nessuna attività di avvio trovata disponibile per questa app</string>
-    <string name="av_tag_result_full_64bit">Questa app è compatibile sia con ARM a 64 bit che x86 a 64 bit</string>
     <string name="av_tag_result_pkg">Il pacchetto %s si trova nei file APK dex</string>
     <string name="av_tag_result_installer">Questa app è stata installata da %s</string>
-    <string name="av_tag_result_dir">I file si trovano sotto %s nell\'APK</string>
-    <string name="av_tag_result_dir_arm32">I file si trovano sotto lib/armeabi-v7a o lib/armeabi nell\'APK</string>
     <string name="av_list_info_compile_sdk">Compila l\'SDK</string>
     <string name="av_list_info_min_sdk">SDK minimo</string>
     <string name="av_list_info_aab_total_size">Dimensione totale: %s</string>

@@ -80,11 +80,8 @@
     <string name="av_tag_result_aab">Для этого приложения найдены разделенные APK</string>
     <string name="av_tag_result_sys">Это приложение установлено как системное</string>
     <string name="av_tag_result_hidden">Для этого приложения не найдено доступных действий запуска.</string>
-    <string name="av_tag_result_full_64bit">Это приложение совместимо как с 64-разрядной версией ARM, так и с 64-разрядной версией x86.</string>
     <string name="av_tag_result_pkg">Пакет %s находится в файлах APK dex</string>
     <string name="av_tag_result_installer">Это приложение было установлено пользователем %s</string>
-    <string name="av_tag_result_dir">Файлы находятся в разделе %s в APK</string>
-    <string name="av_tag_result_dir_arm32">Файлы находятся в lib/armeabi-v7a или lib/armeabi в APK</string>
     <string name="av_list_info_compile_sdk">Скомпилировать SDK</string>
     <string name="av_list_info_min_sdk">Минимальный SDK</string>
     <string name="av_list_info_aab_total_size">Общий размер: %s</string>

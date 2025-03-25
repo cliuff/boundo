@@ -80,11 +80,8 @@
     <string name="av_tag_result_aab">ਇਸ ਐਪ ਲਈ ਸਪਲਿਟ ਏਪੀਕੇ ਲੱਭੇ ਗਏ ਹਨ</string>
     <string name="av_tag_result_sys">ਇਹ ਐਪ ਇੱਕ ਸਿਸਟਮ ਐਪ ਵਜੋਂ ਸਥਾਪਤ ਕੀਤੀ ਗਈ ਹੈ</string>
     <string name="av_tag_result_hidden">ਇਸ ਐਪ ਲਈ ਕੋਈ ਲਾਂਚਰ ਗਤੀਵਿਧੀ ਉਪਲਬਧ ਨਹੀਂ ਹੈ</string>
-    <string name="av_tag_result_full_64bit">ਇਹ ਐਪ ARM 64-bit ਅਤੇ x86 64-bit ਦੋਵੇਂ ਅਨੁਕੂਲ ਹੈ</string>
     <string name="av_tag_result_pkg">ਪੈਕੇਜ %s APK dex ਫਾਈਲਾਂ ਵਿੱਚ ਪਾਇਆ ਗਿਆ ਹੈ</string>
     <string name="av_tag_result_installer">ਇਹ ਐਪ %s ਦੁਆਰਾ ਸਥਾਪਤ ਕੀਤੀ ਗਈ ਸੀ</string>
-    <string name="av_tag_result_dir">ਫ਼ਾਈਲਾਂ APK ਵਿੱਚ %s ਦੇ ਹੇਠਾਂ ਮਿਲਦੀਆਂ ਹਨ</string>
-    <string name="av_tag_result_dir_arm32">ਫ਼ਾਈਲਾਂ APK ਵਿੱਚ lib/armeabi-v7a ਜਾਂ lib/armeabi ਦੇ ਅਧੀਨ ਮਿਲਦੀਆਂ ਹਨ</string>
     <string name="av_list_info_compile_sdk">SDK ਕੰਪਾਇਲ ਕਰੋ</string>
     <string name="av_list_info_min_sdk">ਘੱਟੋ-ਘੱਟ SDK</string>
     <string name="av_list_info_aab_total_size">ਕੁੱਲ ਆਕਾਰ: %s</string>

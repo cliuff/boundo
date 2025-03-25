@@ -97,15 +97,8 @@
     <string name="av_tag_tpns_normal">&#1564;TPNS</string>
     <string name="av_tag_ali_push_normal">&#1564;Alibaba Cloud push</string>
     <string name="av_tag_full_64bit">64-bit</string>
-    <string name="av_tag_full_64bit_normal">64-bit</string>
     <!-- https://unicode.org/reports/tr9/#Explicit_Directional_Isolates -->
     <!-- prefix with \u2068 for texts start with numbers in bidi text -->
-    <string name="av_tag_full_64bit_full">\u206864-bit (ARM 64-bit, x86 64-bit)</string>
-    <string name="av_tag_arm_32bit">&#1564;ARM 32-bit</string>
-    <string name="av_tag_arm_64bit">&#1564;ARM 64-bit</string>
-    <string name="av_tag_x86_32bit">&#1564;x86</string>
-    <string name="av_tag_x86_64bit_normal">&#1564;x64</string>
-    <string name="av_tag_x86_64bit_full">&#1564;x86-64 (x64)</string>
     <string name="av_tag_result_service">تم العثور على %s في هذا التطبيق</string>
     <string name="av_tag_result_mipush_service">تم التحقق منه بواسطة MiPush SDK ، وإلا تم العثور على %s في هذا التطبيق</string>
     <string name="av_tag_result_file">تم العثور على %s في APK</string>
@@ -113,11 +106,8 @@
     <string name="av_tag_result_aab">تم العثور على ملفات APK المنقسمة لهذا التطبيق</string>
     <string name="av_tag_result_sys">تم تثبيت هذا التطبيق كتطبيق نظام</string>
     <string name="av_tag_result_hidden">لم يتم العثور على نشاط قاذفة متاح لهذا التطبيق</string>
-    <string name="av_tag_result_full_64bit">هذا التطبيق متوافق مع ARM 64 بت و x86 64 بت</string>
     <string name="av_tag_result_pkg">تم العثور على الحزمة %s في ملفات APK dex</string>
     <string name="av_tag_result_installer">تم تثبيت هذا التطبيق من قبل %s</string>
-    <string name="av_tag_result_dir">تم العثور على الملفات ضمن %s في APK</string>
-    <string name="av_tag_result_dir_arm32">تم العثور على الملفات ضمن lib / armeabi-v7a أو lib / armeabi في ملف APK</string>
     <string name="av_list_info_compile_sdk">تجميع SDK</string>
     <string name="av_list_info_min_sdk">دقيقة SDK</string>
     <string name="av_list_info_aab_total_size">الحجم الإجمالي: %s</string>

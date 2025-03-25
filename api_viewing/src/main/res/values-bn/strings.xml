@@ -80,11 +80,8 @@
     <string name="av_tag_result_aab">এই অ্যাপের জন্য স্প্লিট APK পাওয়া যায়</string>
     <string name="av_tag_result_sys">এই অ্যাপটি একটি সিস্টেম অ্যাপ হিসেবে ইনস্টল করা আছে</string>
     <string name="av_tag_result_hidden">এই অ্যাপের জন্য কোনো লঞ্চার অ্যাক্টিভিটি পাওয়া যায়নি</string>
-    <string name="av_tag_result_full_64bit">এই অ্যাপটি এআরএম 64-বিট এবং x86 64-বিট উভয়ই সামঞ্জস্যপূর্ণ</string>
     <string name="av_tag_result_pkg">প্যাকেজ %s APK dex ফাইলে পাওয়া যায়</string>
     <string name="av_tag_result_installer">এই অ্যাপটি %s দ্বারা ইনস্টল করা হয়েছে</string>
-    <string name="av_tag_result_dir">ফাইলগুলি APK-এ %s-এর অধীনে পাওয়া যায়</string>
-    <string name="av_tag_result_dir_arm32">ফাইলগুলি APK-এ lib/armeabi-v7a বা lib/armeabi-এর অধীনে পাওয়া যায়</string>
     <string name="av_list_info_compile_sdk">SDK কম্পাইল করুন</string>
     <string name="av_list_info_min_sdk">ন্যূনতম SDK</string>
     <string name="av_list_info_aab_total_size">মোট আকার: %s</string>

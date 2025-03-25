@@ -79,11 +79,8 @@
     <string name="av_tag_result_aab">Для цієї програми знайдено розділені файли .apk</string>
     <string name="av_tag_result_sys">Ця програма встановлюється як системна програма</string>
     <string name="av_tag_result_hidden">Для цієї програми не знайдено жодної активності програми запуску</string>
-    <string name="av_tag_result_full_64bit">Ця програма сумісна як з ARM, так і з 64-розрядною версією x86</string>
     <string name="av_tag_result_pkg">Пакет %s знайдено у файлах APK dex</string>
     <string name="av_tag_result_installer">Цю програму встановив %s</string>
-    <string name="av_tag_result_dir">Файли знаходяться під %s у файлі .apk</string>
-    <string name="av_tag_result_dir_arm32">Файли знаходяться під lib/armeabi-v7a або lib/armeabi в APK</string>
     <string name="av_list_info_compile_sdk">Скомпілювати SDK</string>
     <string name="av_list_info_min_sdk">Мінімальний пакет SDK</string>
     <string name="av_list_info_aab_total_size">Загальний розмір: %s</string>

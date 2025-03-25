@@ -80,11 +80,8 @@
     <string name="av_tag_result_aab">APK terpisah ditemukan untuk aplikasi ini</string>
     <string name="av_tag_result_sys">Aplikasi ini diinstal sebagai aplikasi sistem</string>
     <string name="av_tag_result_hidden">Tidak ada aktivitas peluncur yang tersedia untuk aplikasi ini</string>
-    <string name="av_tag_result_full_64bit">Aplikasi ini kompatibel dengan ARM 64-bit dan x86 64-bit</string>
     <string name="av_tag_result_pkg">Paket %s ditemukan di file dex APK</string>
     <string name="av_tag_result_installer">Aplikasi ini dipasang oleh %s</string>
-    <string name="av_tag_result_dir">File ditemukan di bawah %s di APK</string>
-    <string name="av_tag_result_dir_arm32">File ditemukan di bawah lib/armeabi-v7a atau lib/armeabi di APK</string>
     <string name="av_list_info_compile_sdk">Kompilasi SDK</string>
     <string name="av_list_info_min_sdk">SDK minimal</string>
     <string name="av_list_info_aab_total_size">Ukuran total: %s</string>

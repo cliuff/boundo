@@ -80,11 +80,8 @@
     <string name="av_tag_result_aab">Bu uygulama için bölünmüş APK\'lar bulundu</string>
     <string name="av_tag_result_sys">Bu uygulama bir sistem uygulaması olarak yüklenir</string>
     <string name="av_tag_result_hidden">Bu uygulama için başlatıcı etkinliği bulunamadı</string>
-    <string name="av_tag_result_full_64bit">Bu uygulama hem ARM 64-bit hem de x86 64-bit uyumludur</string>
     <string name="av_tag_result_pkg">%s paketi APK dex dosyalarında bulundu</string>
     <string name="av_tag_result_installer">Bu uygulama %s tarafından yüklendi</string>
-    <string name="av_tag_result_dir">Dosyalar APK\'da %s altında bulunur</string>
-    <string name="av_tag_result_dir_arm32">Dosyalar APK\'da lib/armeabi-v7a veya lib/armeabi altında bulunur</string>
     <string name="av_list_info_compile_sdk">SDK\'yı derle</string>
     <string name="av_list_info_min_sdk">Minimum SDK</string>
     <string name="av_list_info_aab_total_size">Toplam boyut: %s</string>

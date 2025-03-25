@@ -80,11 +80,8 @@
     <string name="av_tag_result_aab">このアプリの分割APKが見つかりました</string>
     <string name="av_tag_result_sys">このアプリはシステムアプリとしてインストールされます</string>
     <string name="av_tag_result_hidden">このアプリで利用できるランチャーアクティビティが見つかりません</string>
-    <string name="av_tag_result_full_64bit">このアプリは、ARM64ビットとx86 64ビットの両方と互換性があります</string>
     <string name="av_tag_result_pkg">パッケージ%sはAPK dexファイルにあります</string>
     <string name="av_tag_result_installer">このアプリは%sによってインストールされました</string>
-    <string name="av_tag_result_dir">ファイルはAPKの%sの下にあります</string>
-    <string name="av_tag_result_dir_arm32">ファイルはAPKのlib/armeabi-v7aまたはlib/armeabiにあります</string>
     <string name="av_list_info_compile_sdk">SDKをコンパイルします</string>
     <string name="av_list_info_min_sdk">最小SDK</string>
     <string name="av_list_info_aab_total_size">合計サイズ: %s</string>

@@ -17,16 +17,22 @@
 package com.madness.collision.misc
 
 import android.content.SharedPreferences
+import androidx.core.content.edit
 
 class SelfUpdater25 : SelfUpdater {
-    override val maxVersion: Int = 25022816
+    override val maxVersion: Int = 25032514
 
     override fun apply(oldVersion: Int, prefSettings: SharedPreferences) {
         // check illegal version code
         if (oldVersion < 0) return
         // use ifs instead of when to implement fallthrough
-        if (oldVersion < 25022816) {
-            Unit
+        if (oldVersion < 25032514) {
+            val ids = listOf("avTagsValPkgArm32", "avTagsValPkgArm64", "avTagsValPkgX86", "avTagsValPkgX64")
+            val tags = prefSettings.getStringSet("AvTags", null)
+            if (tags != null && ids.any(tags::contains)) {
+                val modSet = tags.toHashSet().apply { removeAll(ids); add("avTagsVal64b") }
+                prefSettings.edit { putStringSet("AvTags", modSet) }
+            }
         }
     }
 }

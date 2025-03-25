@@ -88,11 +88,7 @@
     <string name="av_tag_upush_normal">友盟推送</string>
     <string name="av_tag_tpns_normal">騰訊推送通知服務</string>
     <string name="av_tag_ali_push_normal">阿里雲行動推送</string>
-    <string name="av_tag_full_64bit">全 64 位元</string>
-    <string name="av_tag_full_64bit_normal">全 64 位元</string>
-    <string name="av_tag_full_64bit_full">全 64 位元 (ARM 64 位元、x86 64 位元)</string>
-    <string name="av_tag_arm_32bit">ARM 32 位元</string>
-    <string name="av_tag_arm_64bit">ARM 64 位元</string>
+    <string name="av_tag_full_64bit">64 位元</string>
     <string name="av_tag_result_service">在這個應用程式中找到了 %s</string>
     <string name="av_tag_result_mipush_service">由小米推送 SDK 核取，或者在這個應用程式中找到了 %s</string>
     <string name="av_tag_result_file">在這個安裝檔中找到了 %s</string>
@@ -100,11 +96,8 @@
     <string name="av_tag_result_aab">這個應用程式中包含分割安裝檔</string>
     <string name="av_tag_result_sys">這個應用程式是系統應用程式</string>
     <string name="av_tag_result_hidden">找不到這個應用程式的可用啟動入口</string>
-    <string name="av_tag_result_full_64bit">這個應用程式相容 ARM 64 位元和 x86 64 位元</string>
     <string name="av_tag_result_pkg">在這個安裝檔的 Dex 檔案中找到了套件 %s</string>
     <string name="av_tag_result_installer">這個應用程式由 %s 安裝</string>
-    <string name="av_tag_result_dir">在這個安裝檔的 %s 目錄中找到了檔案</string>
-    <string name="av_tag_result_dir_arm32">在這個安裝檔的 lib/armeabi-v7a 或 lib/armeabi 目錄中找到了檔案</string>
     <string name="av_list_info_compile_sdk">編譯 SDK</string>
     <string name="av_list_info_min_sdk">最低 SDK</string>
     <string name="av_list_info_aab_total_size">總大小：%s</string>

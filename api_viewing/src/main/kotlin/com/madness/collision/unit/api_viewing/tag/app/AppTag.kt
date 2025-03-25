@@ -114,10 +114,6 @@ internal class AppTagInfo(
         const val ID_TECH_X_COMPOSE = "avTagsValXCmp"
         const val ID_TECH_COMPOSE_CMP = "avTagsValCmp"
         const val ID_PKG_64BIT = "avTagsVal64b"
-        const val ID_PKG_ARM32 = "avTagsValPkgArm32"
-        const val ID_PKG_ARM64 = "avTagsValPkgArm64"
-        const val ID_PKG_X86 = "avTagsValPkgX86"
-        const val ID_PKG_X64 = "avTagsValPkgX64"
         const val ID_APP_HIDDEN = "avTagsValueHidden"
         const val ID_APP_SYSTEM = "avTagsValPriSys"
         const val ID_APP_SYSTEM_CORE = "avTagsValSysCore"
@@ -154,10 +150,6 @@ internal class AppTagInfo(
             ID_TECH_X_COMPOSE,
             ID_TECH_COMPOSE_CMP,
             ID_PKG_64BIT,
-            ID_PKG_ARM32,
-            ID_PKG_ARM64,
-            ID_PKG_X86,
-            ID_PKG_X64,
             ID_APP_HIDDEN,
             ID_APP_SYSTEM,
             ID_APP_SYSTEM_CORE,

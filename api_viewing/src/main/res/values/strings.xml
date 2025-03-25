@@ -97,13 +97,6 @@
     <string name="av_tag_tpns_normal">TPNS</string>
     <string name="av_tag_ali_push_normal">Alibaba Cloud push</string>
     <string name="av_tag_full_64bit">64-bit</string>
-    <string name="av_tag_full_64bit_normal">64-bit</string>
-    <string name="av_tag_full_64bit_full">64-bit (ARM 64-bit, x86 64-bit)</string>
-    <string name="av_tag_arm_32bit">ARM 32-bit</string>
-    <string name="av_tag_arm_64bit">ARM 64-bit</string>
-    <string name="av_tag_x86_32bit">x86</string>
-    <string name="av_tag_x86_64bit_normal">x64</string>
-    <string name="av_tag_x86_64bit_full">x86-64 (x64)</string>
     <string name="av_tag_result_service">%s is found in this app</string>
     <string name="av_tag_result_mipush_service">Checked by MiPush SDK, otherwise %s is found in this app</string>
     <string name="av_tag_result_file">%s is found in the APK</string>
@@ -112,11 +105,8 @@
     <string name="av_tag_result_sys">This app is installed as a system app</string>
     <string name="av_tag_result_hidden">No launcher activity is found available for this app</string>
     <string name="av_tag_result_64bit">This app is 64-bit compatible with your device</string>
-    <string name="av_tag_result_full_64bit">This app is both ARM 64-bit and x86 64-bit compatible</string>
     <string name="av_tag_result_pkg">Package %s is found in the APK dex files</string>
     <string name="av_tag_result_installer">This app was installed by %s</string>
-    <string name="av_tag_result_dir">Files are found under %s in the APK</string>
-    <string name="av_tag_result_dir_arm32">Files are found under lib/armeabi-v7a or lib/armeabi in the APK</string>
     <string name="av_list_info_compile_sdk">Compile SDK</string>
     <string name="av_list_info_min_sdk">Min SDK</string>
     <string name="av_list_info_aab_total_size">Total size: %s</string>

@@ -192,35 +192,6 @@ internal fun builtInTags(): Map<String, AppTagInfo> = listOf(
     ),
 
     AppTagInfo(
-        id = AppTagInfo.ID_PKG_ARM32, category = 0.cat, icon = "ARM 32".icon,
-        label = R.string.av_tag_arm_32bit.labels, rank = "28",
-        desc = dirArm32ResultDesc,
-        requisites = nativeLibrariesRequisite().list,
-        expressing = commonExpressing { it.nativeLibraries[0] }
-    ),
-    AppTagInfo(
-        id = AppTagInfo.ID_PKG_ARM64, category = 0.cat, icon = "ARM 64".icon,
-        label = R.string.av_tag_arm_64bit.labels, rank = "29",
-        desc = "lib/arm64-v8a".dirResultDesc,
-        requisites = nativeLibrariesRequisite().list,
-        expressing = commonExpressing { it.nativeLibraries[1] }
-    ),
-    AppTagInfo(
-        id = AppTagInfo.ID_PKG_X86, category = 0.cat, icon = "x86".icon,
-        label = R.string.av_tag_x86_32bit.labels, rank = "30",
-        desc = "lib/x86".dirResultDesc,
-        requisites = nativeLibrariesRequisite().list,
-        expressing = commonExpressing { it.nativeLibraries[2] }
-    ),
-    AppTagInfo(
-        id = AppTagInfo.ID_PKG_X64, category = 0.cat, icon = "x64".icon,
-        label = (R.string.av_tag_x86_64bit_normal to R.string.av_tag_x86_64bit_full).resLabels, rank = "31",
-        desc = "lib/x86_64".dirResultDesc,
-        requisites = nativeLibrariesRequisite().list,
-        expressing = commonExpressing { it.nativeLibraries[3] }
-    ),
-
-    AppTagInfo(
         id = AppTagInfo.ID_MSG_FCM, category = 0.cat, icon = R.drawable.ic_firebase_72.icon,
         label = (R.string.av_tag_fcm_normal to R.string.av_tag_fcm_full).resLabels, rank = "32",
         desc = "com.google.firebase.messaging.FirebaseMessagingService".serviceResultDesc,
@@ -371,12 +342,6 @@ private val installerResultDesc: AppTagInfo.Description
         val name = AppListService().getInstallerName(it.context, it.app.pkgInstaller)
         it.context.getString(R.string.av_tag_result_installer, name).label
     })
-
-private val CharSequence.dirResultDesc: AppTagInfo.Description
-    get() = AppTagInfo.Description(checkResultDesc = { it.context.getString(R.string.av_tag_result_dir, this).label })
-
-private val dirArm32ResultDesc: AppTagInfo.Description
-    get() = AppTagInfo.Description(checkResultDesc = { it.context.getString(R.string.av_tag_result_dir_arm32).label })
 
 private val Any.cat: AppTagInfo.Category
     get() = AppTagInfo.Category()

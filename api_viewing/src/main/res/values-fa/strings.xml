@@ -97,14 +97,7 @@
     <string name="av_tag_tpns_normal">&#8207;TPNS</string>
     <string name="av_tag_ali_push_normal">&#8207;Alibaba Cloud push</string>
     <string name="av_tag_full_64bit">64-bit</string>
-    <string name="av_tag_full_64bit_normal">64-bit</string>
     <!-- prefix with \u2068 for texts start with numbers in bidi text -->
-    <string name="av_tag_full_64bit_full">\u206864-bit (ARM 64-bit, x86 64-bit)</string>
-    <string name="av_tag_arm_32bit">&#8207;ARM 32-bit</string>
-    <string name="av_tag_arm_64bit">&#8207;ARM 64-bit</string>
-    <string name="av_tag_x86_32bit">&#8207;x86</string>
-    <string name="av_tag_x86_64bit_normal">&#8207;x64</string>
-    <string name="av_tag_x86_64bit_full">&#8207;x86-64 (x64)</string>
     <string name="av_tag_result_service">%s در این برنامه یافت می شود</string>
     <string name="av_tag_result_mipush_service">توسط MiPush SDK بررسی شده است، در غیر این صورت %s در این برنامه یافت می شود</string>
     <string name="av_tag_result_file">%s در APK یافت می شود</string>
@@ -112,11 +105,8 @@
     <string name="av_tag_result_aab">فایل‌های APK تقسیم‌شده برای این برنامه یافت می‌شوند</string>
     <string name="av_tag_result_sys">این برنامه به عنوان یک برنامه سیستمی نصب شده است</string>
     <string name="av_tag_result_hidden">هیچ فعالیت راه‌اندازی برای این برنامه در دسترس نیست</string>
-    <string name="av_tag_result_full_64bit">این برنامه با ARM 64 بیتی و x86 64 بیتی سازگار است</string>
     <string name="av_tag_result_pkg">بسته %s در فایل‌های APK dex یافت می‌شود</string>
     <string name="av_tag_result_installer">این برنامه توسط %s نصب شده است</string>
-    <string name="av_tag_result_dir">فایل‌ها در زیر %s در APK یافت می‌شوند</string>
-    <string name="av_tag_result_dir_arm32">فایل‌ها تحت lib/armeabi-v7a یا lib/armeabi در APK یافت می‌شوند.</string>
     <string name="av_list_info_compile_sdk">&#8207;SDK را کامپایل کنید</string>
     <string name="av_list_info_min_sdk">حداقل SDK</string>
     <string name="av_list_info_aab_total_size">اندازه کل: %s</string>
