@@ -100,6 +100,7 @@
     <string name="av_tag_result_aab">该应用含有 Split APK</string>
     <string name="av_tag_result_sys">该应用是系统应用</string>
     <string name="av_tag_result_hidden">未发现该应用的可用启动入口</string>
+    <string name="av_tag_result_64bit">该应用与您的设备64位兼容</string>
     <string name="av_tag_result_full_64bit">该应用兼容 ARM 64位、x86 64位</string>
     <string name="av_tag_result_pkg">该应用安装包dex文件中发现了包名 %s</string>
     <string name="av_tag_result_installer">该应用由%s安装</string>
@@ -173,4 +174,7 @@
     <string name="av_options_api_min">最低 API</string>
     <string name="av_upd_installed_query">查询已安装的应用</string>
     <string name="av_upd_installed_query_msg">授予权限以分析您所有的应用</string>
+    <string name="av_info_arch_abi_system">系统 ABI</string>
+    <string name="av_info_arch_abi_other">其他 ABI</string>
+    <string name="av_info_arch_none">安装包内未发现原生库，不过纯 Java 应用均兼容64位。</string>
 </resources>

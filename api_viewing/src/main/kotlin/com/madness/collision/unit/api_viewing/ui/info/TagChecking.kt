@@ -52,6 +52,7 @@ import com.madness.collision.unit.api_viewing.info.AppType
 import com.madness.collision.unit.api_viewing.info.ExpressedTag
 import com.madness.collision.unit.api_viewing.list.LocalAppSwitcherHandler
 import com.madness.collision.unit.api_viewing.tag.app.AppTagInfo
+import com.madness.collision.unit.api_viewing.ui.info.tag.PkgArchDetails
 import com.madness.collision.util.ui.autoMirrored
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -75,9 +76,10 @@ internal fun TagDetailsList(
             val info = expressed.info
             val activated = expressed.activated
             val isAi = expressed.intrinsic.id == AppTagInfo.ID_APP_ADAPTIVE_ICON
+            val is64Bit = expressed.intrinsic.id == AppTagInfo.ID_PKG_64BIT
             val showDivider = remember show@{
                 if (index == 0) return@show false
-                if (activated || isAi) return@show true
+                if (activated || isAi || is64Bit) return@show true
                 val lastTag = tags[index - 1]
                 lastTag.activated || lastTag.intrinsic.id == AppTagInfo.ID_APP_ADAPTIVE_ICON
             }
@@ -86,15 +88,17 @@ internal fun TagDetailsList(
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.15f),
                 thickness = 0.5.dp,
             )
-            if (activated || isAi) {
+            if (activated || isAi || is64Bit) {
                 var showTagDetails by remember(app.packageName) { mutableStateOf(false) }
                 val hasTagDetails = when (expressed.intrinsic.id) {
+                    AppTagInfo.ID_PKG_64BIT,
                     AppTagInfo.ID_PKG_AAB, AppTagInfo.ID_APP_SYSTEM_MODULE, AppTagInfo.ID_TYPE_OVERLAY -> true
                     else -> false
                 }
                 val chevron = when (expressed.intrinsic.id) {
                     AppTagInfo.ID_APP_INSTALLER_PLAY -> Icons.Outlined.Launch
                     AppTagInfo.ID_APP_ADAPTIVE_ICON -> Icons.Outlined.ChevronRight
+                    AppTagInfo.ID_PKG_64BIT,
                     AppTagInfo.ID_PKG_AAB, AppTagInfo.ID_APP_SYSTEM_MODULE, AppTagInfo.ID_TYPE_OVERLAY -> {
                         if (showTagDetails) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore
                     }
@@ -128,6 +132,7 @@ internal fun TagDetailsList(
                     ) {
                         when (expressed.intrinsic.id) {
                             AppTagInfo.ID_PKG_AAB -> AppBundleDetails(splitApks)
+                            AppTagInfo.ID_PKG_64BIT -> PkgArchDetails(app)
                             AppTagInfo.ID_APP_SYSTEM_MODULE -> {
                                 val module = app.moduleInfo
                                 if (module != null) {

@@ -189,7 +189,6 @@ internal class AppTagInfo(
             ID_TECH_KOTLIN,
             ID_TECH_X_COMPOSE,
             ID_TECH_COMPOSE_CMP,
-            ID_PKG_64BIT,
             ID_APP_HIDDEN,
             ID_APP_SYSTEM,
             ID_TYPE_WEB_APK,

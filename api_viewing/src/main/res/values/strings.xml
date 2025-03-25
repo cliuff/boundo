@@ -111,6 +111,7 @@
     <string name="av_tag_result_aab">Split APKs are found for this app</string>
     <string name="av_tag_result_sys">This app is installed as a system app</string>
     <string name="av_tag_result_hidden">No launcher activity is found available for this app</string>
+    <string name="av_tag_result_64bit">This app is 64-bit compatible with your device</string>
     <string name="av_tag_result_full_64bit">This app is both ARM 64-bit and x86 64-bit compatible</string>
     <string name="av_tag_result_pkg">Package %s is found in the APK dex files</string>
     <string name="av_tag_result_installer">This app was installed by %s</string>
@@ -184,4 +185,7 @@
     <string name="av_options_api_min">Min. API</string>
     <string name="av_upd_installed_query">Query installed apps</string>
     <string name="av_upd_installed_query_msg">Grant access to analyze all your apps</string>
+    <string name="av_info_arch_abi_system">System ABIs</string>
+    <string name="av_info_arch_abi_other">Other ABIs</string>
+    <string name="av_info_arch_none">No native libs found in the APK, but all Java-only apps are 64-bit compatible.</string>
 </resources>

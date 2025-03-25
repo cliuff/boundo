@@ -21,6 +21,7 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.ServiceInfo
+import android.os.Build
 import android.util.Log
 import com.madness.collision.misc.PackageCompat
 import com.madness.collision.unit.api_viewing.R
@@ -178,11 +179,17 @@ internal fun builtInTags(): Map<String, AppTagInfo> = listOf(
 
     AppTagInfo(
         id = AppTagInfo.ID_PKG_64BIT, category = 0.cat, icon = R.string.av_tag_full_64bit.label.icon,
-        label = (R.string.av_tag_full_64bit_normal to R.string.av_tag_full_64bit_full).resLabels, rank = "27",
-        desc = R.string.av_tag_result_full_64bit.resultDesc,
+        label = R.string.av_tag_full_64bit.labels, rank = "27",
+        desc = R.string.av_tag_result_64bit.resultDesc,
+        availability = { Build.SUPPORTED_64_BIT_ABIS.isNotEmpty() },
         requisites = nativeLibrariesRequisite().list,
-        expressing = commonExpressing { it.nativeLibraries.let { n -> (!n[0] || n[1]) && (!n[2] || n[3]) } }
-    ).apply { iconKey = "64b" },
+        expressing = commonExpressing { app ->
+            val lib = app.nativeLibraries
+            val abiSet64 = Build.SUPPORTED_64_BIT_ABIS.toSet()
+            val abis = listOf("arm64-v8a", "x86_64")
+            abis.indices.any { i -> (abis[i] in abiSet64) && (!lib[i*2] || lib[i*2+1]) }
+        }
+    ),
 
     AppTagInfo(
         id = AppTagInfo.ID_PKG_ARM32, category = 0.cat, icon = "ARM 32".icon,
