@@ -22,7 +22,6 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
 import com.madness.collision.unit.api_viewing.data.AppPackage
-import com.madness.collision.unit.api_viewing.util.ApkUtil
 import com.madness.collision.util.jsonSimpleTo
 import com.madness.collision.util.simpleToJson
 
@@ -47,10 +46,10 @@ class AppEntity(
     val minAPI: Int,
     val apiUnit: Int,
     val updateTime: Long,
-    val isNativeLibrariesRetrieved: Boolean,
-    val nativeLibraries: BooleanArray,
     val isLaunchable: Boolean,
     val appPackage: AppPackage,
+    @ColumnInfo(name = "apk_entries", defaultValue = "-1")
+    val archiveEntryFlags: Int,
     @ColumnInfo(name = "dex_pkgs", defaultValue = "-1")
     val dexPackageFlags: Int,
     @Embedded
@@ -59,16 +58,6 @@ class AppEntity(
 
 
 internal class AppConverters {
-
-    @TypeConverter
-    fun booleanArrayToString(array: BooleanArray): String {
-        return array.simpleToJson()
-    }
-
-    @TypeConverter
-    fun fromBooleanArrayString(string: String?): BooleanArray {
-        return string?.jsonSimpleTo<BooleanArray>() ?: BooleanArray(ApkUtil.NATIVE_LIB_SUPPORT_SIZE) { false }
-    }
 
     @TypeConverter
     fun appPackageToString(appPackage: AppPackage): String {

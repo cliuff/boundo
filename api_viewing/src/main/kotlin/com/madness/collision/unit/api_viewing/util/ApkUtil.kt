@@ -33,57 +33,6 @@ import java.util.zip.ZipFile
 
 object ApkUtil {
 
-    const val NATIVE_LIB_SUPPORT_SIZE = 8
-
-    fun getNativeLibSupport(path: String): BooleanArray {
-        return getNativeLibSupport(File(path))
-    }
-
-    fun getNativeLibSupport(file: File): BooleanArray {
-        val libFlutter = "libflutter.so"
-        val libReactNative = "libreactnativejni.so"
-        val libXamarin = "libxamarin-app.so"
-
-        val libDirs = arrayOf(
-            arrayOf("lib/armeabi-v7a/", "lib/armeabi/",), arrayOf("lib/arm64-v8a/"),
-            arrayOf("lib/x86/"), arrayOf("lib/x86_64/")
-        )
-        val libDirCheck = BooleanArray(4) { false }
-
-        var hasFlutter = false
-        var hasReactNative = false
-        var hasXamarin = false
-        val itemKotlin = "kotlin/kotlin.kotlin_builtins"
-        var hasKotlin = false
-
-        iterateFile(file) { entry ->
-            val name = entry.name
-            var isAnyLibDirDetected = false
-            var isAllLibDirDetected = true
-            for (i in libDirCheck.indices) {
-                if (libDirCheck[i].not()) {
-                    libDirCheck[i] = entry.isDirectory.not() && libDirs[i].any { name.startsWith(it) }
-                }
-                isAnyLibDirDetected = isAnyLibDirDetected || libDirCheck[i]
-                isAllLibDirDetected = isAllLibDirDetected && libDirCheck[i]
-            }
-            if (isAnyLibDirDetected) {
-                if (!hasFlutter) hasFlutter = name.endsWith(libFlutter)
-                if (!hasReactNative) hasReactNative = name.endsWith(libReactNative)
-                if (!hasXamarin) hasXamarin = name.endsWith(libXamarin)
-            }
-            if (!hasKotlin) hasKotlin = name == itemKotlin
-            !(isAllLibDirDetected && hasFlutter && hasReactNative && hasXamarin && hasKotlin)
-        }?.let {
-            it.printStackTrace()
-            return BooleanArray(NATIVE_LIB_SUPPORT_SIZE) { false }
-        }
-        return booleanArrayOf(
-            libDirCheck[0], libDirCheck[1], libDirCheck[2], libDirCheck[3],
-            hasFlutter, hasReactNative, hasXamarin, hasKotlin
-        )
-    }
-
     fun getNativeLibs(file: File): List<Triple<String, Long, Long>> {
         val libDirs = listOf("lib/armeabi-v7a/", "lib/armeabi/", "lib/arm64-v8a/", "lib/x86/", "lib/x86_64/")
         val libList = arrayListOf<Triple<String, Long, Long>>()

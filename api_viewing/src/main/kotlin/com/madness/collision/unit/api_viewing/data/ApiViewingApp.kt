@@ -27,6 +27,7 @@ import com.madness.collision.misc.MiscApp
 import com.madness.collision.unit.api_viewing.database.ApiViewingIconDetails
 import com.madness.collision.unit.api_viewing.database.ApiViewingIconInfo
 import com.madness.collision.unit.api_viewing.info.AppType
+import com.madness.collision.unit.api_viewing.info.ArchiveFlags
 import com.madness.collision.unit.api_viewing.info.PkgInfo
 import com.madness.collision.unit.api_viewing.info.getAppType
 import com.madness.collision.unit.api_viewing.info.isOnBackInvokedCallbackEnabled
@@ -50,14 +51,13 @@ open class ApiViewingApp(var packageName: String) : Cloneable {
     var minAPI: Int = -1
     var apiUnit: Int = ApiUnit.NON
     var updateTime: Long = 0L
-    var isNativeLibrariesRetrieved: Boolean = false
-    var nativeLibraries: BooleanArray = BooleanArray(ApkUtil.NATIVE_LIB_SUPPORT_SIZE) { false }
     var isLaunchable: Boolean = false
     var appPackage: AppPackage = AppPackage("")
+    var archiveEntryFlags: ArchiveEntryFlags = ArchiveEntryFlags.Undefined
     var dexPackageFlags: DexPackageFlags = DexPackageFlags(DexPackageFlags.UNDEFINED)
     var iconInfo: ApiViewingIconInfo? = null
 
-    var retrieveLocks: Array<Any> = Array(2) { Any() }
+    var retrieveLocks: Array<Any> = Array(3) { Any() }
 
     @Ignore var uid: Int = -1
     @Ignore var name: String = ""
@@ -112,7 +112,6 @@ open class ApiViewingApp(var packageName: String) : Cloneable {
 
     public override fun clone(): Any {
         return (super.clone() as ApiViewingApp).apply {
-            nativeLibraries = nativeLibraries.copyOf()
             retrieveLocks = retrieveLocks.copyOf()
         }
     }
@@ -197,8 +196,8 @@ open class ApiViewingApp(var packageName: String) : Cloneable {
         retrieveConsuming(1)
     }
 
-    fun retrieveNativeLibraries() {
-        if (isNativeLibrariesRetrieved) return
+    fun retrieveArchiveEntries() {
+        if (archiveEntryFlags.isValidRev) return
         retrieveConsuming(0)
     }
 
@@ -218,19 +217,26 @@ open class ApiViewingApp(var packageName: String) : Cloneable {
 
 private fun ApiViewingApp.loadNativeLibraries() {
     fun AppPackage.getNativeLibSupport(): BooleanArray {
-        if (!hasSplits) return ApkUtil.getNativeLibSupport(basePath)
+        if (!hasSplits) return ArchiveFlags.getEntryFlags(basePath)
         var arr = BooleanArray(0)
         for (path in apkPaths) {
-            val lib = ApkUtil.getNativeLibSupport(path)
+            val lib = ArchiveFlags.getEntryFlags(path)
             if (arr.size != lib.size) { arr = lib; continue }
             for (i in arr.indices) if (!arr[i]) arr[i] = lib[i]
+            if (arr.all { it }) break
         }
         return arr
     }
-    synchronized(nativeLibraries) {
-        if (isNativeLibrariesRetrieved) return
-        appPackage.getNativeLibSupport().copyInto(nativeLibraries)
-        isNativeLibrariesRetrieved = true
+    synchronized(retrieveLocks[2]) {
+        if (archiveEntryFlags.isValidRev) return
+        val libs = appPackage.getNativeLibSupport()
+        archiveEntryFlags = ArchiveEntryFlags.from(
+            if (libs[0]) ArchiveEntryFlags.BIT_KOTLIN else 0,
+            if (libs[1]) ArchiveEntryFlags.BIT_NATIVE_LIBS_64B else 0,
+            if (libs[2]) ArchiveEntryFlags.BIT_LIB_FLUTTER else 0,
+            if (libs[3]) ArchiveEntryFlags.BIT_LIB_REACT_NATIVE else 0,
+            if (libs[4]) ArchiveEntryFlags.BIT_LIB_XAMARIN else 0,
+        )
     }
 }
 

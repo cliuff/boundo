@@ -27,6 +27,7 @@ import com.madness.collision.misc.PackageCompat
 import com.madness.collision.unit.api_viewing.R
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
+import com.madness.collision.unit.api_viewing.data.ArchiveEntryFlags
 import com.madness.collision.unit.api_viewing.info.AppType
 import com.madness.collision.unit.api_viewing.info.DexLibSuperFinder
 import com.madness.collision.unit.api_viewing.list.AppListService
@@ -60,8 +61,8 @@ internal fun builtInTags(): Map<String, AppTagInfo> = listOf(
         id = AppTagInfo.ID_TECH_KOTLIN, category = 0.cat, icon = R.drawable.ic_kotlin_72.icon,
         label = R.string.av_tag_kotlin.labels, rank = "12",
         desc = "kotlin.kotlin_builtins".fileResultDesc,
-        requisites = nativeLibrariesRequisite().list,
-        expressing = commonExpressing { it.nativeLibraries[7] }
+        requisites = archiveEntriesRequisite().list,
+        expressing = commonExpressing { ArchiveEntryFlags.BIT_KOTLIN in it.archiveEntryFlags }
     ).apply { iconKey = "kot" },
     AppTagInfo(
         id = AppTagInfo.ID_TECH_X_COMPOSE, category = 0.cat, icon = R.drawable.ic_cmp_72.icon,
@@ -81,22 +82,22 @@ internal fun builtInTags(): Map<String, AppTagInfo> = listOf(
         id = AppTagInfo.ID_TECH_FLUTTER, category = 0.cat, icon = R.drawable.ic_flutter_72.icon,
         label = R.string.av_tag_flutter.labels, rank = "14",
         desc = "libflutter.so".fileResultDesc,
-        requisites = nativeLibrariesRequisite().list,
-        expressing = commonExpressing { it.nativeLibraries[4] }
+        requisites = archiveEntriesRequisite().list,
+        expressing = commonExpressing { ArchiveEntryFlags.BIT_LIB_FLUTTER in it.archiveEntryFlags }
     ).apply { iconKey = "flu" },
     AppTagInfo(
         id = AppTagInfo.ID_TECH_REACT_NATIVE, category = 0.cat, icon = R.drawable.ic_react_72.icon,
         label = R.string.av_tag_react_native.labels, rank = "15",
         desc = "libreactnativejni.so".fileResultDesc,
-        requisites = nativeLibrariesRequisite().list,
-        expressing = commonExpressing { it.nativeLibraries[5] }
+        requisites = archiveEntriesRequisite().list,
+        expressing = commonExpressing { ArchiveEntryFlags.BIT_LIB_REACT_NATIVE in it.archiveEntryFlags }
     ).apply { iconKey = "rn" },
     AppTagInfo(
         id = AppTagInfo.ID_TECH_XAMARIN, category = 0.cat, icon = R.drawable.ic_xamarin_72.icon,
         label = R.string.av_tag_xamarin.labels, rank = "16",
         desc = "libxamarin-app.so".fileResultDesc,
-        requisites = nativeLibrariesRequisite().list,
-        expressing = commonExpressing { it.nativeLibraries[6] }
+        requisites = archiveEntriesRequisite().list,
+        expressing = commonExpressing { ArchiveEntryFlags.BIT_LIB_XAMARIN in it.archiveEntryFlags }
     ).apply { iconKey = "xam" },
 
     AppTagInfo(
@@ -182,13 +183,8 @@ internal fun builtInTags(): Map<String, AppTagInfo> = listOf(
         label = R.string.av_tag_full_64bit.labels, rank = "27",
         desc = R.string.av_tag_result_64bit.resultDesc,
         availability = { Build.SUPPORTED_64_BIT_ABIS.isNotEmpty() },
-        requisites = nativeLibrariesRequisite().list,
-        expressing = commonExpressing { app ->
-            val lib = app.nativeLibraries
-            val abiSet64 = Build.SUPPORTED_64_BIT_ABIS.toSet()
-            val abis = listOf("arm64-v8a", "x86_64")
-            abis.indices.any { i -> (abis[i] in abiSet64) && (!lib[i*2] || lib[i*2+1]) }
-        }
+        requisites = archiveEntriesRequisite().list,
+        expressing = commonExpressing { ArchiveEntryFlags.BIT_NATIVE_LIBS_64B in it.archiveEntryFlags }
     ),
 
     AppTagInfo(
@@ -422,10 +418,10 @@ private fun xiaomiMsgRequisite(): AppTagInfo.Requisite =
     }
 }
 
-private fun nativeLibrariesRequisite(): AppTagInfo.Requisite = AppTagInfo.Requisite(
-    id = "ReqNativeLibs",
-    checker = { res -> res.app.isNativeLibrariesRetrieved },
-    loader = { res -> res.app.retrieveNativeLibraries() }
+private fun archiveEntriesRequisite(): AppTagInfo.Requisite = AppTagInfo.Requisite(
+    id = "ReqArchiveEntries",
+    checker = { res -> res.app.archiveEntryFlags.isValidRev },
+    loader = { res -> res.app.retrieveArchiveEntries() }
 )
 
 private fun appIconRequisite(): AppTagInfo.Requisite = AppTagInfo.Requisite(

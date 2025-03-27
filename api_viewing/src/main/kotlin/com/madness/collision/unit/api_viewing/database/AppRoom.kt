@@ -24,7 +24,7 @@ import com.madness.collision.unit.api_viewing.database.maintainer.DiffConverters
 import com.madness.collision.unit.api_viewing.database.maintainer.DiffDao
 
 @Database(
-    version = 7,
+    version = 8,
     exportSchema = true,
     entities = [AppEntity::class, DiffChange::class],
     autoMigrations = [
@@ -34,6 +34,7 @@ import com.madness.collision.unit.api_viewing.database.maintainer.DiffDao
         AutoMigration(from = 4, to = 5, spec = AppIconSetMigrationSpec::class),
         AutoMigration(from = 5, to = 6),
         AutoMigration(from = 6, to = 7, spec = ComposeMigrationSpec::class),
+        AutoMigration(from = 7, to = 8, spec = NativeLibsMigrationSpec::class),
     ]
 )
 @TypeConverters(AppConverters::class, DiffConverters::class)
@@ -70,3 +71,7 @@ class AppIconSetMigrationSpec : AutoMigrationSpec
 
 @DeleteColumn(tableName = "app", columnName = "jetpackComposed")
 class ComposeMigrationSpec : AutoMigrationSpec
+
+@DeleteColumn(tableName = "app", columnName = "nativeLibraries")
+@DeleteColumn(tableName = "app", columnName = "isNativeLibrariesRetrieved")
+class NativeLibsMigrationSpec : AutoMigrationSpec

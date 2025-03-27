@@ -32,10 +32,9 @@ fun ApiViewingApp.toEntity() =
         minAPI = minAPI,
         apiUnit = apiUnit,
         updateTime = updateTime,
-        isNativeLibrariesRetrieved = isNativeLibrariesRetrieved,
-        nativeLibraries = nativeLibraries,
         isLaunchable = isLaunchable,
         appPackage = appPackage,
+        archiveEntryFlags = archiveEntryFlags.value,
         dexPackageFlags = dexPackageFlags.value,
         iconInfo = iconInfo
     )
@@ -48,10 +47,9 @@ fun AppEntity.toEntityApp(app: ApiViewingApp = ApiViewingApp()): ApiViewingApp {
     app.minAPI = minAPI
     app.apiUnit = apiUnit
     app.updateTime = updateTime
-    app.isNativeLibrariesRetrieved = isNativeLibrariesRetrieved
-    app.nativeLibraries = nativeLibraries
     app.isLaunchable = isLaunchable
     app.appPackage = appPackage
+    app.archiveEntryFlags = ArchiveEntryFlags.of(archiveEntryFlags)
     app.dexPackageFlags = DexPackageFlags(dexPackageFlags)
     app.iconInfo = iconInfo
     return app
