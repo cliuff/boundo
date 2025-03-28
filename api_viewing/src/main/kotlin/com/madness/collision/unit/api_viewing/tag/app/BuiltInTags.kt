@@ -94,7 +94,7 @@ internal fun builtInTags(): Map<String, AppTagInfo> = listOf(
     AppTagInfo(
         id = AppTagInfo.ID_TECH_REACT_NATIVE, category = 0.cat, icon = R.drawable.ic_react_72.icon,
         label = R.string.av_tag_react_native.labels, rank = "15",
-        desc = "libreactnativejni.so".fileResultDesc,
+        desc = "libreactnative.so".fileResultDesc,
         requisites = archiveEntriesRequisite().list,
         expressing = commonExpressing { ArchiveEntryFlags.BIT_LIB_REACT_NATIVE in it.archiveEntryFlags }
     ).apply { iconKey = "rn" },
@@ -105,6 +105,16 @@ internal fun builtInTags(): Map<String, AppTagInfo> = listOf(
         requisites = archiveEntriesRequisite().list,
         expressing = commonExpressing { ArchiveEntryFlags.BIT_LIB_XAMARIN in it.archiveEntryFlags }
     ).apply { iconKey = "xam" },
+    AppTagInfo(
+        id = AppTagInfo.ID_TECH_MAUI, category = 0.cat, icon = R.drawable.ic_dot_net_72.icon,
+        label = R.string.av_tag_maui.labels, rank = "165",
+        desc = "libaot-Microsoft.Maui.dll.so".fileResultDesc,
+        requisites = mauiRequisite().list,
+        expressing = commonExpressing {
+            ArchiveEntryFlags.BIT_LIB_MAUI in it.archiveEntryFlags ||
+                    DexPackageFlags.BIT_MAUI in it.dexPackageFlags
+        }
+    ).apply { iconKey = "mau" },
 
     AppTagInfo(
         id = AppTagInfo.ID_APP_ADAPTIVE_ICON, category = 0.cat, icon = R.drawable.ic_ai_72.icon,
@@ -439,6 +449,18 @@ private fun kotlinRequisite(): AppTagInfo.Requisite = AppTagInfo.Requisite(
     loader = { res ->
         if (!res.app.archiveEntryFlags.isValidRev) res.app.retrieveArchiveEntries()
         if (ArchiveEntryFlags.BIT_KOTLIN !in res.app.archiveEntryFlags) res.app.retrieveThirdPartyPackages()
+    }
+)
+
+private fun mauiRequisite(): AppTagInfo.Requisite = AppTagInfo.Requisite(
+    id = "ReqMaui",
+    checker = { res ->
+        res.app.archiveEntryFlags.run { isValidRev && contains(ArchiveEntryFlags.BIT_LIB_MAUI) } ||
+                res.app.dexPackageFlags.isValidRev
+    },
+    loader = { res ->
+        if (!res.app.archiveEntryFlags.isValidRev) res.app.retrieveArchiveEntries()
+        if (ArchiveEntryFlags.BIT_LIB_MAUI !in res.app.archiveEntryFlags) res.app.retrieveThirdPartyPackages()
     }
 )
 

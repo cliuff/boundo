@@ -228,8 +228,9 @@ private fun ApiViewingApp.loadNativeLibraries() {
             if (libs[0]) ArchiveEntryFlags.BIT_KOTLIN else 0,
             if (libs[1]) ArchiveEntryFlags.BIT_NATIVE_LIBS_64B else 0,
             if (libs[2]) ArchiveEntryFlags.BIT_LIB_FLUTTER else 0,
-            if (libs[3]) ArchiveEntryFlags.BIT_LIB_REACT_NATIVE else 0,
-            if (libs[4]) ArchiveEntryFlags.BIT_LIB_XAMARIN else 0,
+            if (libs[3] || libs[4]) ArchiveEntryFlags.BIT_LIB_REACT_NATIVE else 0,
+            if (libs[5]) ArchiveEntryFlags.BIT_LIB_XAMARIN else 0,
+            if (libs[6]) ArchiveEntryFlags.BIT_LIB_MAUI else 0,
         )
     }
 }
@@ -240,7 +241,9 @@ private fun ApiViewingApp.loadThirdPartyPackages() {
         if (dexPackageFlags.isValidRev) return
         var pkgArr = BooleanArray(0)
         for (path in appPackage.apkPaths) {
-            val arr = ApkUtil.checkPkg(path, "kotlin", "androidx.compose", "org.jetbrains.compose")
+            val arr = ApkUtil.checkPkg(path,
+                "kotlin", "androidx.compose",
+                "org.jetbrains.compose", "microsoft.maui.platform")
             if (pkgArr.size != arr.size) { pkgArr = arr; continue }
             for (i in arr.indices) pkgArr[i] = pkgArr[i] || arr[i]
             if (pkgArr.all { it }) break
@@ -249,6 +252,7 @@ private fun ApiViewingApp.loadThirdPartyPackages() {
             if (pkgArr[0]) DexPackageFlags.BIT_KOTLIN else 0,
             if (pkgArr[1]) DexPackageFlags.BIT_JETPACK_COMPOSE else 0,
             if (pkgArr[2]) DexPackageFlags.BIT_COMPOSE_MULTIPLATFORM else 0,
+            if (pkgArr[3]) DexPackageFlags.BIT_MAUI else 0,
         )
     }
 }

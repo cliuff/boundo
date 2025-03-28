@@ -110,6 +110,7 @@ internal class AppTagInfo(
         const val ID_TECH_FLUTTER = "avTagsValCpFlu"
         const val ID_TECH_REACT_NATIVE = "avTagsValCpRn"
         const val ID_TECH_XAMARIN = "avTagsValCpXar"
+        const val ID_TECH_MAUI = "avTagsValCpMau"
         const val ID_TECH_KOTLIN = "avTagsValKot"
         const val ID_TECH_X_COMPOSE = "avTagsValXCmp"
         const val ID_TECH_COMPOSE_CMP = "avTagsValCmp"
@@ -146,6 +147,7 @@ internal class AppTagInfo(
             ID_TECH_FLUTTER,
             ID_TECH_REACT_NATIVE,
             ID_TECH_XAMARIN,
+            ID_TECH_MAUI,
             ID_TECH_KOTLIN,
             ID_TECH_X_COMPOSE,
             ID_TECH_COMPOSE_CMP,
@@ -178,6 +180,7 @@ internal class AppTagInfo(
             ID_TECH_FLUTTER,
             ID_TECH_REACT_NATIVE,
             ID_TECH_XAMARIN,
+            ID_TECH_MAUI,
             ID_TECH_KOTLIN,
             ID_TECH_X_COMPOSE,
             ID_TECH_COMPOSE_CMP,

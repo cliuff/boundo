@@ -1,0 +1,37 @@
+<!--
+  ~ Copyright 2025 Clifford Liu
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="72dp"
+    android:height="72dp"
+    android:viewportWidth="72"
+    android:viewportHeight="72">
+  <path
+      android:pathData="M36,36m-28.5,0a28.5,28.5 0,1 1,57 0a28.5,28.5 0,1 1,-57 0"
+      android:fillColor="#512bd4"/>
+  <path
+      android:pathData="m17.659,43.917c-0.403,0 -0.746,-0.134 -1.028,-0.403 -0.282,-0.275 -0.423,-0.603 -0.423,-0.981 0,-0.386 0.141,-0.716 0.423,-0.992 0.282,-0.275 0.625,-0.413 1.028,-0.413 0.41,0 0.756,0.138 1.038,0.413 0.289,0.275 0.433,0.606 0.433,0.992 0,0.379 -0.144,0.706 -0.433,0.981 -0.282,0.269 -0.628,0.403 -1.038,0.403z"
+      android:fillColor="#ffffff"/>
+  <path
+      android:pathData="m33.771,43.689h-2.62L24.249,32.801c-0.175,-0.275 -0.319,-0.561 -0.433,-0.858h-0.06c0.054,0.317 0.081,0.995 0.081,2.035v9.711h-2.318V28.875h2.791l6.67,10.63C31.262,39.946 31.443,40.249 31.524,40.415h0.04C31.497,40.022 31.463,39.357 31.463,38.421V28.875h2.307z"
+      android:fillColor="#ffffff"/>
+  <path
+      android:pathData="m45.056,43.689h-8.111V28.875h7.789v2.087h-5.391v4.194h4.967v2.076H39.343v4.38h5.713z"
+      android:fillColor="#ffffff"/>
+  <path
+      android:pathData="m56.583,30.962h-4.151v12.727H50.034v-12.727H45.893V28.875h10.691z"
+      android:fillColor="#ffffff"/>
+</vector>

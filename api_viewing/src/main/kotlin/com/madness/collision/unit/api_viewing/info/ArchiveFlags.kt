@@ -28,7 +28,8 @@ object ArchiveFlags {
 
 private fun checkEntryFlags(file: File): BooleanArray {
     val kotlinEntryNames = arrayOf("kotlin-tooling-metadata.json", "kotlin/kotlin.kotlin_builtins")
-    val libNameSet = linkedSetOf("flutter", "reactnativejni", "xamarin-app")
+    val libNameSet = linkedSetOf(
+        "flutter", "reactnativejni", "reactnative", "xamarin-app", "aot-Microsoft.Maui.dll")
     // Android ABIs, native code in app packages: /lib/<abi>/lib<name>.so
     val libEntryRegex = """lib/([\w-]+)/lib(.+)\.so""".toRegex()
 
