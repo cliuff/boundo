@@ -95,6 +95,7 @@ value class DexPackageFlags private constructor(val value: Int) {
         const val BIT_JETPACK_COMPOSE: Int = 1 shl 1
         const val BIT_COMPOSE_MULTIPLATFORM: Int = 1 shl 2
         const val BIT_MAUI: Int = 1 shl 3
+        const val BIT_CORDOVA: Int = 1 shl 4
         const val BIT_MAX: Int = 1 shl 26
 
         val Undefined: DexPackageFlags = DexPackageFlags(UNDEFINED)

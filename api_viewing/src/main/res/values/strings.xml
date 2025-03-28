@@ -91,6 +91,7 @@
     <string name="av_tag_react_native">React Native</string>
     <string name="av_tag_xamarin">Xamarin</string>
     <string name="av_tag_maui">.NET MAUI</string>
+    <string name="av_tag_cordova">Cordova</string>
     <string name="av_tag_fcm_normal">FCM</string>
     <string name="av_tag_fcm_full">Firebase Cloud Messaging (FCM)</string>
     <string name="av_tag_jpush_normal">JPush</string>

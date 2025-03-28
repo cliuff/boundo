@@ -115,6 +115,13 @@ internal fun builtInTags(): Map<String, AppTagInfo> = listOf(
                     DexPackageFlags.BIT_MAUI in it.dexPackageFlags
         }
     ).apply { iconKey = "mau" },
+    AppTagInfo(
+        id = AppTagInfo.ID_TECH_CORDOVA, category = 0.cat, icon = R.drawable.ic_cordova_72.icon,
+        label = R.string.av_tag_cordova.labels, rank = "166",
+        desc = "org.apache.cordova".packageResultDesc,
+        requisites = thirdPartyPkgRequisite().list,
+        expressing = commonExpressing { DexPackageFlags.BIT_CORDOVA in it.dexPackageFlags }
+    ).apply { iconKey = "cdv" },
 
     AppTagInfo(
         id = AppTagInfo.ID_APP_ADAPTIVE_ICON, category = 0.cat, icon = R.drawable.ic_ai_72.icon,
