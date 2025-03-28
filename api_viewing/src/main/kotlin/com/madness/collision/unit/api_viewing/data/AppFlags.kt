@@ -64,24 +64,46 @@ value class ArchiveEntryFlags private constructor(val value: Int) {
 }
 
 @JvmInline
-value class DexPackageFlags(val value: Int) {
+value class DexPackageFlags private constructor(val value: Int) {
     val isDefined: Boolean
         get() = value != UNDEFINED
-    val isJetpackCompose: Boolean
-        get() = isDefined && (value and JETPACK_COMPOSE != 0)
-    val isComposeMultiplatform: Boolean
-        get() = isDefined && (value and COMPOSE_MULTIPLATFORM != 0)
+    val rev: Int
+        get() = if (isDefined) value and 0b11111 else -1
+    val bits: Int
+        get() = if (isDefined) value ushr REV_BITS else BIT_NONE
+    val isValidRev: Boolean
+        get() = rev == REV
+
+    operator fun contains(bit: Int): Boolean {
+        return isDefined && (bits and bit != 0)
+    }
 
     companion object {
         // binary value of -1 is all ones (i.e. ~0)
         const val UNDEFINED: Int = -1
-        const val NONE: Int = 0
-        const val JETPACK_COMPOSE: Int = 1 shl 0
-        const val COMPOSE_MULTIPLATFORM: Int = 1 shl 1
+        /** The number of bits used as revision number. */
+        const val REV_BITS: Int = 5
+        /** The maximum revision number. Number of all ones is reserved. */
+        const val REV_MAX: Int = 0b11110
 
-        fun from(vararg flag: Int): DexPackageFlags {
-            if (flag.isEmpty()) return DexPackageFlags(NONE)
-            return DexPackageFlags(flag.reduce { acc, i -> acc or i })
+        /* The current revision. Increment on changing bits. */
+        const val REV: Int = 4
+
+        const val BIT_NONE: Int = 0
+        const val BIT_KOTLIN: Int = 1 shl 0
+        const val BIT_JETPACK_COMPOSE: Int = 1 shl 1
+        const val BIT_COMPOSE_MULTIPLATFORM: Int = 1 shl 2
+        const val BIT_MAX: Int = 1 shl 26
+
+        val Undefined: DexPackageFlags = DexPackageFlags(UNDEFINED)
+
+        fun of(value: Int): DexPackageFlags {
+            return DexPackageFlags(value)
+        }
+
+        fun from(vararg flagBits: Int): DexPackageFlags {
+            val bits = if (flagBits.isNotEmpty()) flagBits.reduce { acc, i -> acc or i } else 0
+            return DexPackageFlags((bits shl REV_BITS) + REV)
         }
     }
 }

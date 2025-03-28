@@ -50,7 +50,7 @@ fun AppEntity.toEntityApp(app: ApiViewingApp = ApiViewingApp()): ApiViewingApp {
     app.isLaunchable = isLaunchable
     app.appPackage = appPackage
     app.archiveEntryFlags = ArchiveEntryFlags.of(archiveEntryFlags)
-    app.dexPackageFlags = DexPackageFlags(dexPackageFlags)
+    app.dexPackageFlags = DexPackageFlags.of(dexPackageFlags)
     app.iconInfo = iconInfo
     return app
 }

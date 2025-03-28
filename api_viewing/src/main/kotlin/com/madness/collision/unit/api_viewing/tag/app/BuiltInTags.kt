@@ -28,6 +28,7 @@ import com.madness.collision.unit.api_viewing.R
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.ArchiveEntryFlags
+import com.madness.collision.unit.api_viewing.data.DexPackageFlags
 import com.madness.collision.unit.api_viewing.info.AppType
 import com.madness.collision.unit.api_viewing.info.DexLibSuperFinder
 import com.madness.collision.unit.api_viewing.list.AppListService
@@ -60,23 +61,28 @@ internal fun builtInTags(): Map<String, AppTagInfo> = listOf(
     AppTagInfo(
         id = AppTagInfo.ID_TECH_KOTLIN, category = 0.cat, icon = R.drawable.ic_kotlin_72.icon,
         label = R.string.av_tag_kotlin.labels, rank = "12",
-        desc = "kotlin.kotlin_builtins".fileResultDesc,
-        requisites = archiveEntriesRequisite().list,
-        expressing = commonExpressing { ArchiveEntryFlags.BIT_KOTLIN in it.archiveEntryFlags }
+        desc = "kotlin".packageResultDesc,
+        requisites = kotlinRequisite().list,
+        expressing = commonExpressing {
+            ArchiveEntryFlags.BIT_KOTLIN in it.archiveEntryFlags ||
+                    DexPackageFlags.BIT_KOTLIN in it.dexPackageFlags ||
+                    DexPackageFlags.BIT_JETPACK_COMPOSE in it.dexPackageFlags ||
+                    DexPackageFlags.BIT_COMPOSE_MULTIPLATFORM in it.dexPackageFlags
+        }
     ).apply { iconKey = "kot" },
     AppTagInfo(
         id = AppTagInfo.ID_TECH_X_COMPOSE, category = 0.cat, icon = R.drawable.ic_cmp_72.icon,
         label = R.string.av_tag_compose.labels, rank = "13",
         desc = "androidx.compose".packageResultDesc,
         requisites = thirdPartyPkgRequisite().list,
-        expressing = commonExpressing { it.dexPackageFlags.isJetpackCompose }
+        expressing = commonExpressing { DexPackageFlags.BIT_JETPACK_COMPOSE in it.dexPackageFlags }
     ).apply { iconKey = "xcm" },
     AppTagInfo(
         id = AppTagInfo.ID_TECH_COMPOSE_CMP, category = 0.cat, icon = R.drawable.ic_compose_cmp_72.icon,
         label = R.string.av_tag_compose_cmp.labels, rank = "135",
         desc = "org.jetbrains.compose".packageResultDesc,
         requisites = thirdPartyPkgRequisite().list,
-        expressing = commonExpressing { it.dexPackageFlags.isComposeMultiplatform }
+        expressing = commonExpressing { DexPackageFlags.BIT_COMPOSE_MULTIPLATFORM in it.dexPackageFlags }
     ).apply { iconKey = "cmp" },
     AppTagInfo(
         id = AppTagInfo.ID_TECH_FLUTTER, category = 0.cat, icon = R.drawable.ic_flutter_72.icon,
@@ -424,6 +430,18 @@ private fun archiveEntriesRequisite(): AppTagInfo.Requisite = AppTagInfo.Requisi
     loader = { res -> res.app.retrieveArchiveEntries() }
 )
 
+private fun kotlinRequisite(): AppTagInfo.Requisite = AppTagInfo.Requisite(
+    id = "ReqKotlin",
+    checker = { res ->
+        res.app.archiveEntryFlags.run { isValidRev && contains(ArchiveEntryFlags.BIT_KOTLIN) } ||
+                res.app.dexPackageFlags.isValidRev
+    },
+    loader = { res ->
+        if (!res.app.archiveEntryFlags.isValidRev) res.app.retrieveArchiveEntries()
+        if (ArchiveEntryFlags.BIT_KOTLIN !in res.app.archiveEntryFlags) res.app.retrieveThirdPartyPackages()
+    }
+)
+
 private fun appIconRequisite(): AppTagInfo.Requisite = AppTagInfo.Requisite(
     id = "ReqAppIcon",
     checker = { res -> res.app.hasIcon },
@@ -494,7 +512,7 @@ private fun flagGetDisabledLegacy() = PackageManager.GET_DISABLED_COMPONENTS
 
 private fun thirdPartyPkgRequisite(): AppTagInfo.Requisite = AppTagInfo.Requisite(
     id = "ReqThirdPartyPkg",
-    checker = { res -> res.app.isThirdPartyPackagesRetrieved },
+    checker = { res -> res.app.dexPackageFlags.isValidRev },
     loader = { res -> res.app.retrieveThirdPartyPackages() }
 )
 

@@ -54,7 +54,7 @@ open class ApiViewingApp(var packageName: String) : Cloneable {
     var isLaunchable: Boolean = false
     var appPackage: AppPackage = AppPackage("")
     var archiveEntryFlags: ArchiveEntryFlags = ArchiveEntryFlags.Undefined
-    var dexPackageFlags: DexPackageFlags = DexPackageFlags(DexPackageFlags.UNDEFINED)
+    var dexPackageFlags: DexPackageFlags = DexPackageFlags.Undefined
     var iconInfo: ApiViewingIconInfo? = null
 
     var retrieveLocks: Array<Any> = Array(3) { Any() }
@@ -95,8 +95,6 @@ open class ApiViewingApp(var packageName: String) : Cloneable {
         get() = when (miPushSdkCheckRef) { 1 -> true; 0 -> false; else -> null }
         set(value) { miPushSdkCheckRef = value?.compareTo(false) ?: -2 }
 
-    val isThirdPartyPackagesRetrieved: Boolean
-        get() = dexPackageFlags.isDefined
     val isArchive: Boolean
         get() = apiUnit == ApiUnit.APK
     val isNotArchive: Boolean
@@ -192,7 +190,7 @@ open class ApiViewingApp(var packageName: String) : Cloneable {
     }
 
     fun retrieveThirdPartyPackages() {
-        if (isThirdPartyPackagesRetrieved) return
+        if (dexPackageFlags.isValidRev) return
         retrieveConsuming(1)
     }
 
@@ -207,10 +205,6 @@ open class ApiViewingApp(var packageName: String) : Cloneable {
             1 -> loadThirdPartyPackages()
             2 -> loadAppIconInfo((arg as List<*>).filterIsInstance<Drawable?>())
         }
-    }
-
-    private fun checkKotlin() {  // todo improve Kotlin detection
-        appPackage.apkPaths.any { ApkUtil.checkPkg(it, "kotlin") }
     }
 }
 
@@ -243,16 +237,18 @@ private fun ApiViewingApp.loadNativeLibraries() {
 private fun ApiViewingApp.loadThirdPartyPackages() {
     // ensure thread safety, otherwise encounter exceptions during app list loading
     synchronized(retrieveLocks[0]) {
-        if (dexPackageFlags.isDefined) return
-        val pkgArr = BooleanArray(2)
+        if (dexPackageFlags.isValidRev) return
+        var pkgArr = BooleanArray(0)
         for (path in appPackage.apkPaths) {
-            val arr = ApkUtil.checkPkg(path, "androidx.compose", "org.jetbrains.compose")
+            val arr = ApkUtil.checkPkg(path, "kotlin", "androidx.compose", "org.jetbrains.compose")
+            if (pkgArr.size != arr.size) { pkgArr = arr; continue }
             for (i in arr.indices) pkgArr[i] = pkgArr[i] || arr[i]
             if (pkgArr.all { it }) break
         }
         dexPackageFlags = DexPackageFlags.from(
-            if (pkgArr[0]) DexPackageFlags.JETPACK_COMPOSE else 0,
-            if (pkgArr[1]) DexPackageFlags.COMPOSE_MULTIPLATFORM else 0,
+            if (pkgArr[0]) DexPackageFlags.BIT_KOTLIN else 0,
+            if (pkgArr[1]) DexPackageFlags.BIT_JETPACK_COMPOSE else 0,
+            if (pkgArr[2]) DexPackageFlags.BIT_COMPOSE_MULTIPLATFORM else 0,
         )
     }
 }
