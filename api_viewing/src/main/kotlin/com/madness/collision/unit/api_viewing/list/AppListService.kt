@@ -180,16 +180,6 @@ internal class AppListService(private val serviceContext: Context? = null) {
                 yieldLineBreak()
             }
         }
-
-        if (!appInfo.isNativeLibrariesRetrieved) appInfo.retrieveNativeLibraries()
-        val nls = appInfo.nativeLibraries
-        val nlItem = arrayOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64", "Flutter", "React Native", "Xamarin", "Kotlin")
-            .mapIndexed { i, s -> "$s " + (if (nls[i]) "✓" else "✗") }
-            .joinToString(separator = "  ")
-
-        yield(R.string.av_details_native_libs.boldItem)
-        yield(nlItem)
-        yieldLineBreak()
     }
 
     fun getAppExtendedDetailsSequence(context: Context, appInfo: ApiViewingApp, pkgInfo: PackageInfo) = buildList<AppInfoItem> {

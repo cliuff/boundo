@@ -28,23 +28,9 @@ import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.map
 import java.io.File
 import java.util.TreeSet
-import java.util.zip.ZipEntry
 import java.util.zip.ZipFile
 
 object ApkUtil {
-
-    fun getNativeLibs(file: File): List<Triple<String, Long, Long>> {
-        val libDirs = listOf("lib/armeabi-v7a/", "lib/armeabi/", "lib/arm64-v8a/", "lib/x86/", "lib/x86_64/")
-        val libList = arrayListOf<Triple<String, Long, Long>>()
-        iterateFile(file) { entry ->
-            if (entry.isDirectory.not() && libDirs.any { entry.name.startsWith(it) }) {
-                val item = Triple(entry.name, entry.compressedSize, entry.size)
-                libList.add(item)
-            }
-            true
-        }
-        return libList
-    }
 
     fun getResourceEntries(resources: Resources, resId: Int, path: String): Pair<String, List<String>> {
         return getResourceEntries(resources, resId, File(path))
@@ -71,46 +57,17 @@ object ApkUtil {
         val dirPattern = "${dirPrefix}(-[a-z\\d]+)*/"
         val namePattern = "$dirPattern$targetEntry\\.((?!\\.).)+".toRegex()
         val resultList = mutableListOf<String>()
-        readFile(file) { zip ->
-            val iterator = zip.entries().iterator()
-            while (iterator.hasNext()) {
-                val entry = iterator.next()
-                val name = entry.name
-                if (!name.startsWith(dirPrefix)) continue
-                if (!name.matches(namePattern)) continue
-                resultList.add(name)
+        kotlin.runCatching {
+            ZipFile(file).use { zip ->
+                for (entry in zip.entries()) {
+                    val name = entry.name
+                    if (!name.startsWith(dirPrefix)) continue
+                    if (!name.matches(namePattern)) continue
+                    resultList.add(name)
+                }
             }
-        }?.printStackTrace()
+        }.onFailure(Throwable::printStackTrace)
         return "R.$type.$targetEntry" to resultList
-    }
-
-    fun getItem(file: File, name: String): Boolean {
-        var hasTheItem = false
-        readFile(file) {
-            hasTheItem = it.getEntry(name) != null
-        }?.let {
-            it.printStackTrace()
-            return false
-        }
-        return hasTheItem
-    }
-
-    fun readFile(file: File, operation: (ZipFile) -> Unit): Throwable? {
-        if (file.exists().not()) return RuntimeException("File ${file.path} does not exist")
-        try {
-            ZipFile(file).use(operation)
-        } catch (e: Throwable) {
-            return e
-        }
-        return null
-    }
-
-    fun iterateFile(file: File, operation: (ZipEntry) -> Boolean): Throwable? = readFile(file) { zip ->
-        val iterator = zip.entries().iterator()
-        while (iterator.hasNext()) {
-            val e = iterator.next()
-            if (!operation.invoke(e)) break
-        }
     }
 
     fun getThirdPartyPkg(path: String, ownPkg: String): List<String> {

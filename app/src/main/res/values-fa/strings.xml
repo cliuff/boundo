@@ -148,7 +148,6 @@
     <string name="prefSettingsThemeCnRed">نه چندان قرمز</string>
     <string name="unitsManager">مدیر واحد</string>
     <string name="units">واحدها</string>
-    <string name="av_details_native_libs">"کتابخانه های بومی: "</string>
     <string name="twService">تصویر زمینه زنده مضمون</string>
     <string name="twLiveWallpaperDesc">وقتی تم تیره فعال است، به طور خودکار به کاغذدیواری تیره بروید</string>
     <string name="activity_av_search">برنامه API</string>

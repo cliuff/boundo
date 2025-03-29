@@ -149,7 +149,6 @@
     <string name="prefSettingsThemeCnRed">红得泛橙</string>
     <string name="unitsManager">组件管理</string>
     <string name="units">组件</string>
-    <string name="av_details_native_libs">原生库：</string>
     <string name="twService">主题动态壁纸</string>
     <string name="twLiveWallpaperDesc">开启黑暗模式时自动更换暗色调壁纸</string>
     <string name="activity_av_search">应用 API</string>

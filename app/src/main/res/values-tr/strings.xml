@@ -164,7 +164,6 @@
     <string name="unit_desc_pin">Toplu iğne</string>
     <string name="sdk_search_hint"><font size="12">ad, paket, API düzeyi, Android sürümü</font></string>
     <string name="apiDetailsPackageName">"Paket ismi: "</string>
-    <string name="av_details_native_libs">"Yerel kütüphaneler: "</string>
     <string name="unit_desc_im">• Çözünürlüğü değiştir\n• Biçimi değiştir: png jpg webp heif\n• Görüntüyü bulanıklaştır</string>
     <string name="immortalMessage">Oh hayır!\nBir hata bizi rahatsız ediyor.\nEndişelenme, çantamızda yakalandı!\nAraştırma yapmak için günlüğü bize gönderin!</string>
     <string name="textAsk4Notification">Lütfen bize bildirimleri gösterme izni verin, size en iyi deneyimi sunmak için Tost Bildirimlerine güveniyoruz. Talimatları, ipuçlarını, önerileri, başarılı işlem mesajlarını ve bazen hata mesajlarını bildirmek için kullanılır. Bize bildirim izni vermemeyi seçerseniz uygulamamızda karışıklıkla karşılaşabilirsiniz.</string>

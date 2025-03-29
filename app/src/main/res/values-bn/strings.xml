@@ -146,7 +146,6 @@
     <string name="prefSettingsThemeCnRed">তেমন লাল নয়</string>
     <string name="unitsManager">ইউনিট ম্যানেজার</string>
     <string name="units">ইউনিট</string>
-    <string name="av_details_native_libs">"নেটিভ লাইব্রেরি: "</string>
     <string name="twService">থিমযুক্ত লাইভ ওয়ালপেপার</string>
     <string name="twLiveWallpaperDesc">অন্ধকার থিম সক্ষম হলে স্বয়ংক্রিয়ভাবে অন্ধকার ওয়ালপেপারে স্যুইচ করুন</string>
     <string name="activity_av_search">অ্যাপ API</string>

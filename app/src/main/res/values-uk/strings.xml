@@ -147,7 +147,6 @@
     <string name="prefSettingsThemeCnRed">Не такий червоний</string>
     <string name="unitsManager">Менеджер підрозділу</string>
     <string name="units">одиниці</string>
-    <string name="av_details_native_libs">"Рідні бібліотеки: "</string>
     <string name="twService">Тематичні живі шпалери</string>
     <string name="twLiveWallpaperDesc">Автоматично перемикайтеся на темні шпалери, коли ввімкнено темну тему</string>
     <string name="activity_av_search">API програми</string>

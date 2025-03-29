@@ -159,7 +159,6 @@
     <string name="unit_desc_uninstall_notice">Deinstallation verschieben</string>
     <string name="unit_desc_install_notice">Ich versuche zu installieren</string>
     <string name="unit_desc_pin">Stift</string>
-    <string name="av_details_native_libs">"Native Bibliotheken: "</string>
     <string name="apiDetailsPackageName">"Paketnamen: "</string>
     <string name="textParentheses">" (%s)"</string>
     <string name="textColon">": "</string>

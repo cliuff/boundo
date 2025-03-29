@@ -143,7 +143,6 @@
     <string name="notifyChannelServiceDesc">Seja notificado da solicitação do serviço para iniciar a atividade</string>
     <string name="notifyChannelService">Solicitações de serviço</string>
     <string name="prefExteriorForceDarkDesc">Para obter a melhor experiência sombria, não é necessário ativar a opção Substituir força escura nas opções do desenvolvedor</string>
-    <string name="av_details_native_libs">"Bibliotecas nativas: "</string>
     <string name="instantTileScannerMmManual">Clique no bloco para capturar a tela e abra o scanner WeChat para selecionar manualmente a captura de tela a ser digitalizada.</string>
     <string name="instantTileScannerAlipayManual">Clique no bloco para capturar a tela e chame o scanner Alipay para digitalizar a captura de tela.</string>
     <string name="instantTileMDUManual">Clique no bloco para atualizar os dados. Você será solicitado a conceder a permissão de Acesso de Uso ao adicionar o bloco.</string>

@@ -146,7 +146,6 @@
     <string name="prefSettingsThemeCnRed">Tidak begitu merah</string>
     <string name="unitsManager">Manajer Unit</string>
     <string name="units">Satuan</string>
-    <string name="av_details_native_libs">"Perpustakaan asli: "</string>
     <string name="twService">Bertema Gambar Animasi</string>
     <string name="twLiveWallpaperDesc">Beralih ke wallpaper gelap secara otomatis saat tema gelap diaktifkan</string>
     <string name="activity_av_search">API Aplikasi</string>

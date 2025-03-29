@@ -143,7 +143,6 @@
     <string name="notifyChannelServiceDesc">Nhận thông báo về yêu cầu của dịch vụ để bắt đầu hoạt động</string>
     <string name="notifyChannelService">Yêu cầu dịch vụ</string>
     <string name="prefExteriorForceDarkDesc">Để có trải nghiệm tối tốt nhất, bạn không được bật Override Force-dark trong tùy chọn nhà phát triển</string>
-    <string name="av_details_native_libs">"Thư viện bản địa: "</string>
     <string name="instantTileScannerMmManual">Nhấp vào ô để chụp màn hình và mở máy quét WeChat để chọn thủ công ảnh chụp màn hình để quét.</string>
     <string name="instantTileScannerAlipayManual">Nhấp vào ô để chụp màn hình và gọi trình quét Alipay để quét ảnh chụp màn hình.</string>
     <string name="instantTileMDUManual">Nhấp vào ô để làm mới dữ liệu. Bạn sẽ được nhắc cấp quyền truy cập sử dụng khi thêm ô.</string>

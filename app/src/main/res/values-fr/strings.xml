@@ -146,7 +146,6 @@
     <string name="prefSettingsThemeCnRed">Not so red</string>
     <string name="unitsManager">Gestionnaire d\'unités</string>
     <string name="units">Unités</string>
-    <string name="av_details_native_libs">"Bibliothèques natives: "</string>
     <string name="twService">Thème animé comme fond d\'écran</string>
     <string name="twLiveWallpaperDesc">Passer automatiquement au fond d\'écran sombre lorsque le thème sombre est activé</string>
     <string name="activity_av_search">API d\'application</string>

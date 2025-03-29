@@ -149,7 +149,6 @@
     <string name="prefSettingsThemeCnRed">Not so red</string>
     <string name="unitsManager">Unit Manager</string>
     <string name="units">Units</string>
-    <string name="av_details_native_libs">"Native libraries: "</string>
     <string name="twService">Themed Live Wallpaper</string>
     <string name="twLiveWallpaperDesc">Switch to dark wallpaper automatically when dark theme is enabled</string>
     <string name="activity_av_search">App API</string>

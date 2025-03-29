@@ -143,7 +143,6 @@
     <string name="notifyChannelServiceDesc">Ricevi una notifica della richiesta di servizio per avviare l\'attività</string>
     <string name="notifyChannelService">Richieste di servizio</string>
     <string name="prefExteriorForceDarkDesc">Per ottenere la migliore esperienza dark, non devi abilitare Override Force-dark nelle opzioni sviluppatore</string>
-    <string name="av_details_native_libs">"Biblioteche native: "</string>
     <string name="instantTileScannerMmManual">Fare clic sul riquadro per acquisire la schermata e aprire lo scanner WeChat per selezionare manualmente lo screenshot da scansionare.</string>
     <string name="instantTileScannerAlipayManual">Fare clic sul riquadro per acquisire la schermata e richiamare lo scanner Alipay per eseguire la scansione dello screenshot.</string>
     <string name="instantTileMDUManual">Fare clic sul riquadro per aggiornare i dati. Quando si aggiunge il riquadro, viene richiesto di concedere l\'autorizzazione Accesso utilizzo.</string>

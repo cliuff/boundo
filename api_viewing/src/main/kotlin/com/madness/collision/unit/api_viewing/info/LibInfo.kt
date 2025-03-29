@@ -221,7 +221,7 @@ object LibInfoRetriever {
     }
 
     private fun getNativeLibs(app: ApiViewingApp): Collection<ValueOwnerComp> {
-        val libEntries = app.appPackage.apkPaths.flatMap { ApkUtil.getNativeLibs(File(it)) }
+        val libEntries = app.appPackage.apkPaths.flatMap { SharedLibs.getNativeLibs(File(it)) }
         return libEntries
             .map { entry -> File(entry.first).name to entry }
             .groupBy { it.first }

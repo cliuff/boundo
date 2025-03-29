@@ -64,7 +64,6 @@
     <string name="app_info_name">Название пакета приложения</string>
     <string name="avAdapterActionsApk">Поделиться apk</string>
     <string name="avAdapterActionsIcon">Поделиться значком</string>
-    <string name="av_details_native_libs">"Родные библиотеки: "</string>
     <string name="developertools_cropimage">Изменение изображения</string>
     <string name="exterior_blur_degree">Степень размытия</string>
     <string name="exterior_dark_staus">Темный значок в строке состояния</string>

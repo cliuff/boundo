@@ -76,6 +76,7 @@ open class ApiViewingApp(var packageName: String) : Cloneable {
     // services of 500 apps only consume a couple MB of memory, store them to avoid expensive re-computation
     @Ignore private var serviceFamilyClassesRef: Set<String>? = null
     @Ignore private var miPushSdkCheckRef: Int = -1
+    @Ignore var nativeLibAbiSet: Set<String>? = null
 
     val isPkgInstallerLoaded: Boolean
         get() = pkgInstallerRef != null

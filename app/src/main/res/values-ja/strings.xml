@@ -150,7 +150,6 @@
     <string name="notifyChannelGroupAppDesc">アプリケーション関連の通知</string>
     <string name="textWaitASecond">読み込み中。。。待って下さい</string>
     <string name="apiDetailsPackageName">パッケージ名：</string>
-    <string name="av_details_native_libs">ネイティブライブラリ：</string>
     <string name="twLiveWallpaperDesc">ダークモードがオンのときに暗い壁紙を自動的に変更する</string>
     <string name="unit_desc_tw">•明るいトーンと暗いトーンの壁紙を設定します。壁紙はAndroid 10のダークモードで変化します</string>
     <string name="unit_desc_at">•オーディオ再生を停止する</string>

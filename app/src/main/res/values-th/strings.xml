@@ -143,7 +143,6 @@
     <string name="notifyChannelServiceDesc">รับการแจ้งเตือนคำขอบริการเพื่อเริ่มกิจกรรม</string>
     <string name="notifyChannelService">คำขอบริการ</string>
     <string name="prefExteriorForceDarkDesc">เพื่อให้ได้รับประสบการณ์ที่มืดที่สุดคุณต้องไม่เปิดใช้งาน Override Force-dark ในตัวเลือกนักพัฒนาซอฟต์แวร์</string>
-    <string name="av_details_native_libs">"ห้องสมุดพื้นเมือง: "</string>
     <string name="instantTileScannerMmManual">คลิกที่ไทล์เพื่อจับภาพหน้าจอและเปิดเครื่องสแกน WeChat เพื่อเลือกภาพหน้าจอที่ต้องการสแกนด้วยตนเอง</string>
     <string name="instantTileScannerAlipayManual">คลิกที่ไทล์เพื่อจับภาพหน้าจอและเรียกใช้สแกนเนอร์ Alipay เพื่อสแกนภาพหน้าจอ</string>
     <string name="instantTileMDUManual">คลิกที่ไทล์เพื่อรีเฟรชข้อมูลคุณจะได้รับแจ้งให้อนุญาตสิทธิ์การเข้าถึงการใช้งานเมื่อเพิ่มไทล์</string>

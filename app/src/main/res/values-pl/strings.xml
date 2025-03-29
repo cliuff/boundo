@@ -146,7 +146,6 @@
     <string name="prefSettingsThemeCnRed">Nie tak czerwony</string>
     <string name="unitsManager">Menedżer działu</string>
     <string name="units">Jednostki</string>
-    <string name="av_details_native_libs">"Biblioteki natywne: "</string>
     <string name="twService">Tematyczne tapety na żywo</string>
     <string name="twLiveWallpaperDesc">Przełącz się na ciemną tapetę automatycznie po włączeniu ciemnego motywu</string>
     <string name="activity_av_search">Interfejs API aplikacji</string>

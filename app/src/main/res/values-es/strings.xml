@@ -150,7 +150,6 @@
     <string name="units">Modulos</string>
     <string name="unitsManager">Gestor del módulo</string>
     <string name="apiDetailsPackageName">"Nombre del paquete: "</string>
-    <string name="av_details_native_libs">"Bibliotecas nativas: "</string>
     <string name="immortalMessage">Oh no!\nNosotros estamos irritados por un error.\nNo te preocupes, ha sido reconocido!\nEnvíenos el registro para investigar!</string>
     <string name="instantManual">Mantenga presionado el icono de la aplicación en el iniciador para mostrar accesos directos a aplicaciones.\nTire hacia abajo el tono de notificación, la configuración se alterna por encima del área de notificación son los iconos en ajustes rápidos que está buscando.</string>
     <string name="unit_desc_av">• Verifique el nivel de API de Android de todas las aplicaciones y aplicaciones en el dispositivo\n• Verifique el soporte de Adaptive Icon de todas las aplicaciones\n• Estadísticas de la API de la aplicación\n• APK y extracción de iconos\n•Detalles del paquete y detalles de la firma</string>

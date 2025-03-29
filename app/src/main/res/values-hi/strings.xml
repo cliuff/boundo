@@ -146,7 +146,6 @@
     <string name="prefSettingsThemeCnRed">इतना लाल नहीं</string>
     <string name="unitsManager">यूनिट मैनेजर</string>
     <string name="units">इकाइयों</string>
-    <string name="av_details_native_libs">"मूल पुस्तकालय: "</string>
     <string name="twService">थीम्ड लाइव वॉलपेपर</string>
     <string name="twLiveWallpaperDesc">गहरे रंग वाली थीम के सक्षम होने पर स्वचालित रूप से गहरे रंग के वॉलपेपर पर स्विच करें</string>
     <string name="activity_av_search">ऐप एपीआई</string>

@@ -145,7 +145,6 @@
     <string name="notifyChannelServiceDesc">الحصول على إشعار بطلب الخدمة لبدء النشاط</string>
     <string name="notifyChannelService">طلبات الخدمة</string>
     <string name="prefExteriorForceDarkDesc">للحصول على أفضل تجربة مظلمة ، يجب عدم تمكين Override Force-dark في خيارات المطور</string>
-    <string name="av_details_native_libs">"المكتبات الأصلية: "</string>
     <string name="instantTileScannerMmManual">انقر على البلاط لالتقاط الشاشة وفتح الماسح الضوئي WeChat لتحديد لقطة الشاشة يدويًا للمسح الضوئي.</string>
     <string name="instantTileScannerAlipayManual">انقر على البلاط لالتقاط الشاشة واستدعاء الماسح الضوئي Alipay لمسح الصورة.</string>
     <string name="instantTileMDUManual">انقر فوق التجانب لتحديث البيانات. ستتم مطالبتك بمنح إذن \"وصول الاستخدام\" عند إضافة التجانب.</string>
