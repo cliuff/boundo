@@ -49,8 +49,15 @@ fun AppListOrder.getComparator(apiMode: AppApiMode): Comparator<ApiViewingApp> {
         AppListOrder.LowerApi -> compareBy(selectApi())
         AppListOrder.HigherApi -> compareBy(selectApi()).reversed()
         AppListOrder.UpdateTime -> compareBy(ApiViewingApp::updateTime).reversed()
-        AppListOrder.AppName -> return compareBy(StringUtils.comparator, ApiViewingApp::name)
+        AppListOrder.AppName -> compareBy { false }  // fall through
     }.thenBy(StringUtils.comparator, ApiViewingApp::name)
+        .thenBy(ApiViewingApp::packageName)
+        // apps take precedence than apks
+        .thenBy(ApiViewingApp::isArchive)
+        // apks by ascending version code
+        .thenBy(ApiViewingApp::verCode)
+        // compare apk path, this guarantees apk inequality (required for use with TreeSet)
+        .thenBy { it.appPackage.basePath }
 }
 
 
@@ -133,6 +140,7 @@ val ListSrcKeys: List<ListSrcKey<*>>
 class OrderedAppList(private var options: Options) {
     private val srcSet: MutableSet<AppListSrc> = hashSetOf()
     private val srcMap: MutableMap<AppListSrc, Set<ApiViewingApp>> = hashMapOf()
+    // bear in mind that two elements that compareTo() returns 0, are considered equal by TreeSet
     private var treeSet: TreeSet<ApiViewingApp> = TreeSet(options.order.getComparator(options.apiMode))
 
     class Options(val order: AppListOrder, val apiMode: AppApiMode)

@@ -157,7 +157,8 @@ internal open class APIAdapter(context: Context, private val listener: Listener,
 
         bindUpdateTime(holder, appInfo)
 
-        managedTagLoading(appInfo.packageName, holder.tags) {
+        // use apk path, which is unique among apps and apks, instead of package name
+        managedTagLoading(appInfo.appPackage.basePath, holder.tags) {
             holder.tags.removeAllViews()
             scope.launch(Dispatchers.Default) {
                 AppTag.inflateAllTagsAsync(context, holder.tags, appInfo)
