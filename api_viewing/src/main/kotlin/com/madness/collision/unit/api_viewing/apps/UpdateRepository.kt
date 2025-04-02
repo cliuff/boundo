@@ -37,7 +37,8 @@ data class AppPkgChanges(
 interface UpdateRepository {
     fun getPkgChangedTime(): Long
     fun getChangedPackages(context: Context, isFreshInstall: Boolean): Pair<AppPkgChanges, Long>
-    fun getMaintainedApp(): ApiViewingApp
+    /** Get persistent apps by [pkgNames] with the original order. */
+    fun getPersistentApps(pkgNames: List<String>): List<ApiViewingApp>
 }
 
 internal object UpdateRepo {
@@ -104,7 +105,7 @@ class UpdateRepoImpl(
         return AppPkgChanges(previous, updPkgs)
     }
 
-    override fun getMaintainedApp(): ApiViewingApp {
-        return appRepo.getMaintainedApp()
+    override fun getPersistentApps(pkgNames: List<String>): List<ApiViewingApp> {
+        return medRepo.get(pkgNames, init = true)
     }
 }

@@ -17,10 +17,8 @@
 package com.madness.collision.unit.api_viewing.ui.upd
 
 import android.content.Context
-import com.madness.collision.misc.MiscApp
 import com.madness.collision.unit.api_viewing.apps.UpdateRepository
 import com.madness.collision.unit.api_viewing.apps.UsedPkgChecker
-import com.madness.collision.unit.api_viewing.apps.toPkgApps
 import com.madness.collision.unit.api_viewing.data.UpdatedApp
 import com.madness.collision.util.hasUsageAccess
 import kotlin.math.min
@@ -60,9 +58,7 @@ class AppUpdatesChecker(private val updateRepo: UpdateRepository) {
         if (usedPackages.isNotEmpty()) {
             val usedSize = min(usedPackages.size, usedLimit)
             val packages = usedPackages.subList(0, usedSize)
-                .mapNotNull { MiscApp.getPackageInfo(context, packageName = it) }
-            val anApp = updateRepo.getMaintainedApp()
-            sections[AppUpdatesIndex.USE] = packages.toPkgApps(context, anApp)
+            sections[AppUpdatesIndex.USE] = updateRepo.getPersistentApps(packages)
                 .map(UpdatedApp::General)
         }
         val iterator = sections.iterator()

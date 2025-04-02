@@ -52,8 +52,11 @@ class AppMediatorRepo(private val appDao: AppDao, private val context: Context) 
         return runBlocking { toFullApps(getMaintainedApp(), context) }
     }
 
-    fun get(packageNames: List<String>, init: Boolean = true): List<ApiViewingApp> =
-        appDao.selectApps(packageNames).toApps(init)
+    /** Get apps by [packageNames], the result list retains the original order. */
+    fun get(packageNames: List<String>, init: Boolean = true): List<ApiViewingApp> {
+        val entities = appDao.selectApps(packageNames).associateBy(AppEntity::packageName)
+        return packageNames.mapNotNull(entities::get).toApps(init)
+    }
 
     fun get(unit: Int, init: Boolean = true): List<ApiViewingApp> =
         appDao.selectApps(unit).toApps(init)
