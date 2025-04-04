@@ -119,7 +119,7 @@ fun LegacyAppList(
 
         val contentInsetTop = paddingValues.calculateTopPadding() + 110.dp
         val density = LocalDensity.current
-        val contentHeight by remember(headerState.headerHeight) {
+        val contentHeight by remember {
             derivedStateOf {
                 (headerState.headerHeight / density.density - contentInsetTop.value)
                     .coerceAtLeast(0f).dp
@@ -213,7 +213,7 @@ fun LegacyAppList(
             }
         }
 
-        val showCatSwitcher by remember(appSrcState.loadedCats) {
+        val showCatSwitcher by remember {
             derivedStateOf { appSrcState.loadedCats.singleOrNull() != ListSrcCat.Platform }
         }
         LaunchedEffect(showCatSwitcher) {

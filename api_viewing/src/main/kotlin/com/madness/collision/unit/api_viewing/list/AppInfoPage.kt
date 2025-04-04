@@ -145,9 +145,14 @@ private fun AppInfo(
             val margin = remember {
                 if (maxWidth >= 600.dp) 30.dp else if (maxWidth >= 360.dp) 24.dp else 12.dp
             }
-            val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+            val layoutDir = LocalLayoutDirection.current
             // use coefficient to invert slide animation offset for RTL layout
-            val offsetCoeff = if (isRtl) -1 else 1
+            // remember derived state referenced by lambdas to minimize recomposition
+            val offsetCoeff by remember {
+                derivedStateOf {
+                    if (layoutDir == LayoutDirection.Rtl) -1 else 1
+                }
+            }
             var pageIndex by remember { mutableIntStateOf(0) }
             var predictiveProgress by remember { mutableFloatStateOf(-1f) }
             AnimatedVisibility(
@@ -155,9 +160,8 @@ private fun AppInfo(
                 enter = fadeIn() + slideInHorizontally(initialOffsetX = { offsetCoeff * -it / 2 }),
                 exit = fadeOut(),
             ) {
-                val scope = rememberCoroutineScope()
                 FrontAppInfo(cardColor, margin, verInfoList, updateTime,
-                    { scope.launch { pageIndex = 1 } }, getClick)
+                    { pageIndex = 1 }, getClick)
             }
             AnimatedVisibility(
                 visible = pageIndex == 1,

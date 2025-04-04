@@ -186,21 +186,34 @@ open class AppListFragment : ComposeUnit(), Democratic, AppHomeNavPage by AppHom
     override fun ComposeContent() {
         MaterialTheme(colorScheme = rememberColorScheme()) {
             AppList(
+                eventHandler = rememberAppListEventHandler(),
                 paddingValues = navContentPadding,
-                onAppBarOpacityChange = { opacity ->
+            )
+        }
+    }
+
+    @Composable
+    private fun rememberAppListEventHandler() =
+        remember<AppListEventHandler> {
+            object : AppListEventHandler {
+                override fun onAppBarOpacityChange(opacity: Float) {
                     val isDark = when {
                         opacity < 0.4f -> listHeaderDarkIcon
                         else -> mainApplication.isPaleTheme
                     }
                     setStatusBarDarkIcon(isDark)
-                },
-            )
+                }
+            }
         }
-    }
+}
+
+@Stable
+interface AppListEventHandler {
+    fun onAppBarOpacityChange(opacity: Float)
 }
 
 @Composable
-fun AppList(paddingValues: PaddingValues, onAppBarOpacityChange: (Float) -> Unit = {}) {
+fun AppList(eventHandler: AppListEventHandler, paddingValues: PaddingValues) {
     val viewModel = viewModel<AppListViewModel>()
     val appList by viewModel.appList.collectAsStateWithLifecycle()
     val appListPrefs by viewModel.appListId.collectAsStateWithLifecycle()
@@ -211,8 +224,8 @@ fun AppList(paddingValues: PaddingValues, onAppBarOpacityChange: (Float) -> Unit
         listState = rememberAppListState(viewModel),
         eventHandler = rememberCompOptionsEventHandler(viewModel),
         paddingValues = paddingValues,
-        contentOffsetProgress = -headerState.headerOffsetY,
-        onAppBarOpacityChange = onAppBarOpacityChange,
+        contentOffsetProgress = { -headerState.headerOffsetY },
+        onAppBarOpacityChange = eventHandler::onAppBarOpacityChange,
     ) { contentPadding ->
         LegacyAppList(
             appList = appList,
@@ -250,25 +263,26 @@ private fun AppListScaffold(
     listState: AppListState,
     eventHandler: CompositeOptionsEventHandler,
     paddingValues: PaddingValues,
-    contentOffsetProgress: Int,
+    contentOffsetProgress: () -> Int,
     onAppBarOpacityChange: (Float) -> Unit = {},
     content: @Composable (PaddingValues) -> Unit
 ) {
     var showListOptions by remember { mutableIntStateOf(0) }
-    val toolbarHeight = with(LocalDensity.current) { 100.dp.toPx() }
-    val headerHeight = (toolbarHeight * 1.8f).roundToInt()
-    val toolbarOpacity by remember(contentOffsetProgress) {
-        derivedStateOf {
-            ((contentOffsetProgress - headerHeight) / toolbarHeight)
-                .coerceIn(0f, 0.96f).mapIf({ it <= 0.06f }, { 0f })
-        }
-    }
-    LaunchedEffect(toolbarOpacity) {
-        onAppBarOpacityChange(toolbarOpacity)
-    }
-
     Scaffold(
         topBar = {
+            val density = LocalDensity.current
+            val toolbarOpacity by remember(density) {
+                val toolbarHeight = with(density) { 100.dp.toPx() }
+                val headerHeight = (toolbarHeight * 1.8f).roundToInt()
+                derivedStateOf {
+                    ((contentOffsetProgress() - headerHeight) / toolbarHeight)
+                        .coerceIn(0f, 0.96f).mapIf({ it <= 0.06f }, { 0f })
+                }
+            }
+            LaunchedEffect(toolbarOpacity) {
+                onAppBarOpacityChange(toolbarOpacity)
+            }
+
             AppListBar(
                 isRefreshing = listState.isRefreshing,
                 windowInsets = paddingValues.asInsets()
@@ -317,7 +331,7 @@ private fun AppListPreview() {
             listState = listState,
             eventHandler = remember { PseudoCompOptionsEventHandler() },
             paddingValues = PaddingValues(),
-            contentOffsetProgress = 50,
+            contentOffsetProgress = { 50 },
             content = { _ -> Box(Modifier.fillMaxSize().background(Color.DarkGray)) }
         )
     }

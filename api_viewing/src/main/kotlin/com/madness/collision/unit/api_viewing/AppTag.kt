@@ -27,6 +27,10 @@ import com.madness.collision.unit.api_viewing.tag.app.toExpressible
 import com.madness.collision.unit.api_viewing.tag.inflater.AppTagInflater
 import com.madness.collision.unit.api_viewing.util.PrefUtil
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
@@ -115,29 +119,34 @@ internal object AppTag {
         val (checked, unchecked) = getGroupedRequisites().partition { (p, tagIds) ->
             p.second.checker(res) || (filter != null && filter(tagIds).not())
         }
-        val uncheckedDeferred = unchecked.map { (p, tagIds) ->
+        // use flow to order results by exec speed
+        val uncheckedFlow = channelFlow {
+        for ((p, tagIds) in unchecked) {
             val (reqId, requisite) = p
-            async(Dispatchers.Default) {
+            launch(Dispatchers.Default) {
                 val mutex = tagReqMutex[reqId] ?: Mutex()
                 mutex.withLock {
                     tagReqMutex[reqId] = mutex
                     requisite.run { if (!checker(res)) loader(res) }
                     tagReqMutex.remove(reqId, mutex)
                 }
-                requisite to tagIds
+                send(requisite to tagIds)
             }
+        }
         }
         if (perRequisite != null) {
             checked.forEach { (p, tagIds) ->
                 val (_, requisite) = p
                 perRequisite(requisite, tagIds, res)
             }
-            uncheckedDeferred.forEach { deferred ->
-                val (requisite, tagIds) = deferred.await()
-                perRequisite(requisite, tagIds, res)
-            }
+            uncheckedFlow
+                .onEach { (req, tagIds) -> perRequisite(req, tagIds, res) }
+                .catch { it.printStackTrace() }
+                .collect()
         } else {
-            uncheckedDeferred.awaitAll()
+            uncheckedFlow
+                .catch { it.printStackTrace() }
+                .collect()
         }
         res
     }
