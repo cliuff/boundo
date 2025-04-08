@@ -67,6 +67,12 @@ fun PlainLibItem(item: PackComponent, horizontalPadding: Dp = 20.dp) {
                 comp = item,
             )
         }
+        is ValueComponent.SharedLib -> {
+            PlainSharedLibItem(
+                modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 3.dp),
+                comp = item,
+            )
+        }
         else -> {
             // apply expandable end padding, to allow for more text to display
             val textLayout = rememberExpandableTextLayout(item, horizontalPadding)
@@ -94,6 +100,14 @@ fun PlainChunkPartLibItem(item: PackComponent, horizontalPadding: Dp = 20.dp) {
         fontSize = 10.sp,
         lineHeight = 14.sp,
     )
+}
+
+@Composable
+private fun PlainSharedLibItem(modifier: Modifier = Modifier, comp: ValueComponent.SharedLib) {
+    val libPrefs = LocalLibPrefs.current
+    if (libPrefs.preferSystemLibs || comp.desc != null) {
+        SharedLibItem(modifier = modifier, label = comp.value, type = comp.type, desc = comp.desc)
+    }
 }
 
 @Composable
@@ -519,6 +533,9 @@ private fun MarkedComponent.getUiType(): MarkedCompUiType {
                 val compList = item.castComponents<ValueComponent.NativeLib>()
                 MarkedCompUiType.MergingNativeLib(MarkedMergingComp(item, compList))
             }
+            is ValueComponent.SharedLib -> {
+                error("unreachable")
+            }
             is ValueComponent.AppComp -> {
                 val compList = item.castComponents<ValueComponent.AppComp>()
                 MarkedCompUiType.MergingAppComp(MarkedMergingComp(item, compList))
@@ -532,6 +549,8 @@ private fun MarkedComponent.getUiType(): MarkedCompUiType {
         when (val valueComp = item.comp) {
             is ValueComponent.NativeLib ->
                 MarkedCompUiType.NativeLib(MarkedValueComp(item, valueComp))
+            is ValueComponent.SharedLib ->
+                error("unreachable")
             is ValueComponent.AppComp ->
                 MarkedCompUiType.AppComp(MarkedValueComp(item, valueComp))
             is ValueComponent.Simple ->

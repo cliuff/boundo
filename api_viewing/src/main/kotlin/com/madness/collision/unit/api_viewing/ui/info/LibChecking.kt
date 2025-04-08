@@ -214,6 +214,7 @@ private fun getTypeLabel(compType: PackCompType) = when (compType) {
     PackCompType.Provider -> "Provider"
     PackCompType.DexPackage -> "Dex"
     PackCompType.NativeLibrary -> stringResource(R.string.av_info_lib_native_lib)
+    PackCompType.SharedLibrary -> stringResource(R.string.av_info_lib_shared_lib)
 }
 
 @Composable
@@ -253,6 +254,7 @@ private fun CompTab(label: String, selected: Boolean, loading: Boolean, onClick:
 // show "tags" tab before comp types
 private const val nonCompItemCount = 1
 private val compTypeList = listOf(
+    PackCompType.SharedLibrary,
     PackCompType.NativeLibrary,
     PackCompType.Activity,
     PackCompType.Service,
@@ -309,8 +311,9 @@ private fun ComponentList(
 }
 
 @Stable
-class LibPrefs(preferCompressedSizeState: MutableState<Boolean>) {
-    var preferCompressedSize: Boolean by preferCompressedSizeState
+class LibPrefs(compressedSize: Boolean, systemLibs: Boolean) {
+    var preferCompressedSize: Boolean by mutableStateOf(compressedSize)
+    var preferSystemLibs: Boolean by mutableStateOf(systemLibs)
 }
 
 val LocalLibPrefs = compositionLocalOf<LibPrefs> { error("LibPrefs not provided") }
@@ -358,8 +361,9 @@ private fun ComponentList(
             }
         }
     }
-    val prefCompressedSize = remember { mutableStateOf(true) }
-    val libPrefs = remember { LibPrefs(prefCompressedSize) }
+    val libPrefs = remember {
+        LibPrefs(compressedSize = true, systemLibs = false)
+    }
     LazyColumn(
         modifier = modifier.fillMaxWidth(),
         state = listState,
@@ -391,7 +395,8 @@ private fun ComponentList(
                         (0 until sectionIndex).any { sections[it].value.isNotEmpty() }) {
                         item { SectionDivider() }
                     }
-                    if (itemList.isNotEmpty()) {
+                    // hide section title for shared libs changing size
+                    if (itemList.isNotEmpty() && compType != PackCompType.SharedLibrary) {
                         item { SectionTitle(compSection, itemList.size) }
                     }
                     val layoutGroups = layoutGroupsList[typeIndex]?.getOrNull(sectionIndex)
@@ -541,6 +546,23 @@ private fun CompTypeTitle(compType: PackCompType, libPrefs: LibPrefs) {
                     .clickable { libPrefs.preferCompressedSize = !libPrefs.preferCompressedSize }
                     .padding(horizontal = 14.dp, vertical = 8.dp),
                 text = stringResource(textRes),
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.55f),
+                fontWeight = FontWeight.Medium,
+                fontSize = 8.sp,
+                lineHeight = 9.sp,
+            )
+        } else if (compType == PackCompType.SharedLibrary) {
+            val textRes = when {
+                libPrefs.preferSystemLibs -> "SYSTEM LIBS"
+                else -> "APP LIBS"
+            }
+            Text(
+                modifier = Modifier
+                    .padding(horizontal = 6.dp)
+                    .clip(RoundedCornerShape(50))
+                    .clickable { libPrefs.preferSystemLibs = !libPrefs.preferSystemLibs }
+                    .padding(horizontal = 14.dp, vertical = 8.dp),
+                text = textRes,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.55f),
                 fontWeight = FontWeight.Medium,
                 fontSize = 8.sp,

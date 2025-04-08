@@ -25,6 +25,7 @@ class LibItemLayoutStrategy(private val width: Float) {
 
     fun calculate(itemList: List<PackComponent>, type: PackCompType, section: CompSection): Value? {
         when (type) {
+            PackCompType.SharedLibrary,
             PackCompType.NativeLibrary, PackCompType.Activity, PackCompType.Service,
             PackCompType.Receiver, PackCompType.Provider -> return null
             PackCompType.DexPackage -> Unit

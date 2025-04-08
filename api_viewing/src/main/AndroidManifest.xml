@@ -47,6 +47,12 @@
     <!-- used for InstallSourceInfo.getOriginatingPackageName, granted to system apps only -->
     <uses-permission android:name="android.permission.INSTALL_PACKAGES"
         tools:ignore="ProtectedPermissions" />
+    <!-- see static and sdk libraries, granted to system apps only -->
+    <!-- INSTALL_PACKAGES, DELETE_PACKAGES, REQUEST_INSTALL_PACKAGES, REQUEST_DELETE_PACKAGES -->
+    <uses-permission android:name="android.permission.ACCESS_SHARED_LIBRARIES"
+        tools:ignore="ProtectedPermissions" />
+    <!-- see static and sdk libraries, refer com.android.server.pm.ComputerEngine.getSharedLibraries -->
+<!--    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />-->
 
     <application>
         <!-- Service to run in a separate process to isolate native exceptions. -->

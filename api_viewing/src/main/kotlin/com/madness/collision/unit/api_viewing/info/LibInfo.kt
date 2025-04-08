@@ -41,6 +41,7 @@ sealed interface ValueComponent : ValueOwnerComp {
     // Activity/Service/Receiver/Provider
     class AppComp(override val value: String, val isEnabled: Boolean) : ValueComponent
     class NativeLib(override val value: String, val entries: List<NativeLibEntry>) : ValueComponent
+    class SharedLib(override val value: String, val type: String?, val desc: String?) : ValueComponent
 }
 
 sealed class MarkedComponent(mark: LibMark) : ValueOwnerComp, LibMark by mark
@@ -74,7 +75,7 @@ enum class CompSection {
 
 // PackageComponentType
 enum class PackCompType {
-    Activity, Service, Receiver, Provider, DexPackage, NativeLibrary
+    Activity, Service, Receiver, Provider, DexPackage, NativeLibrary, SharedLibrary
 }
 
 class CompSectionCollection : SectionMapCollection<CompSection, PackComponent>()
@@ -121,10 +122,11 @@ object LibInfoRetriever {
             PackCompType.Receiver, PackCompType.Provider -> LoadType.AndroidComponents
             PackCompType.DexPackage -> LoadType.DexPackages
             PackCompType.NativeLibrary -> LoadType.NativeLibraries
+            PackCompType.SharedLibrary -> LoadType.SharedLibraries
         }
 
     private enum class LoadType {
-        AndroidComponents, DexPackages, NativeLibraries
+        AndroidComponents, DexPackages, NativeLibraries, SharedLibraries
     }
 
     private suspend fun loadTypeActual(context: Context, app: ApiViewingApp, collection: PackCompCollection, type: PackCompType) {
@@ -141,6 +143,8 @@ object LibInfoRetriever {
             }
             LoadType.NativeLibraries ->
                 collection.finishLoad(type, getNativeLibs(app))
+            LoadType.SharedLibraries ->
+                collection.finishLoad(type, getSharedLibs(context, app))
         }
     }
 
@@ -232,6 +236,39 @@ object LibInfoRetriever {
                 if (marked !is LibMark) return@comp lib
                 MarkedValueComp(marked, lib)
             }
+    }
+
+    private fun getSharedLibs(context: Context, app: ApiViewingApp): Collection<ValueOwnerComp> {
+        val flags = PackageManager.GET_SHARED_LIBRARY_FILES
+        try {
+            val packMan = context.packageManager
+            val libPkg = when {
+                app.isArchive -> PackageCompat.getArchivePackage(packMan, app.appPackage.basePath, flags)
+                else -> PackageCompat.getInstalledPackage(packMan, app.packageName, flags)
+            }
+            val appInfo = libPkg?.applicationInfo ?: return emptyList()
+
+            val appLibs = SharedLibs.getAppSharedLibs(appInfo, packMan).toMutableMap()
+            val systemLibs = SharedLibs.getSystemSharedLibs(context)
+            return buildList(systemLibs.size) {
+                for ((libName, libType) in systemLibs) {
+                    val libPath = appLibs.remove(libName)
+                    val lib = ValueComponent.SharedLib(libName, libType?.uppercase(), libPath)
+//                    val mark = getMarkedItem(libName, PackCompType.SharedLibrary)
+//                    add(if (mark !is LibMark) lib else MarkedValueComp(mark, lib))
+                    add(lib)
+                }
+                for ((name, path) in appLibs) {
+                    val lib = ValueComponent.SharedLib(name, null, path)
+//                    val mark = getMarkedItem(name, PackCompType.SharedLibrary)
+//                    add(if (mark !is LibMark) lib else MarkedValueComp(mark, lib))
+                    add(lib)
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return emptyList()
+        }
     }
 }
 

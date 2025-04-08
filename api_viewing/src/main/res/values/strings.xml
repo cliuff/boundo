@@ -180,4 +180,5 @@
     <string name="av_info_arch_abi_system">System ABIs</string>
     <string name="av_info_arch_abi_other">Other ABIs</string>
     <string name="av_info_arch_none">No native libs found in the APK, but all Java-only apps are 64-bit compatible.</string>
+    <string name="av_info_lib_shared_lib">Shared Library</string>
 </resources>

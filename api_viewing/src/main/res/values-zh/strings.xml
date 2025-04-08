@@ -170,4 +170,5 @@
     <string name="av_info_arch_abi_system">系统 ABI</string>
     <string name="av_info_arch_abi_other">其他 ABI</string>
     <string name="av_info_arch_none">安装包内未发现原生库，不过纯 Java 应用均兼容64位。</string>
+    <string name="av_info_lib_shared_lib">共享库</string>
 </resources>

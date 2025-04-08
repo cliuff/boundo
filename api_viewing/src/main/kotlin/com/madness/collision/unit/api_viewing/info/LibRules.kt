@@ -27,6 +27,7 @@ import com.absinthe.rulesbundle.RECEIVER
 import com.absinthe.rulesbundle.RuleEntity
 import com.absinthe.rulesbundle.RuleRepository
 import com.absinthe.rulesbundle.SERVICE
+import com.absinthe.rulesbundle.STATIC
 import com.madness.collision.chief.chiefContext
 import com.madness.collision.unit.api_viewing.BuildConfig
 import com.madness.collision.unit.api_viewing.R
@@ -40,6 +41,7 @@ private val PackCompType.libType
         PackCompType.Provider -> PROVIDER
         PackCompType.DexPackage -> DEX
         PackCompType.NativeLibrary -> NATIVE
+        PackCompType.SharedLibrary -> STATIC
     }
 
 object LibRules {
