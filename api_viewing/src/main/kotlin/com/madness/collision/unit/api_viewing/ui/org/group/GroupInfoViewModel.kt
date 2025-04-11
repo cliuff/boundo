@@ -21,6 +21,7 @@ import android.content.pm.PackageInfo
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.madness.collision.unit.api_viewing.apps.AppPkgLabelProvider
 import com.madness.collision.unit.api_viewing.apps.PackageLabelProvider
 import com.madness.collision.unit.api_viewing.apps.PkgLabelProviderImpl
 import com.madness.collision.unit.api_viewing.env.AppInfoOwner
@@ -89,14 +90,11 @@ class GroupInfoViewModel(savedState: SavedStateHandle) : ViewModel() {
             if (modGroup != null) {
                 val modSelPkgs = modGroup.apps.run { mapTo(HashSet(size), OrgApp::pkg) }
                 val labels = modGroup.apps.associate { it.pkg to it.label }
-                labelProvider = PkgLabelProviderImpl(labels + pkgLabelProvider.pkgLabels)
+                val appLabelProvider = AppPkgLabelProvider(labels + pkgLabelProvider.pkgLabels)
+                labelProvider = appLabelProvider
                 val pkgs = pkgInfoProvider.getAll()
                 val sortedPkgs = pkgs.filter { it.packageName in modSelPkgs }
                     .sortedWith(compareBy(labelProvider.pkgComparator, PackageInfo::packageName))
-
-                val appStoreOwners = EnvPackages.getAppStoreOwners(context).also { appOwners = it }
-                val ownerPkgs = appStoreOwners.run { mapTo(HashSet(size), AppInfoOwner::packageName) }
-                    .let { pkgSet -> pkgs.filter { it.packageName in pkgSet } }
 
                 mutUiState.update {
                     it.copy(
@@ -104,9 +102,14 @@ class GroupInfoViewModel(savedState: SavedStateHandle) : ViewModel() {
                         selPkgs = modSelPkgs,
                         installedApps = sortedPkgs,
                         isLoading = false,
-                        appOwnerApps = ownerPkgs,
                     )
                 }
+
+                val appStoreOwners = EnvPackages.getAppStoreOwners(context).also { appOwners = it }
+                val ownerPkgs = appStoreOwners.run { mapTo(HashSet(size), AppInfoOwner::packageName) }
+                    .let { pkgSet -> pkgs.filter { it.packageName in pkgSet } }
+                appLabelProvider.retrieveLabels(ownerPkgs, context.packageManager)
+                mutUiState.update { it.copy(appOwnerApps = ownerPkgs) }
             }
         }
     }

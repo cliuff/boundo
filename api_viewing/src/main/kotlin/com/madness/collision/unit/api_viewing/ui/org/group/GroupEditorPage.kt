@@ -115,7 +115,7 @@ fun GroupEditorPage(
     LaunchedEffect(Unit) { viewModel.init(context, modCollId, modGroupId) }
     val eventHandler = rememberGroupEditorEventHandler(viewModel)
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val (groupName, selPkgs, installedApps, installedAppsGrouping, isLoading, isSubmitOk, collName, selColl, collList) = uiState
+    val (groupName, selPkgs, installedApps, installedAppsGrouping, isLoading, isSubmitOk, collName, selColl, collList, modPkgs) = uiState
 
     val navController = LocalPageNavController.current
     LaunchedEffect(isSubmitOk) { if (isSubmitOk) navController.navigateBack() }
@@ -133,6 +133,7 @@ fun GroupEditorPage(
             eventHandler = eventHandler,
             collList = collList,
             selectedPkgs = selPkgs,
+            modifyingPkgs = modPkgs,
             installedApps = installedApps,
             installedAppsGrouping = installedAppsGrouping,
             contentPadding = innerPadding,
@@ -206,20 +207,42 @@ private fun GroupContent(
     modCollName: Boolean = true,
     collList: List<CollInfo> = emptyList(),
     selectedPkgs: Set<String> = emptySet(),
+    modifyingPkgs: Set<String> = emptySet(),
     installedApps: List<PackageInfo> = emptyList(),
     installedAppsGrouping: List<Int> = emptyList(),
     contentPadding: PaddingValues = PaddingValues(),
 ) {
     val detailed = remember(installedAppsGrouping) {
-        List(installedAppsGrouping.size + 1) { false }.toMutableStateList()
+        List(installedAppsGrouping.size + 2) { false }.toMutableStateList()
     }
-    val selectedApps = remember(selectedPkgs, installedApps) {
-        when (selectedPkgs.size) {
-            0 -> emptyList()
-            1 -> installedApps.find { it.packageName in selectedPkgs }?.let(::listOf).orEmpty()
-            else -> installedApps.filter { it.packageName in selectedPkgs }
+    val (selectedApps, selUnInstPkgs, selNewApps) = remember(selectedPkgs, modifyingPkgs, installedApps) {
+        // show nothing when installed apps are not obtained yet
+        if (installedApps.isEmpty())
+            return@remember Triple(emptyList<PackageInfo>(), emptyList(), emptyList())
+        when (modifyingPkgs.size) {
+            0 -> Triple(emptyList(), emptyList(), emptyList())
+            1 -> {
+                val newSelPkgs = selectedPkgs - modifyingPkgs.first()
+                val newList = if (newSelPkgs.isEmpty()) emptyList()
+                else installedApps.filter { it.packageName in newSelPkgs }
+                when (val selInstApp = installedApps.find { it.packageName in modifyingPkgs }) {
+                    null -> Triple(emptyList(), modifyingPkgs.toList(), newList)
+                    else -> Triple(listOf(selInstApp), emptyList(), newList)
+                }
+            }
+            else -> {
+                val mutSelPkgs = modifyingPkgs.toMutableSet()
+                val newSelPkgs = selectedPkgs - modifyingPkgs
+                val modList = installedApps.filter { mutSelPkgs.remove(it.packageName) }
+                val newList = if (newSelPkgs.isEmpty()) emptyList()
+                else installedApps.filter { it.packageName in newSelPkgs }
+                Triple(modList, mutSelPkgs.toList(), newList)
+            }
         }
     }
+    val context = LocalContext.current
+    val defAppIcon = remember { context.packageManager.defaultActivityIcon }
+
     LazyColumn(modifier = modifier, contentPadding = contentPadding) {
         if (modCollName) {
             item(key = "@group.coll", contentType = "Coll") {
@@ -240,13 +263,33 @@ private fun GroupContent(
             )
         }
 
+        if (selUnInstPkgs.isNotEmpty()) {
+            item(key = "@group.sec.uninst", contentType = "AppHeading") {
+                CollAppHeading(
+                    modifier = Modifier.animateItem().appHeadingPadding(),
+                    name = "Uninstalled apps (${selUnInstPkgs.size})",
+                )
+            }
+        }
+        items(selUnInstPkgs, key = { app -> app }, contentType = { "App" }) { app ->
+            val itemStyle = DetailedCollAppItemStyle
+            CompositionLocalProvider(LocalCollAppItemStyle provides itemStyle) {
+                GroupItem(
+                    modifier = Modifier.animateItem().padding(horizontal = 20.dp, vertical = 8.dp),
+                    name = eventHandler.getAppLabel(app),
+                    pkgName = app,
+                    selected = app in selectedPkgs,
+                    iconModel = defAppIcon,
+                    onCheckedChange = { chk -> eventHandler.setAppSelected(app, chk) },
+                    includedGroups = eventHandler.getAppGroups(app),
+                )
+            }
+        }
+
         if (selectedApps.isNotEmpty()) {
             item(key = "@group.sec.sel", contentType = "AppHeading") {
                 CollAppHeading(
-                    modifier = Modifier
-                        .animateItem()
-                        .padding(horizontal = 20.dp)
-                        .padding(top = 8.dp, bottom = 0.dp),
+                    modifier = Modifier.animateItem().appHeadingPadding(),
                     name = "Selected apps (${selectedApps.size})",
                     changeViewText = if (detailed[0]) "Detailed view" else "Compact view",
                     onChangeView = { detailed[0] = !detailed[0] },
@@ -272,16 +315,43 @@ private fun GroupContent(
             }
         }
 
+        val newAppViewIndex = detailed.lastIndex
+        if (selNewApps.isNotEmpty()) {
+            item(key = "@group.sec.new", contentType = "AppHeading") {
+                CollAppHeading(
+                    modifier = Modifier.animateItem().appHeadingPadding(),
+                    name = "Newly selected apps (${selNewApps.size})",
+                    changeViewText = if (detailed[newAppViewIndex]) "Detailed view" else "Compact view",
+                    onChangeView = { detailed[newAppViewIndex] = !detailed[newAppViewIndex] },
+                )
+            }
+        }
+        items(selNewApps, key = { app -> app.packageName + "$" }, contentType = { "App" }) { app ->
+            val icPkg = app.applicationInfo?.let { AppIconPackageInfo(app, it) }
+            val isSys = app.applicationInfo?.run { flags and ApplicationInfo.FLAG_SYSTEM != 0 } == true
+            val itemStyle = if (detailed[newAppViewIndex]) DetailedCollAppItemStyle else CompactCollAppItemStyle
+            CompositionLocalProvider(LocalCollAppItemStyle provides itemStyle) {
+                GroupItem(
+                    modifier = Modifier.animateItem().padding(horizontal = 20.dp, vertical = 8.dp),
+                    name = eventHandler.getAppLabel(app.packageName),
+                    pkgName = app.packageName,
+                    selected = app.packageName in selectedPkgs,
+                    iconModel = icPkg,
+                    typeText = eventHandler.getAppPartition(app.packageName),
+                    typeIcon = if (isSys) Icons.Outlined.Android else null,
+                    onCheckedChange = { chk -> eventHandler.setAppSelected(app.packageName, chk) },
+                    includedGroups = eventHandler.getAppGroups(app.packageName),
+                )
+            }
+        }
+
         for (sectionIndex in installedAppsGrouping.indices) {
             val sectionApps = installedApps.getGroup(installedAppsGrouping, sectionIndex)
             if (sectionApps.isNotEmpty()) {
                 item(key = "@group.sec.apps$sectionIndex", contentType = "AppHeading") {
                     val heading = collAppGroupHeading(sectionIndex)
                     CollAppHeading(
-                        modifier = Modifier
-                            .animateItem()
-                            .padding(horizontal = 20.dp)
-                            .padding(top = 8.dp, bottom = 0.dp),
+                        modifier = Modifier.animateItem().appHeadingPadding(),
                         name = "$heading (${sectionApps.size})",
                         changeViewText = if (detailed[sectionIndex + 1]) "Detailed view" else "Compact view",
                         onChangeView = { detailed[sectionIndex + 1] = !detailed[sectionIndex + 1] },
@@ -309,6 +379,9 @@ private fun GroupContent(
         }
     }
 }
+
+private fun Modifier.appHeadingPadding(): Modifier =
+    padding(horizontal = 20.dp).padding(top = 8.dp, bottom = 0.dp)
 
 @Composable
 private fun GroupFooter(

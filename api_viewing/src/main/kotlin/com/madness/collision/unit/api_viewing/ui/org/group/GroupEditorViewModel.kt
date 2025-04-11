@@ -76,6 +76,11 @@ data class GroupUiState(
     val collName: String,
     val selColl: CollInfo?,
     val collList: List<CollInfo>,
+    /**
+     * The package names of selected apps from the group to modify,
+     * or the maximum set of selected apps when creating a new group.
+     */
+    val modPkgs: Set<String>,
 )
 
 class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
@@ -106,6 +111,7 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
             collName = savedObj.collName ?: "",
             selColl = null,
             collList = emptyList(),
+            modPkgs = emptySet(),
         )
         mutUiState = MutableStateFlow(state)
         uiState = mutUiState.asStateFlow()
@@ -143,11 +149,16 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
             val modGroup = if (modGroupId > 0) groupRepo.getOneOffGroup(modGroupId) else null
             val modGroupName = modGroup?.name ?: ""
             val modSelPkgs = modGroup?.apps?.run { mapTo(HashSet(size), OrgApp::pkg) } ?: emptySet()
+            // Put labels of selected apps, note this can override labels from retrieved app list.
+            val modSelLabels = modGroup?.apps?.associate { it.pkg to it.label } ?: emptyMap()
+            if (modSelLabels.isNotEmpty()) pkgLabelProvider.putLabels(modSelLabels)
 
             mutUiState.update { currValue ->
                 currValue.copy(
                     groupName = savedObj.groupName ?: modGroupName,
                     selPkgs = savedObj.selPkgs ?: modSelPkgs,
+                    // if modifying, use modSelPkgs; else (creating) use saved selPkgs
+                    modPkgs = if (modGroup != null) modSelPkgs else savedObj.selPkgs.orEmpty(),
                 )
             }
 
@@ -207,8 +218,14 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
             !isSelected && hasSelPkg -> selPkgSet - pkg
             else -> return
         }
+        // always add new selections to modPkgs when creating group
+        val newMod = when {
+            modGroupId <= 0 && isSelected -> currentState.modPkgs + pkg
+            else -> currentState.modPkgs
+        }
+
         savedObj.selPkgs = newSel
-        val newState = currentState.copy(selPkgs = newSel)
+        val newState = currentState.copy(selPkgs = newSel, modPkgs = newMod)
         mutUiState.update { newState }
     }
 

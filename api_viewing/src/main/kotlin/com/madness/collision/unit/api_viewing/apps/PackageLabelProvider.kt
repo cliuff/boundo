@@ -54,10 +54,14 @@ open class PkgLabelProviderImpl(open val pkgLabels: Map<String, String>) : Packa
     }
 }
 
-class AppPkgLabelProvider : PkgLabelProviderImpl() {
+class AppPkgLabelProvider(labels: Map<String, String> = emptyMap()) : PkgLabelProviderImpl() {
     override val pkgLabels: Map<String, String> by ::mutLabels
-    private var mutLabels: Map<String, String> = emptyMap()
+    private var mutLabels: Map<String, String> = labels
     private val pkgLabelMutex = Mutex()
+
+    suspend fun putLabels(labels: Map<String, String>) {
+        pkgLabelMutex.withLock { mutLabels += labels }
+    }
 
     suspend fun retrieveLabels(pkgInfoProvider: PackageInfoProvider, pkgMgr: PackageManager) {
         retrieveLabels(pkgInfoProvider.getAll(), pkgMgr)

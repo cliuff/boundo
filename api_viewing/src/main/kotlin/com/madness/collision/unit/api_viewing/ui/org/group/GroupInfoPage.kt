@@ -20,6 +20,7 @@ import android.content.Context
 import android.content.pm.PackageInfo
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -30,8 +31,10 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
@@ -205,6 +208,9 @@ private fun GroupContent(
         val un = selectedPkgs - selectedApps.mapTo(HashSet(selectedApps.size)) { it.packageName }
         un.toList()
     }
+    val context = LocalContext.current
+    val defAppIcon = remember { context.packageManager.defaultActivityIcon }
+
     LazyColumn(modifier = modifier, contentPadding = contentPadding) {
         if (selectedApps.isNotEmpty()) {
             item(key = "@group.sec.sel", contentType = "AppHeading") {
@@ -251,19 +257,28 @@ private fun GroupContent(
             CompositionLocalProvider(LocalCollAppItemStyle provides itemStyle) {
             GroupItem(
                 modifier = Modifier.animateItem().padding(horizontal = 20.dp, vertical = 8.dp),
-                name = app,
+                name = eventHandler.getAppLabel(app),
                 pkgName = app,
-                iconModel = null,
+                iconModel = defAppIcon,
                 onLaunch = null,
                 onExternal = { showAppOwners = true },
+                externalContent = {
+                    DropdownMenu(
+                        expanded = showAppOwners,
+                        onDismissRequest = { showAppOwners = false },
+                        shape = RoundedCornerShape(10.dp),
+                    ) {
+                        AppOwners(
+                            appOwnerApps = appOwnerApps,
+                            getOwnerLabel = eventHandler::getAppLabel,
+                            onSelectOwner = { owner ->
+                                eventHandler.showAppInOwner(app, owner)
+                                showAppOwners = false
+                            },
+                        )
+                    }
+                }
             )
-            }
-            DropdownMenu(expanded = showAppOwners, onDismissRequest = { showAppOwners = false }) {
-                AppOwners(
-                    appOwnerApps = appOwnerApps,
-                    getOwnerLabel = eventHandler::getAppLabel,
-                    onSelectOwner = { owner -> eventHandler.showAppInOwner(app, owner) },
-                )
             }
         }
     }
@@ -279,16 +294,17 @@ private fun AppOwners(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .widthIn(min = 160.dp, max = 260.dp)
                 .clickable { onSelectOwner(owner.packageName) }
-                .padding(horizontal = 20.dp, vertical = 12.dp),
+                .padding(horizontal = 16.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             AsyncImage(
-                modifier = Modifier.width(40.dp).heightIn(max = 40.dp),
+                modifier = Modifier.width(32.dp).heightIn(max = 32.dp),
                 model = owner.applicationInfo?.let { AppIconPackageInfo(owner, it) },
                 contentDescription = null,
             )
-            Spacer(Modifier.width(15.dp))
+            Spacer(Modifier.width(12.dp))
             Text(
                 text = getOwnerLabel(owner.packageName),
                 color = MaterialTheme.colorScheme.onSurface,
@@ -298,6 +314,8 @@ private fun AppOwners(
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 2,
             )
+            // extra space for optical balance
+            Spacer(Modifier.width(15.dp))
         }
     }
 }
@@ -310,6 +328,7 @@ private fun GroupItem(
     onLaunch: (() -> Unit)?,
     onExternal: (() -> Unit)?,
     modifier: Modifier = Modifier,
+    externalContent: @Composable () -> Unit = {},
 ) {
     Row(
         modifier = modifier,
@@ -322,12 +341,15 @@ private fun GroupItem(
             secondaryText = pkgName,
         )
         if (onLaunch != null || onExternal != null) {
-            OutlinedButton(
-                modifier = Modifier.sizeIn(minWidth = 36.dp, minHeight = 20.dp),
-                onClick = onLaunch ?: onExternal ?: {},
-                contentPadding = PaddingValues(horizontal = 20.dp, vertical = 5.dp),
-            ) {
-                Text(text = if (onLaunch != null) "Open" else "Install...", fontSize = 12.sp)
+            Box {
+                OutlinedButton(
+                    modifier = Modifier.sizeIn(minWidth = 36.dp, minHeight = 20.dp),
+                    onClick = onLaunch ?: onExternal ?: {},
+                    contentPadding = PaddingValues(horizontal = 20.dp, vertical = 5.dp),
+                ) {
+                    Text(text = if (onLaunch != null) "Open" else "Install...", fontSize = 12.sp)
+                }
+                externalContent()
             }
         }
     }
