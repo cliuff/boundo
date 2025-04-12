@@ -36,7 +36,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
@@ -167,13 +166,10 @@ private fun GroupScaffold(
                             tint = appBarIconColor,
                         )
                     }
-                    IconButton(onClick = onActionDelete) {
-                        Icon(
-                            imageVector = Icons.Outlined.Delete,
-                            contentDescription = null,
-                            tint = appBarIconColor,
-                        )
-                    }
+                    GroupInfoOverflowIconButton(
+                        onActionDelete = onActionDelete,
+                        iconColor = appBarIconColor,
+                    )
                 },
                 windowInsets = topBarInsets
                     .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),

@@ -16,6 +16,7 @@
 
 package com.madness.collision.unit.api_viewing.ui.org.coll
 
+import android.text.format.DateUtils
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -28,7 +29,6 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
@@ -83,14 +83,20 @@ fun OrgCollAppBar(
                 )
             },
             actions = {
-                IconButton(onClick = onActionDelete) {
-                    Icon(
-                        modifier = Modifier.size(22.dp),
-                        imageVector = Icons.Outlined.Delete,
-                        contentDescription = null,
-                    )
-                }
-                OverflowIconButton(onActionImport, onActionExport)
+                OverflowIconButton(
+                    collName = selectedColl?.name,
+                    collCreateTime = remember(selectedColl) {
+                        selectedColl ?: return@remember ""
+                        val time = DateUtils.getRelativeTimeSpanString(
+                            selectedColl.createTime,
+                            System.currentTimeMillis(),
+                            DateUtils.MINUTE_IN_MILLIS)
+                        "Created: $time"
+                    },
+                    onActionDelete = onActionDelete,
+                    onActionImport = onActionImport,
+                    onActionExport = onActionExport,
+                )
             },
             windowInsets = windowInsets,
             colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
@@ -120,12 +126,22 @@ fun OrgCollAppBar(
 
 @Composable
 private fun OverflowIconButton(
+    collName: String?,
+    collCreateTime: String,
+    onActionDelete: () -> Unit,
     onActionImport: () -> Unit,
     onActionExport: () -> Unit,
 ) {
-    val context = LocalContext.current
-    val impFile = remember { context.externalCacheDir?.resolve("Import.org.txt") }
-    if (impFile?.exists() == true) {
+    if (collName != null) {
+        var showDelDialog by remember { mutableStateOf(false) }
+        if (showDelDialog) {
+            DeleteConfirmationDialog(
+                title = "Delete Collection",
+                onConfirm = onActionDelete,
+                onDismiss = { showDelDialog = false },
+            )
+        }
+
         var showOptions by remember { mutableStateOf(false) }
         IconButton(onClick = { showOptions = true }) {
             Icon(
@@ -134,22 +150,73 @@ private fun OverflowIconButton(
                 contentDescription = null,
             )
         }
+
         DropdownMenu(
+            modifier = Modifier.widthIn(max = 260.dp),
             expanded = showOptions,
             onDismissRequest = { showOptions = false },
             shape = RoundedCornerShape(10.dp),
         ) {
-            DropdownMenuItem(
-                modifier = Modifier.widthIn(min = 160.dp),
-                text = { Text(text = "Import collection") },
-                onClick = onActionImport,
+            CollectionInfo(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .widthIn(min = 160.dp)
+                    .padding(top = 10.dp, bottom = 4.dp),
+                name = collName,
+                createTime = collCreateTime,
             )
-            DropdownMenuItem(
+
+            DropdownMenuDeleteItem(
                 modifier = Modifier.widthIn(min = 160.dp),
-                text = { Text(text = "Export collection") },
-                onClick = onActionExport,
+                text = "Delete collection",
+                onClick = {
+                    showDelDialog = true
+                    showOptions = false
+                },
             )
+
+            val context = LocalContext.current
+            val impFile = remember { context.externalCacheDir?.resolve("Import.org.txt") }
+            if (impFile?.exists() == true) {
+                DropdownMenuItem(
+                    modifier = Modifier.widthIn(min = 160.dp),
+                    text = { Text(text = "Import collection") },
+                    onClick = onActionImport,
+                )
+                DropdownMenuItem(
+                    modifier = Modifier.widthIn(min = 160.dp),
+                    text = { Text(text = "Export collection") },
+                    onClick = onActionExport,
+                )
+            }
         }
+    }
+}
+
+@Composable
+private fun CollectionInfo(name: String, createTime: String, modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(
+            text = name,
+            color = MaterialTheme.colorScheme.onSurface,
+            fontSize = 14.sp,
+            lineHeight = 16.sp,
+            fontWeight = FontWeight.Medium,
+            textAlign = TextAlign.Center,
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 3,
+        )
+        Text(
+            text = createTime,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
+            fontSize = 11.sp,
+            lineHeight = 12.sp,
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1,
+        )
     }
 }
 
