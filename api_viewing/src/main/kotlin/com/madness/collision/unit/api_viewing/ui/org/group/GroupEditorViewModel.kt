@@ -83,6 +83,26 @@ data class GroupUiState(
     val modPkgs: Set<String>,
 )
 
+private sealed interface EditorModId {
+    val isCreating: Boolean
+        get() = this !is ModifyGroup
+
+    /** Create new group in a new collection. */
+    object CreateGroupNewColl : EditorModId
+
+    /** Create new group in a selected existing collection. */
+    class CreateGroupInColl(coll: Int) : _CollMod(coll)
+
+    /** Modify group from an existing collection. */
+    class ModifyGroup(coll: Int, val group: Int) : _CollMod(coll) {
+        init { require(group > 0) }
+    }
+
+    sealed class _CollMod(val coll: Int) : EditorModId {
+        init { require(coll > 0) }
+    }
+}
+
 class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
     private val mutUiState: MutableStateFlow<GroupUiState>
     val uiState: StateFlow<GroupUiState>
@@ -91,10 +111,7 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
     private var pkgGroupsMap: Map<String, List<OrgGroup>> = emptyMap()
     private var collRepo: CollRepository? = null
     private var groupRepo: GroupRepository? = null
-    /** Coll ID to add group in. */
-    private var modCollId: Int = -1
-    /** Group ID to modify. */
-    private var modGroupId: Int = -1
+    private var editId: EditorModId = EditorModId.CreateGroupNewColl
     private var submittedGroupId: Int = -1
 
     private val savedObj: GroupSavedState = GroupSavedState(savedState)
@@ -119,8 +136,13 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
 
     fun init(context: Context, modCollId: Int, modGroupId: Int) {
         if (initJob != null) return
-        if (modCollId > 0) this.modCollId = modCollId
-        if (modGroupId > 0) this.modGroupId = modGroupId
+        val modId = when {
+            (modCollId > 0 && modGroupId > 0) -> EditorModId.ModifyGroup(modCollId, modGroupId)
+            (modCollId > 0) -> EditorModId.CreateGroupInColl(modCollId)
+            else -> EditorModId.CreateGroupNewColl
+        }
+        editId = modId
+
         initJob = viewModelScope.launch(Dispatchers.IO) {
             mutUiState.update { it.copy(isLoading = true) }
             val collRepo = collRepo ?: OrgCollRepo.coll(context).also { collRepo = it }
@@ -132,7 +154,7 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
             val pkgMgr = context.packageManager
             MultiStageAppList.load(pkgInfoProvider, pkgMgr, pkgLabelProvider)
                 // skip first stage when modifying group
-                .runIf({ modGroupId > 0 }, { drop(1) })
+                .runIf({ !modId.isCreating }, { drop(1) })
                 .onEach { (pkgList, grouping) ->
                     pkgPartitionMap = PartitionInfo.getPkgPartitions(pkgList)
                     mutUiState.update {
@@ -145,8 +167,8 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
                 }
                 .launchIn(this)
 
-            pkgGroupsMap = if (modCollId > 0) groupRepo.getAppGroups(modCollId) else emptyMap()
-            val modGroup = if (modGroupId > 0) groupRepo.getOneOffGroup(modGroupId) else null
+            pkgGroupsMap = if (modId is EditorModId._CollMod) groupRepo.getAppGroups(modId.coll) else emptyMap()
+            val modGroup = if (modId is EditorModId.ModifyGroup) groupRepo.getOneOffGroup(modId.group) else null
             val modGroupName = modGroup?.name ?: ""
             val modSelPkgs = modGroup?.apps?.run { mapTo(HashSet(size), OrgApp::pkg) } ?: emptySet()
             // Put labels of selected apps, note this can override labels from retrieved app list.
@@ -163,7 +185,7 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
             }
 
             // retrieve collections when creating group
-            if (modGroupId <= 0) {
+            if (modId.isCreating) {
                 collRepo.getCollections()
                     .onEach { colls ->
                         mutUiState.update { currValue ->
@@ -195,11 +217,18 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
     }
 
     fun selectColl(coll: CollInfo) {
+        editId = EditorModId.CreateGroupInColl(coll.id)
         savedObj.selCollId = coll.id
         mutUiState.update { it.copy(collName = coll.name, selColl = coll) }
     }
 
     fun setCollName(name: String) {
+        // if input coll name matches selColl name, create in selColl
+        val selColl = uiState.value.selColl
+        editId = when (selColl?.name) {
+            name -> EditorModId.CreateGroupInColl(selColl.id)
+            else -> EditorModId.CreateGroupNewColl
+        }
         savedObj.collName = name
         mutUiState.update { it.copy(collName = name) }
     }
@@ -220,7 +249,7 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
         }
         // always add new selections to modPkgs when creating group
         val newMod = when {
-            modGroupId <= 0 && isSelected -> currentState.modPkgs + pkg
+            editId.isCreating && isSelected -> currentState.modPkgs + pkg
             else -> currentState.modPkgs
         }
 
@@ -234,36 +263,54 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
         val collRepo = collRepo ?: return
         val groupRepo = groupRepo ?: return
         val state = uiState.value
-        val modCid = modCollId
-        val modGid = modGroupId
         viewModelScope.launch(Dispatchers.IO) {
-            val time = System.currentTimeMillis()
-            val isMod = modCid > 0 && state.run { selColl?.id == modCid && selColl.name == collName }
-            val collName = state.collName.trim().takeUnless { it.isBlank() } ?: "Unnamed Coll"
-            val collId = if (modGid <= 0 && !isMod) {
-                val createColl = CollInfo(0, collName, time, time, 0)
-                collRepo.addCollection(createColl)
-            } else {
-                modCid
-            }
-            val groupName = state.groupName.trim().takeUnless { it.isBlank() } ?: "Unnamed Group"
-            val apps = state.selPkgs.map { pkg ->
-                OrgApp(pkg, labelProvider.getLabel(pkg) ?: "", "", time, time)
-            }
-            if (modGid <= 0) {
-                if (collId > 0) {
-                    val updGroup = OrgGroup(0, groupName, time, time, apps)
-                    val gid = groupRepo.addGroupAndApps(collId, updGroup)
-                    if (gid > 0) submittedGroupId = gid
-                }
-            } else {
-                val updGroup = OrgGroup(modGid, groupName, time, time, apps)
-                groupRepo.updateGroupAndApps(updGroup)
-                submittedGroupId = modGid
+            when (val modId = editId) {
+                EditorModId.CreateGroupNewColl -> createGroup(state, -1, collRepo, groupRepo)
+                is EditorModId.CreateGroupInColl -> createGroup(state, modId.coll, collRepo, groupRepo)
+                is EditorModId.ModifyGroup -> modifyGroup(state, modId.group, groupRepo)
             }
             if (submittedGroupId > 0) {
                 mutUiState.update { it.copy(isSubmitOk = true) }
             }
         }
+    }
+
+    private suspend fun createGroup(
+        state: GroupUiState, modCid: Int, collRepo: CollRepository, groupRepo: GroupRepository) {
+
+        val time = System.currentTimeMillis()
+        // Create a new coll with non-blank coll name, or default to unnamed.
+        val collName = state.collName.trim().takeUnless { it.isBlank() } ?: "Unnamed Coll"
+        val collId = if (modCid <= 0) {
+            val createColl = CollInfo(0, collName, time, time, 0)
+            collRepo.addCollection(createColl)
+        } else {
+            modCid
+        }
+
+        // Take non-blank group name, or default to unnamed.
+        val groupName = state.groupName.trim().takeUnless { it.isBlank() } ?: "Unnamed Group"
+        val apps = state.selPkgs.map { pkg ->
+            OrgApp(pkg, labelProvider.getLabel(pkg) ?: "", "", time, time)
+        }
+        if (collId > 0) {
+            // Create a new group with supplied data.
+            val updGroup = OrgGroup(0, groupName, time, time, apps)
+            val gid = groupRepo.addGroupAndApps(collId, updGroup)
+            if (gid > 0) submittedGroupId = gid
+        }
+    }
+
+    private suspend fun modifyGroup(state: GroupUiState, modGid: Int, groupRepo: GroupRepository) {
+        val time = System.currentTimeMillis()
+        // Take non-blank group name, or default to unnamed.
+        val groupName = state.groupName.trim().takeUnless { it.isBlank() } ?: "Unnamed Group"
+        val apps = state.selPkgs.map { pkg ->
+            OrgApp(pkg, labelProvider.getLabel(pkg) ?: "", "", time, time)
+        }
+        // Update group with new data.
+        val updGroup = OrgGroup(modGid, groupName, time, time, apps)
+        groupRepo.updateGroupAndApps(updGroup)
+        submittedGroupId = modGid
     }
 }

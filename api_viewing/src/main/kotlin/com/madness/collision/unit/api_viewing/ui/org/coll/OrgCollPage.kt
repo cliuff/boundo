@@ -29,6 +29,7 @@ import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.add
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.only
@@ -51,6 +52,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -59,6 +61,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -100,7 +103,9 @@ fun OrgCollPage(contentPadding: PaddingValues = PaddingValues()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val (isLoading, coll, collList, installedPkgsSummary) = uiState
     val navController = LocalPageNavController.current
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     OrgCollScaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             OrgCollAppBar(
                 collList = collList,
@@ -111,6 +116,7 @@ fun OrgCollPage(contentPadding: PaddingValues = PaddingValues()) {
                 onActionExport = { coll?.let { viewModel.exportColl(it, context) } },
                 windowInsets = contentPadding.asInsets()
                     .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
+                scrollBehavior = scrollBehavior,
             )
         },
         onClickAdd = {
@@ -123,7 +129,7 @@ fun OrgCollPage(contentPadding: PaddingValues = PaddingValues()) {
     ) { innerPadding ->
         if (coll != null) {
             OrgCollContent(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxSize(),
                 coll = coll,
                 onClickGroup = clickGroup@{ i, id ->
                     if (i !in coll.groups.indices) return@clickGroup
@@ -136,7 +142,7 @@ fun OrgCollPage(contentPadding: PaddingValues = PaddingValues()) {
             )
         } else {
             Box(
-                modifier = Modifier.fillMaxWidth().padding(innerPadding),
+                modifier = Modifier.fillMaxSize().padding(innerPadding),
                 contentAlignment = Alignment.TopCenter,
             ) {
                 Text(

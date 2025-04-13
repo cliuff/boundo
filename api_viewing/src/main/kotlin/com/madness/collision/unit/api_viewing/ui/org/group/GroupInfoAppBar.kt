@@ -45,7 +45,7 @@ fun GroupInfoOverflowIconButton(
     if (showDelDialog) {
         DeleteConfirmationDialog(
             title = "Delete Group",
-            onConfirm = onActionDelete,
+            onConfirm = { showDelDialog = false; onActionDelete() },
             onDismiss = { showDelDialog = false },
         )
     }

@@ -43,12 +43,14 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -56,6 +58,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.madness.collision.chief.app.stateOf
 import io.cliuff.boundo.org.model.CompColl
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -71,9 +74,14 @@ fun OrgCollAppBar(
     scrollBehavior: TopAppBarScrollBehavior? = null,
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
+        val barContentAlpha by remember(scrollBehavior) {
+            val state = scrollBehavior?.state ?: return@remember stateOf(1f)
+            derivedStateOf { (1 - 2 * state.collapsedFraction).coerceIn(0f, 1f) }
+        }
         CenterAlignedTopAppBar(
             title = {
                 Text(
+                    modifier = Modifier.alpha(barContentAlpha),
                     text = "Organize",
                     fontSize = 26.sp,
                     lineHeight = 28.sp,
@@ -84,6 +92,7 @@ fun OrgCollAppBar(
             },
             actions = {
                 OverflowIconButton(
+                    modifier = Modifier.alpha(barContentAlpha),
                     collName = selectedColl?.name,
                     collCreateTime = remember(selectedColl) {
                         selectedColl ?: return@remember ""
@@ -131,19 +140,20 @@ private fun OverflowIconButton(
     onActionDelete: () -> Unit,
     onActionImport: () -> Unit,
     onActionExport: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     if (collName != null) {
         var showDelDialog by remember { mutableStateOf(false) }
         if (showDelDialog) {
             DeleteConfirmationDialog(
                 title = "Delete Collection",
-                onConfirm = onActionDelete,
+                onConfirm = { showDelDialog = false; onActionDelete() },
                 onDismiss = { showDelDialog = false },
             )
         }
 
         var showOptions by remember { mutableStateOf(false) }
-        IconButton(onClick = { showOptions = true }) {
+        IconButton(modifier = modifier, onClick = { showOptions = true }) {
             Icon(
                 modifier = Modifier.size(22.dp),
                 imageVector = Icons.Outlined.MoreVert,
