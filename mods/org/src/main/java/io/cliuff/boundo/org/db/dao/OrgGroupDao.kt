@@ -42,11 +42,15 @@ interface OrgGroupDao {
 
     @Transaction
     @Query("SELECT * FROM org_group WHERE _id=:groupId")
-    suspend fun select(groupId: Int): AppGroup?
+    suspend fun selectOneOff(groupId: Int): AppGroup?
 
     @Transaction
     @Query("SELECT * FROM org_group WHERE coll_id=:collId")
     suspend fun selectOneOffColl(collId: Int): List<AppGroup>
+
+    @Transaction
+    @Query("SELECT * FROM org_group WHERE _id=:groupId")
+    fun select(groupId: Int): Flow<AppGroup?>
 
     @Transaction
     @Query("SELECT * FROM org_group WHERE coll_id=:collId")

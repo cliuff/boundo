@@ -36,6 +36,8 @@ interface GroupRepository {
     /** Get coll groups by [collId]. */
     suspend fun getOneOffGroups(collId: Int): List<OrgGroup>
     suspend fun getAppGroups(collId: Int): Map<String, List<OrgGroup>>
+    /** Get group flow by [groupId]. */
+    fun getGroup(groupId: Int): Flow<OrgGroup?>
     fun getGroups(collId: Int): Flow<List<OrgGroup>>
 }
 
@@ -72,7 +74,7 @@ class GroupRepoImpl(
     }
 
     override suspend fun getOneOffGroup(groupId: Int): OrgGroup? {
-        return groupDao.select(groupId)?.let(AppGroup::toModel)
+        return groupDao.selectOneOff(groupId)?.let(AppGroup::toModel)
     }
 
     override suspend fun getOneOffGroups(collId: Int): List<OrgGroup> {
@@ -83,6 +85,10 @@ class GroupRepoImpl(
         return groupDao.selectOneOffColl(collId).map(AppGroup::toModel)
             .flatMap { group -> group.apps.map { app -> app.pkg to group } }
             .groupBy({ (pkg, _) -> pkg }) { (_, group) -> group }
+    }
+
+    override fun getGroup(groupId: Int): Flow<OrgGroup?> {
+        return groupDao.select(groupId).map { ent -> ent?.toModel() }
     }
 
     override fun getGroups(collId: Int): Flow<List<OrgGroup>> {

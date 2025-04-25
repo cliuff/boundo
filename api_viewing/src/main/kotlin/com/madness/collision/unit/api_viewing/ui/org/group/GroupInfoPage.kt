@@ -78,7 +78,6 @@ import com.madness.collision.unit.api_viewing.ui.org.coll.LocalCollAppItemStyle
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
 import com.madness.collision.util.mainApplication
 import com.madness.collision.util.ui.AppIconPackageInfo
-import io.cliuff.boundo.org.model.OrgApp
 import io.cliuff.boundo.org.model.OrgGroup
 
 @Stable
@@ -96,28 +95,27 @@ fun GroupInfoPage(
 ) {
     val viewModel = viewModel<GroupInfoViewModel>()
     val context = LocalContext.current
-    LaunchedEffect(Unit) { viewModel.init(context, modCollId, modGroupId) }
+    LaunchedEffect(Unit) { viewModel.init(context, modCollId, modGroupId, group) }
     val eventHandler = rememberGroupInfoEventHandler(viewModel, context)
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val (groupName, selPkgs, installedApps, isLoading, isSubmitOk, ownerApps) = uiState
-    val groupPkgs = remember(group) { group?.apps?.map(OrgApp::pkg)?.toSet() }
 
     val navController = LocalPageNavController.current
     LaunchedEffect(isSubmitOk) { if (isSubmitOk) navController.navigateBack() }
 
     GroupScaffold(
-        title = group?.name ?: groupName,
+        title = groupName,
         onActionEdit = {
             val route = OrgRouteId.GroupEditor(modCollId, modGroupId)
             navController.navigateTo(route.asRoute())
         },
-        onActionDelete = { group?.let(viewModel::remove) },
+        onActionDelete = viewModel::remove,
     ) { innerPadding ->
         GroupContent(
             modifier = Modifier.fillMaxWidth(),
-            groupName = group?.name ?: groupName,
+            groupName = groupName,
             eventHandler = eventHandler,
-            selectedPkgs = groupPkgs ?: selPkgs,
+            selectedPkgs = selPkgs,
             installedApps = installedApps,
             appOwnerApps = ownerApps,
             contentPadding = innerPadding,

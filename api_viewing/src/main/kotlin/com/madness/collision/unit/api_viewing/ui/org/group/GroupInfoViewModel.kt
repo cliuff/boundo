@@ -59,6 +59,7 @@ class GroupInfoViewModel(savedState: SavedStateHandle) : ViewModel() {
     private var modCollId: Int = -1
     /** Group ID to modify. */
     private var modGroupId: Int = -1
+    private var modGroup: OrgGroup? = null
 
     private var initJob: Job? = null
 
@@ -75,7 +76,7 @@ class GroupInfoViewModel(savedState: SavedStateHandle) : ViewModel() {
         uiState = mutUiState.asStateFlow()
     }
 
-    fun init(context: Context, modCollId: Int, modGroupId: Int) {
+    fun init(context: Context, modCollId: Int, modGroupId: Int, initGroup: OrgGroup?) {
         if (initJob != null) return
         if (modCollId > 0) this.modCollId = modCollId
         if (modGroupId > 0) this.modGroupId = modGroupId
@@ -86,12 +87,23 @@ class GroupInfoViewModel(savedState: SavedStateHandle) : ViewModel() {
             val pkgInfoProvider = OrgPkgInfoProvider
             val pkgLabelProvider = OrgPkgLabelProvider
 
-            val modGroup = if (modGroupId > 0) groupRepo.getOneOffGroup(modGroupId) else null
-            if (modGroup != null) {
+            if (initGroup != null) {
+                mutUiState.update { currValue ->
+                    currValue.copy(
+                        groupName = initGroup.name,
+                        selPkgs = initGroup.apps.run { mapTo(HashSet(size), OrgApp::pkg) },
+                    )
+                }
+            }
+
+            var lastLabelProvider = pkgLabelProvider
+            if (modGroupId > 0) groupRepo.getGroup(modGroupId).collect { modGroup ->
+                this@GroupInfoViewModel.modGroup = modGroup
+                modGroup ?: return@collect
                 val modSelPkgs = modGroup.apps.run { mapTo(HashSet(size), OrgApp::pkg) }
                 val labels = modGroup.apps.associate { it.pkg to it.label }
-                val appLabelProvider = AppPkgLabelProvider(labels + pkgLabelProvider.pkgLabels)
-                labelProvider = appLabelProvider
+                val appLabelProvider = AppPkgLabelProvider(labels + lastLabelProvider.pkgLabels)
+                labelProvider = appLabelProvider.also { lastLabelProvider = it }
                 val pkgs = pkgInfoProvider.getAll()
                 val sortedPkgs = pkgs.filter { it.packageName in modSelPkgs }
                     .sortedWith(compareBy(labelProvider.pkgComparator, PackageInfo::packageName))
@@ -105,11 +117,13 @@ class GroupInfoViewModel(savedState: SavedStateHandle) : ViewModel() {
                     )
                 }
 
+                if (appOwners.isEmpty()) {  // run once
                 val appStoreOwners = EnvPackages.getAppStoreOwners(context).also { appOwners = it }
                 val ownerPkgs = appStoreOwners.run { mapTo(HashSet(size), AppInfoOwner::packageName) }
                     .let { pkgSet -> pkgs.filter { it.packageName in pkgSet } }
                 appLabelProvider.retrieveLabels(ownerPkgs, context.packageManager)
                 mutUiState.update { it.copy(appOwnerApps = ownerPkgs) }
+                }
             }
         }
     }
@@ -123,8 +137,9 @@ class GroupInfoViewModel(savedState: SavedStateHandle) : ViewModel() {
         return appOwners.find { it.packageName == pkg }
     }
 
-    fun remove(group: OrgGroup) {
+    fun remove() {
         val groupRepo = groupRepo ?: return
+        val group = modGroup ?: return
         val modCid = modCollId
         viewModelScope.launch(Dispatchers.IO) {
             if (modCid > 0) {
