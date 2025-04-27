@@ -17,16 +17,26 @@
 package com.madness.collision.unit.api_viewing.ui.org.coll
 
 import android.content.Context
+import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
+import android.os.Build
 import android.os.Environment
+import androidx.annotation.RequiresApi
+import androidx.core.content.edit
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.madness.collision.chief.app.SavedStateDelegate
+import com.madness.collision.unit.api_viewing.apps.MultiStageAppList
 import com.madness.collision.unit.api_viewing.ui.org.OrgPkgInfoProvider
+import com.madness.collision.unit.api_viewing.ui.org.OrgPkgLabelProvider
+import com.madness.collision.unit.api_viewing.util.PrefUtil
+import com.madness.collision.util.P
+import com.madness.collision.util.os.OsUtils
 import io.cliuff.boundo.org.data.io.OrgCollExport
 import io.cliuff.boundo.org.data.repo.CompCollRepository
 import io.cliuff.boundo.org.data.repo.OrgCollRepo
+import io.cliuff.boundo.org.data.usecase.CollUseCase
 import io.cliuff.boundo.org.model.CompColl
 import io.cliuff.boundo.org.model.OrgApp
 import kotlinx.coroutines.Dispatchers
@@ -80,7 +90,39 @@ class OrgCollViewModel(savedState: SavedStateHandle) : ViewModel() {
                     }
                 }
                 .launchIn(this)
+
+            // create categories in the background
+            val prefCats = PrefUtil.ORG_COLL_CATS_REV
+            val rev = PrefUtil.ORG_COLL_CATS_CURR_REV
+            val prefs = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
+            if (OsUtils.satisfy(OsUtils.O) && prefs.getInt(prefCats, -1) != rev) {
+                val pkgInfoProvider = OrgPkgInfoProvider
+                val pkgLabelProvider = OrgPkgLabelProvider
+                val collRepo = OrgCollRepo.coll(context)
+                val groupRepo = OrgCollRepo.group(context)
+
+                val pkgMgr = context.packageManager
+                val cats = MultiStageAppList.loadCats(pkgInfoProvider, pkgMgr, pkgLabelProvider)
+                val collUseCase = CollUseCase(collRepo, groupRepo, pkgLabelProvider::getLabel)
+                val cid = createCategoryColl(collUseCase, cats, context)
+                if (cid > 0) prefs.edit { putInt(prefCats, rev) }
+            }
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private suspend fun createCategoryColl(
+        useCase: CollUseCase, cats: Map<Int, List<PackageInfo>>, context: Context): Int {
+
+        var modCid = -1
+        for ((cat, pkgs) in cats) {
+            val title = getAppCategoryTitle(cat, context)
+            val pkgNames = pkgs.run { mapTo(HashSet(size), PackageInfo::packageName) }
+            val (cid, _) = useCase.createGroup(modCid, "Cats", title, pkgNames)
+            // abort when coll not created
+            if (cid > 0) modCid = cid else break
+        }
+        return modCid
     }
 
     fun getPkg(pkgName: String): PackageInfo? {
@@ -149,3 +191,24 @@ private fun CompColl.getGroupPkgs(context: Context, limit: Int = 3): Map<String,
         }
     }
 }
+
+@RequiresApi(Build.VERSION_CODES.O)
+private fun getAppCategoryTitle(cat: Int, context: Context): String {
+    val title = ApplicationInfo.getCategoryTitle(context, cat)?.toString() ?: "Unknown"
+    return "${getEmoji(cat)} $title"
+}
+
+private fun getEmoji(appCategory: Int): String =
+    when (appCategory) {
+        ApplicationInfo.CATEGORY_GAME -> "🎮"
+        ApplicationInfo.CATEGORY_AUDIO -> "🎧"
+        ApplicationInfo.CATEGORY_VIDEO -> "🍿"
+        ApplicationInfo.CATEGORY_IMAGE -> "🖼️"
+        ApplicationInfo.CATEGORY_SOCIAL -> "🫂"
+        ApplicationInfo.CATEGORY_NEWS -> "📰"
+        ApplicationInfo.CATEGORY_MAPS -> "🧭"
+        ApplicationInfo.CATEGORY_PRODUCTIVITY -> "🚀"
+        ApplicationInfo.CATEGORY_ACCESSIBILITY -> "♿"
+        ApplicationInfo.CATEGORY_UNDEFINED -> "💭"
+        else -> "💭"
+    }

@@ -77,9 +77,10 @@ internal fun <T> List<T>.getGroup(grouping: List<Int>, groupIndex: Int): List<T>
 fun collAppGroupHeading(groupIndex: Int): String =
     when (groupIndex) {
         0 -> "Installed launcher apps"
-        1 -> "Installed service apps"
-        2 -> "Installed misc apps"
-        3 -> "Installed overlay apps"
+        1 -> "User services & components"
+        2 -> "System services & components"
+        3 -> "Misc system components"
+        4 -> "System overlay components"
         else -> "Installed apps"
     }
 

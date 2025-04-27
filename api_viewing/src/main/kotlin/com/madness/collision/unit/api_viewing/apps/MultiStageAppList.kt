@@ -17,9 +17,12 @@
 package com.madness.collision.unit.api_viewing.apps
 
 import android.content.Intent
+import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.madness.collision.unit.api_viewing.info.PkgInfo
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -33,6 +36,22 @@ typealias MultiGroupPkgList = Pair<List<PackageInfo>, List<Int>>
 object MultiStageAppList {
     fun load(pkgInfoProvider: PackageInfoProvider, pkgMgr: PackageManager, labelProvider: AppPkgLabelProvider) =
         loadByStage(pkgInfoProvider, pkgMgr, labelProvider)
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun loadCats(
+        pkgInfoProvider: PackageInfoProvider, pkgMgr: PackageManager, labelProvider: AppPkgLabelProvider): Map<Int, List<PackageInfo>> {
+
+        val pkgs = pkgInfoProvider.getAll()
+        val launchers = getLauncherPkgsAsync(pkgs, pkgMgr)
+        val (launcherCatApps, userCatServices, _) = getAppsAndServices(pkgs, launchers)
+        val launcherPkgList = launcherCatApps.values.toList()
+        val userServicePkgList = userCatServices.values.toList()
+
+        labelProvider.retrieveLabels(launcherPkgList, pkgMgr)
+        labelProvider.retrieveLabels(userServicePkgList, pkgMgr)
+        return (launcherPkgList + userServicePkgList)
+            .groupBy { it.applicationInfo?.category ?: ApplicationInfo.CATEGORY_UNDEFINED }
+    }
 }
 
 private fun loadByStage(
@@ -40,19 +59,19 @@ private fun loadByStage(
     return channelFlow {
         val pkgs = pkgInfoProvider.getAll()
         // retrieve launcher pkgs asynchronously
-        val deferredLauncherPkgs = async { getLauncherPkgsAsync(pkgs, pkgMgr) }
-        // retrieve overlay pkgs asynchronously
-        val deferredOverlayPkgs = async {
-            pkgs.mapNotNullTo(HashSet()) { p ->
-                p.packageName.takeIf { PkgInfo.getOverlayTarget(p) != null }
-            }
-        }
-        val launcherPkgs = deferredLauncherPkgs.await()
-        val (launcherPkgList, nonLauncherPkgList) = pkgs.partition { it.packageName in launcherPkgs }
+        val launchers = getLauncherPkgsAsync(pkgs, pkgMgr)
+        val (launcherCatApps, userCatServices, sysCatServices) = getAppsAndServices(pkgs, launchers)
+        val launcherPkgs = launcherCatApps.keys
+        val userServicePkgs = userCatServices.keys
+        val launcherPkgList = launcherCatApps.values.toList()
+        val userServicePkgList = userCatServices.values.toList()
+        val systemServicePkgList = sysCatServices.values.toList()
+
         // avoid retrieving labels asynchronously, which seems to negatively impact launcher labels
         labelProvider.retrieveLabels(launcherPkgList, pkgMgr)
         val deferredNonLauncherLabels = async {
-            labelProvider.retrieveLabels(nonLauncherPkgList, pkgMgr)
+            labelProvider.retrieveLabels(userServicePkgList, pkgMgr)
+            labelProvider.retrieveLabels(systemServicePkgList, pkgMgr)
         }
 
         // first stage: launcher packages
@@ -60,11 +79,14 @@ private fun loadByStage(
             .sortedWith(compareBy(labelProvider.pkgComparator, PackageInfo::packageName))
         send(sortedLauncherPkgs to listOf(launcherPkgs.size))
 
-        val overlayPkgs = deferredOverlayPkgs.await()
+        // retrieve overlay pkgs from system services
+        val overlayPkgs = systemServicePkgList.mapNotNullTo(HashSet()) { p ->
+            p.packageName.takeIf { PkgInfo.getOverlayTarget(p) != null }
+        }
         deferredNonLauncherLabels.await()
-        val miscPkgs = pkgs.mapNotNullTo(HashSet()) misc@{ p ->
+        val miscPkgs = systemServicePkgList.mapNotNullTo(HashSet()) misc@{ p ->
             val pkgName = p.packageName
-            if (pkgName in launcherPkgs || pkgName in overlayPkgs) return@misc null
+            if (pkgName in overlayPkgs) return@misc null
             if ('.' in pkgName) {
                 val label = labelProvider.getLabelOrPkg(pkgName)
                 if (label == pkgName || label.startsWith("$pkgName.")) return@misc pkgName
@@ -73,16 +95,46 @@ private fun loadByStage(
             null
         }
         val comparator = compareByDescending<PackageInfo> { it.packageName in launcherPkgs }
+            .thenByDescending { it.packageName in userServicePkgs }
             .thenBy { it.packageName in overlayPkgs }
             .thenBy { it.packageName in miscPkgs }
             .thenBy { labelProvider.getLabelOrPkg(it.packageName).let { l -> l == it.packageName || l.startsWith("${it.packageName}.") } }
             .thenBy(labelProvider.pkgComparator, PackageInfo::packageName)
         val sortedPkgs = pkgs.sortedWith(comparator)
         val sortedGrouping = listOf(
-            launcherPkgs.size, pkgs.size - miscPkgs.size - overlayPkgs.size, pkgs.size - overlayPkgs.size, pkgs.size)
+            launcherPkgs.size,  // launcher
+            launcherPkgs.size + userServicePkgs.size,  // user service
+            pkgs.size - miscPkgs.size - overlayPkgs.size,  // service
+            pkgs.size - overlayPkgs.size,  // misc
+            pkgs.size)  // overlay
 
         send(sortedPkgs to sortedGrouping)
     }
+}
+
+private typealias CatApps = Map<String, PackageInfo>
+
+private fun getAppsAndServices(
+    pkgs: List<PackageInfo>, launchers: Set<String>): Triple<CatApps, CatApps, CatApps> {
+
+    // launcher apps excluding user debuggable ones
+    val launcherApps = mutableMapOf<String, PackageInfo>()
+    // user services (non-launcher) & user debuggable apps
+    val userServices = mutableMapOf<String, PackageInfo>()
+    val systemServices = mutableMapOf<String, PackageInfo>()
+
+    for (p in pkgs) {
+        val flags = p.applicationInfo?.flags ?: 0
+        val appMap = if (flags and ApplicationInfo.FLAG_SYSTEM != 0) {
+            if (p.packageName in launchers) launcherApps else systemServices
+        } else if (flags and ApplicationInfo.FLAG_DEBUGGABLE != 0) {
+            userServices
+        } else {
+            if (p.packageName in launchers) launcherApps else userServices
+        }
+        appMap[p.packageName] = p
+    }
+    return Triple(launcherApps, userServices, systemServices)
 }
 
 // todo cache
@@ -114,6 +166,13 @@ private fun resolveLauncherActivity(pkgName: String, pkgMgr: PackageManager): Re
         val intent = Intent(Intent.ACTION_MAIN)
             .addCategory(Intent.CATEGORY_LAUNCHER)
             .setPackage(pkgName)
-        pkgMgr.resolveActivity(intent, 0)
+
+        // PackageManager.MATCH_DISABLED_COMPONENTS:
+        // include launcher activities that are disabled by default,
+        // e.g. Android Files, Digital Wellbeing, Gboard, etc.
+
+        // Use queryIntentActivities() instead of resolveActivity(),
+        // which returns ResolverActivity for multiple matching activities.
+        pkgMgr.queryIntentActivities(intent, 0).firstOrNull()
     }.getOrNull()
 }

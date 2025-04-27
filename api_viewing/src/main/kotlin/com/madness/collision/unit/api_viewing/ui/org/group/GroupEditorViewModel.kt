@@ -33,6 +33,7 @@ import com.madness.collision.unit.api_viewing.ui.org.OrgPkgLabelProvider
 import io.cliuff.boundo.org.data.repo.CollRepository
 import io.cliuff.boundo.org.data.repo.GroupRepository
 import io.cliuff.boundo.org.data.repo.OrgCollRepo
+import io.cliuff.boundo.org.data.usecase.CollUseCase
 import io.cliuff.boundo.org.model.CollInfo
 import io.cliuff.boundo.org.model.OrgApp
 import io.cliuff.boundo.org.model.OrgGroup
@@ -264,53 +265,20 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
         val groupRepo = groupRepo ?: return
         val state = uiState.value
         viewModelScope.launch(Dispatchers.IO) {
-            when (val modId = editId) {
-                EditorModId.CreateGroupNewColl -> createGroup(state, -1, collRepo, groupRepo)
-                is EditorModId.CreateGroupInColl -> createGroup(state, modId.coll, collRepo, groupRepo)
-                is EditorModId.ModifyGroup -> modifyGroup(state, modId.group, groupRepo)
+            val useCase = CollUseCase(collRepo, groupRepo, labelProvider::getLabel)
+            state.run {
+                submittedGroupId = when (val modId = editId) {
+                    EditorModId.CreateGroupNewColl ->
+                        useCase.createGroup(-1, collName, groupName, selPkgs).second
+                    is EditorModId.CreateGroupInColl ->
+                        useCase.createGroup(modId.coll, collName, groupName, selPkgs).second
+                    is EditorModId.ModifyGroup ->
+                        useCase.modifyGroup(modId.group, groupName, selPkgs)
+                }
             }
             if (submittedGroupId > 0) {
                 mutUiState.update { it.copy(isSubmitOk = true) }
             }
         }
-    }
-
-    private suspend fun createGroup(
-        state: GroupUiState, modCid: Int, collRepo: CollRepository, groupRepo: GroupRepository) {
-
-        val time = System.currentTimeMillis()
-        // Create a new coll with non-blank coll name, or default to unnamed.
-        val collName = state.collName.trim().takeUnless { it.isBlank() } ?: "Unnamed Coll"
-        val collId = if (modCid <= 0) {
-            val createColl = CollInfo(0, collName, time, time, 0)
-            collRepo.addCollection(createColl)
-        } else {
-            modCid
-        }
-
-        // Take non-blank group name, or default to unnamed.
-        val groupName = state.groupName.trim().takeUnless { it.isBlank() } ?: "Unnamed Group"
-        val apps = state.selPkgs.map { pkg ->
-            OrgApp(pkg, labelProvider.getLabel(pkg) ?: "", "", time, time)
-        }
-        if (collId > 0) {
-            // Create a new group with supplied data.
-            val updGroup = OrgGroup(0, groupName, time, time, apps)
-            val gid = groupRepo.addGroupAndApps(collId, updGroup)
-            if (gid > 0) submittedGroupId = gid
-        }
-    }
-
-    private suspend fun modifyGroup(state: GroupUiState, modGid: Int, groupRepo: GroupRepository) {
-        val time = System.currentTimeMillis()
-        // Take non-blank group name, or default to unnamed.
-        val groupName = state.groupName.trim().takeUnless { it.isBlank() } ?: "Unnamed Group"
-        val apps = state.selPkgs.map { pkg ->
-            OrgApp(pkg, labelProvider.getLabel(pkg) ?: "", "", time, time)
-        }
-        // Update group with new data.
-        val updGroup = OrgGroup(modGid, groupName, time, time, apps)
-        groupRepo.updateGroupAndApps(updGroup)
-        submittedGroupId = modGid
     }
 }
