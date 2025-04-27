@@ -20,6 +20,7 @@ import android.content.pm.PackageInfo
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -31,11 +32,13 @@ import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -71,6 +74,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.coerceAtLeast
+import androidx.compose.ui.unit.coerceIn
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -140,7 +144,7 @@ fun OrgCollPage(contentPadding: PaddingValues = PaddingValues()) {
                 installedAppsSummary = installedPkgsSummary?.let { (a, b) -> "$a/$b" } ?: "N/A",
                 contentPadding = innerPadding,
             )
-        } else {
+        } else if (!isLoading) {
             Box(
                 modifier = Modifier.fillMaxSize().padding(innerPadding),
                 contentAlignment = Alignment.TopCenter,
@@ -206,9 +210,19 @@ private fun OrgCollContent(
             fallbackTint = HazeTint(surfaceColor),
         )
     }
+    BoxWithConstraints(modifier = modifier.fillMaxSize()) {
+    val cellWidth = remember {
+        when {
+            maxWidth >= 840.dp -> 200.dp
+            maxWidth >= 600.dp -> 170.dp
+            maxWidth >= 360.dp -> 170.dp
+            else -> 160.dp
+        }
+    }
     LazyVerticalGrid(
-        modifier = modifier,
-        columns = GridCells.Adaptive(160.dp),
+        // fillMaxSize to intercept scroll gestures in empty areas
+        modifier = Modifier.fillMaxSize(),
+        columns = GridCells.Adaptive(cellWidth),
         contentPadding = contentPadding.run {
             PaddingValues(
                 top = calculateTopPadding(),
@@ -237,13 +251,18 @@ private fun OrgCollContent(
                     .animateItem()
                     .fillMaxWidth()
                     .padding(horizontal = 5.dp, vertical = 5.dp),
-                name = "${group.name} (${group.apps.size})",
+                name = group.name,
+                appCount = group.apps.size,
                 apps = getPkgsForGroup(group.apps.take(3).map(OrgApp::pkg)),
                 onClick = { onClickGroup(i, group.id) },
                 appHazeState = remember { HazeState() },
                 appHazeStyle = hazeStyle,
             )
         }
+        item(span = { GridItemSpan(maxLineSpan) }, contentType = "Space") {
+            Spacer(modifier = Modifier.height((maxHeight / 4).coerceIn(80.dp, 120.dp)))
+        }
+    }
     }
 }
 
@@ -271,6 +290,7 @@ private fun CollAppsSummary(text: String, onClick: () -> Unit, modifier: Modifie
 @Composable
 private fun CollGroup(
     name: String,
+    appCount: Int,
     apps: List<PackageInfo?>,
     onClick: () -> Unit,
     appHazeState: HazeState,
@@ -290,15 +310,26 @@ private fun CollGroup(
         },
     ) {
     Column {
-        Text(
-            modifier = Modifier.padding(start = 20.dp, top = 20.dp, end = 4.dp),
-            text = name,
-            color = MaterialTheme.colorScheme.onSurface,
-            fontSize = 16.sp,
-            lineHeight = 16.sp,
-            overflow = TextOverflow.Ellipsis,
-            maxLines = 2,
-        )
+        Row(modifier = Modifier.padding(start = 20.dp, top = 20.dp, end = 12.dp)) {
+            Text(
+                modifier = Modifier.alignByBaseline().weight(1f, fill = false),
+                text = "$name ",
+                color = MaterialTheme.colorScheme.onSurface,
+                fontSize = 16.sp,
+                lineHeight = 16.sp,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1,
+            )
+            Text(
+                modifier = Modifier.alignByBaseline().widthIn(max = 50.dp),
+                text = appCount.toString(),
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.55f),
+                fontSize = 16.sp,
+                lineHeight = 16.sp,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1,
+            )
+        }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -306,6 +337,10 @@ private fun CollGroup(
                 .padding(start = 20.dp, top = 20.dp, end = 4.dp, bottom = 20.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
+            // placeholder to match height with neighboring cells
+            if (apps.isEmpty()) {
+                Box(modifier = Modifier.size(28.dp))
+            }
             for (i in apps.indices) {
                 val app = apps[i]
                 val icPkg = remember { app?.applicationInfo?.let { AppIconPackageInfo(app, it) } }

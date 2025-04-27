@@ -19,8 +19,8 @@ package io.cliuff.boundo.org.data.repo
 import io.cliuff.boundo.org.data.model.toEntity
 import io.cliuff.boundo.org.data.model.toModel
 import io.cliuff.boundo.org.db.dao.OrgCollDao
-import io.cliuff.boundo.org.db.model.AppColl
 import io.cliuff.boundo.org.model.CompColl
+import io.cliuff.boundo.org.model.OrgGroup
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -34,13 +34,15 @@ class CompCollRepoImpl(private val collDao: OrgCollDao) : CompCollRepository {
 
     override fun getCompCollection(collId: Int): Flow<CompColl?> {
         return collDao.select(collId).map { compEnt ->
-            compEnt?.toModel()
+            val compGroup = compareBy(OrgGroup::name)
+            compEnt?.toModel(compGroup)
         }
     }
 
     override fun getCompCollections(): Flow<List<CompColl>> {
         return collDao.selectAllComp().map { compEnts ->
-            compEnts.map(AppColl::toModel)
+            val compGroup = compareBy(OrgGroup::name)
+            compEnts.map { it.toModel(compGroup) }
         }
     }
 

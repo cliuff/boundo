@@ -21,6 +21,8 @@ import io.cliuff.boundo.org.db.model.AppGroup
 import io.cliuff.boundo.org.db.model.OrgCollEntity
 import io.cliuff.boundo.org.model.CollInfo
 import io.cliuff.boundo.org.model.CompColl
+import io.cliuff.boundo.org.model.OrgGroup
+import java.util.TreeSet
 
 fun CollInfo.toEntity() =
     OrgCollEntity(
@@ -48,14 +50,22 @@ fun CompColl.toEntity() =
         modifyTime = modifyTime,
     )
 
-fun AppColl.toModel() =
+fun AppColl.toModel(compGroup: Comparator<OrgGroup>) =
     CompColl(
         id = collEnt.id,
         name = collEnt.name,
         createTime = collEnt.createTime,
         modifyTime = collEnt.modifyTime,
-        groups = groupEntities.map(AppGroup::toModel),
+        groups = groupEntities.toModels(compGroup),
     )
 
 
 fun List<CollInfo>.toEntities() = map(CollInfo::toEntity)
+
+
+private fun List<AppGroup>.toModels(comparator: Comparator<OrgGroup>): List<OrgGroup> {
+    // fall back to comparing id to guarantee inequality for TreeSet
+    val treeSet = TreeSet(comparator.thenBy(OrgGroup::id))
+    for (ent in this) treeSet.add(ent.toModel())
+    return treeSet.toList()
+}
