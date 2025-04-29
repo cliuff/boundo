@@ -27,6 +27,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.madness.collision.chief.app.SavedStateDelegate
+import com.madness.collision.unit.api_viewing.apps.AppListPermission
 import com.madness.collision.unit.api_viewing.apps.MultiStageAppList
 import com.madness.collision.unit.api_viewing.ui.org.OrgPkgInfoProvider
 import com.madness.collision.unit.api_viewing.ui.org.OrgPkgLabelProvider
@@ -101,7 +102,8 @@ class OrgCollViewModel(savedState: SavedStateHandle) : ViewModel() {
             val prefCats = PrefUtil.ORG_COLL_CATS_REV
             val rev = PrefUtil.ORG_COLL_CATS_CURR_REV
             val prefs = context.getSharedPreferences(P.PREF_SETTINGS, Context.MODE_PRIVATE)
-            if (OsUtils.satisfy(OsUtils.O) && prefs.getInt(prefCats, -1) != rev) {
+            val perm = AppListPermission.queryAllPackagesOrNull(context)
+            if (OsUtils.satisfy(OsUtils.O) && prefs.getInt(prefCats, -1) != rev && perm == null) {
                 val pkgInfoProvider = OrgPkgInfoProvider
                 val pkgLabelProvider = OrgPkgLabelProvider
                 val collRepo = OrgCollRepo.coll(context)
@@ -120,15 +122,12 @@ class OrgCollViewModel(savedState: SavedStateHandle) : ViewModel() {
     private suspend fun createCategoryColl(
         useCase: CollUseCase, cats: Map<Int, List<PackageInfo>>, context: Context): Int {
 
-        var modCid = -1
-        for ((cat, pkgs) in cats) {
+        val groups = cats.map { (cat, pkgs) ->
             val title = getAppCategoryTitle(cat, context)
             val pkgNames = pkgs.run { mapTo(HashSet(size), PackageInfo::packageName) }
-            val (cid, _) = useCase.createGroup(modCid, "Cats", title, pkgNames)
-            // abort when coll not created
-            if (cid > 0) modCid = cid else break
+            title to pkgNames
         }
-        return modCid
+        return useCase.createColl("Cats", groups)
     }
 
     fun getPkg(pkgName: String): PackageInfo? {

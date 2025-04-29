@@ -43,8 +43,8 @@ interface OrgAppDao {
     @Delete
     suspend fun delete(app: OrgAppEntity)
 
-    @Query("DELETE FROM org_app WHERE pkg IN (:pkgs)")
-    suspend fun deletePkgs(pkgs: List<String>): Int
+    @Query("DELETE FROM org_app WHERE group_id=:groupId AND pkg IN (:pkgs)")
+    suspend fun deleteGroupPkgs(groupId: Int, pkgs: List<String>): Int
 
     @Transaction
     suspend fun replace(groupId: Int, entities: List<OrgAppEntity>) {
@@ -54,7 +54,7 @@ interface OrgAppDao {
         val updPkgSet = updPkgs.toSet()
         val (updEntities, newEntities) = entities.partition { ent -> ent.pkgName in updPkgSet }
         val updates = updEntities.map(OrgAppEntity::toUpdate)
-        if (delPkgs.isNotEmpty()) deletePkgs(delPkgs)
+        if (delPkgs.isNotEmpty()) deleteGroupPkgs(groupId, delPkgs)
         updateAll(updates)
         insertAll(newEntities)
     }

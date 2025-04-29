@@ -38,10 +38,11 @@ interface OrgCollDao {
     @Query("SELECT * FROM org_coll")
     fun selectAll(): Flow<List<OrgCollEntity>>
 
+    @Transaction  // required for AppColl
     @Query("SELECT * FROM org_coll")
     fun selectAllComp(): Flow<List<AppColl>>
 
-    @Transaction
+    @Transaction  // required for AppColl
     @Query("SELECT * FROM org_coll WHERE _id=:collId")
     fun select(collId: Int): Flow<AppColl?>
 }

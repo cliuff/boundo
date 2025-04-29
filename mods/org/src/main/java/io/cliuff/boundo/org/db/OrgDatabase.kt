@@ -22,6 +22,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import io.cliuff.boundo.org.db.dao.OrgAppDao
 import io.cliuff.boundo.org.db.dao.OrgCollDao
+import io.cliuff.boundo.org.db.dao.OrgCreateDao
 import io.cliuff.boundo.org.db.dao.OrgGroupDao
 import io.cliuff.boundo.org.db.model.OrgAppEntity
 import io.cliuff.boundo.org.db.model.OrgCollEntity
@@ -37,6 +38,7 @@ import io.cliuff.boundo.org.db.model.OrgGroupEntity
     ],
 )
 internal abstract class OrgDatabase : RoomDatabase() {
+    abstract fun createDao(): OrgCreateDao
     abstract fun collDao(): OrgCollDao
     abstract fun groupDao(): OrgGroupDao
     abstract fun appDao(): OrgAppDao

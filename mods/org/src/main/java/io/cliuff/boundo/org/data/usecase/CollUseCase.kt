@@ -27,6 +27,27 @@ class CollUseCase(
     private val groupRepo: GroupRepository,
     private val provideLabel: (pkgName: String) -> String?,
 ) {
+    suspend fun createColl(collName: String, groups: List<Pair<String, Set<String>>>): Int {
+        val time = System.currentTimeMillis()
+        // Create a new coll with non-blank coll name, or default to unnamed.
+        val updCollName = collName.trim().takeUnless { it.isBlank() } ?: "Unnamed Coll"
+        val createColl = CollInfo(0, updCollName, time, time, 0)
+        val collId = collRepo.addCollection(createColl)
+        if (collId <= 0) return collId
+
+        val groupList = groups.map { (groupName, pkgs) ->
+            // Take non-blank group name, or default to unnamed.
+            val updGroupName = groupName.trim().takeUnless { it.isBlank() } ?: "Unnamed Group"
+            val apps = pkgs.map { pkg ->
+                OrgApp(pkg, provideLabel(pkg) ?: "", "", time, time)
+            }
+            OrgGroup(0, updGroupName, time, time, apps)
+        }
+        // Create all groups in transaction.
+        groupRepo.addGroupsAndApps(collId, groupList)
+        return collId
+    }
+
     suspend fun createGroup(modCid: Int, collName: String, groupName: String, pkgs: Set<String>): Pair<Int, Int> {
         val time = System.currentTimeMillis()
         // Create a new coll with non-blank coll name, or default to unnamed.

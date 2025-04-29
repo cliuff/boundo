@@ -20,6 +20,7 @@ import io.cliuff.boundo.org.data.model.toEntity
 import io.cliuff.boundo.org.data.model.toModel
 import io.cliuff.boundo.org.data.model.toUpdate
 import io.cliuff.boundo.org.db.dao.OrgAppDao
+import io.cliuff.boundo.org.db.dao.OrgCreateDao
 import io.cliuff.boundo.org.db.dao.OrgGroupDao
 import io.cliuff.boundo.org.db.model.AppGroup
 import io.cliuff.boundo.org.model.OrgGroup
@@ -27,6 +28,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 interface GroupRepository {
+    /** Add multiple groups and their apps, in transaction. */
+    suspend fun addGroupsAndApps(collId: Int, groups: List<OrgGroup>): List<Int>
+    /** Add a group and its apps, in transaction. */
     suspend fun addGroupAndApps(collId: Int, group: OrgGroup): Int
     suspend fun updateGroupAndApps(group: OrgGroup)
     suspend fun updateGroup(group: OrgGroup)
@@ -41,27 +45,30 @@ interface GroupRepository {
     fun getGroups(collId: Int): Flow<List<OrgGroup>>
 }
 
-class GroupRepoImpl(
+internal class GroupRepoImpl(
+    private val createDao: OrgCreateDao,
     private val groupDao: OrgGroupDao,
     private val appDao: OrgAppDao,
 ) : GroupRepository {
 
-    override suspend fun addGroupAndApps(collId: Int, group: OrgGroup): Int {
-        val gid = groupDao.insert(group.toEntity(collId)).toInt()
-        if (gid > 0) {
-            val apps = group.apps.map { app -> app.toEntity(gid) }
-            // replace with new apps instead of inserting all
-            appDao.replace(gid, apps)
+    override suspend fun addGroupsAndApps(collId: Int, groups: List<OrgGroup>): List<Int> {
+        val groupEntities = groups.map { it.toEntity(collId) }
+        return createDao.insertGroups(groupEntities) { i, gid ->
+            groups[i].apps.map { app -> app.toEntity(gid) }
         }
-        return gid
+    }
+
+    override suspend fun addGroupAndApps(collId: Int, group: OrgGroup): Int {
+        val groupEnt = group.toEntity(collId)
+        return createDao.insertGroupAndApps(groupEnt) { gid ->
+            group.apps.map { app -> app.toEntity(gid) }
+        }
     }
 
     override suspend fun updateGroupAndApps(group: OrgGroup) {
-        groupDao.update(group.toUpdate())
-        if (group.id > 0) {
-            val apps = group.apps.map { app -> app.toEntity(group.id) }
-            appDao.replace(group.id, apps)
-        }
+        val update = group.toUpdate()
+        val apps = group.apps.map { app -> app.toEntity(group.id) }
+        createDao.updateGroupAndApps(update, apps)
     }
 
     override suspend fun updateGroup(group: OrgGroup) {

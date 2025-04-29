@@ -32,6 +32,6 @@ object OrgCollRepo {
 
     fun group(context: Context): GroupRepository {
         val db = OrgRoom.getDatabase(context)
-        return GroupRepoImpl(db.groupDao(), db.appDao())
+        return GroupRepoImpl(db.createDao(), db.groupDao(), db.appDao())
     }
 }

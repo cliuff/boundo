@@ -19,6 +19,7 @@ package io.cliuff.boundo.org.db.model
 import androidx.room.Embedded
 import androidx.room.Relation
 
+/** Coll entity with groups (one coll to many groups). */
 data class AppColl(
     @Embedded
     val collEnt: OrgCollEntity,
@@ -26,6 +27,7 @@ data class AppColl(
     val groupEntities: List<AppGroup>,
 )
 
+/** Group entity with apps (one group to many apps). */
 data class AppGroup(
     @Embedded
     val groupEnt: OrgGroupEntity,
