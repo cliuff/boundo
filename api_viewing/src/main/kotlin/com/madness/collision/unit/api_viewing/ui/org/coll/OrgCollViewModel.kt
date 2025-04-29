@@ -49,6 +49,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.concurrent.atomic.AtomicInteger
 
 class CollSavedState(savedState: SavedStateHandle) {
     private val stateDelegate = SavedStateDelegate(savedState)
@@ -68,6 +69,8 @@ class OrgCollViewModel(savedState: SavedStateHandle) : ViewModel() {
     val uiState: StateFlow<OrgCollUiState> = mutUiState.asStateFlow()
     private var compCollRepo: CompCollRepository? = null
     private var groupPkgs: Map<String, PackageInfo> = emptyMap()
+    // the coll index to select next, after removing the currently selected coll or adding a new one
+    private val nextSelCollIndex: AtomicInteger = AtomicInteger(-1)
     private var selCollJob: Job? = null
 
     private val savedObj: CollSavedState = CollSavedState(savedState)
@@ -81,12 +84,15 @@ class OrgCollViewModel(savedState: SavedStateHandle) : ViewModel() {
             repo.getCompCollections()
                 .onEach { collList ->
                     mutUiState.update { it.copy(collList = collList) }
-                    if (uiState.value.coll == null) {
+
+                    val nextIndex = nextSelCollIndex.getAndSet(-1)
+                    if (uiState.value.coll == null || nextIndex >= 0) {
+                        val nextColl = collList.getOrNull(nextIndex)
                         val selColl = savedObj.selCollId
                             ?.let { cid -> collList.find { it.id == cid } }
-                        (selColl ?: collList.firstOrNull())?.let { coll ->
-                            selectColl(coll, context)
-                        }
+                        // specified next coll, or recover saved state, or first coll
+                        val coll = nextColl ?: selColl ?: collList.firstOrNull()
+                        if (coll != null) selectColl(coll, context)
                     }
                 }
                 .launchIn(this)
@@ -152,7 +158,13 @@ class OrgCollViewModel(savedState: SavedStateHandle) : ViewModel() {
     fun deleteColl(coll: CompColl) {
         val repo = compCollRepo ?: return
         viewModelScope.launch(Dispatchers.IO) {
+            // select the coll with smaller index after deletion
+            val collList = uiState.value.collList
+            val nextIndex = (collList.indexOf(coll) - 1).coerceAtLeast(0)
+
+            val oldNext = nextSelCollIndex.getAndSet(nextIndex)
             val isOk = repo.removeCompCollection(coll)
+            if (!isOk) nextSelCollIndex.compareAndSet(nextIndex, oldNext)
         }
     }
 

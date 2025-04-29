@@ -82,7 +82,7 @@ fun OrgCollAppBar(
             title = {
                 Text(
                     modifier = Modifier.alpha(barContentAlpha),
-                    text = "Organize",
+                    text = "App Library",
                     fontSize = 26.sp,
                     lineHeight = 28.sp,
                     fontWeight = FontWeight.Medium,
@@ -108,11 +108,13 @@ fun OrgCollAppBar(
                 )
             },
             windowInsets = windowInsets,
-            colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = Color.Transparent, scrolledContainerColor = Color.Transparent),
             scrollBehavior = scrollBehavior,
         )
         val selIndex = selectedColl?.let(collList::indexOf) ?: -1
-        if (collList.isNotEmpty() && selIndex >= 0) {
+        // show non-empty coll list, even if selIndex < 0
+        if (collList.isNotEmpty()) {
             Row(
                 modifier = Modifier
                     .horizontalScroll(rememberScrollState())

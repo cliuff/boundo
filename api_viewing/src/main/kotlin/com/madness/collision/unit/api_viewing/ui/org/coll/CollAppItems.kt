@@ -166,6 +166,8 @@ fun CollAppItem(
         }
         Spacer(modifier = Modifier.width(12.dp))
         Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
+            // avoid Arrangement.spacedBy() for secondaryText to resolve animation stutter
+            Column {
             InlineAppName(
                 modifier = Modifier.animateContentSize(),
                 name = name,
@@ -180,12 +182,14 @@ fun CollAppItem(
             AnimatedVisibility(visible = style.showSecondaryText) {
                 if (secondaryText != null) {
                     Text(
+                        modifier = Modifier.padding(top = 5.dp),
                         text = secondaryText,
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.85f),
                         fontSize = 11.sp,
                         lineHeight = 13.sp,
                     )
                 }
+            }
             }
             desc()
         }
@@ -209,12 +213,14 @@ private fun InlineAppName(
         } else {
             append(name)
         }
-        if (hasTarget) appendInlineContent("Target")
+        if (hasTarget) {
+            appendInlineContent("Space")
+            appendInlineContent("Target")
+        }
     }
     val target = @Composable {
         if (hasTarget) {
             AppType(
-                modifier = Modifier.padding(start = 8.dp),
                 text = typeText,
                 icon = typeIcon,
                 iconTint = iconTint,
@@ -227,8 +233,12 @@ private fun InlineAppName(
         content = { (tw, th) ->
             val inlineContent = if (tw > 0 && th > 0) {
                 with(LocalDensity.current) {
+                    val sh = Placeholder(8.dp.toSp(), 1.sp, PlaceholderVerticalAlign.TextCenter)
                     val ph = Placeholder(tw.toSp(), th.toSp(), PlaceholderVerticalAlign.TextCenter)
-                    mapOf("Target" to InlineTextContent(placeholder = ph, children = { target() }))
+                    mapOf(
+                        "Space" to InlineTextContent(placeholder = sh, children = { Spacer(Modifier.width(8.dp)) }),
+                        "Target" to InlineTextContent(placeholder = ph, children = { target() }),
+                    )
                 }
             } else {
                 emptyMap()
@@ -263,14 +273,14 @@ private fun AppGroup(name: String) {
     Box(
         Modifier
             .clip(AbsoluteSmoothCornerShape(3.dp, 80))
-            .background(MaterialTheme.colorScheme.secondary.copy(alpha = 0.075f))
-            .padding(horizontal = 4.dp, vertical = 1.dp),
+            .background(MaterialTheme.colorScheme.secondary.copy(alpha = 0.08f))
+            .padding(horizontal = 4.dp, vertical = 2.dp),
     ) {
         Text(
             text = name,
             color = MaterialTheme.colorScheme.secondary,
-            fontSize = 9.sp,
-            lineHeight = 9.sp,
+            fontSize = 11.sp,
+            lineHeight = 13.sp,
             fontWeight = FontWeight.Medium,
             overflow = TextOverflow.Ellipsis,
             maxLines = 1,

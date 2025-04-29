@@ -40,6 +40,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Android
+import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material.icons.outlined.ExpandMore
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
@@ -512,6 +513,16 @@ private fun GroupName(name: String, onNameChange: (String) -> Unit, modifier: Mo
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
+            },
+            trailingIcon = {
+                if (name.isNotEmpty()) {
+                    IconButton(onClick = { onNameChange("") }) {
+                        Icon(
+                            imageVector = Icons.Outlined.Cancel,
+                            contentDescription = null,
+                        )
+                    }
+                }
             },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text, imeAction = ImeAction.Done),
