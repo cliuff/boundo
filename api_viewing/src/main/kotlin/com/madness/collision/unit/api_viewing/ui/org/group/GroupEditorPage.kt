@@ -69,6 +69,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -81,6 +82,7 @@ import com.madness.collision.chief.app.BoundoTheme
 import com.madness.collision.chief.app.LocalPageNavController
 import com.madness.collision.chief.layout.scaffoldWindowInsets
 import com.madness.collision.ui.comp.ClassicTopAppBar
+import com.madness.collision.unit.api_viewing.R
 import com.madness.collision.unit.api_viewing.ui.org.coll.CollAppGroupRow
 import com.madness.collision.unit.api_viewing.ui.org.coll.CollAppHeading
 import com.madness.collision.unit.api_viewing.ui.org.coll.CollAppItem
@@ -122,8 +124,14 @@ fun GroupEditorPage(
     LaunchedEffect(isSubmitOk) { if (isSubmitOk) navController.navigateBack() }
 
     GroupScaffold(
-        title = if (modGroupId > 0) "Edit Group" else "Create New Group",
-        submitText = if (modGroupId > 0) "Update group" else "Add group",
+        title = when {
+            (modGroupId > 0) -> stringResource(R.string.org_group_edit_title_mod)
+            else -> stringResource(R.string.org_group_edit_title_create)
+        },
+        submitText = when {
+            (modGroupId > 0) -> stringResource(R.string.org_group_edit_submit_mod)
+            else -> stringResource(R.string.org_group_edit_submit_create)
+        },
         eventHandler = eventHandler,
     ) { innerPadding ->
         GroupContent(
@@ -268,7 +276,7 @@ private fun GroupContent(
             item(key = "@group.sec.uninst", contentType = "AppHeading") {
                 CollAppHeading(
                     modifier = Modifier.animateItem().appHeadingPadding(),
-                    name = "Uninstalled apps (${selUnInstPkgs.size})",
+                    name = stringResource(R.string.org_common_sec_uninstalled, selUnInstPkgs.size),
                 )
             }
         }
@@ -291,8 +299,11 @@ private fun GroupContent(
             item(key = "@group.sec.sel", contentType = "AppHeading") {
                 CollAppHeading(
                     modifier = Modifier.animateItem().appHeadingPadding(),
-                    name = "Selected apps (${selectedApps.size})",
-                    changeViewText = if (detailed[0]) "Detailed view" else "Compact view",
+                    name = stringResource(R.string.org_group_edit_sec_sel, selectedApps.size),
+                    changeViewText = when {
+                        detailed[0] -> stringResource(R.string.org_common_view_detailed)
+                        else -> stringResource(R.string.org_common_view_compact)
+                    },
                     onChangeView = { detailed[0] = !detailed[0] },
                 )
             }
@@ -321,8 +332,11 @@ private fun GroupContent(
             item(key = "@group.sec.new", contentType = "AppHeading") {
                 CollAppHeading(
                     modifier = Modifier.animateItem().appHeadingPadding(),
-                    name = "Newly selected apps (${selNewApps.size})",
-                    changeViewText = if (detailed[newAppViewIndex]) "Detailed view" else "Compact view",
+                    name = stringResource(R.string.org_group_edit_sec_sel_new, selNewApps.size),
+                    changeViewText = when {
+                        detailed[newAppViewIndex] -> stringResource(R.string.org_common_view_detailed)
+                        else -> stringResource(R.string.org_common_view_compact)
+                    },
                     onChangeView = { detailed[newAppViewIndex] = !detailed[newAppViewIndex] },
                 )
             }
@@ -350,11 +364,13 @@ private fun GroupContent(
             val sectionApps = installedApps.getGroup(installedAppsGrouping, sectionIndex)
             if (sectionApps.isNotEmpty()) {
                 item(key = "@group.sec.apps$sectionIndex", contentType = "AppHeading") {
-                    val heading = collAppGroupHeading(sectionIndex)
                     CollAppHeading(
                         modifier = Modifier.animateItem().appHeadingPadding(),
-                        name = "$heading (${sectionApps.size})",
-                        changeViewText = if (detailed[sectionIndex + 1]) "Detailed view" else "Compact view",
+                        name = collAppGroupHeading(sectionIndex, sectionApps.size.toString()),
+                        changeViewText = when {
+                            detailed[sectionIndex + 1] -> stringResource(R.string.org_common_view_detailed)
+                            else -> stringResource(R.string.org_common_view_compact)
+                        },
                         onChangeView = { detailed[sectionIndex + 1] = !detailed[sectionIndex + 1] },
                     )
                 }
@@ -422,7 +438,7 @@ private fun GroupColl(
 ) {
     Column(modifier = modifier) {
         Text(
-            text = "Collection name",
+            text = stringResource(R.string.org_group_edit_coll_name),
             color = MaterialTheme.colorScheme.onSurface,
             fontSize = 18.sp,
             lineHeight = 20.sp,
@@ -435,7 +451,7 @@ private fun GroupColl(
             onValueChange = onNameChange,
             placeholder = {
                 Text(
-                    text = "Enter or choose the collection name",
+                    text = stringResource(R.string.org_group_edit_coll_name_hint),
                     fontSize = 14.sp,
                     lineHeight = 14.sp,
                     maxLines = 1,
@@ -494,7 +510,7 @@ private fun GroupCollItem(collList: List<CollInfo>, onSelectItem: (Int, CollInfo
 private fun GroupName(name: String, onNameChange: (String) -> Unit, modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
         Text(
-            text = "Group name",
+            text = stringResource(R.string.org_group_edit_group_name),
             color = MaterialTheme.colorScheme.onSurface,
             fontSize = 18.sp,
             lineHeight = 20.sp,
@@ -507,7 +523,7 @@ private fun GroupName(name: String, onNameChange: (String) -> Unit, modifier: Mo
             onValueChange = onNameChange,
             placeholder = {
                 Text(
-                    text = "Enter a name for the new group",
+                    text = stringResource(R.string.org_group_edit_group_name_hint),
                     fontSize = 14.sp,
                     lineHeight = 14.sp,
                     maxLines = 1,

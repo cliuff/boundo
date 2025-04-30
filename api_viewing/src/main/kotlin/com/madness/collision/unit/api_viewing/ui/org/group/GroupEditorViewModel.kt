@@ -24,6 +24,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.madness.collision.chief.app.SavedStateDelegate
 import com.madness.collision.chief.lang.runIf
+import com.madness.collision.unit.api_viewing.R
 import com.madness.collision.unit.api_viewing.apps.MultiStageAppList
 import com.madness.collision.unit.api_viewing.apps.PackageLabelProvider
 import com.madness.collision.unit.api_viewing.apps.PkgLabelProviderImpl
@@ -114,6 +115,7 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
     private var groupRepo: GroupRepository? = null
     private var editId: EditorModId = EditorModId.CreateGroupNewColl
     private var submittedGroupId: Int = -1
+    private var defCollLabel: Pair<String, String> = "Unnamed Coll" to "Unnamed Group"
 
     private val savedObj: GroupSavedState = GroupSavedState(savedState)
     private var initJob: Job? = null
@@ -148,6 +150,8 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
             mutUiState.update { it.copy(isLoading = true) }
             val collRepo = collRepo ?: OrgCollRepo.coll(context).also { collRepo = it }
             val groupRepo = groupRepo ?: OrgCollRepo.group(context).also { groupRepo = it }
+            defCollLabel = context.getString(R.string.org_coll_def_coll) to
+                    context.getString(R.string.org_coll_def_group)
 
             labelProvider = OrgPkgLabelProvider
             val pkgInfoProvider = OrgPkgInfoProvider
@@ -267,6 +271,8 @@ class GroupEditorViewModel(savedState: SavedStateHandle) : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             val useCase = CollUseCase(collRepo, groupRepo, labelProvider::getLabel)
             state.run {
+                val collName = collName.trim().takeUnless { it.isBlank() } ?: defCollLabel.first
+                val groupName = groupName.trim().takeUnless { it.isBlank() } ?: defCollLabel.second
                 submittedGroupId = when (val modId = editId) {
                     EditorModId.CreateGroupNewColl ->
                         useCase.createGroup(-1, collName, groupName, selPkgs).second

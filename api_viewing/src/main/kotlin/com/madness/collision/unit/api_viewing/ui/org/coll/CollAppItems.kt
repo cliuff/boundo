@@ -51,6 +51,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.buildAnnotatedString
@@ -61,6 +62,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.madness.collision.chief.layout.SubcomposeTargetSize
+import com.madness.collision.unit.api_viewing.R
 import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape
 import com.madness.collision.R as MainR
 
@@ -74,14 +76,14 @@ internal fun <T> List<T>.getGroup(grouping: List<Int>, groupIndex: Int): List<T>
 
 @Composable
 @ReadOnlyComposable
-fun collAppGroupHeading(groupIndex: Int): String =
+fun collAppGroupHeading(groupIndex: Int, appCount: String): String =
     when (groupIndex) {
-        0 -> "Installed launcher apps"
-        1 -> "User services & components"
-        2 -> "System services & components"
-        3 -> "Misc system components"
-        4 -> "System overlay components"
-        else -> "Installed apps"
+        0 -> stringResource(R.string.org_common_sec_launcher, appCount)
+        1 -> stringResource(R.string.org_common_sec_usr_service, appCount)
+        2 -> stringResource(R.string.org_common_sec_sys_service, appCount)
+        3 -> stringResource(R.string.org_common_sec_sys_misc, appCount)
+        4 -> stringResource(R.string.org_common_sec_sys_overlay, appCount)
+        else -> stringResource(R.string.org_common_sec_default, appCount)
     }
 
 @Composable

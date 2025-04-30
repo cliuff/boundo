@@ -32,6 +32,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.madness.collision.unit.api_viewing.R
 import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape
 
 @Composable
@@ -74,13 +75,13 @@ fun DeleteConfirmationDialog(
         onDismissRequest = onDismiss,
         shape = AbsoluteSmoothCornerShape(28.dp, 70),
         title = { Text(text = title) },
-        text = { Text(text = "Are you sure to delete?\nThis cannot be undone.") },
+        text = { Text(text = stringResource(R.string.org_common_del_msg)) },
         confirmButton = {
             TextButton(
                 onClick = onConfirm,
                 colors = ButtonDefaults.textButtonColors(
                     contentColor = MaterialTheme.colorScheme.error),
-                content = { Text(text = "Delete") },
+                content = { Text(text = stringResource(R.string.org_common_del_confirm)) },
             )
         },
         dismissButton = {

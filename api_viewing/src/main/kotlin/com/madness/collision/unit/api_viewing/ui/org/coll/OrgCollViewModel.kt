@@ -27,6 +27,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.madness.collision.chief.app.SavedStateDelegate
+import com.madness.collision.unit.api_viewing.R
 import com.madness.collision.unit.api_viewing.apps.AppListPermission
 import com.madness.collision.unit.api_viewing.apps.MultiStageAppList
 import com.madness.collision.unit.api_viewing.ui.org.OrgPkgInfoProvider
@@ -122,12 +123,13 @@ class OrgCollViewModel(savedState: SavedStateHandle) : ViewModel() {
     private suspend fun createCategoryColl(
         useCase: CollUseCase, cats: Map<Int, List<PackageInfo>>, context: Context): Int {
 
+        val collName = context.getString(R.string.org_coll_cat_coll)
         val groups = cats.map { (cat, pkgs) ->
             val title = getAppCategoryTitle(cat, context)
             val pkgNames = pkgs.run { mapTo(HashSet(size), PackageInfo::packageName) }
             title to pkgNames
         }
-        return useCase.createColl("Cats", groups)
+        return useCase.createColl(collName, groups)
     }
 
     fun getPkg(pkgName: String): PackageInfo? {
@@ -205,7 +207,8 @@ private fun CompColl.getGroupPkgs(context: Context, limit: Int = 3): Map<String,
 
 @RequiresApi(Build.VERSION_CODES.O)
 private fun getAppCategoryTitle(cat: Int, context: Context): String {
-    val title = ApplicationInfo.getCategoryTitle(context, cat)?.toString() ?: "Unknown"
+    val title = ApplicationInfo.getCategoryTitle(context, cat)?.toString()
+        ?: context.getString(R.string.org_coll_cat_unknown)
     return "${getEmoji(cat)} $title"
 }
 

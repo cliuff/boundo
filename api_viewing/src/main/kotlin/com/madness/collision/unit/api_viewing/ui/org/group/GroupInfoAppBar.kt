@@ -32,7 +32,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.madness.collision.unit.api_viewing.R
 import com.madness.collision.unit.api_viewing.ui.org.coll.DeleteConfirmationDialog
 import com.madness.collision.unit.api_viewing.ui.org.coll.DropdownMenuDeleteItem
 
@@ -44,7 +46,7 @@ fun GroupInfoOverflowIconButton(
     var showDelDialog by remember { mutableStateOf(false) }
     if (showDelDialog) {
         DeleteConfirmationDialog(
-            title = "Delete Group",
+            title = stringResource(R.string.org_group_info_del_title),
             onConfirm = { showDelDialog = false; onActionDelete() },
             onDismiss = { showDelDialog = false },
         )
@@ -70,7 +72,7 @@ fun GroupInfoOverflowIconButton(
     ) {
         DropdownMenuDeleteItem(
             modifier = Modifier.widthIn(min = 160.dp),
-            text = "Delete group",
+            text = stringResource(R.string.org_group_info_option_del),
             onClick = {
                 showDelDialog = true
                 showOptions = false

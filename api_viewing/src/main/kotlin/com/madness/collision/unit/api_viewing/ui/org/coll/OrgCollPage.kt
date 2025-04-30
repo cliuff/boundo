@@ -83,6 +83,7 @@ import coil.compose.AsyncImage
 import com.madness.collision.chief.app.BoundoTheme
 import com.madness.collision.chief.app.asInsets
 import com.madness.collision.chief.app.LocalPageNavController
+import com.madness.collision.unit.api_viewing.R
 import com.madness.collision.unit.api_viewing.ui.org.OrgRouteId
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
 import com.madness.collision.util.mainApplication
@@ -238,7 +239,7 @@ private fun OrgCollContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 5.dp, vertical = 5.dp),
-                text = "Installed apps summary ($installedAppsSummary)",
+                text = stringResource(R.string.org_coll_installed_sum, installedAppsSummary),
                 onClick = {
                     val route = OrgRouteId.CollAppList(coll)
                     navController.navigateTo(route.asRoute())

@@ -23,5 +23,5 @@ internal object PrefUtil {
     const val AV_SORT_ITEM = "SDKCheckSortSpinnerSelection"
     const val AV_LIST_SRC_ITEM = "SDKCheckDisplaySpinnerSelection"
     const val ORG_COLL_CATS_REV = "OrgCollCatsRev"
-    const val ORG_COLL_CATS_CURR_REV = 1
+    const val ORG_COLL_CATS_CURR_REV = 2
 }

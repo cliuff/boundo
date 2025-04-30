@@ -45,12 +45,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.madness.collision.chief.app.BoundoTheme
 import com.madness.collision.chief.layout.scaffoldWindowInsets
 import com.madness.collision.ui.comp.ClassicTopAppBar
+import com.madness.collision.unit.api_viewing.R
 import com.madness.collision.unit.api_viewing.ui.org.group.GroupEditorViewModel
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
 import com.madness.collision.util.ui.AppIconPackageInfo
@@ -146,14 +148,16 @@ private fun GroupContent(
             val selectedSecPkgSize = sectionApps.count { it.packageName in selectedPkgs }
             if (sectionApps.isNotEmpty()) {
                 item(key = "@group.sec.apps$sectionIndex", contentType = "AppHeading") {
-                    val heading = collAppGroupHeading(sectionIndex)
                     CollAppHeading(
                         modifier = Modifier
                             .animateItem()
                             .padding(horizontal = 20.dp)
                             .padding(top = 8.dp, bottom = 0.dp),
-                        name = "$heading ($selectedSecPkgSize/${sectionApps.size})",
-                        changeViewText = if (detailed[sectionIndex]) "Detailed view" else "Compact view",
+                        name = collAppGroupHeading(sectionIndex, "$selectedSecPkgSize/${sectionApps.size}"),
+                        changeViewText = when {
+                            detailed[sectionIndex] -> stringResource(R.string.org_common_view_detailed)
+                            else -> stringResource(R.string.org_common_view_compact)
+                        },
                         onChangeView = { detailed[sectionIndex] = !detailed[sectionIndex] },
                     )
                 }

@@ -58,6 +58,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -69,6 +70,7 @@ import com.madness.collision.chief.app.BoundoTheme
 import com.madness.collision.chief.app.LocalPageNavController
 import com.madness.collision.chief.layout.scaffoldWindowInsets
 import com.madness.collision.ui.comp.ClassicTopAppBar
+import com.madness.collision.unit.api_viewing.R
 import com.madness.collision.unit.api_viewing.ui.org.OrgRouteId
 import com.madness.collision.unit.api_viewing.ui.org.coll.CollAppHeading
 import com.madness.collision.unit.api_viewing.ui.org.coll.CollAppItem
@@ -213,8 +215,11 @@ private fun GroupContent(
                         .animateItem()
                         .padding(horizontal = 20.dp)
                         .padding(top = 8.dp, bottom = 0.dp),
-                    name = "Group apps (${selectedApps.size})",
-                    changeViewText = if (detailed) "Detailed view" else "Compact view",
+                    name = stringResource(R.string.org_group_info_sec_sel, selectedApps.size),
+                    changeViewText = when {
+                        detailed -> stringResource(R.string.org_common_view_detailed)
+                        else -> stringResource(R.string.org_common_view_compact)
+                    },
                     onChangeView = { detailed = !detailed },
                 )
             }
@@ -241,7 +246,7 @@ private fun GroupContent(
                         .animateItem()
                         .padding(horizontal = 20.dp)
                         .padding(top = 8.dp, bottom = 0.dp),
-                    name = "Uninstalled apps (${uninstalledPkgs.size})",
+                    name = stringResource(R.string.org_common_sec_uninstalled, uninstalledPkgs.size),
                 )
             }
         }
@@ -341,7 +346,13 @@ private fun GroupItem(
                     onClick = onLaunch ?: onExternal ?: {},
                     contentPadding = PaddingValues(horizontal = 20.dp, vertical = 5.dp),
                 ) {
-                    Text(text = if (onLaunch != null) "Open" else "Install...", fontSize = 12.sp)
+                    Text(
+                        text = when {
+                            onLaunch != null -> stringResource(R.string.org_group_info_act_open)
+                            else -> stringResource(R.string.org_group_info_act_install)
+                        },
+                        fontSize = 12.sp,
+                    )
                 }
                 externalContent()
             }

@@ -53,12 +53,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.madness.collision.chief.app.stateOf
+import com.madness.collision.unit.api_viewing.R
 import io.cliuff.boundo.org.model.CompColl
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -82,7 +84,7 @@ fun OrgCollAppBar(
             title = {
                 Text(
                     modifier = Modifier.alpha(barContentAlpha),
-                    text = "App Library",
+                    text = stringResource(R.string.org_title),
                     fontSize = 26.sp,
                     lineHeight = 28.sp,
                     fontWeight = FontWeight.Medium,
@@ -91,6 +93,7 @@ fun OrgCollAppBar(
                 )
             },
             actions = {
+                val context = LocalContext.current
                 OverflowIconButton(
                     modifier = Modifier.alpha(barContentAlpha),
                     collName = selectedColl?.name,
@@ -100,7 +103,7 @@ fun OrgCollAppBar(
                             selectedColl.createTime,
                             System.currentTimeMillis(),
                             DateUtils.MINUTE_IN_MILLIS)
-                        "Created: $time"
+                        context.getString(R.string.org_coll_create_time, time)
                     },
                     onActionDelete = onActionDelete,
                     onActionImport = onActionImport,
@@ -148,7 +151,7 @@ private fun OverflowIconButton(
         var showDelDialog by remember { mutableStateOf(false) }
         if (showDelDialog) {
             DeleteConfirmationDialog(
-                title = "Delete Collection",
+                title = stringResource(R.string.org_coll_del_title),
                 onConfirm = { showDelDialog = false; onActionDelete() },
                 onDismiss = { showDelDialog = false },
             )
@@ -180,7 +183,7 @@ private fun OverflowIconButton(
 
             DropdownMenuDeleteItem(
                 modifier = Modifier.widthIn(min = 160.dp),
-                text = "Delete collection",
+                text = stringResource(R.string.org_coll_option_del),
                 onClick = {
                     showDelDialog = true
                     showOptions = false
