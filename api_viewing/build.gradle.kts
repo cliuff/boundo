@@ -11,7 +11,6 @@ plugins {
 
 ksp {
     arg("room.schemaLocation", "$projectDir/schemas")
-    arg("room.generateKotlin", "false")
 }
 
 android {
