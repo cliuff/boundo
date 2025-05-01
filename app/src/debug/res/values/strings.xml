@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">MTA-M</string>
+    <string name="app_name">Meta App M</string>
     <string name="app_descriptive_name">Boundo Meta-app M</string>
     <string name="tileBarCodeScanner">Scan barcode M</string>
     <string name="activityTextProcessingApp">View BndM apps</string>

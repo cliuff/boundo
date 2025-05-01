@@ -4,9 +4,11 @@
   <img src="doconfig/markdown/shot3.png" width="270" alt="Screenshot 3">
 </p>
 
-# Boundo: App API Checker
+# Boundo Meta-app: Info & Manager
 
-Designed for Android enthusiasts, Boundo is available on **Android** and **Wear OS**
+Boundo Meta-app is all about your apps and beyond.  
+Check info of apps on your phone, and organize them into categories.  
+Designed for Android enthusiasts, Meta-app is available on **Android** and **Wear OS**.
 
 ### 1. Develop
 **1.1 Requirements**

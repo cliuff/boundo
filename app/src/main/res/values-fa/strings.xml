@@ -15,7 +15,7 @@
   -->
 
 <resources>
-    <string name="app_name">&#8207;Meta-app</string>
+    <string name="app_name">&#8207;Meta App</string>
     <string name="app_descriptive_name">&#8207;Boundo Meta-app</string>
     <string name="appDesc">بسته‌ای از ابزارها برای انجام برخی کارها برای شما</string>
     <string name="Main_ToolBar_title_Settings">تنظیمات</string>

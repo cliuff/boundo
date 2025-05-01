@@ -15,7 +15,7 @@
   -->
 
 <resources>
-    <string name="app_name">Meta-app</string>
+    <string name="app_name">Meta App</string>
     <string name="app_descriptive_name">Boundo Meta-app</string>
     <string name="appDesc">A bundle of tools bound to do some things for you</string>
     <string name="Main_ToolBar_title_Settings">Settings</string>

@@ -16,7 +16,7 @@
   -->
 
 <resources>
-    <string name="app_name">Meta-app</string>
+    <string name="app_name">Meta App</string>
     <string name="app_descriptive_name">斑朵 Meta-app</string>
     <string name="appDesc">辦許多的事</string>
     <string name="Main_ToolBar_title_Settings">設置</string>
