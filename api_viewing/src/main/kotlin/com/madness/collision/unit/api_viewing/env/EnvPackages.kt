@@ -61,6 +61,8 @@ object EnvPackages {
         }
         return activities.mapNotNull owner@{ activity ->
             val info = activity.activityInfo ?: return@owner null
+            // filter out disabled components
+            if (!info.enabled) return@owner null
             StandardAppInfoOwner(info.packageName, info.name)
         }
     }
@@ -76,6 +78,8 @@ object EnvPackages {
         }
         return activities.mapNotNull owner@{ activity ->
             val info = activity.activityInfo ?: return@owner null
+            // filter out disabled components
+            if (!info.enabled) return@owner null
             MarketAppInfoOwner(info.packageName, info.name)
         }
     }
@@ -103,6 +107,11 @@ object EnvPackages {
                 val addedOwner = get(invalidPkg) as? CompAppInfoOwner ?: continue
                 if (addedOwner.comp.className == invalidClassName) remove(invalidPkg)
             }
+            // remove disabled or uninstalled owners
+            keys.retainAll { pkg ->
+                kotlin.runCatching { context.packageManager.getApplicationInfo(pkg, 0) }
+                    .fold({ it.enabled }, { false })
+            }
         }
         return map.values.toList()
     }
@@ -115,8 +124,9 @@ object EnvPackages {
             put(GooglePlayAppInfoOwner.packageName, GooglePlayAppInfoOwner)
             // put standard owners afterwards to override custom owners, in reversed order
             // (in case one package / multiple activities, to retain the smaller-index one)
-            putAll(marketOwners.asReversed().associateBy { it.packageName })
             putAll(standardOwners.asReversed().associateBy { it.packageName })
+            // market owners will override standard ones as app stores
+            putAll(marketOwners.asReversed().associateBy { it.packageName })
             // Xiaomi app store itself is a market owner that blocks app details intent,
             // use this custom owner instead as a workaround
             put(XiaomiAppInfoOwner.packageName, XiaomiAppInfoOwner)
@@ -126,6 +136,15 @@ object EnvPackages {
             for ((invalidPkg, invalidClassName) in UnqualifiedAppInfoOwners) {
                 val addedOwner = get(invalidPkg) as? CompAppInfoOwner ?: continue
                 if (addedOwner.comp.className == invalidClassName) remove(invalidPkg)
+            }
+            for ((invalidPkg, invalidClassName) in UnqualifiedAppStoreOwners) {
+                val addedOwner = get(invalidPkg) as? CompAppInfoOwner ?: continue
+                if (addedOwner.comp.className == invalidClassName) remove(invalidPkg)
+            }
+            // remove disabled or uninstalled owners
+            keys.retainAll { pkg ->
+                kotlin.runCatching { context.packageManager.getApplicationInfo(pkg, 0) }
+                    .fold({ it.enabled }, { false })
             }
         }
         return map.values.toList()
@@ -145,4 +164,10 @@ private val UnqualifiedAppInfoOwners: Map<String, String> = hashMapOf(
     "com.ucmobile.lite" to "com.UCMobile.main.UCMobile",
     // QQ Browser, page not opening up
     "com.tencent.mtt" to "com.tencent.mtt.external.market.ui.QQMarketReceiveIntentActivity",
+)
+
+private val UnqualifiedAppStoreOwners: Map<String, String> = hashMapOf(
+    "com.absinthe.libchecker" to "com.absinthe.libchecker.features.applist.detail.ui.AppDetailActivity",
+    "com.catchingnow.icebox" to "com.catchingnow.icebox.activity.AppInfoActivity",
+    "rikka.appops" to "rikka.appops.appdetail.AppDetailActivity",
 )

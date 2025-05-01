@@ -83,10 +83,18 @@ fun AboutPage(paddingValues: PaddingValues, options: List<AboutOption>) {
 
 @Composable
 private fun Settings(paddingValues: PaddingValues, options: List<AboutOption>, itemColor: Color) {
-    Box(modifier = Modifier.fillMaxSize()) {
+    BoxWithConstraints(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
+        val cellWidth = remember {
+            when {
+                maxWidth >= 840.dp -> 200.dp
+                maxWidth >= 600.dp -> 170.dp
+                maxWidth >= 360.dp -> 170.dp
+                else -> 160.dp
+            }
+        }
         LazyVerticalGrid(
-            columns = GridCells.Adaptive(170.dp),
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.widthIn(max = 900.dp).fillMaxSize(),
+            columns = GridCells.Adaptive(cellWidth),
             contentPadding = PaddingValues(
                 top = paddingValues.calculateTopPadding() + 8.dp,
                 bottom = paddingValues.calculateBottomPadding() + 10.dp,

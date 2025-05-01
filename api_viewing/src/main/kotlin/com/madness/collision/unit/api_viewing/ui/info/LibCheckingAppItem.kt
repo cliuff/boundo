@@ -26,12 +26,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.*
+import com.madness.collision.chief.layout.SubcomposeTargetSize
 import com.madness.collision.unit.api_viewing.R
 import com.madness.collision.unit.api_viewing.info.ValueComponent
 
@@ -171,7 +171,7 @@ private fun InlineEnabledDesc(
             }
         }
     }
-    MeasureUnconstrainedSize(
+    SubcomposeTargetSize(
         modifier = modifier,
         target = { CompDescEnabledTag(disabledColor) },
         content = { tagSize ->
@@ -193,22 +193,4 @@ private fun InlineEnabledDesc(
             )
         },
     )
-}
-
-private data class UnconstrainedSize(val width: Int, val height: Int)
-
-@Composable
-private fun MeasureUnconstrainedSize(
-    modifier: Modifier = Modifier,
-    target: @Composable () -> Unit,
-    content: @Composable (size: UnconstrainedSize) -> Unit,
-) {
-    SubcomposeLayout(modifier = modifier) { constraints ->
-        val placeable = subcompose("target", target)[0].measure(Constraints())
-        val size = UnconstrainedSize(placeable.width, placeable.height)
-        val contentPlaceable = subcompose("content") { content(size) }[0].measure(constraints)
-        layout(contentPlaceable.width, contentPlaceable.height) {
-            contentPlaceable.placeRelative(0, 0)
-        }
-    }
 }

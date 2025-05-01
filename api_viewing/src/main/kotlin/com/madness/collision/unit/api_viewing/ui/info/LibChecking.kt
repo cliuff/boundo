@@ -396,8 +396,12 @@ private fun ComponentList(
                         item { SectionDivider() }
                     }
                     // hide section title for shared libs changing size
-                    if (itemList.isNotEmpty() && compType != PackCompType.SharedLibrary) {
-                        item { SectionTitle(compSection, itemList.size) }
+                    if (itemList.isNotEmpty()) {
+                        when (compType) {
+                            // use empty space to align with tab navigation algorithm
+                            PackCompType.SharedLibrary -> item { Spacer(Modifier) }
+                            else -> item { SectionTitle(compSection, itemList.size) }
+                        }
                     }
                     val layoutGroups = layoutGroupsList[typeIndex]?.getOrNull(sectionIndex)
                     layoutGroupItems(itemList, layoutGroups, typeIndex, sectionIndex, libPrefs,
