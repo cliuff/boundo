@@ -66,12 +66,12 @@ class PlatformAppsFetcher(private val context: Context) : AppListFetcher<Package
     // companion object: direct access to singleton object by simply the class name
     companion object : AppListFetcher<PackageInfo> by PlatformAppsFetcher(chiefContext)
 
-    class Session(val includeApex: Boolean)
+    class Session(val includeApex: Boolean, val includeArchived: Boolean)
 
     private var session: Session? = null
 
-    fun withSession(includeApex: Boolean): PlatformAppsFetcher {
-        session = Session(includeApex = includeApex)
+    fun withSession(includeApex: Boolean = false, includeArchived: Boolean = false): PlatformAppsFetcher {
+        session = Session(includeApex = includeApex, includeArchived = includeArchived)
         return this
     }
 
@@ -79,9 +79,10 @@ class PlatformAppsFetcher(private val context: Context) : AppListFetcher<Package
         queryAllPkgsCheck(context)
         val timed = measureTimedValue {
             val ss = session
-            var flags = 0
-            if (OsUtils.satisfy(OsUtils.N)) flags = flags or PackageManager.MATCH_DISABLED_COMPONENTS
-            if (OsUtils.satisfy(OsUtils.Q) && ss?.includeApex != false) flags = flags or PackageManager.MATCH_APEX
+            var flags = 0L
+            if (OsUtils.satisfy(OsUtils.N)) flags = flags or PackageManager.MATCH_DISABLED_COMPONENTS.toLong()
+            if (OsUtils.satisfy(OsUtils.Q) && ss?.includeApex == true) flags = flags or PackageManager.MATCH_APEX.toLong()
+            if (OsUtils.satisfy(OsUtils.V) && ss?.includeArchived == true) flags = flags or PackageManager.MATCH_ARCHIVED_PACKAGES
             PackageCompat.getAllPackages(context.packageManager, flags).also { session = null }
         }
         Log.d("AppListFetcher", "PlatformAppListFetcher/${timed.value.size}/${timed.duration}")

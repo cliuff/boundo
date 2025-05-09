@@ -19,6 +19,7 @@ package com.madness.collision.unit.api_viewing.apps
 import android.content.Context
 import android.content.pm.PackageInfo
 import android.os.SystemClock
+import com.madness.collision.util.os.OsUtils
 import java.lang.ref.WeakReference
 
 interface PackageInfoProvider {
@@ -36,7 +37,15 @@ class PlatformAppProvider(private val context: Context) : PackageInfoProvider {
         pkgListRef.get()
             ?.takeIf { SystemClock.uptimeMillis() - time <= 5000 }
             ?.let { return it }
-        return PlatformAppsFetcher(context).withSession(includeApex = false).getRawList()
-            .also { pkgListCache = SystemClock.uptimeMillis() to WeakReference(it) }
+
+        val fetcher = PlatformAppsFetcher(context)
+        var pkgs = fetcher.withSession(includeApex = false).getRawList()
+        // match archived apps the second pass, to avoid potential info loss in returned results
+        if (OsUtils.satisfy(OsUtils.V)) {
+            val archived = fetcher.withSession(includeArchived = true).getRawList()
+                .filter { pkg -> pkg.archiveTimeMillis > 0 || pkg.applicationInfo?.isArchived == true }
+            if (archived.isNotEmpty()) pkgs = pkgs + archived
+        }
+        return pkgs.also { pkgListCache = SystemClock.uptimeMillis() to WeakReference(it) }
     }
 }

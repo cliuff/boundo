@@ -39,16 +39,23 @@ object PackageCompat {
         getApplicationInfo(path, flags)
 
     fun getAllPackages(packMan: PackageManager, flags: Int = 0): List<PackageInfo> =
+        getAllPackages(packMan, flags.toLong())
+
+    fun getAllPackages(packMan: PackageManager, flags: Long): List<PackageInfo> =
         when {
-            OsUtils.satisfy(OsUtils.T) -> packMan.getInstalledPackages(PackageFlags.Package(flags))
-            else -> packMan.getInstalledPackagesLegacy(flags)
+            OsUtils.satisfy(OsUtils.T) -> packMan.getInstalledPackages(PackageManager.PackageInfoFlags.of(flags))
+            else -> packMan.getInstalledPackagesLegacy(flags.toInt())
         }
 
     @Throws(PackageManager.NameNotFoundException::class)
     fun getInstalledPackage(packMan: PackageManager, packageName: String, flags: Int = 0): PackageInfo? =
+        getInstalledPackage(packMan, packageName, flags.toLong())
+
+    @Throws(PackageManager.NameNotFoundException::class)
+    fun getInstalledPackage(packMan: PackageManager, packageName: String, flags: Long): PackageInfo? =
         when {
-            OsUtils.satisfy(OsUtils.T) -> packMan.getPackageInfo(packageName, PackageFlags.Package(flags))
-            else -> packMan.getPackageInfoLegacy(packageName, flags)
+            OsUtils.satisfy(OsUtils.T) -> packMan.getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(flags))
+            else -> packMan.getPackageInfoLegacy(packageName, flags.toInt())
         }
 
     fun getArchivePackage(packMan: PackageManager, path: String, flags: Int = 0): PackageInfo? =
@@ -59,8 +66,12 @@ object PackageCompat {
 
     @Throws(PackageManager.NameNotFoundException::class)
     fun getApplication(packMan: PackageManager, packageName: String, flags: Int = 0): ApplicationInfo =
+        getApplication(packMan, packageName, flags.toLong())
+
+    @Throws(PackageManager.NameNotFoundException::class)
+    fun getApplication(packMan: PackageManager, packageName: String, flags: Long): ApplicationInfo =
         when {
-            OsUtils.satisfy(OsUtils.T) -> packMan.getApplicationInfo(packageName, PackageFlags.Application(flags))
-            else -> packMan.getApplicationInfoLegacy(packageName, flags)
+            OsUtils.satisfy(OsUtils.T) -> packMan.getApplicationInfo(packageName, PackageManager.ApplicationInfoFlags.of(flags))
+            else -> packMan.getApplicationInfoLegacy(packageName, flags.toInt())
         }
 }

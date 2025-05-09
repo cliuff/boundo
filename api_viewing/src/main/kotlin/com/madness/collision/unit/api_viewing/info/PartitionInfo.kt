@@ -60,7 +60,8 @@ object PartitionInfo {
                     }
                 }
                 // fallback method for apps on /system, /data and /apex partitions
-                val pkgSrcDir: String = appInfo.publicSourceDir
+                // "forward locked": sharing/access to file not allowed
+                val pkgSrcDir: String = appInfo.publicSourceDir ?: appInfo.sourceDir ?: continue
                 val pkgKey = pkgSrcDir.substring(0, keyLength.coerceAtMost(pkgSrcDir.length))
                 if (pkgKey !in partKeys) continue
                 // matching multiple partitions for one key

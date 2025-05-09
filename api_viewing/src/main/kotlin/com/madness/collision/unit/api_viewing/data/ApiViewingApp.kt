@@ -19,11 +19,12 @@ package com.madness.collision.unit.api_viewing.data
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import android.graphics.drawable.AdaptiveIconDrawable
 import android.graphics.drawable.Drawable
 import androidx.core.content.pm.PackageInfoCompat
 import androidx.room.Ignore
-import com.madness.collision.misc.MiscApp
+import com.madness.collision.misc.PackageCompat
 import com.madness.collision.unit.api_viewing.database.ApiViewingIconDetails
 import com.madness.collision.unit.api_viewing.database.ApiViewingIconInfo
 import com.madness.collision.unit.api_viewing.info.AppType
@@ -177,13 +178,11 @@ open class ApiViewingApp(var packageName: String) : Cloneable {
     }
 
     fun getApplicationInfo(context: Context): ApplicationInfo? {
-        return if (this.isArchive) MiscApp.getApplicationInfo(context, apkPath = appPackage.basePath)
-        else MiscApp.getApplicationInfo(context, packageName = packageName)
+        return getApplicationInfo(this, context.packageManager)
     }
 
     fun getPackageInfo(context: Context): PackageInfo? {
-        return if (this.isArchive) MiscApp.getPackageArchiveInfo(context, path = appPackage.basePath)
-        else MiscApp.getPackageInfo(context, packageName = packageName)
+        return getPackageInfo(this, context.packageManager)
     }
 
     fun retrieveAppIconInfo(iconSet: List<Drawable?>) {
@@ -268,5 +267,41 @@ private fun ApiViewingApp.loadAppIconInfo(iconSet: List<Drawable?>) {
             ApiViewingIconDetails(isDefined, isAdaptive)
         }
         iconInfo = ApiViewingIconInfo(system = list[0], normal = list[1], round = list[2])
+    }
+}
+
+private fun getPackageInfo(app: ApiViewingApp, pkgMgr: PackageManager): PackageInfo? {
+    if (app.isArchive) {
+        return getPackageArchiveInfo(pkgMgr, path = app.appPackage.basePath)
+    }
+    // match archived app the second pass, to avoid potential info loss in returned result
+    val flags = if (OsUtils.satisfy(OsUtils.V)) arrayOf(0L, PackageManager.MATCH_ARCHIVED_PACKAGES) else arrayOf(0L)
+    for (f in flags) {
+        runCatching { PackageCompat.getInstalledPackage(pkgMgr, app.packageName, f) }
+            .onSuccess { info -> if (info != null) return info }
+            .onFailure(Throwable::printStackTrace)
+    }
+    return null
+}
+
+private fun getApplicationInfo(app: ApiViewingApp, pkgMgr: PackageManager): ApplicationInfo? {
+    if (app.isArchive) {
+        return getPackageArchiveInfo(pkgMgr, path = app.appPackage.basePath)?.applicationInfo
+    }
+    // match archived app the second pass, to avoid potential info loss in returned result
+    val flags = if (OsUtils.satisfy(OsUtils.V)) arrayOf(0L, PackageManager.MATCH_ARCHIVED_PACKAGES) else arrayOf(0L)
+    for (f in flags) {
+        runCatching { PackageCompat.getApplication(pkgMgr, app.packageName, f) }
+            .onSuccess { info -> return info }
+            .onFailure(Throwable::printStackTrace)
+    }
+    return null
+}
+
+
+private fun getPackageArchiveInfo(pkgMgr: PackageManager, path: String): PackageInfo? {
+    return PackageCompat.getArchivePackage(pkgMgr, path)?.apply {
+        applicationInfo?.sourceDir = path
+        applicationInfo?.publicSourceDir = path
     }
 }
