@@ -12,8 +12,8 @@ Designed for Android enthusiasts, Meta-app is available on **Android** and **Wea
 
 ### 1. Develop
 **1.1 Requirements**
-- Android Studio `Ladybug` (AGP `8.7.3`)
-- Java `17`, Kotlin `2.1.20`, Gradle Wrapper `8.10`
+- Android Studio `Meerkat` (AGP `8.9`)
+- Java `17`, Kotlin `2.1.20`, Gradle `8.13`
 
 **1.2 Configure automatic signing**
 - **Copy** the file named `custom.properties.template` in `doconfig` directory,
