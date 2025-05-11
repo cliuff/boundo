@@ -121,5 +121,7 @@ object LocaleUtils {
 // get lang-country only: zh-Hant-TW -> zh-TW
 fun Locale.toRegionalTag(): String {
     if (language.isEmpty()) return ""
-    return arrayOf(language, country).filterNot { it.isEmpty() }.joinToString(separator = "-")
+    // use legacy language codes on Android 15+
+    val lang = mapOf("he" to "iw", "yi" to "ji", "id" to "in")[language] ?: language
+    return listOfNotNull(lang, country.ifEmpty { null }).joinToString(separator = "-")
 }

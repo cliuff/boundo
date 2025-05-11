@@ -22,6 +22,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.Window
 import androidx.activity.viewModels
+import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
@@ -34,7 +35,6 @@ import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.base.BaseActivity
 import com.madness.collision.databinding.ActivityMainPageBinding
-import com.madness.collision.diy.WindowInsets
 import com.madness.collision.util.*
 import com.madness.collision.util.controller.getSavedFragment
 import com.madness.collision.util.controller.saveFragment
@@ -126,11 +126,12 @@ class MainPageActivity : BaseActivity(), SystemBarMaintainerOwner {
     }
 
     private fun setupUi() {
-        viewBinding.root.setOnApplyWindowInsetsListener { v, insets ->
-            if (checkInsets(insets)) edgeToEdge(insets, false)
-            val isRtl = if (v.isLayoutDirectionResolved) v.layoutDirection == View.LAYOUT_DIRECTION_RTL else false
-            consumeInsets(WindowInsets(insets, isRtl))
-            WindowInsetsCompat.CONSUMED.toWindowInsets()!!
+        ViewCompat.setOnApplyWindowInsetsListener(viewBinding.root) { v, insets ->
+            val platInsets = insets.toWindowInsets()?.takeIf(::checkInsets)
+            if (platInsets != null) edgeToEdge(platInsets, false)
+            val isRtl = v.layoutDirection == View.LAYOUT_DIRECTION_RTL
+            consumeInsets(insets, isRtl)
+            WindowInsetsCompat.CONSUMED
         }
         viewBinding.mainPageToolbar.setOnMenuItemClickListener click@{ item ->
             item ?: return@click false
@@ -144,11 +145,13 @@ class MainPageActivity : BaseActivity(), SystemBarMaintainerOwner {
         }
     }
 
-    private fun consumeInsets(insets: WindowInsets) {
+    private fun consumeInsets(insetsCompat: WindowInsetsCompat, isRtl: Boolean) {
+        val type = WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
+        val insets = insetsCompat.getInsets(type)
         mainViewModel.updateInsetTop(insets.top)
         mainViewModel.insetBottom.value = insets.bottom
-        mainViewModel.insetStart.value = insets.start
-        mainViewModel.insetEnd.value = insets.end
+        mainViewModel.insetStart.value = if (isRtl) insets.right else insets.left
+        mainViewModel.insetEnd.value = if (isRtl) insets.left else insets.right
     }
 
     private fun observeStates(context: Context) {
@@ -182,10 +185,12 @@ class MainPageActivity : BaseActivity(), SystemBarMaintainerOwner {
             mainViewModel.contentWidthBottom.value = it
         }
         mainViewModel.insetStart.observe(this) {
-            viewBinding.root.updatePaddingRelative(start = it)
+            viewBinding.mainPageToolbar.updatePaddingRelative(start = it)
+            viewBinding.mainPageContainer.updatePaddingRelative(start = it)
         }
         mainViewModel.insetEnd.observe(this) {
-            viewBinding.root.updatePaddingRelative(end = it)
+            viewBinding.mainPageToolbar.updatePaddingRelative(end = it)
+            viewBinding.mainPageContainer.updatePaddingRelative(end = it)
         }
     }
 

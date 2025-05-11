@@ -35,7 +35,8 @@ android {
         verCommit = commitHashOutput.toString().trim()
     }
 
-    buildToolsVersion = "34.0.0"
+    // higher version supports older SDK versions
+    buildToolsVersion = "35.0.1"
     sourceSets {
         getByName("main").java.srcDir("src/main/kotlin")
     }
@@ -60,7 +61,7 @@ android {
         manifestPlaceholders["buildPackage"] = buildPackage
         applicationId = "com.madness.collision"
         minSdk = 23
-        targetSdk = 34
+        targetSdk = 35
         // versionCode = baseVerCode + (verInc % baseCommitInc)
         versionCode = 25050100 + (verInc % 540)
         versionName = listOfNotNull("5.0.0", verCommit).joinToString(separator = "-")

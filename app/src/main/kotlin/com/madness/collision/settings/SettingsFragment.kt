@@ -70,7 +70,9 @@ internal class SettingsFragment : ComposeFragment(), Democratic {
     // get lang_country only: zh_Hant_TW -> zh_TW
     private fun Locale.toRegionalString(): String {
         if (language.isEmpty()) return ""
-        return arrayOf(language, country).filterNot { it.isEmpty() }.joinToString(separator = "_")
+        // use legacy language codes on Android 15+
+        val lang = mapOf("he" to "iw", "yi" to "ji", "id" to "in")[language] ?: language
+        return listOfNotNull(lang, country.ifEmpty { null }).joinToString(separator = "_")
     }
 
     private fun showLanguages(context: Context) {
