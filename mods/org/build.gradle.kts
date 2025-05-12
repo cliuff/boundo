@@ -12,7 +12,7 @@ ksp {
 
 android {
     namespace = "io.cliuff.boundo.org"
-    compileSdk = 35
+    compileSdk = 36
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17

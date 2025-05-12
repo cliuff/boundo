@@ -52,7 +52,7 @@ internal class ScreenCapturingService: Service() {
         private const val CAPTURE_NAME = "BoundoCapture"
         private const val VIRTUAL_DISPLAY_FLAGS = DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY or
                 DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC
-        private lateinit var sMediaProjection: MediaProjection
+        private var sMediaProjection: MediaProjection? = null
 
         var capture: Bitmap? = null
         // Service cannot obtain display by its context
@@ -63,7 +63,7 @@ internal class ScreenCapturingService: Service() {
     private lateinit var mImageReader: ImageReader
     private lateinit var mHandler: Handler
     private var mDisplay: Display? = null
-    private lateinit var mVirtualDisplay: VirtualDisplay
+    private var mVirtualDisplay: VirtualDisplay? = null
     private var mWidth = 0
     private var mHeight = 0
     private var mRotation = 0
@@ -103,7 +103,7 @@ internal class ScreenCapturingService: Service() {
             mRotation = rotation
             try {
                 // clean up
-                mVirtualDisplay.release()
+                mVirtualDisplay?.release()
                 mImageReader.setOnImageAvailableListener(null, null)
                 // re-create virtual display depending on device width / height
                 createVirtualDisplay()
@@ -115,10 +115,10 @@ internal class ScreenCapturingService: Service() {
 
     inner class MediaProjectionStopCallback : MediaProjection.Callback() {
         override fun onStop() {
-            mVirtualDisplay.release()
+            mVirtualDisplay?.release()
             mImageReader.setOnImageAvailableListener(null, null)
             mOrientationChangeCallback.disable()
-            sMediaProjection.unregisterCallback(this@MediaProjectionStopCallback)
+            sMediaProjection?.unregisterCallback(this@MediaProjectionStopCallback)
         }
     }
 
@@ -171,7 +171,7 @@ internal class ScreenCapturingService: Service() {
         mDisplay = SystemUtil.getDisplay(context)
         mOrientationChangeCallback = OrientationChangeCallback(context)
         if (mOrientationChangeCallback.canDetectOrientation()) mOrientationChangeCallback.enable()
-        sMediaProjection.registerCallback(MediaProjectionStopCallback(), mHandler)
+        sMediaProjection?.registerCallback(MediaProjectionStopCallback(), mHandler)
         GlobalScope.launch {
             delay(100)
             createVirtualDisplay()
@@ -184,7 +184,7 @@ internal class ScreenCapturingService: Service() {
         mHeight = size.y
         mImageReader = ImageReader.newInstance(mWidth, mHeight, PixelFormat.RGBA_8888, 1)
         val dpi = context.resources.displayMetrics.densityDpi
-        mVirtualDisplay = sMediaProjection.createVirtualDisplay(
+        mVirtualDisplay = sMediaProjection?.createVirtualDisplay(
                 CAPTURE_NAME, mWidth, mHeight, dpi,
                 VIRTUAL_DISPLAY_FLAGS, mImageReader.surface,
                 null, mHandler
@@ -194,7 +194,7 @@ internal class ScreenCapturingService: Service() {
 
     private fun stopProjection() {
         uiContext = null
-        mHandler.post{ sMediaProjection.stop() }
+        mHandler.post{ sMediaProjection?.stop() }
         GlobalScope.launch {
             delay(500)
             stopSelf()

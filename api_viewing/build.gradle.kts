@@ -19,7 +19,7 @@ android {
     }
     // namespace is used by R and BuildConfig classes
     namespace = "com.madness.collision.unit.api_viewing"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 23

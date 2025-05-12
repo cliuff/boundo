@@ -36,7 +36,7 @@ android {
     }
 
     // higher version supports older SDK versions
-    buildToolsVersion = "35.0.1"
+    buildToolsVersion = "36.0.0"
     sourceSets {
         getByName("main").java.srcDir("src/main/kotlin")
     }
@@ -55,13 +55,13 @@ android {
     }
     // namespace is used by R and BuildConfig classes
     namespace = "com.madness.collision"
-    compileSdk = 35
+    compileSdk = 36
     defaultConfig {
         // below: manifest placeholders
         manifestPlaceholders["buildPackage"] = buildPackage
         applicationId = "com.madness.collision"
         minSdk = 23
-        targetSdk = 35
+        targetSdk = 36
         // versionCode = baseVerCode + (verInc % baseCommitInc)
         versionCode = 25050100 + (verInc % 540)
         versionName = listOfNotNull("5.0.0", verCommit).joinToString(separator = "-")
