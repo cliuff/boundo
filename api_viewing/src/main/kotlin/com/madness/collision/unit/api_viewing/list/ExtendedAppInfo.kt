@@ -45,7 +45,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.rememberAsyncImagePainter
+import coil3.compose.rememberAsyncImagePainter
 import com.madness.collision.R
 import com.madness.collision.misc.MiscApp
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp

@@ -52,7 +52,7 @@ import androidx.compose.ui.window.Popup
 import androidx.core.graphics.drawable.toDrawable
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import com.madness.collision.unit.api_viewing.R
 import com.madness.collision.util.dev.DarkPreview
 import com.madness.collision.util.dev.LayoutDirectionPreviews

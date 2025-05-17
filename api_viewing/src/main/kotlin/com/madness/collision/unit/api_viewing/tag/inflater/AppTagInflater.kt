@@ -31,8 +31,9 @@ import androidx.core.graphics.ColorUtils
 import androidx.core.view.get
 import androidx.core.view.size
 import androidx.core.view.updatePaddingRelative
-import coil.Coil
-import coil.request.ImageRequest
+import coil3.SingletonImageLoader
+import coil3.asDrawable
+import coil3.request.ImageRequest
 import com.madness.collision.R
 import com.madness.collision.chief.chiefPkgMan
 import com.madness.collision.misc.PackageCompat
@@ -116,7 +117,7 @@ internal object AppTagInflater {
         }
         val appIc = pkgInfo.applicationInfo?.let { AppIconPackageInfo(pkgInfo, it) } ?: return null
         val req = ImageRequest.Builder(context).data(appIc).build()
-        val iconDrawable = runBlocking { Coil.imageLoader(context).execute(req).drawable }
+        val iconDrawable = runBlocking { SingletonImageLoader.get(context).execute(req).image?.asDrawable(context.resources) }
         return if (iconDrawable != null) ensureTagIcon(context, pkgName, iconDrawable) else null
     }
 

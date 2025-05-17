@@ -43,8 +43,8 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.DialogFragment
-import coil.compose.AsyncImage
-import coil.compose.rememberAsyncImagePainter
+import coil3.compose.AsyncImage
+import coil3.compose.rememberAsyncImagePainter
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.api_viewing.data.*
 import com.madness.collision.unit.api_viewing.env.GooglePlayAppInfoOwner

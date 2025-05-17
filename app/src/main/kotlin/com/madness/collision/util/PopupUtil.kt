@@ -18,15 +18,17 @@ package com.madness.collision.util
 
 import android.content.Context
 import android.content.res.TypedArray
-import android.graphics.drawable.Drawable
 import android.view.ViewGroup
 import android.widget.CompoundButton
 import android.widget.RadioGroup
 import androidx.core.content.res.use
 import androidx.core.view.get
-import coil.imageLoader
-import coil.request.ImageRequest
-import coil.target.ViewTarget
+import coil3.Image
+import coil3.asDrawable
+import coil3.imageLoader
+import coil3.request.ImageRequest
+import coil3.request.allowHardware
+import coil3.target.ViewTarget
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.radiobutton.MaterialRadioButton
 import com.madness.collision.R
@@ -94,10 +96,11 @@ object PopupUtil {
                 item.compoundDrawablePadding = iconPadding
                 val viewTarget = object : ViewTarget<MaterialCheckBox> {
                     override val view: MaterialCheckBox = item
-                    override fun onStart(placeholder: Drawable?) = setDrawable(placeholder)
-                    override fun onSuccess(result: Drawable) = setDrawable(result)
-                    override fun onError(error: Drawable?) = setDrawable(error)
-                    private fun setDrawable(drawable: Drawable?) {
+                    override fun onStart(placeholder: Image?) = setDrawable(placeholder)
+                    override fun onSuccess(result: Image) = setDrawable(result)
+                    override fun onError(error: Image?) = setDrawable(error)
+                    private fun setDrawable(image: Image?) {
+                        val drawable = image?.asDrawable(context.resources)
                         drawable?.setBounds(0, 0, iconBound, iconBound)
                         item.setCompoundDrawablesRelative(drawable, null, null, null)
                     }

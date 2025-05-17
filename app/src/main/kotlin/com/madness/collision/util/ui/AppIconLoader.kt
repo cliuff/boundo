@@ -18,7 +18,6 @@ package com.madness.collision.util.ui
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.UserHandle
 import android.os.UserManager
@@ -26,13 +25,14 @@ import android.util.ArrayMap
 import androidx.annotation.Px
 import androidx.core.content.pm.PackageInfoCompat
 import androidx.core.os.UserHandleCompat
-import coil.ImageLoader
-import coil.decode.DataSource
-import coil.fetch.DrawableResult
-import coil.fetch.FetchResult
-import coil.fetch.Fetcher
-import coil.key.Keyer
-import coil.request.Options
+import coil3.ImageLoader
+import coil3.asImage
+import coil3.decode.DataSource
+import coil3.fetch.FetchResult
+import coil3.fetch.Fetcher
+import coil3.fetch.ImageFetchResult
+import coil3.key.Keyer
+import coil3.request.Options
 import me.zhanghai.android.appiconloader.iconloaderlib.BaseIconFactory
 import me.zhanghai.android.appiconloader.iconloaderlib.BitmapInfo
 import java.util.concurrent.ConcurrentLinkedQueue
@@ -120,8 +120,7 @@ class AppIconFetcher(private val iconLoader: AppIconLoader, private val data: Pa
 
     override suspend fun fetch(): FetchResult {
         val icon = iconLoader.loadIcon(data.applicationInfo)
-        val drawable = BitmapDrawable(options.context.resources, icon)
-        return DrawableResult(drawable, true, DataSource.DISK)
+        return ImageFetchResult(icon.asImage(), true, DataSource.DISK)
     }
 }
 

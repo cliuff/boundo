@@ -54,7 +54,7 @@ gglGuava = "31.0.1-android"
 # This dependency is set to compile only
 googleWearable = "2.9.0"
 okhttp = "4.12.0"
-coil = "2.7.0"
+coil = "3.2.0"
 junit4 = "4.13.2"
 junitJupiter = "5.8.1"
 mpChart = "v3.1.0"
@@ -141,8 +141,8 @@ googleMaterialComponents = { module = "com.google.android.material:material", ve
 googlePlayServicesOSSLicenses = { module = "com.google.android.gms:play-services-oss-licenses", version.ref = "googlePlayServicesOSSLicenses" }
 googlePlayServicesBasement = { module = "com.google.android.gms:play-services-basement", version.ref = "googlePlayServicesBasement" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
-coil = { module = "io.coil-kt:coil", version.ref = "coil" }
-coilCompose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
+coilCompose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 kotlinStdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 kotlinReflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 kotlinCoroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinCoroutines" }

@@ -20,25 +20,20 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.content.Intent
-import coil.ImageLoader
-import coil.ImageLoaderFactory
+import coil3.SingletonImageLoader
 import com.google.android.play.core.splitcompat.SplitCompat
 import com.madness.collision.BuildConfig
 import com.madness.collision.unit.api_viewing.AccessAV
-import com.madness.collision.util.X
 import com.madness.collision.util.os.OsUtils
-import com.madness.collision.util.ui.AppIconFetcher
-import com.madness.collision.util.ui.AppIconKeyer
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
-import kotlin.math.roundToInt
 import kotlin.system.exitProcess
 
 typealias AppAction = Pair<String, Any?>
 
-class MainApplication : Application(), Thread.UncaughtExceptionHandler, ImageLoaderFactory {
+class MainApplication : Application(), Thread.UncaughtExceptionHandler, SingletonImageLoader.Factory by CoilInitializer {
     companion object {
         lateinit var INSTANCE: MainApplication
     }
@@ -105,19 +100,6 @@ class MainApplication : Application(), Thread.UncaughtExceptionHandler, ImageLoa
             e.printStackTrace()
             null
         }
-    }
-
-    // Configure Coil
-    override fun newImageLoader(): ImageLoader {
-        val context = applicationContext
-        val iconSIze = X.size(context, 48f, X.DP).roundToInt()
-        return ImageLoader.Builder(context)
-            .crossfade(true)
-            .components {
-                add(AppIconKeyer(context))
-                add(AppIconFetcher.Factory(iconSIze, false, context))
-            }
-            .build()
     }
 
     override fun uncaughtException(t: Thread, e: Throwable) {

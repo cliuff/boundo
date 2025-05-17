@@ -44,7 +44,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import com.madness.collision.chief.app.BoundoTheme
 import com.madness.collision.chief.lang.runIf
 import com.madness.collision.unit.api_viewing.tag.app.AppTagManager

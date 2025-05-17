@@ -60,7 +60,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import com.madness.collision.chief.layout.SubcomposeTargetSize
 import com.madness.collision.unit.api_viewing.R
 import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape

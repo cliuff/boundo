@@ -25,7 +25,7 @@ import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
+import coil3.load
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.ChipGroup
 import com.madness.collision.R

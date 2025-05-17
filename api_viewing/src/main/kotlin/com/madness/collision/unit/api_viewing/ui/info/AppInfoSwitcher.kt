@@ -39,7 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.AppPackageInfo
 import com.madness.collision.util.ui.autoMirrored

@@ -55,7 +55,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.fragment.compose.AndroidFragment
 import androidx.recyclerview.widget.RecyclerView
-import coil.compose.rememberAsyncImagePainter
+import coil3.compose.rememberAsyncImagePainter
 import com.madness.collision.chief.lang.runIf
 import com.madness.collision.unit.api_viewing.Utils
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp

@@ -48,7 +48,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
 import androidx.constraintlayout.compose.Visibility
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import com.madness.collision.chief.lang.runIf
 import com.madness.collision.unit.api_viewing.info.*
 import com.madness.collision.util.ColorUtil

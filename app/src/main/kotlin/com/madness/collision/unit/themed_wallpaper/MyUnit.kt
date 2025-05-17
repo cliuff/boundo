@@ -39,7 +39,7 @@ import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import coil.load
+import coil3.load
 import com.madness.collision.BuildConfig
 import com.madness.collision.R
 import com.madness.collision.chief.auth.AppOpsMaster

@@ -51,7 +51,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import com.madness.collision.BuildConfig
 import com.madness.collision.R
 import com.madness.collision.chief.graphics.AdaptiveIcon
