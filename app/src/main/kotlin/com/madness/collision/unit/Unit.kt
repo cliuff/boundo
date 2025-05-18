@@ -22,8 +22,6 @@ import android.content.pm.PackageManager
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.edit
 import androidx.fragment.app.activityViewModels
-import com.google.android.play.core.splitinstall.SplitInstallManager
-import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.madness.collision.Democratic
@@ -75,16 +73,6 @@ abstract class Unit: TaggedFragment(), Democratic {
         }
 
         fun getInstalledUnits(context: Context): List<String> {
-            return getInstalledUnits(SplitInstallManagerFactory.create(context))
-        }
-
-        fun getInstalledUnits(splitInstallManager: SplitInstallManager): List<String> {
-            val installedModules = splitInstallManager.installedModules
-            if (!installedModules.isNullOrEmpty()) {
-                val result = installedModules.toMutableList()
-                result.addAll(STATIC_UNITS)
-                return result
-            }
             return UNITS.mapNotNull { if (getUnitClass(it) != null) it else null }
         }
 

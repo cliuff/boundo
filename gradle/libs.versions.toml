@@ -48,8 +48,6 @@ googleMaterialComponents = "1.13.0-alpha13"
 googlePlayServicesOSSLicenses = "17.1.0"
 googlePlayServicesBasement = "18.5.0"
 googleGson = "2.10.1"
-googlePlayFeatureDelivery = "2.1.0"
-googlePlayFeatureDeliveryKtx = "2.1.0"
 gglGuava = "31.0.1-android"
 # This dependency is set to compile only
 googleWearable = "2.9.0"
@@ -151,8 +149,6 @@ androidDesugaring = { module = "com.android.tools:desugar_jdk_libs", version.ref
 googleTruth = { module = "com.google.truth:truth", version.ref = "googleTruth" }
 googleTruthExtensions = { module = "com.google.truth.extensions:truth-java8-extension", version.ref = "googleTruth" }
 googleGson = { module = "com.google.code.gson:gson", version.ref = "googleGson" }
-googlePlayFeatureDelivery = { module = "com.google.android.play:feature-delivery", version.ref = "googlePlayFeatureDelivery" }
-googlePlayFeatureDeliveryKtx = { module = "com.google.android.play:feature-delivery-ktx", version.ref = "googlePlayFeatureDeliveryKtx" }
 gglGuava = { module = "com.google.guava:guava", version.ref = "gglGuava" }
 junit4 = { module = "junit:junit", version.ref = "junit4" }
 junitJupiter = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junitJupiter" }
@@ -211,8 +207,6 @@ dynamicFeatureBasics = [
     "androidxLifecycleViewModel",
     "androidxLifecycleLiveData",
     "googleMaterialComponents",
-    "googlePlayFeatureDelivery",
-    "googlePlayFeatureDeliveryKtx",
     "gglGuava",
     "jbAnnotations",
     "okhttp",

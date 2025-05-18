@@ -208,8 +208,6 @@ dependencies {
         libs.googleMaterialComponents,
         libs.googlePlayServicesOSSLicenses,
         libs.googleGson,
-        libs.googlePlayFeatureDelivery,
-        libs.googlePlayFeatureDeliveryKtx,
         libs.gglGuava,
         libs.kotlinStdlib,
         libs.kotlinCoroutines,

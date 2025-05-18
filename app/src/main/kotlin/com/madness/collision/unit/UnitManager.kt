@@ -19,69 +19,15 @@ package com.madness.collision.unit
 import android.content.ComponentName
 import android.content.Context
 import android.content.pm.PackageManager
-import android.view.View
-import android.widget.Toast
-import com.google.android.play.core.splitinstall.SplitInstallException
-import com.google.android.play.core.splitinstall.SplitInstallManager
-import com.google.android.play.core.splitinstall.SplitInstallRequest
-import com.google.android.play.core.splitinstall.model.SplitInstallErrorCode
-import com.madness.collision.R
 import com.madness.collision.qs.TileServiceApiViewer
 import com.madness.collision.qs.TileServiceAudioTimer
 import com.madness.collision.unit.themed_wallpaper.ThemedWallpaperService
-import com.madness.collision.util.X
-import com.madness.collision.util.notify
-import com.madness.collision.util.notifyBriefly
 import com.madness.collision.versatile.ApiViewingSearchActivity
 import com.madness.collision.versatile.ApkSharing
 import com.madness.collision.versatile.TextProcessingActivity
-import java.lang.ref.WeakReference
 import kotlin.reflect.KClass
 
-internal class UnitManager(private val context: Context, private val splitInstallManager: SplitInstallManager? = null) {
-
-    private fun updateUnitState(description: Description) {
-//        val index = mDescriptions.indexOf(description)
-//        notifyListItemChanged(index)
-    }
-
-    fun installUnit(description: Description, view: View? = null) {
-        val splitInstallManager = splitInstallManager ?: return
-        val viewRef = WeakReference(view)
-        val request: SplitInstallRequest = SplitInstallRequest.newBuilder().addModule(description.unitName).build()
-        splitInstallManager.startInstall(request).addOnSuccessListener {
-            viewRef.notify(R.string.unit_manager_install_success, true)
-            updateUnitState(description)
-            doAftermath(context, description, false)
-        }.addOnFailureListener { exception ->
-            val e = if (exception is SplitInstallException) exception else null
-            val errorMessage = when(e?.errorCode) {
-                SplitInstallErrorCode.NETWORK_ERROR -> R.string.unit_manager_error_network
-                SplitInstallErrorCode.MODULE_UNAVAILABLE -> R.string.unit_manager_error_module_unavailable
-                SplitInstallErrorCode.API_NOT_AVAILABLE -> R.string.unit_manager_error_api_unavailable
-                else -> R.string.text_error
-            }
-            viewRef.notify(errorMessage)
-            updateUnitState(description)
-        }
-    }
-
-    fun uninstallUnit(description: Description, view: View? = null) {
-        val splitInstallManager = splitInstallManager ?: return
-        val viewRef = WeakReference(view)
-        // uninstall can only be deferred, which in practice defers until the next app update
-        // (because app stays in memory?), confusing the user for missing feature after update
-        splitInstallManager.deferredUninstall(listOf(description.unitName)).addOnSuccessListener {
-            viewRef.notify(R.string.unit_manager_uninstall_success, true)
-            Unit.unpinUnit(context, description.unitName)
-            updateUnitState(description)
-            doAftermath(context, description, true)
-        }.addOnFailureListener {
-            viewRef.notify(R.string.text_error)
-            Unit.unpinUnit(context, description.unitName)
-            updateUnitState(description)
-        }
-    }
+internal class UnitManager(private val context: Context) {
 
     fun enableUnit(description: Description) {
         Unit.enableUnit(context, description.unitName)
@@ -100,15 +46,6 @@ internal class UnitManager(private val context: Context, private val splitInstal
             Unit.UNIT_NAME_THEMED_WALLPAPER -> this::aftermathThemedWallpaper
             else -> return
         }.invoke(context, isUninstall)
-    }
-
-    private fun WeakReference<View?>.notify(textResId: Int, shouldLastLong: Boolean = false) {
-        val v = this.get()
-        if (v != null) {
-            (if (shouldLastLong) View::notify else View::notifyBriefly).invoke(v, textResId, true)
-        } else {
-            X.toast(context, textResId, if (shouldLastLong) Toast.LENGTH_LONG else Toast.LENGTH_SHORT)
-        }
     }
 
     private fun Boolean.stateEnabled(): Int {

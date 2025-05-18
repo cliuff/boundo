@@ -17,7 +17,6 @@
 package com.madness.collision.unit
 
 import android.content.Context
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -31,7 +30,6 @@ import androidx.core.view.get
 import androidx.core.view.size
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.databinding.UnitDescBinding
@@ -133,30 +131,12 @@ internal class UnitDescFragment() : TaggedFragment(), Democratic {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val context = context ?: return
         val colorPass: Int by lazy { ThemeUtil.getColor(context, R.attr.colorActionPass) }
-        val colorPassBack: Int by lazy { ThemeUtil.getBackColor(colorPass, 0.2f) }
         val colorAlert: Int by lazy { ThemeUtil.getColor(context, R.attr.colorActionAlert) }
-        val colorAlertBack: Int by lazy { ThemeUtil.getColor(context, R.attr.colorActionAlertBack) }
-        val splitInstallManager = SplitInstallManagerFactory.create(context)
-        val installedUnits = Unit.getInstalledUnits(splitInstallManager)
-        val unitManager = UnitManager(context, splitInstallManager)
+        val unitManager = UnitManager(context)
         mViewModel.description.observe(viewLifecycleOwner) {
             it ?: return@observe
             // show unit icon
             viewBinding.unitDescIcon.setImageDrawable(it.description.getIcon(context))
-            val showDynamicState = it.isDynamic && it.description.isRemovable
-            // show install status for dynamic unit
-            if (showDynamicState) {
-                val iconTint = viewBinding.unitDescIcon.imageTintList
-                val installStatusColor = if (it.isInstalled) ColorStateList.valueOf(colorPass) else iconTint
-                viewBinding.unitDescInstallStatus.run {
-                    setText(if (it.isInstalled) R.string.unit_desc_installed else R.string.unit_desc_not_installed)
-                    setTextColor(installStatusColor)
-                    compoundDrawablesRelative[0].setTintList(installStatusColor)
-                    visibility = View.VISIBLE
-                }
-            } else {
-                viewBinding.unitDescInstallStatus.visibility = View.GONE
-            }
             // show availability
             viewBinding.unitDescAvailability.run {
                 setText(if (it.isAvailable) R.string.unit_desc_available else R.string.unit_desc_unavailable)
@@ -197,44 +177,6 @@ internal class UnitDescFragment() : TaggedFragment(), Democratic {
                         visibility = View.GONE
                     }
                 }
-            }
-            // show install action for dynamic unit
-            viewBinding.unitDescAction.run {
-                when {
-                    showDynamicState && it.isInstalled -> {
-                        setText(R.string.unit_desc_uninstall)
-                        setTextColor(colorAlert)
-                        setBackgroundColor(colorAlertBack)
-                        setOnClickListener { _ ->
-                            if (!installedUnits.contains(it.unitName)) return@setOnClickListener
-                            notifyBriefly(R.string.unit_desc_uninstall_notice)
-                            lifecycleScope.launch(Dispatchers.Default) {
-                                unitManager.uninstallUnit(it.description, getView())
-                            }
-                        }
-                        visibility = View.VISIBLE
-                    }
-                    showDynamicState && it.isAvailable -> {
-                        setText(R.string.unit_desc_install)
-                        setTextColor(colorPass)
-                        setBackgroundColor(colorPassBack)
-                        setOnClickListener { _ ->
-                            if (installedUnits.contains(it.unitName)) return@setOnClickListener
-                            notifyBriefly(R.string.unit_desc_install_notice)
-                            lifecycleScope.launch(Dispatchers.Default) {
-                                unitManager.installUnit(it.description, getView())
-                            }
-                        }
-                        visibility = View.VISIBLE
-                    }
-                    else -> {
-                        visibility = View.GONE
-                    }
-                }
-            }
-            // hide install action when Google Play store is unavailable
-            if (!ApiUtils.isGglPlayAvailable(context)) {
-                viewBinding.unitDescAction.visibility = View.GONE
             }
             // show requirement checkers
             if (it.description.hasChecker) {

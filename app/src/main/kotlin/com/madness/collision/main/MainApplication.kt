@@ -18,10 +18,8 @@ package com.madness.collision.main
 
 import android.annotation.SuppressLint
 import android.app.Application
-import android.content.Context
 import android.content.Intent
 import coil3.SingletonImageLoader
-import com.google.android.play.core.splitcompat.SplitCompat
 import com.madness.collision.BuildConfig
 import com.madness.collision.unit.api_viewing.AccessAV
 import com.madness.collision.util.os.OsUtils
@@ -73,12 +71,6 @@ class MainApplication : Application(), Thread.UncaughtExceptionHandler, Singleto
 //        val context = LanguageMan(newBase).getLocaleContext()
 //        super.attachBaseContext(context)
 //    }
-
-    override fun attachBaseContext(base: Context?) {
-        super.attachBaseContext(base)
-        // access dynamic feature modules after download
-        SplitCompat.install(this)
-    }
 
     override fun onCreate() {
         super.onCreate()

@@ -27,33 +27,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/unitManDynamic"
-            android:text="@string/unit_man_dynamic_feature"
-            android:textSize="9sp"
-            android:textColor="#ff7030"
-            android:textStyle="bold"
-            android:textAllCaps="true"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="@id/unitManIcon"
-            android:layout_marginStart="18dp"
-            android:layout_marginTop="2dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:ignore="SmallSp" />
-
-        <TextView
-            android:id="@+id/unitManDynamicState"
-            tools:text="Installed"
-            android:textSize="9sp"
-            app:layout_constraintTop_toTopOf="@id/unitManDynamic"
-            app:layout_constraintBottom_toBottomOf="@id/unitManDynamic"
-            app:layout_constraintStart_toEndOf="@id/unitManDynamic"
-            android:layout_marginStart="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:ignore="SmallSp" />
-
         <ImageView
             android:id="@+id/unitManIcon"
             android:src="@drawable/ic_image_24"

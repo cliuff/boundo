@@ -35,9 +35,7 @@ import com.madness.collision.databinding.AdapterUnitsManagerBinding
 import com.madness.collision.diy.SandwichAdapter
 import com.madness.collision.unit.DescRetriever
 import com.madness.collision.unit.StatefulDescription
-import com.madness.collision.util.ColorUtil
 import com.madness.collision.util.ThemeUtil
-import com.madness.collision.util.mainApplication
 import com.madness.collision.util.sortedWithUtilsBy
 
 internal class UnitsManagerAdapter(context: Context, private val listener: Listener)
@@ -49,8 +47,6 @@ internal class UnitsManagerAdapter(context: Context, private val listener: Liste
         val name: AppCompatTextView = binding.unitsManagerAdapterName
         val status: ImageView = binding.unitManagerAdapterStatus
         val container: View = binding.unitManagerContainer
-        val dynamic = binding.unitManDynamic
-        val dynamicState = binding.unitManDynamicState
         val disabled = binding.unitManDisabled
     }
 
@@ -75,9 +71,6 @@ internal class UnitsManagerAdapter(context: Context, private val listener: Liste
     private val colorPassStateList: ColorStateList by lazy {
         ColorStateList.valueOf(colorPass)
     }
-    // red theme is neither pale nor dark, the best way is to select color for each respective theme
-    private val cardColorDynamic = if (mainApplication.isPaleTheme) Color.parseColor("#FFFFF5F0")
-    else ColorUtil.darkenAs(Color.parseColor("#FFFF7030"), if (mainApplication.isDarkTheme) 0.15f else 0.55f)
     private val cardColorStatic = ThemeUtil.getColor(context, R.attr.colorAItem)
     private val colorOnItem = ThemeUtil.getColor(context, R.attr.colorAOnItem)
     // 0..255
@@ -116,17 +109,9 @@ internal class UnitsManagerAdapter(context: Context, private val listener: Liste
         }
         holder.icon.setImageDrawable(description.getIcon(mContext))
         holder.icon.imageTintList = ColorStateList.valueOf(if (stateful.isAvailable) colorOnItem else colorSubText)
-        val showDynamicState = stateful.isDynamic && description.isRemovable
-        val opaqueCardColor = if (showDynamicState) cardColorDynamic else cardColorStatic
         // adjust card color alpha manually since card background color overrides view alpha
-        val semitransparentCardColor = ColorUtils.setAlphaComponent(opaqueCardColor, cardAlphaComp)
+        val semitransparentCardColor = ColorUtils.setAlphaComponent(cardColorStatic, cardAlphaComp)
         holder.card.setCardBackgroundColor(semitransparentCardColor)
-        if (showDynamicState) {
-            holder.dynamicState.setText(if (stateful.isInstalled) R.string.unit_desc_installed else R.string.unit_desc_not_installed)
-            holder.dynamicState.setTextColor(if (stateful.isInstalled) colorPass else colorSubText)
-        }
-        holder.dynamic.isVisible = showDynamicState
-        holder.dynamicState.isVisible = showDynamicState
         val showDisableMsg = stateful.isDisabled && stateful.isInstalled && stateful.isAvailable
         holder.disabled.isVisible = showDisableMsg
         holder.container.setOnClickListener {

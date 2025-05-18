@@ -45,17 +45,6 @@
                 android:layout_width="200dp"
                 android:layout_height="200dp"/>
 
-            <TextView
-                android:id="@+id/unitDescInstallStatus"
-                tools:text="Installed"
-                android:textSize="20sp"
-                android:drawableStart="@drawable/res_circle"
-                android:drawablePadding="10dp"
-                android:padding="10dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
         </LinearLayout>
 
         <TextView
@@ -82,17 +71,6 @@
             app:cornerRadius="5dp"
             tools:text="Disable"
             android:layout_marginTop="12dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/unitDescAction"
-            app:cornerRadius="5dp"
-            tools:text="Uninstall"
-            android:layout_marginTop="10dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
