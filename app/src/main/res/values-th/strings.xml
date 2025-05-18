@@ -156,19 +156,8 @@
     <string name="unit_desc_im">•แก้ไขความละเอียด\n•ปรับเปลี่ยนรูปแบบ: png jpg webp heif\n•ภาพเบลอ</string>
     <string name="unit_desc_tw">•ทำให้วอลล์เปเปอร์ของคุณสอดคล้องกับ Android 10 ธีมมืดโดยการใช้วอลล์เปเปอร์สีเข้มโดยอัตโนมัติ</string>
     <string name="unit_desc_at">•หยุดเสียงจากการเล่น</string>
-    <string name="unit_desc_uninstall">ถอนการติดตั้ง</string>
-    <string name="unit_desc_install">ติดตั้ง</string>
     <string name="unit_desc_unavailable">ไม่มี</string>
     <string name="unit_desc_available">ที่มีจำหน่าย</string>
-    <string name="unit_desc_not_installed">ไม่ได้ติดตั้ง</string>
-    <string name="unit_desc_installed">การติดตั้ง</string>
-    <string name="unit_manager_install_success">Play Store กำลังประมวลผลการติดตั้ง</string>
-    <string name="unit_desc_install_notice">กำลังพยายามติดตั้ง</string>
-    <string name="unit_manager_error_network">เครือข่ายผิดพลาด</string>
-    <string name="unit_manager_error_module_unavailable">หน่วยไม่พร้อมใช้งาน</string>
-    <string name="unit_manager_error_api_unavailable">API ใช้งานไม่ได้</string>
-    <string name="unit_manager_uninstall_success">ถอนการติดตั้งจะเกิดขึ้นเมื่อไม่ได้ใช้งาน</string>
-    <string name="unit_desc_uninstall_notice">ยกเลิกการถอนการติดตั้ง</string>
     <string name="unit_desc_pin">ปัก</string>
     <string name="text_access_denied">ปฏิเสธการเข้าใช้</string>
     <string name="versatile_device_controls_at_hint_on">ปัดเพื่อปรับ</string>
@@ -211,7 +200,6 @@
     <string name="im_image_select">เลือกภาพ</string>
     <string name="im_toast_finish">บันทึกไว้ในแกลเลอรี่</string>
     <string name="unit_man_disabled">พิการ</string>
-    <string name="unit_man_dynamic_feature">คุณสมบัติไดนามิก</string>
     <string name="at_status_running">ตัวจับเวลากำลังทำงานอยู่</string>
     <string name="at_action_start">เริ่มจับเวลา</string>
     <string name="at_hint_dev_ctrl">เข้าถึงด่วน: เพิ่มตัวจับเวลาในการควบคุมอุปกรณ์</string>

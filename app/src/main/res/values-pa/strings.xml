@@ -152,23 +152,12 @@
     <string name="title_api_viewing" translatable="false">App API</string>
     <string name="main_more">ਹੋਰ</string>
     <string name="unit_audio_timer">ਆਡੀਓ ਟਾਈਮਰ</string>
-    <string name="unit_desc_installed">ਸਥਾਪਿਤ ਕੀਤਾ</string>
-    <string name="unit_desc_not_installed">ਇੰਸਟਾਲ ਨਹੀਂ ਹੈ</string>
     <string name="unit_desc_available">ਉਪਲੱਬਧ</string>
     <string name="unit_desc_unavailable">ਅਣਉਪਲਬਧ</string>
-    <string name="unit_desc_install">ਇੰਸਟਾਲ ਕਰੋ</string>
-    <string name="unit_desc_uninstall">ਅਣਇੰਸਟੌਲ ਕਰੋ</string>
     <string name="unit_desc_av">• ਡੀਵਾਈਸ \'ਤੇ ਸਾਰੀਆਂ ਐਪਾਂ ਅਤੇ apks ਦੇ Android API ਪੱਧਰ ਦੀ ਜਾਂਚ ਕਰੋ\n• ਸਾਰੀਆਂ ਐਪਾਂ ਦੇ ਅਨੁਕੂਲਿਤ ਆਈਕਨ ਸਮਰਥਨ ਦੀ ਜਾਂਚ ਕਰੋ\n• ਐਪ API ਅੰਕੜੇ\n• APK ਅਤੇ ਆਈਕਨ ਐਕਸਟਰੈਕਸ਼ਨ\n• ਪੈਕੇਜ ਵੇਰਵੇ ਅਤੇ ਦਸਤਖਤ ਵੇਰਵੇ</string>
     <string name="unit_desc_im">• ਰੈਜ਼ੋਲਿਊਸ਼ਨ ਸੋਧੋ\n• ਫਾਰਮੈਟ ਸੋਧੋ: png jpg webp heif\n• ਬਲਰ ਚਿੱਤਰ</string>
     <string name="unit_desc_tw">• ਗੂੜ੍ਹੇ ਰੰਗ ਦੇ ਵਾਲਪੇਪਰ ਨੂੰ ਸਵੈਚਲਿਤ ਤੌਰ \'ਤੇ ਲਾਗੂ ਕਰਕੇ ਆਪਣੇ ਵਾਲਪੇਪਰ ਨੂੰ Android 10 ਡਾਰਕ ਥੀਮ ਦੇ ਅਨੁਕੂਲ ਬਣਾਓ</string>
     <string name="unit_desc_at">• ਆਡੀਓ ਚਲਾਉਣ ਤੋਂ ਰੋਕੋ</string>
-    <string name="unit_manager_install_success">ਪਲੇ ਸਟੋਰ ਇੰਸਟੌਲ ਦੀ ਪ੍ਰਕਿਰਿਆ ਕਰ ਰਿਹਾ ਹੈ</string>
-    <string name="unit_manager_uninstall_success">ਨਿਸ਼ਕਿਰਿਆ ਹੋਣ \'ਤੇ ਅਣਇੰਸਟੌਲ ਹੋ ਜਾਵੇਗਾ</string>
-    <string name="unit_manager_error_network">ਨੈੱਟਵਰਕ ਗੜਬੜ</string>
-    <string name="unit_manager_error_module_unavailable">ਯੂਨਿਟ ਉਪਲਬਧ ਨਹੀਂ ਹੈ</string>
-    <string name="unit_manager_error_api_unavailable">API ਉਪਲਬਧ ਨਹੀਂ ਹੈ</string>
-    <string name="unit_desc_uninstall_notice">ਅਣਇੰਸਟੌਲ ਨੂੰ ਮੁਲਤਵੀ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ</string>
-    <string name="unit_desc_install_notice">ਸਥਾਪਤ ਕਰਨ ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰ ਰਿਹਾ ਹੈ</string>
     <string name="unit_desc_pin">ਪਿੰਨ</string>
     <string name="app_device_controls">ਬਾਉਂਡੋ ਨਿਯੰਤਰਣ</string>
     <string name="access_sys_usage">Boundo ਨੂੰ ਵਰਤੋਂ ਡੇਟਾ ਤੱਕ ਪਹੁੰਚ ਕਰਨ ਦਿਓ</string>
@@ -211,7 +200,6 @@
     <string name="im_image_select">ਚਿੱਤਰ ਚੁਣੋ</string>
     <string name="im_toast_finish">ਗੈਲਰੀ ਵਿੱਚ ਸੁਰੱਖਿਅਤ ਕੀਤਾ ਗਿਆ</string>
     <string name="unit_man_disabled">ਅਯੋਗ</string>
-    <string name="unit_man_dynamic_feature">ਗਤੀਸ਼ੀਲ ਵਿਸ਼ੇਸ਼ਤਾ</string>
     <string name="at_status_running">ਟਾਈਮਰ ਚੱਲ ਰਿਹਾ ਹੈ</string>
     <string name="at_action_start">ਟਾਈਮਰ ਸ਼ੁਰੂ ਕਰੋ</string>
     <string name="at_hint_dev_ctrl">ਤਤਕਾਲ ਪਹੁੰਚ: ਡਿਵਾਈਸ ਨਿਯੰਤਰਣ ਵਿੱਚ ਟਾਈਮਰ ਸ਼ਾਮਲ ਕਰੋ</string>

@@ -156,19 +156,8 @@
     <string name="unit_desc_im">• Modificar resolución\n• Modificar formato: png jpg webp heif\n• Imagen borrosa</string>
     <string name="unit_desc_tw">• Haga que su fondo de pantalla cumpla con el tema oscuro de Android 10 aplicando un fondo de pantalla de color oscuro automáticamente</string>
     <string name="unit_desc_at">• Detener la reproducción de audio</string>
-    <string name="unit_desc_installed">Instalado</string>
-    <string name="unit_desc_not_installed">No instalado</string>
     <string name="unit_desc_available">Disponible</string>
     <string name="unit_desc_unavailable">Indisponible</string>
-    <string name="unit_desc_install">Instalar en pc</string>
-    <string name="unit_desc_uninstall">Desinstalar</string>
-    <string name="unit_manager_install_success">Play Store está procesando la instalación</string>
-    <string name="unit_desc_install_notice">Intentando instalar</string>
-    <string name="unit_manager_error_network">Error de red</string>
-    <string name="unit_manager_error_module_unavailable">Módulo no disponible</string>
-    <string name="unit_manager_error_api_unavailable">API no disponible</string>
-    <string name="unit_manager_uninstall_success">La desinstalación ocurrirá cuando esté inactivo</string>
-    <string name="unit_desc_uninstall_notice">Desinstalación diferida</string>
     <string name="unit_desc_pin">prender con alfileres</string>
     <string name="text_access_denied">Acceso denegado</string>
     <string name="versatile_device_controls_at_hint_on">Desliza para ajustar</string>
@@ -211,7 +200,6 @@
     <string name="im_edit_width">Anchura</string>
     <string name="im_image_select">Seleccionar imagen</string>
     <string name="unit_man_disabled">Desactivado</string>
-    <string name="unit_man_dynamic_feature">Característica dinámica</string>
     <string name="at_status_running">El temporizador está corriendo</string>
     <string name="at_action_start">Temporizador de inicio</string>
     <string name="at_hint_dev_ctrl">Acceso rápido: agregue temporizador al control de dispositivos</string>

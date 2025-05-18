@@ -156,19 +156,8 @@
     <string name="unit_desc_im">• Изменить разрешение\n• Изменить формат: png jpg webp heif\n• Размытие изображения</string>
     <string name="unit_desc_tw">• Заставьте свои обои соответствовать темной теме Android 10, автоматически применяя темные обои</string>
     <string name="unit_desc_at">• остановить воспроизведение звука</string>
-    <string name="unit_desc_installed">Установлены</string>
-    <string name="unit_desc_not_installed">Не установлено</string>
     <string name="unit_desc_available">Доступный</string>
     <string name="unit_desc_unavailable">Недоступен</string>
-    <string name="unit_desc_install">устанавливать</string>
-    <string name="unit_desc_uninstall">Удалить</string>
-    <string name="unit_manager_install_success">Play Store обрабатывает установку</string>
-    <string name="unit_desc_install_notice">Пытаюсь установить</string>
-    <string name="unit_manager_error_network">Сетевая ошибка</string>
-    <string name="unit_manager_error_module_unavailable">Единица недоступна</string>
-    <string name="unit_manager_error_api_unavailable">API недоступен</string>
-    <string name="unit_manager_uninstall_success">Удаление произойдет, когда простаивает</string>
-    <string name="unit_desc_uninstall_notice">Отсрочка удаления</string>
     <string name="unit_desc_pin">приколоть</string>
     <string name="text_access_denied">В доступе отказано</string>
     <string name="versatile_device_controls_at_hint_on">Проведите, чтобы настроить</string>
@@ -211,7 +200,6 @@
     <string name="im_image_select">Выберите изображение</string>
     <string name="im_toast_finish">Сохранено в галерее</string>
     <string name="unit_man_disabled">инвалид</string>
-    <string name="unit_man_dynamic_feature">Динамическая функция</string>
     <string name="at_status_running">Таймер работает</string>
     <string name="at_action_start">Запустить таймер</string>
     <string name="at_hint_dev_ctrl">Быстрый доступ: добавьте таймер в элементы управления устройством</string>

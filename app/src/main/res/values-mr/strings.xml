@@ -152,23 +152,12 @@
     <string name="title_api_viewing" translatable="false">App API</string>
     <string name="main_more">अधिक</string>
     <string name="unit_audio_timer">ऑडिओ टाइमर</string>
-    <string name="unit_desc_installed">स्थापित केले</string>
-    <string name="unit_desc_not_installed">स्थापित नाही</string>
     <string name="unit_desc_available">उपलब्ध</string>
     <string name="unit_desc_unavailable">अनुपलब्ध</string>
-    <string name="unit_desc_install">स्थापित करा</string>
-    <string name="unit_desc_uninstall">विस्थापित करा</string>
     <string name="unit_desc_av">• डिव्हाइसवरील सर्व अॅप्स आणि apks ची Android API पातळी तपासा\n• सर्व अॅप्ससाठी अनुकूली चिन्ह समर्थन तपासा\n• अॅप API आकडेवारी\n• APK आणि चिन्ह काढणे\n• पॅकेज तपशील आणि स्वाक्षरी तपशील</string>
     <string name="unit_desc_im">• रिझोल्यूशन सुधारित करा\n• स्वरूप सुधारित करा: png jpg webp heif\n• अस्पष्ट प्रतिमा</string>
     <string name="unit_desc_tw">• गडद रंगाचा वॉलपेपर आपोआप लागू करून तुमचा वॉलपेपर Android 10 गडद थीमला अनुसरून बनवा</string>
     <string name="unit_desc_at">• ऑडिओ प्ले करणे थांबवा</string>
-    <string name="unit_manager_install_success">Play Store इंस्टॉलवर प्रक्रिया करत आहे</string>
-    <string name="unit_manager_uninstall_success">निष्क्रिय असताना विस्थापित होईल</string>
-    <string name="unit_manager_error_network">नेटवर्क त्रुटी</string>
-    <string name="unit_manager_error_module_unavailable">युनिट अनुपलब्ध</string>
-    <string name="unit_manager_error_api_unavailable">API अनुपलब्ध</string>
-    <string name="unit_desc_uninstall_notice">विस्थापित करणे पुढे ढकलत आहे</string>
-    <string name="unit_desc_install_notice">स्थापित करण्याचा प्रयत्न करत आहे</string>
     <string name="unit_desc_pin">पिन</string>
     <string name="app_device_controls">Boundo नियंत्रणे</string>
     <string name="access_sys_usage">बौंडोला वापर डेटामध्ये प्रवेश करण्याची अनुमती द्या</string>
@@ -211,7 +200,6 @@
     <string name="im_image_select">प्रतिमा निवडा</string>
     <string name="im_toast_finish">गॅलरीत जतन केले</string>
     <string name="unit_man_disabled">अक्षम</string>
-    <string name="unit_man_dynamic_feature">डायनॅमिक वैशिष्ट्य</string>
     <string name="at_status_running">टायमर चालू आहे</string>
     <string name="at_action_start">टाइमर सुरू करा</string>
     <string name="at_hint_dev_ctrl">द्रुत प्रवेश: डिव्हाइस नियंत्रणांमध्ये टायमर जोडा</string>

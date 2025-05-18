@@ -79,12 +79,8 @@
     <string name="activity_av_search">Uygulama API\'sı</string>
     <string name="main_more">Daha</string>
     <string name="unit_audio_timer">Ses Zamanlayıcısı</string>
-    <string name="unit_desc_installed">Kurulmuş</string>
-    <string name="unit_desc_not_installed">Yüklü değil</string>
     <string name="unit_desc_available">Mevcut</string>
     <string name="unit_desc_unavailable">Kullanım dışı</string>
-    <string name="unit_desc_install">Yüklemek</string>
-    <string name="unit_desc_uninstall">Kaldırma</string>
     <string name="textManual">Manuel</string>
     <string name="textAlways">Her zaman</string>
     <string name="textNever">Asla</string>
@@ -154,13 +150,6 @@
     <string name="twLiveWallpaperDesc">Karanlık tema etkinleştirildiğinde otomatik olarak karanlık duvar kağıdına geç</string>
     <string name="unit_desc_tw">• Otomatik olarak koyu renkli bir duvar kağıdı uygulayarak duvar kağıdınızın Android 10 karanlık temasına uymasını sağlayın</string>
     <string name="unit_desc_at">• Sesin çalmasını durdurun</string>
-    <string name="unit_manager_install_success">Play Store yüklemeyi işliyor</string>
-    <string name="unit_manager_uninstall_success">Boşta kaldığında kaldırma işlemi gerçekleşecek</string>
-    <string name="unit_manager_error_network">Ağ hatası</string>
-    <string name="unit_manager_error_module_unavailable">Birim kullanılamıyor</string>
-    <string name="unit_manager_error_api_unavailable">API kullanılamıyor</string>
-    <string name="unit_desc_uninstall_notice">Kaldırma işleminin ertelenmesi</string>
-    <string name="unit_desc_install_notice">Yüklemeye çalışıyor</string>
     <string name="unit_desc_pin">Toplu iğne</string>
     <string name="sdk_search_hint"><font size="12">ad, paket, API düzeyi, Android sürümü</font></string>
     <string name="apiDetailsPackageName">"Paket ismi: "</string>
@@ -211,7 +200,6 @@
     <string name="im_image_select">Fotoğraf seç</string>
     <string name="im_toast_finish">Galeriye kaydedildi</string>
     <string name="unit_man_disabled">Engelli</string>
-    <string name="unit_man_dynamic_feature">Dinamik özellik</string>
     <string name="at_status_running">Zamanlayıcı çalışıyor</string>
     <string name="at_action_start">Zamanlayıcıyı başlat</string>
     <string name="at_hint_dev_ctrl">Hızlı erişim: cihaz kontrollerine zamanlayıcı ekleyin</string>

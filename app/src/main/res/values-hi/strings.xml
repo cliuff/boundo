@@ -152,23 +152,12 @@
     <string name="title_api_viewing" translatable="false">App API</string>
     <string name="main_more">अधिक</string>
     <string name="unit_audio_timer">ऑडियो टाइमर</string>
-    <string name="unit_desc_installed">स्थापित</string>
-    <string name="unit_desc_not_installed">स्थापित नहीं है</string>
     <string name="unit_desc_available">उपलब्ध</string>
     <string name="unit_desc_unavailable">अनुपलब्ध</string>
-    <string name="unit_desc_install">स्थापित करना</string>
-    <string name="unit_desc_uninstall">स्थापना रद्द करें</string>
     <string name="unit_desc_av">• डिवाइस पर सभी ऐप्लिकेशन और ऐप्लिकेशन के Android API स्तर की जांच करें\n• सभी ऐप्लिकेशन के अनुकूली आइकन समर्थन की जांच करें\n• ऐप्लिकेशन API आंकड़े\n• APK और आइकन निष्कर्षण\n• पैकेज विवरण और हस्ताक्षर विवरण</string>
     <string name="unit_desc_im">• रिज़ॉल्यूशन संशोधित करें\n• प्रारूप संशोधित करें: png jpg webp heif\n• धुंधली छवि</string>
     <string name="unit_desc_tw">• गहरे रंग का वॉलपेपर अपने आप लागू करके अपने वॉलपेपर को Android 10 डार्क थीम के अनुरूप बनाएं</string>
     <string name="unit_desc_at">• ऑडियो को चलने से रोकें</string>
-    <string name="unit_manager_install_success">Play Store इंस्टॉल को संसाधित कर रहा है</string>
-    <string name="unit_manager_uninstall_success">निष्क्रिय होने पर अनइंस्टॉल हो जाएगा</string>
-    <string name="unit_manager_error_network">नेटवर्क त्रुटि</string>
-    <string name="unit_manager_error_module_unavailable">इकाई अनुपलब्ध</string>
-    <string name="unit_manager_error_api_unavailable">एपीआई अनुपलब्ध</string>
-    <string name="unit_desc_uninstall_notice">अनइंस्टॉल करना स्थगित करना</string>
-    <string name="unit_desc_install_notice">स्थापित करने की कोशिश कर रहा है</string>
     <string name="unit_desc_pin">नत्थी करना</string>
     <string name="app_device_controls">बाउंडो नियंत्रण</string>
     <string name="access_sys_usage">बाउंडो को उपयोग डेटा तक पहुंचने दें</string>
@@ -211,7 +200,6 @@
     <string name="im_image_select">छवि चुने</string>
     <string name="im_toast_finish">गैलरी में सहेजा गया</string>
     <string name="unit_man_disabled">अक्षम</string>
-    <string name="unit_man_dynamic_feature">गतिशील सुविधा</string>
     <string name="at_status_running">टाइमर चल रहा है</string>
     <string name="at_action_start">टाइमर प्रारंभ करें</string>
     <string name="at_hint_dev_ctrl">त्वरित पहुंच: डिवाइस नियंत्रण में टाइमर जोड़ें</string>

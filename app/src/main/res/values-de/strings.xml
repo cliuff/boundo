@@ -145,19 +145,8 @@
     <string name="activity_av_search">App API</string>
     <string name="main_more">Mehr</string>
     <string name="unit_audio_timer">Audio-Timer</string>
-    <string name="unit_desc_installed">Eingerichtet</string>
-    <string name="unit_desc_not_installed">Nicht installiert</string>
     <string name="unit_desc_available">Verfügbar</string>
     <string name="unit_desc_unavailable">Nicht verfügbar</string>
-    <string name="unit_desc_install">Installieren</string>
-    <string name="unit_desc_uninstall">Deinstallieren</string>
-    <string name="unit_manager_install_success">Play Store verarbeitet die Installation</string>
-    <string name="unit_manager_uninstall_success">Die Deinstallation erfolgt im Leerlauf</string>
-    <string name="unit_manager_error_network">Netzwerkfehler</string>
-    <string name="unit_manager_error_module_unavailable">Gerät nicht verfügbar</string>
-    <string name="unit_manager_error_api_unavailable">API nicht verfügbar</string>
-    <string name="unit_desc_uninstall_notice">Deinstallation verschieben</string>
-    <string name="unit_desc_install_notice">Ich versuche zu installieren</string>
     <string name="unit_desc_pin">Stift</string>
     <string name="apiDetailsPackageName">"Paketnamen: "</string>
     <string name="textParentheses">" (%s)"</string>
@@ -211,7 +200,6 @@
     <string name="im_image_select">Bild auswählen</string>
     <string name="im_toast_finish">In der Galerie gespeichert</string>
     <string name="unit_man_disabled">Deaktiviert</string>
-    <string name="unit_man_dynamic_feature">Dynamische Funktion</string>
     <string name="at_status_running">Timer läuft</string>
     <string name="at_action_start">Timer starten</string>
     <string name="at_hint_dev_ctrl">Schnellzugriff: Timer zur Gerätesteuerung hinzufügen</string>

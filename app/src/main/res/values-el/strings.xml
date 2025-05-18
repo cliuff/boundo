@@ -79,12 +79,8 @@
     <string name="activity_av_search">API εφαρμογής</string>
     <string name="main_more">Περισσότερο</string>
     <string name="unit_audio_timer">Χρονόμετρο ήχου</string>
-    <string name="unit_desc_installed">Εγκατεστημένο</string>
-    <string name="unit_desc_not_installed">Μη εγκατεστημενο</string>
     <string name="unit_desc_available">Διαθέσιμος</string>
     <string name="unit_desc_unavailable">Μη διαθέσιμο</string>
-    <string name="unit_desc_install">Εγκαθιστώ</string>
-    <string name="unit_desc_uninstall">Κατάργηση εγκατάστασης</string>
     <string name="textManual">Εγχειρίδιο</string>
     <string name="textAlways">Πάντα</string>
     <string name="textNever">Ποτέ</string>
@@ -154,13 +150,6 @@
     <string name="twLiveWallpaperDesc">Μετάβαση σε σκοτεινή ταπετσαρία αυτόματα όταν είναι ενεργοποιημένο το σκοτεινό θέμα</string>
     <string name="unit_desc_tw">• Κάντε την ταπετσαρία σας να συμμορφώνεται με το σκοτεινό θέμα Android 10 εφαρμόζοντας αυτόματα μια ταπετσαρία σκούρου χρώματος</string>
     <string name="unit_desc_at">• Διακοπή αναπαραγωγής ήχου</string>
-    <string name="unit_manager_install_success">Το Play Store επεξεργάζεται την εγκατάσταση</string>
-    <string name="unit_manager_uninstall_success">Η απεγκατάσταση θα πραγματοποιηθεί όταν είναι αδρανής</string>
-    <string name="unit_manager_error_network">Σφάλμα δικτύου</string>
-    <string name="unit_manager_error_module_unavailable">Η μονάδα δεν είναι διαθέσιμη</string>
-    <string name="unit_manager_error_api_unavailable">Το API δεν είναι διαθέσιμο</string>
-    <string name="unit_desc_uninstall_notice">Αναβολή απεγκατάστασης</string>
-    <string name="unit_desc_install_notice">Προσπάθεια εγκατάστασης</string>
     <string name="unit_desc_pin">Καρφίτσα</string>
     <string name="sdk_search_hint"><font size="12">όνομα, πακέτο, επίπεδο API, έκδοση Android</font></string>
     <string name="apiDetailsPackageName">"Ονομα πακέτου: "</string>
@@ -211,7 +200,6 @@
     <string name="im_image_select">Επιλέξτε εικόνα</string>
     <string name="im_toast_finish">Αποθηκεύτηκε στη συλλογή</string>
     <string name="unit_man_disabled">άτομα με ειδικές ανάγκες</string>
-    <string name="unit_man_dynamic_feature">Δυναμική λειτουργία</string>
     <string name="at_status_running">Το χρονόμετρο λειτουργεί</string>
     <string name="at_action_start">Έναρξη χρονοδιακόπτη</string>
     <string name="at_hint_dev_ctrl">Γρήγορη πρόσβαση: προσθήκη χρονοδιακόπτη στα χειριστήρια της συσκευής</string>

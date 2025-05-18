@@ -156,19 +156,8 @@
     <string name="unit_desc_im">• Sửa đổi độ phân giải\n• Sửa đổi định dạng: png jpg webp heif\n• Làm mờ hình ảnh</string>
     <string name="unit_desc_tw">• Làm cho hình nền của bạn tuân thủ chủ đề tối của Android 10 bằng cách tự động áp dụng hình nền tối màu</string>
     <string name="unit_desc_at">• Dừng âm thanh phát</string>
-    <string name="unit_desc_uninstall">Gỡ cài đặt</string>
-    <string name="unit_desc_install">Tải về</string>
     <string name="unit_desc_unavailable">Không có sẵn</string>
     <string name="unit_desc_available">Có sẵn</string>
-    <string name="unit_desc_not_installed">Chưa cài đặt</string>
-    <string name="unit_desc_installed">Cài đặt</string>
-    <string name="unit_manager_install_success">Play Store đang xử lý cài đặt</string>
-    <string name="unit_desc_install_notice">Đang cố gắng cài đặt</string>
-    <string name="unit_manager_error_network">Lỗi mạng</string>
-    <string name="unit_manager_error_module_unavailable">Đơn vị không có sẵn</string>
-    <string name="unit_manager_error_api_unavailable">API không khả dụng</string>
-    <string name="unit_manager_uninstall_success">Gỡ cài đặt sẽ xảy ra khi không hoạt động</string>
-    <string name="unit_desc_uninstall_notice">Trì hoãn gỡ cài đặt</string>
     <string name="unit_desc_pin">xỏ chốt</string>
     <string name="text_access_denied">Quyền truy cập bị từ chối</string>
     <string name="versatile_device_controls_at_hint_on">Vuốt để điều chỉnh</string>
@@ -211,7 +200,6 @@
     <string name="im_image_select">Chọn ảnh</string>
     <string name="im_toast_finish">Lưu trong bộ sưu tập</string>
     <string name="unit_man_disabled">Tàn tật</string>
-    <string name="unit_man_dynamic_feature">Tính năng động</string>
     <string name="at_status_running">Hẹn giờ đang chạy</string>
     <string name="at_action_start">bắt đầu hẹn giờ</string>
     <string name="at_hint_dev_ctrl">Truy cập nhanh: thêm bộ hẹn giờ vào điều khiển thiết bị</string>

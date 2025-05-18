@@ -85,12 +85,8 @@
     <string name="activity_av_search">응용 프로그램 API</string>
     <string name="main_more">더</string>
     <string name="unit_audio_timer">음악, 그만</string>
-    <string name="unit_desc_installed">설치되었습니다</string>
-    <string name="unit_desc_not_installed">미설치</string>
     <string name="unit_desc_available">유효한</string>
     <string name="unit_desc_unavailable">없는</string>
-    <string name="unit_desc_install">설치</string>
-    <string name="unit_desc_uninstall">제거</string>
     <string name="app_info_name">패키지 이름</string>
     <string name="text_app_not_installed">필요한 응용 프로그램이 설치되지 않았습니다</string>
     <string name="text_error">에러 발생됨</string>
@@ -153,13 +149,6 @@
     <string name="twLiveWallpaperDesc">어두운 모드가 켜져있을 때 어두운 배경 화면을 자동으로 변경</string>
     <string name="unit_desc_tw">• 밝고 어두운 톤 배경 화면을 설정하면 배경 화면이 Android 10의 어두운 모드로 변경됩니다.</string>
     <string name="unit_desc_at">• 오디오 재생 중지</string>
-    <string name="unit_manager_install_success">Play 스토어 처리</string>
-    <string name="unit_manager_uninstall_success">기기가 유휴 상태 일 때 제거됩니다</string>
-    <string name="unit_manager_error_network">네트워크 장애</string>
-    <string name="unit_manager_error_module_unavailable">모듈을 사용할 수 없습니다</string>
-    <string name="unit_manager_error_api_unavailable">API를 사용할 수 없습니다</string>
-    <string name="unit_desc_uninstall_notice">설치 제거 예약</string>
-    <string name="unit_desc_install_notice">설치하려고</string>
     <string name="unit_desc_pin">결정된</string>
     <string name="sdk_search_hint"><font size="12">애플리케이션 이름 패키지 이름 API 레벨 Android 버전</font></string>
     <string name="advice_license_details">Boundo의 탄생은 오픈 소스 소프트웨어의 지원에 의존합니다</string>
@@ -211,7 +200,6 @@
     <string name="im_image_select">이미지 선택</string>
     <string name="im_toast_finish">앨범에 저장된 사진</string>
     <string name="unit_man_disabled">장애가있는</string>
-    <string name="unit_man_dynamic_feature">동적 기능</string>
     <string name="at_status_running">타이머 실행 중</string>
     <string name="at_action_start">타이머 시작</string>
     <string name="at_hint_dev_ctrl">빠른 액세스: 장치 제어에 타이머 추가</string>

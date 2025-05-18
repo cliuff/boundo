@@ -85,12 +85,8 @@
     <string name="activity_av_search">アプリケーションAPI</string>
     <string name="main_more">もっと</string>
     <string name="unit_audio_timer">音楽、ストップ</string>
-    <string name="unit_desc_installed">インストールされています</string>
-    <string name="unit_desc_not_installed">インストールされていない</string>
     <string name="unit_desc_available">利用可能</string>
     <string name="unit_desc_unavailable">利用できません</string>
-    <string name="unit_desc_install">インストール</string>
-    <string name="unit_desc_uninstall">アンインストール</string>
     <string name="app_info_name">パッケージ名</string>
     <string name="text_app_not_installed">必要なアプリケーションがインストールされていません</string>
     <string name="text_error">エラーが発生しました</string>
@@ -153,13 +149,6 @@
     <string name="twLiveWallpaperDesc">ダークモードがオンのときに暗い壁紙を自動的に変更する</string>
     <string name="unit_desc_tw">•明るいトーンと暗いトーンの壁紙を設定します。壁紙はAndroid 10のダークモードで変化します</string>
     <string name="unit_desc_at">•オーディオ再生を停止する</string>
-    <string name="unit_manager_install_success">Playストアの処理</string>
-    <string name="unit_manager_uninstall_success">デバイスがアイドル状態のときにアンインストールされます</string>
-    <string name="unit_manager_error_network">ネットワーク障害</string>
-    <string name="unit_manager_error_module_unavailable">モジュールは利用できません</string>
-    <string name="unit_manager_error_api_unavailable">APIは利用できません</string>
-    <string name="unit_desc_uninstall_notice">アンインストールのスケジュール</string>
-    <string name="unit_desc_install_notice">インストールしようとしています</string>
     <string name="unit_desc_pin">修繕</string>
     <string name="sdk_search_hint"><font size="12">アプリケーション名パッケージ名APIレベルAndroidバージョン</font></string>
     <string name="advice_license_details">Boundoの誕生は、オープンソースソフトウェアのサポートに依存しています</string>
@@ -211,7 +200,6 @@
     <string name="im_image_select">画像を選択</string>
     <string name="im_toast_finish">写真をアルバムに保存しました</string>
     <string name="unit_man_disabled">無効</string>
-    <string name="unit_man_dynamic_feature">動的機能</string>
     <string name="at_status_running">タイマーが作動中です</string>
     <string name="at_action_start">タイマーを開始します</string>
     <string name="at_hint_dev_ctrl">クイックアクセス: デバイスコントロールにタイマーを追加</string>

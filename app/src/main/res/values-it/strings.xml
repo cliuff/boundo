@@ -156,19 +156,8 @@
     <string name="unit_desc_im">• Modifica risoluzione\n• Modifica formato: png jpg webp heif\n• Sfocatura immagine</string>
     <string name="unit_desc_tw">• Rendi il tuo sfondo conforme al tema scuro di Android 10 applicando automaticamente uno sfondo di colore scuro</string>
     <string name="unit_desc_at">• Interrompere la riproduzione dell\'audio</string>
-    <string name="unit_desc_installed">installato</string>
-    <string name="unit_desc_not_installed">Non installato</string>
     <string name="unit_desc_available">A disposizione</string>
     <string name="unit_desc_unavailable">non disponibile</string>
-    <string name="unit_desc_install">Installare</string>
-    <string name="unit_desc_uninstall">Disinstallare</string>
-    <string name="unit_manager_uninstall_success">La disinstallazione avverrà quando è inattivo</string>
-    <string name="unit_manager_error_network">Errore di rete</string>
-    <string name="unit_manager_error_module_unavailable">Unità non disponibile</string>
-    <string name="unit_manager_error_api_unavailable">API non disponibile</string>
-    <string name="unit_desc_uninstall_notice">Rinvio della disinstallazione</string>
-    <string name="unit_manager_install_success">Play Store sta elaborando l\'installazione</string>
-    <string name="unit_desc_install_notice">Prova di installare</string>
     <string name="unit_desc_pin">fissare</string>
     <string name="text_access_denied">Accesso negato</string>
     <string name="versatile_device_controls_at_hint_on">Scorri per regolare</string>
@@ -211,7 +200,6 @@
     <string name="im_image_select">Seleziona immagine</string>
     <string name="im_toast_finish">Salvato in galleria</string>
     <string name="unit_man_disabled">Disabilitato</string>
-    <string name="unit_man_dynamic_feature">Funzione dinamica</string>
     <string name="at_status_running">Il timer è in esecuzione</string>
     <string name="at_action_start">Avvia il cronometro</string>
     <string name="at_hint_dev_ctrl">Accesso rapido: aggiungi timer ai controlli del dispositivo</string>

@@ -154,23 +154,12 @@
     <string name="title_api_viewing" translatable="false">App API</string>
     <string name="main_more">بیشتر</string>
     <string name="unit_audio_timer">تایمر صوتی</string>
-    <string name="unit_desc_installed">نصب شده است</string>
-    <string name="unit_desc_not_installed">نصب نشده</string>
     <string name="unit_desc_available">در دسترس</string>
     <string name="unit_desc_unavailable">غیر قابل دسترسی</string>
-    <string name="unit_desc_install">نصب</string>
-    <string name="unit_desc_uninstall">حذف نصب کنید</string>
     <string name="unit_desc_av">• سطح Android API همه برنامه‌ها و apk‌های موجود در دستگاه را بررسی کنید\n• پشتیبانی از نماد تطبیقی از همه برنامه‌ها را بررسی کنید\n• آمار API برنامه\n• استخراج APK و نماد\n• جزئیات بسته و جزئیات امضا</string>
     <string name="unit_desc_im">• تغییر وضوح\n• تغییر قالب: png jpg webp heif\n• تار کردن تصویر</string>
     <string name="unit_desc_tw">• با اعمال خودکار کاغذدیواری تیره رنگ، کاغذدیواری خود را مطابق با تم تیره Android 10 کنید.</string>
     <string name="unit_desc_at">• پخش صدا را متوقف کنید</string>
-    <string name="unit_manager_install_success">Play Store در حال پردازش نصب است</string>
-    <string name="unit_manager_uninstall_success">حذف نصب در حالت بیکار انجام می شود</string>
-    <string name="unit_manager_error_network">خطای شبکه</string>
-    <string name="unit_manager_error_module_unavailable">واحد در دسترس نیست</string>
-    <string name="unit_manager_error_api_unavailable">API در دسترس نیست</string>
-    <string name="unit_desc_uninstall_notice">به تعویق انداختن حذف</string>
-    <string name="unit_desc_install_notice">در حال تلاش برای نصب</string>
     <string name="unit_desc_pin">سنجاق</string>
     <string name="app_device_controls">کنترل های Boundo</string>
     <string name="access_sys_usage">به Boundo اجازه دسترسی به داده‌های استفاده را بدهید</string>
@@ -213,7 +202,6 @@
     <string name="im_image_select">تصویر را انتخاب کنید</string>
     <string name="im_toast_finish">ذخیره شده در گالری</string>
     <string name="unit_man_disabled">معلول</string>
-    <string name="unit_man_dynamic_feature">ویژگی پویا</string>
     <string name="about_twitter_account">&#8206;\@libekliff</string>
     <string name="at_status_running">تایمر در حال اجرا است</string>
     <string name="at_action_start">شروع تایمر</string>

@@ -156,19 +156,8 @@
     <string name="unit_desc_im">• Modificar resolução\n• Modificar formato: png jpg webp heif\n• Desfocar imagem</string>
     <string name="unit_desc_tw">• Faça seu papel de parede estar em conformidade com o tema escuro do Android 10 aplicando um papel de parede de cor escura automaticamente</string>
     <string name="unit_desc_at">• Interrompa a reprodução do áudio</string>
-    <string name="unit_desc_installed">Instalado</string>
-    <string name="unit_desc_not_installed">Não instalado</string>
     <string name="unit_desc_available">acessível</string>
     <string name="unit_desc_unavailable">Indisponível</string>
-    <string name="unit_desc_install">Instalar</string>
-    <string name="unit_desc_uninstall">Desinstalar</string>
-    <string name="unit_manager_error_api_unavailable">API indisponível</string>
-    <string name="unit_manager_install_success">A Play Store está processando a instalação</string>
-    <string name="unit_desc_uninstall_notice">Adiando desinstalação</string>
-    <string name="unit_desc_install_notice">Tentando instalar</string>
-    <string name="unit_manager_error_network">Erro de rede</string>
-    <string name="unit_manager_error_module_unavailable">Unidade indisponível</string>
-    <string name="unit_manager_uninstall_success">A desinstalação ocorrerá quando estiver ociosa</string>
     <string name="unit_desc_pin">fixar</string>
     <string name="text_access_denied">Acesso negado</string>
     <string name="versatile_device_controls_at_hint_on">Deslize para ajustar</string>
@@ -211,7 +200,6 @@
     <string name="im_image_select">Selecione a imagem</string>
     <string name="im_toast_finish">Guardado na galeria</string>
     <string name="unit_man_disabled">Desabilitado</string>
-    <string name="unit_man_dynamic_feature">Característica dinâmica</string>
     <string name="at_status_running">O cronômetro está funcionando</string>
     <string name="at_action_start">Iniciar cronômetro</string>
     <string name="at_hint_dev_ctrl">Acesso rápido: adicione temporizador aos controles do dispositivo</string>

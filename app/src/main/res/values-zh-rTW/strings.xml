@@ -87,12 +87,8 @@
     <string name="activity_av_search">應用程式 API</string>
     <string name="main_more">更多</string>
     <string name="unit_audio_timer">音訊計時器</string>
-    <string name="unit_desc_installed">已安裝</string>
-    <string name="unit_desc_not_installed">未安裝</string>
     <string name="unit_desc_available">可使用</string>
     <string name="unit_desc_unavailable">無法使用</string>
-    <string name="unit_desc_install">安裝</string>
-    <string name="unit_desc_uninstall">解除安裝</string>
     <string name="app_info_name">應用程式套件名稱</string>
     <string name="text_app_not_installed">未安裝對應的應用程式</string>
     <string name="text_error">出現錯誤</string>
@@ -157,13 +153,6 @@
     <string name="twLiveWallpaperDesc">開啟深色主題時自動切換深色桌布</string>
     <string name="unit_desc_tw">• 套用淺色和深色桌布，桌布隨 Android 10 的深色模式變化</string>
     <string name="unit_desc_at">• 停止音訊播放</string>
-    <string name="unit_manager_install_success">Play 商店正在進行安裝</string>
-    <string name="unit_manager_uninstall_success">將在裝置閒置時解除安裝</string>
-    <string name="unit_manager_error_network">網路錯誤</string>
-    <string name="unit_manager_error_module_unavailable">元件無法使用</string>
-    <string name="unit_manager_error_api_unavailable">API 無法使用</string>
-    <string name="unit_desc_uninstall_notice">正在延後解除安裝</string>
-    <string name="unit_desc_install_notice">正在嘗試安裝</string>
     <string name="unit_desc_pin">釘選</string>
     <string name="sdk_search_hint"><font size="12">應用程式名稱 套件 API 等級 Android 版本</font></string>
     <string name="unit_desc_im">• 修改解析度\n• 修改格式 png jpg webp heif\n• 模糊圖片</string>
@@ -213,7 +202,6 @@
     <string name="im_image_select">選取圖片</string>
     <string name="im_toast_finish">圖片已儲存至相簿</string>
     <string name="unit_man_disabled">已停用</string>
-    <string name="unit_man_dynamic_feature">動態功能</string>
     <string name="at_status_running">正在倒計時</string>
     <string name="at_action_start">開始倒計時</string>
     <string name="at_hint_dev_ctrl">快速存取：新增計時器至設備控制器</string>

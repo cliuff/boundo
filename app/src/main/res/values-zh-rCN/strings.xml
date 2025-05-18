@@ -158,19 +158,8 @@
     <string name="unit_desc_im">• 修改分辨率\n• 修改格式 png jpg webp heif\n• 模糊图片</string>
     <string name="unit_desc_tw">• 设置亮色调和暗色调壁纸，壁纸随安卓10的黑暗模式而变化</string>
     <string name="unit_desc_at">• 停止音频播放</string>
-    <string name="unit_desc_installed">已安装</string>
-    <string name="unit_desc_not_installed">未安装</string>
     <string name="unit_desc_available">可用</string>
     <string name="unit_desc_unavailable">不可用</string>
-    <string name="unit_desc_uninstall">卸载</string>
-    <string name="unit_desc_install">安装</string>
-    <string name="unit_manager_install_success">Play 商店处理中</string>
-    <string name="unit_manager_uninstall_success">将在设备空闲时卸载</string>
-    <string name="unit_manager_error_network">网络故障</string>
-    <string name="unit_manager_error_module_unavailable">模块不可用</string>
-    <string name="unit_manager_error_api_unavailable">API 不可用</string>
-    <string name="unit_desc_uninstall_notice">正在安排卸载</string>
-    <string name="unit_desc_install_notice">正在尝试安装</string>
     <string name="unit_desc_pin">固定</string>
     <string name="text_access_denied">访问被拒</string>
     <string name="versatile_device_controls_at_hint_on">滑动调整</string>
@@ -213,7 +202,6 @@
     <string name="im_image_select">选择图片</string>
     <string name="im_toast_finish">图片已保存至相册</string>
     <string name="unit_man_disabled">已禁用</string>
-    <string name="unit_man_dynamic_feature">动态功能</string>
     <string name="at_status_running">正在倒计时</string>
     <string name="at_action_start">开始倒计时</string>
     <string name="at_hint_dev_ctrl">快捷访问：添加倒计时到设备控制器</string>

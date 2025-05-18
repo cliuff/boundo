@@ -158,19 +158,8 @@
     <string name="unit_desc_im">• تعديل القرار• تعديل الشكل: png jpg webp heif• طمس الصورة</string>
     <string name="unit_desc_tw">• اجعل ورق الحائط الخاص بك يتوافق مع السمة المظلم لنظام Android 10 من خلال تطبيق ورق الحائط الداكن تلقائيًا</string>
     <string name="unit_desc_at">• إيقاف الصوت من اللعب</string>
-    <string name="unit_desc_installed">المثبتة</string>
-    <string name="unit_desc_not_installed">غير مثبت</string>
     <string name="unit_desc_available">متاح</string>
     <string name="unit_desc_unavailable">غير متوفره</string>
-    <string name="unit_desc_install">تثبيت</string>
-    <string name="unit_desc_uninstall">الغاء التثبيت</string>
-    <string name="unit_manager_install_success">متجر Play يقوم بمعالجة التثبيت</string>
-    <string name="unit_manager_uninstall_success">سوف يحدث إلغاء التثبيت عند الخمول</string>
-    <string name="unit_manager_error_network">خطأ في الشبكة</string>
-    <string name="unit_manager_error_module_unavailable">الوحدة غير متوفرة</string>
-    <string name="unit_manager_error_api_unavailable">API غير متوفر</string>
-    <string name="unit_desc_uninstall_notice">تأجيل إلغاء التثبيت</string>
-    <string name="unit_desc_install_notice">محاولة تثبيت</string>
     <string name="unit_desc_pin">ثابت</string>
     <string name="text_access_denied">تم الرفض</string>
     <string name="versatile_device_controls_at_hint_on">انتقد لضبط</string>
@@ -213,7 +202,6 @@
     <string name="im_image_select">اختر صورة</string>
     <string name="im_toast_finish">تم الحفظ في المعرض</string>
     <string name="unit_man_disabled">معاق</string>
-    <string name="unit_man_dynamic_feature">ميزة ديناميكية</string>
     <string name="about_twitter_account">&#8206;\@libekliff</string>
     <string name="at_status_running">الموقت قيد التشغيل</string>
     <string name="at_action_start">بدء الموقت</string>

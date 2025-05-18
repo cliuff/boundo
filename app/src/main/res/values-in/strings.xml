@@ -152,23 +152,12 @@
     <string name="title_api_viewing" translatable="false">App API</string>
     <string name="main_more">Lagi</string>
     <string name="unit_audio_timer">Pengatur Waktu Audio</string>
-    <string name="unit_desc_installed">Terpasang</string>
-    <string name="unit_desc_not_installed">Tidak terpasang</string>
     <string name="unit_desc_available">Tersedia</string>
     <string name="unit_desc_unavailable">Tidak tersedia</string>
-    <string name="unit_desc_install">Install</string>
-    <string name="unit_desc_uninstall">Copot pemasangan</string>
     <string name="unit_desc_av">• Periksa level API Android dari semua aplikasi dan apk di perangkat\n• Periksa dukungan Ikon Adaptif dari semua aplikasi\n• Statistik API Aplikasi\n• APK dan ekstraksi ikon\n• Detail paket dan detail tanda tangan</string>
     <string name="unit_desc_im">• Ubah resolusi\n• Ubah format: png jpg webp heif\n• Gambar buram</string>
     <string name="unit_desc_tw">• Jadikan wallpaper Anda sesuai dengan tema gelap Android 10 dengan menerapkan wallpaper berwarna gelap secara otomatis</string>
     <string name="unit_desc_at">• Hentikan audio agar tidak diputar</string>
-    <string name="unit_manager_install_success">Play Store sedang memproses pemasangan</string>
-    <string name="unit_manager_uninstall_success">Uninstall akan terjadi saat idle</string>
-    <string name="unit_manager_error_network">Kesalahan jaringan</string>
-    <string name="unit_manager_error_module_unavailable">Unit tidak tersedia</string>
-    <string name="unit_manager_error_api_unavailable">API tidak tersedia</string>
-    <string name="unit_desc_uninstall_notice">Menunda pencopotan</string>
-    <string name="unit_desc_install_notice">Mencoba untuk menginstal</string>
     <string name="unit_desc_pin">Pin</string>
     <string name="app_device_controls">Kontrol Batas</string>
     <string name="access_sys_usage">Izinkan Bondo mengakses data penggunaan</string>
@@ -211,7 +200,6 @@
     <string name="im_image_select">Pilih gambar</string>
     <string name="im_toast_finish">Disimpan di galeri</string>
     <string name="unit_man_disabled">Dengan disabilitas</string>
-    <string name="unit_man_dynamic_feature">Fitur dinamis</string>
     <string name="at_status_running">Timer sedang berjalan</string>
     <string name="at_action_start">Mulai pengatur waktu</string>
     <string name="at_hint_dev_ctrl">Akses cepat: tambahkan pengatur waktu ke kontrol perangkat</string>

@@ -152,23 +152,12 @@
     <string name="title_api_viewing" translatable="false">App API</string>
     <string name="main_more">Więcej</string>
     <string name="unit_audio_timer">Zegar audio</string>
-    <string name="unit_desc_installed">Zainstalowane</string>
-    <string name="unit_desc_not_installed">Nie zainstalowany</string>
     <string name="unit_desc_available">Do dyspozycji</string>
     <string name="unit_desc_unavailable">Niedostępne</string>
-    <string name="unit_desc_install">zainstalować</string>
-    <string name="unit_desc_uninstall">Odinstaluj</string>
     <string name="unit_desc_av">• Sprawdź poziom interfejsu API Androida wszystkich aplikacji i apków na urządzeniu\n• Sprawdź obsługę ikon Adaptive Icon we wszystkich aplikacjach\n• Statystyki interfejsu API aplikacji\n• Wyodrębnianie plików APK i ikon\n• Szczegóły pakietu i szczegóły podpisu</string>
     <string name="unit_desc_im">• Zmień rozdzielczość\n• Zmień format: png jpg webp heif\n• Rozmyj obraz</string>
     <string name="unit_desc_tw">• Dostosuj tapetę do ciemnego motywu Androida 10, automatycznie stosując ciemną tapetę</string>
     <string name="unit_desc_at">• Zatrzymaj odtwarzanie dźwięku</string>
-    <string name="unit_manager_install_success">Sklep Play przetwarza instalację</string>
-    <string name="unit_manager_uninstall_success">Odinstalowanie nastąpi w stanie bezczynności</string>
-    <string name="unit_manager_error_network">Błąd sieci</string>
-    <string name="unit_manager_error_module_unavailable">Jednostka niedostępna</string>
-    <string name="unit_manager_error_api_unavailable">Interfejs API niedostępny</string>
-    <string name="unit_desc_uninstall_notice">Odraczanie odinstalowania</string>
-    <string name="unit_desc_install_notice">Próbuję zainstalować</string>
     <string name="unit_desc_pin">Szpilka</string>
     <string name="app_device_controls">Kontrola Boundo</string>
     <string name="access_sys_usage">Zezwól Boundo na dostęp do danych użytkowania</string>
@@ -211,7 +200,6 @@
     <string name="im_image_select">Wybierz obraz</string>
     <string name="im_toast_finish">Zapisano w galerii</string>
     <string name="unit_man_disabled">Wyłączone</string>
-    <string name="unit_man_dynamic_feature">Funkcja dynamiczna</string>
     <string name="at_status_running">Minutnik działa</string>
     <string name="at_action_start">Uruchom minutnik</string>
     <string name="at_hint_dev_ctrl">Szybki dostęp: dodaj timer do elementów sterujących urządzenia</string>

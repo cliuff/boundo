@@ -152,23 +152,12 @@
     <string name="title_api_viewing" translatable="false">App API</string>
     <string name="main_more">আরও</string>
     <string name="unit_audio_timer">অডিও টাইমার</string>
-    <string name="unit_desc_installed">ইনস্টল করা হয়েছে</string>
-    <string name="unit_desc_not_installed">ইনস্টল করা না</string>
     <string name="unit_desc_available">পাওয়া যায়</string>
     <string name="unit_desc_unavailable">অনুপলব্ধ</string>
-    <string name="unit_desc_install">ইনস্টল করুন</string>
-    <string name="unit_desc_uninstall">আনইনস্টল করুন</string>
     <string name="unit_desc_av">• ডিভাইসে থাকা সমস্ত অ্যাপ এবং apks-এর Android API স্তর পরীক্ষা করুন\n• সমস্ত অ্যাপের অভিযোজিত আইকন সমর্থন পরীক্ষা করুন\n• অ্যাপ API পরিসংখ্যান\n• APK এবং আইকন নিষ্কাশন\n• প্যাকেজের বিবরণ এবং স্বাক্ষরের বিবরণ</string>
     <string name="unit_desc_im">• রেজোলিউশন পরিবর্তন করুন\n• বিন্যাস পরিবর্তন করুন: png jpg webp heif\n• অস্পষ্ট ছবি</string>
     <string name="unit_desc_tw">• স্বয়ংক্রিয়ভাবে একটি গাঢ় রঙের ওয়ালপেপার প্রয়োগ করে আপনার ওয়ালপেপারকে অ্যান্ড্রয়েড 10 গাঢ় থিমের সাথে সঙ্গতিপূর্ণ করুন</string>
     <string name="unit_desc_at">• অডিও বাজানো বন্ধ করুন</string>
-    <string name="unit_manager_install_success">প্লে স্টোর ইনস্টল প্রক্রিয়া করছে</string>
-    <string name="unit_manager_uninstall_success">নিষ্ক্রিয় হলে আনইনস্টল ঘটবে</string>
-    <string name="unit_manager_error_network">নেটওয়ার্ক ত্রুটি</string>
-    <string name="unit_manager_error_module_unavailable">ইউনিট অনুপলব্ধ</string>
-    <string name="unit_manager_error_api_unavailable">API অনুপলব্ধ৷</string>
-    <string name="unit_desc_uninstall_notice">আনইনস্টল বিলম্বিত</string>
-    <string name="unit_desc_install_notice">ইন্সটল করার চেষ্টা করছি</string>
     <string name="unit_desc_pin">পিন</string>
     <string name="app_device_controls">বাউন্ডো কন্ট্রোল</string>
     <string name="access_sys_usage">বাউন্ডোকে ব্যবহারের ডেটা অ্যাক্সেস করার অনুমতি দিন</string>
@@ -211,7 +200,6 @@
     <string name="im_image_select">ছবি নির্বাচন করুন</string>
     <string name="im_toast_finish">গ্যালারিতে সংরক্ষিত</string>
     <string name="unit_man_disabled">অক্ষম</string>
-    <string name="unit_man_dynamic_feature">গতিশীল বৈশিষ্ট্য</string>
     <string name="at_status_running">টাইমার চলছে</string>
     <string name="at_action_start">টাইমার শুরু করুন</string>
     <string name="at_hint_dev_ctrl">দ্রুত অ্যাক্সেস: ডিভাইস নিয়ন্ত্রণে টাইমার যোগ করুন</string>
