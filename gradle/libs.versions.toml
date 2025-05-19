@@ -71,6 +71,7 @@ haze = "1.5.4"
 libCheckerRules = "37.1"
 googleSmali = "3.0.8"
 ldapsdk = "6.0.11"
+aboutLibraries = "12.1.2"
 
 [libraries]
 androidxTestCore = { module = "androidx.test:core", version.ref = "androidxTestCore" }
@@ -166,6 +167,10 @@ libCheckerRules = { module = "com.github.LibChecker:LibChecker-Rules-Bundle", ve
 google-smali = { module = "com.android.tools.smali:smali-dexlib2", version.ref = "googleSmali" }
 # resolve distinguished names from X.509 cert
 ldapsdk = { module = "com.unboundid:unboundid-ldapsdk", version.ref = "ldapsdk" }
+# AboutLibraries core module (required for accessing library data)
+aboutlibraries-core = { module = "com.mikepenz:aboutlibraries-core", version.ref = "aboutLibraries" }
+aboutlibraries-compose-core = { module = "com.mikepenz:aboutlibraries-compose-core", version.ref = "aboutLibraries" }
+aboutlibraries-compose-m3 = { module = "com.mikepenz:aboutlibraries-compose-m3", version.ref = "aboutLibraries" }
 
 # wear
 androidxWear = { module = "androidx.wear:wear", version.ref = "androidxWear" }
@@ -181,6 +186,7 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 google-ksp = { id = "com.google.devtools.ksp", version.ref = "googleKsp" }
 google-gms-licenses = { id = "com.google.android.gms.oss-licenses-plugin", version.ref = "googlePlayServicesOSSLicensesPlugin" }
 room = { id = "androidx.room", version.ref = "androidxRoom" }
+aboutLibraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "aboutLibraries" }
 
 [bundles]
 dynamicFeatureBasics = [

@@ -9,6 +9,7 @@ plugins {
     // implement parcelable interface by using annotation
     id("kotlin-parcelize")
     alias(libs.plugins.google.gms.licenses)
+    alias(libs.plugins.aboutLibraries)
 }
 
 ksp {
@@ -219,6 +220,8 @@ dependencies {
         libs.androidDeviceNames,
         libs.appIconLoader,
         libs.smoothCornerCompose,
+        libs.aboutlibraries.core,
+        libs.aboutlibraries.compose.m3,
     ).forEach { implementation(it) }
 
     debugImplementation(libs.androidxComposeUiTooling)

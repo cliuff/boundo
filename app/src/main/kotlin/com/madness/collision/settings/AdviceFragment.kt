@@ -33,9 +33,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.edit
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.madness.collision.Democratic
 import com.madness.collision.R
+import com.madness.collision.chief.app.ActivityPageNavController
 import com.madness.collision.chief.app.ComposeFragment
 import com.madness.collision.chief.app.rememberColorScheme
 import com.madness.collision.util.CollisionDialog
@@ -62,11 +62,12 @@ internal class AdviceFragment : ComposeFragment(), Democratic {
 
     @Composable
     override fun ComposeContent() {
+        val navController = remember { ActivityPageNavController(requireActivity()) }
         val context = LocalContext.current
         val options = remember {
             listOf(
                 AboutOption(Icons.TwoTone.Code.icon, getString(R.string.advice_license), "", false) {
-                    startActivity(Intent(context, OssLicensesMenuActivity::class.java))
+                    navController.navigateTo(SettingsRouteId.OssLibraries.asRoute())
                 },
                 AboutOption(R.drawable.ic_github_24.icon, "Github", "cliuff/boundo", true) {
                     openUrl(context, P.LINK_SOURCE_CODE)

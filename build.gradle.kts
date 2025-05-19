@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.compose) apply false
     alias(libs.plugins.google.gms.licenses) apply false
     alias(libs.plugins.room) apply false
+    alias(libs.plugins.aboutLibraries) apply false
 }
 
 tasks{
