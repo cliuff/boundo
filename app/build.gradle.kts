@@ -8,7 +8,6 @@ plugins {
     alias(libs.plugins.google.ksp)
     // implement parcelable interface by using annotation
     id("kotlin-parcelize")
-    alias(libs.plugins.google.gms.licenses)
     alias(libs.plugins.aboutLibraries)
 }
 
@@ -207,7 +206,6 @@ dependencies {
         libs.androidxDocumentFile,
         libs.androidxHeifWriter,
         libs.googleMaterialComponents,
-        libs.googlePlayServicesOSSLicenses,
         libs.googleGson,
         libs.gglGuava,
         libs.kotlinStdlib,
