@@ -33,10 +33,19 @@ android {
         getByName("debug") {
             isJniDebuggable = false
             renderscriptOptimLevel = 3
+            proguardFile("proguard-rules.pro")
         }
         getByName("release") {
             isJniDebuggable = false
             renderscriptOptimLevel = 3
+            proguardFile("proguard-rules.pro")
+        }
+        // FOSS release
+        create("foss") {
+            // foss inherits from release build
+            initWith(getByName("release"))
+            // match the release build type for submodules
+            matchingFallbacks += "release"
         }
     }
 
@@ -57,7 +66,8 @@ dependencies {
     implementation(project(":mods:org"))
     implementation(platform(libs.androidxComposeBom))
     listOf(
-        fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))),
+        // commented out: manually include libs conditionally for build types
+        // fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))),
         project(":app"),
         libs.androidxDocumentFile,
         libs.androidxSwipeRefreshLayout,
@@ -76,6 +86,10 @@ dependencies {
         libs.ldapsdk,
     ).forEach { implementation(it) }
     implementation(libs.bundles.dynamicFeatureBasics)
+
+    // include Mipush SDK in pro builds (non-foss i.e. debug/release)
+    releaseImplementation(files("libs/MiPush_SDK_Client_6_0_1-C.jar"))
+    debugImplementation(files("libs/MiPush_SDK_Client_6_0_1-C.jar"))
 
     debugImplementation(libs.androidxComposeUiTooling)
 

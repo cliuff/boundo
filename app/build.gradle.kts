@@ -130,6 +130,13 @@ android {
             // override field with current time in release builds only
             buildConfigField("long", "BUILD_TIMESTAMP", System.currentTimeMillis().toString())
         }
+        // FOSS release
+        create("foss") {
+            // foss inherits from release build
+            initWith(getByName("release"))
+            // match the release build type for submodules
+            matchingFallbacks += "release"
+        }
     }
     compileOptions {
         // Flag to enable support for the new Java 8+ APIs

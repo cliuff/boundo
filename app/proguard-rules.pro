@@ -43,15 +43,6 @@
 #-keep class * extends com.madness.collision.unit.Unit
 -keep class * extends com.madness.collision.unit.Bridge { *; }
 
-# Xiaomi push detection
--keep class com.xiaomi.mipush.sdk.m {
- void d(...);
-}
-# keep the class and specified members from being renamed only
-# classes in the sdk are obfuscated already
-# those that are not are APIs and should be kept
--keepnames class com.xiaomi.** { *; }
-
 # Bottom sheet background color
 -keep class com.google.android.material.bottomsheet.BottomSheetBehavior {
  com.google.android.material.shape.MaterialShapeDrawable getMaterialShapeDrawable(...);
