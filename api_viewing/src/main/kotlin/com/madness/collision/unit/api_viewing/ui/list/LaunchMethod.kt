@@ -37,6 +37,9 @@ class LaunchMethod(
         operator fun invoke(bundle: Bundle?): LaunchMethod {
             val mode = when {
                 bundle == null -> LAUNCH_MODE_NORMAL
+                // only Intent.EXTRA_TEXT is provided, EXTRA_LAUNCH_MODE is not
+                bundle.containsKey(Intent.EXTRA_TEXT) -> LAUNCH_MODE_SEARCH
+                // args other than launch method are provided (e.g. content padding)
                 bundle.containsKey(EXTRA_LAUNCH_MODE).not() -> LAUNCH_MODE_NORMAL
                 // below: from share action
                 bundle.getInt(EXTRA_LAUNCH_MODE, 0) == LAUNCH_MODE_LINK -> LAUNCH_MODE_LINK

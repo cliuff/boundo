@@ -34,6 +34,8 @@ import com.madness.collision.util.F
 import com.madness.collision.util.ui.PackageInfo
 import com.opencsv.CSVWriter
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -116,6 +118,8 @@ class AppListViewModel : ViewModel() {
     private val mutEvents = MutableSharedFlow<AppListEvent>()
     val events: SharedFlow<AppListEvent> = mutEvents.asSharedFlow()
 
+    private var initJob: Job? = null
+
     init {
         val options = AppListOptions(emptyList(), AppListOrder.UpdateTime, AppApiMode.Target)
         multiSrcApps = MultiSrcApps(options.listOrder, options.apiMode)
@@ -136,6 +140,7 @@ class AppListViewModel : ViewModel() {
     }
 
     fun init(context: Context, lifecycleOwner: LifecycleOwner, sessionTimestamp: Long) {
+        if (initJob != null) return
         val appRepo = AppRepo.impl(context, PlatformAppProvider(context))
         val loader = object : AppListLoader {
             override val appRepo: AppRepository = appRepo
@@ -144,7 +149,7 @@ class AppListViewModel : ViewModel() {
         }
         srcLoader = AppListSrcLoader(loader, optionsOwner)
 
-        viewModelScope.launch(Dispatchers.Default) {
+        initJob = viewModelScope.launch(Dispatchers.Default) {
             // maintain records asynchronously
             val mtnJob = when {
                 appRepo.lastMaintenanceTime > 0 -> null
@@ -228,8 +233,14 @@ class AppListViewModel : ViewModel() {
         }
         viewModelScope.launch(Dispatchers.Default) {
             // try to wait for init to complete (otherwise abort) when called from LaunchMethod
-            if (!::srcLoader.isInitialized) withTimeout(200) {
-                while (!::srcLoader.isInitialized) delay(5)
+            try {
+                if (initJob == null) withTimeout(800) {
+                    while (initJob == null) delay(5)
+                }
+            } catch (e: TimeoutCancellationException) {
+                // print error and abort
+                e.printStackTrace()
+                throw e
             }
             optionsOwner.setListSrc(src, newSrcSet)
             if (src in srcSet) {

@@ -82,6 +82,8 @@ private val HomeNavContainerId: Int = View.generateViewId()
 class AppHomeNavFragment : Fragment(), AppHomeNav {
     companion object {
         const val ARG_NAV_PAGE = "AppHomeNavPage"
+        /** The [arguments][Bundle] that will be passed to the initial page. */
+        const val ARG_NAV_ARGUMENTS: String = "AppHomeNavArgs"
         const val ARG_CONTENT_PADDING: String = AppHomeNavPage.ARG_CONTENT_PADDING
     }
     private val navFgmClasses: Array<KClass<out Fragment>> =
@@ -127,11 +129,15 @@ class AppHomeNavFragment : Fragment(), AppHomeNav {
         }
         if (savedInstanceState == null) {
             val indexArg = arguments?.getInt(ARG_NAV_PAGE) ?: 0
-            setNavPage(indexArg.coerceIn(navFgmClasses.indices))
+            val initArgs = arguments?.getBundle(ARG_NAV_ARGUMENTS)
+            setNavPage(indexArg.coerceIn(navFgmClasses.indices), initArgs)
         }
     }
 
-    override fun setNavPage(index: Int) {
+    override fun setNavPage(index: Int) =
+        setNavPage(index, null)
+
+    private fun setNavPage(index: Int, arguments: Bundle?) {
         if (index == -1) {
             val lastFragment = childFragmentManager.fragments.lastOrNull { it.isHidden } ?: return
             val navIndex = navFgmClasses.indexOf(lastFragment::class)
@@ -173,7 +179,9 @@ class AppHomeNavFragment : Fragment(), AppHomeNav {
                 val paddingRect = (lastContentPadding ?: PaddingValues()).toRectF(direction)
                 // pass content padding as arg to newly created nav pages,
                 // only the initial page definitely needs this arg to avoid visual flicker.
-                val args = bundleOf(AppHomeNavPage.ARG_CONTENT_PADDING to paddingRect)
+                var args = bundleOf(AppHomeNavPage.ARG_CONTENT_PADDING to paddingRect)
+                // pass additional custom arguments for individual nav pages
+                args = Bundle(arguments ?: Bundle.EMPTY).apply { putAll(args) }
                 add(HomeNavContainerId, navFgmClasses[index].java, args, navFgmTags[index])
             }
             setReorderingAllowed(true)

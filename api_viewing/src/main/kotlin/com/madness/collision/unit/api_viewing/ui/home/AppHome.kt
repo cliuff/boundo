@@ -180,9 +180,10 @@ fun PaddingValues.toRectF(direction: LayoutDirection): RectF {
 }
 
 @Composable
-private fun HomeNavFragment(
+fun HomeNavFragment(
     selectedPageIndex: Int,
     modifier: Modifier = Modifier,
+    initArguments: Bundle = Bundle.EMPTY,
     fragmentState: FragmentState = rememberFragmentState(),
     contentPadding: PaddingValues = PaddingValues(0.dp),
     onUpdate: (AppHomeNavFragment) -> Unit,
@@ -195,6 +196,7 @@ private fun HomeNavFragment(
         arguments = remember {
             bundleOf(
                 AppHomeNavFragment.ARG_NAV_PAGE to selectedPageIndex,
+                AppHomeNavFragment.ARG_NAV_ARGUMENTS to initArguments,
                 AppHomeNavFragment.ARG_CONTENT_PADDING to paddingRect,
             )
         },
