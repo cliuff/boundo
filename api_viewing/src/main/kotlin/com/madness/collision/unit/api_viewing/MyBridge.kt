@@ -22,12 +22,14 @@ import android.content.pm.PackageInfo
 import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
+import android.os.Parcelable
 import androidx.core.content.edit
 import androidx.core.database.getFloatOrNull
 import androidx.core.database.getIntOrNull
 import androidx.core.database.getStringOrNull
 import androidx.fragment.app.Fragment
 import androidx.sqlite.db.SupportSQLiteQueryBuilder
+import com.madness.collision.chief.app.ComposePageRoute
 import com.madness.collision.chief.chiefContext
 import com.madness.collision.misc.MiscApp
 import com.madness.collision.unit.Bridge
@@ -38,6 +40,7 @@ import com.madness.collision.unit.api_viewing.database.AppRoom
 import com.madness.collision.unit.api_viewing.info.LibRules
 import com.madness.collision.unit.api_viewing.tag.app.AppTagInfo
 import com.madness.collision.unit.api_viewing.ui.home.AppHomeFragment
+import com.madness.collision.unit.api_viewing.ui.home.AppListRouteId
 import com.madness.collision.unit.api_viewing.util.ApkRetriever
 import com.madness.collision.unit.api_viewing.util.PrefUtil
 import com.madness.collision.util.P
@@ -162,5 +165,13 @@ class ApiViewingAccessorImpl : ApiViewingAccessor {
 
     override fun getHomeFragment(): Fragment {
         return AppHomeFragment()
+    }
+
+    override fun getAppListRoute(query: CharSequence?, pkgInfo: Parcelable?): ComposePageRoute {
+        return when {
+            pkgInfo != null -> AppListRouteId.ApkInfo(pkgInfo).asRoute()
+            query != null -> AppListRouteId.AppQuery(query).asRoute()
+            else -> AppListRouteId.AppQuery("").asRoute()
+        }
     }
 }

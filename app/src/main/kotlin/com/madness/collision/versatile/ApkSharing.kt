@@ -24,8 +24,7 @@ import android.os.Parcelable
 import androidx.lifecycle.lifecycleScope
 import com.madness.collision.R
 import com.madness.collision.base.BaseActivity
-import com.madness.collision.main.MainActivity
-import com.madness.collision.unit.Unit
+import com.madness.collision.chief.app.ComposePageActivityIntent
 import com.madness.collision.unit.api_viewing.AccessAV
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -40,7 +39,8 @@ internal class ApkSharing : BaseActivity() {
             val context = this@ApkSharing
             val apkFile = getFile(context) ?: return@launch
             if (apkFile !is Parcelable) return@launch
-            val intent = getIntent(context, apkFile)
+            val intent = ComposePageActivityIntent(AccessAV.getAppListRoute(pkgInfo = apkFile))
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             withContext(Dispatchers.Main) {
                 startActivity(intent)
                 finish()
@@ -54,16 +54,5 @@ internal class ApkSharing : BaseActivity() {
         // if make file copy of content uri, raw file uri cannot be accessed unless copied as well
         // so get package info directly, which is parcelable and more light-weight than AV app
         return AccessAV.resolveUri(context, res)
-    }
-
-    private fun getIntent(context: Context, file: Parcelable): Intent {
-        val args = Bundle().apply {
-            putInt(AccessAV.EXTRA_LAUNCH_MODE, AccessAV.LAUNCH_MODE_LINK)
-            putParcelable(AccessAV.EXTRA_DATA_STREAM, file)
-        }
-        return Intent(context, MainActivity::class.java).apply {
-            putExtras(MainActivity.forItem(Unit.UNIT_NAME_API_VIEWING, args))
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
     }
 }

@@ -22,47 +22,26 @@ import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.madness.collision.main.MainActivity
-import com.madness.collision.unit.Unit
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import com.madness.collision.chief.app.ComposePageActivityIntent
+import com.madness.collision.unit.api_viewing.AccessAV
 
 @RequiresApi(Build.VERSION_CODES.M)
 class TextProcessingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        var flagAction = false
-        var actionIntent: Intent? = null
-        GlobalScope.launch {
-            val extras = intent.extras
-            if (extras == null){
-                finish()
-                return@launch
-            }
-            val text = extras.getCharSequence(Intent.EXTRA_PROCESS_TEXT) ?: ""
-            val readOnly = extras.getBoolean(Intent.EXTRA_PROCESS_TEXT_READONLY, true)
-            if (text.isEmpty()) {
-                finish()
-                return@launch
-            }
-            if (!readOnly){
-                Intent().run {
-                    putExtra(Intent.EXTRA_PROCESS_TEXT, text)
-                    setResult(Activity.RESULT_OK, this)
-                }
-            }
-            val args = Bundle()
-            args.putString(Intent.EXTRA_TEXT, text.toString())
-            actionIntent = Intent(this@TextProcessingActivity, MainActivity::class.java).apply {
-                putExtras(MainActivity.forItem(Unit.UNIT_NAME_API_VIEWING, args))
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            }
-            flagAction = true
-        }.invokeOnCompletion {
-            if (!flagAction) return@invokeOnCompletion
-            startActivity(actionIntent)
-            finish()
+        val text = intent.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT)
+        val readOnly = intent.getBooleanExtra(Intent.EXTRA_PROCESS_TEXT_READONLY, true)
+        // set process result
+        if (text != null && !readOnly) {
+            val result = Intent().putExtra(Intent.EXTRA_PROCESS_TEXT, text)
+            setResult(Activity.RESULT_OK, result)
         }
+        if (!text.isNullOrEmpty()) {
+            val intent = ComposePageActivityIntent(AccessAV.getAppListRoute(query = text))
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            startActivity(intent)
+        }
+        finish()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

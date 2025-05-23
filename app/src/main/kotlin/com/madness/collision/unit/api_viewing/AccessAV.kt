@@ -19,7 +19,9 @@ package com.madness.collision.unit.api_viewing
 import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
+import android.os.Parcelable
 import androidx.fragment.app.Fragment
+import com.madness.collision.chief.app.ComposePageRoute
 import com.madness.collision.unit.Unit as ModUnit
 
 object AccessAV : ApiViewingAccessor by SafeApiViewingAccessor() {
@@ -42,6 +44,8 @@ internal class SafeApiViewingAccessor : ApiViewingAccessor {
     override fun getRoomInfo(context: Context): String = ax?.getRoomInfo(context).orEmpty()
     override fun nukeAppRoom(context: Context): Boolean = ax?.nukeAppRoom(context) ?: false
     override fun getHomeFragment(): Fragment = ax?.getHomeFragment() ?: error("NPE!")
+    override fun getAppListRoute(query: CharSequence?, pkgInfo: Parcelable?): ComposePageRoute =
+        ax?.getAppListRoute(query, pkgInfo) ?: error("NPE!")
 }
 
 interface ApiViewingAccessor {
@@ -55,4 +59,5 @@ interface ApiViewingAccessor {
     fun getRoomInfo(context: Context): String
     fun nukeAppRoom(context: Context): Boolean
     fun getHomeFragment(): Fragment
+    fun getAppListRoute(query: CharSequence? = null, pkgInfo: Parcelable? = null): ComposePageRoute
 }
