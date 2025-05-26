@@ -22,14 +22,25 @@ sealed interface UpdatedApp {
     class General(override val app: ApiViewingApp) : UpdatedApp
 
     class Upgrade(
+        app: ApiViewingApp,
+        versionName: Pair<String, String>,
+        versionCode: Pair<Long, Long>,
+        updateTime: Pair<Long, Long>,
+        val targetApi: Pair<Int, Int>,
+    ): VersionUpgrade(app, versionName, versionCode, updateTime) {
+        companion object {
+            fun get(previous: ApiViewingApp, new: ApiViewingApp) = getUpgrade(previous, new)
+        }
+    }
+
+    open class VersionUpgrade(
         override val app: ApiViewingApp,
         val versionName: Pair<String, String>,
         val versionCode: Pair<Long, Long>,
         val updateTime: Pair<Long, Long>,
-        val targetApi: Pair<Int, Int>,
     ) : UpdatedApp {
         companion object {
-            fun get(previous: ApiViewingApp, new: ApiViewingApp) = getUpgrade(previous, new)
+            fun get(previous: ApiViewingApp, new: ApiViewingApp) = getVersionUpgrade(previous, new)
         }
     }
 }
@@ -42,5 +53,15 @@ private fun getUpgrade(previous: ApiViewingApp, new: ApiViewingApp): UpdatedApp.
         versionCode = previous.verCode to new.verCode,
         updateTime = previous.updateTime to new.updateTime,
         targetApi = previous.targetAPI to new.targetAPI,
+    )
+}
+
+private fun getVersionUpgrade(previous: ApiViewingApp, new: ApiViewingApp): UpdatedApp.VersionUpgrade? {
+    if (previous.verCode == new.verCode) return null
+    return UpdatedApp.VersionUpgrade(
+        app = new,
+        versionName = previous.verName to new.verName,
+        versionCode = previous.verCode to new.verCode,
+        updateTime = previous.updateTime to new.updateTime,
     )
 }

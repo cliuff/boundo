@@ -18,6 +18,7 @@ package com.madness.collision.unit.api_viewing.ui.upd
 
 import android.content.Context
 import android.content.pm.PackageInfo
+import androidx.core.content.pm.PackageInfoCompat
 import com.madness.collision.unit.api_viewing.apps.AppRepo
 import com.madness.collision.unit.api_viewing.apps.toPkgApps
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
@@ -60,11 +61,18 @@ class AppUpdatesClassifier(
         }
         val upgradeList = async {
             val appSet = appList.associateBy(ApiViewingApp::packageName)
-            val comparator = compareBy<Upgrade> { it.updateTime.second }.reversed()
-            getUpgrades(changedPkgList, appSet, context, anApp).sortedWith(comparator)
+            val comparator = compareBy<UpdatedApp.VersionUpgrade> { it.updateTime.second }.reversed()
+            val apiUpgrades = getUpgrades(changedPkgList, appSet, context, anApp.clone() as ApiViewingApp)
+            val verUpgrades = getVerUpgrades(changedPkgList, appSet, context, anApp)
+            // exclude API upgrades from version upgrades
+            val dupPkgs = apiUpgrades.run { mapTo(HashSet(size)) { it.app.packageName } }
+            val distinctVerUpgrades = verUpgrades.filterNot { it.app.packageName in dupPkgs }
+            apiUpgrades.sortedWith(comparator) to distinctVerUpgrades.sortedWith(comparator)
         }
         cLists.await().forEach { (type, list) -> sections[type] = list }
-        sections[AppUpdatesIndex.UPG] = upgradeList.await()
+        val (apiUpgrades, verUpgrades) = upgradeList.await()
+        sections[AppUpdatesIndex.UPG] = apiUpgrades
+        sections[AppUpdatesIndex.VER] = verUpgrades
         sections
     }
 
@@ -99,6 +107,28 @@ class AppUpdatesClassifier(
             .associateBy(ApiViewingApp::packageName)
         val upgradesB = getPackages
             .mapNotNull { (prev, _) -> getApps[prev.packageName]?.let { Upgrade.get(prev, it) } }
+        return upgradesA + upgradesB
+    }
+
+    private suspend fun getVerUpgrades(
+        changedPkgList: List<PackageInfo>,
+        appSet: Map<String, ApiViewingApp>,
+        context: Context, anApp: ApiViewingApp
+    ): List<UpdatedApp.VersionUpgrade> {
+        // upgradePackages: upgrades that can be found in appList
+        // getPackages: upgrades that are missing, i.e. excluded from appList
+        val (upgradePackages, getPackages) = changedPkgList.asSequence()
+            .mapNotNull { p -> previousRecords[p.packageName]?.let { it to p } }
+            .partition { (_, p) -> appSet[p.packageName] != null }
+        val upgradesA = upgradePackages
+            .mapNotNull { (prev, p) -> UpdatedApp.VersionUpgrade.get(prev, appSet[p.packageName]!!) }
+        // get missing apps and missing upgrades
+        val getApps = getPackages
+            .mapNotNull { (prev, p) -> p.takeIf { prev.verCode != PackageInfoCompat.getLongVersionCode(p) } }
+            .toPkgApps(context, anApp)
+            .associateBy(ApiViewingApp::packageName)
+        val upgradesB = getPackages
+            .mapNotNull { (prev, _) -> getApps[prev.packageName]?.let { UpdatedApp.VersionUpgrade.get(prev, it) } }
         return upgradesA + upgradesB
     }
 }

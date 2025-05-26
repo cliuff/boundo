@@ -22,30 +22,56 @@ import com.madness.collision.unit.api_viewing.info.ExpTag
 import com.madness.collision.util.ui.PackageInfo
 import kotlinx.coroutines.flow.Flow
 
+/** Graphical UI Artifact for the UI layer. */
+@Immutable
+internal interface GuiArt {
+    val identity: Identity
+    val expTags: Flow<List<ExpTag>>
+    val onClick: () -> Unit
+
+    data class Identity(
+        /**
+         * The unique ID to identify among arts. The [packageName] becomes insufficient
+         * in cases where multiple versions or types of the same package co-exist.
+         */
+        val uid: String,
+        val packageName: String,
+        val label: String,
+        val iconPkgInfo: PackageInfo,
+    )
+}
+
+@Immutable
+internal data class GuiArtImpl(
+    override val identity: GuiArt.Identity,
+    override val expTags: Flow<List<ExpTag>>,
+    override val onClick: () -> Unit,
+) : GuiArt
+
 /** Update Graphical UI Artifact */
 @Immutable
 internal data class UpdGuiArt(
-    val packageName: String,
-    val label: String,
-    val iconPkgInfo: PackageInfo,
-    val updateTime: String,
+    val art: GuiArt,
     val apiInfo: VerInfo,
-    val expTags: Flow<List<ExpTag>>,
-    val onClick: () -> Unit,
-)
+    val updateTime: String,
+) : GuiArt by art
+
+@Immutable
+internal data class VerUpdGuiArt(
+    val art: GuiArt,
+    val apiInfo: VerInfo,
+    val oldVersion: AppInstallVersion,
+    val newVersion: AppInstallVersion,
+): GuiArt by art
 
 @Immutable
 internal data class ApiUpdGuiArt(
-    val packageName: String,
-    val label: String,
-    val iconPkgInfo: PackageInfo,
-    val expTags: Flow<List<ExpTag>>,
-    val onClick: () -> Unit,
+    val art: GuiArt,
     val oldApiInfo: VerInfo,
     val newApiInfo: VerInfo,
     val oldVersion: AppInstallVersion,
     val newVersion: AppInstallVersion,
-)
+): GuiArt by art
 
 @Immutable
 data class AppInstallVersion(val code: Long, val name: String?, val time: String)

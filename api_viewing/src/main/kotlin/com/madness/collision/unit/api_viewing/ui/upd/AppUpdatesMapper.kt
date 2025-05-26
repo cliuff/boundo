@@ -20,27 +20,38 @@ import android.content.Context
 import android.text.format.DateUtils
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.AppPackageInfo
+import com.madness.collision.unit.api_viewing.data.UpdatedApp
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.info.AppInfo
 import com.madness.collision.unit.api_viewing.ui.upd.item.ApiUpdGuiArt
 import com.madness.collision.unit.api_viewing.ui.upd.item.AppInstallVersion
+import com.madness.collision.unit.api_viewing.ui.upd.item.GuiArt
+import com.madness.collision.unit.api_viewing.ui.upd.item.GuiArtImpl
 import com.madness.collision.unit.api_viewing.ui.upd.item.UpdGuiArt
-import com.madness.collision.unit.api_viewing.upgrade.Upgrade
-import com.madness.collision.unit.api_viewing.upgrade.new
+import com.madness.collision.unit.api_viewing.ui.upd.item.VerUpdGuiArt
 
-internal fun Upgrade.toGuiArt(context: Context, onClick: () -> Unit): ApiUpdGuiArt {
+internal fun UpdatedApp.Upgrade.toGuiArt(context: Context, onClick: () -> Unit): ApiUpdGuiArt {
     val times = updateTime.toList().map { timestamp ->
         DateUtils.getRelativeTimeSpanString(
             timestamp, System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS).toString()
     }
     return ApiUpdGuiArt(
-        packageName = new.packageName,
-        label = new.name,
-        iconPkgInfo = AppPackageInfo(context, new),
-        expTags = AppInfo.getExpTags(new, context),
-        onClick = onClick,
+        art = app.toGuiArtImpl(context, onClick),
         oldApiInfo = VerInfo(targetApi.first),
         newApiInfo = VerInfo(targetApi.second),
+        oldVersion = AppInstallVersion(versionCode.first, versionName.first, times[0]),
+        newVersion = AppInstallVersion(versionCode.second, versionName.second, times[1]),
+    )
+}
+
+internal fun UpdatedApp.VersionUpgrade.toGuiArt(context: Context, onClick: () -> Unit): VerUpdGuiArt {
+    val times = updateTime.toList().map { timestamp ->
+        DateUtils.getRelativeTimeSpanString(
+            timestamp, System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS).toString()
+    }
+    return VerUpdGuiArt(
+        art = app.toGuiArtImpl(context, onClick),
+        apiInfo = VerInfo.targetDisplay(app),
         oldVersion = AppInstallVersion(versionCode.first, versionName.first, times[0]),
         newVersion = AppInstallVersion(versionCode.second, versionName.second, times[1]),
     )
@@ -51,18 +62,33 @@ internal fun ApiViewingApp.toGuiArt(context: Context, onClick: () -> Unit): UpdG
     val time = DateUtils.getRelativeTimeSpanString(
         updateTime, System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS).toString()
     return UpdGuiArt(
-        packageName = packageName,
-        label = name,
-        iconPkgInfo = AppPackageInfo(context, app),
+        art = app.toGuiArtImpl(context, onClick),
         updateTime = time,
         apiInfo = VerInfo.targetDisplay(app),
-        expTags = AppInfo.getExpTags(app, context),
-        onClick = onClick,
     )
 }
 
+internal fun ApiViewingApp.toGuiArtImpl(context: Context, onClick: () -> Unit) =
+    GuiArtImpl(
+        identity = GuiArtIdentity(this, context),
+        expTags = AppInfo.getExpTags(this, context),
+        onClick = onClick,
+    )
+
+@Suppress("FunctionName")
+internal fun GuiArtIdentity(app: ApiViewingApp, context: Context) =
+    GuiArt.Identity(
+        uid = app.appPackage.basePath,
+        packageName = app.packageName,
+        label = app.name,
+        iconPkgInfo = AppPackageInfo(context, app),
+    )
+
 internal fun ApiUpdGuiArt.withUpdatedTags(app: ApiViewingApp, context: Context) =
-    copy(expTags = AppInfo.getExpTags(app, context))
+    copy(art = GuiArtImpl(identity, AppInfo.getExpTags(app, context), onClick))
+
+internal fun VerUpdGuiArt.withUpdatedTags(app: ApiViewingApp, context: Context) =
+    copy(art = GuiArtImpl(identity, AppInfo.getExpTags(app, context), onClick))
 
 internal fun UpdGuiArt.withUpdatedTags(app: ApiViewingApp, context: Context) =
-    copy(expTags = AppInfo.getExpTags(app, context))
+    copy(art = GuiArtImpl(identity, AppInfo.getExpTags(app, context), onClick))
