@@ -77,7 +77,9 @@ import com.madness.collision.unit.api_viewing.ui.comp.sealFileOf
 import com.madness.collision.unit.api_viewing.ui.upd.item.ApiUpdGuiArt
 import com.madness.collision.unit.api_viewing.ui.upd.item.AppApiUpdate
 import com.madness.collision.unit.api_viewing.ui.upd.item.AppInstallVersion
+import com.madness.collision.unit.api_viewing.ui.upd.item.AppVerUpdate
 import com.madness.collision.unit.api_viewing.ui.upd.item.UpdGuiArt
+import com.madness.collision.unit.api_viewing.ui.upd.item.VerUpdGuiArt
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
 import com.madness.collision.util.mainApplication
 import com.madness.collision.util.ui.CompactPackageInfo
@@ -102,11 +104,11 @@ internal fun AppItem(art: UpdGuiArt, modifier: Modifier = Modifier) {
     }
     AppItem(
         modifier = modifier,
-        name = art.label,
+        name = art.identity.label,
         time = art.updateTime,
         apiText = art.apiInfo.displaySdk,
         sealLetter = art.apiInfo.letterOrDev,
-        iconInfo = art.iconPkgInfo,
+        iconInfo = art.identity.iconPkgInfo,
         tagGroup = tagGroup.collectAsStateWithLifecycle(EmptyTagGroup).value,
         cardColor = Color(backColor),
         apiColor = Color(accentColor),
@@ -128,12 +130,36 @@ internal fun AppUpdateItem(art: ApiUpdGuiArt, modifier: Modifier = Modifier) {
     }
     AppUpdateItem(
         modifier = modifier,
-        name = art.label,
-        iconInfo = art.iconPkgInfo,
+        name = art.identity.label,
+        iconInfo = art.identity.iconPkgInfo,
         tagGroup = tagGroup.collectAsStateWithLifecycle(EmptyTagGroup).value,
         cardColor = Color(backColor),
         newApi = art.newApiInfo,
         oldApi = art.oldApiInfo,
+        newVer = art.newVersion,
+        oldVer = art.oldVersion,
+        onClick = art.onClick,
+    )
+}
+
+@Composable
+internal fun VerUpdateItem(art: VerUpdGuiArt, modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+    val tagGroup = remember(art) {
+        art.expTags.map { tags ->
+            val (ic, tx) = tags.partition { t -> t.icon !is ExpIcon.Text }
+            AppTagGroup(ic, tx)
+        }
+    }
+    val backColor = remember(art) {
+        SealMaker.getItemColorBack(context, art.apiInfo.api)
+    }
+    VerUpdateItem(
+        modifier = modifier,
+        name = art.identity.label,
+        iconInfo = art.identity.iconPkgInfo,
+        tagGroup = tagGroup.collectAsStateWithLifecycle(EmptyTagGroup).value,
+        cardColor = Color(backColor),
         newVer = art.newVersion,
         oldVer = art.oldVersion,
         onClick = art.onClick,
@@ -301,8 +327,59 @@ internal fun AppUpdateItem(
         border = BorderStroke(0.5.dp, cardBorderColor),
     ) {
         Column(modifier = Modifier.padding(horizontal = 4.dp, vertical = 4.dp)) {
+            AppUpdateHeader(name = name, iconInfo = iconInfo, tagGroup = tagGroup, cardColor = cardColor)
+            Box(modifier = Modifier.padding(horizontal = 8.dp, vertical = 12.dp)) {
+                AppApiUpdate(newApi = newApi, oldApi = oldApi, newVer = newVer, oldVer = oldVer)
+            }
+        }
+    }
+}
+
+@Composable
+internal fun VerUpdateItem(
+    modifier: Modifier = Modifier,
+    name: String,
+    iconInfo: PackageInfo,
+    tagGroup: AppTagGroup,
+    cardColor: Color,
+    newVer: AppInstallVersion,
+    oldVer: AppInstallVersion,
+    onClick: () -> Unit,
+) {
+    val containerColor = when (LocalInspectionMode.current) {
+        true -> if (isSystemInDarkTheme()) Color(0xFF101010) else Color.White
+        false -> if (mainApplication.isDarkTheme) Color(0xFF101010) else Color.White
+    }
+    val cardBorderColor = when (LocalInspectionMode.current) {
+        true -> if (isSystemInDarkTheme()) Color(0xFF191919) else Color(0xFFF0F0F0)
+        false -> if (mainApplication.isDarkTheme) Color(0xFF191919) else Color(0xFFF0F0F0)
+    }
+    Card(
+        modifier = modifier,
+        onClick = onClick,
+        shape = AbsoluteSmoothCornerShape(18.dp, 80),
+        colors = CardDefaults.elevatedCardColors(containerColor = containerColor),
+        border = BorderStroke(0.5.dp, cardBorderColor),
+    ) {
+        Column(modifier = Modifier.padding(horizontal = 4.dp, vertical = 4.dp)) {
+            AppUpdateHeader(name = name, iconInfo = iconInfo, tagGroup = tagGroup, cardColor = cardColor)
+            Box(modifier = Modifier.padding(horizontal = 8.dp, vertical = 12.dp)) {
+                AppVerUpdate(newVer = newVer, oldVer = oldVer)
+            }
+        }
+    }
+}
+
+@Composable
+private fun AppUpdateHeader(
+    name: String,
+    iconInfo: PackageInfo,
+    tagGroup: AppTagGroup,
+    cardColor: Color,
+    modifier: Modifier = Modifier,
+) {
             Row(
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .clip(AbsoluteSmoothCornerShape(
                         16.dp, 60, 16.dp, 60,
@@ -330,11 +407,6 @@ internal fun AppUpdateItem(
                     }
                 }
             }
-            Column(modifier = Modifier.padding(horizontal = 8.dp, vertical = 12.dp)) {
-                AppApiUpdate(newApi = newApi, oldApi = oldApi, newVer = newVer, oldVer = oldVer)
-            }
-        }
-    }
 }
 
 @Composable

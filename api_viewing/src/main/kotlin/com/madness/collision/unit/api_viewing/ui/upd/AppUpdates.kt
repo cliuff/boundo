@@ -92,6 +92,7 @@ import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.UpdatedApp
 import com.madness.collision.unit.api_viewing.ui.upd.item.ApiUpdGuiArt
 import com.madness.collision.unit.api_viewing.ui.upd.item.UpdGuiArt
+import com.madness.collision.unit.api_viewing.ui.upd.item.VerUpdGuiArt
 import com.madness.collision.unit.api_viewing.upgrade.Upgrade
 import com.madness.collision.unit.api_viewing.upgrade.new
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
@@ -435,6 +436,27 @@ private inline fun <T : UpdatedApp> sectionItems(
                     updatedArt.also { lastArt = it }
                 }
                 AppUpdateItem(
+                    modifier = modifier.padding(horizontal = 5.dp, vertical = 5.dp),
+                    art = art,
+                )
+            }
+        }
+    } else if (secIndex == AppUpdatesIndex.VER) {
+        items(secList, { upd -> (upd as UpdatedApp.VersionUpgrade).app.packageName + secIndex.ordinal }
+        ) { upd, modifier ->
+            if (upd is UpdatedApp.VersionUpgrade) {
+                val context = LocalContext.current
+                val itemPrefs = LocalAppItemPrefs.current
+                var lastArt: VerUpdGuiArt? by remember { mutableStateOf(null) }
+                val art = remember(upd, itemPrefs) {
+                    val art = lastArt
+                    val updatedArt = when {
+                        itemPrefs > 0 && art != null -> art.withUpdatedTags(upd.app, context)
+                        else -> upd.toGuiArt(context) { onClickApp(upd.app) }
+                    }
+                    updatedArt.also { lastArt = it }
+                }
+                VerUpdateItem(
                     modifier = modifier.padding(horizontal = 5.dp, vertical = 5.dp),
                     art = art,
                 )

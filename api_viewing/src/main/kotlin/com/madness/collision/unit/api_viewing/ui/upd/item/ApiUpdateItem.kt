@@ -100,6 +100,38 @@ internal fun AppApiUpdate(
 }
 
 @Composable
+internal fun AppVerUpdate(
+    newVer: AppInstallVersion,
+    oldVer: AppInstallVersion,
+) {
+    Row(
+        modifier = Modifier.widthIn(max = 320.dp).fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.Top,
+    ) {
+        Column(
+            // weight(1f) for equal widths
+            modifier = Modifier.weight(1f).padding(horizontal = 8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            AppInstallationColumn(verCode = oldVer.code, verName = oldVer.name, time = oldVer.time)
+        }
+        Icon(
+            modifier = Modifier.padding(bottom = 12.dp).size(24.dp).align(Alignment.CenterVertically),
+            imageVector = Icons.Outlined.KeyboardDoubleArrowRight,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.75f),
+        )
+        Column(
+            modifier = Modifier.weight(1f).padding(horizontal = 8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            AppInstallationColumn(verCode = newVer.code, verName = newVer.name, time = newVer.time)
+        }
+    }
+}
+
+@Composable
 private fun AppInstallationColumn(verCode: Long, verName: String?, time: String) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         val verNo = verCode.toString()
@@ -241,6 +273,11 @@ private fun ApiUpdatePreview() {
                     oldApi = VerInfo(34),
                     newVer = AppInstallVersion(102345681L, "15", "Sep 17, 2024"),
                     oldVer = AppInstallVersion(102345671L, "2024-06-01 S+", "Mar 11, 2024"),
+                )
+                Spacer(modifier = Modifier.height(30.dp))
+                AppVerUpdate(
+                    newVer = AppInstallVersion(102345681L, "2024-09-02", "Sep 17, 2024"),
+                    oldVer = AppInstallVersion(102345671L, "2024-06-01", "Mar 11, 2024"),
                 )
             }
         }
