@@ -16,6 +16,7 @@
 
 package com.madness.collision.unit.api_viewing.ui.list
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateIntOffsetAsState
 import androidx.compose.animation.core.tween
@@ -40,11 +41,13 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Android
+import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material.icons.outlined.PieChart
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.twotone.Android
 import androidx.compose.material.icons.twotone.PieChart
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -62,8 +65,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -168,7 +174,17 @@ fun AppListHeader(
         }
 
         var query by remember { mutableStateOf("") }
+        val keyboardController = LocalSoftwareKeyboardController.current
+        val focusManager = LocalFocusManager.current
         Spacer(modifier = Modifier.height(8.dp))
+        // clear the query when navigating back
+        // fixme this gets overridden by fragment back stack, results in a wrong back order
+        BackHandler(enabled = query.isNotEmpty()) {
+            query = ""
+            onQueryChange("")
+            // the keyboard has collapsed before user can go back, we only clear the focus
+            focusManager.clearFocus()
+        }
         Surface(shape = CircleShape, color = MaterialTheme.colorScheme.surface) {
             TextField(
                 modifier = Modifier.fillMaxWidth(),
@@ -193,9 +209,25 @@ fun AppListHeader(
                         tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                     )
                 },
+                trailingIcon = {
+                    if (query.isNotEmpty()) {
+                        // the user might be typing after clearing the query,
+                        // leave the focus and keyboard as they are
+                        IconButton(onClick = { query = ""; onQueryChange("") }) {
+                            Icon(
+                                imageVector = Icons.Outlined.Cancel,
+                                contentDescription = null,
+                            )
+                        }
+                    }
+                },
                 singleLine = true,
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                keyboardActions = KeyboardActions(onSearch = {}),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text, imeAction = ImeAction.Search),
+                keyboardActions = KeyboardActions(onSearch = {
+                    focusManager.clearFocus()
+                    keyboardController?.hide()
+                }),
                 colors = TextFieldDefaults.colors(
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,

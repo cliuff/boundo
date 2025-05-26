@@ -38,7 +38,7 @@ fun scaffoldWindowInsets(
     shareSideCutout: Dp = Dp.Unspecified,
 ): List<WindowInsets> {
     // share waterfall insets with content padding
-    val pageInsets = WindowInsets.systemBars.union(WindowInsets.ime)
+    val pageInsets = WindowInsets.systemBars
         .union(WindowInsets.waterfall.runIf({ shareWaterfall.value > 0f }) {
             share(WindowInsets(left = shareWaterfall, right = shareWaterfall))
         })
@@ -65,6 +65,9 @@ fun scaffoldWindowInsets(
         .union(remainingCutoutInsets)
         .union(bottomBarCornerCutoutInsets)
     val contentInsets = pageInsets
+        // apply IME insets to content only,
+        // so bottom bar does not appear on top of the IME
+        .union(WindowInsets.ime)
         .union(remainingCutoutInsets.runIf({ shareCutout.value > 0f }) {
             share(WindowInsets(left = shareCutout, right = shareCutout))
         })
