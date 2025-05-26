@@ -26,7 +26,6 @@ import com.madness.collision.unit.api_viewing.data.UpdatedApp
 import com.madness.collision.unit.api_viewing.ui.list.AppApiMode
 import com.madness.collision.unit.api_viewing.ui.list.AppListOrder
 import com.madness.collision.unit.api_viewing.ui.list.getComparator
-import com.madness.collision.unit.api_viewing.upgrade.Upgrade
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -92,21 +91,21 @@ class AppUpdatesClassifier(
         changedPkgList: List<PackageInfo>,
         appSet: Map<String, ApiViewingApp>,
         context: Context, anApp: ApiViewingApp
-    ): List<Upgrade> {
+    ): List<UpdatedApp.Upgrade> {
         // upgradePackages: upgrades that can be found in appList
         // getPackages: upgrades that are missing, i.e. excluded from appList
         val (upgradePackages, getPackages) = changedPkgList.asSequence()
             .mapNotNull { p -> previousRecords[p.packageName]?.let { it to p } }
             .partition { (_, p) -> appSet[p.packageName] != null }
         val upgradesA = upgradePackages
-            .mapNotNull { (prev, p) -> Upgrade.get(prev, appSet[p.packageName]!!) }
+            .mapNotNull { (prev, p) -> UpdatedApp.Upgrade.get(prev, appSet[p.packageName]!!) }
         // get missing apps and missing upgrades
         val getApps = getPackages
             .mapNotNull { (prev, p) -> p.takeIf { prev.targetAPI != p.applicationInfo?.targetSdkVersion } }
             .toPkgApps(context, anApp)
             .associateBy(ApiViewingApp::packageName)
         val upgradesB = getPackages
-            .mapNotNull { (prev, _) -> getApps[prev.packageName]?.let { Upgrade.get(prev, it) } }
+            .mapNotNull { (prev, _) -> getApps[prev.packageName]?.let { UpdatedApp.Upgrade.get(prev, it) } }
         return upgradesA + upgradesB
     }
 

@@ -34,12 +34,9 @@ fun Modifier.autoMirrored(): Modifier = composed {
 }
 
 @Composable
-inline fun <T> T.orWithRtl(rtl: () -> T) = layoutDirected({ this }, rtl)
-
-@Composable
-inline fun <T> layoutDirected(ltr: () -> T, rtl: () -> T) =
+inline fun <T> T.orWithRtl(rtl: () -> T) =
     when (LocalLayoutDirection.current) {
-        LayoutDirection.Ltr -> ltr()
+        LayoutDirection.Ltr -> this
         LayoutDirection.Rtl -> rtl()
     }
 

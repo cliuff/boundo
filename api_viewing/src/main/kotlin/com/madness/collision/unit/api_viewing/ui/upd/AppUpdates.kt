@@ -93,8 +93,6 @@ import com.madness.collision.unit.api_viewing.data.UpdatedApp
 import com.madness.collision.unit.api_viewing.ui.upd.item.ApiUpdGuiArt
 import com.madness.collision.unit.api_viewing.ui.upd.item.UpdGuiArt
 import com.madness.collision.unit.api_viewing.ui.upd.item.VerUpdGuiArt
-import com.madness.collision.unit.api_viewing.upgrade.Upgrade
-import com.madness.collision.unit.api_viewing.upgrade.new
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
 import com.madness.collision.util.mainApplication
 
@@ -421,17 +419,17 @@ private inline fun <T : UpdatedApp> sectionItems(
     items: (items: List<T>, key: (T) -> Any, itemContent: @Composable (T, Modifier) -> Unit) -> Unit,
 ) {
     if (secIndex == AppUpdatesIndex.UPG) {
-        items(secList, { upd -> (upd as Upgrade).new.packageName + secIndex.ordinal }
+        items(secList, { upd -> (upd as UpdatedApp.Upgrade).app.packageName + secIndex.ordinal }
         ) { upd, modifier ->
-            if (upd is Upgrade) {
+            if (upd is UpdatedApp.Upgrade) {
                 val context = LocalContext.current
                 val itemPrefs = LocalAppItemPrefs.current
                 var lastArt: ApiUpdGuiArt? by remember { mutableStateOf(null) }
                 val art = remember(upd, itemPrefs) {
                     val art = lastArt
                     val updatedArt = when {
-                        itemPrefs > 0 && art != null -> art.withUpdatedTags(upd.new, context)
-                        else -> upd.toGuiArt(context) { onClickApp(upd.new) }
+                        itemPrefs > 0 && art != null -> art.withUpdatedTags(upd.app, context)
+                        else -> upd.toGuiArt(context) { onClickApp(upd.app) }
                     }
                     updatedArt.also { lastArt = it }
                 }

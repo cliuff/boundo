@@ -51,6 +51,7 @@ import com.madness.collision.chief.app.BoundoTheme
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.ui.info.AppSdkItem
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
+import com.madness.collision.util.ui.autoMirrored
 
 @Composable
 internal fun AppApiUpdate(
@@ -79,7 +80,8 @@ internal fun AppApiUpdate(
             AppInstallationColumn(verCode = oldVer.code, verName = oldVer.name, time = oldVer.time)
         }
         Icon(
-            modifier = Modifier.padding(bottom = 12.dp).size(24.dp).align(Alignment.CenterVertically),
+            modifier = Modifier.padding(bottom = 12.dp).size(24.dp)
+                .align(Alignment.CenterVertically).autoMirrored(),
             imageVector = Icons.Outlined.KeyboardDoubleArrowRight,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.75f),
@@ -117,7 +119,8 @@ internal fun AppVerUpdate(
             AppInstallationColumn(verCode = oldVer.code, verName = oldVer.name, time = oldVer.time)
         }
         Icon(
-            modifier = Modifier.padding(bottom = 12.dp).size(24.dp).align(Alignment.CenterVertically),
+            modifier = Modifier.padding(bottom = 12.dp).size(24.dp)
+                .align(Alignment.CenterVertically).autoMirrored(),
             imageVector = Icons.Outlined.KeyboardDoubleArrowRight,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.75f),
