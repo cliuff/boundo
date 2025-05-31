@@ -1,8 +1,8 @@
 [versions]
 # plugins
 androidGradlePlugin = "8.9.2"  # 8.9-Meerkat
-kotlin = "2.1.20"
-googleKsp = "2.1.20-1.0.32"
+kotlin = "2.1.21"
+googleKsp = "2.1.21-2.0.1"
 
 kotlinCoroutines = "1.10.2"
 
@@ -11,18 +11,18 @@ androidxTestRunner = "1.6.2"
 androidxTestExtJunit = "1.2.1"
 androidxTestEspresso = "3.6.1"
 
-androidxCore = "1.15.0"
+androidxCore = "1.16.0"
 androidxCoreSplashScreen = "1.1.0-rc01"
-androidxComposeBom = "2025.04.01"
+androidxComposeBom = "2025.05.01"
 androidxActivity = "1.10.1"
-androidxFragment = "1.8.6"
-androidxLifecycle = "2.8.7"
+androidxFragment = "1.8.7"
+androidxLifecycle = "2.9.0"
 
 androidxAppcompat = "1.7.0"
 androidxRoom = "2.7.1"
-androidxNavigation = "2.8.9"
+androidxNavigation = "2.9.0"
 androidxCoreTesting = "2.2.0"
-androidxWindow = "1.3.0"
+androidxWindow = "1.4.0"
 
 androidxDrawerLayout = "1.2.0"
 androidxSwipeRefreshLayout = "1.1.0"
@@ -36,7 +36,7 @@ androidxViewPager = "1.0.0"
 androidxPaging = "3.1.1"
 androidxPreference = "1.2.1"
 androidxWork = "2.8.1"
-androidxDocumentFile = "1.0.1"
+androidxDocumentFile = "1.1.0"
 
 # This dependency is for the Wear UI Library,
 # which has classes that exemplify best practices
@@ -59,14 +59,15 @@ rxJava = "3.1.8"
 jbAnnotations = "24.0.0"
 androidDeviceNames = "2.1.1"
 byteBuddy = "1.12.22"
-androidDesugaring = "2.1.3"
+androidDesugaring = "2.1.5"
 mockito = "5.1.1"
 appIconLoader = "1.5.0"
 # Superellipse shape for Compose
 smoothCornerCompose = "v1.0.0"
+# fixme upgrade from 1.5.4 to 1.6.2
 haze = "1.5.4"
 libCheckerRules = "37.1"
-googleSmali = "3.0.8"
+googleSmali = "3.0.9"
 ldapsdk = "6.0.11"
 aboutLibraries = "12.1.2"
 
