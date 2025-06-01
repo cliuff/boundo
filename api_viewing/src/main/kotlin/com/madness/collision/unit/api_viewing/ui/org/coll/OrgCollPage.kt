@@ -141,7 +141,8 @@ fun OrgCollPage(contentPadding: PaddingValues = PaddingValues()) {
                     val route = OrgRouteId.GroupInfo(coll.groups[i], coll.id, id)
                     navController.navigateTo(route.asRoute())
                 },
-                getPkgsForGroup = { pkgs -> pkgs.mapNotNull(viewModel::getPkg) },
+                // keep null values (uninstalled) to show in grid cells
+                getPkgsForGroup = { pkgs -> pkgs.map(viewModel::getPkg) },
                 installedAppsSummary = installedPkgsSummary?.let { (a, b) -> "$a/$b" } ?: "N/A",
                 contentPadding = innerPadding,
             )

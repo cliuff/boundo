@@ -225,6 +225,7 @@ dependencies {
         libs.androidDeviceNames,
         libs.appIconLoader,
         libs.smoothCornerCompose,
+        libs.haze,
         libs.aboutlibraries.core,
         libs.aboutlibraries.compose.m3,
     ).forEach { implementation(it) }

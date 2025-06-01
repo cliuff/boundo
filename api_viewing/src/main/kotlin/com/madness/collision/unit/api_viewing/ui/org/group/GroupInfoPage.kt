@@ -113,6 +113,8 @@ fun GroupInfoPage(
         },
         onActionDelete = viewModel::remove,
     ) { innerPadding ->
+        // do not show apps when still loading
+        if (!isLoading)
         GroupContent(
             modifier = Modifier.fillMaxWidth(),
             groupName = groupName,
@@ -200,7 +202,8 @@ private fun GroupContent(
         }
     }
     val uninstalledPkgs = remember(selectedPkgs, selectedApps) {
-        if (installedApps.isEmpty() || selectedApps.size >= selectedPkgs.size) return@remember emptyList()
+        // Installed app list may be empty if all selected apps are uninstalled.
+        if (selectedApps.size >= selectedPkgs.size) return@remember emptyList()
         val un = selectedPkgs - selectedApps.mapTo(HashSet(selectedApps.size)) { it.packageName }
         un.toList()
     }
