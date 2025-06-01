@@ -63,8 +63,8 @@ android {
         minSdk = 23
         targetSdk = 36
         // versionCode = baseVerCode + (verInc % baseCommitInc)
-        versionCode = 25050100 + (verInc % 540)
-        versionName = listOfNotNull("5.0.0", verCommit).joinToString(separator = "-")
+        versionCode = 25060200 + (verInc % 540)
+        versionName = listOfNotNull("5.0.1", verCommit).joinToString(separator = "-")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testApplicationId = "${applicationId}.test"
         renderscriptSupportModeEnabled = true
