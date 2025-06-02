@@ -136,6 +136,8 @@ android {
             initWith(getByName("release"))
             // match the release build type for submodules
             matchingFallbacks += "release"
+            // override field from inherited release config with zero for reproducible builds
+            buildConfigField("long", "BUILD_TIMESTAMP", "0")
         }
     }
     compileOptions {
@@ -242,6 +244,12 @@ tasks.register("genUniversalApks") {
     dependsOn("buildUniversalApks", "printBundleToolVersion")
 }
 
+// Generate universal APK from AAB that includes necessary dynamic modules (dist:module in manifests).
+tasks.register("genFossApks") {
+    tasks["printBundleToolVersion"].mustRunAfter("buildFossApks")
+    dependsOn("buildFossApks", "printBundleToolVersion")
+}
+
 tasks.register<JavaExec>("printBundleToolVersion") {
     val bundleTool = rootProject.file("doconfig/bundletool.jar")
     classpath = files(bundleTool)
@@ -280,4 +288,36 @@ tasks.register<JavaExec>("buildUniversalApks") {
     }
 
     dependsOn("bundleRelease")
+}
+
+tasks.register<JavaExec>("buildFossApks") {
+    val bundleTool = rootProject.file("doconfig/bundletool.jar")
+    classpath = files(bundleTool)
+    mainClass.set("com.android.tools.build.bundletool.BundleToolMain")
+    val customConfig = getCustomConfig(project)
+    if (customConfig.signing != null) {
+        customConfig.signing?.run {
+            args(
+                "build-apks",
+                "--bundle", file("build/outputs/bundle/foss/app-foss.aab").absolutePath,
+                "--output", file("build/outputs/app-universal-foss.apks").absolutePath,
+                "--ks", rootProject.file(store.path).absolutePath,
+                "--ks-pass=pass:${store.password}",
+                "--ks-key-alias", key.alias,
+                "--key-pass=pass:${key.password}",
+                "--overwrite",
+                "--mode=universal",
+            )
+        }
+    } else {
+        args(
+            "build-apks",
+            "--bundle", file("build/outputs/bundle/foss/app-foss.aab").absolutePath,
+            "--output", file("build/outputs/app-universal-foss.apks").absolutePath,
+            "--overwrite",
+            "--mode=universal",
+        )
+    }
+
+    dependsOn("bundleFoss")
 }

@@ -54,15 +54,15 @@ jobs:
         uses: actions/cache@v4
         with:
           path: doconfig/bundletool.jar
-          key: ${{ runner.os }}-bundletool-v1.18.0
+          key: ${{ runner.os }}-bundletool-v1.18.1
 
       - name: Setup BundleTool
         if: steps.bundletool-cache.outputs.cache-hit != 'true'
         uses: dsaltares/fetch-gh-release-asset@master
         with:
           repo: 'google/bundletool'
-          version: 'tags/1.18.0'
-          file: 'bundletool-all-1.18.0.jar'
+          version: 'tags/1.18.1'
+          file: 'bundletool-all-1.18.1.jar'
           target: 'doconfig/bundletool.jar'
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -93,8 +93,19 @@ jobs:
         run: ./gradlew dependencies
 
       # Build the app
+      - name: Build the FOSS app
+        run: ./gradlew :app:genFossApks -Pver.inc=true
+
+      # Build the app
       - name: Build the app
         run: ./gradlew :app:genUniversalApks -Pver.inc=true
+
+      # If you want to upload the APK as an artifact
+      - name: Upload FOSS APK as an artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-foss-apks-g${{ env.COMMIT_COUNT }}-${{ env.COMMIT_HASH }}
+          path: app/build/outputs/app-universal-foss.apks
 
       # If you want to upload the APK as an artifact
       - name: Upload APK as an artifact

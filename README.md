@@ -27,9 +27,11 @@ Designed for Android enthusiasts, Meta-app is available on **Android** and **Wea
 - Look for `app/build/outputs/app-universal-release.apks` in this project
 
 **1.4 Build FOSS version (less feature)**
-- Run Gradle task from commandline `gradlew :app:bundleFoss`
-- Look for `app/build/outputs/bundle/foss/app-foss.aab` in this project
-- Generate universal apks from `app-foss.aab` using BundleTool
+- Configure signing as specified in section 1.2
+- Download BundleTool binary from [BundleTool Releases](https://github.com/google/bundletool/releases),
+  and save it as `doconfig/bundletool.jar` in this project
+- Run Gradle task from commandline `gradlew :app:genFossApks`
+- Look for `app/build/outputs/app-universal-foss.apks` in this project
 
 ### 2. Download
 [<img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' height='100'/>](
