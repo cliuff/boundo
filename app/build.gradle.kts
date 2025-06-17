@@ -15,6 +15,11 @@ ksp {
     arg("room.schemaLocation", "$projectDir/schemas")
 }
 
+aboutLibraries {
+    // font licenses are configured under app/config
+    collect.configPath = file("config")
+}
+
 android {
     var verInc = 0
     var verCommit: String? = null

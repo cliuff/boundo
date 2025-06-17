@@ -60,6 +60,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.madness.collision.chief.app.stateOf
+import com.madness.collision.ui.comp.ClassicTopAppBarDefaults
 import com.madness.collision.unit.api_viewing.R
 import io.cliuff.boundo.org.model.CompColl
 
@@ -85,9 +86,8 @@ fun OrgCollAppBar(
                 Text(
                     modifier = Modifier.alpha(barContentAlpha),
                     text = stringResource(R.string.org_title),
-                    fontSize = 26.sp,
-                    lineHeight = 28.sp,
                     fontWeight = FontWeight.Medium,
+                    fontFamily = ClassicTopAppBarDefaults.FontFamily,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
                 )

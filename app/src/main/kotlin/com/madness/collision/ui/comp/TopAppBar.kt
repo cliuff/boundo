@@ -27,13 +27,17 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import com.madness.collision.chief.app.LocalPageNavController
+import com.madness.collision.ui.theme.OutfitFontFamily
 import com.madness.collision.util.mainApplication
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -56,11 +60,15 @@ fun ClassicTopAppBar(
         true -> if (isSystemInDarkTheme()) Color(0xFFD0D6DB) else Color(0xFF353535)
         false -> if (mainApplication.isDarkTheme) Color(0xFFD0D6DB) else Color(0xFF353535)
     }
+    val styledTitle = @Composable {
+        // override font family only, other text attributes are determined by the theme
+        ProvideTextStyle(TextStyle(fontFamily = ClassicTopAppBarDefaults.FontFamily), title)
+    }
     Column {
         val navController = LocalPageNavController.current
         CenterAlignedTopAppBar(
             modifier = modifier,
-            title = title,
+            title = styledTitle,
             navigationIcon = {
                 IconButton(onClick = navController::navigateBack) {
                     Icon(
@@ -80,4 +88,8 @@ fun ClassicTopAppBar(
             color = appBarDividerColor.copy(alpha = 0.3f),
         )
     }
+}
+
+object ClassicTopAppBarDefaults {
+    val FontFamily: FontFamily = OutfitFontFamily
 }
