@@ -64,6 +64,7 @@ class ComposeViewOwner {
     }
 }
 
+@Deprecated("Use MetaAppTheme instead with default colorScheme.")
 @Composable
 fun rememberColorScheme(): ColorScheme {
     val isInspected = LocalInspectionMode.current

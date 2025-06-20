@@ -19,6 +19,10 @@ package com.madness.collision.chief.app
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 
+@Deprecated(
+    message = "Use MetaAppTheme or PreviewAppTheme instead.",
+    replaceWith = ReplaceWith("MetaAppTheme", "com.madness.collision.ui.theme.MetaAppTheme")
+)
 @Composable
 fun BoundoTheme(content: @Composable () -> Unit) {
     MaterialTheme(colorScheme = rememberColorScheme(), content = content)
