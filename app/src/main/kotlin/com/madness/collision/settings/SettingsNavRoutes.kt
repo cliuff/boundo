@@ -16,11 +16,9 @@
 
 package com.madness.collision.settings
 
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.NonRestartableComposable
 import com.madness.collision.chief.app.ComposePageRoute
-import com.madness.collision.chief.app.rememberColorScheme
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -46,8 +44,6 @@ enum class SettingsRouteId : RouteId<SettingsNavRoute> {
 private fun SettingsRouteId.RouteContent(): Unit =
     when (this) {
         SettingsRouteId.OssLibraries -> {
-            MaterialTheme(colorScheme = rememberColorScheme()) {
-                OssLibsPage()
-            }
+            OssLibsPage()
         }
     }

@@ -29,6 +29,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.madness.collision.chief.chiefContext
 import com.madness.collision.chief.layout.LocalWindowInsets
+import com.madness.collision.ui.theme.MetaAppTheme
 import com.madness.collision.util.os.ActivitySystemBarMaintainer
 import com.madness.collision.util.os.SystemBarMaintainer
 import com.madness.collision.util.os.SystemBarMaintainerOwner
@@ -79,7 +80,7 @@ open class ComposePageActivity : BaseActivity(), SystemBarMaintainerOwner {
                 CompositionLocalProvider(
                     LocalPageNavController provides navController,
                     LocalWindowInsets provides windowInsetsValue,
-                    content = { route.content() },
+                    content = { MetaAppTheme { route.content() } },
                 )
             }
         }

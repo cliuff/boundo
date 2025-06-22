@@ -18,14 +18,13 @@ package com.madness.collision.unit.api_viewing.ui.org
 
 import android.os.Bundle
 import android.view.View
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import com.madness.collision.chief.app.ComposeFragment
-import com.madness.collision.chief.app.rememberColorScheme
 import com.madness.collision.chief.app.ActivityPageNavController
 import com.madness.collision.chief.app.LocalPageNavController
+import com.madness.collision.ui.theme.MetaAppTheme
 import com.madness.collision.unit.api_viewing.ui.home.AppHomeNavPage
 import com.madness.collision.unit.api_viewing.ui.home.AppHomeNavPageImpl
 import com.madness.collision.unit.api_viewing.ui.org.coll.OrgCollPage
@@ -43,7 +42,7 @@ class AppOrgFragment : ComposeFragment(), AppHomeNavPage by AppHomeNavPageImpl()
         // enable new ComposePageActivity navigation from legacy pages
         val navController = remember { ActivityPageNavController(requireActivity()) }
         CompositionLocalProvider(LocalPageNavController provides navController) {
-            MaterialTheme(colorScheme = rememberColorScheme()) {
+            MetaAppTheme {
                 OrgCollPage(contentPadding = navContentPadding)
             }
         }

@@ -17,11 +17,9 @@
 package com.madness.collision.unit.api_viewing.ui.home
 
 import android.os.Parcelable
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.NonRestartableComposable
 import com.madness.collision.chief.app.ComposePageRoute
-import com.madness.collision.chief.app.rememberColorScheme
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -51,13 +49,9 @@ sealed interface AppListRouteId : RouteId<AppListNavRoute>, Parcelable {
 private fun AppListRouteId.RouteContent(): Unit =
     when (this) {
         is AppListRouteId.AppQuery -> {
-            MaterialTheme(colorScheme = rememberColorScheme()) {
-                StandaloneAppList(query = text) {}
-            }
+            StandaloneAppList(query = text) {}
         }
         is AppListRouteId.ApkInfo -> {
-            MaterialTheme(colorScheme = rememberColorScheme()) {
-                StandaloneAppList(pkgInfo = data) {}
-            }
+            StandaloneAppList(pkgInfo = data) {}
         }
     }

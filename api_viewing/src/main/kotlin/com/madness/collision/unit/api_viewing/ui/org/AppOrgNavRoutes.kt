@@ -17,11 +17,9 @@
 package com.madness.collision.unit.api_viewing.ui.org
 
 import android.os.Parcelable
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.NonRestartableComposable
 import com.madness.collision.chief.app.ComposePageRoute
-import com.madness.collision.chief.app.rememberColorScheme
 import com.madness.collision.unit.api_viewing.ui.org.coll.CollAppListPage
 import com.madness.collision.unit.api_viewing.ui.org.group.GroupEditorPage
 import com.madness.collision.unit.api_viewing.ui.org.group.GroupInfoPage
@@ -70,23 +68,15 @@ private fun resolveCollGroupId(collGroupId: String): Pair<Int, Int> {
 private fun OrgRouteId.RouteContent(): Unit =
     when (this) {
         is OrgRouteId.NewGroup -> {
-            MaterialTheme(colorScheme = rememberColorScheme()) {
-                GroupEditorPage(modCollId = collId)
-            }
+            GroupEditorPage(modCollId = collId)
         }
         is OrgRouteId.GroupEditor -> {
-            MaterialTheme(colorScheme = rememberColorScheme()) {
-                GroupEditorPage(modCollId = collId, modGroupId = groupId)
-            }
+            GroupEditorPage(modCollId = collId, modGroupId = groupId)
         }
         is OrgRouteId.GroupInfo -> {
-            MaterialTheme(colorScheme = rememberColorScheme()) {
-                GroupInfoPage(group = group, modCollId = collId, modGroupId = groupId)
-            }
+            GroupInfoPage(group = group, modCollId = collId, modGroupId = groupId)
         }
         is OrgRouteId.CollAppList -> {
-            MaterialTheme(colorScheme = rememberColorScheme()) {
-                CollAppListPage(coll = coll, modCollId = collId)
-            }
+            CollAppListPage(coll = coll, modCollId = collId)
         }
     }
