@@ -315,6 +315,11 @@
         <!-- transparent navigation bar for gesture navigation -->
         <!-- (fullscreen only when navigationBarColor set to transparent or translucent) -->
         <item name="enableEdgeToEdge">true</item>
+        <!-- Avoid horizontal insets for waterfall in portrait, and system bars and cutout in split screen. -->
+        <!-- Fixme waterfall and cutout insets, see BottomSheetBehavior#setWindowInsetsListener. -->
+        <!-- As of material components 1.13.0-alpha14, only system bar insets are considered. -->
+        <item name="marginLeftSystemWindowInsets">true</item>
+        <item name="marginRightSystemWindowInsets">true</item>
     </style>
 
     <style name="AppTheme.DatePickerDialog" parent="Theme.MaterialComponents.Light.Dialog">

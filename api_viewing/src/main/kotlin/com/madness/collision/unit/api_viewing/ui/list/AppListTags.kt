@@ -20,6 +20,7 @@ import android.content.Context
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -62,7 +63,11 @@ class ListTagState(private var initTags: Map<String, Boolean> = emptyMap()) {
 }
 
 @Composable
-fun AppListTags(tagState: ListTagState, onStateChanged: (String, Boolean?) -> Unit) {
+fun AppListTags(
+    tagState: ListTagState,
+    onStateChanged: (String, Boolean?) -> Unit,
+    contentPadding: PaddingValues = PaddingValues(),
+) {
     val context = LocalContext.current
     val tags = remember(tagState) {
         getTagEntries(context).also { tagState.init(it.map(TagsEntry::id)) }
@@ -71,7 +76,7 @@ fun AppListTags(tagState: ListTagState, onStateChanged: (String, Boolean?) -> Un
     Tags(tags = tags, checkStateList = checkStateList, onCheckChanged = { i, state ->
         checkStateList[i] = state
         onStateChanged(tags[i].id, state)
-    })
+    }, contentPadding = contentPadding)
 }
 
 private fun getTagEntries(context: Context): List<TagsEntry> {
@@ -89,8 +94,14 @@ private fun Tags(
     tags: List<TagsEntry>,
     checkStateList: SnapshotStateList<Boolean?>,
     onCheckChanged: (tagIndex: Int, newState: Boolean?) -> Unit,
+    contentPadding: PaddingValues = PaddingValues(),
 ) {
-    Column(modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState())) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
+            .padding(contentPadding),
+    ) {
         for ((i, tag) in tags.withIndex()) {
             val checkState = checkStateList[i]
             TagItem(

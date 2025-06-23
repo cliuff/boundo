@@ -25,6 +25,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -34,6 +36,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.Share
@@ -79,13 +82,18 @@ interface CompositeOptionsEventHandler : ListOptionsEventHandler {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ListOptionsDialog(isShown: Int, options: AppListOptions, eventHandler: CompositeOptionsEventHandler) {
+fun ListOptionsDialog(
+    isShown: Int,
+    options: AppListOptions,
+    eventHandler: CompositeOptionsEventHandler,
+    windowInsets: WindowInsets = WindowInsets(0),
+) {
     var showBottomSheet by remember(isShown) { mutableStateOf(isShown > 0) }
     if (showBottomSheet) {
         BottomSheet(
             onDismiss = { showBottomSheet = false },
             sheetState = rememberModalBottomSheetState(),
-            content = { SheetContent(options, eventHandler) },
+            content = { SheetContent(options, eventHandler, windowInsets) },
         )
     }
 }
@@ -93,6 +101,9 @@ fun ListOptionsDialog(isShown: Int, options: AppListOptions, eventHandler: Compo
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun BottomSheet(onDismiss: () -> Unit, sheetState: SheetState, content: @Composable () -> Unit) {
+    // todo set contentWindowInsets to zero to disable nav bar scrim
+    // todo horizontal insets as sheet's margin, bottom insets as content padding
+    // avoid horizontal insets for waterfall in portrait, and system bars and cutout in split screen
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
@@ -108,7 +119,11 @@ private fun BottomSheet(onDismiss: () -> Unit, sheetState: SheetState, content: 
 }
 
 @Composable
-private fun SheetContent(options: AppListOptions, eventHandler: CompositeOptionsEventHandler) {
+private fun SheetContent(
+    options: AppListOptions,
+    eventHandler: CompositeOptionsEventHandler,
+    windowInsets: WindowInsets = WindowInsets(0),
+) {
     val tagState = remember {
         val filter = options.srcSet.filterIsInstance<AppListSrc.TagFilter>().firstOrNull()
         ListTagState(filter?.checkedTags.orEmpty())
@@ -121,7 +136,11 @@ private fun SheetContent(options: AppListOptions, eventHandler: CompositeOptions
         }) { tabIndex ->
         when (tabIndex) {
             0 -> {
-                Column() {
+                Column(
+                    modifier = Modifier
+                        .verticalScroll(rememberScrollState())
+                        .padding(windowInsets.asPaddingValues()),
+                ) {
                     AppListOptions(options = options, eventHandler = eventHandler)
                     Spacer(modifier = Modifier.height(12.dp))
                     Text(
@@ -135,7 +154,11 @@ private fun SheetContent(options: AppListOptions, eventHandler: CompositeOptions
                 }
             }
             1 -> {
-                AppListTags(tagState = tagState, onStateChanged = eventHandler::updateTags)
+                AppListTags(
+                    tagState = tagState,
+                    onStateChanged = eventHandler::updateTags,
+                    contentPadding = windowInsets.asPaddingValues(),
+                )
             }
         }
     }

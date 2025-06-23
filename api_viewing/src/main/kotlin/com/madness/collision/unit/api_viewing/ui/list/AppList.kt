@@ -308,7 +308,9 @@ private fun AppListScaffold(
                 ListOptionsDialog(
                     isShown = showListOptions,
                     options = listState.opUiState.options,
-                    eventHandler = eventHandler
+                    eventHandler = eventHandler,
+                    windowInsets = paddingValues.asInsets()
+                        .only(WindowInsetsSides.Bottom),
                 )
             }
         }
