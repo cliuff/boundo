@@ -92,6 +92,7 @@ class AppListViewModel : ViewModel() {
         val appListStats: AppListStats? by ::mutAppListStats
     }
 
+    private var appRepo: AppRepository? = null
     private val appListRepo: AppListRepository = AppListRepoImpl()
     private val mutUiState = MutableStateFlow<AppListUiState>(emptyList())
     val uiState: StateFlow<AppListUiState> by ::mutUiState
@@ -136,12 +137,18 @@ class AppListViewModel : ViewModel() {
         super.onCleared()
     }
 
+    fun getApp(context: Context, pkgName: String): ApiViewingApp? {
+        val repo = appRepo ?: AppRepo.dumb(context).also { appRepo = it }
+        return repo.getApp(pkgName)
+    }
+
     private fun updateSrcApps() {
     }
 
     fun init(context: Context, lifecycleOwner: LifecycleOwner, sessionTimestamp: Long) {
         if (initJob != null) return
         val appRepo = AppRepo.impl(context, PlatformAppProvider(context))
+        this.appRepo = appRepo
         val loader = object : AppListLoader {
             override val appRepo: AppRepository = appRepo
             override val apkRetriever: ApkRetriever = ApkRetriever(context)

@@ -34,6 +34,7 @@ import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CheckCircle
@@ -41,6 +42,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
@@ -67,10 +69,17 @@ import com.madness.collision.chief.app.BoundoTheme
 import com.madness.collision.chief.app.asInsets
 import com.madness.collision.chief.app.rememberColorScheme
 import com.madness.collision.chief.lang.mapIf
+import com.madness.collision.diy.SpanAdapter
 import com.madness.collision.unit.api_viewing.ComposeUnit
 import com.madness.collision.unit.api_viewing.Utils
+import com.madness.collision.unit.api_viewing.data.ApiViewingApp
+import com.madness.collision.unit.api_viewing.list.AppPopOwner
+import com.madness.collision.unit.api_viewing.list.PopUpState
+import com.madness.collision.unit.api_viewing.list.updateState
 import com.madness.collision.unit.api_viewing.ui.home.AppHomeNavPage
 import com.madness.collision.unit.api_viewing.ui.home.AppHomeNavPageImpl
+import com.madness.collision.unit.api_viewing.ui.info.AppInfoFragment
+import com.madness.collision.unit.api_viewing.ui.info.ListStateAppOwner
 import com.madness.collision.util.F
 import com.madness.collision.util.FilePop
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
@@ -83,10 +92,22 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
-open class AppListFragment : ComposeUnit(), Democratic, AppHomeNavPage by AppHomeNavPageImpl() {
+open class AppListFragment : ComposeUnit(), Democratic, AppInfoFragment.Callback, AppHomeNavPage by AppHomeNavPageImpl() {
     override val id: String = "AV"
 
     private var listHeaderDarkIcon: Boolean = false
+    private val viewModel: AppListViewModel by viewModels()
+    private val popOwner = AppPopOwner()
+
+    override fun getAppOwner(): AppInfoFragment.AppOwner {
+        return ListStateAppOwner(viewModel.appList::value) { pkgName ->
+            context?.let { context -> viewModel.getApp(context, pkgName) }
+        }
+    }
+
+    override fun onAppChanged(app: ApiViewingApp) {
+        popOwner.updateState(app)
+    }
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
 //        mainViewModel.configNavigation(toolbar, iconColor)
@@ -196,6 +217,12 @@ open class AppListFragment : ComposeUnit(), Democratic, AppHomeNavPage by AppHom
     private fun rememberAppListEventHandler() =
         remember<AppListEventHandler> {
             object : AppListEventHandler {
+                private val host = this@AppListFragment
+
+                override fun getMaxSpan(): Int {
+                    return SpanAdapter.getSpanCount(host, 290f)
+                }
+
                 override fun onAppBarOpacityChange(opacity: Float) {
                     val isDark = when {
                         opacity < 0.4f -> listHeaderDarkIcon
@@ -203,15 +230,23 @@ open class AppListFragment : ComposeUnit(), Democratic, AppHomeNavPage by AppHom
                     }
                     setStatusBarDarkIcon(isDark)
                 }
+
+                override fun showAppInfo(app: ApiViewingApp) {
+                    AppInfoFragment(app).show(host.childFragmentManager, AppInfoFragment.TAG)
+                    host.popOwner.popState = PopUpState.Pop(app)
+                }
             }
         }
 }
 
 @Stable
 interface AppListEventHandler {
+    fun getMaxSpan(): Int
     fun onAppBarOpacityChange(opacity: Float)
+    fun showAppInfo(app: ApiViewingApp)
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppList(eventHandler: AppListEventHandler, paddingValues: PaddingValues) {
     val viewModel = viewModel<AppListViewModel>()
@@ -220,6 +255,8 @@ fun AppList(eventHandler: AppListEventHandler, paddingValues: PaddingValues) {
     val appSrcState by viewModel.appSrcState.collectAsStateWithLifecycle()
     val opUiState by viewModel.opUiState.collectAsStateWithLifecycle()
     val headerState = rememberListHeaderState(viewModel)
+    val appBarState = rememberTopAppBarState()
+    val scrollState = rememberLazyGridState()
     AppListScaffold(
         listState = rememberAppListState(viewModel),
         eventHandler = rememberCompOptionsEventHandler(viewModel),
@@ -227,12 +264,16 @@ fun AppList(eventHandler: AppListEventHandler, paddingValues: PaddingValues) {
         contentOffsetProgress = { -headerState.headerOffsetY },
         onAppBarOpacityChange = eventHandler::onAppBarOpacityChange,
     ) { contentPadding ->
-        LegacyAppList(
+        AppListGrid(
             appList = appList,
+            onClickApp = eventHandler::showAppInfo,
+            getMaxSpan = eventHandler::getMaxSpan,
             appListPrefs = appListPrefs,
             options = opUiState.options,
             appSrcState = appSrcState,
             headerState = headerState,
+            appBarState = appBarState,
+            scrollState = scrollState,
             paddingValues = contentPadding,
         )
     }
