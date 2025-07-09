@@ -36,15 +36,12 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridItemSpanScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -90,11 +87,12 @@ import com.madness.collision.chief.app.BoundoTheme
 import com.madness.collision.chief.app.asInsets
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.UpdatedApp
-import com.madness.collision.unit.api_viewing.ui.upd.item.ApiUpdGuiArt
-import com.madness.collision.unit.api_viewing.ui.upd.item.UpdGuiArt
-import com.madness.collision.unit.api_viewing.ui.upd.item.VerUpdGuiArt
+import com.madness.collision.unit.api_viewing.info.AppInfo
+import com.madness.collision.unit.api_viewing.info.ExpIcon
+import com.madness.collision.unit.api_viewing.ui.upd.item.GuiArt
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
 import com.madness.collision.util.mainApplication
+import kotlinx.coroutines.flow.map
 
 @Stable
 interface AppUpdatesEventHandler {
@@ -295,66 +293,38 @@ private fun UpdatesList(
             end = 3.dp + calculateEndPadding(LocalLayoutDirection.current).coerceAtLeast(7.dp),
         )
     }
-    if (columnCount <= 1) {
-        // use lazy column for simpler (thus faster) impl
-        val listState = rememberLazyListState()
-        LazyColumn(state = listState, contentPadding = contentPadding) {
-            if (onClickInstalledAppsQuery != null) {
-                item(key = "@upd.btn0") {
-                    UpdatesRedirectButton(type = 3, onClickInstalledAppsQuery, Modifier.animateItem())
-                }
-            }
-            for ((secIndex, secList) in sections) {
-                if (secList.isNotEmpty()) {
-                    item(key = "@upd.sec${secIndex.ordinal}") {
-                        UpdatesSectionTitle(index = secIndex, Modifier.animateItem())
-                    }
-                    sectionItems(secIndex, secList, onClickApp) { list, key, content ->
-                        items(list, key) { item -> content(item, Modifier.animateItem()) }
-                    }
-                }
-            }
-            if (onClickUsageAccess != null) {
-                item(key = "@upd.btn2") {
-                    UpdatesRedirectButton(type = 2, onClickUsageAccess, Modifier.animateItem())
-                }
-            }
-        }
-        LaunchedEffect(sections) {
-            // scroll to the top of the new list from existing usage access button
-            if (lastSectionCount == 0 && sections.isNotEmpty()) listState.scrollToItem(0)
-            lastSectionCount = sections.size
-        }
-    } else {
         val gridState = rememberLazyGridState()
         LazyVerticalGrid(
             columns = GridCells.Fixed(columnCount),
             state = gridState, contentPadding = contentPadding) {
             if (onClickInstalledAppsQuery != null) {
                 // placeholder to make installed apps query button be positioned in a new row's cell
-                item(key = "@upd.row0", span = MaxLineSpan) {
+                item(key = "@upd.row0", span = MaxLineSpan, contentType = "Space") {
                     Spacer(modifier = Modifier.animateItem())
                 }
-                item(key = "@upd.btn0") {
+                item(key = "@upd.btn0", contentType = "QueryAppsButton") {
                     UpdatesRedirectButton(type = 3, onClickInstalledAppsQuery, Modifier.animateItem())
                 }
             }
             for ((secIndex, secList) in sections) {
                 if (secList.isNotEmpty()) {
-                    item(key = "@upd.sec${secIndex.ordinal}", span = MaxLineSpan) {
+                    item(key = "@upd.sec${secIndex.ordinal}", span = MaxLineSpan, contentType = "SectionHeading") {
                         UpdatesSectionTitle(index = secIndex, Modifier.animateItem())
                     }
-                    sectionItems(secIndex, secList, onClickApp) { list, key, content ->
-                        items(list, key) { item -> content(item, Modifier.animateItem()) }
+                    items(
+                        secList,
+                        key = { upd -> upd.app.packageName + secIndex.ordinal },
+                        contentType = { upd -> upd::class }) { item ->
+                        ArtUpdateItem(item, onClickApp, Modifier.animateItem())
                     }
                 }
             }
             if (onClickUsageAccess != null) {
                 // placeholder to make usage access button be positioned in a new row's cell
-                item(key = "@upd.row1", span = MaxLineSpan) {
+                item(key = "@upd.row1", span = MaxLineSpan, contentType = "Space") {
                     Spacer(modifier = Modifier.animateItem())
                 }
-                item(key = "@upd.btn2") {
+                item(key = "@upd.btn2", contentType = "AccessUsageButton") {
                     UpdatesRedirectButton(type = 2, onClickUsageAccess, Modifier.animateItem())
                 }
             }
@@ -364,7 +334,6 @@ private fun UpdatesList(
             if (lastSectionCount == 0 && sections.isNotEmpty()) gridState.scrollToItem(0)
             lastSectionCount = sections.size
         }
-    }
 }
 
 private val MaxLineSpan: LazyGridItemSpanScope.() -> GridItemSpan
@@ -412,76 +381,32 @@ private fun UpdatesRedirectButton(type: Int, onClick: () -> Unit, modifier: Modi
     }
 }
 
-private inline fun <T : UpdatedApp> sectionItems(
-    secIndex: AppUpdatesIndex,
-    secList: List<T>,
-    noinline onClickApp: (ApiViewingApp) -> Unit,
-    items: (items: List<T>, key: (T) -> Any, itemContent: @Composable (T, Modifier) -> Unit) -> Unit,
+@Composable
+private fun ArtUpdateItem(
+    upd: UpdatedApp,
+    onClickApp: (ApiViewingApp) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    if (secIndex == AppUpdatesIndex.UPG) {
-        items(secList, { upd -> (upd as UpdatedApp.Upgrade).app.packageName + secIndex.ordinal }
-        ) { upd, modifier ->
-            if (upd is UpdatedApp.Upgrade) {
-                val context = LocalContext.current
-                val itemPrefs = LocalAppItemPrefs.current
-                var lastArt: ApiUpdGuiArt? by remember { mutableStateOf(null) }
-                val art = remember(upd, itemPrefs) {
-                    val art = lastArt
-                    val updatedArt = when {
-                        itemPrefs > 0 && art != null -> art.withUpdatedTags(upd.app, context)
-                        else -> upd.toGuiArt(context) { onClickApp(upd.app) }
-                    }
-                    updatedArt.also { lastArt = it }
-                }
-                AppUpdateItem(
-                    modifier = modifier.padding(horizontal = 5.dp, vertical = 5.dp),
-                    art = art,
-                )
-            }
+    val context = LocalContext.current
+    val itemPrefs = LocalAppItemPrefs.current
+    val art = remember(upd) { upd.toGuiArt(context) }
+    val tagGroupFlow = remember(upd.app, itemPrefs) {
+        AppInfo.getExpTags(upd.app, context).map { tags ->
+            val (ic, tx) = tags.partition { t -> t.icon !is ExpIcon.Text }
+            AppTagGroup(ic, tx)
         }
-    } else if (secIndex == AppUpdatesIndex.VER) {
-        items(secList, { upd -> (upd as UpdatedApp.VersionUpgrade).app.packageName + secIndex.ordinal }
-        ) { upd, modifier ->
-            if (upd is UpdatedApp.VersionUpgrade) {
-                val context = LocalContext.current
-                val itemPrefs = LocalAppItemPrefs.current
-                var lastArt: VerUpdGuiArt? by remember { mutableStateOf(null) }
-                val art = remember(upd, itemPrefs) {
-                    val art = lastArt
-                    val updatedArt = when {
-                        itemPrefs > 0 && art != null -> art.withUpdatedTags(upd.app, context)
-                        else -> upd.toGuiArt(context) { onClickApp(upd.app) }
-                    }
-                    updatedArt.also { lastArt = it }
-                }
-                VerUpdateItem(
-                    modifier = modifier.padding(horizontal = 5.dp, vertical = 5.dp),
-                    art = art,
-                )
-            }
-        }
-    } else {
-        items(secList, { upd -> upd.app.packageName + secIndex.ordinal }
-        ) { upd, modifier ->
-            val app = upd.app
-            if (true) {
-                val context = LocalContext.current
-                val itemPrefs = LocalAppItemPrefs.current
-                var lastArt: UpdGuiArt? by remember { mutableStateOf(null) }
-                val art = remember(app, itemPrefs) {
-                    val art = lastArt
-                    val updatedArt = when {
-                        itemPrefs > 0 && art != null -> art.withUpdatedTags(app, context)
-                        else -> app.toGuiArt(context) { onClickApp(app) }
-                    }
-                    updatedArt.also { lastArt = it }
-                }
-                AppItem(
-                    modifier = modifier.padding(horizontal = 5.dp, vertical = 5.dp),
-                    art = art,
-                )
-            }
-        }
+    }
+    val tagGroup by tagGroupFlow.collectAsStateWithLifecycle(EmptyTagGroup)
+    val onClickUpd = { onClickApp(upd.app) }
+
+    val itemMod = modifier.padding(horizontal = 5.dp, vertical = 5.dp)
+    when (art) {
+        is GuiArt.ApiUpdate ->
+            AppUpdateItem(modifier = itemMod, art = art, tagGroup = tagGroup, onClick = onClickUpd)
+        is GuiArt.VerUpdate ->
+            VerUpdateItem(modifier = itemMod, art = art, tagGroup = tagGroup, onClick = onClickUpd)
+        is GuiArt.App ->
+            AppItem(modifier = itemMod, art = art, tagGroup = tagGroup, onClick = onClickUpd)
     }
 }
 
