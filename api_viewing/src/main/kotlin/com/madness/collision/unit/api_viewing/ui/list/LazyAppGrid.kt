@@ -41,11 +41,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.info.AppInfo
 import com.madness.collision.unit.api_viewing.info.ExpIcon
-import com.madness.collision.unit.api_viewing.ui.upd.AppItem
+import com.madness.collision.unit.api_viewing.ui.comp.AppItem
+import com.madness.collision.unit.api_viewing.ui.comp.LocalAppItemPrefs
+import com.madness.collision.unit.api_viewing.ui.comp.toGuiArt
 import com.madness.collision.unit.api_viewing.ui.upd.AppTagGroup
 import com.madness.collision.unit.api_viewing.ui.upd.EmptyTagGroup
-import com.madness.collision.unit.api_viewing.ui.upd.LocalAppItemPrefs
-import com.madness.collision.unit.api_viewing.ui.upd.toGuiArt
 import kotlinx.coroutines.flow.map
 
 @Composable
@@ -111,7 +111,7 @@ private fun AppListItem(
     val itemPrefs = LocalAppItemPrefs.current
     val art = remember(app) { app.toGuiArt(context) }
 
-    val tagGroupFlow = remember(app, itemPrefs) {
+    val tagGroupFlow = remember(app, itemPrefs.tagPrefs) {
         AppInfo.getExpTags(app, context).map { tags ->
             val (ic, tx) = tags.partition { t -> t.icon !is ExpIcon.Text }
             AppTagGroup(ic, tx)

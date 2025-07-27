@@ -19,21 +19,22 @@ package com.madness.collision.unit.api_viewing.ui.comp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.produceState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import com.madness.collision.chief.app.stateOf
 import com.madness.collision.unit.api_viewing.seal.SealMaker
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
 
 @Composable
 fun sealFileOf(letter: Char): State<File?> {
-    val cacheFile = SealMaker.getSealCacheFile(letter)
-    if (cacheFile != null) return remember { stateOf(cacheFile) }
     val context = LocalContext.current
-    val itemWidth = with(LocalDensity.current) { 45.dp.roundToPx() }
-    return produceState(null as File?) {
-        value = SealMaker.getSealFile(context, letter, itemWidth)
+    val density = LocalDensity.current
+    return produceState(null as File?, key1 = letter) {
+        value = withContext(Dispatchers.IO) {
+            SealMaker.getSealCacheFile(letter)
+                ?: SealMaker.getSealFile(context, letter, with(density) { 45.dp.roundToPx() })
+        }
     }
 }

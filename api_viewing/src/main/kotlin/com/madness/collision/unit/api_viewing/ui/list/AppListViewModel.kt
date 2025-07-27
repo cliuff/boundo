@@ -73,6 +73,12 @@ data class AppListOptions(
     val apiMode: AppApiMode,
 )
 
+/** Config of the displaying app list (differentiate between lists). */
+data class AppListConfig(
+    /** Prefs for individual items, independent of the list (e.g. tag prefs). */
+    val itemPrefs: Int,
+)
+
 typealias AppListUiState = List<GuiArt>
 data class AppListOpUiState(val options: AppListOptions)
 
@@ -95,14 +101,15 @@ class AppListViewModel : ViewModel() {
     private var appRepo: AppRepository? = null
     private val appListRepo: AppListRepository = AppListRepoImpl()
     private val mutUiState = MutableStateFlow<AppListUiState>(emptyList())
+    private val mutListConfig: MutableStateFlow<AppListConfig>
+
     val uiState: StateFlow<AppListUiState> by ::mutUiState
+    val appListConfig: StateFlow<AppListConfig> by ::mutListConfig
 
     @Deprecated(message = "")
     private val mutAppList = MutableStateFlow<List<ApiViewingApp>>(emptyList())
     @Deprecated(message = "")
     val appList: StateFlow<List<ApiViewingApp>> by ::mutAppList
-    private val mutAppListId = MutableStateFlow(0)
-    val appListId: StateFlow<Int> by ::mutAppListId
     private val mutAppsModNotifier = MutableStateFlow(0)
     private val mutSrcState: MutableStateFlow<AppSrcState>
     val appSrcState: StateFlow<AppSrcState> by ::mutSrcState
@@ -127,6 +134,7 @@ class AppListViewModel : ViewModel() {
         mutOpUiState = MutableStateFlow(AppListOpUiState(options))
         val appSrcState = AppSrcState(ListSrcCat.Platform, false, emptySet())
         mutSrcState = MutableStateFlow(appSrcState)
+        mutListConfig = MutableStateFlow(AppListConfig(0))
         appListRepo.apps.onEach { r -> mutUiState.update { r.toGui() } }.launchIn(viewModelScope)
 //        viewModelScope.launch(Dispatchers.Default) { appListRepo.fetchNewData(chiefPkgMan) }
     }
@@ -361,8 +369,10 @@ class AppListViewModel : ViewModel() {
     fun checkListPrefs(context: Context) {
         viewModelScope.launch(Dispatchers.Default) {
             if (optionsOwner.checkPrefsChanged(context)) {
-                // trigger list prefs update
-                mutAppListId.update { it + 1 }
+                // trigger update for items' tag prefs
+                mutListConfig.update { conf ->
+                    conf.copy(itemPrefs = conf.itemPrefs + 1)
+                }
             }
         }
     }

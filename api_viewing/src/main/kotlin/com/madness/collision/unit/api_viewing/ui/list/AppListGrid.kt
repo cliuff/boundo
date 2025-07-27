@@ -50,12 +50,13 @@ import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.coerceIn
 import androidx.compose.ui.unit.dp
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
+import com.madness.collision.unit.api_viewing.ui.comp.AppItemPrefs
+import com.madness.collision.unit.api_viewing.ui.comp.LocalAppItemPrefs
 import com.madness.collision.unit.api_viewing.ui.list.comp.ListHeaderBackdrop
 import com.madness.collision.unit.api_viewing.ui.list.comp.ListHeaderImage
 import com.madness.collision.unit.api_viewing.ui.list.comp.ListHeaderVerticalShade
 import com.madness.collision.unit.api_viewing.ui.upd.CompactAppItemStyle
 import com.madness.collision.unit.api_viewing.ui.upd.DefaultAppItemStyle
-import com.madness.collision.unit.api_viewing.ui.upd.LocalAppItemPrefs
 import com.madness.collision.unit.api_viewing.ui.upd.LocalAppItemStyle
 import com.madness.collision.util.mainApplication
 import dev.chrisbanes.haze.HazeState
@@ -70,7 +71,7 @@ fun AppListGrid(
     appList: List<ApiViewingApp>,
     onClickApp: (ApiViewingApp) -> Unit,
     getMaxSpan: () -> Int,
-    appListPrefs: Int,
+    listConfig: AppListConfig,
     options: AppListOptions,
     appSrcState: AppSrcState,
     headerState: ListHeaderState,
@@ -151,10 +152,16 @@ fun AppListGrid(
             maxWidth - horizontalPaddingSum >= 360.dp -> DefaultAppItemStyle
             else -> CompactAppItemStyle
         }
+        val appItemPrefs = remember(options.apiMode, listConfig.itemPrefs) {
+            AppItemPrefs(
+                apiMode = options.apiMode,
+                tagPrefs = listConfig.itemPrefs,
+            )
+        }
 
         CompositionLocalProvider(
             LocalAppItemStyle provides appItemStyle,
-            LocalAppItemPrefs provides appListPrefs,
+            LocalAppItemPrefs provides appItemPrefs,
         ) {
             // remove corners for asymmetric paddings (e.g. landscape with 3-button nav)
             val flatBackdrop = LocalLayoutDirection.current.let { di ->
@@ -192,7 +199,7 @@ fun AppListGrid(
 
         var topScrollInit by remember { mutableIntStateOf(0) }
 
-        LaunchedEffect(appList, appListPrefs) {
+        LaunchedEffect(appList) {
             if (topScrollInit++ > 0) {
                 scrollState.scrollToItem(0)
                 // reset nested scrolling to match

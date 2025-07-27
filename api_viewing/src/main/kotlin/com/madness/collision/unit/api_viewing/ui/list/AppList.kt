@@ -251,7 +251,7 @@ interface AppListEventHandler {
 fun AppList(eventHandler: AppListEventHandler, paddingValues: PaddingValues) {
     val viewModel = viewModel<AppListViewModel>()
     val appList by viewModel.appList.collectAsStateWithLifecycle()
-    val appListPrefs by viewModel.appListId.collectAsStateWithLifecycle()
+    val appListConfig by viewModel.appListConfig.collectAsStateWithLifecycle()
     val appSrcState by viewModel.appSrcState.collectAsStateWithLifecycle()
     val opUiState by viewModel.opUiState.collectAsStateWithLifecycle()
     val headerState = rememberListHeaderState(viewModel)
@@ -268,7 +268,7 @@ fun AppList(eventHandler: AppListEventHandler, paddingValues: PaddingValues) {
             appList = appList,
             onClickApp = eventHandler::showAppInfo,
             getMaxSpan = eventHandler::getMaxSpan,
-            appListPrefs = appListPrefs,
+            listConfig = appListConfig,
             options = opUiState.options,
             appSrcState = appSrcState,
             headerState = headerState,
