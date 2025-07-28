@@ -1,3 +1,35 @@
+
+<div align="right">
+  <details>
+    <summary >🌐 Language</summary>
+    <div>
+      <div align="center">
+        <a href="https://openaitx.github.io/view.html?user=cliuff&project=boundo&lang=en">English</a>
+        | <a href="https://openaitx.github.io/view.html?user=cliuff&project=boundo&lang=zh-CN">简体中文</a>
+        | <a href="https://openaitx.github.io/view.html?user=cliuff&project=boundo&lang=zh-TW">繁體中文</a>
+        | <a href="https://openaitx.github.io/view.html?user=cliuff&project=boundo&lang=ja">日本語</a>
+        | <a href="https://openaitx.github.io/view.html?user=cliuff&project=boundo&lang=ko">한국어</a>
+        | <a href="https://openaitx.github.io/view.html?user=cliuff&project=boundo&lang=hi">हिन्दी</a>
+        | <a href="https://openaitx.github.io/view.html?user=cliuff&project=boundo&lang=th">ไทย</a>
+        | <a href="https://openaitx.github.io/view.html?user=cliuff&project=boundo&lang=fr">Français</a>
+        | <a href="https://openaitx.github.io/view.html?user=cliuff&project=boundo&lang=de">Deutsch</a>
+        | <a href="https://openaitx.github.io/view.html?user=cliuff&project=boundo&lang=es">Español</a>
+        | <a href="https://openaitx.github.io/view.html?user=cliuff&project=boundo&lang=it">Italiano</a>
+        | <a href="https://openaitx.github.io/view.html?user=cliuff&project=boundo&lang=ru">Русский</a>
+        | <a href="https://openaitx.github.io/view.html?user=cliuff&project=boundo&lang=pt">Português</a>
+        | <a href="https://openaitx.github.io/view.html?user=cliuff&project=boundo&lang=nl">Nederlands</a>
+        | <a href="https://openaitx.github.io/view.html?user=cliuff&project=boundo&lang=pl">Polski</a>
+        | <a href="https://openaitx.github.io/view.html?user=cliuff&project=boundo&lang=ar">العربية</a>
+        | <a href="https://openaitx.github.io/view.html?user=cliuff&project=boundo&lang=fa">فارسی</a>
+        | <a href="https://openaitx.github.io/view.html?user=cliuff&project=boundo&lang=tr">Türkçe</a>
+        | <a href="https://openaitx.github.io/view.html?user=cliuff&project=boundo&lang=vi">Tiếng Việt</a>
+        | <a href="https://openaitx.github.io/view.html?user=cliuff&project=boundo&lang=id">Bahasa Indonesia</a>
+        | <a href="https://openaitx.github.io/view.html?user=cliuff&project=boundo&lang=as">অসমীয়া</
+      </div>
+    </div>
+  </details>
+</div>
+
 <p align="center">
   <img src="doconfig/markdown/shot1.png" width="270" alt="Screenshot 1">
   <img src="doconfig/markdown/shot2.png" width="270" alt="Screenshot 2">
