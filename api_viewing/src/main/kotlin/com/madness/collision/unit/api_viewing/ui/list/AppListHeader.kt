@@ -17,9 +17,6 @@
 package com.madness.collision.unit.api_viewing.ui.list
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.animateIntOffsetAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -31,7 +28,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -64,14 +60,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.madness.collision.chief.app.BoundoTheme
@@ -81,13 +75,10 @@ import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape
 
 @Stable
 interface ListHeaderState {
-    var headerHeight: Int
-    val headerOffsetY: Int
     val devInfoLabel: String
     val devInfoDesc: String
     var statsSize: Int
     fun setTerminalCat(cat: ListSrcCat)
-    fun updateOffsetY(scrollY: Int)
     fun showStats(options: AppListOptions)
     fun showSystemModules()
     fun onQueryChange(query: String)
@@ -100,17 +91,7 @@ fun AppListSwitchHeader(
     appSrcState: AppSrcState,
     headerState: ListHeaderState,
 ) {
-    val headerOffset by animateIntOffsetAsState(
-        targetValue = IntOffset(0, headerState.headerOffsetY),
-        animationSpec = tween(easing = LinearEasing, durationMillis = 0),
-        label = "HeaderOffsetAnim",
-    )
-    Column(
-        modifier = Modifier
-            .onSizeChanged { headerState.headerHeight = it.height }
-            .offset { headerOffset }
-            .then(modifier)
-    ) {
+    Column(modifier = modifier) {
         var isQuerying: Boolean by remember { mutableStateOf(false) }
         AppListHeader(
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp),

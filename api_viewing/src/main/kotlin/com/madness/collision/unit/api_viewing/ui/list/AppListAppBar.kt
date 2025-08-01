@@ -50,6 +50,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
@@ -74,6 +75,7 @@ fun AppListBar(
     isRefreshing: Boolean,
     windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
     colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
+    scrollBehavior: TopAppBarScrollBehavior? = null,
     primaryAction: @Composable () -> Unit,
 ) {
     TopAppBar(
@@ -110,6 +112,7 @@ fun AppListBar(
         },
         windowInsets = windowInsets,
         colors = colors,
+        scrollBehavior = scrollBehavior,
     )
 }
 

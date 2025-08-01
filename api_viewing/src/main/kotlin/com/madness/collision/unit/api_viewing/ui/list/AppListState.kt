@@ -26,7 +26,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -116,13 +115,9 @@ class ListHeaderStateImpl(
     private val viewModel: AppListViewModel,
     private val context: Context,
 ) : ListHeaderState {
-    private var scrollY by mutableIntStateOf(0)
-    override var headerHeight: Int by mutableIntStateOf(0)
-    override val headerOffsetY: Int by derivedStateOf { -(scrollY.coerceIn(0, headerHeight)) }
     override var statsSize: Int by mutableIntStateOf(0)
 
     override fun setTerminalCat(cat: ListSrcCat) = viewModel.setListSrcCat(cat)
-    override fun updateOffsetY(scrollY: Int) { this.scrollY = scrollY }
     override fun showSystemModules() = context.showPage<SystemModulesFragment>()
     override fun showStats(options: AppListOptions) {
         getStatsFragment(options)?.let(context::showPage)

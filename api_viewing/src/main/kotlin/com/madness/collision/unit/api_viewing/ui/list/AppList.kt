@@ -34,6 +34,7 @@ import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -42,6 +43,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -53,6 +55,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
@@ -260,8 +263,9 @@ fun AppList(eventHandler: AppListEventHandler, paddingValues: PaddingValues) {
     AppListScaffold(
         listState = rememberAppListState(viewModel),
         eventHandler = rememberCompOptionsEventHandler(viewModel),
+        appBarState = appBarState,
+        listScrollState = scrollState,
         paddingValues = paddingValues,
-        contentOffsetProgress = { -headerState.headerOffsetY },
         onAppBarOpacityChange = eventHandler::onAppBarOpacityChange,
     ) { contentPadding ->
         AppListGrid(
@@ -303,33 +307,43 @@ interface AppListState {
 private fun AppListScaffold(
     listState: AppListState,
     eventHandler: CompositeOptionsEventHandler,
-    paddingValues: PaddingValues,
-    contentOffsetProgress: () -> Int,
+    appBarState: TopAppBarState = rememberTopAppBarState(),
+    listScrollState: LazyGridState = rememberLazyGridState(),
+    paddingValues: PaddingValues = PaddingValues(),
     onAppBarOpacityChange: (Float) -> Unit = {},
     content: @Composable (PaddingValues) -> Unit
 ) {
     var showListOptions by remember { mutableIntStateOf(0) }
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(appBarState)
     Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             val density = LocalDensity.current
-            val toolbarOpacity by remember(density) {
+            val toolbarOpacity by remember(density, appBarState) {
                 val toolbarHeight = with(density) { 100.dp.toPx() }
                 val headerHeight = (toolbarHeight * 1.8f).roundToInt()
                 derivedStateOf {
-                    ((contentOffsetProgress() - headerHeight) / toolbarHeight)
-                        .coerceIn(0f, 0.96f).mapIf({ it <= 0.06f }, { 0f })
+                    val fraction = if (listScrollState.firstVisibleItemIndex == 0) {
+                        // use first item offset when scrolled to top
+                        (listScrollState.firstVisibleItemScrollOffset - headerHeight) / toolbarHeight
+                    } else {
+                        (-appBarState.contentOffset - headerHeight) / toolbarHeight
+                    }
+                    fraction.coerceIn(0f, 0.96f).mapIf({ it <= 0.06f }, { 0f })
                 }
             }
             LaunchedEffect(toolbarOpacity) {
                 onAppBarOpacityChange(toolbarOpacity)
             }
 
+            val containerColor = MaterialTheme.colorScheme.surface.copy(alpha = toolbarOpacity)
             AppListBar(
                 isRefreshing = listState.isRefreshing,
                 windowInsets = paddingValues.asInsets()
                     .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface.copy(alpha = toolbarOpacity))
+                    containerColor = containerColor, scrolledContainerColor = containerColor),
+                scrollBehavior = scrollBehavior,
             ) {
                 AppListBarAction(
                     icon = Icons.Outlined.CheckCircle,
@@ -358,6 +372,7 @@ private fun AppListScaffold(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @PreviewCombinedColorLayout
 @Composable
 private fun AppListPreview() {
@@ -373,8 +388,6 @@ private fun AppListPreview() {
         AppListScaffold(
             listState = listState,
             eventHandler = remember { PseudoCompOptionsEventHandler() },
-            paddingValues = PaddingValues(),
-            contentOffsetProgress = { 50 },
             content = { _ -> Box(Modifier.fillMaxSize().background(Color.DarkGray)) }
         )
     }
