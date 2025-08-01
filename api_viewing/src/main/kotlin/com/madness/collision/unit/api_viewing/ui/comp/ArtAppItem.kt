@@ -20,10 +20,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.madness.collision.chief.app.stateOf
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.seal.SealMaker
 import com.madness.collision.unit.api_viewing.ui.list.AppApiMode
@@ -38,7 +41,7 @@ internal data class GuiArtApp(
     val compileApiInfo: VerInfo,
     val targetApiInfo: VerInfo,
     val minApiInfo: VerInfo,
-    val updateTime: String,
+    val updateTime: Long,
 )
 
 @Stable
@@ -77,10 +80,17 @@ internal fun AppItem(
         SealMaker.getItemColorBack(context, apiInfo.api) to
                 SealMaker.getItemColorAccent(context, apiInfo.api)
     }
+
+    val (initTime, relTimeFlow) = remember(art.updateTime) {
+        ArtMapper.getRelativeTimeUpdates(art.updateTime)
+    }
+    val relativeTime by relTimeFlow?.collectAsStateWithLifecycle(initTime)
+        ?: remember(initTime) { stateOf(initTime) }
+
     com.madness.collision.unit.api_viewing.ui.upd.AppItem(
         modifier = modifier,
         name = art.identity.label,
-        time = art.updateTime,
+        time = relativeTime,
         apiText = apiInfo.displaySdk,
         sealLetter = apiInfo.letterOrDev,
         iconInfo = art.identity.iconPkgInfo,

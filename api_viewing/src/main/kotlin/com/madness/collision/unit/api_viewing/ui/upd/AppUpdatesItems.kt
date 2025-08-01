@@ -65,13 +65,16 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.madness.collision.chief.app.BoundoTheme
+import com.madness.collision.chief.app.stateOf
 import com.madness.collision.unit.api_viewing.R
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.info.ExpIcon
 import com.madness.collision.unit.api_viewing.info.ExpTag
 import com.madness.collision.unit.api_viewing.seal.SealMaker
+import com.madness.collision.unit.api_viewing.ui.comp.ArtMapper
 import com.madness.collision.unit.api_viewing.ui.comp.sealFileOf
 import com.madness.collision.unit.api_viewing.ui.upd.item.AppApiUpdate
 import com.madness.collision.unit.api_viewing.ui.upd.item.AppInstallVersion
@@ -97,10 +100,17 @@ internal fun AppItem(
         SealMaker.getItemColorBack(context, art.apiInfo.api) to
                 SealMaker.getItemColorAccent(context, art.apiInfo.api)
     }
+
+    val (initTime, relTimeFlow) = remember(art.updateTime) {
+        ArtMapper.getRelativeTimeUpdates(art.updateTime)
+    }
+    val relativeTime by relTimeFlow?.collectAsStateWithLifecycle(initTime)
+        ?: remember(initTime) { stateOf(initTime) }
+
     AppItem(
         modifier = modifier,
         name = art.identity.label,
-        time = art.updateTime,
+        time = relativeTime,
         apiText = art.apiInfo.displaySdk,
         sealLetter = art.apiInfo.letterOrDev,
         iconInfo = art.identity.iconPkgInfo,

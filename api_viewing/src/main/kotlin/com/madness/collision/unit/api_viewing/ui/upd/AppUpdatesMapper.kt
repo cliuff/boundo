@@ -54,11 +54,9 @@ private fun UpdatedApp.VersionUpgrade.toGuiArt(context: Context): GuiArt.VerUpda
 
 internal fun ApiViewingApp.toGuiArt(context: Context): GuiArt.App {
     val app = this
-    val time = DateUtils.getRelativeTimeSpanString(
-        updateTime, System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS).toString()
     return GuiArt.App(
         identity = GuiArtIdentity(app, context),
-        updateTime = time,
+        updateTime = updateTime,
         apiInfo = VerInfo(app.targetAPI),
     )
 }

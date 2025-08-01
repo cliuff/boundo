@@ -22,14 +22,53 @@ import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.AppPackageInfo
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.ui.upd.item.GuiArt.Identity
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flow
+import kotlin.math.abs
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.seconds
+
+object ArtMapper {
+    /** Get time relative to [targetTime], refreshed periodically. */
+    fun getRelativeTimeUpdates(targetTime: Long): Pair<String, Flow<String>?> {
+        val freshTime = 1.hours.inWholeMilliseconds
+
+        fun getRelativeTimeSpan(time: Long, now: Long): String {
+            return DateUtils.getRelativeTimeSpanString(
+                time, now, DateUtils.MINUTE_IN_MILLIS).toString()
+        }
+
+        val initTime = System.currentTimeMillis()
+        val initResult = getRelativeTimeSpan(targetTime, initTime)
+        if (abs(initTime - targetTime) >= freshTime) {
+            return initResult to null
+        }
+
+        return initResult to flow {
+            // delay some time to override the initial value
+            if (System.currentTimeMillis() - initTime < 500) {
+                delay(30.seconds)
+            }
+            while (true) {
+                // delay at the end of an iteration,
+                // emit update immediately when recollecting
+                val now = System.currentTimeMillis()
+                emit(getRelativeTimeSpan(targetTime, now))
+                if (abs(now - targetTime) >= freshTime) break
+                delay(45.seconds)
+            }
+        }
+            .distinctUntilChanged()
+    }
+}
 
 internal fun ApiViewingApp.toGuiArt(context: Context): GuiArtApp {
     val app = this
-    val time = DateUtils.getRelativeTimeSpanString(
-        updateTime, System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS).toString()
     return GuiArtApp(
         identity = GuiArtIdentity(app, context),
-        updateTime = time,
+        updateTime = updateTime,
         compileApiInfo = VerInfo(app.compileAPI),
         targetApiInfo = VerInfo(app.targetAPI),
         minApiInfo = VerInfo(app.minAPI),

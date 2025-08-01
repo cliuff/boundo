@@ -41,7 +41,7 @@ internal sealed interface GuiArt {
     data class App(
         override val identity: Identity,
         val apiInfo: VerInfo,
-        val updateTime: String,
+        val updateTime: Long,
     ) : GuiArt
 
     @Immutable
