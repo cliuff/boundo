@@ -42,7 +42,6 @@ import androidx.compose.ui.unit.*
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.widget.NestedScrollView
-import androidx.fragment.app.DialogFragment
 import coil3.compose.AsyncImage
 import coil3.compose.rememberAsyncImagePainter
 import com.madness.collision.main.MainViewModel
@@ -77,12 +76,11 @@ import kotlin.math.roundToInt
 fun AppInfoPage(
     app: ApiViewingApp,
     mainViewModel: MainViewModel,
-    hostFragment: DialogFragment,
     shareIcon: () -> Unit,
     shareApk: () -> Unit,
 ) {
     CompositionLocalProvider(LocalApp provides app) {
-        AppInfoPage(mainViewModel, hostFragment, shareIcon, shareApk)
+        AppInfoPage(mainViewModel, shareIcon, shareApk)
     }
 }
 
@@ -92,7 +90,6 @@ private val LocalApp = staticCompositionLocalOf<ApiViewingApp> { error("App not 
 @Composable
 private fun AppInfoPage(
     mainViewModel: MainViewModel,
-    hostFragment: DialogFragment,
     shareIcon: () -> Unit,
     shareApk: () -> Unit,
 ) {
@@ -116,7 +113,6 @@ private fun AppInfoPage(
             }
             AppTagInfo.ID_APP_ADAPTIVE_ICON -> {
                 {
-                    hostFragment.dismiss()
                     val f = AppIconFragment.newInstance(
                         app.name, app.packageName, app.appPackage.basePath, app.isArchive)
                     mainViewModel.displayFragment(f)
