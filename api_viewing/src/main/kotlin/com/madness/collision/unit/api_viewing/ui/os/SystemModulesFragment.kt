@@ -35,7 +35,7 @@ import com.madness.collision.chief.app.rememberColorScheme
 import com.madness.collision.unit.api_viewing.R
 import com.madness.collision.unit.api_viewing.data.ModuleInfo
 import com.madness.collision.unit.api_viewing.info.PkgInfo
-import com.madness.collision.unit.api_viewing.ui.info.AppInfoFragment
+import com.madness.collision.unit.api_viewing.ui.info.rememberAppInfoEventHandler
 import com.madness.collision.util.os.OsUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -57,10 +57,10 @@ class SystemModulesFragment : ComposeFragment(), Democratic {
     @Composable
     override fun ComposeContent() {
         MaterialTheme(colorScheme = rememberColorScheme()) {
-            SystemModulesPage(paddingValues = rememberContentPadding()) mod@{ moduleInfo ->
-                val pkgName = moduleInfo.pkgName ?: return@mod
-                AppInfoFragment(pkgName).show(childFragmentManager, AppInfoFragment.TAG)
-            }
+            SystemModulesPage(
+                appInfoEventHandler = rememberAppInfoEventHandler(this),
+                contentPadding = rememberContentPadding(),
+            )
         }
     }
 }

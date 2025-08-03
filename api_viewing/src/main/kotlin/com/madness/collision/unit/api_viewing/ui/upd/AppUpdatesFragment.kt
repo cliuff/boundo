@@ -41,46 +41,18 @@ import com.madness.collision.chief.auth.PermissionHandler
 import com.madness.collision.chief.auth.PermissionState
 import com.madness.collision.diy.SpanAdapter
 import com.madness.collision.unit.api_viewing.apps.AppListPermission
-import com.madness.collision.unit.api_viewing.data.ApiViewingApp
-import com.madness.collision.unit.api_viewing.list.AppPopOwner
-import com.madness.collision.unit.api_viewing.list.pop
-import com.madness.collision.unit.api_viewing.list.updateState
 import com.madness.collision.unit.api_viewing.ui.home.AppHomeNavPage
 import com.madness.collision.unit.api_viewing.ui.home.AppHomeNavPageImpl
-import com.madness.collision.unit.api_viewing.ui.info.AppInfoFragment
+import com.madness.collision.unit.api_viewing.ui.info.AppInfoEventHandler
+import com.madness.collision.unit.api_viewing.ui.info.rememberAppInfoEventHandler
 import com.madness.collision.util.hasUsageAccess
 import com.madness.collision.util.mainApplication
 
-class AppUpdatesFragment : ComposeFragment(), AppInfoFragment.Callback,
+class AppUpdatesFragment : ComposeFragment(),
     AppHomeNavPage by AppHomeNavPageImpl() {
     private val viewModel: AppUpdatesViewModel by viewModels()
     private var updatesCheckResumeTime: Long = 0L
     private var updatesCheckTime: Long = 0L
-    private val popOwner = AppPopOwner()
-
-    override fun getAppOwner(): AppInfoFragment.AppOwner {
-        return object : AppInfoFragment.AppOwner {
-            override val size: Int
-                get() = viewModel.sectionsAppList.size
-
-            override fun get(index: Int): ApiViewingApp? {
-                return viewModel.sectionsAppList.getOrNull(index)
-            }
-
-            override fun getIndex(app: ApiViewingApp): Int {
-                return viewModel.sectionsAppList.indexOf(app)
-            }
-
-            override fun findInAll(pkgName: String): ApiViewingApp? {
-                return viewModel.sectionsAppList.find { it.packageName == pkgName }
-                    ?: context?.let { context -> viewModel.getApp(context, pkgName) }
-            }
-        }
-    }
-
-    override fun onAppChanged(app: ApiViewingApp) {
-        popOwner.updateState(app)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -126,9 +98,10 @@ class AppUpdatesFragment : ComposeFragment(), AppInfoFragment.Callback,
     @Composable
     override fun ComposeContent() {
         MaterialTheme(colorScheme = rememberColorScheme()) {
+            val appInfoEventHandler = rememberAppInfoEventHandler(this)
             AppUpdatesPage(
                 paddingValues = navContentPadding,
-                eventHandler = rememberUpdatesEventHandler()
+                eventHandler = rememberUpdatesEventHandler(appInfoEventHandler)
             )
         }
     }
@@ -154,9 +127,9 @@ class AppUpdatesFragment : ComposeFragment(), AppInfoFragment.Callback,
     }
 
     @Composable
-    private fun rememberUpdatesEventHandler(): AppUpdatesEventHandler {
+    private fun rememberUpdatesEventHandler(appInfoEventHandler: AppInfoEventHandler): AppUpdatesEventHandler {
         return remember {
-            object : AppUpdatesEventHandler {
+            object : AppUpdatesEventHandler, AppInfoEventHandler by appInfoEventHandler {
                 private var refreshTime: Long = 0L
 
                 override fun hasUsageAccess() = context?.hasUsageAccess == true
@@ -166,10 +139,6 @@ class AppUpdatesFragment : ComposeFragment(), AppInfoFragment.Callback,
                         refreshTime = SystemClock.uptimeMillis()
                         moderatedUpdatesCheck()
                     }
-                }
-
-                override fun showAppInfo(app: ApiViewingApp) {
-                    popOwner.pop(this@AppUpdatesFragment, app)
                 }
 
                 override fun showAppListPage() {

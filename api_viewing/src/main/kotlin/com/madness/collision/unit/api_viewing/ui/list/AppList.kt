@@ -46,6 +46,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
@@ -56,6 +57,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
@@ -76,13 +78,15 @@ import com.madness.collision.diy.SpanAdapter
 import com.madness.collision.unit.api_viewing.ComposeUnit
 import com.madness.collision.unit.api_viewing.Utils
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
-import com.madness.collision.unit.api_viewing.list.AppPopOwner
-import com.madness.collision.unit.api_viewing.list.PopUpState
-import com.madness.collision.unit.api_viewing.list.updateState
 import com.madness.collision.unit.api_viewing.ui.home.AppHomeNavPage
 import com.madness.collision.unit.api_viewing.ui.home.AppHomeNavPageImpl
+import com.madness.collision.unit.api_viewing.ui.info.AppInfoEventHandler
 import com.madness.collision.unit.api_viewing.ui.info.AppInfoFragment
+import com.madness.collision.unit.api_viewing.ui.info.AppInfoSheet
 import com.madness.collision.unit.api_viewing.ui.info.ListStateAppOwner
+import com.madness.collision.unit.api_viewing.ui.info.LocalAppInfoCallback
+import com.madness.collision.unit.api_viewing.ui.info.rememberAppInfoEventHandler
+import com.madness.collision.unit.api_viewing.ui.info.rememberAppInfoState
 import com.madness.collision.util.F
 import com.madness.collision.util.FilePop
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
@@ -95,22 +99,10 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
-open class AppListFragment : ComposeUnit(), Democratic, AppInfoFragment.Callback, AppHomeNavPage by AppHomeNavPageImpl() {
+open class AppListFragment : ComposeUnit(), Democratic, AppHomeNavPage by AppHomeNavPageImpl() {
     override val id: String = "AV"
 
     private var listHeaderDarkIcon: Boolean = false
-    private val viewModel: AppListViewModel by viewModels()
-    private val popOwner = AppPopOwner()
-
-    override fun getAppOwner(): AppInfoFragment.AppOwner {
-        return ListStateAppOwner(viewModel.appList::value) { pkgName ->
-            context?.let { context -> viewModel.getApp(context, pkgName) }
-        }
-    }
-
-    override fun onAppChanged(app: ApiViewingApp) {
-        popOwner.updateState(app)
-    }
 
     override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
 //        mainViewModel.configNavigation(toolbar, iconColor)
@@ -209,17 +201,18 @@ open class AppListFragment : ComposeUnit(), Democratic, AppInfoFragment.Callback
     @Composable
     override fun ComposeContent() {
         MaterialTheme(colorScheme = rememberColorScheme()) {
+            val appInfoEventHandler = rememberAppInfoEventHandler(this)
             AppList(
-                eventHandler = rememberAppListEventHandler(),
+                eventHandler = rememberAppListEventHandler(appInfoEventHandler),
                 paddingValues = navContentPadding,
             )
         }
     }
 
     @Composable
-    private fun rememberAppListEventHandler() =
+    private fun rememberAppListEventHandler(appInfoEventHandler: AppInfoEventHandler) =
         remember<AppListEventHandler> {
-            object : AppListEventHandler {
+            object : AppListEventHandler, AppInfoEventHandler by appInfoEventHandler {
                 private val host = this@AppListFragment
 
                 override fun getMaxSpan(): Int {
@@ -233,25 +226,55 @@ open class AppListFragment : ComposeUnit(), Democratic, AppInfoFragment.Callback
                     }
                     setStatusBarDarkIcon(isDark)
                 }
-
-                override fun showAppInfo(app: ApiViewingApp) {
-                    AppInfoFragment(app).show(host.childFragmentManager, AppInfoFragment.TAG)
-                    host.popOwner.popState = PopUpState.Pop(app)
-                }
             }
         }
 }
 
 @Stable
-interface AppListEventHandler {
+interface AppListEventHandler : AppInfoEventHandler {
     fun getMaxSpan(): Int
     fun onAppBarOpacityChange(opacity: Float)
-    fun showAppInfo(app: ApiViewingApp)
+}
+
+@Composable
+fun AppList(eventHandler: AppListEventHandler, paddingValues: PaddingValues) {
+    val context = LocalContext.current
+    val viewModel = viewModel<AppListViewModel>()
+    val appInfoState = rememberAppInfoState()
+    val appInfoCallback = remember(viewModel) {
+        object : AppInfoFragment.Callback {
+            override fun getAppOwner(): AppInfoFragment.AppOwner {
+                return ListStateAppOwner(viewModel.appList::value) { pkgName ->
+                    viewModel.getApp(context, pkgName)
+                }
+            }
+        }
+    }
+
+    Box {
+        AppListPrimary(
+            eventHandler = eventHandler,
+            showAppInfo = { appInfoState.app = it },
+            paddingValues = paddingValues,
+        )
+
+        CompositionLocalProvider(LocalAppInfoCallback provides appInfoCallback) {
+            AppInfoSheet(
+                state = appInfoState,
+                onDismissRequest = { appInfoState.app = null },
+                eventHandler = eventHandler,
+            )
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppList(eventHandler: AppListEventHandler, paddingValues: PaddingValues) {
+private fun AppListPrimary(
+    eventHandler: AppListEventHandler,
+    showAppInfo: (ApiViewingApp) -> Unit,
+    paddingValues: PaddingValues,
+) {
     val viewModel = viewModel<AppListViewModel>()
     val appList by viewModel.appList.collectAsStateWithLifecycle()
     val appListConfig by viewModel.appListConfig.collectAsStateWithLifecycle()
@@ -270,7 +293,7 @@ fun AppList(eventHandler: AppListEventHandler, paddingValues: PaddingValues) {
     ) { contentPadding ->
         AppListGrid(
             appList = appList,
-            onClickApp = eventHandler::showAppInfo,
+            onClickApp = showAppInfo,
             getMaxSpan = eventHandler::getMaxSpan,
             listConfig = appListConfig,
             options = opUiState.options,

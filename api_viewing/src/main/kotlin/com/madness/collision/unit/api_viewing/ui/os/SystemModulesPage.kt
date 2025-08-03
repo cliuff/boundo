@@ -38,6 +38,7 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -50,15 +51,47 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.madness.collision.chief.lang.runIf
 import com.madness.collision.unit.api_viewing.data.ModuleInfo
+import com.madness.collision.unit.api_viewing.ui.info.AppInfoEventHandler
+import com.madness.collision.unit.api_viewing.ui.info.AppInfoSheet
+import com.madness.collision.unit.api_viewing.ui.info.rememberAppInfoState
 import com.madness.collision.util.ThemeUtil
 import com.madness.collision.util.dev.DarkPreview
 import com.madness.collision.util.dev.LayoutDirectionPreviews
 import com.madness.collision.util.ui.autoMirrored
+import kotlinx.coroutines.launch
 import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape
 import com.madness.collision.R as MainR
 
 @Composable
-fun SystemModulesPage(paddingValues: PaddingValues, showPkgModule: (ModuleInfo) -> Unit) {
+fun SystemModulesPage(
+    appInfoEventHandler: AppInfoEventHandler,
+    contentPadding: PaddingValues,
+) {
+    Box(contentAlignment = Alignment.TopCenter) {
+        val context = LocalContext.current
+        val coroutineScope = rememberCoroutineScope()
+        val appInfoState = rememberAppInfoState()
+
+        SystemModulesPagePrimary(
+            paddingValues = contentPadding,
+            showPkgModule = { moduleInfo ->
+                if (appInfoState.pkgName != moduleInfo.pkgName) {
+                    appInfoState.pkgName = moduleInfo.pkgName
+                    coroutineScope.launch { appInfoState.restoreApp(context) }
+                }
+            }
+        )
+
+        AppInfoSheet(
+            state = appInfoState,
+            onDismissRequest = { appInfoState.app = null },
+            eventHandler = appInfoEventHandler,
+        )
+    }
+}
+
+@Composable
+private fun SystemModulesPagePrimary(paddingValues: PaddingValues, showPkgModule: (ModuleInfo) -> Unit) {
     val context = LocalContext.current
     val viewModel = viewModel<SystemModulesViewModel>()
     val (modules, appPkgs) = viewModel.uiState.value

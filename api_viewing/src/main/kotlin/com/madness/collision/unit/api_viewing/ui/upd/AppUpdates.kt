@@ -89,16 +89,21 @@ import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.UpdatedApp
 import com.madness.collision.unit.api_viewing.info.AppInfo
 import com.madness.collision.unit.api_viewing.info.ExpIcon
+import com.madness.collision.unit.api_viewing.ui.info.AppInfoEventHandler
+import com.madness.collision.unit.api_viewing.ui.info.AppInfoFragment
+import com.madness.collision.unit.api_viewing.ui.info.AppInfoSheet
+import com.madness.collision.unit.api_viewing.ui.info.ListStateAppOwner
+import com.madness.collision.unit.api_viewing.ui.info.LocalAppInfoCallback
+import com.madness.collision.unit.api_viewing.ui.info.rememberAppInfoState
 import com.madness.collision.unit.api_viewing.ui.upd.item.GuiArt
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
 import com.madness.collision.util.mainApplication
 import kotlinx.coroutines.flow.map
 
 @Stable
-interface AppUpdatesEventHandler {
+interface AppUpdatesEventHandler : AppInfoEventHandler {
     fun hasUsageAccess(): Boolean
     fun refreshUpdates()
-    fun showAppInfo(app: ApiViewingApp)
     fun showAppListPage()
     fun showUsageAccessSettings()
     fun requestAllPkgsQuery(permission: String?)
@@ -109,6 +114,42 @@ interface AppUpdatesEventHandler {
 
 @Composable
 fun AppUpdatesPage(paddingValues: PaddingValues, eventHandler: AppUpdatesEventHandler) {
+    val context = LocalContext.current
+    val viewModel = viewModel<AppUpdatesViewModel>()
+    val appInfoState = rememberAppInfoState()
+    val appInfoCallback = remember(viewModel) {
+        object : AppInfoFragment.Callback {
+            override fun getAppOwner(): AppInfoFragment.AppOwner {
+                return ListStateAppOwner(viewModel::sectionsAppList) { pkgName ->
+                    viewModel.getApp(context, pkgName)
+                }
+            }
+        }
+    }
+
+    Box {
+        AppUpdatesPrimary(
+            eventHandler = eventHandler,
+            showAppInfo = { appInfoState.app = it },
+            paddingValues = paddingValues,
+        )
+
+        CompositionLocalProvider(LocalAppInfoCallback provides appInfoCallback) {
+            AppInfoSheet(
+                state = appInfoState,
+                onDismissRequest = { appInfoState.app = null },
+                eventHandler = eventHandler,
+            )
+        }
+    }
+}
+
+@Composable
+private fun AppUpdatesPrimary(
+    eventHandler: AppUpdatesEventHandler,
+    showAppInfo: (ApiViewingApp) -> Unit,
+    paddingValues: PaddingValues,
+) {
     val viewModel: AppUpdatesViewModel = viewModel()
     val updatesUiState by viewModel.uiState.collectAsStateWithLifecycle()
     val appListPrefs by viewModel.appListId.collectAsStateWithLifecycle()
@@ -171,7 +212,7 @@ fun AppUpdatesPage(paddingValues: PaddingValues, eventHandler: AppUpdatesEventHa
                             top = contentPadding.calculateTopPadding() + 5.dp,
                             bottom = paddingValues.calculateBottomPadding() + 20.dp
                         ),
-                        onClickApp = eventHandler::showAppInfo,
+                        onClickApp = showAppInfo,
                         onClickViewMore = eventHandler::showAppListPage,
                         onClickUsageAccess = eventHandler::showUsageAccessSettings
                             // hide usage access when all pkgs query not granted yet

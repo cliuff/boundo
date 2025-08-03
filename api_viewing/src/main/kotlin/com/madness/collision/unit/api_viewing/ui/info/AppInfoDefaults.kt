@@ -21,12 +21,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalContext
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.madness.collision.unit.api_viewing.apps.AppRepo
 import com.madness.collision.unit.api_viewing.apps.AppRepository
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
+import com.madness.collision.unit.api_viewing.list.AppListService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -78,3 +82,22 @@ fun rememberAppInfoState(initApp: ApiViewingApp? = null): AppInfoSheetState {
     }
     return state
 }
+
+@Composable
+fun rememberAppInfoEventHandler(hostFragment: Fragment) =
+    hostFragment.run {
+        remember<AppInfoEventHandler> {
+            object : AppInfoEventHandler {
+
+                override fun shareAppIcon(app: ApiViewingApp) {
+                    val context = context ?: return
+                    AppListService().actionIcon(context, app, parentFragmentManager)
+                }
+
+                override fun shareAppArchive(app: ApiViewingApp) {
+                    val context = context ?: return
+                    AppListService().actionApk(context, app, lifecycleScope, parentFragmentManager)
+                }
+            }
+        }
+    }
