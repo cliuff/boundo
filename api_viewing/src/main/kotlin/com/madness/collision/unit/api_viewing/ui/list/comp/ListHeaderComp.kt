@@ -52,6 +52,18 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import kotlin.math.roundToInt
 
+fun listHeaderDarkIcon(context: Context): Boolean {
+    val f = F.createFile(F.valFilePubExterior(context), "Art_ListHeader.jpg")
+    // light status bar icons for custom header images
+    if (f.exists()) return false
+    val sealIndex = Utils.getDevCodenameLetter()
+        ?: Utils.getAndroidLetterByAPI(Build.VERSION.SDK_INT)
+    return when (sealIndex) {
+        'm', 'n', 'q', 'u' -> true
+        else -> false
+    }
+}
+
 private suspend fun getHeaderImage(context: Context): File? {
     val f = F.createFile(F.valFilePubExterior(context), "Art_ListHeader.jpg")
     if (f.exists()) return f
