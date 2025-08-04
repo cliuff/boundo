@@ -81,6 +81,7 @@ import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.madness.collision.chief.app.BoundoTheme
@@ -97,13 +98,14 @@ import com.madness.collision.unit.api_viewing.ui.info.LocalAppInfoCallback
 import com.madness.collision.unit.api_viewing.ui.info.rememberAppInfoState
 import com.madness.collision.unit.api_viewing.ui.upd.item.GuiArt
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
+import com.madness.collision.util.hasUsageAccess
 import com.madness.collision.util.mainApplication
 import kotlinx.coroutines.flow.map
+import kotlin.math.truncate
 
 @Stable
 interface AppUpdatesEventHandler : AppInfoEventHandler {
-    fun hasUsageAccess(): Boolean
-    fun refreshUpdates()
+    fun setStatusBarDarkIcon(isDark: Boolean)
     fun showAppListPage()
     fun showUsageAccessSettings()
     fun requestAllPkgsQuery(permission: String?)
@@ -145,12 +147,43 @@ fun AppUpdatesPage(paddingValues: PaddingValues, eventHandler: AppUpdatesEventHa
 }
 
 @Composable
+private fun AppUpdatesEventEffects() {
+    val viewModel = viewModel<AppUpdatesViewModel>()
+
+    val context = LocalContext.current
+    // track times of on-resume, reset when recreated (i.e. restart of composition)
+    var resumeTimes by remember { mutableIntStateOf(0) }
+    LifecycleResumeEffect(Unit) {
+        // resumes excluding the 1st one
+        if (resumeTimes++ > 0) {
+            viewModel.checkListPrefs(context)
+            viewModel.checkResumedUpdates(context)
+        }
+        onPauseOrDispose {}
+    }
+}
+
+@Composable
 private fun AppUpdatesPrimary(
     eventHandler: AppUpdatesEventHandler,
     showAppInfo: (ApiViewingApp) -> Unit,
     paddingValues: PaddingValues,
 ) {
-    val viewModel: AppUpdatesViewModel = viewModel()
+    AppUpdatesEventEffects()
+
+    LaunchedEffect(Unit) {
+        eventHandler.setStatusBarDarkIcon(mainApplication.isPaleTheme)
+    }
+
+    BoxWithConstraints {
+        val context = LocalContext.current
+        val viewModel = viewModel<AppUpdatesViewModel>()
+        val maxSpan = truncate(maxWidth / 290.dp).toInt().coerceAtLeast(1)
+        LaunchedEffect(maxSpan) {
+            viewModel.columnCount = maxSpan
+            viewModel.checkResumedUpdates(context)
+        }
+
     val updatesUiState by viewModel.uiState.collectAsStateWithLifecycle()
     val appListPrefs by viewModel.appListId.collectAsStateWithLifecycle()
     val (isLoading, sections, permState) = updatesUiState
@@ -159,7 +192,7 @@ private fun AppUpdatesPrimary(
             BoxWithConstraints {
                 UpdatesAppBar(
                     refreshing = isLoading,
-                    onClickRefresh = eventHandler::refreshUpdates,
+                    onClickRefresh = { viewModel.refreshUpdates(context) },
                     onClickSettings = eventHandler::showAppSettings,
                     windowInsets = paddingValues.asInsets()
                         .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
@@ -187,13 +220,13 @@ private fun AppUpdatesPrimary(
         },
         containerColor = if (mainApplication.isDarkTheme) Color(0xFF050505) else Color(0xFFFCFCFC),
         content = { contentPadding ->
-            val hasUsageAccess = eventHandler.hasUsageAccess()
+            val hasUsageAccess = context.hasUsageAccess
             BoxWithConstraints {
                 val horizontalPadding = LocalLayoutDirection.current.let { di ->
                     paddingValues.run { calculateLeftPadding(di) + calculateRightPadding(di) }
                 }
                 val appItemStyle = when {
-                    viewModel.columnCount > 1 -> DefaultAppItemStyle
+                    maxSpan > 1 -> DefaultAppItemStyle
                     maxWidth - horizontalPadding >= 360.dp -> DefaultAppItemStyle
                     else -> CompactAppItemStyle
                 }
@@ -205,7 +238,7 @@ private fun AppUpdatesPrimary(
                     // if (sections.isNotEmpty() || !hasUsageAccess)
                     UpdatesList(
                         sections = sections,
-                        columnCount = viewModel.columnCount,
+                        columnCount = maxSpan,
                         paddingValues = PaddingValues(
                             start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
                             end = paddingValues.calculateEndPadding(LocalLayoutDirection.current),
@@ -234,6 +267,7 @@ private fun AppUpdatesPrimary(
             }
         }
     )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

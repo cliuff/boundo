@@ -63,10 +63,10 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleResumeEffect
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.madness.collision.Democratic
 import com.madness.collision.R
@@ -74,7 +74,6 @@ import com.madness.collision.chief.app.BoundoTheme
 import com.madness.collision.chief.app.asInsets
 import com.madness.collision.chief.app.rememberColorScheme
 import com.madness.collision.chief.lang.mapIf
-import com.madness.collision.diy.SpanAdapter
 import com.madness.collision.unit.api_viewing.ComposeUnit
 import com.madness.collision.unit.api_viewing.Utils
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
@@ -94,9 +93,7 @@ import com.madness.collision.util.mainApplication
 import com.madness.collision.util.notifyBriefly
 import com.madness.collision.util.os.OsUtils
 import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
+import java.io.File
 import kotlin.math.roundToInt
 
 open class AppListFragment : ComposeUnit(), Democratic, AppHomeNavPage by AppHomeNavPageImpl() {
@@ -135,37 +132,6 @@ open class AppListFragment : ComposeUnit(), Democratic, AppHomeNavPage by AppHom
                 true
             }
         }
-        val viewModel by viewModels<AppListViewModel>()
-        viewModel.events
-            .filterIsInstance<AppListEvent.ShareAppList>()
-            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-            .onEach ev@{ event ->
-                val context = context ?: return@ev
-                val title = com.madness.collision.R.string.fileActionsShare
-                FilePop.by(context, event.file, "text/csv", title, imageLabel = "App List")
-                    .show(childFragmentManager, FilePop.TAG)
-            }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
-
-        LaunchMethod(arguments).run {
-            val src = if (mode == LaunchMethod.LAUNCH_MODE_SEARCH && textExtra != null) {
-                AppListSrc.DataSourceQuery(null, textExtra)
-            } else if (mode == LaunchMethod.LAUNCH_MODE_LINK && dataStreamExtra != null) {
-                AppListSrc.SharedApk(dataStreamExtra)
-            } else {
-                return@run
-            }
-            // launch in default context and wait for view model init completed
-            lifecycleScope.launch { viewModel.toggleListSrc(src) }
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (lifecycleEventTime.compareValues(Lifecycle.Event.ON_PAUSE, Lifecycle.Event.ON_CREATE) > 0) {
-            val viewModel by viewModels<AppListViewModel>()
-            context?.let(viewModel::checkListPrefs)
-        }
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -200,9 +166,22 @@ open class AppListFragment : ComposeUnit(), Democratic, AppHomeNavPage by AppHom
 
     @Composable
     override fun ComposeContent() {
+        val startSrc = remember {
+            LaunchMethod(arguments).run {
+                if (mode == LaunchMethod.LAUNCH_MODE_SEARCH && textExtra != null) {
+                    AppListSrc.DataSourceQuery(null, textExtra)
+                } else if (mode == LaunchMethod.LAUNCH_MODE_LINK && dataStreamExtra != null) {
+                    AppListSrc.SharedApk(dataStreamExtra)
+                } else {
+                    null
+                }
+            }
+        }
+
         MaterialTheme(colorScheme = rememberColorScheme()) {
             val appInfoEventHandler = rememberAppInfoEventHandler(this)
             AppList(
+                startSrc = startSrc,
                 eventHandler = rememberAppListEventHandler(appInfoEventHandler),
                 paddingValues = navContentPadding,
             )
@@ -213,11 +192,6 @@ open class AppListFragment : ComposeUnit(), Democratic, AppHomeNavPage by AppHom
     private fun rememberAppListEventHandler(appInfoEventHandler: AppInfoEventHandler) =
         remember<AppListEventHandler> {
             object : AppListEventHandler, AppInfoEventHandler by appInfoEventHandler {
-                private val host = this@AppListFragment
-
-                override fun getMaxSpan(): Int {
-                    return SpanAdapter.getSpanCount(host, 290f)
-                }
 
                 override fun onAppBarOpacityChange(opacity: Float) {
                     val isDark = when {
@@ -226,18 +200,25 @@ open class AppListFragment : ComposeUnit(), Democratic, AppHomeNavPage by AppHom
                     }
                     setStatusBarDarkIcon(isDark)
                 }
+
+                override fun shareAppList(file: File) {
+                    val context = context ?: return
+                    val title = com.madness.collision.R.string.fileActionsShare
+                    FilePop.by(context, file, "text/csv", title, imageLabel = "App List")
+                        .show(parentFragmentManager, FilePop.TAG)
+                }
             }
         }
 }
 
 @Stable
 interface AppListEventHandler : AppInfoEventHandler {
-    fun getMaxSpan(): Int
     fun onAppBarOpacityChange(opacity: Float)
+    fun shareAppList(file: File)
 }
 
 @Composable
-fun AppList(eventHandler: AppListEventHandler, paddingValues: PaddingValues) {
+fun AppList(startSrc: AppListSrc?, eventHandler: AppListEventHandler, paddingValues: PaddingValues) {
     val context = LocalContext.current
     val viewModel = viewModel<AppListViewModel>()
     val appInfoState = rememberAppInfoState()
@@ -253,6 +234,7 @@ fun AppList(eventHandler: AppListEventHandler, paddingValues: PaddingValues) {
 
     Box {
         AppListPrimary(
+            startSrc = startSrc,
             eventHandler = eventHandler,
             showAppInfo = { appInfoState.app = it },
             paddingValues = paddingValues,
@@ -268,14 +250,49 @@ fun AppList(eventHandler: AppListEventHandler, paddingValues: PaddingValues) {
     }
 }
 
+@Composable
+private fun AppListEventEffects(eventHandler: AppListEventHandler) {
+    val viewModel = viewModel<AppListViewModel>()
+
+    // collect events in a lifecycle-aware manner
+    val lifecycleOwner = LocalLifecycleOwner.current
+    LaunchedEffect(viewModel) {
+        viewModel.events
+            .filterIsInstance<AppListEvent.ShareAppList>()
+            .flowWithLifecycle(lifecycleOwner.lifecycle)
+            .collect { event -> eventHandler.shareAppList(event.file) }
+    }
+
+    val context = LocalContext.current
+    // track times of on-resume, reset when recreated (i.e. restart of composition)
+    var resumeTimes by remember { mutableIntStateOf(0) }
+    LifecycleResumeEffect(Unit) {
+        // resumes excluding the 1st one
+        if (resumeTimes++ > 0) {
+            viewModel.checkListPrefs(context)
+        }
+        onPauseOrDispose {}
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AppListPrimary(
+    startSrc: AppListSrc?,
     eventHandler: AppListEventHandler,
     showAppInfo: (ApiViewingApp) -> Unit,
     paddingValues: PaddingValues,
 ) {
     val viewModel = viewModel<AppListViewModel>()
+    if (startSrc != null) {
+        LaunchedEffect(startSrc) {
+            // launch in default context and wait for view model init completed
+            viewModel.toggleListSrc(startSrc)
+        }
+    }
+
+    AppListEventEffects(eventHandler = eventHandler)
+
     val appList by viewModel.appList.collectAsStateWithLifecycle()
     val appListConfig by viewModel.appListConfig.collectAsStateWithLifecycle()
     val appSrcState by viewModel.appSrcState.collectAsStateWithLifecycle()
@@ -294,7 +311,6 @@ private fun AppListPrimary(
         AppListGrid(
             appList = appList,
             onClickApp = showAppInfo,
-            getMaxSpan = eventHandler::getMaxSpan,
             listConfig = appListConfig,
             options = opUiState.options,
             appSrcState = appSrcState,

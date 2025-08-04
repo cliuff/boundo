@@ -17,7 +17,8 @@
 package com.madness.collision.unit.api_viewing.ui.upd
 
 import android.content.Context
-import androidx.lifecycle.LifecycleOwner
+import android.os.SystemClock
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.madness.collision.chief.auth.PermissionState
@@ -73,13 +74,8 @@ class AppUpdatesViewModel : ViewModel() {
     private var updatesChecker: AppUpdatesChecker? = null
     private val mutexUpdatesCheck = Mutex()
     var columnCount: Int = 1
-        private set
     var sectionsAppList: List<ApiViewingApp> = emptyList()
         private set
-
-    fun setUpdatesColumnCount(columnCount: Int) {
-        this.columnCount = columnCount.coerceAtLeast(1)
-    }
 
     fun setAllPkgsQueryResult(state: PermissionState) {
         mutUiState.update { curr ->
@@ -96,7 +92,31 @@ class AppUpdatesViewModel : ViewModel() {
         }
     }
 
-    fun checkUpdates(timestamp: Long, context: Context, lifecycleOwner: LifecycleOwner) {
+    private var updatesCheckTime: Long = 0L
+    private var updatesCheckResumeTime: Long = 0L
+    private var refreshTime: Long = 0L
+
+    fun refreshUpdates(context: Context) {
+        if (SystemClock.uptimeMillis() - refreshTime > 500) {
+            refreshTime = SystemClock.uptimeMillis()
+            checkUpdates(context)
+        }
+    }
+
+    fun checkResumedUpdates(context: Context) {
+        if (SystemClock.uptimeMillis() - updatesCheckResumeTime > 30_000) {
+            updatesCheckResumeTime = SystemClock.uptimeMillis()
+            checkUpdates(context)
+        }
+    }
+
+    fun checkUpdates(context: Context) {
+        if (SystemClock.uptimeMillis() - updatesCheckTime < 80) {
+            Log.d("AppUpdates", "Abort updates check within 80ms.")
+            return
+        }
+        updatesCheckTime = SystemClock.uptimeMillis()
+
         if (mutexUpdatesCheck.isLocked) return
         viewModelScope.launch(Dispatchers.IO) {
             if (mutexUpdatesCheck.isLocked) return@launch

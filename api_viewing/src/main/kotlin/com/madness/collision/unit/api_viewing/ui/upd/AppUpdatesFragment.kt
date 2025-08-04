@@ -20,10 +20,7 @@ import android.content.Intent
 import android.graphics.RectF
 import android.net.Uri
 import android.os.Bundle
-import android.os.SystemClock
 import android.provider.Settings
-import android.util.Log
-import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.MaterialTheme
@@ -33,26 +30,20 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.os.BundleCompat
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import com.madness.collision.BuildConfig
 import com.madness.collision.chief.app.ComposeFragment
 import com.madness.collision.chief.app.rememberColorScheme
 import com.madness.collision.chief.auth.PermissionHandler
 import com.madness.collision.chief.auth.PermissionState
-import com.madness.collision.diy.SpanAdapter
 import com.madness.collision.unit.api_viewing.apps.AppListPermission
 import com.madness.collision.unit.api_viewing.ui.home.AppHomeNavPage
 import com.madness.collision.unit.api_viewing.ui.home.AppHomeNavPageImpl
 import com.madness.collision.unit.api_viewing.ui.info.AppInfoEventHandler
 import com.madness.collision.unit.api_viewing.ui.info.rememberAppInfoEventHandler
-import com.madness.collision.util.hasUsageAccess
-import com.madness.collision.util.mainApplication
 
 class AppUpdatesFragment : ComposeFragment(),
     AppHomeNavPage by AppHomeNavPageImpl() {
     private val viewModel: AppUpdatesViewModel by viewModels()
-    private var updatesCheckResumeTime: Long = 0L
-    private var updatesCheckTime: Long = 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,36 +54,8 @@ class AppUpdatesFragment : ComposeFragment(),
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        setStatusBarDarkIcon(mainApplication.isPaleTheme)
-        viewModel.setUpdatesColumnCount(SpanAdapter.getSpanCount(this, 290f))
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (lifecycleEventTime.compareValues(Lifecycle.Event.ON_PAUSE, Lifecycle.Event.ON_CREATE) > 0) {
-            context?.let(viewModel::checkListPrefs)
-        }
-        if (SystemClock.uptimeMillis() - updatesCheckResumeTime > 30_000) {
-            updatesCheckResumeTime = SystemClock.uptimeMillis()
-            moderatedUpdatesCheck()
-        }
-    }
-
     override fun onHiddenChanged(hidden: Boolean) {
-        if (!hidden && SystemClock.uptimeMillis() - updatesCheckResumeTime > 30_000) {
-            updatesCheckResumeTime = SystemClock.uptimeMillis()
-            moderatedUpdatesCheck()
-        }
-    }
-
-    private fun moderatedUpdatesCheck() {
-        if (SystemClock.uptimeMillis() - updatesCheckTime < 80) {
-            Log.d("AppUpdatesFragment", "Abort updates check within 80ms.")
-            return
-        }
-        updatesCheckTime = SystemClock.uptimeMillis()
-        viewModel.checkUpdates(mainViewModel.timestamp, requireContext(), this)
+        if (!hidden) viewModel.checkResumedUpdates(requireContext())
     }
 
     @Composable
@@ -110,7 +73,9 @@ class AppUpdatesFragment : ComposeFragment(),
         if (AppListPermission.GetInstalledAppsPkg != null) {
             PermissionHandler(this, AppListPermission.GetInstalledApps) { _, state ->
                 viewModel.setAllPkgsQueryResult(state)
-                if (state == PermissionState.Granted) moderatedUpdatesCheck()
+                if (state == PermissionState.Granted) {
+                    viewModel.checkUpdates(requireContext())
+                }
             }
         } else {
             null
@@ -130,15 +95,9 @@ class AppUpdatesFragment : ComposeFragment(),
     private fun rememberUpdatesEventHandler(appInfoEventHandler: AppInfoEventHandler): AppUpdatesEventHandler {
         return remember {
             object : AppUpdatesEventHandler, AppInfoEventHandler by appInfoEventHandler {
-                private var refreshTime: Long = 0L
 
-                override fun hasUsageAccess() = context?.hasUsageAccess == true
-
-                override fun refreshUpdates() {
-                    if (SystemClock.uptimeMillis() - refreshTime > 500) {
-                        refreshTime = SystemClock.uptimeMillis()
-                        moderatedUpdatesCheck()
-                    }
+                override fun setStatusBarDarkIcon(isDark: Boolean) {
+                    this@AppUpdatesFragment.setStatusBarDarkIcon(isDark)
                 }
 
                 override fun showAppListPage() {

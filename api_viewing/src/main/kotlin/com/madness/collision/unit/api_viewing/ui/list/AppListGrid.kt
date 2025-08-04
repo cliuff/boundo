@@ -64,13 +64,13 @@ import dev.chrisbanes.haze.hazeSource
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlin.math.roundToInt
+import kotlin.math.truncate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppListGrid(
     appList: List<ApiViewingApp>,
     onClickApp: (ApiViewingApp) -> Unit,
-    getMaxSpan: () -> Int,
     listConfig: AppListConfig,
     options: AppListOptions,
     appSrcState: AppSrcState,
@@ -142,11 +142,7 @@ fun AppListGrid(
             paddingValues.run { calculateLeftPadding(di) + calculateRightPadding(di) }
         }
 
-        val maxSpan by remember(scrollState) {
-            derivedStateOf {
-                scrollState.layoutInfo.maxSpan.coerceAtLeast(1)
-            }
-        }
+        val maxSpan = truncate(maxWidth / 290.dp).toInt().coerceAtLeast(1)
         val appItemStyle = when {
             maxSpan > 1 -> DefaultAppItemStyle
             maxWidth - horizontalPaddingSum >= 360.dp -> DefaultAppItemStyle
@@ -168,7 +164,7 @@ fun AppListGrid(
                 paddingValues.run { calculateStartPadding(di) != calculateEndPadding(di) }
             }
             LazyAppGrid(
-                columnCount = remember { getMaxSpan() },
+                columnCount = maxSpan,
                 apps = appList,
                 onClickApp = onClickApp,
                 backdropColor = backdropColor,
