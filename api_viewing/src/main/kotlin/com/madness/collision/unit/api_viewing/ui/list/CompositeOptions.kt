@@ -21,15 +21,19 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -63,15 +67,25 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.madness.collision.chief.app.BoundoTheme
+import com.madness.collision.chief.layout.NavigationBarProtection
+import com.madness.collision.chief.layout.SystemBarsProtectionDefaults
+import com.madness.collision.chief.layout.symmetricSheetMargin
+import com.madness.collision.ui.theme.MetaAppTheme
 import com.madness.collision.unit.api_viewing.R
+import com.madness.collision.util.SystemUtil
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
+
+import com.madness.collision.chief.layout.BottomSheetDefaults as ChiefBottomSheetDefaults
 
 @Stable
 interface CompositeOptionsEventHandler : ListOptionsEventHandler {
@@ -92,22 +106,37 @@ fun ListOptionsDialog(
     if (showBottomSheet) {
         BottomSheet(
             onDismiss = { showBottomSheet = false },
-            sheetState = rememberModalBottomSheetState(),
-            content = { SheetContent(options, eventHandler, windowInsets) },
+            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+            content = { insets -> SheetContent(options, eventHandler, insets) },
         )
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun BottomSheet(onDismiss: () -> Unit, sheetState: SheetState, content: @Composable () -> Unit) {
-    // todo set contentWindowInsets to zero to disable nav bar scrim
-    // todo horizontal insets as sheet's margin, bottom insets as content padding
-    // avoid horizontal insets for waterfall in portrait, and system bars and cutout in split screen
+private fun BottomSheet(
+    onDismiss: () -> Unit,
+    sheetState: SheetState,
+    contentWindowInsets: @Composable () -> WindowInsets = { ChiefBottomSheetDefaults.windowInsets },
+    content: @Composable (WindowInsets) -> Unit
+) {
+    val context = LocalContext.current
+    val density = LocalDensity.current
+    // retrieve host page's window size
+    val maxWidth = remember(context) {
+        val winWidthPx = SystemUtil.getRuntimeWindowSize(context).x
+        with(density) { winWidthPx.toDp() }
+    }
+    // todo use sheet's window's maxWidth
+    // apply horizontal window insets as margin to sheet's surface
+    val (maxSheetWidth, horizontalMargin) = symmetricSheetMargin(maxWidth, contentWindowInsets())
+
     ModalBottomSheet(
+        modifier = Modifier.padding(horizontalMargin),
         onDismissRequest = onDismiss,
         sheetState = sheetState,
-        content = { content() },
+        sheetMaxWidth = maxSheetWidth,
+        contentWindowInsets = { WindowInsets() },
         dragHandle = {
             Box(
                 modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surface),
@@ -115,7 +144,28 @@ private fun BottomSheet(onDismiss: () -> Unit, sheetState: SheetState, content: 
                 content = { BottomSheetDefaults.DragHandle() }
             )
         }
-    )
+    ) {
+        // bottom sheet's content is inside a separate window, with independent window insets
+        BoxWithConstraints {
+            val windowInsets = contentWindowInsets()
+            val contentPadding = windowInsets.asPaddingValues()
+            val sheetHeight = (maxHeight * 0.7f)
+                .coerceIn(400.dp, 600.dp)
+                .coerceAtMost(maxHeight - contentPadding.calculateTopPadding() - 10.dp)
+
+            Box(modifier = Modifier.heightIn(max = sheetHeight)) {
+                content(windowInsets.only(WindowInsetsSides.Bottom))
+
+                MetaAppTheme(colorScheme = MaterialTheme.colorScheme) {
+                    NavigationBarProtection(
+                        modifier = Modifier.align(Alignment.BottomCenter),
+                        color = SystemBarsProtectionDefaults
+                            .derivedNavBarColorOf(BottomSheetDefaults.ContainerColor),
+                    )
+                }
+            }
+        }
+    }
 }
 
 @Composable

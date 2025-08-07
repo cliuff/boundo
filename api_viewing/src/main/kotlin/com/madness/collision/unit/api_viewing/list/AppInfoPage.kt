@@ -35,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -44,6 +45,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.widget.NestedScrollView
 import coil3.compose.AsyncImage
 import coil3.compose.rememberAsyncImagePainter
+import com.madness.collision.chief.app.stateOf
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.api_viewing.data.*
 import com.madness.collision.unit.api_viewing.env.GooglePlayAppInfoOwner
@@ -125,6 +127,7 @@ private fun AppInfoPage(
     AppInfo(Color(itemColor), isDark, verInfo, updateTime, shareIcon, shareApk, getClick)
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AppInfo(
     itemBackColor: Color,
@@ -156,8 +159,9 @@ private fun AppInfo(
                 enter = fadeIn() + slideInHorizontally(initialOffsetX = { offsetCoeff * -it / 2 }),
                 exit = fadeOut(),
             ) {
+                val infoScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
                 FrontAppInfo(cardColor, margin, verInfoList, updateTime,
-                    { pageIndex = 1 }, getClick)
+                    { pageIndex = 1 }, getClick, infoScrollBehavior)
             }
             AnimatedVisibility(
                 visible = pageIndex == 1,
@@ -251,6 +255,7 @@ private fun DetailedAppInfo(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun FrontAppInfo(
     cardColor: Color,
@@ -259,32 +264,66 @@ private fun FrontAppInfo(
     updateTime: String?,
     clickDetails: () -> Unit,
     getClick: (AppTagInfo) -> (() -> Unit)?,
+    infoScrollBehavior: TopAppBarScrollBehavior? = null,
 ) {
     val app = LocalApp.current
     val context = LocalContext.current
     val splitApks = remember { AppInfo.getApkSizeList(app.appPackage, context) }
-    Column {
+    val nestedScrollModifier = infoScrollBehavior?.run {
+        Modifier.nestedScroll(nestedScrollConnection)
+    }
+
+    Box(modifier = nestedScrollModifier ?: Modifier) {
+        val scrollState = infoScrollBehavior?.state
+        var appDetailsHeightPx by remember { mutableIntStateOf(-1) }
+        val appDetailsAlpha by remember(scrollState) {
+            val state = scrollState ?: return@remember stateOf(1f)
+            derivedStateOf { (1 - 1.25f * state.collapsedFraction).coerceIn(0f, 1f) }
+        }
+
         Card(
-            modifier = Modifier.padding(horizontal = horizontalMargin),
+            modifier = Modifier
+                .graphicsLayer {
+                    alpha = appDetailsAlpha
+                    scaleX = appDetailsAlpha * 0.04f + 0.96f
+                    scaleY = appDetailsAlpha * 0.04f + 0.96f
+                }
+                .onSizeChanged { size ->
+                    appDetailsHeightPx = size.height
+                    if (scrollState != null) {
+                        val offset = size.height.toFloat() - scrollState.heightOffset
+                        scrollState.heightOffsetLimit = -offset
+                    }
+                }
+                .padding(bottom = 18.dp)
+                .padding(horizontal = horizontalMargin),
             elevation = CardDefaults.elevatedCardElevation(),
             shape = AbsoluteSmoothCornerShape(20.dp, 100),
             colors = CardDefaults.elevatedCardColors(containerColor = cardColor),
         ) {
             AppDetailsContent(app, verInfoList, splitApks[0].second, updateTime, clickDetails)
         }
-        Spacer(modifier = Modifier.height(18.dp))
-        Card(
-            modifier = Modifier.padding(horizontal = horizontalMargin),
-            elevation = CardDefaults.elevatedCardElevation(),
-            shape = AbsoluteSmoothCornerShape(
-                cornerRadiusTL = 20.dp, smoothnessAsPercentTL = 100,
-                cornerRadiusTR = 20.dp, smoothnessAsPercentTR = 100),
-            colors = CardDefaults.elevatedCardColors(containerColor = cardColor),
-        ) {
-            BoxWithConstraints(modifier = Modifier.weight(1f)) {
-                // ensure enough space for tab to scroll to
-                val extraHeight = remember { max(maxHeight - 150.dp, 80.dp) }
-                NestedScrollParent {
+
+        if (appDetailsHeightPx < 0) {
+            // placeholder before appDetailsHeightPx is available
+            Spacer(modifier = Modifier.fillMaxHeight())
+        } else {
+            Card(
+                modifier = Modifier
+                    .offset {
+                        val scrollOffset = scrollState?.heightOffset?.roundToInt() ?: 0
+                        IntOffset(0, (appDetailsHeightPx + scrollOffset).coerceAtLeast(0))
+                    }
+                    .padding(horizontal = horizontalMargin),
+                elevation = CardDefaults.elevatedCardElevation(),
+                shape = AbsoluteSmoothCornerShape(
+                    cornerRadiusTL = 20.dp, smoothnessAsPercentTL = 100,
+                    cornerRadiusTR = 20.dp, smoothnessAsPercentTR = 100),
+                colors = CardDefaults.elevatedCardColors(containerColor = cardColor),
+            ) {
+                BoxWithConstraints(modifier = Modifier.weight(1f)) {
+                    // ensure enough space for tab to scroll to
+                    val extraHeight = remember { max(maxHeight - 150.dp, 80.dp) }
                     TagDetailsContent(getClick, splitApks, PaddingValues(bottom = extraHeight))
                 }
             }
@@ -396,11 +435,10 @@ private fun TagDetailsContent(
     val list = lists
     if (list != null) {
         LibPage(
-            modifier = Modifier.nestedScroll(rememberNestedScrollInteropConnection()),
             app = app,
             contentPadding = contentPadding,
         ) {
-            item {
+            item(contentType = "TagDetails") {
                 Column {
                     TagDetailsList(app, list, getClick, splitApks)
                 }

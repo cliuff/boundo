@@ -21,19 +21,29 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
 import com.madness.collision.chief.app.rememberColorScheme
+import com.madness.collision.chief.layout.BottomSheetDefaults
+import com.madness.collision.chief.layout.NavigationBarProtection
+import com.madness.collision.chief.layout.symmetricSheetMargin
+import com.madness.collision.ui.theme.MetaAppTheme
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
+import com.madness.collision.util.SystemUtil
 
 @Stable
 interface AppInfoEventHandler {
@@ -53,12 +63,25 @@ fun AppInfoSheet(
     contentWindowInsets: @Composable () -> WindowInsets = { BottomSheetDefaults.windowInsets },
 ) {
     if (state.app != null) {
+        val context = LocalContext.current
+        val density = LocalDensity.current
+        // retrieve host page's window size
+        val maxWidth = remember(context) {
+            val winWidthPx = SystemUtil.getRuntimeWindowSize(context).x
+            with(density) { winWidthPx.toDp() }
+        }
+        // todo use sheet's window's maxWidth
+        // apply horizontal window insets as margin to sheet's surface
+        val (maxSheetWidth, horizontalMargin) = symmetricSheetMargin(maxWidth, contentWindowInsets())
+
         ModalBottomSheet(
+            modifier = Modifier.padding(horizontalMargin),
             onDismissRequest = onDismissRequest,
             sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+            sheetMaxWidth = maxSheetWidth,
             shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
             dragHandle = null,
-            contentWindowInsets = contentWindowInsets,
+            contentWindowInsets = { WindowInsets() },
         ) {
             // bottom sheet's content is inside a separate window, with independent window insets
             BoxWithConstraints {
@@ -74,6 +97,12 @@ fun AppInfoSheet(
                         eventHandler = eventHandler,
                         colorScheme = rememberColorScheme(),
                     )
+
+                    MetaAppTheme(colorScheme = MaterialTheme.colorScheme) {
+                        NavigationBarProtection(
+                            modifier = Modifier.align(Alignment.BottomCenter),
+                        )
+                    }
                 }
             }
         }

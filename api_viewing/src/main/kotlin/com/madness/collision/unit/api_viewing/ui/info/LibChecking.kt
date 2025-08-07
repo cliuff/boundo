@@ -373,9 +373,9 @@ private fun ComponentList(
         for ((typeIndex, compType) in compTypeList.withIndex()) {
             val typeCollection = itemCollection[compType].firstOrNull()
             if (typeIndex > 0) {
-                item { CompTypeDivider() }
+                item(contentType = "TypeDivider") { CompTypeDivider() }
             }
-            item {
+            item(contentType = "TypeTitle") {
                 if (itemCollection.getTypeState(compType) == PackCompCollection.State.None) {
                     SideEffect {
                         Log.d("LIB-TYPE", "$typeIndex/${compType}")
@@ -387,27 +387,27 @@ private fun ComponentList(
             if (typeCollection != null) {
                 val sections = typeCollection.entryIterator().asSequence().toList()
                 if (sections.all { it.value.isEmpty() }) {
-                    item { EmptyContent() }
+                    item(contentType = "EmptyContent") { EmptyContent() }
                 }
                 for (sectionIndex in sections.indices) {
                     val (compSection, itemList) = sections[sectionIndex]
                     if (sectionIndex > 0 && itemList.isNotEmpty() &&
                         (0 until sectionIndex).any { sections[it].value.isNotEmpty() }) {
-                        item { SectionDivider() }
+                        item(contentType = "SectionDivider") { SectionDivider() }
                     }
                     // hide section title for shared libs changing size
                     if (itemList.isNotEmpty()) {
                         when (compType) {
                             // use empty space to align with tab navigation algorithm
-                            PackCompType.SharedLibrary -> item { Spacer(Modifier) }
-                            else -> item { SectionTitle(compSection, itemList.size) }
+                            PackCompType.SharedLibrary -> item(contentType = "Space") { Spacer(Modifier) }
+                            else -> item(contentType = "SectionTitle") { SectionTitle(compSection, itemList.size) }
                         }
                     }
                     val layoutGroups = layoutGroupsList[typeIndex]?.getOrNull(sectionIndex)
                     layoutGroupItems(itemList, layoutGroups, typeIndex, sectionIndex, libPrefs,
                         altRowColorEnabled = compSection != CompSection.Marked)
                     if (compSection == CompSection.Marked && itemList.isNotEmpty()) {
-                        item { LibCheckerMark() }
+                        item(contentType = "LibCheckerMark") { LibCheckerMark() }
                     }
                 }
             }

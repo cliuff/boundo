@@ -13,7 +13,7 @@ androidxTestEspresso = "3.6.1"
 
 androidxCore = "1.16.0"
 androidxCoreSplashScreen = "1.1.0-rc01"
-androidxComposeBom = "2025.05.01"
+androidxComposeBom = "2025.07.01"
 androidxActivity = "1.10.1"
 androidxFragment = "1.8.7"
 androidxLifecycle = "2.9.0"
@@ -79,7 +79,7 @@ androidxTestEspresso = { module = "androidx.test.espresso:espresso-core", versio
 androidxCore = { module = "androidx.core:core", version.ref = "androidxCore" }
 androidxCoreKtx = { module = "androidx.core:core-ktx", version.ref = "androidxCore" }
 androidxCoreSplashScreen = { module = "androidx.core:core-splashscreen", version.ref = "androidxCoreSplashScreen" }
-androidxComposeBom = { module = "androidx.compose:compose-bom", version.ref = "androidxComposeBom" }
+androidxComposeBom = { module = "androidx.compose:compose-bom-beta", version.ref = "androidxComposeBom" }
 androidxComposeRuntimeLiveData = { module = "androidx.compose.runtime:runtime-livedata" }
 androidxComposeFoundation = { module = "androidx.compose.foundation:foundation" }
 androidxComposeUi = { module = "androidx.compose.ui:ui" }
