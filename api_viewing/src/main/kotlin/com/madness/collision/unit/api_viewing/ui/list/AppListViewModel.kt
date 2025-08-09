@@ -231,6 +231,12 @@ class AppListViewModel : ViewModel() {
             .forEach(::toggleListSrc)
     }
 
+    fun clearExtraListSrc() {
+        opUiState.value.options.srcSet
+            .filter { it.cat != ListSrcCat.Platform }
+            .forEach(::toggleListSrc)
+    }
+
     fun setListSrcCat(cat: ListSrcCat) {
         mutSrcState.update { it.copy(terminalCat = cat) }
         mutAppList.update { multiSrcApps[cat].getList() }

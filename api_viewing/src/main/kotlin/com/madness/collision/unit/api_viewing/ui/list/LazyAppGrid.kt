@@ -17,6 +17,7 @@
 package com.madness.collision.unit.api_viewing.ui.list
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
@@ -55,6 +56,7 @@ fun LazyAppGrid(
     onClickApp: (ApiViewingApp) -> Unit,
     backdropColor: Color,
     header: @Composable () -> Unit,
+    switcher: @Composable () -> Unit,
     scrollState: LazyGridState = rememberLazyGridState(),
     contentPadding: PaddingValues = PaddingValues(),
 ) {
@@ -76,6 +78,12 @@ fun LazyAppGrid(
     ) {
         item(key = "list.header", span = { GridItemSpan(maxLineSpan) }, contentType = "Header") {
             header()
+        }
+
+        item(key = "list.switcher", span = { GridItemSpan(maxLineSpan) }, contentType = "Switcher") {
+            Box(modifier = Modifier.animateItem().background(backdropColor).padding(bottom = 12.dp)) {
+                switcher()
+            }
         }
 
         val (itemPadStart, itemPadEnd) =

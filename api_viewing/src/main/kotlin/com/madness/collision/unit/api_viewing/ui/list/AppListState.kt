@@ -118,6 +118,7 @@ class ListHeaderStateImpl(
     override var statsSize: Int by mutableIntStateOf(0)
 
     override fun setTerminalCat(cat: ListSrcCat) = viewModel.setListSrcCat(cat)
+    override fun clearExtraCats() = viewModel.clearExtraListSrc()
     override fun showSystemModules() = context.showPage<SystemModulesFragment>()
     override fun showStats(options: AppListOptions) {
         getStatsFragment(options)?.let(context::showPage)

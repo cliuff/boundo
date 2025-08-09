@@ -79,6 +79,7 @@ interface ListHeaderState {
     val devInfoDesc: String
     var statsSize: Int
     fun setTerminalCat(cat: ListSrcCat)
+    fun clearExtraCats()
     fun showStats(options: AppListOptions)
     fun showSystemModules()
     fun onQueryChange(query: String)
@@ -92,32 +93,53 @@ fun AppListSwitchHeader(
     headerState: ListHeaderState,
 ) {
     Column(modifier = modifier) {
-        var isQuerying: Boolean by remember { mutableStateOf(false) }
-        AppListHeader(
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
-            devInfoLabel = headerState.devInfoLabel,
-            devInfoDesc = headerState.devInfoDesc,
-            statsSizeLabel = headerState.statsSize.takeIf { it > 0 }?.toString().orEmpty(),
-            onClickDevInfo = headerState::showSystemModules,
-            onClickStats = { headerState.showStats(options) },
-            queryEnabled = !appSrcState.isLoadingSrc || isQuerying,
-            onQueryChange = { q -> isQuerying = true; headerState.onQueryChange(q) },
+        AppListHeader(appSrcState.isLoadingSrc, options, headerState)
+        AppListSwitcher(appSrcState, headerState::setTerminalCat, headerState::clearExtraCats)
+    }
+}
+
+@Composable
+fun AppListHeader(
+    isLoadingSrc: Boolean,
+    options: AppListOptions,
+    headerState: ListHeaderState,
+    modifier: Modifier = Modifier,
+) {
+    var isQuerying: Boolean by remember { mutableStateOf(false) }
+    AppListHeader(
+        modifier = modifier.padding(horizontal = 12.dp, vertical = 10.dp),
+        devInfoLabel = headerState.devInfoLabel,
+        devInfoDesc = headerState.devInfoDesc,
+        statsSizeLabel = headerState.statsSize.takeIf { it > 0 }?.toString().orEmpty(),
+        onClickDevInfo = headerState::showSystemModules,
+        onClickStats = { headerState.showStats(options) },
+        queryEnabled = !isLoadingSrc || isQuerying,
+        onQueryChange = { q -> isQuerying = true; headerState.onQueryChange(q) },
+    )
+}
+
+@Composable
+fun AppListSwitcher(
+    appSrcState: AppSrcState,
+    onSelect: (ListSrcCat) -> Unit,
+    onClear: () -> Unit,
+    overrideLabel: Map<ListSrcCat, String> = emptyMap(),
+) {
+    val loadedSrc = appSrcState.loadedCats
+    if (loadedSrc.isNotEmpty() && loadedSrc.singleOrNull() != ListSrcCat.Platform) {
+        AppSrcTypeSwitcher(
+            types = loadedSrc.associateWith { cat ->
+                overrideLabel[cat] ?: when (cat) {
+                    ListSrcCat.Platform -> stringResource(R.string.av_main_cat_platform)
+                    ListSrcCat.Storage -> stringResource(R.string.av_main_cat_storage)
+                    ListSrcCat.Temporary -> stringResource(R.string.av_main_cat_temporary)
+                    ListSrcCat.Filter -> stringResource(R.string.av_main_cat_filter)
+                }
+            },
+            selType = appSrcState.terminalCat,
+            onSelType = onSelect,
+            onClear = onClear,
         )
-        val loadedSrc = appSrcState.loadedCats
-        if (loadedSrc.isNotEmpty() && loadedSrc.singleOrNull() != ListSrcCat.Platform) {
-            AppSrcTypeSwitcher(
-                types = loadedSrc.associateWith { cat ->
-                    when (cat) {
-                        ListSrcCat.Platform -> stringResource(R.string.av_main_cat_platform)
-                        ListSrcCat.Storage -> stringResource(R.string.av_main_cat_storage)
-                        ListSrcCat.Temporary -> stringResource(R.string.av_main_cat_temporary)
-                        ListSrcCat.Filter -> stringResource(R.string.av_main_cat_filter)
-                    }
-                },
-                selType = appSrcState.terminalCat,
-                onSelType = headerState::setTerminalCat,
-            )
-        }
     }
 }
 

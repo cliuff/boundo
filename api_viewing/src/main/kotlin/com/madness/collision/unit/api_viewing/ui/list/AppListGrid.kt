@@ -16,6 +16,7 @@
 
 package com.madness.collision.unit.api_viewing.ui.list
 
+import android.content.Context
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
@@ -40,6 +41,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -50,6 +52,8 @@ import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.coerceIn
 import androidx.compose.ui.unit.dp
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
+import com.madness.collision.unit.api_viewing.tag.app.AppTagManager
+import com.madness.collision.unit.api_viewing.tag.app.getNormalLabel
 import com.madness.collision.unit.api_viewing.ui.comp.AppItemPrefs
 import com.madness.collision.unit.api_viewing.ui.comp.LocalAppItemPrefs
 import com.madness.collision.unit.api_viewing.ui.list.comp.ListHeaderBackdrop
@@ -179,13 +183,34 @@ fun AppListGrid(
                         cornerSize = if (flatBackdrop) 0.dp else 20.dp,
                         hazeState = hazeState,
                     ) {
-                        AppListSwitchHeader(
+                        AppListHeader(
                             modifier = Modifier.padding(horizontalPadding),
+                            isLoadingSrc = appSrcState.isLoadingSrc,
                             options = options,
-                            appSrcState = appSrcState,
                             headerState = headerState,
                         )
                     }
+                },
+                switcher = {
+                    val context = LocalContext.current
+                    AppListSwitcher(
+                        appSrcState = appSrcState,
+                        onSelect = headerState::setTerminalCat,
+                        onClear = headerState::clearExtraCats,
+                        overrideLabel = remember(appSrcState.loadedCats, options.srcSet) {
+                            when {
+                                appSrcState.loadedCats.isEmpty() -> emptyMap()
+                                appSrcState.loadedCats.singleOrNull() == ListSrcCat.Platform -> emptyMap()
+                                // override label for AppListSrc.TagFilter
+                                else ->
+                                    appSrcState.loadedCats.mapNotNull L@{ cat ->
+                                        if (cat != ListSrcCat.Filter) return@L null
+                                        val label = getSingleTagLabel(options.srcSet, context)
+                                        label?.let { cat to label }
+                                    }.toMap()
+                            }
+                        },
+                    )
                 },
             )
         }
@@ -203,4 +228,15 @@ fun AppListGrid(
             }
         }
     }
+}
+
+private fun getSingleTagLabel(srcSet: List<AppListSrc>, context: Context): String? {
+    val filter = srcSet
+        .filterIsInstance<AppListSrc.TagFilter>()
+        .firstOrNull()
+    val (tagId) = filter?.checkedTags.orEmpty()
+        .entries.singleOrNull()
+        ?: return null
+    val label = AppTagManager.tags[tagId]?.getNormalLabel(context)
+    return label?.toString() ?: ""
 }

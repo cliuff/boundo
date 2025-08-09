@@ -28,21 +28,26 @@ import androidx.compose.animation.shrinkOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PrimaryScrollableTabRow
 import androidx.compose.material3.Tab
@@ -56,6 +61,7 @@ import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -173,25 +179,46 @@ fun AppListBarAction(icon: ImageVector, label: String?, onClick: () -> Unit) {
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppSrcTypeSwitcher(
     types: Map<ListSrcCat, String>,
     selType: ListSrcCat,
-    onSelType: (ListSrcCat) -> Unit
+    onSelType: (ListSrcCat) -> Unit,
+    onClear: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    val selIndex = types.keys.indexOf(selType)
+    val selIndex = remember(types, selType) { types.keys.indexOf(selType) }
+
     if (types.isNotEmpty() && selIndex >= 0) {
-        PrimaryScrollableTabRow(
-            selectedTabIndex = selIndex,
-            divider = {},
-            containerColor = Color.Transparent
-        ) {
-            for ((srcType, typeLabel) in types) {
-                Tab(
-                    selected = srcType == selType,
-                    onClick = { onSelType(srcType) },
-                    text = { Text(text = typeLabel, maxLines = 1, overflow = TextOverflow.Ellipsis) }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            PrimaryScrollableTabRow(
+                modifier = modifier.weight(1f),
+                selectedTabIndex = selIndex,
+                edgePadding = 20.dp,
+                divider = {},
+                containerColor = Color.Transparent
+            ) {
+                for ((srcType, typeLabel) in types) {
+                    key(srcType) {
+                        Tab(
+                            selected = srcType == selType,
+                            onClick = { onSelType(srcType) },
+                            text = { Text(text = typeLabel, maxLines = 1, overflow = TextOverflow.Ellipsis) }
+                        )
+                    }
+                }
+            }
+
+            FilledTonalIconButton(
+                modifier = Modifier.padding(end = 8.dp),
+                onClick = onClear,
+                colors = IconButtonDefaults.filledTonalIconButtonColors(
+                    containerColor = MaterialTheme.colorScheme.tertiaryContainer),
+            ) {
+                Icon(
+                    modifier = Modifier.size(20.dp),
+                    imageVector = Icons.Outlined.Clear,
+                    contentDescription = null,
                 )
             }
         }
@@ -214,7 +241,7 @@ private fun AppListBarPreview() {
                 AppListBarAction(icon = Icons.Outlined.CheckCircle, label = "2", onClick = { })
             }
             Spacer(modifier = Modifier.height(20.dp))
-            AppSrcTypeSwitcher(types = cats, selType = ListSrcCat.Platform, onSelType = { })
+            AppSrcTypeSwitcher(types = cats, selType = ListSrcCat.Platform, onSelType = { }, {})
             Spacer(modifier = Modifier.height(20.dp))
         }
     }
