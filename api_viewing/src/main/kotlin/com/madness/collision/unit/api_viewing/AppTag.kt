@@ -18,7 +18,6 @@ package com.madness.collision.unit.api_viewing
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.view.ViewGroup
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.tag.app.AppTagInfo
 import com.madness.collision.unit.api_viewing.tag.app.AppTagManager
@@ -164,67 +163,8 @@ internal object AppTag {
         }
     }
 
-    /**
-     * [ensureTagIcons] and [ensureRequisites] need to be called beforehand.
-     */
-    fun inflateAllTags(context: Context, container: ViewGroup, res: AppTagInfo.Resources) {
-        AppTagManager.tags.values.sortedBy { it.rank }.forEach { tagInfo ->
-            inflateSingleTag(context, container, tagInfo, res)
-        }
-    }
-
-    /**
-     * [ensureTagIcons] and [ensureRequisites] are called within.
-     */
-    suspend fun inflateAllTagsAsync(context: Context, container: ViewGroup, app: ApiViewingApp)
-    = supervisorScope {
-        ensureTagIcons(context)
-        // inflate tags that do not have requisite first
-        val directTagIds = AppTagManager.tags.mapNotNull {
-            if (it.value.requisites == null) it.key else null
-        }
-        launch(Dispatchers.Main) {
-            inflateMultipleTags(context, container, directTagIds, AppTagInfo.Resources(context, app))
-        }
-        // ensure resources and inflate requisite tags
-        val inflatedTagIds = directTagIds.toHashSet()
-        val res = ensureRequisitesAsync(context, app) { _, tagIds, res ->
-            inflatedTagIds.addAll(tagIds)
-            launch(Dispatchers.Main) { inflateMultipleTags(context, container, tagIds, res) }
-        }
-        // inflate any tag left (should be none)
-        val leftTagIds = (AppTagManager.tags.keys - inflatedTagIds)
-        if (leftTagIds.isNotEmpty()) withContext(Dispatchers.Main) {
-            inflateMultipleTags(context, container, leftTagIds, res)
-        }
-    }
-
-    fun inflateMultipleTags(context: Context, container: ViewGroup, tagIds: Collection<String>, res: AppTagInfo.Resources) {
-        tagIds.forEach { id ->
-            val tag = AppTagManager.tags[id] ?: return@forEach // continue
-            inflateSingleTag(context, container, tag, res)
-        }
-    }
-
-    // Tag inflating: selected and expressed true (no anti-ed tag icon support yet).
-    fun inflateSingleTag(context: Context, container: ViewGroup, tagInfo: AppTagInfo, res: AppTagInfo.Resources): Boolean {
-        // terminate if any requisite not satisfied
-        if (tagInfo.requisites?.any { it.checker(res).not() } == true) return false
-        // selected and expressed true
-        if (displayingTags[tagInfo.id].isSelected && tagInfo.express(res)) {
-            val info = getTagViewInfo(tagInfo, res, context) ?: return false
-            AppTagInflater.inflateTag(context, container, info)
-            return true
-        }
-        return false
-    }
-
     fun AppTagInfo.selExpressed(res: AppTagInfo.Resources): Boolean {
         return displayingTags[id].isSelected && express(res)
-    }
-
-    private fun getTagViewInfo(tagInfo: AppTagInfo, res: AppTagInfo.Resources, context: Context): AppTagInflater.TagInfo? {
-        return getTagViewInfo(tagInfo, res, context) { it.label.normal }
     }
 
     fun getTagViewInfo(tagInfo: AppTagInfo, res: AppTagInfo.Resources, context: Context, labelSelector: (AppTagInfo) -> AppTagInfo.Label?): AppTagInflater.TagInfo? {

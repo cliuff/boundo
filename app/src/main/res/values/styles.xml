@@ -556,13 +556,6 @@
         <item name="android:textSize">6sp</item>
     </style>
 
-    <style name="AvTags" parent="Widget.MaterialComponents.ChipGroup">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="singleLine">true</item>
-        <item name="chipSpacingHorizontal">3dp</item>
-    </style>
-
     <style name="NavRail" parent="Widget.MaterialComponents.NavigationRailView.Compact" />
 
     <style name="ShapeAppearance.Circle" parent="">
