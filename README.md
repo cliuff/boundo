@@ -12,7 +12,7 @@ Designed for Android enthusiasts, Meta-app is available on **Android** and **Wea
 
 ### 1. Develop
 **1.1 Requirements**
-- Android Studio `Meerkat` (AGP `8.9`)
+- Android Studio `Narwhal` (AGP `8.11`)
 - Java `17`, Kotlin `2.1.21`, Gradle `8.13`
 
 **1.2 Configure automatic signing**

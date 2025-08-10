@@ -1,6 +1,6 @@
 [versions]
 # plugins
-androidGradlePlugin = "8.9.2"  # 8.9-Meerkat
+androidGradlePlugin = "8.11.1"  # 8.11-Narwhal
 kotlin = "2.1.21"
 googleKsp = "2.1.21-2.0.1"
 
