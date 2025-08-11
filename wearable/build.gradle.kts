@@ -25,7 +25,7 @@ android {
     }
     // namespace is used by R and BuildConfig classes
     namespace = "com.madness.collision.wearable"
-    compileSdk = 34
+    compileSdk = 36
     defaultConfig {
         // below: manifest placeholders
         manifestPlaceholders["buildPackage"] = buildPackage

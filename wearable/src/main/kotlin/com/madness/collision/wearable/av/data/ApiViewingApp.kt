@@ -53,17 +53,21 @@ internal class ApiViewingApp(val packageName: String) : Parcelable {
             verName = info.versionName ?: ""
             updateTime = info.lastUpdateTime
             preload = true
-            apiUnit = if ((info.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM) == 0) ApiUnit.USER else ApiUnit.SYS
-            loadName(context, info.applicationInfo)
-            //name = manager.getApplicationLabel(pi.applicationInfo).toString();
-            this.targetAPI = info.applicationInfo.targetSdkVersion
+            info.applicationInfo?.let { applicationInfo ->
+                apiUnit = if ((applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM) == 0) ApiUnit.USER else ApiUnit.SYS
+                loadName(context, applicationInfo)
+                //name = manager.getApplicationLabel(pi.applicationInfo).toString();
+                this.targetAPI = applicationInfo.targetSdkVersion
+            }
             targetSDK = X.getAndroidVersionByAPI(targetAPI, false)
             if (targetSDK.isNotEmpty()){
                 targetSDKDouble = targetSDK.toDouble()
                 targetSDKDisplay = targetSDK
             }
         }else {
-            load(context, info.applicationInfo)
+            info.applicationInfo?.let { applicationInfo ->
+                load(context, applicationInfo)
+            }
         }
     }
 

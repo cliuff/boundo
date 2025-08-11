@@ -31,21 +31,23 @@ internal class AppRepository(){
 
     private fun getAppsUser(context: Context): List<ApiViewingApp> {
         val predicate: (PackageInfo) -> Boolean = if (EasyAccess.shouldIncludeDisabled) { packageInfo ->
-            (packageInfo.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM) == 0
+            val app = packageInfo.applicationInfo
+            app == null || (app.flags and ApplicationInfo.FLAG_SYSTEM) == 0
         } else { packageInfo ->
             val app = packageInfo.applicationInfo
             // users without root privilege can only disable system apps
-            (app.flags and ApplicationInfo.FLAG_SYSTEM) == 0 && app.enabled
+            app == null || (app.flags and ApplicationInfo.FLAG_SYSTEM) == 0 && app.enabled
         }
         return getApps(context, predicate)
     }
 
     private fun getAppsSys(context: Context): List<ApiViewingApp> {
         val predicate: (PackageInfo) -> Boolean = if (EasyAccess.shouldIncludeDisabled) { packageInfo ->
-            (packageInfo.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM) != 0
+            val app = packageInfo.applicationInfo
+            app != null && (app.flags and ApplicationInfo.FLAG_SYSTEM) != 0
         } else { packageInfo ->
             val app = packageInfo.applicationInfo
-            (app.flags and ApplicationInfo.FLAG_SYSTEM) != 0 && app.enabled
+            app != null && (app.flags and ApplicationInfo.FLAG_SYSTEM) != 0 && app.enabled
         }
         return getApps(context, predicate)
     }
@@ -53,7 +55,7 @@ internal class AppRepository(){
     private fun getAppsAll(context: Context): List<ApiViewingApp> {
         val predicate: ((PackageInfo) -> Boolean)? = if (EasyAccess.shouldIncludeDisabled) null
         else { packageInfo ->
-            packageInfo.applicationInfo.enabled
+            packageInfo.applicationInfo?.enabled != false
         }
         return getApps(context, predicate)
     }

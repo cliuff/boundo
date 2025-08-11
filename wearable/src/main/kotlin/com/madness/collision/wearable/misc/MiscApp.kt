@@ -17,8 +17,8 @@ internal object MiscApp {
         return if (isArchive){
             if (apkPath.isEmpty()) return null
             pm.getPackageArchiveInfo(apkPath, 0)?.apply {
-                applicationInfo.sourceDir = apkPath
-                applicationInfo.publicSourceDir = apkPath
+                applicationInfo?.sourceDir = apkPath
+                applicationInfo?.publicSourceDir = apkPath
             }
         }else{
             if (packageName.isEmpty()) return null
