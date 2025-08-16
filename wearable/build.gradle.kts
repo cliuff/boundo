@@ -3,6 +3,7 @@ import com.cliuff.boundo.build.getCustomConfig
 plugins {
     alias(libs.plugins.android)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
@@ -30,7 +31,7 @@ android {
         // below: manifest placeholders
         manifestPlaceholders["buildPackage"] = buildPackage
         applicationId = "com.madness.collision"
-        minSdk = 23
+        minSdk = 25
         targetSdk = 33
         versionCode = 24010122
         versionName = "4.1.4W"
@@ -98,12 +99,14 @@ android {
     buildFeatures {
         buildConfig = true
         viewBinding = true
+        compose = true
     }
 }
 
 dependencies {
     coreLibraryDesugaring(libs.androidDesugaring)
 
+    implementation(platform(libs.androidxComposeBom))
     listOf(
         fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))),
         libs.androidxCore,
@@ -124,7 +127,16 @@ dependencies {
         libs.kotlinStdlib,
         libs.kotlinCoroutines,
         libs.androidxWear,
+        libs.androidxComposeActivity,
+        libs.androidxComposeViewModel,
+        libs.androidxComposeUiToolingPreview,
+        libs.androidxComposeFoundation,
+        libs.androidxWearComposeUiTooling,
+        libs.androidxWearComposeFundation,
+        libs.androidxWearComposeMaterial3,
     ).forEach { implementation(it) }
+
+    debugImplementation(libs.androidxComposeUiTooling)
 
     compileOnly(libs.googleWearable)
 }
