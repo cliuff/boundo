@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Clifford Liu
+ * Copyright 2025 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.madness.collision.unit.api_viewing.apps
+package io.cliuff.boundo.data
 
 import android.Manifest
 import android.content.Context
@@ -23,12 +23,8 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
-import com.madness.collision.chief.chiefContext
-import com.madness.collision.chief.chiefPkgMan
-import com.madness.collision.misc.PackageCompat
-import com.madness.collision.unit.api_viewing.data.ApiViewingApp
-import com.madness.collision.util.PermissionUtils
-import com.madness.collision.util.os.OsUtils
+import androidx.core.content.ContextCompat
+import io.cliuff.boundo.ext.OsUtils
 import java.io.File
 import kotlin.time.measureTimedValue
 
@@ -37,18 +33,22 @@ object AppListPermission {
     const val QueryAllPackages = Manifest.permission.QUERY_ALL_PACKAGES
     /** Chinese exclusive permission defined in《T/TAF 108-2022 移动终端应用软件列表权限实施指南》. */
     const val GetInstalledApps: String = "com.android.permission.GET_INSTALLED_APPS"
+
     /** Name of the package in which Chinese exclusive [GetInstalledApps] permission is defined. */
-    val GetInstalledAppsPkg: String? = runCatching {
-        chiefPkgMan.getPermissionInfo(GetInstalledApps, 0)?.packageName }.getOrNull()
+    fun getInstalledAppsPkg(context: Context): String? = runCatching {
+        context.packageManager.getPermissionInfo(GetInstalledApps, 0)?.packageName }.getOrNull()
 
     /** @return The permission required to be granted, or null. */
     fun queryAllPackagesOrNull(context: Context): String? {
-        val permissions = when {
-            GetInstalledAppsPkg != null -> PermissionUtils.check(context, arrayOf(GetInstalledApps))
-            OsUtils.satisfy(OsUtils.R) -> PermissionUtils.check(context, arrayOf(QueryAllPackages))
-            else -> emptyList()
+        fun check(permission: String): String? {
+            val chk = ContextCompat.checkSelfPermission(context, permission)
+            return permission.takeIf { chk != PackageManager.PERMISSION_GRANTED }
         }
-        return permissions.firstOrNull()
+        return when {
+            getInstalledAppsPkg(context) != null -> check(GetInstalledApps)
+            OsUtils.satisfy(OsUtils.R) -> check(QueryAllPackages)
+            else -> null
+        }
     }
 }
 
@@ -63,8 +63,6 @@ interface AppListFetcher<out T> {
 
 
 class PlatformAppsFetcher(private val context: Context) : AppListFetcher<PackageInfo> {
-    // companion object: direct access to singleton object by simply the class name
-    companion object : AppListFetcher<PackageInfo> by PlatformAppsFetcher(chiefContext)
 
     class Session(val includeApex: Boolean, val includeArchived: Boolean)
 
@@ -83,11 +81,18 @@ class PlatformAppsFetcher(private val context: Context) : AppListFetcher<Package
             if (OsUtils.satisfy(OsUtils.N)) flags = flags or PackageManager.MATCH_DISABLED_COMPONENTS.toLong()
             if (OsUtils.satisfy(OsUtils.Q) && ss?.includeApex == true) flags = flags or PackageManager.MATCH_APEX.toLong()
             if (OsUtils.satisfy(OsUtils.V) && ss?.includeArchived == true) flags = flags or PackageManager.MATCH_ARCHIVED_PACKAGES
-            PackageCompat.getAllPackages(context.packageManager, flags).also { session = null }
+            getAllPackages(context.packageManager, flags).also { session = null }
         }
         Log.d("AppListFetcher", "PlatformAppListFetcher/${timed.value.size}/${timed.duration}")
         return timed.value
     }
+
+    private fun getAllPackages(pkgMgr: PackageManager, flags: Long) =
+        if (OsUtils.satisfy(OsUtils.T)) {
+            pkgMgr.getInstalledPackages(PackageManager.PackageInfoFlags.of(flags))
+        } else {
+            pkgMgr.getInstalledPackages(flags.toInt())
+        }
 }
 
 private fun queryAllPkgsCheck(context: Context): Boolean {
@@ -100,7 +105,6 @@ private fun queryAllPkgsCheck(context: Context): Boolean {
 data class ShellAppResult(val packageName: String, val apkPath: String?)
 
 class ShellAppsFetcher(private val context: Context) : AppListFetcher<ShellAppResult> {
-    companion object : AppListFetcher<ShellAppResult> by ShellAppsFetcher(chiefContext)
 
     override fun getRawList(): List<ShellAppResult> {
         queryAllPkgsCheck(context)
@@ -146,14 +150,5 @@ class ShellAppsFetcher(private val context: Context) : AppListFetcher<ShellAppRe
                 (path to pkgName).takeUnless { pkgName.contains(File.separatorChar) }
             }
         }
-    }
-}
-
-
-class StorageAppsFetcher(private val context: Context) : AppListFetcher<ApiViewingApp> {
-    companion object : AppListFetcher<ApiViewingApp> by StorageAppsFetcher(chiefContext)
-
-    override fun getRawList(): List<ApiViewingApp> {
-        return AppRepo.dumb(context).getApps(0)
     }
 }

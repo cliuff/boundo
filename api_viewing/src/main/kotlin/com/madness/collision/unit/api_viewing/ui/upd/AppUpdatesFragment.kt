@@ -36,6 +36,7 @@ import com.madness.collision.chief.app.rememberColorScheme
 import com.madness.collision.chief.auth.PermissionHandler
 import com.madness.collision.chief.auth.PermissionState
 import com.madness.collision.unit.api_viewing.apps.AppListPermission
+import com.madness.collision.unit.api_viewing.apps.GetInstalledAppsPkg
 import com.madness.collision.unit.api_viewing.ui.home.AppHomeNavPage
 import com.madness.collision.unit.api_viewing.ui.home.AppHomeNavPageImpl
 import com.madness.collision.unit.api_viewing.ui.info.AppInfoEventHandler

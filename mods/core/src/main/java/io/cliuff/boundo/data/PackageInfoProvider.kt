@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Clifford Liu
+ * Copyright 2025 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.madness.collision.unit.api_viewing.apps
+package io.cliuff.boundo.data
 
 import android.content.Context
 import android.content.pm.PackageInfo
 import android.os.SystemClock
-import com.madness.collision.util.os.OsUtils
+import io.cliuff.boundo.ext.OsUtils
 import java.lang.ref.WeakReference
 
 interface PackageInfoProvider {

@@ -63,6 +63,7 @@ android {
 
 dependencies {
     coreLibraryDesugaring(libs.androidDesugaring)
+    implementation(project(":mods:core"))
     implementation(project(":mods:org"))
     implementation(platform(libs.androidxComposeBom))
     listOf(
