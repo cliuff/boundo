@@ -38,6 +38,7 @@ import com.madness.collision.chief.os.HyperOsDistro
 import com.madness.collision.chief.os.MiuiDistro
 import com.madness.collision.chief.os.distro
 import com.madness.collision.util.os.OsUtils
+import io.cliuff.boundo.conf.coil.AppIconTransformer
 import me.zhanghai.android.appiconloader.iconloaderlib.ShadowGenerator
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.ceil
@@ -66,17 +67,12 @@ private fun getDebugTransformer() = when (debugTransformerType) {
     else -> null
 }
 
-interface AppIconTransformer {
-    fun applySrc(icon: Drawable): Drawable = icon
-    fun apply(icon: Drawable, scale: Float, size: Int, getBitmap: () -> Bitmap): Bitmap = getBitmap()
-
-    fun calculateOffset(scale: Float, size: Int): Int {
+    private fun calculateOffset(scale: Float, size: Int): Int {
         // values from BaseIconFactory.createIconBitmap()
         return max(
             ceil(ShadowGenerator.BLUR_FACTOR * size).toInt(),
             (size * (1 - scale) / 2).roundToInt())
     }
-}
 
 class EmptyAppIconTransformer : AppIconTransformer
 

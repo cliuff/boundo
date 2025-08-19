@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Clifford Liu
+ * Copyright 2025 Clifford Liu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.madness.collision.util.ui
+package io.cliuff.boundo.conf.coil
 
 import android.content.Context
 import android.content.pm.PackageManager
@@ -58,6 +58,21 @@ private object UserSerialNumberCache {
         return userManager.getSerialNumberForUser(this)
     }
 }
+
+
+interface AppIconTransformer {
+    fun applySrc(icon: Drawable): Drawable = icon
+    fun apply(icon: Drawable, scale: Float, size: Int, getBitmap: () -> Bitmap): Bitmap = getBitmap()
+}
+
+object EmptyAppIconTransformer : AppIconTransformer
+
+/** Override app icon transformer across module. */
+object DefaultAppIconTransformer {
+    var value: AppIconTransformer = EmptyAppIconTransformer
+}
+
+fun AppIconTransformer() = DefaultAppIconTransformer.value
 
 private class IconFactory(
     @Px iconBitmapSize: Int, context: Context,

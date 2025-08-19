@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package com.madness.collision.main
+package io.cliuff.boundo.conf
 
 import androidx.core.util.TypedValueCompat
 import coil3.ImageLoader
 import coil3.PlatformContext
 import coil3.SingletonImageLoader
 import coil3.request.crossfade
-import com.madness.collision.util.ui.AppIconFetcher
-import com.madness.collision.util.ui.AppIconKeyer
+import io.cliuff.boundo.conf.coil.AppIconFetcher
+import io.cliuff.boundo.conf.coil.AppIconKeyer
 import kotlin.math.roundToInt
 
 object CoilInitializer : SingletonImageLoader.Factory {

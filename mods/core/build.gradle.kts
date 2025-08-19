@@ -17,5 +17,8 @@ android {
 dependencies {
     implementation(libs.androidxCoreKtx)
 
+    implementation(libs.coil)
+    implementation(libs.appIconLoader)
+
     testImplementation(libs.junit4)
 }
