@@ -29,6 +29,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,6 +46,7 @@ import androidx.wear.compose.material3.Text
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import androidx.wear.compose.ui.tooling.preview.WearPreviewSquare
 import io.cliuff.boundo.wear.model.ApiViewingApp
+import io.cliuff.boundo.wear.ui.comp.ArtMapper
 import io.cliuff.boundo.wear.ui.theme.PreviewAppTheme
 
 @Composable
@@ -53,12 +55,19 @@ internal fun ArtItem(
     modifier: Modifier = Modifier,
     transformation: SurfaceTransformation? = null,
 ) {
+    val relativeTime = remember(app.updateTime) {
+        ArtMapper.getRelativeTime(app.updateTime)
+    }
+    val apiColor = remember(app.targetAPI) {
+        ArtMapper.getItemColorAccent(app.targetAPI)
+    }
+
     ArtItemContainer(modifier = modifier, onClick = {}, transformation = transformation) {
         ArtItemContent(
             name = app.name,
-            time = "3 hours ago",
-            apiText = app.targetAPI.toString(),
-            apiColor = MaterialTheme.colorScheme.onSurface,
+            time = relativeTime,
+            apiText = app.targetSDKDisplay,
+            apiColor = Color(apiColor),
         )
     }
 }

@@ -16,13 +16,17 @@
 
 package io.cliuff.boundo.wear.ui.list
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.wear.compose.foundation.lazy.rememberTransformingLazyColumnState
+import androidx.wear.compose.material3.CircularProgressIndicator
 import androidx.wear.compose.material3.ScreenScaffold
 
 @Composable
@@ -36,7 +40,19 @@ fun AppList() {
     val appList by viewModel.appListState.collectAsStateWithLifecycle()
     val columnState = rememberTransformingLazyColumnState()
 
-    ScreenScaffold(scrollState = columnState) {
-        LazyAppGrid(apps = appList, columnState = columnState)
+    ScreenScaffold(
+        modifier = Modifier.fillMaxSize(),
+        scrollState = columnState,
+    ) { innerPadding ->
+
+        LazyAppGrid(
+            apps = appList,
+            columnState = columnState,
+            contentPadding = innerPadding,
+        )
+
+        if (appList.isEmpty()) {
+            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+        }
     }
 }

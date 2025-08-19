@@ -16,10 +16,9 @@
 
 package io.cliuff.boundo.wear.ui.list
 
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.wear.compose.foundation.lazy.TransformingLazyColumn
 import androidx.wear.compose.foundation.lazy.TransformingLazyColumnState
 import androidx.wear.compose.foundation.lazy.items
@@ -33,15 +32,16 @@ import io.cliuff.boundo.wear.model.ApiViewingApp
 internal fun LazyAppGrid(
     apps: List<ApiViewingApp>,
     columnState: TransformingLazyColumnState = rememberTransformingLazyColumnState(),
+    contentPadding: PaddingValues = PaddingValues.Zero,
 ) {
 //    val contentPadding = rememberResponsiveColumnPadding()
     val transSpec = rememberTransformationSpec()
 
-    TransformingLazyColumn(state = columnState) {
-        items(apps, contentType = { "App" }) { app ->
+    TransformingLazyColumn(state = columnState, contentPadding = contentPadding) {
+        items(apps, key = { app -> app.packageName }, contentType = { "App" }) { app ->
             ArtItem(
                 modifier = Modifier
-                    .padding(horizontal = 12.dp)
+                    .animateItem()
                     .transformedHeight(this, transSpec),
                 transformation = SurfaceTransformation(transSpec),
                 app = app,

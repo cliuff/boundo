@@ -46,7 +46,10 @@ internal class AppListViewModel : ViewModel() {
         appRepo = repo
 
         initJob = viewModelScope.launch(Dispatchers.Default) {
-            val appList = repo.getAppsOneShot()
+            val comparator = compareByDescending(ApiViewingApp::updateTime)
+                .thenBy(ApiViewingApp::name)
+                .thenBy(ApiViewingApp::packageName)
+            val appList = repo.getAppsOneShot().sortedWith(comparator)
             mutAppListState.update { appList }
         }
     }
