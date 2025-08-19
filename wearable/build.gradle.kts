@@ -127,6 +127,7 @@ dependencies {
         libs.googleMaterialComponents,
         libs.kotlinStdlib,
         libs.kotlinCoroutines,
+        libs.coilCompose,
         libs.androidxWear,
         libs.androidxComposeActivity,
         libs.androidxComposeViewModel,

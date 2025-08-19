@@ -34,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -45,7 +46,10 @@ import androidx.wear.compose.material3.SurfaceTransformation
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import androidx.wear.compose.ui.tooling.preview.WearPreviewSquare
+import coil3.compose.AsyncImage
+import io.cliuff.boundo.conf.coil.PackageInfo
 import io.cliuff.boundo.wear.model.ApiViewingApp
+import io.cliuff.boundo.wear.ui.comp.AppPackageInfo
 import io.cliuff.boundo.wear.ui.comp.ArtMapper
 import io.cliuff.boundo.wear.ui.theme.PreviewAppTheme
 
@@ -55,6 +59,10 @@ internal fun ArtItem(
     modifier: Modifier = Modifier,
     transformation: SurfaceTransformation? = null,
 ) {
+    val context = LocalContext.current
+    val iconInfo = remember(app) {
+        AppPackageInfo(context, app)
+    }
     val relativeTime = remember(app.updateTime) {
         ArtMapper.getRelativeTime(app.updateTime)
     }
@@ -68,6 +76,7 @@ internal fun ArtItem(
             time = relativeTime,
             apiText = app.targetSDKDisplay,
             apiColor = Color(apiColor),
+            iconInfo = iconInfo,
         )
     }
 }
@@ -100,18 +109,18 @@ private fun ArtItemContent(
     time: String?,
     apiText: String,
     apiColor: Color,
+    iconInfo: PackageInfo?,
     modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier.fillMaxWidth().padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Box(
+        AppIcon(
             modifier = Modifier
                 .padding(start = 8.dp, end = 8.dp)
-                .size(28.dp)
-                .clip(CircleShape)
-                .background(color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.4f))
+                .size(28.dp),
+            iconInfo = iconInfo,
         )
 
         Column(modifier = Modifier.weight(1f)) {
@@ -150,6 +159,21 @@ private fun ArtItemContent(
     }
 }
 
+@Composable
+fun AppIcon(modifier: Modifier = Modifier, iconInfo: PackageInfo?) {
+    if (iconInfo != null) {
+        AsyncImage(
+            modifier = modifier,
+            model = iconInfo,
+            contentDescription = null,
+        )
+    } else {
+        Box(modifier
+            .clip(CircleShape)
+            .background(color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.4f)))
+    }
+}
+
 @WearPreviewDevices
 @WearPreviewSquare
 @Composable
@@ -162,6 +186,7 @@ private fun ArtItemPreview() {
                     time = "3 hours ago",
                     apiText = "16",
                     apiColor = MaterialTheme.colorScheme.onSurface,
+                    iconInfo = null,
                 )
             }
         }

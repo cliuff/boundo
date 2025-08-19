@@ -2,10 +2,12 @@ package com.madness.collision.wearable.main
 
 import android.app.Application
 import android.content.Intent
+import coil3.SingletonImageLoader
 import com.madness.collision.wearable.BuildConfig
+import io.cliuff.boundo.conf.CoilInitializer
 import kotlin.system.exitProcess
 
-internal class MainApplication : Application(), Thread.UncaughtExceptionHandler {
+internal class MainApplication : Application(), Thread.UncaughtExceptionHandler, SingletonImageLoader.Factory by CoilInitializer {
     companion object {
         lateinit var INSTANCE: MainApplication
     }
