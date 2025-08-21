@@ -19,14 +19,37 @@ package io.cliuff.boundo.wear
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.lifecycleScope
+import io.cliuff.boundo.wear.conf.MiscMain
+import io.cliuff.boundo.wear.ui.list.AppList
 import io.cliuff.boundo.wear.ui.theme.MetaAppTheme
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+    private var appInitJob: Job? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        // handle splash screen transition
+        installSplashScreen()
+
         super.onCreate(savedInstanceState)
+        applyAppInit()
+
         setContent {
             MetaAppTheme {
+                AppList()
             }
+        }
+    }
+
+    private fun applyAppInit() {
+        appInitJob?.cancel()
+        appInitJob = lifecycleScope.launch(Dispatchers.Default) {
+            val prefs = getSharedPreferences("PrefSettings", MODE_PRIVATE)
+            MiscMain.applyAppVersionUpgrade(applicationContext, prefs)
         }
     }
 }

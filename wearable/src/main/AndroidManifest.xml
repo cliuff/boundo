@@ -21,7 +21,7 @@
     <uses-feature android:name="android.hardware.type.watch" />
 
     <application
-        android:name=".main.MainApplication"
+        android:name=".MainApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -30,7 +30,7 @@
         android:theme="@style/StartingAppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name="io.cliuff.boundo.wear.MainActivity"
+            android:name=".MainActivity"
             android:taskAffinity=".main"
             android:exported="true"
             android:enabled="true">

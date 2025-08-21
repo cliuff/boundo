@@ -25,7 +25,7 @@ android {
         }
     }
     // namespace is used by R and BuildConfig classes
-    namespace = "com.madness.collision.wearable"
+    namespace = "io.cliuff.boundo.wear"
     compileSdk = 36
     defaultConfig {
         // below: manifest placeholders
