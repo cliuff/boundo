@@ -17,20 +17,30 @@
 package io.cliuff.boundo.wear.ui.comp
 
 import android.content.Context
+import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
-import com.madness.collision.wearable.misc.MiscApp
 import io.cliuff.boundo.conf.coil.CompactPackageInfo
 import io.cliuff.boundo.wear.model.ApiViewingApp
 
 internal class AppPackageInfo(private val context: Context, private val appInfo: ApiViewingApp) :
     CompactPackageInfo {
     override val handleable: Boolean = true
-    override val verCode: Long = 1// todo appInfo.verCode
-    override val uid: Int = 1// todo appInfo.uid
+    override val verCode: Long = appInfo.verCode
+    override val uid: Int = appInfo.uid
     override val packageName: String = appInfo.packageName
     override fun loadUnbadgedIcon(pm: PackageManager): Drawable {
-        val app = MiscApp.getApplicationInfo(context, packageName) ?: throw Exception("Application info is null")
+        val app = getApplicationInfo(context, packageName) ?: throw Exception("Application info is null")
         return app.loadUnbadgedIcon(pm)
+    }
+}
+
+private fun getApplicationInfo(context: Context, pkgName: String): ApplicationInfo? {
+    return try {
+        if (pkgName.isEmpty()) return null
+        context.packageManager.getApplicationInfo(pkgName, 0)
+    } catch (e: PackageManager.NameNotFoundException) {
+        e.printStackTrace()
+        null
     }
 }

@@ -48,6 +48,7 @@ import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import androidx.wear.compose.ui.tooling.preview.WearPreviewSquare
 import coil3.compose.AsyncImage
 import io.cliuff.boundo.conf.coil.PackageInfo
+import io.cliuff.boundo.os.OS
 import io.cliuff.boundo.wear.model.ApiViewingApp
 import io.cliuff.boundo.wear.ui.comp.AppPackageInfo
 import io.cliuff.boundo.wear.ui.comp.ArtMapper
@@ -66,15 +67,17 @@ internal fun ArtItem(
     val relativeTime = remember(app.updateTime) {
         ArtMapper.getRelativeTime(app.updateTime)
     }
-    val apiColor = remember(app.targetAPI) {
-        ArtMapper.getItemColorAccent(app.targetAPI)
+    val (apiVer, apiColor) = remember(app.targetAPI) {
+        val targetOS = OS.from(app.targetAPI)
+        val majorVer = targetOS?.getMajorVersionName()?.toString() ?: ""
+        majorVer to ArtMapper.getItemColorAccent(targetOS)
     }
 
     ArtItemContainer(modifier = modifier, onClick = {}, transformation = transformation) {
         ArtItemContent(
             name = app.name,
             time = relativeTime,
-            apiText = app.targetSDKDisplay,
+            apiText = apiVer,
             apiColor = Color(apiColor),
             iconInfo = iconInfo,
         )

@@ -28,7 +28,7 @@ import kotlinx.coroutines.coroutineScope
 internal suspend fun List<PackageInfo>.toPkgApps(context: Context) = coroutineScope {
     val arr = Array(size) { i ->
         async(Dispatchers.IO) {
-            ApiViewingApp(context, get(i), preloadProcess = true)
+            ApiViewingApp(context, get(i))
         }
     }
     // use array to avoid toTypedArray() conversion
