@@ -20,6 +20,9 @@
 
     <uses-feature android:name="android.hardware.type.watch" />
 
+    <!-- use rememberResponsiveColumnPadding() with API 25 -->
+    <uses-sdk tools:overrideLibrary="com.google.android.horologist.compose.layout" />
+
     <application
         android:name=".MainApplication"
         android:allowBackup="true"

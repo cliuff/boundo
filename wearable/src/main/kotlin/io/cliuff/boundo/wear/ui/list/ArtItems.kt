@@ -17,6 +17,7 @@
 package io.cliuff.boundo.wear.ui.list
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -91,10 +92,11 @@ private fun ArtItemContainer(
     transformation: SurfaceTransformation? = null,
     content: @Composable () -> Unit,
 ) {
+    // todo replace Card with M3E Chip
+    Box(modifier = modifier.heightIn(max = 50.dp)) {
     Card(
-        modifier = modifier,
         onClick = onClick,
-        shape = MaterialTheme.shapes.medium,
+        shape = CircleShape,
         contentPadding = PaddingValues.Zero,
         transformation = transformation,
     ) {
@@ -103,6 +105,7 @@ private fun ArtItemContainer(
             contentAlignment = Alignment.CenterStart,
             content = { content() }
         )
+    }
     }
 }
 
@@ -133,7 +136,7 @@ private fun ArtItemContent(
                 lineHeight = 14.sp,
                 fontWeight = FontWeight.Medium,
                 overflow = TextOverflow.Ellipsis,
-                maxLines = 2,
+                maxLines = 1,
             )
             if (time != null) {
                 Text(
@@ -182,8 +185,20 @@ fun AppIcon(modifier: Modifier = Modifier, iconInfo: PackageInfo?) {
 @Composable
 private fun ArtItemPreview() {
     PreviewAppTheme {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.CenterStart) {
-            ArtItemContainer(modifier = Modifier.padding(horizontal = 12.dp), onClick = {}) {
+        Column(
+            modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterVertically)
+        ) {
+            ArtItemContainer(onClick = {}) {
+                ArtItemContent(
+                    name = "Meta App",
+                    time = "0 minutes ago",
+                    apiText = "16",
+                    apiColor = MaterialTheme.colorScheme.onSurface,
+                    iconInfo = null,
+                )
+            }
+            ArtItemContainer(onClick = {}) {
                 ArtItemContent(
                     name = "Boundo Meta App",
                     time = "3 hours ago",

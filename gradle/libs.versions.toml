@@ -41,7 +41,8 @@ androidxDocumentFile = "1.1.0"
 # This dependency is for the Wear UI Library,
 # which has classes that exemplify best practices
 androidxWear = "1.3.0"
-androidxWearCompose = "1.5.0-rc01"
+androidxWearCompose = "1.5.0-rc02"
+googleHorologist = "0.7.15"
 
 googleTruth = "1.1.3"
 googleMaterialComponents = "1.13.0-alpha13"
@@ -175,6 +176,8 @@ androidxWearComposeMaterial3 = { module = "androidx.wear.compose:compose-materia
 androidxWearComposeFundation = { module = "androidx.wear.compose:compose-foundation", version.ref = "androidxWearCompose" }
 # Wear OS preview annotations
 androidxWearComposeUiTooling = { module = "androidx.wear.compose:compose-ui-tooling", version.ref = "androidxWearCompose" }
+google-horologist-layout = { module = "com.google.android.horologist:horologist-compose-layout", version.ref = "googleHorologist" }
+google-horologist-material = { module = "com.google.android.horologist:horologist-compose-material", version.ref = "googleHorologist" }
 # Ambient mode support is provided by this dependency
 googleWearable = { module = "com.google.android.wearable:wearable", version.ref = "googleWearable" }
 

@@ -136,6 +136,7 @@ dependencies {
         libs.androidxWearComposeUiTooling,
         libs.androidxWearComposeFundation,
         libs.androidxWearComposeMaterial3,
+        libs.google.horologist.layout,
     ).forEach { implementation(it) }
 
     debugImplementation(libs.androidxComposeUiTooling)

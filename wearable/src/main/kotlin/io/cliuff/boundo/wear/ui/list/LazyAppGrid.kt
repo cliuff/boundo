@@ -19,13 +19,17 @@ package io.cliuff.boundo.wear.ui.list
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.wear.compose.foundation.lazy.TransformingLazyColumn
 import androidx.wear.compose.foundation.lazy.TransformingLazyColumnState
 import androidx.wear.compose.foundation.lazy.items
 import androidx.wear.compose.foundation.lazy.rememberTransformingLazyColumnState
+import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.SurfaceTransformation
+import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.lazy.rememberTransformationSpec
 import androidx.wear.compose.material3.lazy.transformedHeight
+import io.cliuff.boundo.wear.R
 import io.cliuff.boundo.wear.model.ApiViewingApp
 
 @Composable
@@ -34,10 +38,19 @@ internal fun LazyAppGrid(
     columnState: TransformingLazyColumnState = rememberTransformingLazyColumnState(),
     contentPadding: PaddingValues = PaddingValues.Zero,
 ) {
-//    val contentPadding = rememberResponsiveColumnPadding()
     val transSpec = rememberTransformationSpec()
 
     TransformingLazyColumn(state = columnState, contentPadding = contentPadding) {
+
+        item(key = "@list.header", contentType = "Header") {
+            ListHeader(
+                modifier = Modifier.transformedHeight(this, transSpec),
+                transformation = SurfaceTransformation(transSpec),
+            ) {
+                Text(stringResource(R.string.art_list_hrader))
+            }
+        }
+
         items(apps, key = { app -> app.packageName }, contentType = { "App" }) { app ->
             ArtItem(
                 modifier = Modifier

@@ -28,6 +28,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.wear.compose.foundation.lazy.rememberTransformingLazyColumnState
 import androidx.wear.compose.material3.CircularProgressIndicator
 import androidx.wear.compose.material3.ScreenScaffold
+import com.google.android.horologist.compose.layout.ColumnItemType
+import com.google.android.horologist.compose.layout.rememberResponsiveColumnPadding
 
 @Composable
 fun AppList() {
@@ -39,10 +41,15 @@ fun AppList() {
 
     val appList by viewModel.appListState.collectAsStateWithLifecycle()
     val columnState = rememberTransformingLazyColumnState()
+    val contentPadding = rememberResponsiveColumnPadding(
+        first = ColumnItemType.ListHeader,
+        last = ColumnItemType.Card,
+    )
 
     ScreenScaffold(
         modifier = Modifier.fillMaxSize(),
         scrollState = columnState,
+        contentPadding = contentPadding,
     ) { innerPadding ->
 
         LazyAppGrid(
