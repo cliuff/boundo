@@ -46,14 +46,29 @@ android {
         resValue("string", "buildPackage", buildPackage)
         // below: fix multi-locale support
         resourceConfigurations.addAll(arrayOf(
+            "ar",
+            "bn", "bn-rBD",
+            "de", "de-rDE",
+            "el", "el-rGR",
             "en", "en-rGB", "en-rUS",
-            "zh", "zh-rCN", "zh-rHK", "zh-rMO", "zh-rTW", "zh-rSG",
-            "ru", "ru-rRU", "es", "es-rES", "es-rUS",
-            "ar", "it", "it-rIT", "pt", "pt-rPT",
-            "th", "th-rTH", "vi", "vi-rVN",
-            "fr", "fr-rFR", "el", "el-rGR",
-            "ja", "ja-rJP", "ko", "ko-rKR",
-            "tr", "tr-rTR", "de", "de-rDE"
+            "es", "es-rES", "es-rUS",
+            "fa", "fa-rAF", "fa-rIR",
+            "fr", "fr-rFR",
+            "hi", "hi-rIN",
+            "in", "in-rID",
+            "it", "it-rIT",
+            "ja", "ja-rJP",
+            "ko", "ko-rKR",
+            "mr", "mr-rIN",
+            "pa", "pa-rPK",
+            "pl", "pl-rPL",
+            "pt", "pt-rPT",
+            "ru", "ru-rRU",
+            "th", "th-rTH",
+            "tr", "tr-rTR",
+            "uk", "uk-rUA",
+            "vi", "vi-rVN",
+            "zh", "zh-rCN", "zh-rHK", "zh-rMO", "zh-rSG", "zh-rTW",
         ))
     }
     buildTypes {
