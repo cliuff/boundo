@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright 2020 Clifford Liu
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2025 Clifford Liu
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -16,8 +15,5 @@
   -->
 
 <resources>
-    <string name="apiViewing">應用 API</string>
-    <string name="avPrefIncludeDisabled">包含已禁用的應用</string>
-    <string name="avPrefSweet">顯示甜點</string>
-    <string name="app_name">Meta App</string>
+    <string name="app_name">&#8207;Meta App</string>
 </resources>

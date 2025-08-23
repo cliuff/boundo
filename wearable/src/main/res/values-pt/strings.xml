@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Boundo</string>
     <string name="apiViewing">API do aplicativo</string>
     <string name="avPrefIncludeDisabled">Incluir aplicativos desativados</string>
     <string name="avPrefSweet">Mostrar sobremesas</string>

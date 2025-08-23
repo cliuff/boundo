@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">Boundo</string>
     <string name="apiViewing">API d\'application</string>
     <string name="avPrefIncludeDisabled">Inclure les applications désactivées</string>
     <string name="avPrefSweet">Afficher les desserts</string>

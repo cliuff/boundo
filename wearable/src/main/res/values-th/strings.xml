@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Boundo</string>
     <string name="apiViewing">แอป API</string>
     <string name="avPrefIncludeDisabled">รวมแอพที่ปิดใช้งาน</string>
     <string name="avPrefSweet">แสดงของหวาน</string>

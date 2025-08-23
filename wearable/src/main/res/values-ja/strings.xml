@@ -19,5 +19,4 @@
     <string name="apiViewing">アプリケーションAPI</string>
     <string name="avPrefIncludeDisabled">無効になっているアプリが含まれています</string>
     <string name="avPrefSweet">デザートを表示</string>
-    <string name="app_name">Boundo</string>
 </resources>
