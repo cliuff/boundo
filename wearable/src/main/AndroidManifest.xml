@@ -20,6 +20,20 @@
 
     <uses-feature android:name="android.hardware.type.watch" />
 
+    <!-- Query all apps on Android 11+ -->
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+
+    <!-- Permissions added due to unknown reason -->
+    <uses-permission
+        android:name="android.permission.READ_PHONE_STATE"
+        tools:node="remove" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        tools:node="remove" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:node="remove" />
+
     <!-- use rememberResponsiveColumnPadding() with API 25 -->
     <uses-sdk tools:overrideLibrary="com.google.android.horologist.compose.layout" />
 
@@ -60,6 +74,6 @@
 
         <uses-library
             android:name="com.google.android.wearable"
-            android:required="true" />
+            android:required="false" />
     </application>
 </manifest>

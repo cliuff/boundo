@@ -20,16 +20,17 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 
 class SelfUpdater25 : SelfUpdater {
-    override val maxVersion: Int = 25082000
+    override val maxVersion: Int = 25082400
 
     override fun apply(oldVersion: Int, prefSettings: SharedPreferences) {
         // check illegal version code
         if (oldVersion < 0) return
         // use ifs instead of when to implement fallthrough
-        if (oldVersion < 25082000) {
+        if (oldVersion < 25082400) {
             prefSettings.edit {
                 remove("AVSweet")
                 remove("AVIncludeDisabled")
+                remove("SDKCheckSortSpinnerSelection")
                 remove("SDKCheckSortSpinnerSelection1")
                 remove("SDKCheckDisplaySpinnerSelection")
             }

@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    buildToolsVersion = "34.0.0"
+    buildToolsVersion = "36.0.0"
     sourceSets {
         getByName("main").java.srcDir("src/main/kotlin")
     }
@@ -32,9 +32,9 @@ android {
         manifestPlaceholders["buildPackage"] = buildPackage
         applicationId = "com.madness.collision"
         minSdk = 25
-        targetSdk = 33
-        versionCode = 24010122
-        versionName = "4.1.4W"
+        targetSdk = 36
+        versionCode = 25082400
+        versionName = "5.0.0W"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testApplicationId = "${applicationId}.test"
         if (configSigning) {
@@ -130,15 +130,9 @@ dependencies {
         libs.androidxCoreSplashScreen,
         libs.androidxActivity,
         libs.androidxAppcompat,
-        libs.androidxFragment,
-        libs.androidxPalette,
-        libs.androidxRecyclerView,
-        libs.androidxViewPager,
         libs.androidxLifecycleRuntime,
         libs.androidxLifecycleCommon,
         libs.androidxLifecycleViewModel,
-        libs.androidxLifecycleLiveData,
-        libs.androidxPreference,
         libs.googleMaterialComponents,
         libs.kotlinStdlib,
         libs.kotlinCoroutines,
