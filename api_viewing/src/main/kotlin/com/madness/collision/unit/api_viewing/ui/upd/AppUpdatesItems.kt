@@ -132,6 +132,19 @@ internal fun AppUpdateItem(
     val backColor = remember(art.newApiInfo) {
         SealMaker.getItemColorBack(context, art.newApiInfo.api)
     }
+
+    val (initNewTime, relNewTimeFlow) = remember(art.newUpdateTime) {
+        ArtMapper.getRelativeTimeUpdates(art.newUpdateTime)
+    }
+    val relativeNewTime by relNewTimeFlow?.collectAsStateWithLifecycle(initNewTime)
+        ?: remember(initNewTime) { stateOf(initNewTime) }
+
+    val (initOldTime, relOldTimeFlow) = remember(art.oldUpdateTime) {
+        ArtMapper.getRelativeTimeUpdates(art.oldUpdateTime)
+    }
+    val relativeOldTime by relOldTimeFlow?.collectAsStateWithLifecycle(initOldTime)
+        ?: remember(initOldTime) { stateOf(initOldTime) }
+
     AppUpdateItem(
         modifier = modifier,
         name = art.identity.label,
@@ -142,6 +155,8 @@ internal fun AppUpdateItem(
         oldApi = art.oldApiInfo,
         newVer = art.newVersion,
         oldVer = art.oldVersion,
+        newTime = relativeNewTime,
+        oldTime = relativeOldTime,
         onClick = onClick,
     )
 }
@@ -157,6 +172,19 @@ internal fun VerUpdateItem(
     val backColor = remember(art.apiInfo) {
         SealMaker.getItemColorBack(context, art.apiInfo.api)
     }
+
+    val (initNewTime, relNewTimeFlow) = remember(art.newUpdateTime) {
+        ArtMapper.getRelativeTimeUpdates(art.newUpdateTime)
+    }
+    val relativeNewTime by relNewTimeFlow?.collectAsStateWithLifecycle(initNewTime)
+        ?: remember(initNewTime) { stateOf(initNewTime) }
+
+    val (initOldTime, relOldTimeFlow) = remember(art.oldUpdateTime) {
+        ArtMapper.getRelativeTimeUpdates(art.oldUpdateTime)
+    }
+    val relativeOldTime by relOldTimeFlow?.collectAsStateWithLifecycle(initOldTime)
+        ?: remember(initOldTime) { stateOf(initOldTime) }
+
     VerUpdateItem(
         modifier = modifier,
         name = art.identity.label,
@@ -165,6 +193,8 @@ internal fun VerUpdateItem(
         cardColor = Color(backColor),
         newVer = art.newVersion,
         oldVer = art.oldVersion,
+        newTime = relativeNewTime,
+        oldTime = relativeOldTime,
         onClick = onClick,
     )
 }
@@ -312,6 +342,8 @@ internal fun AppUpdateItem(
     oldApi: VerInfo,
     newVer: AppInstallVersion,
     oldVer: AppInstallVersion,
+    newTime: String = newVer.time,
+    oldTime: String = oldVer.time,
     onClick: () -> Unit,
 ) {
     val containerColor = when (LocalInspectionMode.current) {
@@ -332,7 +364,7 @@ internal fun AppUpdateItem(
         Column(modifier = Modifier.padding(horizontal = 4.dp, vertical = 4.dp)) {
             AppUpdateHeader(name = name, iconInfo = iconInfo, tagGroup = tagGroup, cardColor = cardColor)
             Box(modifier = Modifier.padding(horizontal = 8.dp, vertical = 12.dp)) {
-                AppApiUpdate(newApi = newApi, oldApi = oldApi, newVer = newVer, oldVer = oldVer)
+                AppApiUpdate(newApi = newApi, oldApi = oldApi, newVer = newVer, oldVer = oldVer, newTime = newTime, oldTime = oldTime)
             }
         }
     }
@@ -347,6 +379,8 @@ internal fun VerUpdateItem(
     cardColor: Color,
     newVer: AppInstallVersion,
     oldVer: AppInstallVersion,
+    newTime: String = newVer.time,
+    oldTime: String = oldVer.time,
     onClick: () -> Unit,
 ) {
     val containerColor = when (LocalInspectionMode.current) {
@@ -367,7 +401,7 @@ internal fun VerUpdateItem(
         Column(modifier = Modifier.padding(horizontal = 4.dp, vertical = 4.dp)) {
             AppUpdateHeader(name = name, iconInfo = iconInfo, tagGroup = tagGroup, cardColor = cardColor)
             Box(modifier = Modifier.padding(horizontal = 8.dp, vertical = 12.dp)) {
-                AppVerUpdate(newVer = newVer, oldVer = oldVer)
+                AppVerUpdate(newVer = newVer, oldVer = oldVer, newTime = newTime, oldTime = oldTime)
             }
         }
     }

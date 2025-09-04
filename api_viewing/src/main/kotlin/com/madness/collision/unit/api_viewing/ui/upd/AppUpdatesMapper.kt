@@ -17,7 +17,6 @@
 package com.madness.collision.unit.api_viewing.ui.upd
 
 import android.content.Context
-import android.text.format.DateUtils
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.AppPackageInfo
 import com.madness.collision.unit.api_viewing.data.UpdatedApp
@@ -35,20 +34,17 @@ internal fun UpdatedApp.toGuiArt(context: Context): GuiArt =
 private fun UpdatedApp.Upgrade.toGuiArt(context: Context): GuiArt.ApiUpdate {
     val apis = targetApi.toList().map(::VerInfo)
     val verArt = (this as UpdatedApp.VersionUpgrade).toGuiArt(context)
-    return verArt.run { GuiArt.ApiUpdate(identity, apis[0], apis[1], oldVersion, newVersion) }
+    return verArt.run { GuiArt.ApiUpdate(identity, apis[0], apis[1], oldVersion, newVersion, oldUpdateTime, newUpdateTime) }
 }
 
 private fun UpdatedApp.VersionUpgrade.toGuiArt(context: Context): GuiArt.VerUpdate {
-    val timeNow = System.currentTimeMillis()
-    val times = updateTime.toList().map { timestamp ->
-        DateUtils.getRelativeTimeSpanString(
-            timestamp, timeNow, DateUtils.MINUTE_IN_MILLIS).toString()
-    }
     return GuiArt.VerUpdate(
         identity = GuiArtIdentity(app, context),
         apiInfo = VerInfo(app.targetAPI),
-        oldVersion = AppInstallVersion(versionCode.first, versionName.first, times[0]),
-        newVersion = AppInstallVersion(versionCode.second, versionName.second, times[1]),
+        oldVersion = AppInstallVersion(versionCode.first, versionName.first, ""),
+        newVersion = AppInstallVersion(versionCode.second, versionName.second, ""),
+        oldUpdateTime = updateTime.first,
+        newUpdateTime = updateTime.second,
     )
 }
 

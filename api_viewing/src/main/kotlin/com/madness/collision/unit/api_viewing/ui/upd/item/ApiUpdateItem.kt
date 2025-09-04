@@ -59,6 +59,8 @@ internal fun AppApiUpdate(
     oldApi: VerInfo,
     newVer: AppInstallVersion,
     oldVer: AppInstallVersion,
+    newTime: String = newVer.time,
+    oldTime: String = oldVer.time,
 ) {
     Row(
         modifier = Modifier.widthIn(max = 320.dp).fillMaxWidth(),
@@ -77,7 +79,7 @@ internal fun AppApiUpdate(
                 AppSdkItem(ver = oldApi, title = targetTitle, sealIndex = 'u', sealFile = null)
             }
             Spacer(modifier = Modifier.height(6.dp))
-            AppInstallationColumn(verCode = oldVer.code, verName = oldVer.name, time = oldVer.time)
+            AppInstallationColumn(verCode = oldVer.code, verName = oldVer.name, time = oldTime)
         }
         Icon(
             modifier = Modifier.padding(bottom = 12.dp).size(24.dp)
@@ -96,7 +98,7 @@ internal fun AppApiUpdate(
                 AppSdkItem(ver = newApi, title = targetTitle, sealIndex = 'v', sealFile = null)
             }
             Spacer(modifier = Modifier.height(6.dp))
-            AppInstallationColumn(verCode = newVer.code, verName = newVer.name, time = newVer.time)
+            AppInstallationColumn(verCode = newVer.code, verName = newVer.name, time = newTime)
         }
     }
 }
@@ -105,6 +107,8 @@ internal fun AppApiUpdate(
 internal fun AppVerUpdate(
     newVer: AppInstallVersion,
     oldVer: AppInstallVersion,
+    newTime: String = newVer.time,
+    oldTime: String = oldVer.time,
 ) {
     Row(
         modifier = Modifier.widthIn(max = 320.dp).fillMaxWidth(),
@@ -116,7 +120,7 @@ internal fun AppVerUpdate(
             modifier = Modifier.weight(1f).padding(horizontal = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            AppInstallationColumn(verCode = oldVer.code, verName = oldVer.name, time = oldVer.time)
+            AppInstallationColumn(verCode = oldVer.code, verName = oldVer.name, time = oldTime)
         }
         Icon(
             modifier = Modifier.padding(bottom = 12.dp).size(24.dp)
@@ -129,7 +133,7 @@ internal fun AppVerUpdate(
             modifier = Modifier.weight(1f).padding(horizontal = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            AppInstallationColumn(verCode = newVer.code, verName = newVer.name, time = newVer.time)
+            AppInstallationColumn(verCode = newVer.code, verName = newVer.name, time = newTime)
         }
     }
 }

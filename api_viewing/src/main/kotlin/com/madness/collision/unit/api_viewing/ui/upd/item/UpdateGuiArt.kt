@@ -50,6 +50,8 @@ internal sealed interface GuiArt {
         val apiInfo: VerInfo,
         val oldVersion: AppInstallVersion,
         val newVersion: AppInstallVersion,
+        val oldUpdateTime: Long,
+        val newUpdateTime: Long,
     ) : GuiArt
 
     @Immutable
@@ -59,6 +61,8 @@ internal sealed interface GuiArt {
         val newApiInfo: VerInfo,
         val oldVersion: AppInstallVersion,
         val newVersion: AppInstallVersion,
+        val oldUpdateTime: Long,
+        val newUpdateTime: Long,
     ) : GuiArt
 }
 
