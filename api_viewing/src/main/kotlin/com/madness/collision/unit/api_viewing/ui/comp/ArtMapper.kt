@@ -72,6 +72,7 @@ internal fun ApiViewingApp.toGuiArt(context: Context): GuiArtApp {
         compileApiInfo = VerInfo(app.compileAPI),
         targetApiInfo = VerInfo(app.targetAPI),
         minApiInfo = VerInfo(app.minAPI),
+        isArchive = isArchive,
     )
 }
 

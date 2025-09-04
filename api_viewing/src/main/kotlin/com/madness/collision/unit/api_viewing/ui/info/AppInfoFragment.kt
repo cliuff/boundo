@@ -33,8 +33,6 @@ import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.madness.collision.main.MainViewModel
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.list.AppInfoPage
 import com.madness.collision.unit.api_viewing.list.LocalAppSwitcherHandler
@@ -120,7 +118,6 @@ class AppInfoFragment {
         eventHandler: AppInfoEventHandler,
         colorScheme: ColorScheme,
     ) {
-        val mainViewModel = viewModel<MainViewModel>()
         var switchPair: Pair<ApiViewingApp?, Int> by remember(appInfoState) {
             mutableStateOf(appInfoState.app to 0)
         }
@@ -148,7 +145,7 @@ class AppInfoFragment {
                                     enter = fadeIn(animationSpec = spring(stiffness = Spring.StiffnessLow)),
                                     exit = fadeOut(animationSpec = spring(stiffness = Spring.StiffnessVeryLow)),
                                 ) {
-                                    AppInfoPage(a, mainViewModel, {
+                                    AppInfoPage(a, {
                                         appInfoState.app = null
                                         eventHandler.shareAppIcon(a)
                                     }, {

@@ -148,7 +148,7 @@ fun AppListGrid(
 
         val maxSpan = truncate(maxWidth / 290.dp).toInt().coerceAtLeast(1)
         val appItemStyle = when {
-            maxSpan > 1 -> DefaultAppItemStyle
+            maxSpan > 1 -> DefaultAppItemStyle.copy(autoSizeName = true)
             maxWidth - horizontalPaddingSum >= 360.dp -> DefaultAppItemStyle
             else -> CompactAppItemStyle
         }

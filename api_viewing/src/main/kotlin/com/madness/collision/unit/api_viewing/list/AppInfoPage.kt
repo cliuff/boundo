@@ -46,7 +46,7 @@ import androidx.core.widget.NestedScrollView
 import coil3.compose.AsyncImage
 import coil3.compose.rememberAsyncImagePainter
 import com.madness.collision.chief.app.stateOf
-import com.madness.collision.main.MainViewModel
+import com.madness.collision.main.showPage
 import com.madness.collision.unit.api_viewing.data.*
 import com.madness.collision.unit.api_viewing.env.GooglePlayAppInfoOwner
 import com.madness.collision.unit.api_viewing.info.AppInfo
@@ -77,12 +77,11 @@ import kotlin.math.roundToInt
 @Composable
 fun AppInfoPage(
     app: ApiViewingApp,
-    mainViewModel: MainViewModel,
     shareIcon: () -> Unit,
     shareApk: () -> Unit,
 ) {
     CompositionLocalProvider(LocalApp provides app) {
-        AppInfoPage(mainViewModel, shareIcon, shareApk)
+        AppInfoPage(shareIcon, shareApk)
     }
 }
 
@@ -91,7 +90,6 @@ private val LocalApp = staticCompositionLocalOf<ApiViewingApp> { error("App not 
 
 @Composable
 private fun AppInfoPage(
-    mainViewModel: MainViewModel,
     shareIcon: () -> Unit,
     shareApk: () -> Unit,
 ) {
@@ -117,7 +115,7 @@ private fun AppInfoPage(
                 {
                     val f = AppIconFragment.newInstance(
                         app.name, app.packageName, app.appPackage.basePath, app.isArchive)
-                    mainViewModel.displayFragment(f)
+                    context.showPage(f)
                 }
             }
             else -> null

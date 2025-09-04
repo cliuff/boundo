@@ -42,6 +42,7 @@ internal data class GuiArtApp(
     val targetApiInfo: VerInfo,
     val minApiInfo: VerInfo,
     val updateTime: Long,
+    val isArchive: Boolean,
 )
 
 @Stable
@@ -82,6 +83,7 @@ internal fun AppItem(
     }
 
     val (initTime, relTimeFlow) = remember(art.updateTime) {
+        if (art.isArchive) return@remember (null to null)
         ArtMapper.getRelativeTimeUpdates(art.updateTime)
     }
     val relativeTime by relTimeFlow?.collectAsStateWithLifecycle(initTime)

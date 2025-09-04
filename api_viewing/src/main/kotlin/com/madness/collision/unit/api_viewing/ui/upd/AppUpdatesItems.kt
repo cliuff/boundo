@@ -38,6 +38,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.LocalTextStyle
@@ -223,6 +224,7 @@ data class AppItemStyle(
     val sealSize: Dp,
     val nameTextStyle: TextStyle? = null,
     val apiTextStyle: TextStyle? = null,
+    val autoSizeName: Boolean = false,
 )
 
 val LocalAppItemStyle = compositionLocalOf { DefaultAppItemStyle }
@@ -292,14 +294,22 @@ private fun AppItemContent(
         )
         Spacer(modifier = Modifier.width(7.dp))
         Column(modifier = Modifier.weight(1f)) {
+            val nameStyle = style.nameTextStyle ?: LocalTextStyle.current
+            val nameAutoSize = if (style.autoSizeName) {
+                TextAutoSize.StepBased(12.sp, nameStyle.fontSize, 1.sp)
+            } else {
+                null
+            }
+
             Text(
                 // 3dp extracted from spacer to align with tag row's content
                 modifier = Modifier.padding(start = 3.dp),
                 text = name,
                 color = MaterialTheme.colorScheme.onBackground,
-                style = style.nameTextStyle ?: LocalTextStyle.current,
+                autoSize = nameAutoSize,
+                style = nameStyle,
                 overflow = TextOverflow.Ellipsis,
-                maxLines = 2,
+                maxLines = if (nameAutoSize != null) 1 else 2,
             )
             if (tagGroup.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(4.dp))

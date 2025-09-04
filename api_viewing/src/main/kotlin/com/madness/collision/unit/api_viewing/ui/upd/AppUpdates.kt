@@ -226,7 +226,7 @@ private fun AppUpdatesPrimary(
                     paddingValues.run { calculateLeftPadding(di) + calculateRightPadding(di) }
                 }
                 val appItemStyle = when {
-                    maxSpan > 1 -> DefaultAppItemStyle
+                    maxSpan > 1 -> DefaultAppItemStyle.copy(autoSizeName = true)
                     maxWidth - horizontalPadding >= 360.dp -> DefaultAppItemStyle
                     else -> CompactAppItemStyle
                 }
