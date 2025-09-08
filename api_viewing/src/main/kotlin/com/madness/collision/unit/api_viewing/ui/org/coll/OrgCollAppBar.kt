@@ -62,6 +62,7 @@ import androidx.compose.ui.unit.sp
 import com.madness.collision.chief.app.stateOf
 import com.madness.collision.ui.comp.ClassicTopAppBarDefaults
 import com.madness.collision.unit.api_viewing.R
+import com.madness.collision.util.config.LocaleUtils
 import io.cliuff.boundo.org.model.CompColl
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -85,7 +86,8 @@ fun OrgCollAppBar(
             title = {
                 Text(
                     modifier = Modifier.alpha(barContentAlpha),
-                    text = stringResource(R.string.org_title),
+                    text = stringResource(R.string.org_title)
+                        .run { remember { lowercase(LocaleUtils.getRuntimeFirst()) } },
                     fontWeight = FontWeight.Medium,
                     fontFamily = ClassicTopAppBarDefaults.FontFamily,
                     overflow = TextOverflow.Ellipsis,

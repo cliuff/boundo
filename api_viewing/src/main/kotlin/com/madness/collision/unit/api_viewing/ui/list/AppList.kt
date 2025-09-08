@@ -24,6 +24,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.draganddrop.dragAndDropTarget
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
@@ -38,6 +39,7 @@ import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarState
 import androidx.compose.material3.rememberTopAppBarState
@@ -53,11 +55,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.view.isVisible
 import androidx.lifecycle.compose.LifecycleResumeEffect
@@ -70,6 +74,8 @@ import com.madness.collision.chief.app.BoundoTheme
 import com.madness.collision.chief.app.asInsets
 import com.madness.collision.chief.app.rememberColorScheme
 import com.madness.collision.chief.lang.mapIf
+import com.madness.collision.chief.layout.share
+import com.madness.collision.ui.comp.ClassicTopAppBarDefaults
 import com.madness.collision.unit.api_viewing.ComposeUnit
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.ui.home.AppHomeNavPage
@@ -339,8 +345,17 @@ private fun AppListScaffold(
             val containerColor = MaterialTheme.colorScheme.surface.copy(alpha = toolbarOpacity)
             AppListBar(
                 isRefreshing = listState.isRefreshing,
+                title = {
+                    Text(
+                        modifier = Modifier.alpha(toolbarOpacity),
+                        text = "metá app",
+                        fontWeight = FontWeight.Medium,
+                        fontFamily = ClassicTopAppBarDefaults.FontFamily,
+                    )
+                },
                 windowInsets = paddingValues.asInsets()
-                    .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
+                    .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top)
+                    .share(WindowInsets(top = 5.dp)),
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = containerColor, scrolledContainerColor = containerColor),
                 scrollBehavior = scrollBehavior,

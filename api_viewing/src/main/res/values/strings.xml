@@ -216,4 +216,7 @@
     <string name="org_group_info_act_install">Install…</string>
     <string name="org_group_info_option_del">Delete group</string>
     <string name="org_group_info_del_title">Delete Group</string>
+    <string name="home_nav_item_updates">For You</string>
+    <string name="home_nav_item_list">Apps</string>
+    <string name="home_nav_item_org">Library</string>
 </resources>

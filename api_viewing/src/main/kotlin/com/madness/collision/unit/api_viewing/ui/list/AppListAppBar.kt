@@ -43,6 +43,7 @@ import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
@@ -52,7 +53,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PrimaryScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -79,13 +79,14 @@ import com.madness.collision.util.dev.PreviewCombinedColorLayout
 @Composable
 fun AppListBar(
     isRefreshing: Boolean,
+    title: @Composable () -> Unit = {},
     windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
     colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
     scrollBehavior: TopAppBarScrollBehavior? = null,
     primaryAction: @Composable () -> Unit,
 ) {
-    TopAppBar(
-        title = { },
+    CenterAlignedTopAppBar(
+        title = title,
         actions = {
             Box(contentAlignment = Alignment.Center) {
                 androidx.compose.animation.AnimatedVisibility(

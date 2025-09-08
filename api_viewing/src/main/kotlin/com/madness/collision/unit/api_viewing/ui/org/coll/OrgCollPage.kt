@@ -83,6 +83,7 @@ import coil3.compose.AsyncImage
 import com.madness.collision.chief.app.BoundoTheme
 import com.madness.collision.chief.app.asInsets
 import com.madness.collision.chief.app.LocalPageNavController
+import com.madness.collision.chief.layout.share
 import com.madness.collision.unit.api_viewing.R
 import com.madness.collision.unit.api_viewing.ui.org.OrgRouteId
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
@@ -120,7 +121,8 @@ fun OrgCollPage(contentPadding: PaddingValues = PaddingValues()) {
                 onActionImport = { viewModel.importColl(context) },
                 onActionExport = { coll?.let { viewModel.exportColl(it, context) } },
                 windowInsets = contentPadding.asInsets()
-                    .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
+                    .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top)
+                    .share(WindowInsets(top = 5.dp)),
                 scrollBehavior = scrollBehavior,
             )
         },

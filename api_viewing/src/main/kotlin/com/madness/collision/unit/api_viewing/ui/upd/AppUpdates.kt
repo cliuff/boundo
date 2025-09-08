@@ -50,13 +50,14 @@ import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -75,6 +76,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.coerceAtLeast
@@ -86,6 +88,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.madness.collision.chief.app.BoundoTheme
 import com.madness.collision.chief.app.asInsets
+import com.madness.collision.chief.layout.share
+import com.madness.collision.ui.comp.ClassicTopAppBarDefaults
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.data.UpdatedApp
 import com.madness.collision.unit.api_viewing.info.AppInfo
@@ -195,7 +199,8 @@ private fun AppUpdatesPrimary(
                     onClickRefresh = { viewModel.refreshUpdates(context) },
                     onClickSettings = eventHandler::showAppSettings,
                     windowInsets = paddingValues.asInsets()
-                        .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
+                        .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top)
+                        .share(WindowInsets(top = 5.dp)),
                 ) {
                     val horizontalPadding = LocalLayoutDirection.current.let { di ->
                         paddingValues.run { calculateLeftPadding(di) + calculateRightPadding(di) }
@@ -292,8 +297,14 @@ private fun UpdatesAppBar(
         false -> if (mainApplication.isDarkTheme) Color(0xFFD0D6DB) else Color(0xFF353535)
     }
     Column {
-        TopAppBar(
-            title = {},
+        CenterAlignedTopAppBar(
+            title = {
+                Text(
+                    text = "metá app",
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = ClassicTopAppBarDefaults.FontFamily,
+                )
+            },
             actions = {
                 val rotation by rememberOvershootRotation(refreshing)
                 var showUnitBar by remember { mutableStateOf(false) }
