@@ -24,7 +24,6 @@ import com.madness.collision.settings.instant.tile.AlipayScannerDesc
 import com.madness.collision.settings.instant.tile.MonthDataUsageDesc
 import com.madness.collision.settings.instant.tile.WeChatScannerDesc
 import com.madness.collision.misc.MiscApp
-import com.madness.collision.qs.TileServiceApiViewer
 import com.madness.collision.qs.TileServiceAudioTimer
 import com.madness.collision.qs.TileServiceBarcodeScanner
 import com.madness.collision.qs.TileServiceBarcodeScannerMm
@@ -37,7 +36,6 @@ import com.madness.collision.versatile.TextProcessingActivity
 
 object BuiltInItems {
     val Shortcuts = listOf(
-        InstantShortcut(P.SC_ID_API_VIEWER, R.string.apiViewer, Unit.UNIT_NAME_API_VIEWING),
         InstantShortcut(P.SC_ID_AUDIO_TIMER, R.string.unit_audio_timer, Unit.UNIT_NAME_AUDIO_TIMER),
         InstantShortcut(P.SC_ID_DEVICE_MANAGER, R.string.unit_device_manager, Unit.UNIT_NAME_DEVICE_MANAGER),
     )
@@ -45,7 +43,6 @@ object BuiltInItems {
     @get:RequiresApi(Build.VERSION_CODES.N)
     val Tiles by lazy(LazyThreadSafetyMode.NONE) {
         listOf(
-            comp<TileServiceApiViewer>(R.string.apiViewer, Unit.UNIT_NAME_API_VIEWING),
             comp<TileServiceAudioTimer>(R.string.unit_audio_timer, Unit.UNIT_NAME_AUDIO_TIMER),
             comp<TileServiceBarcodeScannerMm>(R.string.instantTileScannerWechat) { WeChatScannerDesc() }
                 .setRequirement { MiscApp.isAppAvailable(it, "com.tencent.mm", "instant.tile" to "WeChat not installed") },

@@ -19,7 +19,6 @@ package com.madness.collision.unit
 import android.content.ComponentName
 import android.content.Context
 import android.content.pm.PackageManager
-import com.madness.collision.qs.TileServiceApiViewer
 import com.madness.collision.qs.TileServiceAudioTimer
 import com.madness.collision.unit.themed_wallpaper.ThemedWallpaperService
 import com.madness.collision.versatile.ApiViewingSearchActivity
@@ -70,7 +69,7 @@ internal class UnitManager(private val context: Context) {
     private fun aftermathApiViewing(context: Context, isUninstall: Boolean) {
         val state = isUninstall.stateDisabled()
         val pm = context.packageManager
-        listOf(ApkSharing::class, TextProcessingActivity::class, ApiViewingSearchActivity::class, TileServiceApiViewer::class).forEach {
+        listOf(ApkSharing::class, TextProcessingActivity::class, ApiViewingSearchActivity::class).forEach {
             pm.setComponentEnabledSetting(it.toComponentName(context), state, PackageManager.DONT_KILL_APP)
         }
     }

@@ -34,16 +34,6 @@ object InstantCompat {
     fun getShortcutBuildRes(context: Context, id: String): ShortcutBuildRes? {
         val localeContext = SystemUtil.getLocaleContextSys(context)
         return when (id) {
-            P.SC_ID_API_VIEWER -> ShortcutBuildRes(
-                    Intent(Intent.ACTION_VIEW, Uri.EMPTY, context, MainActivity::class.java).putExtras(
-                            MainActivity.forItem(Unit.UNIT_NAME_API_VIEWING)
-                    ).apply {
-                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    },
-                    localeContext.getString(R.string.apiViewerShort),
-                    localeContext.getString(R.string.apiViewer),
-                    if (X.aboveOn(X.O)) R.mipmap.shortcut_api else R.drawable.shortcut_api_vector
-            )
             P.SC_ID_AUDIO_TIMER -> ShortcutBuildRes(
                     Intent(Intent.ACTION_VIEW, Uri.EMPTY, context, MainActivity::class.java).putExtras(
                             MainActivity.forItem(Unit.UNIT_NAME_AUDIO_TIMER)

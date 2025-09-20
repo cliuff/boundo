@@ -43,12 +43,6 @@ internal class PrefActivity : AppCompatActivity() {
                         putExtras(MainActivity.forItem(Unit.UNIT_NAME_AUDIO_TIMER))
                     }
                 }
-                TileServiceApiViewer::class.qualifiedName -> {
-                    Intent(this, MainActivity::class.java).apply {
-                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                        putExtras(MainActivity.forItem(Unit.UNIT_NAME_API_VIEWING))
-                    }
-                }
                 else -> {
                     X.toast(this, "2333", Toast.LENGTH_SHORT)
                     null

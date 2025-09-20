@@ -247,17 +247,6 @@
                 android:resource="@xml/config_themed_wallpaper" />
         </service>
         <service
-            android:name=".qs.TileServiceApiViewer"
-            android:exported="true"
-            android:enabled="false"
-            android:icon="@drawable/ic_android_24"
-            android:label="@string/apiViewer"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
-            <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE" />
-            </intent-filter>
-        </service>
-        <service
             android:name=".qs.TileServiceAudioTimer"
             android:exported="true"
             android:enabled="false"
