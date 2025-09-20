@@ -59,7 +59,7 @@ object P {
     const val SETTINGS_UPDATE_VIA_SETTINGS = "updateViaSettings"
     const val SETTINGS_LANGUAGE = "language"
 
-    const val SC_ID_API_VIEWER = "instant_sdk" // SC => shortcut
+    // SC => shortcut
     const val SC_ID_IMMORTAL = "immortal"
     const val SC_ID_AUDIO_TIMER = "unitAT"
     const val SC_ID_DEVICE_MANAGER = "unitDM"

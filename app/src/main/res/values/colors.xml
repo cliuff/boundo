@@ -18,7 +18,6 @@
 <resources>
 
     <!-- config icon color res -->
-    <color name="shortcut_api_back">#FFF5F5F5</color>
     <color name="ic_apk_sharing_back">#3DDC84</color>
     <!-- config icon color res -->
 
