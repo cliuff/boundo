@@ -17,9 +17,11 @@
 package com.madness.collision.qs
 
 import android.annotation.TargetApi
+import android.app.PendingIntent
 import android.content.Intent
 import android.graphics.drawable.Icon
 import android.os.Build
+import com.madness.collision.util.os.OsUtils
 import com.madness.collision.versatile.BarcodeScannerActivity
 import com.madness.collision.R
 import java.lang.ref.WeakReference
@@ -49,10 +51,14 @@ internal class TileServiceBarcodeScanner: TileCommon() {
     }
 
     override fun onClick() {
-        super.onClick()
-        Intent(this, BarcodeScannerActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            putExtra(BarcodeScannerActivity.EXTRA_MODE, BarcodeScannerActivity.MODE_ALIPAY)
-        }.let { startActivityAndCollapse(it) }
+        val intent = Intent(this, BarcodeScannerActivity::class.java)
+            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            .putExtra(BarcodeScannerActivity.EXTRA_MODE, BarcodeScannerActivity.MODE_ALIPAY)
+        if (OsUtils.satisfy(OsUtils.U)) {
+            val pdIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+            startActivityAndCollapse(pdIntent)
+        } else {
+            startActivityAndCollapse(intent)
+        }
     }
 }

@@ -17,6 +17,7 @@
 package com.madness.collision.qs
 
 import android.annotation.TargetApi
+import android.app.PendingIntent
 import android.content.Intent
 import android.os.Build
 import android.provider.Settings
@@ -28,6 +29,7 @@ import com.madness.collision.R
 import com.madness.collision.util.PermissionUtils
 import com.madness.collision.util.SysServiceUtils
 import com.madness.collision.util.X
+import com.madness.collision.util.os.OsUtils
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -69,10 +71,15 @@ internal class TileServiceMonthData : TileService() {
     }
 
     private fun getPermission(){
-        startActivityAndCollapse(Intent().apply {
-            action = Settings.ACTION_USAGE_ACCESS_SETTINGS
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        })
+        val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
+            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        if (OsUtils.satisfy(OsUtils.U)) {
+            val pdIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+            startActivityAndCollapse(pdIntent)
+        } else {
+            startActivityAndCollapse(intent)
+        }
+
         GlobalScope.launch {
             delay(1000)
             X.toast(applicationContext, R.string.access_sys_usage, Toast.LENGTH_LONG)

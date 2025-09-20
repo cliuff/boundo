@@ -66,7 +66,12 @@ internal class AudioTimerService: Service() {
             context.stopService(intent)
             intent.putExtra(ARG_DURATION, targetDuration)
             try {
-                context.startService(intent)
+                if (OsUtils.satisfy(OsUtils.O)) {
+                    // fixme ForegroundServiceStartNotAllowedException on Android 14
+                    context.startForegroundService(intent)
+                } else {
+                    context.startService(intent)
+                }
             } catch (e: IllegalStateException) {
                 e.printStackTrace()
                 GlobalScope.launch {

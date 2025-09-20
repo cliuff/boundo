@@ -55,6 +55,8 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <!-- required by AudioTimerService -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <!-- Screen capture for ScreenCapturingService -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
     <!-- <uses-permission android:name="android.permission.READ_CALENDAR" /> -->
     <!-- <uses-permission android:name="android.permission.WRITE_CALENDAR" /> -->
     <!--<uses-permission android:name="android.permission.WAKE_LOCK" />-->
