@@ -1,6 +1,6 @@
 [versions]
 # plugins
-androidGradlePlugin = "8.11.1"  # 8.11-Narwhal
+androidGradlePlugin = "8.11.2"  # 8.11-Narwhal
 kotlin = "2.1.21"
 googleKsp = "2.1.21-2.0.1"
 
@@ -11,16 +11,16 @@ androidxTestRunner = "1.6.2"
 androidxTestExtJunit = "1.2.1"
 androidxTestEspresso = "3.6.1"
 
-androidxCore = "1.16.0"
+androidxCore = "1.17.0"
 androidxCoreSplashScreen = "1.1.0-rc01"
-androidxComposeBom = "2025.07.01"
-androidxActivity = "1.10.1"
-androidxFragment = "1.8.7"
-androidxLifecycle = "2.9.0"
+androidxComposeBom = "2025.09.00"
+androidxActivity = "1.11.0"
+androidxFragment = "1.8.9"
+androidxLifecycle = "2.9.4"
 
-androidxAppcompat = "1.7.0"
-androidxRoom = "2.7.1"
-androidxNavigation = "2.9.0"
+androidxAppcompat = "1.7.1"
+androidxRoom = "2.7.2"
+androidxNavigation = "2.9.4"
 androidxCoreTesting = "2.2.0"
 androidxWindow = "1.4.0"
 
@@ -41,11 +41,11 @@ androidxDocumentFile = "1.1.0"
 # This dependency is for the Wear UI Library,
 # which has classes that exemplify best practices
 androidxWear = "1.3.0"
-androidxWearCompose = "1.5.0-rc02"
+androidxWearCompose = "1.5.1"
 googleHorologist = "0.7.15"
 
 googleTruth = "1.1.3"
-googleMaterialComponents = "1.13.0-alpha13"
+googleMaterialComponents = "1.13.0"
 googleGson = "2.10.1"
 gglGuava = "31.0.1-android"
 # This dependency is set to compile only

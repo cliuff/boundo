@@ -30,7 +30,7 @@ fun getCustomConfig(project: Project): CustomConfig {
     val properties = Properties()
     try {
         val customPropFile = project.rootProject.file("doconfig/custom.properties")
-        properties.load(customPropFile.inputStream())
+        customPropFile.inputStream().use(properties::load)
     } catch (ignored: Exception) {
         return CustomConfig(buildPackage = "com.madness.collision", signing = null)
     }
