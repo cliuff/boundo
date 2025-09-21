@@ -159,7 +159,13 @@ private fun GroupScaffold(
     Scaffold(
         topBar = {
             ClassicTopAppBar(
-                title = { Text(title) },
+                title = {
+                    Text(
+                        text = title,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
+                    )
+                },
                 actions = {
                     IconButton(onClick = onActionEdit) {
                         Icon(

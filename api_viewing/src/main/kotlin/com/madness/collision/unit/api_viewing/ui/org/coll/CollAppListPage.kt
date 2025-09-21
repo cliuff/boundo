@@ -46,6 +46,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -118,7 +119,13 @@ private fun GroupScaffold(
     Scaffold(
         topBar = {
             ClassicTopAppBar(
-                title = { Text(title) },
+                title = {
+                    Text(
+                        text = title,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
+                    )
+                },
                 windowInsets = topBarInsets
                     .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
             )
