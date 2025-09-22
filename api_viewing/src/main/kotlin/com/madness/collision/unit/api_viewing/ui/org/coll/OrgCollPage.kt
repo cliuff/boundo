@@ -96,6 +96,7 @@ import dev.chrisbanes.haze.HazeStyle
 import dev.chrisbanes.haze.HazeTint
 import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.hazeSource
+import dev.chrisbanes.haze.rememberHazeState
 import io.cliuff.boundo.org.model.CompColl
 import io.cliuff.boundo.org.model.OrgApp
 import io.cliuff.boundo.org.model.OrgGroup
@@ -259,7 +260,7 @@ private fun OrgCollContent(
                 appCount = group.apps.size,
                 apps = getPkgsForGroup(group.apps.take(3).map(OrgApp::pkg)),
                 onClick = { onClickGroup(i, group.id) },
-                appHazeState = remember { HazeState() },
+                appHazeState = rememberHazeState(blurEnabled = true),
                 appHazeStyle = hazeStyle,
             )
         }

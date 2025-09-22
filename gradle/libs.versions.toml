@@ -66,7 +66,7 @@ mockito = "5.1.1"
 appIconLoader = "1.5.0"
 # Superellipse shape for Compose
 smoothCornerCompose = "v1.0.0"
-haze = "1.6.2"
+haze = "1.6.10"
 libCheckerRules = "37.1"
 googleSmali = "3.0.9"
 ldapsdk = "6.0.11"
