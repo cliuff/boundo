@@ -183,4 +183,7 @@
     <string name="org_group_info_act_install">Instal…</string>
     <string name="org_group_info_option_del">Hapus Grup</string>
     <string name="org_group_info_del_title">Hapus Grup</string>
+    <string name="home_nav_item_updates">Beranda</string>
+    <string name="home_nav_item_list">Aplikasi</string>
+    <string name="home_nav_item_org">Pustaka</string>
 </resources>

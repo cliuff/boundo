@@ -203,4 +203,7 @@
     <string name="org_group_info_act_install">安裝…</string>
     <string name="org_group_info_option_del">刪除群組</string>
     <string name="org_group_info_del_title">刪除群組</string>
+    <string name="home_nav_item_updates">首頁動態</string>
+    <string name="home_nav_item_list">所有應用程式</string>
+    <string name="home_nav_item_org">應用程式庫</string>
 </resources>

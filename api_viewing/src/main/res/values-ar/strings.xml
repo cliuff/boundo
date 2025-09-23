@@ -211,4 +211,7 @@
     <string name="org_group_info_act_install">تثبيت…</string>
     <string name="org_group_info_option_del">حذف المجموعة</string>
     <string name="org_group_info_del_title">حذف المجموعة</string>
+    <string name="home_nav_item_updates">الصفحة الرئيسية</string>
+    <string name="home_nav_item_list">التطبيقات</string>
+    <string name="home_nav_item_org">المكتبة</string>
 </resources>

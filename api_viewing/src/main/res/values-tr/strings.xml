@@ -183,4 +183,7 @@
     <string name="org_group_info_act_install">Yükle…</string>
     <string name="org_group_info_option_del">Grubu Sil</string>
     <string name="org_group_info_del_title">Grubu Sil</string>
+    <string name="home_nav_item_updates">Ana Sayfa</string>
+    <string name="home_nav_item_list">Uygulamalar</string>
+    <string name="home_nav_item_org">Kütüphane</string>
 </resources>

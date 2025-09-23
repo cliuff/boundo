@@ -183,4 +183,7 @@
     <string name="org_group_info_act_install">설치…</string>
     <string name="org_group_info_option_del">그룹 삭제</string>
     <string name="org_group_info_del_title">그룹 삭제</string>
+    <string name="home_nav_item_updates">홈</string>
+    <string name="home_nav_item_list">앱</string>
+    <string name="home_nav_item_org">라이브러리</string>
 </resources>

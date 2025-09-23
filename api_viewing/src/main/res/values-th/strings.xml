@@ -183,4 +183,7 @@
     <string name="org_group_info_act_install">ติดตั้ง…</string>
     <string name="org_group_info_option_del">ลบกลุ่ม</string>
     <string name="org_group_info_del_title">ลบกลุ่ม</string>
+    <string name="home_nav_item_updates">หน้าแรก</string>
+    <string name="home_nav_item_list">แอป</string>
+    <string name="home_nav_item_org">คลัง</string>
 </resources>

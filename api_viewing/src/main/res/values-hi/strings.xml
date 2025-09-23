@@ -183,4 +183,7 @@
     <string name="org_group_info_act_install">इंस्टॉल करें…</string>
     <string name="org_group_info_option_del">समूह हटाएं</string>
     <string name="org_group_info_del_title">समूह हटाएं</string>
+    <string name="home_nav_item_updates">होम</string>
+    <string name="home_nav_item_list">एप्लिकेशन</string>
+    <string name="home_nav_item_org">लाइब्रेरी</string>
 </resources>

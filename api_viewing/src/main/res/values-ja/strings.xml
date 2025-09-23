@@ -183,4 +183,7 @@
     <string name="org_group_info_act_install">インストール…</string>
     <string name="org_group_info_option_del">グループを削除</string>
     <string name="org_group_info_del_title">グループの削除</string>
+    <string name="home_nav_item_updates">ホーム</string>
+    <string name="home_nav_item_list">アプリ</string>
+    <string name="home_nav_item_org">ライブラリ</string>
 </resources>

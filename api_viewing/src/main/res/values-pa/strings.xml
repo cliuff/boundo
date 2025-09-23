@@ -183,4 +183,7 @@
     <string name="org_group_info_act_install">ਇੰਸਟਾਲ ਕਰੋ…</string>
     <string name="org_group_info_option_del">ਸਮੂਹ ਮਿਟਾਓ</string>
     <string name="org_group_info_del_title">ਸਮੂਹ ਮਿਟਾਓ</string>
+    <string name="home_nav_item_updates">ਹੋਮ</string>
+    <string name="home_nav_item_list">ਐਪਸ</string>
+    <string name="home_nav_item_org">ਲਾਇਬ੍ਰੇਰੀ</string>
 </resources>

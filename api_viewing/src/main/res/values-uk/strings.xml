@@ -182,4 +182,7 @@
     <string name="org_group_info_act_install">Встановити…</string>
     <string name="org_group_info_option_del">Видалити групу</string>
     <string name="org_group_info_del_title">Видалити групу</string>
+    <string name="home_nav_item_updates">Головна</string>
+    <string name="home_nav_item_list">Програми</string>
+    <string name="home_nav_item_org">Бібліотека</string>
 </resources>

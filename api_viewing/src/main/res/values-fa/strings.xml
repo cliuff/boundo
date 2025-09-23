@@ -210,4 +210,7 @@
     <string name="org_group_info_act_install">نصب…</string>
     <string name="org_group_info_option_del">حذف گروه</string>
     <string name="org_group_info_del_title">حذف گروه</string>
+    <string name="home_nav_item_updates">خانه</string>
+    <string name="home_nav_item_list">برنامه‌ها</string>
+    <string name="home_nav_item_org">کتابخانه</string>
 </resources>

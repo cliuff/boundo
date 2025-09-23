@@ -183,4 +183,7 @@
     <string name="org_group_info_act_install">Instalar…</string>
     <string name="org_group_info_option_del">Excluir grupo</string>
     <string name="org_group_info_del_title">Excluir grupo</string>
+    <string name="home_nav_item_updates">Início</string>
+    <string name="home_nav_item_list">Aplicativos</string>
+    <string name="home_nav_item_org">Biblioteca</string>
 </resources>

@@ -183,4 +183,7 @@
     <string name="org_group_info_act_install">ইনস্টল করুন…</string>
     <string name="org_group_info_option_del">দল মুছে ফেলুন</string>
     <string name="org_group_info_del_title">দল মুছুন</string>
+    <string name="home_nav_item_updates">হোম</string>
+    <string name="home_nav_item_list">অ্যাপস</string>
+    <string name="home_nav_item_org">লাইব্রেরি</string>
 </resources>

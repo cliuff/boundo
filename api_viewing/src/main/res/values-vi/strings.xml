@@ -183,4 +183,7 @@
     <string name="org_group_info_act_install">Cài đặt…</string>
     <string name="org_group_info_option_del">Xóa nhóm</string>
     <string name="org_group_info_del_title">Xóa nhóm</string>
+    <string name="home_nav_item_updates">Trang chủ</string>
+    <string name="home_nav_item_list">Ứng dụng</string>
+    <string name="home_nav_item_org">Thư viện</string>
 </resources>

@@ -183,4 +183,7 @@
     <string name="org_group_info_act_install">Εγκατάσταση…</string>
     <string name="org_group_info_option_del">Διαγραφή ομάδας</string>
     <string name="org_group_info_del_title">Διαγραφή ομάδας</string>
+    <string name="home_nav_item_updates">Αρχική</string>
+    <string name="home_nav_item_list">Εφαρμογές</string>
+    <string name="home_nav_item_org">Βιβλιοθήκη</string>
 </resources>

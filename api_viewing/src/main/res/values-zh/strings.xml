@@ -206,4 +206,7 @@
     <string name="org_group_info_act_install">安装…</string>
     <string name="org_group_info_option_del">删除分组</string>
     <string name="org_group_info_del_title">删除分组</string>
+    <string name="home_nav_item_updates">首页动态</string>
+    <string name="home_nav_item_list">所有应用</string>
+    <string name="home_nav_item_org">应用库</string>
 </resources>
