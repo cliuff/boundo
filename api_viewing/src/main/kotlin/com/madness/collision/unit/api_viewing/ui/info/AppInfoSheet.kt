@@ -33,6 +33,7 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.coerceAtMost
@@ -43,6 +44,7 @@ import com.madness.collision.chief.layout.NavigationBarProtection
 import com.madness.collision.chief.layout.symmetricSheetMargin
 import com.madness.collision.ui.theme.MetaAppTheme
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
+import com.madness.collision.unit.api_viewing.ui.comp.StopPostScrollNestedScrollConnection
 import com.madness.collision.util.SystemUtil
 
 @Stable
@@ -90,7 +92,11 @@ fun AppInfoSheet(
                     .coerceIn(600.dp, 800.dp)
                     .coerceAtMost(maxHeight - contentPadding.calculateTopPadding() - 10.dp)
 
-                Box(modifier = Modifier.heightIn(max = sheetHeight)) {
+                Box(
+                    modifier = Modifier
+                        .heightIn(max = sheetHeight)
+                        .nestedScroll(StopPostScrollNestedScrollConnection)
+                ) {
                     AppInfoPageContent(
                         appInfoState = state,
                         appInfoCallback = appInfoCallback,

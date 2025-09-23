@@ -67,6 +67,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
@@ -82,6 +83,7 @@ import com.madness.collision.chief.layout.SystemBarsProtectionDefaults
 import com.madness.collision.chief.layout.symmetricSheetMargin
 import com.madness.collision.ui.theme.MetaAppTheme
 import com.madness.collision.unit.api_viewing.R
+import com.madness.collision.unit.api_viewing.ui.comp.StopPostScrollNestedScrollConnection
 import com.madness.collision.util.SystemUtil
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
 
@@ -153,7 +155,11 @@ private fun BottomSheet(
                 .coerceIn(400.dp, 600.dp)
                 .coerceAtMost(maxHeight - contentPadding.calculateTopPadding() - 10.dp)
 
-            Box(modifier = Modifier.heightIn(max = sheetHeight)) {
+            Box(
+                modifier = Modifier
+                    .heightIn(max = sheetHeight)
+                    .nestedScroll(StopPostScrollNestedScrollConnection)
+            ) {
                 content(windowInsets.only(WindowInsetsSides.Bottom))
 
                 MetaAppTheme(colorScheme = MaterialTheme.colorScheme) {
