@@ -1,7 +1,8 @@
 <p align="center">
-  <img src="doconfig/markdown/shot1.png" width="270" alt="Screenshot 1">
-  <img src="doconfig/markdown/shot2.png" width="270" alt="Screenshot 2">
-  <img src="doconfig/markdown/shot3.png" width="270" alt="Screenshot 3">
+  <img src="doconfig/markdown/shot_app_lib.webp" height="380" alt="App Library Screenshot">
+  <img src="doconfig/markdown/shot1.png" width="180" alt="Screenshot 1">
+  <img src="doconfig/markdown/shot2.png" width="180" alt="Screenshot 2">
+  <img src="doconfig/markdown/shot3.png" width="180" alt="Screenshot 3">
 </p>
 
 # Boundo Meta-app: Info & Manager
