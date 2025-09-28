@@ -30,8 +30,11 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.madness.collision.util.mainApplication
 
@@ -39,10 +42,12 @@ import com.madness.collision.util.mainApplication
 fun PreviewAppTheme(
     isAppInDarkTheme: Boolean = isSystemInDarkTheme(),
     colorScheme: ColorScheme = appColorScheme(isAppInDarkTheme),
+    extendedColorScheme: ExtendedColorScheme = extendedAppColorScheme(isAppInDarkTheme),
     content: @Composable () -> Unit,
 ) {
     CompositionLocalProvider(
         LocalContentColor provides colorScheme.onBackground,
+        LocalExtendedColorScheme provides extendedColorScheme,
         LocalAppInDarkTheme provides isAppInDarkTheme,
     ) {
         MaterialTheme(colorScheme = colorScheme, content = content)
@@ -53,16 +58,34 @@ fun PreviewAppTheme(
 fun MetaAppTheme(
     isAppInDarkTheme: Boolean = mainApplication.isDarkTheme,
     colorScheme: ColorScheme = appColorScheme(isAppInDarkTheme),
+    extendedColorScheme: ExtendedColorScheme = extendedAppColorScheme(isAppInDarkTheme),
     content: @Composable () -> Unit,
 ) {
     CompositionLocalProvider(
         // set default color for text as fallback when not set by Surface/Scaffold
         LocalContentColor provides colorScheme.onBackground,
+        LocalExtendedColorScheme provides extendedColorScheme,
         LocalAppInDarkTheme provides isAppInDarkTheme,
     ) {
         MaterialTheme(colorScheme = colorScheme, content = content)
     }
 }
+
+
+object MetaAppTheme {
+    val colorScheme: ExtendedColorScheme
+        @Composable @ReadOnlyComposable
+        get() = LocalExtendedColorScheme.current
+}
+
+@Immutable
+class ExtendedColorScheme(
+    val backgroundNeutral: Color,
+    val surfaceNeutral: Color,
+)
+
+/** Use [MetaAppTheme.colorScheme]. */
+val LocalExtendedColorScheme = staticCompositionLocalOf { extendedLightColorScheme() }
 
 
 /** See [isAppInDarkTheme] instead for public use. */
@@ -94,3 +117,21 @@ private fun appColorScheme(isInDarkTheme: Boolean): ColorScheme {
         if (isInDarkTheme) darkColorScheme() else lightColorScheme()
     }
 }
+
+@Composable
+@ReadOnlyComposable
+private fun extendedAppColorScheme(isInDarkTheme: Boolean): ExtendedColorScheme {
+    return if (isInDarkTheme) extendedBlackColorScheme() else extendedLightColorScheme()
+}
+
+private fun extendedLightColorScheme() =
+    ExtendedColorScheme(
+        backgroundNeutral = LightColors.BackgroundNeutral,
+        surfaceNeutral = LightColors.SurfaceNeutral,
+    )
+
+private fun extendedBlackColorScheme() =
+    ExtendedColorScheme(
+        backgroundNeutral = BlackColors.BackgroundNeutral,
+        surfaceNeutral = BlackColors.SurfaceNeutral,
+    )
