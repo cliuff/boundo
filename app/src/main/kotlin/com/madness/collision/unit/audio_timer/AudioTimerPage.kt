@@ -71,6 +71,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.madness.collision.R
+import com.madness.collision.ui.comp.MetaSurface
+import com.madness.collision.ui.theme.MetaAppTheme
 import com.madness.collision.util.os.OsUtils
 import com.madness.collision.util.ui.autoMirrored
 import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape
@@ -86,31 +88,30 @@ fun AudioTimerPage(paddingValues: PaddingValues, onStartTimer: () -> Unit, onNav
         modifier = Modifier
             .verticalScroll(rememberScrollState())
             .fillMaxWidth()
+            .background(MetaAppTheme.colorScheme.backgroundNeutral)
             .padding(horizontal = 12.dp)
             .padding(paddingValues)
             .padding(top = 13.dp, bottom = 50.dp),
     ) {
         AnimatedVisibility(visible = status) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 15.dp)
-                    .clip(AbsoluteSmoothCornerShape(20.dp, 60))
-                    .background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.06f))
-                    .padding(horizontal = 20.dp, vertical = 12.dp),
+            MetaSurface(
+                modifier = Modifier.padding(bottom = 15.dp),
+                shape = AbsoluteSmoothCornerShape(20.dp, 60),
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
             ) {
-                TimerStatus(status = status, timerController = timerController)
+                Box(modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp)) {
+                    TimerStatus(status = status, timerController = timerController)
+                }
             }
         }
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(AbsoluteSmoothCornerShape(20.dp, 60))
-                .background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.06f))
-                .padding(horizontal = 20.dp, vertical = 12.dp),
-        ) {
-            SetTimer(timerController = timerController, onStart = onStartTimer)
+
+        MetaSurface(shape = AbsoluteSmoothCornerShape(20.dp, 60)) {
+            Box(modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp)) {
+                SetTimer(timerController = timerController, onStart = onStartTimer)
+            }
         }
+
         // Device controls are available on Android 11+
         if (OsUtils.satisfy(OsUtils.R)) {
             Spacer(modifier = Modifier.height(15.dp))

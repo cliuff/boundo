@@ -5,7 +5,6 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -22,11 +21,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,7 +35,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -47,8 +43,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import com.madness.collision.R
+import com.madness.collision.ui.comp.MetaSurface
+import com.madness.collision.ui.theme.MetaAppTheme
 import com.madness.collision.util.dev.LayoutDirectionPreviews
-import com.madness.collision.util.mainApplication
 import com.madness.collision.util.ui.initDelayed
 import com.madness.collision.versatile.ctrl.ControlInfo
 import kotlinx.coroutines.Dispatchers
@@ -83,10 +80,7 @@ private fun DeviceControls(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .background(when (mainApplication.isDarkTheme) {
-                false -> MaterialTheme.colorScheme.background
-                true -> Color.Black
-            })
+            .background(MetaAppTheme.colorScheme.backgroundNeutral)
             .padding(paddingValues)
             .padding(horizontal = 15.dp)
             .padding(top = 13.dp, bottom = 50.dp),
@@ -222,16 +216,8 @@ private fun ControlItem(control: ControlInfo) {
 
 @Composable
 private fun Contained(content: @Composable ColumnScope.() -> Unit) {
-    OutlinedCard(
+    MetaSurface(
         shape = AbsoluteSmoothCornerShape(14.dp, 80),
-        colors = when (mainApplication.isDarkTheme) {
-            false -> CardDefaults.outlinedCardColors(containerColor = Color.White)
-            true -> CardDefaults.outlinedCardColors()
-        },
-        border = BorderStroke(
-            width = 0.4.dp,
-            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.45f)
-        ),
         content = content,
     )
 }
@@ -239,17 +225,11 @@ private fun Contained(content: @Composable ColumnScope.() -> Unit) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Contained(onClick: () -> Unit, content: @Composable ColumnScope.() -> Unit) {
-    OutlinedCard(
+    MetaSurface(
         onClick = onClick,
         shape = AbsoluteSmoothCornerShape(14.dp, 80),
-        colors = when (mainApplication.isDarkTheme) {
-            false -> CardDefaults.outlinedCardColors(containerColor = Color.White)
-            true -> CardDefaults.outlinedCardColors()
-        },
-        border = BorderStroke(
-            width = 0.4.dp,
-            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.45f)
-        ),
+        containerColor = MaterialTheme.colorScheme.primaryContainer,
+        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
         content = content,
     )
 }

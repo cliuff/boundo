@@ -24,16 +24,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.viewModels
 import com.madness.collision.R
 import com.madness.collision.chief.app.ComposeViewOwner
-import com.madness.collision.chief.app.rememberColorScheme
 import com.madness.collision.chief.app.rememberContentPadding
 import com.madness.collision.main.showPage
 import com.madness.collision.settings.DeviceControlsFragment
+import com.madness.collision.ui.theme.MetaAppTheme
 import com.madness.collision.unit.Unit
 import com.madness.collision.util.os.OsUtils
 
@@ -64,7 +63,7 @@ class MyUnit : Unit() {
         democratize()
         composeViewOwner.getView()?.setContent {
             val context = LocalContext.current
-            MaterialTheme(colorScheme = rememberColorScheme()) {
+            MetaAppTheme {
                 AudioTimerPage(
                     paddingValues = rememberContentPadding(mainViewModel),
                     onStartTimer = { requestTimer(context) },

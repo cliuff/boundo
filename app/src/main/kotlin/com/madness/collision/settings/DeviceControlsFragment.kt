@@ -20,12 +20,11 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.widget.Toolbar
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.chief.app.ComposeFragment
-import com.madness.collision.chief.app.rememberColorScheme
+import com.madness.collision.ui.theme.MetaAppTheme
 
 class DeviceControlsFragment : ComposeFragment(), Democratic {
     override val category: String = "Settings"
@@ -43,7 +42,7 @@ class DeviceControlsFragment : ComposeFragment(), Democratic {
 
     @Composable
     override fun ComposeContent() {
-        MaterialTheme(colorScheme = rememberColorScheme()) {
+        MetaAppTheme {
             DeviceControlsPage(paddingValues = rememberContentPadding())
         }
     }
