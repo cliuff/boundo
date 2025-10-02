@@ -18,6 +18,7 @@ package com.madness.collision.unit.api_viewing.ui.org.group
 
 import android.content.Context
 import android.content.pm.PackageInfo
+import android.text.format.DateUtils
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -53,6 +54,7 @@ class GroupInfoViewModel(savedState: SavedStateHandle) : ViewModel() {
     private val mutUiState: MutableStateFlow<GroupInfoUiState>
     val uiState: StateFlow<GroupInfoUiState>
     private var labelProvider: PackageLabelProvider = PkgLabelProviderImpl()
+    private var timeProvider = emptyMap<String, Long>()
     private var appOwners: List<AppInfoOwner> = emptyList()
     private var groupRepo: GroupRepository? = null
     /** Coll ID to add group in. */
@@ -102,8 +104,10 @@ class GroupInfoViewModel(savedState: SavedStateHandle) : ViewModel() {
                 modGroup ?: return@collect
                 val modSelPkgs = modGroup.apps.run { mapTo(HashSet(size), OrgApp::pkg) }
                 val labels = modGroup.apps.associate { it.pkg to it.label }
+                val createTimes = modGroup.apps.associate { it.pkg to it.createTime }
                 val appLabelProvider = AppPkgLabelProvider(labels + lastLabelProvider.pkgLabels)
                 labelProvider = appLabelProvider.also { lastLabelProvider = it }
+                timeProvider = createTimes
                 val pkgs = pkgInfoProvider.getAll()
                 val sortedPkgs = pkgs.filter { it.packageName in modSelPkgs }
                     .sortedWith(compareBy(labelProvider.pkgComparator, PackageInfo::packageName))
@@ -131,6 +135,14 @@ class GroupInfoViewModel(savedState: SavedStateHandle) : ViewModel() {
     /** Label: non-empty label, or package name. */
     fun getPkgLabel(pkg: String): String {
         return labelProvider.getLabelOrPkg(pkg)
+    }
+
+    fun getPkgCreateTime(pkg: String): String? {
+        val createTimeEpoch = 0L
+        val time = timeProvider[pkg] ?: -1
+        if (time <= createTimeEpoch) return null
+        return DateUtils.getRelativeTimeSpanString(
+            time, System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS).toString()
     }
 
     fun getAppOwner(pkg: String): AppInfoOwner? {

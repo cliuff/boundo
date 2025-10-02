@@ -16,6 +16,7 @@
 
 package com.madness.collision.unit.api_viewing.ui.org.coll
 
+import android.graphics.drawable.Drawable
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
@@ -47,6 +48,7 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
@@ -153,8 +155,10 @@ fun CollAppItem(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (iconModel != null) {
+            // scale down default icons to match normal app icons
+            val scale = if (iconModel is Drawable) 0.9f else 1f
             AsyncImage(
-                modifier = Modifier.width(36.dp).heightIn(max = 36.dp),
+                modifier = Modifier.width(36.dp).heightIn(max = 36.dp).scale(scale),
                 model = iconModel,
                 contentDescription = null,
             )
@@ -188,7 +192,8 @@ fun CollAppItem(
                         text = secondaryText,
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.85f),
                         fontSize = 11.sp,
-                        lineHeight = 13.sp,
+                        lineHeight = 15.sp,
+                        letterSpacing = 0.2.sp,
                     )
                 }
             }

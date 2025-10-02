@@ -85,6 +85,7 @@ import io.cliuff.boundo.org.model.OrgGroup
 @Stable
 interface GroupInfoEventHandler {
     fun getAppLabel(pkgName: String): String
+    fun getAppCreateTime(pkgName: String): String
     fun launchApp(pkgName: String)
     fun showAppInOwner(pkgName: String, owner: String)
 }
@@ -133,6 +134,8 @@ private fun rememberGroupInfoEventHandler(viewModel: GroupInfoViewModel, context
         object : GroupInfoEventHandler {
             override fun getAppLabel(pkgName: String) =
                 viewModel.getPkgLabel(pkgName)
+            override fun getAppCreateTime(pkgName: String) =
+                viewModel.getPkgCreateTime(pkgName) ?: ""
             override fun launchApp(pkgName: String) {
                 context.packageManager.getLaunchIntentForPackage(pkgName)
                     ?.let(context::startActivity)
@@ -241,6 +244,7 @@ private fun GroupContent(
                 modifier = Modifier.animateItem().padding(horizontal = 20.dp, vertical = 8.dp),
                 name = eventHandler.getAppLabel(app.packageName),
                 pkgName = app.packageName,
+                time = eventHandler.getAppCreateTime(app.packageName),
                 iconModel = icPkg,
                 onLaunch = { eventHandler.launchApp(app.packageName) },
                 onExternal = null,
@@ -267,6 +271,7 @@ private fun GroupContent(
                 modifier = Modifier.animateItem().padding(horizontal = 20.dp, vertical = 8.dp),
                 name = eventHandler.getAppLabel(app),
                 pkgName = app,
+                time = eventHandler.getAppCreateTime(app),
                 iconModel = defAppIcon,
                 onLaunch = null,
                 onExternal = { showAppOwners = true },
@@ -332,12 +337,17 @@ private fun AppOwners(
 private fun GroupItem(
     name: String,
     pkgName: String,
+    time: String,
     iconModel: Any?,
     onLaunch: (() -> Unit)?,
     onExternal: (() -> Unit)?,
     modifier: Modifier = Modifier,
     externalContent: @Composable () -> Unit = {},
 ) {
+    val secondaryText = remember(pkgName, time) {
+        if (time.isNotEmpty()) "$pkgName\n$time" else pkgName
+    }
+
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
@@ -346,7 +356,7 @@ private fun GroupItem(
             modifier = Modifier.weight(1f),
             name = name,
             iconModel = iconModel,
-            secondaryText = pkgName,
+            secondaryText = secondaryText,
         )
         if (onLaunch != null || onExternal != null) {
             Box {
@@ -372,6 +382,7 @@ private fun GroupItem(
 internal fun PseudoGroupInfoEventHandler() =
     object : GroupInfoEventHandler {
         override fun getAppLabel(pkgName: String) = ""
+        override fun getAppCreateTime(pkgName: String) = ""
         override fun launchApp(pkgName: String) {}
         override fun showAppInOwner(pkgName: String, owner: String) {}
     }

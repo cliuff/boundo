@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.outlined.Android
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Scaffold
@@ -172,6 +173,7 @@ private fun GroupContent(
             items(sectionApps, key = { app -> app.packageName }, contentType = { "App" }) { app ->
                 val icPkg = app.applicationInfo?.let { AppIconPackageInfo(app, it) }
                 val isSys = app.applicationInfo?.run { flags and ApplicationInfo.FLAG_SYSTEM != 0 } == true
+                val isDebuggable = app.applicationInfo?.run { flags and ApplicationInfo.FLAG_DEBUGGABLE != 0 } == true
                 val itemStyle = if (detailed[sectionIndex]) DetailedCollAppItemStyle else CompactCollAppItemStyle
                 CompositionLocalProvider(LocalCollAppItemStyle provides itemStyle) {
                 GroupItem(
@@ -181,7 +183,7 @@ private fun GroupContent(
                     selected = app.packageName in selectedPkgs,
                     iconModel = icPkg,
                     typeText = eventHandler.getAppPartition(app.packageName),
-                    typeIcon = if (isSys) Icons.Outlined.Android else null,
+                    typeIcon = if (isDebuggable) Icons.Filled.BugReport else if (isSys) Icons.Outlined.Android else null,
                     includedGroups = eventHandler.getAppGroups(app.packageName),
                 )
                 }

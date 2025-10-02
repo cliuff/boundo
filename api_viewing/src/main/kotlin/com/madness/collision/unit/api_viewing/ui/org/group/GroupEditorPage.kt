@@ -39,6 +39,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.outlined.Android
 import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material.icons.outlined.ExpandMore
@@ -311,6 +312,7 @@ private fun GroupContent(
         items(selectedApps, key = { app -> app.packageName + "$" }, contentType = { "App" }) { app ->
             val icPkg = app.applicationInfo?.let { AppIconPackageInfo(app, it) }
             val isSys = app.applicationInfo?.run { flags and ApplicationInfo.FLAG_SYSTEM != 0 } == true
+            val isDebuggable = app.applicationInfo?.run { flags and ApplicationInfo.FLAG_DEBUGGABLE != 0 } == true
             val itemStyle = if (detailed[0]) DetailedCollAppItemStyle else CompactCollAppItemStyle
             CompositionLocalProvider(LocalCollAppItemStyle provides itemStyle) {
             GroupItem(
@@ -320,7 +322,7 @@ private fun GroupContent(
                 selected = app.packageName in selectedPkgs,
                 iconModel = icPkg,
                 typeText = eventHandler.getAppPartition(app.packageName),
-                typeIcon = if (isSys) Icons.Outlined.Android else null,
+                typeIcon = if (isDebuggable) Icons.Filled.BugReport else if (isSys) Icons.Outlined.Android else null,
                 onCheckedChange = { chk -> eventHandler.setAppSelected(app.packageName, chk) },
                 includedGroups = eventHandler.getAppGroups(app.packageName),
             )
@@ -344,6 +346,7 @@ private fun GroupContent(
         items(selNewApps, key = { app -> app.packageName + "$" }, contentType = { "App" }) { app ->
             val icPkg = app.applicationInfo?.let { AppIconPackageInfo(app, it) }
             val isSys = app.applicationInfo?.run { flags and ApplicationInfo.FLAG_SYSTEM != 0 } == true
+            val isDebuggable = app.applicationInfo?.run { flags and ApplicationInfo.FLAG_DEBUGGABLE != 0 } == true
             val itemStyle = if (detailed[newAppViewIndex]) DetailedCollAppItemStyle else CompactCollAppItemStyle
             CompositionLocalProvider(LocalCollAppItemStyle provides itemStyle) {
                 GroupItem(
@@ -353,7 +356,7 @@ private fun GroupContent(
                     selected = app.packageName in selectedPkgs,
                     iconModel = icPkg,
                     typeText = eventHandler.getAppPartition(app.packageName),
-                    typeIcon = if (isSys) Icons.Outlined.Android else null,
+                    typeIcon = if (isDebuggable) Icons.Filled.BugReport else if (isSys) Icons.Outlined.Android else null,
                     onCheckedChange = { chk -> eventHandler.setAppSelected(app.packageName, chk) },
                     includedGroups = eventHandler.getAppGroups(app.packageName),
                 )
@@ -378,6 +381,7 @@ private fun GroupContent(
             items(sectionApps, key = { app -> app.packageName }, contentType = { "App" }) { app ->
                 val icPkg = app.applicationInfo?.let { AppIconPackageInfo(app, it) }
                 val isSys = app.applicationInfo?.run { flags and ApplicationInfo.FLAG_SYSTEM != 0 } == true
+                val isDebuggable = app.applicationInfo?.run { flags and ApplicationInfo.FLAG_DEBUGGABLE != 0 } == true
                 val itemStyle = if (detailed[sectionIndex + 1]) DetailedCollAppItemStyle else CompactCollAppItemStyle
                 CompositionLocalProvider(LocalCollAppItemStyle provides itemStyle) {
                 GroupItem(
@@ -387,7 +391,7 @@ private fun GroupContent(
                     selected = app.packageName in selectedPkgs,
                     iconModel = icPkg,
                     typeText = eventHandler.getAppPartition(app.packageName),
-                    typeIcon = if (isSys) Icons.Outlined.Android else null,
+                    typeIcon = if (isDebuggable) Icons.Filled.BugReport else if (isSys) Icons.Outlined.Android else null,
                     onCheckedChange = { chk -> eventHandler.setAppSelected(app.packageName, chk) },
                     includedGroups = eventHandler.getAppGroups(app.packageName),
                 )
