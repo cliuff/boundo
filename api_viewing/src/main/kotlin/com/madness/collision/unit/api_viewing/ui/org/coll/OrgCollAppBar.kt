@@ -178,6 +178,7 @@ private fun OverflowIconButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .widthIn(min = 160.dp)
+                    .padding(horizontal = 12.dp)
                     .padding(top = 10.dp, bottom = 4.dp),
                 name = collName,
                 createTime = collCreateTime,

@@ -50,6 +50,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -264,6 +265,15 @@ private fun OrgCollContent(
                 appHazeStyle = hazeStyle,
             )
         }
+        item(span = { GridItemSpan(maxLineSpan) }, contentType = "GroupsSummary") {
+            val appRecordCount = remember(coll.groups) {
+                coll.groups.sumOf { it.apps.size }
+            }
+            CollGroupsSummary(
+                modifier = Modifier.padding(horizontal = 20.dp, vertical = 30.dp),
+                text = stringResource(R.string.org_coll_groups_sum, coll.groups.size, appRecordCount),
+            )
+        }
         item(span = { GridItemSpan(maxLineSpan) }, contentType = "Space") {
             Spacer(modifier = Modifier.height((maxHeight / 4).coerceIn(80.dp, 120.dp)))
         }
@@ -288,6 +298,24 @@ private fun CollAppsSummary(text: String, onClick: () -> Unit, modifier: Modifie
             lineHeight = 15.sp,
             fontWeight = FontWeight.Medium,
         )
+    }
+}
+
+@Composable
+private fun CollGroupsSummary(text: String, modifier: Modifier = Modifier) {
+    Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
+        val dividerColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+        HorizontalDivider(modifier = Modifier.weight(1f), thickness = 0.5.dp, color = dividerColor)
+        Text(
+            modifier = Modifier.padding(horizontal = 15.dp),
+            text = text,
+            color = MaterialTheme.colorScheme.outline.copy(alpha = 0.85f),
+            fontSize = 10.sp,
+            lineHeight = 12.sp,
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1,
+        )
+        HorizontalDivider(modifier = Modifier.weight(1f), thickness = 0.5.dp, color = dividerColor)
     }
 }
 

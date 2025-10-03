@@ -199,6 +199,7 @@
     <string name="org_coll_option_del">Delete collection</string>
     <string name="org_coll_del_title">Delete Collection</string>
     <string name="org_coll_installed_sum">Installed apps summary (%s)</string>
+    <string name="org_coll_groups_sum">%d groups | %d app records</string>
     <string name="org_coll_def_coll">Unnamed Collection</string>
     <string name="org_coll_def_group">Unnamed Group</string>
     <string name="org_coll_cat_coll">Categories</string>
