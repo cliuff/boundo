@@ -109,6 +109,12 @@ object EnvPackages {
             }
             // remove disabled or uninstalled owners
             keys.retainAll { pkg ->
+                // check activity existence for custom AppInfoOwners
+                (get(pkg) as? GooglePlayAppInfoOwner)?.let { addedOwner ->
+                    val intent = Intent().setComponent(addedOwner.comp)
+                    val info = context.packageManager.resolveActivity(intent, 0)
+                    return@retainAll info?.activityInfo?.enabled == true
+                }
                 kotlin.runCatching { context.packageManager.getApplicationInfo(pkg, 0) }
                     .fold({ it.enabled }, { false })
             }
@@ -143,6 +149,12 @@ object EnvPackages {
             }
             // remove disabled or uninstalled owners
             keys.retainAll { pkg ->
+                // check activity existence for custom AppInfoOwners
+                (get(pkg) as? GooglePlayAppInfoOwner)?.let { addedOwner ->
+                    val intent = Intent().setComponent(addedOwner.comp)
+                    val info = context.packageManager.resolveActivity(intent, 0)
+                    return@retainAll info?.activityInfo?.enabled == true
+                }
                 kotlin.runCatching { context.packageManager.getApplicationInfo(pkg, 0) }
                     .fold({ it.enabled }, { false })
             }

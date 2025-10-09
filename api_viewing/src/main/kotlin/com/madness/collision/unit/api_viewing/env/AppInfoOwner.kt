@@ -68,7 +68,8 @@ class SettingsAppInfoOwner(override val packageName: String) : AppInfoOwner {
     }
 }
 
-object GooglePlayAppInfoOwner : AppInfoOwner {
+object GooglePlayAppInfoOwner :
+    CompAppInfoOwner("com.android.vending", GooglePlayAppInfoOwner.infoActivity) {
     private const val packageGooglePlay = "com.android.vending"
     private const val infoActivity = "com.google.android.finsky.activities.MainActivity"
     override val packageName: String = packageGooglePlay
@@ -77,7 +78,7 @@ object GooglePlayAppInfoOwner : AppInfoOwner {
         val uri = Uri.parse("https://play.google.com/store/apps/details?id=$appPkgName")
         val intent = Intent(Intent.ACTION_VIEW, uri)
             .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            .setComponent(ComponentName(packageName, infoActivity))
+            .setComponent(comp)
         context.startActivity(intent)
     }
 }
