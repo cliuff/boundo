@@ -42,11 +42,6 @@ sealed interface DistroSpec {
         override val id: DistroSpec.Id<*> = Id
     }
 
-    data class HarmonyOS(val verName: String) : DistroSpec {
-        companion object Id : DistroSpec.Id<HarmonyOS>
-        override val id: DistroSpec.Id<*> = Id
-    }
-
     data class MIUI(val verCode: Int, val verName: String, val displayVersion: String?) : DistroSpec {
         companion object Id : DistroSpec.Id<MIUI>
         override val id: DistroSpec.Id<*> = Id
@@ -75,11 +70,6 @@ data class EmuiDistro(val emui: DistroSpec.EMUI) : DistroBuild {
     override val specs: Map<DistroSpec.Id<*>, DistroSpec> = specMapOf(emui)
 }
 
-data class HarmonyOsDistro(val emui: DistroSpec.EMUI, val harmonyOS: DistroSpec.HarmonyOS) : DistroBuild {
-    override val displayName: String = "HarmonyOS"
-    override val specs: Map<DistroSpec.Id<*>, DistroSpec> = specMapOf(emui, harmonyOS)
-}
-
 data class MiuiDistro(val miui: DistroSpec.MIUI) : DistroBuild {
     override val displayName: String = "MIUI"
     override val specs: Map<DistroSpec.Id<*>, DistroSpec> = specMapOf(miui)
@@ -103,12 +93,6 @@ private fun getBuild(): DistroBuild {
     run emui@{
         val api = BuildProp["ro.build.hw_emui_api_level"]?.toIntOrNull() ?: return@emui
         val emui = DistroSpec.EMUI(api)
-        run hos@{
-            if (getHuaweiOsBrand() != "harmony") return@hos
-            val verName = BuildProp["hw_sc.build.platform.version"] ?: return@hos
-            val harmonyOS = DistroSpec.HarmonyOS(verName)
-            return HarmonyOsDistro(emui, harmonyOS)
-        }
         return EmuiDistro(emui)
     }
     run miui@{
@@ -132,19 +116,6 @@ private fun getBuild(): DistroBuild {
         return LineageOsDistro(DistroSpec.LineageOS(api))
     }
     return UndefDistro
-}
-
-private fun getHuaweiOsBrand(): Any? {
-    return try {
-        Class.forName("com.huawei.system.BuildEx")
-            .getDeclaredMethod("getOsBrand").apply { isAccessible = true }
-            .invoke(null)
-    } catch (e: ClassNotFoundException) {
-        null
-    } catch (e: Exception) {
-        e.printStackTrace()
-        null
-    }
 }
 
 private fun parseMiuiDisplayVersion(verName: String): String? {

@@ -23,7 +23,6 @@ import androidx.core.view.isVisible
 import com.jaredrummler.android.device.DeviceName
 import com.madness.collision.R
 import com.madness.collision.chief.os.EmuiDistro
-import com.madness.collision.chief.os.HarmonyOsDistro
 import com.madness.collision.chief.os.HyperOsDistro
 import com.madness.collision.chief.os.LineageOsDistro
 import com.madness.collision.chief.os.MiuiDistro
@@ -61,7 +60,6 @@ internal class DeviceApi {
             val name = displayName
             when (this) {
                 is EmuiDistro -> "$name API ${emui.apiLevel}"
-                is HarmonyOsDistro -> "$name ${harmonyOS.verName}"
                 is MiuiDistro -> "$name ${miui.displayVersion ?: miui.verName}"
                 is HyperOsDistro -> "$name ${hyperOS.displayVersion ?: hyperOS.verName}"
                 is LineageOsDistro -> "$name API ${lineageOS.apiLevel}"

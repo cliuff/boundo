@@ -32,8 +32,6 @@ import com.madness.collision.BuildConfig
 import com.madness.collision.chief.graphics.AdaptiveIcon
 import com.madness.collision.chief.graphics.AdaptiveIconLoader
 import com.madness.collision.chief.graphics.MiuiIconCustomizer
-import com.madness.collision.chief.os.EmuiDistro
-import com.madness.collision.chief.os.HarmonyOsDistro
 import com.madness.collision.chief.os.HyperOsDistro
 import com.madness.collision.chief.os.MiuiDistro
 import com.madness.collision.chief.os.distro
@@ -50,9 +48,8 @@ fun AppIconTransformer(): AppIconTransformer {
     if (OsUtils.dissatisfy(OsUtils.O)) return EmptyAppIconTransformer()
     if (BuildConfig.DEBUG) getDebugTransformer()?.let { return it }
     return when (distro) {
-        // confirmed issues on MIUI and HarmonyOS
+        // confirmed issues on HyperOS/MIUI
         is HyperOsDistro, is MiuiDistro -> MiuiAppIconTransformer(SmoothCornerPathProvider())
-        is HarmonyOsDistro, is EmuiDistro -> RectAppIconTransformer(SmoothCornerPathProvider())
         // unconditionally apply to other distros
         else -> RectAppIconTransformer(SmoothCornerPathProvider())
     }
@@ -95,7 +92,7 @@ class MiuiAppIconTransformer(fallbackPathProvider: AppIconPathProvider) : AppIco
 }
 
 /**
- * Fix rect app icon for AdaptiveIconDrawables on MIUI/HarmonyOS,
+ * Fix rect app icon for AdaptiveIconDrawables on HyperOS/MIUI,
  * specifically system apps with default app icon, when custom icon pack is used (MIUI).
  * Note rect BitmapDrawables are N/A.
  */
