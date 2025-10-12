@@ -219,4 +219,5 @@
     <string name="home_nav_item_updates">Home</string>
     <string name="home_nav_item_list">Apps</string>
     <string name="home_nav_item_org">Library</string>
+    <string name="home_nav_item_conn">Connect</string>
 </resources>

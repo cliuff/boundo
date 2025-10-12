@@ -35,8 +35,10 @@ import androidx.compose.material.icons.automirrored.filled.ListAlt
 import androidx.compose.material.icons.automirrored.outlined.ListAlt
 import androidx.compose.material.icons.filled.BrowseGallery
 import androidx.compose.material.icons.filled.Category
+import androidx.compose.material.icons.filled.OfflineBolt
 import androidx.compose.material.icons.outlined.BrowseGallery
 import androidx.compose.material.icons.outlined.Category
+import androidx.compose.material.icons.outlined.OfflineBolt
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationItemIconPosition
@@ -249,6 +251,13 @@ private val NavIcons = arrayOf(
     Icons.Filled.Category,
 )
 
+private val NavIcons2 = arrayOf(
+    emptyArray(),
+    emptyArray(),
+    emptyArray(),
+    arrayOf(Icons.Outlined.OfflineBolt, Icons.Filled.OfflineBolt),
+)
+
 @Composable
 private fun HomeNavigationBar(
     modifier: Modifier = Modifier,
@@ -284,6 +293,13 @@ private fun HomeNavigationBar(
             iconPosition = iconPosition,
             icon = { Icon(NavIcons[2 + if (selectedIndex == 2) 3 else 0], contentDescription = null) }
         )
+        ShortNavigationBarItem(
+            selected = selectedIndex == 3,
+            onClick = { onSelectItem(3) },
+            label = { Text(stringResource(R.string.home_nav_item_conn)) },
+            iconPosition = iconPosition,
+            icon = { Icon(NavIcons2[3][if (selectedIndex == 3) 1 else 0], contentDescription = null) }
+        )
     }
 }
 
@@ -310,6 +326,11 @@ private fun HomeNavigationRail(
             selected = selectedIndex == 2,
             onClick = { onSelectItem(2) },
             icon = { Icon(NavIcons[2 + if (selectedIndex == 2) 3 else 0], contentDescription = null) }
+        )
+        NavigationRailItem(
+            selected = selectedIndex == 3,
+            onClick = { onSelectItem(3) },
+            icon = { Icon(NavIcons2[3][if (selectedIndex == 3) 1 else 0], contentDescription = null) }
         )
         Spacer(modifier = Modifier.weight(1f))
     }
@@ -350,6 +371,13 @@ private fun HomeWideNavigationRail(
             onClick = { onSelectItem(2) },
             icon = { Icon(NavIcons[2 + if (selectedIndex == 2) 3 else 0], contentDescription = null) },
             label = { Text(stringResource(R.string.home_nav_item_org)) },
+            railExpanded = false,
+        )
+        WideNavigationRailItem(
+            selected = selectedIndex == 3,
+            onClick = { onSelectItem(3) },
+            icon = { Icon(NavIcons2[3][if (selectedIndex == 3) 1 else 0], contentDescription = null) },
+            label = { Text(stringResource(R.string.home_nav_item_conn)) },
             railExpanded = false,
         )
     }

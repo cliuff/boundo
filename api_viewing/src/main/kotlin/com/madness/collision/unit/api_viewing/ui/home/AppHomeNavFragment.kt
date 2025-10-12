@@ -87,7 +87,7 @@ class AppHomeNavFragment : Fragment(), AppHomeNav {
         const val ARG_CONTENT_PADDING: String = AppHomeNavPage.ARG_CONTENT_PADDING
     }
     private val navFgmClasses: Array<KClass<out Fragment>> =
-        arrayOf(AppUpdatesFragment::class, AppListFragment::class, AppOrgFragment::class)
+        arrayOf(AppUpdatesFragment::class, AppListFragment::class, AppOrgFragment::class, ConnectionsFragment::class)
     private val navFgmTags = navFgmClasses.map { klass -> "AppHome_" + klass.simpleName }
     private var lastContentPadding: PaddingValues? = null
     private val mutStatusBarDarkIcon = MutableStateFlow(false)
