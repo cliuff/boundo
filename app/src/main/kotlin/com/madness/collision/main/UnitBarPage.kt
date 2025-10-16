@@ -21,8 +21,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.twotone.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -42,7 +40,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.madness.collision.R
 import com.madness.collision.chief.app.BoundoTheme
-import com.madness.collision.settings.SettingsFragment
 import com.madness.collision.unit.DescRetriever
 import com.madness.collision.unit.Description
 import com.madness.collision.unit.Unit
@@ -66,13 +63,9 @@ fun UnitBarPage(modifier: Modifier = Modifier, mainViewModel: MainViewModel, wid
     }
     val scope = rememberCoroutineScope()
     Updates(width, descriptions, modifier) { unitName ->
-        if (unitName == "app_settings") {
-            mainViewModel.displayFragment(SettingsFragment())
-        } else {
-            mainViewModel.displayUnit(unitName)
-            scope.launch(Dispatchers.Default) {
-                Unit.increaseFrequency(context, unitName)
-            }
+        mainViewModel.displayUnit(unitName)
+        scope.launch(Dispatchers.Default) {
+            Unit.increaseFrequency(context, unitName)
         }
     }
 }
@@ -108,7 +101,7 @@ private fun Updates(
     val itemsLayoutWidth = maxWidth - actualBoxPadding * 2
     val maxColumnCount = (itemsLayoutWidth / minItemSize).toInt().coerceAtLeast(1)
     // desc list size +1 for hardcoded settings item
-    val rowSize = ceil(descriptions.size + 1 / maxColumnCount.toFloat()).toInt()
+    val rowSize = ceil(descriptions.size / maxColumnCount.toFloat()).toInt()
     Column(modifier = modifier.padding(horizontal = actualBoxPadding)) {
         for (i in 0..<rowSize) {
             Row {
@@ -118,14 +111,6 @@ private fun Updates(
                         Box(modifier = Modifier.weight(1f)) {
                             UnitItem(desc, horizontalItemMargin, onClick)
                         }
-                    } else if (i * maxColumnCount + j == descriptions.size) {
-                        // hardcoded settings item
-                        Box(modifier = Modifier.weight(1f)) {
-                            SettingsItem(
-                                horizontalMargin = horizontalItemMargin,
-                                onClick = { onClick("app_settings") }
-                            )
-                        }
                     } else {
                         Spacer(modifier = Modifier.weight(1f))
                     }
@@ -133,27 +118,6 @@ private fun Updates(
             }
         }
     }
-}
-
-@Composable
-private fun SettingsItem(horizontalMargin: Dp, onClick: () -> kotlin.Unit) {
-    val itemColor = when {
-        LocalInspectionMode.current -> MaterialTheme.colorScheme.onBackground.copy(alpha = 0.07f)
-        else -> Color(ThemeUtil.getColor(LocalContext.current, R.attr.colorAItem))
-    }
-    UnitItem(
-        label = stringResource(R.string.Main_ToolBar_title_Settings),
-        icon = {
-            Icon(
-                imageVector = Icons.TwoTone.Settings,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurface,
-            )
-        },
-        backgroundColor = itemColor,
-        horizontalMargin = horizontalMargin,
-        onClick = onClick,
-    )
 }
 
 @Composable

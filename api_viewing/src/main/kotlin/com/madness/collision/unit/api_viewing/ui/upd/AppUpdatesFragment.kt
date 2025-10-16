@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.os.BundleCompat
 import androidx.fragment.app.viewModels
@@ -121,11 +120,6 @@ class AppUpdatesFragment : ComposeFragment(),
 
                 override fun showAppSettings() {
                     mainAppHome?.showAppSettings()
-                }
-
-                @Composable
-                override fun UnitBar(width: Dp) {
-                    mainAppHome?.run { UnitBar(width) }
                 }
             }
         }

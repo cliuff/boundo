@@ -23,7 +23,6 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -42,20 +41,13 @@ import androidx.compose.foundation.lazy.grid.LazyGridItemSpanScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.rounded.Refresh
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -66,23 +58,17 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.coerceAtLeast
-import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Popup
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -114,8 +100,6 @@ interface AppUpdatesEventHandler : AppInfoEventHandler {
     fun showUsageAccessSettings()
     fun requestAllPkgsQuery(permission: String?)
     fun showAppSettings()
-    @Composable
-    fun UnitBar(width: Dp)
 }
 
 @Composable
@@ -193,35 +177,13 @@ private fun AppUpdatesPrimary(
     val (isLoading, sections, permState) = updatesUiState
     Scaffold(
         topBar = {
-            BoxWithConstraints {
-                UpdatesAppBar(
-                    refreshing = isLoading,
-                    onClickRefresh = { viewModel.refreshUpdates(context) },
-                    onClickSettings = eventHandler::showAppSettings,
-                    windowInsets = paddingValues.asInsets()
-                        .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top)
-                        .share(WindowInsets(top = 5.dp)),
-                ) {
-                    val horizontalPadding = LocalLayoutDirection.current.let { di ->
-                        paddingValues.run { calculateLeftPadding(di) + calculateRightPadding(di) }
-                    }
-                    val maxContentWidth = maxWidth - horizontalPadding
-                    val barWidth = when {
-                        maxContentWidth >= 360.dp -> (maxContentWidth - 40.dp).coerceAtMost(400.dp)
-                        else -> maxContentWidth - 20.dp
-                    }
-                    Box(
-                        modifier = Modifier
-                            .width(barWidth)
-                            // scrollable in small split screen
-                            .verticalScroll(rememberScrollState())
-                            .padding(vertical = 12.dp),
-                        content = {
-                            with(eventHandler) { UnitBar(width = barWidth) }
-                        }
-                    )
-                }
-            }
+            UpdatesAppBar(
+                refreshing = isLoading,
+                onClickRefresh = { viewModel.refreshUpdates(context) },
+                windowInsets = paddingValues.asInsets()
+                    .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top)
+                    .share(WindowInsets(top = 5.dp)),
+            )
         },
         containerColor = if (mainApplication.isDarkTheme) Color(0xFF050505) else Color(0xFFFCFCFC),
         content = { contentPadding ->
@@ -280,9 +242,7 @@ private fun AppUpdatesPrimary(
 private fun UpdatesAppBar(
     refreshing: Boolean,
     onClickRefresh: () -> Unit,
-    onClickSettings: () -> Unit,
     windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
-    unitBarContent: @Composable () -> Unit,
 ) {
     val appBarColor = when (LocalInspectionMode.current) {
         true -> if (isSystemInDarkTheme()) Color(0xff0c0c0c) else Color.White
@@ -307,7 +267,6 @@ private fun UpdatesAppBar(
             },
             actions = {
                 val rotation by rememberOvershootRotation(refreshing)
-                var showUnitBar by remember { mutableStateOf(false) }
                 IconButton(modifier = Modifier.rotate(rotation), onClick = onClickRefresh) {
                     Icon(
                         imageVector = Icons.Rounded.Refresh,
@@ -315,23 +274,6 @@ private fun UpdatesAppBar(
                         modifier = Modifier.size(22.dp),
                         tint = appBarIconColor,
                     )
-                }
-                IconButton(onClick = { showUnitBar = true }) {
-                    Icon(
-                        imageVector = Icons.Outlined.Settings,
-                        contentDescription = null,
-                        modifier = Modifier.size(22.dp),
-                        tint = appBarIconColor,
-                    )
-                }
-                if (showUnitBar) {
-                    Popup(
-                        offset = with(LocalDensity.current) { IntOffset(0, 40.dp.roundToPx()) },
-                        onDismissRequest = { showUnitBar = false },
-                    ) {
-                        // reserve 8dp padding for all 4 sides
-                        PopupCard(modifier = Modifier.padding(8.dp)) { unitBarContent() }
-                    }
                 }
                 val endPadding = windowInsets.asPaddingValues()
                     .calculateEndPadding(LocalLayoutDirection.current)
@@ -347,17 +289,6 @@ private fun UpdatesAppBar(
             color = appBarDividerColor.copy(alpha = 0.3f),
         )
     }
-}
-
-@Composable
-private fun PopupCard(modifier: Modifier = Modifier, content: @Composable ColumnScope.() -> Unit) {
-    Card(
-        modifier = modifier,
-        shape = RoundedCornerShape(20.dp),
-        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 3.dp),
-        colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.surface),
-        content = content,
-    )
 }
 
 @Composable
@@ -502,7 +433,7 @@ private fun AppUpdatesPreview() {
     BoundoTheme {
         Scaffold(
             topBar = {
-                UpdatesAppBar(refreshing = true, onClickRefresh = {}, onClickSettings = {}) {}
+                UpdatesAppBar(refreshing = true, onClickRefresh = {})
             },
             content = { contentPadding ->
                 UpdatesList(
