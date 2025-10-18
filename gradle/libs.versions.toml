@@ -23,6 +23,7 @@ androidxRoom = "2.7.2"
 androidxNavigation = "2.9.4"
 androidxCoreTesting = "2.2.0"
 androidxWindow = "1.4.0"
+androidxMaterial3Adaptive = "1.2.0-rc01"
 
 androidxDrawerLayout = "1.2.0"
 androidxSwipeRefreshLayout = "1.1.0"
@@ -103,6 +104,10 @@ androidxAppcompat = { module = "androidx.appcompat:appcompat", version.ref = "an
 androidxFragment = { module = "androidx.fragment:fragment-ktx", version.ref = "androidxFragment" }
 androidxFragmentCompose = { module = "androidx.fragment:fragment-compose", version.ref = "androidxFragment" }
 androidxWindow = { module = "androidx.window:window", version.ref = "androidxWindow" }
+androidx-material3-adaptive = { module = "androidx.compose.material3.adaptive:adaptive", version.ref = "androidxMaterial3Adaptive" }
+androidx-material3-adaptive-layout = { module = "androidx.compose.material3.adaptive:adaptive-layout", version.ref = "androidxMaterial3Adaptive" }
+androidx-material3-adaptive-navigation = { module = "androidx.compose.material3.adaptive:adaptive-navigation", version.ref = "androidxMaterial3Adaptive" }
+
 androidxDrawerLayout = { module = "androidx.drawerlayout:drawerlayout", version.ref = "androidxDrawerLayout" }
 androidxSwipeRefreshLayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "androidxSwipeRefreshLayout" }
 androidxConstraintLayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "androidxConstraintLayout" }
