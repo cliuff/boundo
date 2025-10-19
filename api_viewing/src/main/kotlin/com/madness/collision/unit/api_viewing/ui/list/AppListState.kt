@@ -34,15 +34,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.madness.collision.chief.app.ComposePageActivityIntent
 import com.madness.collision.chief.os.PreviewBuild
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.main.showPage
-import com.madness.collision.unit.api_viewing.MyBridge
 import com.madness.collision.unit.api_viewing.data.ApiUnit
 import com.madness.collision.unit.api_viewing.data.VerInfo
 import com.madness.collision.unit.api_viewing.data.codenameOrNull
 import com.madness.collision.unit.api_viewing.data.verNameOrNull
 import com.madness.collision.unit.api_viewing.stats.StatisticsFragment
+import com.madness.collision.unit.api_viewing.ui.home.AppListRouteId
 import com.madness.collision.unit.api_viewing.ui.os.SystemModulesFragment
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -55,7 +56,7 @@ class CompOptionsEventHandlerImpl(
     private val context: Context,
 ) : CompositeOptionsEventHandler {
     override fun shareList() = viewModel.exportAppList(context)
-    override fun showSettings() = context.showPage(MyBridge.getSettings())
+    override fun showSettings() = context.startActivity(ComposePageActivityIntent(AppListRouteId.Prefs.asRoute()))
     override fun updateTags(id: String, state: Boolean?) = viewModel.updateTagFilter(id, state)
     override fun toggleSrc(src: AppListSrc) = viewModel.toggleListSrc(src)
 

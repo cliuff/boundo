@@ -20,6 +20,7 @@ import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.NonRestartableComposable
 import com.madness.collision.chief.app.ComposePageRoute
+import com.madness.collision.unit.api_viewing.ui.pref.ArtPrefsPage
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -43,6 +44,9 @@ sealed interface AppListRouteId : RouteId<AppListNavRoute>, Parcelable {
 
     @Parcelize
     class ApkInfo(val data: Parcelable) : AppListRouteId
+
+    @Parcelize
+    object Prefs : AppListRouteId
 }
 
 @Composable
@@ -53,5 +57,8 @@ private fun AppListRouteId.RouteContent(): Unit =
         }
         is AppListRouteId.ApkInfo -> {
             StandaloneAppList(pkgInfo = data) {}
+        }
+        AppListRouteId.Prefs -> {
+            ArtPrefsPage()
         }
     }

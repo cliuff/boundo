@@ -23,6 +23,8 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.runtime.Composable
 import androidx.core.content.edit
 import androidx.core.database.getFloatOrNull
 import androidx.core.database.getIntOrNull
@@ -34,19 +36,17 @@ import com.madness.collision.chief.chiefContext
 import com.madness.collision.misc.MiscApp
 import com.madness.collision.unit.Bridge
 import com.madness.collision.unit.Unit
-import com.madness.collision.unit.UpdatesProvider
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.database.AppRoom
 import com.madness.collision.unit.api_viewing.info.LibRules
 import com.madness.collision.unit.api_viewing.tag.app.AppTagInfo
 import com.madness.collision.unit.api_viewing.ui.home.AppHomeFragment
 import com.madness.collision.unit.api_viewing.ui.home.AppListRouteId
+import com.madness.collision.unit.api_viewing.ui.pref.ArtPrefsContent
 import com.madness.collision.unit.api_viewing.util.ApkRetriever
 import com.madness.collision.unit.api_viewing.util.PrefUtil
 import com.madness.collision.util.P
-import com.madness.collision.util.Page
 import kotlin.reflect.KClass
-import com.madness.collision.R as MainR
 
 object MyBridge: Bridge() {
 
@@ -58,10 +58,6 @@ object MyBridge: Bridge() {
      */
     override fun getUnitInstance(vararg args: Any?): Unit {
         return MyUnit().apply { arguments = args[0] as Bundle? }
-    }
-
-    override fun getSettings(): Fragment {
-        return Page<PrefAv>(MainR.string.apiViewer)
     }
 
     override fun getAccessor(): Any {
@@ -173,5 +169,14 @@ class ApiViewingAccessorImpl : ApiViewingAccessor {
             query != null -> AppListRouteId.AppQuery(query).asRoute()
             else -> AppListRouteId.AppQuery("").asRoute()
         }
+    }
+
+    override fun getPrefsRoute(): ComposePageRoute {
+        return AppListRouteId.Prefs.asRoute()
+    }
+
+    @Composable
+    override fun Prefs(contentPadding: PaddingValues) {
+        ArtPrefsContent(contentPadding = contentPadding)
     }
 }

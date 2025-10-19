@@ -1,6 +1,5 @@
 package com.madness.collision.unit
 
-import androidx.fragment.app.Fragment
 import kotlin.reflect.KClass
 
 abstract class Bridge {
@@ -13,6 +12,5 @@ abstract class Bridge {
     abstract fun getUnitInstance(vararg args: Any?): Unit
 
     open fun getUpdates(): UpdatesProvider? = null
-    open fun getSettings(): Fragment? = null
     open fun getAccessor(): Any? = null
 }

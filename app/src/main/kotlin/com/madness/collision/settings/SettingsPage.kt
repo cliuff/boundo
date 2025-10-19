@@ -16,7 +16,6 @@
 
 package com.madness.collision.settings
 
-import android.content.Context
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.animateColorAsState
@@ -40,16 +39,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.os.bundleOf
 import androidx.fragment.compose.AndroidFragment
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_MEDIUM_LOWER_BOUND
 import com.madness.collision.R
+import com.madness.collision.chief.app.ActivityPageNavController
 import com.madness.collision.settings.instant.InstantFragment
 import com.madness.collision.main.DevOptions
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.main.showPage
 import com.madness.collision.pref.PrefExterior
-import com.madness.collision.unit.DescRetriever
-import com.madness.collision.unit.Unit as ModUnit
+import com.madness.collision.unit.api_viewing.AccessAV
 import com.madness.collision.util.Page
 import com.madness.collision.util.dev.DarkPreview
 import com.madness.collision.util.dev.LayoutDirectionPreviews
@@ -83,8 +81,8 @@ private fun SinglePaneLayout(
 ) {
     val context = LocalContext.current
     val activity = LocalActivity.current as? ComponentActivity
+    val navController = remember(activity) { activity?.let(::ActivityPageNavController) }
     SettingsNavPanel(
-        mainViewModel = viewModel(activity!!),
         paddingValues = contentPadding,
         onSelectDest = { dest ->
             when (dest) {
@@ -96,9 +94,7 @@ private fun SinglePaneLayout(
                 NavDest.Languages -> showLanguages()
                 NavDest.About -> context.showPage<AdviceFragment>()
                 NavDest.Instant -> context.showPage<InstantFragment>()
-                NavDest.ApiUnit ->
-                    ModUnit.getBridge(ModUnit.UNIT_NAME_API_VIEWING)
-                        ?.getSettings()?.let(context::showPage)
+                NavDest.ApiUnit -> navController?.navigateTo(AccessAV.getPrefsRoute())
             }
         },
     )
@@ -120,8 +116,7 @@ private fun SideBySideLayout(
                 .width(navPaneWidth)
                 .padding(contentPadding)
         ) {
-            val activity = LocalActivity.current as? ComponentActivity
-            SettingsNavPanel(mainViewModel = viewModel(activity!!), onSelectDest = setNavDest)
+            SettingsNavPanel(onSelectDest = setNavDest)
         }
 
         VerticalDivider(thickness = 0.5.dp)
@@ -139,11 +134,7 @@ private fun SideBySideLayout(
             NavDest.Languages -> Unit
             NavDest.About -> AndroidFragment<AdviceFragment>()
             NavDest.Instant -> AndroidFragment<InstantFragment>()
-            NavDest.ApiUnit -> {
-                val n = "com.madness.collision.unit.api_viewing.PrefAv"
-                val args = bundleOf("fragmentClass" to n, "titleId" to R.string.apiViewer)
-                AndroidFragment<Page>(arguments = args)
-            }
+            NavDest.ApiUnit -> AccessAV.Prefs(contentPadding = contentPadding)
             null -> Unit
         }
     }
@@ -151,13 +142,11 @@ private fun SideBySideLayout(
 
 @Composable
 private fun SettingsNavPanel(
-    mainViewModel: MainViewModel,
     onSelectDest: (NavDest) -> Unit,
     paddingValues: PaddingValues = PaddingValues.Zero,
 ) {
-    val context = LocalContext.current
     val options = remember {
-        val builtIn = listOf(
+        listOf(
             Triple(R.string.settings_exterior, R.drawable.ic_palette_24) {
                 onSelectDest(NavDest.Styles)
             },
@@ -170,10 +159,10 @@ private fun SettingsNavPanel(
             Triple(R.string.Main_TextView_Launcher, R.drawable.ic_flash_24) {
                 onSelectDest(NavDest.Instant)
             },
+            Triple(R.string.apiViewer, R.drawable.ic_android_24) {
+                onSelectDest(NavDest.ApiUnit)
+            },
         )
-        val unitOptions = getUnitOptions(mainViewModel, context)
-            .map { (l, i, _) -> Triple(l, i) { onSelectDest(NavDest.ApiUnit) } }
-        builtIn + unitOptions
     }
     Settings(options = options, paddingValues = paddingValues)
 }
@@ -204,18 +193,6 @@ private fun Settings(options: List<Triple<Int, Int, () -> Unit>>, paddingValues:
                     onClick = onClick
                 )
             }
-        }
-    }
-}
-
-private fun getUnitOptions(mainViewModel: MainViewModel, context: Context): List<Triple<Int, Int, () -> Unit>> {
-    return DescRetriever(context).retrieveInstalled().mapNotNull map@{ state ->
-        val unit = state.unitName
-        val unitBridge = com.madness.collision.unit.Unit.getBridge(unit) ?: return@map null  // continue
-        val settingsPage = unitBridge.getSettings() ?: return@map null  // continue
-        val unitDesc = state.description
-        Triple(unitDesc.nameResId, unitDesc.iconResId) {
-            mainViewModel.displayFragment(settingsPage)
         }
     }
 }

@@ -20,6 +20,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Parcelable
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.runtime.Composable
 import androidx.fragment.app.Fragment
 import com.madness.collision.chief.app.ComposePageRoute
 import com.madness.collision.unit.Unit as ModUnit
@@ -46,6 +48,8 @@ internal class SafeApiViewingAccessor : ApiViewingAccessor {
     override fun getHomeFragment(): Fragment = ax?.getHomeFragment() ?: error("NPE!")
     override fun getAppListRoute(query: CharSequence?, pkgInfo: Parcelable?): ComposePageRoute =
         ax?.getAppListRoute(query, pkgInfo) ?: error("NPE!")
+    override fun getPrefsRoute(): ComposePageRoute = ax?.getPrefsRoute() ?: error("NPE!")
+    @Composable override fun Prefs(contentPadding: PaddingValues) = ax?.Prefs(contentPadding) ?: Unit
 }
 
 interface ApiViewingAccessor {
@@ -60,4 +64,6 @@ interface ApiViewingAccessor {
     fun nukeAppRoom(context: Context): Boolean
     fun getHomeFragment(): Fragment
     fun getAppListRoute(query: CharSequence? = null, pkgInfo: Parcelable? = null): ComposePageRoute
+    fun getPrefsRoute(): ComposePageRoute
+    @Composable fun Prefs(contentPadding: PaddingValues)
 }
