@@ -86,7 +86,7 @@ private fun SinglePaneLayout(
             when (dest) {
                 NavDest.Styles -> navController?.navigateTo(SettingsRouteId.Styles.asRoute())
                 NavDest.Languages -> showLanguages()
-                NavDest.About -> context.showPage<AdviceFragment>()
+                NavDest.About -> navController?.navigateTo(SettingsRouteId.About.asRoute())
                 NavDest.Instant -> context.showPage<InstantFragment>()
                 NavDest.ApiUnit -> navController?.navigateTo(AccessAV.getPrefsRoute())
             }
@@ -122,7 +122,7 @@ private fun SideBySideLayout(
         when (lastDest) {
             NavDest.Styles -> StylesContent(contentPadding = contentPadding)
             NavDest.Languages -> Unit
-            NavDest.About -> AndroidFragment<AdviceFragment>()
+            NavDest.About -> AboutContent(contentPadding = contentPadding)
             NavDest.Instant -> AndroidFragment<InstantFragment>()
             NavDest.ApiUnit -> AccessAV.Prefs(contentPadding = contentPadding)
             null -> Unit

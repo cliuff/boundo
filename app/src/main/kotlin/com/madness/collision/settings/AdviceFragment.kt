@@ -17,57 +17,43 @@
 package com.madness.collision.settings
 
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.annotation.DrawableRes
-import androidx.appcompat.widget.Toolbar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.Code
 import androidx.compose.material.icons.twotone.Email
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.edit
-import com.madness.collision.Democratic
 import com.madness.collision.R
 import com.madness.collision.chief.app.ActivityPageNavController
-import com.madness.collision.chief.app.ComposeFragment
-import com.madness.collision.chief.app.rememberColorScheme
 import com.madness.collision.util.CollisionDialog
 import com.madness.collision.util.P
 import com.madness.collision.util.X
 import com.madness.collision.util.mainApplication
 
-internal class AdviceFragment : ComposeFragment(), Democratic {
-    override val category: String = "Advice"
-    override val id: String = "Advice"
-
-    override fun createOptions(context: Context, toolbar: Toolbar, iconColor: Int): Boolean {
-        mainViewModel.configNavigation(toolbar, iconColor)
-        toolbar.setTitle(R.string.Main_TextView_Advice_Text)
-        return true
-    }
+internal class AdviceOptionsHolder(context: Context) : ContextWrapper(context) {
 
     private val @receiver:DrawableRes Int.icon get() = AboutOptionIcon.Res(this)
     private val ImageVector.icon get() = AboutOptionIcon.Vector(this)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        democratize(mainViewModel)
-    }
-
     @Composable
-    override fun ComposeContent() {
-        val navController = remember { ActivityPageNavController(requireActivity()) }
+    fun get(): List<AboutOption> {
+        val activity = LocalActivity.current as? ComponentActivity
+        val navController = remember(activity) { activity?.let(::ActivityPageNavController) }
         val context = LocalContext.current
-        val options = remember {
+        return remember {
             listOf(
                 AboutOption(Icons.TwoTone.Code.icon, getString(R.string.advice_license), "", false) {
-                    navController.navigateTo(SettingsRouteId.OssLibraries.asRoute())
+                    navController?.navigateTo(SettingsRouteId.OssLibraries.asRoute())
                 },
                 AboutOption(R.drawable.ic_github_24.icon, "Github", "cliuff/boundo", true) {
                     openUrl(context, P.LINK_SOURCE_CODE)
@@ -82,9 +68,6 @@ internal class AdviceFragment : ComposeFragment(), Democratic {
                     openUrl(context, P.LINK_TELEGRAM_GROUP)
                 },
             )
-        }
-        MaterialTheme(colorScheme = rememberColorScheme()) {
-            AboutPage(paddingValues = rememberContentPadding(), options = options)
         }
     }
 

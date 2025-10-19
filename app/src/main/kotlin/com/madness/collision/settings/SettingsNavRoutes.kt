@@ -37,6 +37,7 @@ interface RouteId<R : ComposePageRoute> {
 enum class SettingsRouteId : RouteId<SettingsNavRoute> {
 
     Styles,
+    About,
     OssLibraries;
 
     override fun asRoute(): SettingsNavRoute = SettingsNavRoute(this)
@@ -47,6 +48,9 @@ private fun SettingsRouteId.RouteContent(): Unit =
     when (this) {
         SettingsRouteId.Styles -> {
             StylesPage()
+        }
+        SettingsRouteId.About -> {
+            AboutPage()
         }
         SettingsRouteId.OssLibraries -> {
             OssLibsPage()

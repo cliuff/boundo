@@ -33,8 +33,9 @@ import androidx.compose.material.icons.twotone.Code
 import androidx.compose.material.icons.twotone.Email
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -55,9 +56,12 @@ import coil3.compose.AsyncImage
 import com.madness.collision.BuildConfig
 import com.madness.collision.R
 import com.madness.collision.chief.graphics.AdaptiveIcon
+import com.madness.collision.chief.layout.scaffoldWindowInsets
+import com.madness.collision.ui.comp.ClassicTopAppBar
+import com.madness.collision.ui.theme.MetaAppTheme
+import com.madness.collision.ui.theme.PreviewAppTheme
 import com.madness.collision.util.ThemeUtil
-import com.madness.collision.util.dev.DarkPreview
-import com.madness.collision.util.dev.LayoutDirectionPreviews
+import com.madness.collision.util.dev.PreviewCombinedColorLayout
 import com.madness.collision.util.ui.autoMirrored
 import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape
 
@@ -75,10 +79,30 @@ sealed interface AboutOptionIcon {
 }
 
 @Composable
-fun AboutPage(paddingValues: PaddingValues, options: List<AboutOption>) {
+fun AboutPage() {
+    val (topBarInsets, _, contentInsets) =
+        scaffoldWindowInsets(shareCutout = 12.dp, shareStatusBar = 5.dp, shareWaterfall = 8.dp)
+    Scaffold(
+        topBar = {
+            ClassicTopAppBar(
+                title = { Text(text = stringResource(R.string.Main_TextView_Advice_Text)) },
+                windowInsets = topBarInsets
+                    .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
+            )
+        },
+        containerColor = MetaAppTheme.colorScheme.surfaceNeutral,
+        contentWindowInsets = contentInsets,
+    ) { innerPadding ->
+        AboutContent(contentPadding = innerPadding)
+    }
+}
+
+@Composable
+fun AboutContent(contentPadding: PaddingValues = PaddingValues.Zero) {
     val context = LocalContext.current
+    val optionsHolder = remember(context) { AdviceOptionsHolder(context) }
     val itemColor = remember { Color(ThemeUtil.getColor(context, R.attr.colorAItem)) }
-    Settings(paddingValues = paddingValues, options = options, itemColor = itemColor)
+    Settings(paddingValues = contentPadding, options = optionsHolder.get(), itemColor = itemColor)
 }
 
 @Composable
@@ -206,7 +230,7 @@ private fun SettingsItem(option: AboutOption, itemColor: Color) {
             fontWeight = FontWeight.Medium,
             color = labelColor,
             lineHeight = 14.sp,
-            maxLines = 2,
+            maxLines = 1,
             overflow = TextOverflow.Ellipsis,
         )
         if (option.desc.isNotEmpty()) {
@@ -250,18 +274,12 @@ private fun SettingsPreview() {
     Settings(paddingValues = PaddingValues(), options = options, itemColor = Color(itemColor))
 }
 
-@LayoutDirectionPreviews
 @Composable
-private fun SettingsPagePreview() {
-    MaterialTheme {
-        SettingsPreview()
-    }
-}
-
-@DarkPreview
-@Composable
-private fun SettingsPageDarkPreview() {
-    MaterialTheme(colorScheme = darkColorScheme()) {
-        SettingsPreview()
+@PreviewCombinedColorLayout
+private fun AboutPagePreview() {
+    PreviewAppTheme {
+        Surface(color = MaterialTheme.colorScheme.surfaceContainerLowest) {
+            SettingsPreview()
+        }
     }
 }
