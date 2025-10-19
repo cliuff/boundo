@@ -31,13 +31,6 @@
  public <init>();
 }
 
-# Page class uses Reflection to create fragment instance
-# used with preference fragments, which extends PreferenceFragmentCompat
--keep class * extends androidx.preference.PreferenceFragmentCompat
--keepclassmembers class * extends androidx.preference.PreferenceFragmentCompat {
- public <init>();
-}
-
 # Keep dynamic feature module classes
 # com.madness.collision.unit.Unit extends Fragment
 #-keep class * extends com.madness.collision.unit.Unit

@@ -37,7 +37,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.os.bundleOf
 import androidx.fragment.compose.AndroidFragment
 import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_MEDIUM_LOWER_BOUND
 import com.madness.collision.R
@@ -46,9 +45,8 @@ import com.madness.collision.settings.instant.InstantFragment
 import com.madness.collision.main.DevOptions
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.main.showPage
-import com.madness.collision.pref.PrefExterior
+import com.madness.collision.ui.settings.StylesContent
 import com.madness.collision.unit.api_viewing.AccessAV
-import com.madness.collision.util.Page
 import com.madness.collision.util.dev.DarkPreview
 import com.madness.collision.util.dev.LayoutDirectionPreviews
 import kotlinx.coroutines.delay
@@ -86,11 +84,7 @@ private fun SinglePaneLayout(
         paddingValues = contentPadding,
         onSelectDest = { dest ->
             when (dest) {
-                NavDest.Styles ->
-                    context.showPage<Page> {
-                        putString("fragmentClass", PrefExterior::class.qualifiedName)
-                        putInt("titleId", R.string.settings_exterior)
-                    }
+                NavDest.Styles -> navController?.navigateTo(SettingsRouteId.Styles.asRoute())
                 NavDest.Languages -> showLanguages()
                 NavDest.About -> context.showPage<AdviceFragment>()
                 NavDest.Instant -> context.showPage<InstantFragment>()
@@ -126,11 +120,7 @@ private fun SideBySideLayout(
         if (navDest == NavDest.Languages) LaunchedEffect(Unit) { showLanguages() }
 
         when (lastDest) {
-            NavDest.Styles -> {
-                val n = PrefExterior::class.qualifiedName
-                val args = bundleOf("fragmentClass" to n, "titleId" to R.string.settings_exterior)
-                AndroidFragment<Page>(arguments = args)
-            }
+            NavDest.Styles -> StylesContent(contentPadding = contentPadding)
             NavDest.Languages -> Unit
             NavDest.About -> AndroidFragment<AdviceFragment>()
             NavDest.Instant -> AndroidFragment<InstantFragment>()
