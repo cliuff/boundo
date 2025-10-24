@@ -140,6 +140,8 @@
     <string name="av_settings_diff">App record diff history</string>
     <string name="av_settings_diff_title">Diff History</string>
     <string name="av_settings_diff_minimized">%d empty records minimized, tap to show them</string>
+    <string name="av_settings_text_process">Query selected text in Meta App</string>
+    <string name="av_settings_text_process_desc">Enable system-wide integration into text field context menu</string>
     <string name="av_tag_system_core">System core app</string>
     <string name="av_tag_system_module">Modular system component</string>
     <string name="av_tag_type_overlay">Runtime resource overlay (RRO)</string>
