@@ -19,6 +19,7 @@ package com.madness.collision.settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.NonRestartableComposable
 import com.madness.collision.chief.app.ComposePageRoute
+import com.madness.collision.ui.settings.LanguagesPage
 import com.madness.collision.ui.settings.StylesPage
 import kotlinx.parcelize.Parcelize
 
@@ -37,6 +38,7 @@ interface RouteId<R : ComposePageRoute> {
 enum class SettingsRouteId : RouteId<SettingsNavRoute> {
 
     Styles,
+    Languages,
     About,
     OssLibraries;
 
@@ -48,6 +50,9 @@ private fun SettingsRouteId.RouteContent(): Unit =
     when (this) {
         SettingsRouteId.Styles -> {
             StylesPage()
+        }
+        SettingsRouteId.Languages -> {
+            LanguagesPage()
         }
         SettingsRouteId.About -> {
             AboutPage()

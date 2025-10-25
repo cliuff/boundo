@@ -45,6 +45,7 @@ import com.madness.collision.settings.instant.InstantFragment
 import com.madness.collision.main.DevOptions
 import com.madness.collision.main.MainViewModel
 import com.madness.collision.main.showPage
+import com.madness.collision.ui.settings.LanguagesContent
 import com.madness.collision.ui.settings.StylesContent
 import com.madness.collision.unit.api_viewing.AccessAV
 import com.madness.collision.util.dev.DarkPreview
@@ -85,7 +86,7 @@ private fun SinglePaneLayout(
         onSelectDest = { dest ->
             when (dest) {
                 NavDest.Styles -> navController?.navigateTo(SettingsRouteId.Styles.asRoute())
-                NavDest.Languages -> showLanguages()
+                NavDest.Languages -> navController?.navigateTo(SettingsRouteId.Languages.asRoute())
                 NavDest.About -> navController?.navigateTo(SettingsRouteId.About.asRoute())
                 NavDest.Instant -> context.showPage<InstantFragment>()
                 NavDest.ApiUnit -> navController?.navigateTo(AccessAV.getPrefsRoute())
@@ -114,14 +115,9 @@ private fun SideBySideLayout(
         }
 
         VerticalDivider(thickness = 0.5.dp)
-
-        var lastDest by rememberSaveable { mutableStateOf<NavDest?>(null) }
-        LaunchedEffect(navDest) { if (navDest != NavDest.Languages) lastDest = navDest }
-        if (navDest == NavDest.Languages) LaunchedEffect(Unit) { showLanguages() }
-
-        when (lastDest) {
+        when (navDest) {
             NavDest.Styles -> StylesContent(contentPadding = contentPadding)
-            NavDest.Languages -> Unit
+            NavDest.Languages -> LanguagesContent(contentPadding = contentPadding)
             NavDest.About -> AboutContent(contentPadding = contentPadding)
             NavDest.Instant -> AndroidFragment<InstantFragment>()
             NavDest.ApiUnit -> AccessAV.Prefs(contentPadding = contentPadding)
