@@ -35,7 +35,6 @@ import com.madness.collision.chief.config.toPx
 import com.madness.collision.databinding.ActivityMainBinding
 import com.madness.collision.diy.WindowInsets
 import com.madness.collision.misc.MiscMain
-import com.madness.collision.settings.SettingsFragment
 import com.madness.collision.unit.Unit
 import com.madness.collision.unit.api_viewing.AccessAV
 import com.madness.collision.util.*
@@ -63,7 +62,6 @@ class MainActivity : BaseActivity(), SystemBarMaintainerOwner, MainAppHome {
     private fun MainFragment(): MainFragment = AccessAV.getHomeFragment()
 
     override fun showAppSettings() {
-        viewModel.displayFragment(SettingsFragment())
     }
 
     companion object {

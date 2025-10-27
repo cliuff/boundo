@@ -37,6 +37,7 @@ interface RouteId<R : ComposePageRoute> {
 
 enum class SettingsRouteId : RouteId<SettingsNavRoute> {
 
+    Settings,
     Styles,
     Languages,
     About,
@@ -48,6 +49,9 @@ enum class SettingsRouteId : RouteId<SettingsNavRoute> {
 @Composable
 private fun SettingsRouteId.RouteContent(): Unit =
     when (this) {
+        SettingsRouteId.Settings -> {
+            SettingsPage()
+        }
         SettingsRouteId.Styles -> {
             StylesPage()
         }

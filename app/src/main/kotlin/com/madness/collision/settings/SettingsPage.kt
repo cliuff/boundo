@@ -16,80 +16,122 @@
 
 package com.madness.collision.settings
 
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Android
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Language
+import androidx.compose.material.icons.filled.Palette
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.fragment.compose.AndroidFragment
 import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_MEDIUM_LOWER_BOUND
 import com.madness.collision.R
-import com.madness.collision.chief.app.ActivityPageNavController
-import com.madness.collision.settings.instant.InstantFragment
+import com.madness.collision.chief.app.LocalPageNavController
+import com.madness.collision.chief.app.asInsets
+import com.madness.collision.chief.lang.runIf
+import com.madness.collision.chief.layout.scaffoldWindowInsets
 import com.madness.collision.main.DevOptions
-import com.madness.collision.main.MainViewModel
-import com.madness.collision.main.showPage
+import com.madness.collision.ui.comp.ClassicTopAppBar
 import com.madness.collision.ui.settings.LanguagesContent
 import com.madness.collision.ui.settings.StylesContent
+import com.madness.collision.ui.theme.MetaAppTheme
+import com.madness.collision.ui.theme.PreviewAppTheme
 import com.madness.collision.unit.api_viewing.AccessAV
-import com.madness.collision.util.dev.DarkPreview
-import com.madness.collision.util.dev.LayoutDirectionPreviews
+import com.madness.collision.util.dev.PreviewCombinedColorLayout
 import kotlinx.coroutines.delay
 
 @Composable
-fun SettingsPage(
-    mainViewModel: MainViewModel,
-    paddingValues: PaddingValues,
-    showLanguages: () -> Unit,
-) {
-    val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
-    if (windowSizeClass.isWidthAtLeastBreakpoint(WIDTH_DP_MEDIUM_LOWER_BOUND)) {
-        BoxWithConstraints {
-            val navWidth = (maxWidth / 3).coerceAtMost(240.dp)
-            SideBySideLayout(navPaneWidth = navWidth, showLanguages = showLanguages, contentPadding = paddingValues)
+fun SettingsPage() {
+    val (topBarInsets, _, contentInsets) =
+        scaffoldWindowInsets(shareCutout = 12.dp, shareStatusBar = 5.dp, shareWaterfall = 8.dp)
+    Scaffold(
+        topBar = {
+            ClassicTopAppBar(
+                title = { Text(stringResource(R.string.Main_ToolBar_title_Settings)) },
+                windowInsets = topBarInsets
+                    .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
+            )
+        },
+        containerColor = MetaAppTheme.colorScheme.surfaceNeutral,
+        contentWindowInsets = contentInsets,
+    ) { innerPadding ->
+        val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
+        if (windowSizeClass.isWidthAtLeastBreakpoint(WIDTH_DP_MEDIUM_LOWER_BOUND)) {
+            BoxWithConstraints {
+                val navWidth = (maxWidth / 3).coerceAtMost(240.dp)
+                SideBySideLayout(navPaneWidth = navWidth, contentPadding = innerPadding)
+            }
+        } else {
+            SinglePaneLayout(contentPadding = innerPadding)
         }
-    } else {
-        SinglePaneLayout(showLanguages = showLanguages, contentPadding = paddingValues)
     }
 }
 
 private enum class NavDest {
-    Styles, Languages, About, Instant, ApiUnit
+    Styles, Languages, ApiUnit, About
 }
 
 @Composable
 private fun SinglePaneLayout(
-    showLanguages: () -> Unit,
+    modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues.Zero,
 ) {
-    val context = LocalContext.current
-    val activity = LocalActivity.current as? ComponentActivity
-    val navController = remember(activity) { activity?.let(::ActivityPageNavController) }
+    val navController = LocalPageNavController.current
     SettingsNavPanel(
-        paddingValues = contentPadding,
+        modifier = modifier,
+        selectedDest = null,
+        contentPadding = contentPadding,
         onSelectDest = { dest ->
             when (dest) {
-                NavDest.Styles -> navController?.navigateTo(SettingsRouteId.Styles.asRoute())
-                NavDest.Languages -> navController?.navigateTo(SettingsRouteId.Languages.asRoute())
-                NavDest.About -> navController?.navigateTo(SettingsRouteId.About.asRoute())
-                NavDest.Instant -> context.showPage<InstantFragment>()
-                NavDest.ApiUnit -> navController?.navigateTo(AccessAV.getPrefsRoute())
+                NavDest.Styles -> navController.navigateTo(SettingsRouteId.Styles.asRoute())
+                NavDest.Languages -> navController.navigateTo(SettingsRouteId.Languages.asRoute())
+                NavDest.About -> navController.navigateTo(SettingsRouteId.About.asRoute())
+                NavDest.ApiUnit -> navController.navigateTo(AccessAV.getPrefsRoute())
             }
         },
     )
@@ -98,117 +140,132 @@ private fun SinglePaneLayout(
 @Composable
 private fun SideBySideLayout(
     navPaneWidth: Dp,
-    showLanguages: () -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues.Zero,
 ) {
     val (navDest, setNavDest) = rememberSaveable {
-        mutableStateOf<NavDest?>(null)
+        mutableStateOf(NavDest.Styles)
     }
+    val navPanePadding = contentPadding.asInsets()
+        .only(WindowInsetsSides.Vertical + WindowInsetsSides.Start)
+        .asPaddingValues()
+    val contentPanePadding = contentPadding.asInsets()
+        .only(WindowInsetsSides.Vertical + WindowInsetsSides.End)
+        .asPaddingValues()
+
     Row(modifier = modifier) {
-        Box(
-            modifier = Modifier
-                .width(navPaneWidth)
-                .padding(contentPadding)
-        ) {
-            SettingsNavPanel(onSelectDest = setNavDest)
-        }
+        SettingsNavPanel(
+            modifier = Modifier.width(navPaneWidth),
+            selectedDest = navDest,
+            onSelectDest = setNavDest,
+            contentPadding = navPanePadding,
+        )
 
         VerticalDivider(thickness = 0.5.dp)
         when (navDest) {
-            NavDest.Styles -> StylesContent(contentPadding = contentPadding)
-            NavDest.Languages -> LanguagesContent(contentPadding = contentPadding)
-            NavDest.About -> AboutContent(contentPadding = contentPadding)
-            NavDest.Instant -> AndroidFragment<InstantFragment>()
-            NavDest.ApiUnit -> AccessAV.Prefs(contentPadding = contentPadding)
-            null -> Unit
+            NavDest.Styles -> StylesContent(contentPadding = contentPanePadding)
+            NavDest.Languages -> LanguagesContent(contentPadding = contentPanePadding)
+            NavDest.About -> AboutContent(contentPadding = contentPanePadding)
+            NavDest.ApiUnit -> AccessAV.Prefs(contentPadding = contentPanePadding)
         }
     }
 }
 
 @Composable
-private fun SettingsNavPanel(
-    onSelectDest: (NavDest) -> Unit,
-    paddingValues: PaddingValues = PaddingValues.Zero,
-) {
-    val options = remember {
-        listOf(
-            Triple(R.string.settings_exterior, R.drawable.ic_palette_24) {
-                onSelectDest(NavDest.Styles)
-            },
-            Triple(R.string.Settings_Button_SwitchLanguage, R.drawable.ic_language_24) {
-                onSelectDest(NavDest.Languages)
-            },
-            Triple(R.string.Main_TextView_Advice_Text, R.drawable.ic_info_24) {
-                onSelectDest(NavDest.About)
-            },
-            Triple(R.string.Main_TextView_Launcher, R.drawable.ic_flash_24) {
-                onSelectDest(NavDest.Instant)
-            },
-            Triple(R.string.apiViewer, R.drawable.ic_android_24) {
-                onSelectDest(NavDest.ApiUnit)
-            },
-        )
+private fun getSettingsNavOptions() =
+    NavDest.entries.map { dest ->
+        when (dest) {
+            NavDest.Styles -> Icons.Filled.Palette to stringResource(R.string.settings_exterior)
+            NavDest.Languages -> Icons.Filled.Language to stringResource(R.string.Settings_Button_SwitchLanguage)
+            NavDest.ApiUnit -> Icons.Filled.Android to stringResource(R.string.apiViewer)
+            NavDest.About -> Icons.Filled.Info to stringResource(R.string.Main_TextView_Advice_Text)
+        }
     }
-    Settings(options = options, paddingValues = paddingValues)
-}
 
 @Composable
-private fun Settings(options: List<Triple<Int, Int, () -> Unit>>, paddingValues: PaddingValues) {
-    Box(modifier = Modifier.fillMaxSize()) {
+private fun SettingsNavPanel(
+    selectedDest: NavDest?,
+    onSelectDest: (NavDest) -> Unit,
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues.Zero,
+) {
+    val options = getSettingsNavOptions()
+    val itemShape = RoundedCornerShape(4.dp)
+    val itemModifier = when (selectedDest != null) {
+        true -> Modifier.padding(horizontal = 8.dp, vertical = 4.dp).clip(itemShape)
+        false -> Modifier
+    }
+    val itemPadding = when (selectedDest != null) {
+        true -> PaddingValues(horizontal = 20.dp, vertical = 8.dp)
+        false -> PaddingValues(horizontal = 24.dp, vertical = 12.dp)
+    }
+
+    Box(modifier = modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .verticalScroll(rememberScrollState())
-                .padding(paddingValues)
-                .padding(top = 8.dp, bottom = 10.dp)
+                .padding(contentPadding)
+                .padding(top = 6.dp, bottom = 10.dp)
         ) {
-            options.forEachIndexed { index, (label, icon, onClick) ->
+            NavDest.entries.forEachIndexed { index, navDest ->
+                val (icon, label) = options[index]
                 if (index != 0) {
                     val dividerColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.22f)
-                    Divider(
+                    HorizontalDivider(
                         modifier = Modifier.padding(start = 70.dp),
                         color = dividerColor,
                         thickness = 0.5.dp,
                     )
                 }
                 SettingsItem(
+                    modifier = itemModifier
+                        .runIf({ navDest == selectedDest }) {
+                            background(MaterialTheme.colorScheme.surface, itemShape)
+                        },
                     icon = icon,
-                    label = stringResource(id = label),
+                    label = label,
                     isTertiary = index == 0,
-                    onClick = onClick
+                    onClick = { onSelectDest(navDest) },
+                    contentPadding = itemPadding,
                 )
             }
         }
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun SettingsItem(icon: Int, label: String, isTertiary: Boolean = false, onClick: () -> Unit) {
+private fun SettingsItem(
+    icon: ImageVector,
+    label: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    isTertiary: Boolean = false,
+    contentPadding: PaddingValues = PaddingValues.Zero,
+) {
     val colorScheme = MaterialTheme.colorScheme
     val iconTint: Color
     val iconContainerColor: Color
     if (isTertiary) {
         var iconTintA by remember(key1 = label) {
-            mutableStateOf(colorScheme.primary)
+            mutableStateOf(colorScheme.onPrimaryContainer)
         }
         var iconContainerColorA by remember(key1 = label) {
             mutableStateOf(colorScheme.primaryContainer)
         }
         LaunchedEffect(key1 = label) {
             delay(200)
-            iconTintA = colorScheme.tertiary
+            iconTintA = colorScheme.onTertiaryContainer
             iconContainerColorA = colorScheme.tertiaryContainer
         }
         iconTint = animateColorAsState(targetValue = iconTintA).value
         iconContainerColor = animateColorAsState(targetValue = iconContainerColorA).value
     } else {
-        iconTint = colorScheme.primary
+        iconTint = colorScheme.onPrimaryContainer
         iconContainerColor = colorScheme.primaryContainer
     }
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .run {
                 if (!isTertiary) return@run clickable(onClick = onClick)
@@ -219,7 +276,7 @@ private fun SettingsItem(icon: Int, label: String, isTertiary: Boolean = false, 
                     onClick = onClick
                 )
             }
-            .padding(horizontal = 24.dp, vertical = 10.dp),
+            .padding(contentPadding),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
@@ -231,42 +288,22 @@ private fun SettingsItem(icon: Int, label: String, isTertiary: Boolean = false, 
         ) {
             Icon(
                 modifier = Modifier.size(18.dp),
-                painter = painterResource(id = icon),
+                imageVector = icon,
                 contentDescription = null,
                 tint = iconTint,
             )
         }
         Spacer(modifier = Modifier.width(20.dp))
-        Text(text = label, fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface)
+        Text(text = label, style = MaterialTheme.typography.bodyLarge)
     }
 }
 
 @Composable
-private fun SettingsPreview() {
-    val options = remember {
-        listOf(
-            Triple(R.string.settings_exterior, R.drawable.ic_palette_24) { },
-            Triple(R.string.Settings_Button_SwitchLanguage, R.drawable.ic_language_24) { },
-            Triple(R.string.Main_TextView_Advice_Text, R.drawable.ic_info_24) { },
-            Triple(R.string.Main_TextView_Launcher, R.drawable.ic_flash_24) { },
-            Triple(R.string.apiViewer, R.drawable.ic_android_24) { },
-        )
-    }
-    Settings(options = options, paddingValues = PaddingValues())
-}
-
-@LayoutDirectionPreviews
-@Composable
+@PreviewCombinedColorLayout
 private fun SettingsPagePreview() {
-    MaterialTheme {
-        SettingsPreview()
-    }
-}
-
-@DarkPreview
-@Composable
-private fun SettingsPageDarkPreview() {
-    MaterialTheme(colorScheme = darkColorScheme()) {
-        SettingsPreview()
+    PreviewAppTheme {
+        Surface(color = MetaAppTheme.colorScheme.surfaceNeutral) {
+            SettingsNavPanel(selectedDest = NavDest.Styles, onSelectDest = {})
+        }
     }
 }

@@ -58,10 +58,12 @@ import androidx.fragment.compose.AndroidFragment
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.madness.collision.R
+import com.madness.collision.chief.app.LocalPageNavController
 import com.madness.collision.chief.app.asInsets
 import com.madness.collision.chief.layout.share
 import com.madness.collision.main.showPage
 import com.madness.collision.settings.DeviceControlsFragment
+import com.madness.collision.settings.SettingsRouteId
 import com.madness.collision.settings.instant.InstantFragment
 import com.madness.collision.ui.comp.MetaSurface
 import com.madness.collision.ui.theme.MetaAppTheme
@@ -108,6 +110,7 @@ fun ConnectionsPage(eventHandler: ConnEventHandler, contentPadding: PaddingValue
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
+            val navController = LocalPageNavController.current
             ConnectionsAppBar(
                 title = {
                     Text(
@@ -116,7 +119,7 @@ fun ConnectionsPage(eventHandler: ConnEventHandler, contentPadding: PaddingValue
                         fontWeight = FontWeight.Medium,
                     )
                 },
-                onClickSettings = eventHandler::showAppSettings,
+                onClickSettings = { navController.navigateTo(SettingsRouteId.Settings.asRoute()) },
                 windowInsets = contentPadding.asInsets()
                     .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top)
                     .share(WindowInsets(top = 5.dp)),
