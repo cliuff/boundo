@@ -62,7 +62,6 @@ object P {
     // SC => shortcut
     const val SC_ID_IMMORTAL = "immortal"
     const val SC_ID_AUDIO_TIMER = "unitAT"
-    const val SC_ID_DEVICE_MANAGER = "unitDM"
 
     const val DIR_NAME_LOG = "Log"
 

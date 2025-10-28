@@ -186,7 +186,6 @@ private fun UnitBarPreview() {
         arrayOf(
             R.string.apiViewer to R.drawable.ic_android_24,
             R.string.unit_audio_timer to R.drawable.ic_timer_24,
-            R.string.unit_device_manager to R.drawable.ic_devices_other_24,
             R.string.twService to R.drawable.ic_image_24,
         ).map { (nameResId, iconResId) ->
             Description("", nameResId, iconResId)

@@ -25,7 +25,6 @@ import android.service.controls.DeviceTypes
 import android.service.controls.templates.ControlButton
 import android.service.controls.templates.ToggleTemplate
 import com.madness.collision.main.MainActivity
-import com.madness.collision.unit.Unit
 import com.madness.collision.versatile.ctrl.ControlActionRequest
 import com.madness.collision.versatile.ctrl.ControlInfo
 import com.madness.collision.versatile.ctrl.ControlStatus
@@ -61,8 +60,8 @@ class DevManControlsProvider(private val context: Context) : ControlsProvider {
     }
 
     private fun getStatelessControl(context: Context, controlId: String, info: ControlInfo): Control = CommonControl(context) {
+        // todo redirect to manage devices
         val intent = Intent(context, MainActivity::class.java)
-            .putExtras(MainActivity.forItem(Unit.UNIT_NAME_DEVICE_MANAGER))
             .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         return Control.StatelessBuilder(controlId, activityIntent(intent))
             .setDeviceType(DeviceTypes.TYPE_GENERIC_ON_OFF)

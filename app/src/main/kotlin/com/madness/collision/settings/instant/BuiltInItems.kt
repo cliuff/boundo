@@ -28,16 +28,12 @@ import com.madness.collision.qs.TileServiceAudioTimer
 import com.madness.collision.qs.TileServiceBarcodeScanner
 import com.madness.collision.qs.TileServiceBarcodeScannerMm
 import com.madness.collision.qs.TileServiceMonthData
-import com.madness.collision.settings.DeviceControlsFragment
 import com.madness.collision.unit.Unit
 import com.madness.collision.util.P
-import com.madness.collision.versatile.MyControlService
-import com.madness.collision.versatile.TextProcessingActivity
 
 object BuiltInItems {
     val Shortcuts = listOf(
         InstantShortcut(P.SC_ID_AUDIO_TIMER, R.string.unit_audio_timer, Unit.UNIT_NAME_AUDIO_TIMER),
-        InstantShortcut(P.SC_ID_DEVICE_MANAGER, R.string.unit_device_manager, Unit.UNIT_NAME_DEVICE_MANAGER),
     )
     // tile service classes need to be loaded on Android N+
     @get:RequiresApi(Build.VERSION_CODES.N)
@@ -51,11 +47,7 @@ object BuiltInItems {
             comp<TileServiceMonthData>(R.string.tileData) { MonthDataUsageDesc() }
         )
     }
-    val Others = listOf(
-        // Classes of higher API level cannot be loaded on lower API level
-        Build.VERSION_CODES.M to { comp<TextProcessingActivity>(R.string.activityTextProcessingApp, Unit.UNIT_NAME_API_VIEWING) },
-        Build.VERSION_CODES.R to { comp<MyControlService>(R.string.app_device_controls) { DeviceControlsFragment() } }
-    )
+    val Others = emptyList<Pair<Int, () -> InstantComponent<*>>>()
 }
 
 private inline fun <reified T: Any> comp(

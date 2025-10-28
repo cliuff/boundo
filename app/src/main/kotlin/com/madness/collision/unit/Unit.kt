@@ -43,7 +43,6 @@ abstract class Unit: TaggedFragment(), Democratic {
         const val UNIT_NAME_IMAGE_MODIFYING = "image_modifying"
         const val UNIT_NAME_THEMED_WALLPAPER = "themed_wallpaper"
         const val UNIT_NAME_AUDIO_TIMER = "audio_timer"
-        const val UNIT_NAME_DEVICE_MANAGER = "device_manager"
         private val UNIT_CLASSES: MutableMap<String, Class<Unit>> = hashMapOf()
         private val UNIT_BRIDGE_CLASSES: MutableMap<String, Class<Bridge>> = hashMapOf()
         private val UNIT_DESCRIPTIONS: Map<String, Description>
@@ -59,10 +58,6 @@ abstract class Unit: TaggedFragment(), Democratic {
                                 it.packageManager.hasSystemFeature(PackageManager.FEATURE_LIVE_WALLPAPER)
                             }),
                     StaticDescription(UNIT_NAME_AUDIO_TIMER, R.string.unit_audio_timer, R.drawable.ic_timer_24).setDescResId(R.string.unit_desc_at),
-                    StaticDescription(UNIT_NAME_DEVICE_MANAGER, R.string.unit_device_manager, R.drawable.ic_devices_other_24)
-                            .setRequirement(Description.Checker(R.string.unit_desc_requirement_dm) {
-                                it.packageManager.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH)
-                            }),
             )
             UNIT_DESCRIPTIONS = mUnitDescriptions.associateBy { it.unitName }
             UNITS = UNIT_DESCRIPTIONS.keys.toList().sorted()
