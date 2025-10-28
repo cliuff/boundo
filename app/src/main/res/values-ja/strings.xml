@@ -179,7 +179,6 @@
     <string name="at_minute_hint">分</string>
     <string name="advice_source_sub">Githubにジャンプ</string>
     <string name="unit_desc_requirement_tw">ライブ壁紙のサポート</string>
-    <string name="unit_device_manager">機器管理</string>
     <string name="versatile_device_controls_dm_hint_off">クリックして接続</string>
     <string name="versatile_device_controls_dm_hint_on">クリックして切断</string>
     <string name="versatile_device_controls_dm_ctrl_desc_off">デバイスを接続します</string>
@@ -194,7 +193,6 @@
     <string name="dm_list_item_hint_disconnected">接続されていません。[接続]をクリックしてください</string>
     <string name="unit_desc_enable">有効にする</string>
     <string name="unit_desc_disable">無効にする</string>
-    <string name="unit_desc_requirement_dm">Bluetoothのサポート</string>
     <string name="im_edit_width">幅</string>
     <string name="im_edit_height">高い</string>
     <string name="im_image_select">画像を選択</string>

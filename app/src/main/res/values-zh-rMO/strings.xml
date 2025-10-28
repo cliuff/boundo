@@ -181,7 +181,6 @@
     <string name="at_minute_hint">分鐘</string>
     <string name="advice_source_sub">跳轉 Github</string>
     <string name="unit_desc_requirement_tw">動態壁紙支持</string>
-    <string name="unit_device_manager">設備管理</string>
     <string name="versatile_device_controls_dm_hint_off">點擊連接</string>
     <string name="versatile_device_controls_dm_hint_on">點擊斷開</string>
     <string name="versatile_device_controls_dm_ctrl_desc_off">連接設備</string>
@@ -196,7 +195,6 @@
     <string name="dm_list_item_hint_disconnected">未連接，點擊連接</string>
     <string name="unit_desc_enable">啟用</string>
     <string name="unit_desc_disable">禁用</string>
-    <string name="unit_desc_requirement_dm">藍牙支持</string>
     <string name="im_edit_width">寬</string>
     <string name="im_edit_height">高</string>
     <string name="im_image_select">選擇圖片</string>

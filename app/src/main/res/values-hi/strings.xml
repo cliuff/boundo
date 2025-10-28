@@ -179,7 +179,6 @@
     <string name="at_minute_hint">मिनट</string>
     <string name="advice_source_sub">गीथूब पर पुनर्निर्देशित करें</string>
     <string name="unit_desc_requirement_tw">लाइव वॉलपेपर समर्थन</string>
-    <string name="unit_device_manager">डिवाइस मैनेजर</string>
     <string name="versatile_device_controls_dm_hint_off">कनेक्ट करने के लिए टैप करें</string>
     <string name="versatile_device_controls_dm_hint_on">डिस्कनेक्ट करने के लिए टैप करें</string>
     <string name="versatile_device_controls_dm_ctrl_desc_off">डिवाइस कनेक्ट करें</string>
@@ -194,7 +193,6 @@
     <string name="dm_list_item_hint_disconnected">डिस्कनेक्ट किया गया, कनेक्ट करने के लिए टैप करें</string>
     <string name="unit_desc_enable">सक्षम करना</string>
     <string name="unit_desc_disable">बंद करना</string>
-    <string name="unit_desc_requirement_dm">ब्लूटूथ सपोर्ट</string>
     <string name="im_edit_width">चौड़ाई</string>
     <string name="im_edit_height">कद</string>
     <string name="im_image_select">छवि चुने</string>

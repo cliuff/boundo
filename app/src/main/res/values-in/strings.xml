@@ -179,7 +179,6 @@
     <string name="at_minute_hint">Menit</string>
     <string name="advice_source_sub">Arahkan ke Github</string>
     <string name="unit_desc_requirement_tw">Dukungan wallpaper hidup</string>
-    <string name="unit_device_manager">Pengaturan perangkat</string>
     <string name="versatile_device_controls_dm_hint_off">Ketuk untuk menghubungkan</string>
     <string name="versatile_device_controls_dm_hint_on">Ketuk untuk memutuskan sambungan</string>
     <string name="versatile_device_controls_dm_ctrl_desc_off">Hubungkan perangkat</string>
@@ -194,7 +193,6 @@
     <string name="dm_list_item_hint_disconnected">Terputus, ketuk untuk menghubungkan</string>
     <string name="unit_desc_enable">Memungkinkan</string>
     <string name="unit_desc_disable">Cacat</string>
-    <string name="unit_desc_requirement_dm">Dukungan Bluetooth</string>
     <string name="im_edit_width">Lebar</string>
     <string name="im_edit_height">Tinggi</string>
     <string name="im_image_select">Pilih gambar</string>

@@ -179,7 +179,6 @@
     <string name="at_minute_hint">मिनिट</string>
     <string name="advice_source_sub">Github वर पुनर्निर्देशित करा</string>
     <string name="unit_desc_requirement_tw">थेट वॉलपेपर समर्थन</string>
-    <string name="unit_device_manager">डिव्हाइस व्यवस्थापक</string>
     <string name="versatile_device_controls_dm_hint_off">कनेक्ट करण्यासाठी टॅप करा</string>
     <string name="versatile_device_controls_dm_hint_on">डिस्कनेक्ट करण्यासाठी टॅप करा</string>
     <string name="versatile_device_controls_dm_ctrl_desc_off">डिव्हाइस कनेक्ट करा</string>
@@ -194,7 +193,6 @@
     <string name="dm_list_item_hint_disconnected">डिस्कनेक्ट झाले, कनेक्ट करण्यासाठी टॅप करा</string>
     <string name="unit_desc_enable">सक्षम करा</string>
     <string name="unit_desc_disable">अक्षम करा</string>
-    <string name="unit_desc_requirement_dm">ब्लूटूथ समर्थन</string>
     <string name="im_edit_width">रुंदी</string>
     <string name="im_edit_height">उंची</string>
     <string name="im_image_select">प्रतिमा निवडा</string>

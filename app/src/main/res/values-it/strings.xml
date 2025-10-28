@@ -179,7 +179,6 @@
     <string name="at_minute_hint">Minuto</string>
     <string name="advice_source_sub">Reindirizza a Github</string>
     <string name="unit_desc_requirement_tw">Supporto per sfondi animati</string>
-    <string name="unit_device_manager">Gestore dispositivi</string>
     <string name="versatile_device_controls_dm_hint_off">Tocca per connetterti</string>
     <string name="versatile_device_controls_dm_hint_on">Tocca per disconnetterti</string>
     <string name="versatile_device_controls_dm_ctrl_desc_off">Connetti dispositivo</string>
@@ -194,7 +193,6 @@
     <string name="dm_list_item_hint_disconnected">Disconnesso, tocca per connetterti</string>
     <string name="unit_desc_enable">Abilitare</string>
     <string name="unit_desc_disable">disattivare</string>
-    <string name="unit_desc_requirement_dm">Supporto Bluetooth</string>
     <string name="im_edit_width">Larghezza</string>
     <string name="im_edit_height">Altezza</string>
     <string name="im_image_select">Seleziona immagine</string>

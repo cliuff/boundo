@@ -174,7 +174,6 @@
     <string name="versatile_device_controls_at_status_off">Stopped</string>
     <string name="advice_source_sub">Redirect to Github</string>
     <string name="unit_desc_requirement_tw">Live wallpaper support</string>
-    <string name="unit_device_manager">Device Manager</string>
     <string name="versatile_device_controls_dm_hint_off">Tap to connect</string>
     <string name="versatile_device_controls_dm_hint_on">Tap to disconnect</string>
     <string name="versatile_device_controls_dm_ctrl_desc_off">Connect device</string>
@@ -195,7 +194,6 @@
     <string name="at_title">Set timer</string>
     <string name="at_hour_hint">Hour</string>
     <string name="at_minute_hint">Minute</string>
-    <string name="unit_desc_requirement_dm">Bluetooth support</string>
     <string name="im_edit_width">Width</string>
     <string name="im_edit_height">Height</string>
     <string name="im_image_select">Select image</string>

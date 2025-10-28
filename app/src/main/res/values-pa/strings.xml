@@ -179,7 +179,6 @@
     <string name="at_minute_hint">ਮਿੰਟ</string>
     <string name="advice_source_sub">Github \'ਤੇ ਰੀਡਾਇਰੈਕਟ ਕਰੋ</string>
     <string name="unit_desc_requirement_tw">ਲਾਈਵ ਵਾਲਪੇਪਰ ਸਹਾਇਤਾ</string>
-    <string name="unit_device_manager">ਡਿਵਾਇਸ ਪ੍ਰਬੰਧਕ</string>
     <string name="versatile_device_controls_dm_hint_off">ਕਨੈਕਟ ਕਰਨ ਲਈ ਟੈਪ ਕਰੋ</string>
     <string name="versatile_device_controls_dm_hint_on">ਡਿਸਕਨੈਕਟ ਕਰਨ ਲਈ ਟੈਪ ਕਰੋ</string>
     <string name="versatile_device_controls_dm_ctrl_desc_off">ਡਿਵਾਈਸ ਨੂੰ ਕਨੈਕਟ ਕਰੋ</string>
@@ -194,7 +193,6 @@
     <string name="dm_list_item_hint_disconnected">ਡਿਸਕਨੈਕਟ ਕੀਤਾ ਗਿਆ, ਕਨੈਕਟ ਕਰਨ ਲਈ ਟੈਪ ਕਰੋ</string>
     <string name="unit_desc_enable">ਯੋਗ ਕਰੋ</string>
     <string name="unit_desc_disable">ਅਸਮਰੱਥ</string>
-    <string name="unit_desc_requirement_dm">ਬਲੂਟੁੱਥ ਸਪੋਰਟ</string>
     <string name="im_edit_width">ਚੌੜਾਈ</string>
     <string name="im_edit_height">ਉਚਾਈ</string>
     <string name="im_image_select">ਚਿੱਤਰ ਚੁਣੋ</string>

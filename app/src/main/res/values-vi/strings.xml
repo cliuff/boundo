@@ -179,7 +179,6 @@
     <string name="at_minute_hint">Phút</string>
     <string name="advice_source_sub">Chuyển hướng đến Github</string>
     <string name="unit_desc_requirement_tw">Hỗ trợ hình nền động</string>
-    <string name="unit_device_manager">Quản lý thiết bị</string>
     <string name="versatile_device_controls_dm_hint_off">Nhấn để kết nối</string>
     <string name="versatile_device_controls_dm_hint_on">Nhấn để ngắt kết nối</string>
     <string name="versatile_device_controls_dm_ctrl_desc_off">Kết nối thiết bị</string>
@@ -194,7 +193,6 @@
     <string name="dm_list_item_hint_disconnected">Đã ngắt kết nối, hãy nhấn để kết nối</string>
     <string name="unit_desc_enable">Kích hoạt</string>
     <string name="unit_desc_disable">Vô hiệu hóa</string>
-    <string name="unit_desc_requirement_dm">Hỗ trợ Bluetooth</string>
     <string name="im_edit_width">Chiều rộng</string>
     <string name="im_edit_height">Chiều cao</string>
     <string name="im_image_select">Chọn ảnh</string>

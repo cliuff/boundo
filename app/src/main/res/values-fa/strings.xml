@@ -181,7 +181,6 @@
     <string name="at_minute_hint">دقیقه</string>
     <string name="advice_source_sub">به Github تغییر مسیر دهید</string>
     <string name="unit_desc_requirement_tw">پشتیبانی از تصویر زمینه زنده</string>
-    <string name="unit_device_manager">مدیریت دستگاه</string>
     <string name="versatile_device_controls_dm_hint_off">برای اتصال ضربه بزنید</string>
     <string name="versatile_device_controls_dm_hint_on">برای قطع ارتباط ضربه بزنید</string>
     <string name="versatile_device_controls_dm_ctrl_desc_off">دستگاه را وصل کنید</string>
@@ -196,7 +195,6 @@
     <string name="dm_list_item_hint_disconnected">قطع شد، برای اتصال ضربه بزنید</string>
     <string name="unit_desc_enable">فعال کردن</string>
     <string name="unit_desc_disable">غیر فعال کردن</string>
-    <string name="unit_desc_requirement_dm">پشتیبانی از بلوتوث</string>
     <string name="im_edit_width">عرض</string>
     <string name="im_edit_height">ارتفاع</string>
     <string name="im_image_select">تصویر را انتخاب کنید</string>

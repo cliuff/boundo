@@ -179,7 +179,6 @@
     <string name="at_minute_hint">Minuta</string>
     <string name="advice_source_sub">Przekieruj do Github</string>
     <string name="unit_desc_requirement_tw">Obsługa tapety na żywo</string>
-    <string name="unit_device_manager">Menadżer urządzeń</string>
     <string name="versatile_device_controls_dm_hint_off">Dotknij, aby połączyć</string>
     <string name="versatile_device_controls_dm_hint_on">Dotknij, aby rozłączyć</string>
     <string name="versatile_device_controls_dm_ctrl_desc_off">Podłącz urządzenie</string>
@@ -194,7 +193,6 @@
     <string name="dm_list_item_hint_disconnected">Rozłączono, dotknij, aby połączyć</string>
     <string name="unit_desc_enable">Włączać</string>
     <string name="unit_desc_disable">Wyłączyć</string>
-    <string name="unit_desc_requirement_dm">Obsługa Bluetooth</string>
     <string name="im_edit_width">Szerokość</string>
     <string name="im_edit_height">Wzrost</string>
     <string name="im_image_select">Wybierz obraz</string>

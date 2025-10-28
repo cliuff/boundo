@@ -179,7 +179,6 @@
     <string name="at_minute_hint">Λεπτό</string>
     <string name="advice_source_sub">Ανακατεύθυνση στο Github</string>
     <string name="unit_desc_requirement_tw">Υποστήριξη ζωντανής ταπετσαρίας</string>
-    <string name="unit_device_manager">Διαχειριστή της συσκευής</string>
     <string name="versatile_device_controls_dm_hint_off">Πατήστε για σύνδεση</string>
     <string name="versatile_device_controls_dm_hint_on">Πατήστε για αποσύνδεση</string>
     <string name="versatile_device_controls_dm_ctrl_desc_off">Συνδέστε τη συσκευή</string>
@@ -194,7 +193,6 @@
     <string name="dm_list_item_hint_disconnected">Αποσυνδεδεμένος, πατήστε για σύνδεση</string>
     <string name="unit_desc_enable">επιτρέπω</string>
     <string name="unit_desc_disable">Καθιστώ ανίκανο</string>
-    <string name="unit_desc_requirement_dm">Υποστήριξη Bluetooth</string>
     <string name="im_edit_width">Πλάτος</string>
     <string name="im_edit_height">Υψος</string>
     <string name="im_image_select">Επιλέξτε εικόνα</string>

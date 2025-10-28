@@ -179,7 +179,6 @@
     <string name="at_minute_hint">분</string>
     <string name="advice_source_sub">Github로 이동</string>
     <string name="unit_desc_requirement_tw">라이브 배경 화면 지원</string>
-    <string name="unit_device_manager">장비 관리</string>
     <string name="versatile_device_controls_dm_hint_off">연결하려면 클릭</string>
     <string name="versatile_device_controls_dm_hint_on">연결을 끊으려면 클릭</string>
     <string name="versatile_device_controls_dm_ctrl_desc_off">장치 연결</string>
@@ -194,7 +193,6 @@
     <string name="dm_list_item_hint_disconnected">연결되지 않았습니다. 연결을 클릭하세요.</string>
     <string name="unit_desc_enable">활성화</string>
     <string name="unit_desc_disable">비활성화</string>
-    <string name="unit_desc_requirement_dm">블루투스 지원</string>
     <string name="im_edit_width">폭</string>
     <string name="im_edit_height">높은</string>
     <string name="im_image_select">이미지 선택</string>

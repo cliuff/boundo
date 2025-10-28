@@ -181,7 +181,6 @@
     <string name="at_minute_hint">دقيقة</string>
     <string name="advice_source_sub">إعادة التوجيه إلى جيثب</string>
     <string name="unit_desc_requirement_tw">دعم خلفية حية</string>
-    <string name="unit_device_manager">مدير الجهاز</string>
     <string name="versatile_device_controls_dm_hint_off">انقر للاتصال</string>
     <string name="versatile_device_controls_dm_hint_on">انقر لقطع الاتصال</string>
     <string name="versatile_device_controls_dm_ctrl_desc_off">قم بتوصيل الجهاز</string>
@@ -196,7 +195,6 @@
     <string name="dm_list_item_hint_disconnected">غير متصل ، انقر للاتصال</string>
     <string name="unit_desc_enable">ممكن</string>
     <string name="unit_desc_disable">تعطيل</string>
-    <string name="unit_desc_requirement_dm">دعم البلوتوث</string>
     <string name="im_edit_width">عرض</string>
     <string name="im_edit_height">ارتفاع</string>
     <string name="im_image_select">اختر صورة</string>

@@ -179,7 +179,6 @@
     <string name="at_minute_hint">Хвилина</string>
     <string name="advice_source_sub">Перенаправити на Github</string>
     <string name="unit_desc_requirement_tw">Підтримка живих шпалер</string>
-    <string name="unit_device_manager">Диспетчер пристроїв</string>
     <string name="versatile_device_controls_dm_hint_off">Торкніться, щоб підключитися</string>
     <string name="versatile_device_controls_dm_hint_on">Торкніться, щоб від’єднатися</string>
     <string name="versatile_device_controls_dm_ctrl_desc_off">Підключіть пристрій</string>
@@ -194,7 +193,6 @@
     <string name="dm_list_item_hint_disconnected">Від’єднано, торкніться, щоб під’єднатися</string>
     <string name="unit_desc_enable">Увімкнути</string>
     <string name="unit_desc_disable">Вимкнути</string>
-    <string name="unit_desc_requirement_dm">Підтримка Bluetooth</string>
     <string name="im_edit_width">Ширина</string>
     <string name="im_edit_height">Висота</string>
     <string name="im_image_select">Виберіть зображення</string>

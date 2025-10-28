@@ -179,7 +179,6 @@
     <string name="at_minute_hint">минут</string>
     <string name="advice_source_sub">Перенаправить на Github</string>
     <string name="unit_desc_requirement_tw">Поддержка живых обоев</string>
-    <string name="unit_device_manager">Диспетчер устройств</string>
     <string name="versatile_device_controls_dm_hint_off">Нажмите, чтобы подключиться</string>
     <string name="versatile_device_controls_dm_hint_on">Нажмите, чтобы отключить</string>
     <string name="versatile_device_controls_dm_ctrl_desc_off">Подключить устройство</string>
@@ -194,7 +193,6 @@
     <string name="dm_list_item_hint_disconnected">Отключено, нажмите, чтобы подключиться</string>
     <string name="unit_desc_enable">включить</string>
     <string name="unit_desc_disable">Отключить</string>
-    <string name="unit_desc_requirement_dm">Поддержка Bluetooth</string>
     <string name="im_edit_width">ширина</string>
     <string name="im_edit_height">Высота</string>
     <string name="im_image_select">Выберите изображение</string>

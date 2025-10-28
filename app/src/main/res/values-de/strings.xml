@@ -179,7 +179,6 @@
     <string name="at_minute_hint">Minute</string>
     <string name="advice_source_sub">Weiterleiten an Github</string>
     <string name="unit_desc_requirement_tw">Live Wallpaper Unterstützung</string>
-    <string name="unit_device_manager">Gerätemanager</string>
     <string name="versatile_device_controls_dm_hint_off">Tippen Sie auf, um eine Verbindung herzustellen</string>
     <string name="versatile_device_controls_dm_hint_on">Tippen Sie auf, um die Verbindung zu trennen</string>
     <string name="versatile_device_controls_dm_ctrl_desc_off">Gerät anschließen</string>
@@ -194,7 +193,6 @@
     <string name="dm_list_item_hint_disconnected">Trennen Sie die Verbindung, um eine Verbindung herzustellen</string>
     <string name="unit_desc_enable">Aktivieren</string>
     <string name="unit_desc_disable">Deaktivieren</string>
-    <string name="unit_desc_requirement_dm">Bluetooth-Unterstützung</string>
     <string name="im_edit_width">Breite</string>
     <string name="im_edit_height">Höhe</string>
     <string name="im_image_select">Bild auswählen</string>

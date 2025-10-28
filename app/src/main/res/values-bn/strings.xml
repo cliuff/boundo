@@ -179,7 +179,6 @@
     <string name="at_minute_hint">মিনিট</string>
     <string name="advice_source_sub">Github এ পুনর্নির্দেশ করুন</string>
     <string name="unit_desc_requirement_tw">লাইভ ওয়ালপেপার সমর্থন</string>
-    <string name="unit_device_manager">ডিভাইস ম্যানেজার</string>
     <string name="versatile_device_controls_dm_hint_off">সংযোগ করতে আলতো চাপুন</string>
     <string name="versatile_device_controls_dm_hint_on">সংযোগ বিচ্ছিন্ন করতে আলতো চাপুন</string>
     <string name="versatile_device_controls_dm_ctrl_desc_off">ডিভাইস সংযোগ করুন</string>
@@ -194,7 +193,6 @@
     <string name="dm_list_item_hint_disconnected">সংযোগ বিচ্ছিন্ন, সংযোগ করতে আলতো চাপুন</string>
     <string name="unit_desc_enable">সক্ষম করুন</string>
     <string name="unit_desc_disable">নিষ্ক্রিয় করুন</string>
-    <string name="unit_desc_requirement_dm">ব্লুটুথ সমর্থন</string>
     <string name="im_edit_width">প্রস্থ</string>
     <string name="im_edit_height">উচ্চতা</string>
     <string name="im_image_select">ছবি নির্বাচন করুন</string>

@@ -179,7 +179,6 @@
     <string name="at_minute_hint">Dakika</string>
     <string name="advice_source_sub">Github\'a yeniden yönlendir</string>
     <string name="unit_desc_requirement_tw">Canlı duvar kağıdı desteği</string>
-    <string name="unit_device_manager">Aygıt Yöneticisi</string>
     <string name="versatile_device_controls_dm_hint_off">Bağlanmak için dokunun</string>
     <string name="versatile_device_controls_dm_hint_on">Bağlantıyı kesmek için dokunun</string>
     <string name="versatile_device_controls_dm_ctrl_desc_off">Cihazı bağlayın</string>
@@ -194,7 +193,6 @@
     <string name="dm_list_item_hint_disconnected">Bağlantı kesildi, bağlanmak için dokunun</string>
     <string name="unit_desc_enable">etkinleştirme</string>
     <string name="unit_desc_disable">Devre dışı bırak</string>
-    <string name="unit_desc_requirement_dm">Bluetooth desteği</string>
     <string name="im_edit_width">Genişlik</string>
     <string name="im_edit_height">Yükseklik</string>
     <string name="im_image_select">Fotoğraf seç</string>

@@ -179,7 +179,6 @@
     <string name="at_minute_hint">นาที</string>
     <string name="advice_source_sub">เปลี่ยนเส้นทางไปที่ Github</string>
     <string name="unit_desc_requirement_tw">การสนับสนุนวอลล์เปเปอร์สด</string>
-    <string name="unit_device_manager">ตัวจัดการอุปกรณ์</string>
     <string name="versatile_device_controls_dm_hint_off">แตะเพื่อเชื่อมต่อ</string>
     <string name="versatile_device_controls_dm_hint_on">แตะเพื่อยกเลิกการเชื่อมต่อ</string>
     <string name="versatile_device_controls_dm_ctrl_desc_off">เชื่อมต่ออุปกรณ์</string>
@@ -194,7 +193,6 @@
     <string name="dm_list_item_hint_disconnected">ไม่ได้เชื่อมต่อแตะเพื่อเชื่อมต่อ</string>
     <string name="unit_desc_enable">เปิดใช้งาน</string>
     <string name="unit_desc_disable">ปิดการใช้งาน</string>
-    <string name="unit_desc_requirement_dm">รองรับบลูทู ธ</string>
     <string name="im_edit_width">ความกว้าง</string>
     <string name="im_edit_height">ความสูง</string>
     <string name="im_image_select">เลือกภาพ</string>
