@@ -16,6 +16,8 @@
 
 package com.madness.collision.ui.conn
 
+import android.content.pm.PackageManager
+import android.os.Build
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -114,7 +116,7 @@ fun ConnectionsPage(eventHandler: ConnEventHandler, contentPadding: PaddingValue
             ConnectionsAppBar(
                 title = {
                     Text(
-                        text = "Connections"
+                        text = stringResource(R.string.conn_content_title)
                             .run { remember { lowercase(LocaleUtils.getRuntimeFirst()) } },
                         fontWeight = FontWeight.Medium,
                     )
@@ -137,6 +139,12 @@ fun ConnectionsPage(eventHandler: ConnEventHandler, contentPadding: PaddingValue
     }
 }
 
+private fun hasBluetoothSupport(pkgMgr: PackageManager) =
+    pkgMgr.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH)
+
+private fun hasDeviceControlsSupport() =
+    Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
+
 @Composable
 private fun ConnectionsContent(
     message: ConnPermMessage?,
@@ -150,15 +158,18 @@ private fun ConnectionsContent(
             .padding(horizontal = 18.dp, vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(15.dp),
     ) {
-        MetaSurface(
-            shape = AbsoluteSmoothCornerShape(20.dp, 80),
-            content = { DeviceList(message = message) },
-        )
+        val context = LocalContext.current
+        val devicesEnabled = remember { hasBluetoothSupport(context.packageManager) }
+        if (devicesEnabled) {
+            MetaSurface(
+                shape = AbsoluteSmoothCornerShape(20.dp, 80),
+                content = { DeviceList(message = message) },
+            )
+        }
         MetaSurface(
             shape = AbsoluteSmoothCornerShape(20.dp, 80),
             content = { SystemUtilities() },
         )
-        val context = LocalContext.current
         MetaSurface(
             onClick = { context.showPage<InstantFragment>() },
             shape = AbsoluteSmoothCornerShape(20.dp, 80),
@@ -193,13 +204,15 @@ private fun DeviceList(
             onUpdate = { controller = it.getDeviceListFragment()?.getController() }
         )
 
-        val context = LocalContext.current
-        DeviceControlsEntry(
-            modifier = Modifier
-                .padding(top = 10.dp)
-                .padding(horizontal = 20.dp),
-            onClick = { context.showPage<DeviceControlsFragment>() },
-        )
+        if (hasDeviceControlsSupport()) {
+            val context = LocalContext.current
+            DeviceControlsEntry(
+                modifier = Modifier
+                    .padding(top = 10.dp)
+                    .padding(horizontal = 20.dp),
+                onClick = { context.showPage<DeviceControlsFragment>() },
+            )
+        }
     }
 }
 

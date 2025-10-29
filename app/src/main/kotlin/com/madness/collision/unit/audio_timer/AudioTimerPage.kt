@@ -97,8 +97,8 @@ fun AudioTimerPage(paddingValues: PaddingValues, onStartTimer: () -> Unit, onNav
             MetaSurface(
                 modifier = Modifier.padding(bottom = 15.dp),
                 shape = AbsoluteSmoothCornerShape(20.dp, 60),
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
             ) {
                 Box(modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp)) {
                     TimerStatus(status = status, timerController = timerController)

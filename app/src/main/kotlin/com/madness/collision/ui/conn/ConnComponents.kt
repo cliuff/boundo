@@ -51,6 +51,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -59,6 +60,7 @@ import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.commitNow
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.madness.collision.R
 import com.madness.collision.main.UnitBarPage
 import com.madness.collision.ui.comp.ClassicTopAppBarDefaults
 import com.madness.collision.ui.theme.MetaAppTheme
@@ -114,13 +116,13 @@ internal fun DeviceControlsEntry(modifier: Modifier = Modifier, onClick: () -> U
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = "Quick access from device controls",
+                    text = stringResource(R.string.conn_dev_controls),
                     style = MaterialTheme.typography.bodyMedium,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
                 )
                 Text(
-                    text = "Android system integration",
+                    text = stringResource(R.string.conn_dev_controls_desc),
                     style = MaterialTheme.typography.bodySmall,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
@@ -143,7 +145,7 @@ internal fun AppShortcutsEntry(modifier: Modifier = Modifier) {
     ) {
         Text(
             modifier = Modifier.weight(1f),
-            text = "Manage app shortcuts",
+            text = stringResource(R.string.Main_TextView_Launcher),
             style = MaterialTheme.typography.bodyLarge,
         )
         Icon(

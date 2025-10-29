@@ -163,6 +163,9 @@
     <string name="unit_desc_pin">Pin</string>
     <string name="app_device_controls">Boundo Controls</string>
     <string name="access_sys_usage">Allow Boundo to access usage data</string>
+    <string name="conn_content_title">Connections</string>
+    <string name="conn_dev_controls">Quick access from device controls</string>
+    <string name="conn_dev_controls_desc">System integration of device controls panel</string>
     <string name="text_access_denied">Access denied</string>
     <string name="versatile_device_controls_at_hint_on">Swipe to adjust</string>
     <string name="versatile_device_controls_at_hint_off">Tap to start</string>
