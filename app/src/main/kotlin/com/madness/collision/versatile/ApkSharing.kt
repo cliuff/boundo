@@ -40,7 +40,6 @@ internal class ApkSharing : BaseActivity() {
             val apkFile = getFile(context) ?: return@launch
             if (apkFile !is Parcelable) return@launch
             val intent = ComposePageActivityIntent(AccessAV.getAppListRoute(pkgInfo = apkFile))
-                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             withContext(Dispatchers.Main) {
                 startActivity(intent)
                 finish()

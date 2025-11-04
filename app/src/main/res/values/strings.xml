@@ -79,7 +79,6 @@
     <string name="menuApiSortApiTime">Recently updated</string>
     <string name="apiSdkTarget">Target SDK</string>
     <string name="apiSdkMin">Minimum SDK</string>
-    <string name="activityTextProcessingApp">View Bnd apps</string>
     <string name="res_invalid_input">Invalid input</string>
     <string name="text_sort">Sort</string>
     <string name="text_refresh">Refresh</string>
@@ -163,6 +162,7 @@
     <string name="unit_desc_pin">Pin</string>
     <string name="app_device_controls">Boundo Controls</string>
     <string name="access_sys_usage">Allow Boundo to access usage data</string>
+    <string name="app_activity_text_process">Meta App</string>
     <string name="conn_content_title">Connections</string>
     <string name="conn_dev_controls">Quick access from device controls</string>
     <string name="conn_dev_controls_desc">System integration of device controls panel</string>

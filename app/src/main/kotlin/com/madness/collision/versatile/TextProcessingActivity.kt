@@ -21,14 +21,12 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
-import com.madness.collision.chief.app.ComposePageActivityIntent
+import com.madness.collision.chief.app.ComposePageActivity
 import com.madness.collision.unit.api_viewing.AccessAV
 
 @RequiresApi(Build.VERSION_CODES.M)
-class TextProcessingActivity : AppCompatActivity() {
+class TextProcessingActivity : ComposePageActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         val text = intent.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT)
         val readOnly = intent.getBooleanExtra(Intent.EXTRA_PROCESS_TEXT_READONLY, true)
         // set process result
@@ -36,19 +34,17 @@ class TextProcessingActivity : AppCompatActivity() {
             val result = Intent().putExtra(Intent.EXTRA_PROCESS_TEXT, text)
             setResult(Activity.RESULT_OK, result)
         }
-        if (!text.isNullOrEmpty()) {
-            val intent = ComposePageActivityIntent(AccessAV.getAppListRoute(query = text))
-                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            startActivity(intent)
-        }
-        finish()
+        val route = AccessAV.getAppListRoute(query = text)
+        intent = intent.putExtra(EXTRA_ROUTE, route)
+        super.onCreate(savedInstanceState)
     }
+}
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 0){
-            setResult(Activity.RESULT_OK)
-            finish()
-        }
+class ApiViewingSearchActivity : ComposePageActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        val text = intent.getCharSequenceExtra(Intent.EXTRA_TEXT)
+        val route = AccessAV.getAppListRoute(query = text)
+        intent = intent.putExtra(EXTRA_ROUTE, route)
+        super.onCreate(savedInstanceState)
     }
 }

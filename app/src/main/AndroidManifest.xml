@@ -124,8 +124,12 @@
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- External entrypoint only. -->
         <activity
             android:name=".versatile.ApkSharing"
+            android:launchMode="standard"
+            android:taskAffinity=".apk"
             android:exported="true"
             android:enabled="true"
             android:excludeFromRecents="true"
@@ -139,12 +143,15 @@
                 <data android:mimeType="application/vnd.android.package-archive" />
             </intent-filter>
         </activity>
+
+        <!-- External entrypoint only. -->
         <activity
             android:name=".versatile.TextProcessingActivity"
+            android:launchMode="standard"
+            android:taskAffinity=".art_query"
             android:exported="true"
             android:enabled="true"
-            android:excludeFromRecents="true"
-            android:label="@string/activityTextProcessingApp">
+            android:label="@string/app_activity_text_process">
             <intent-filter>
                 <action android:name="android.intent.action.PROCESS_TEXT" />
 
@@ -153,11 +160,14 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
+
+        <!-- External entrypoint only. -->
         <activity
             android:name=".versatile.ApiViewingSearchActivity"
+            android:launchMode="standard"
+            android:taskAffinity=".art_query"
             android:exported="true"
             android:enabled="true"
-            android:excludeFromRecents="true"
             android:label="@string/activity_av_search">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
