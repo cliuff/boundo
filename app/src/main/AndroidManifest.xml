@@ -96,6 +96,7 @@
     <!-- Provide separate versions of the banner with text for multiple languages. -->
     <application
         android:name=".main.MainApplication"
+        android:taskAffinity=".main"
         android:allowBackup="true"
         android:description="@string/appDesc"
         android:icon="@mipmap/ic_launcher"
@@ -113,6 +114,8 @@
         <!-- Activities -->
         <activity
             android:name=".main.MainActivity"
+            android:launchMode="standard"
+            android:taskAffinity=".main"
             android:exported="true"
             android:enabled="true"
             android:label="@string/app_name">
@@ -179,14 +182,20 @@
             </intent-filter>
         </activity>
 
+        <!-- External entrypoint to redirect. -->
         <activity
             android:name=".unit.themed_wallpaper.ConfigActivity"
+            android:launchMode="singleTop"
             android:exported="true"
             android:enabled="true"
             android:excludeFromRecents="true" />
 
+        <!-- Internal and external entrypoint. -->
         <activity
             android:name=".main.ImmortalActivity"
+            android:launchMode="singleTop"
+            android:taskAffinity=".immortal"
+            android:allowTaskReparenting="true"
             android:exported="false"
             android:enabled="true">
             <intent-filter>
@@ -209,14 +218,20 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+        <!-- External entrypoint only. -->
         <activity
             android:name=".versatile.BarcodeScannerActivity"
+            android:launchMode="standard"
             android:exported="false"
             android:enabled="true"
             android:excludeFromRecents="true"
             android:theme="@style/AppTheme.Transparent"/>
+
+        <!-- External entrypoint only. -->
         <activity
             android:name=".qs.PrefActivity"
+            android:launchMode="standard"
             android:exported="true"
             android:enabled="true"
             android:excludeFromRecents="true">
@@ -224,6 +239,8 @@
                 <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />
             </intent-filter>
         </activity>
+
+        <!-- Internal use only. -->
         <activity
             android:name=".main.MainPageActivity"
             android:exported="false"

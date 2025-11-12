@@ -20,10 +20,12 @@ import android.content.SharedPreferences
 import android.content.pm.ShortcutManager
 import androidx.core.content.edit
 import com.madness.collision.chief.chiefContext
+import com.madness.collision.settings.instant.Instant
+import com.madness.collision.util.P
 import com.madness.collision.util.os.OsUtils
 
 class SelfUpdater25 : SelfUpdater {
-    override val maxVersion: Int = 25102800
+    override val maxVersion: Int = 25111200
 
     override fun apply(oldVersion: Int, prefSettings: SharedPreferences) {
         // check illegal version code
@@ -60,6 +62,10 @@ class SelfUpdater25 : SelfUpdater {
                 manager.disableShortcuts(listOf("unitDM"))
             }
             // pinned shortcuts from com.android.launcher.action.INSTALL_SHORTCUT to be removed manually
+        }
+        if (oldVersion < 25111200 && OsUtils.satisfy(OsUtils.N_MR1)) {
+            val manager = chiefContext.getSystemService(ShortcutManager::class.java) ?: return
+            Instant(chiefContext, manager).refreshDynamicShortcuts(P.SC_ID_IMMORTAL)
         }
     }
 }

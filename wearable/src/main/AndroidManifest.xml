@@ -39,6 +39,7 @@
 
     <application
         android:name=".MainApplication"
+        android:taskAffinity=".main"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher"
@@ -48,6 +49,7 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".MainActivity"
+            android:launchMode="singleTask"
             android:taskAffinity=".main"
             android:exported="true"
             android:enabled="true">

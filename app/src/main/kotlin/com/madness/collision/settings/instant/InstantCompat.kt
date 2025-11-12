@@ -44,12 +44,15 @@ object InstantCompat {
                     localeContext.getString(R.string.unit_audio_timer),
                     if (X.aboveOn(X.O)) R.mipmap.ic_shortcut_audio_timer else R.drawable.ic_shortcut_audio_timer_legacy
             )
-            P.SC_ID_IMMORTAL -> ShortcutBuildRes(
-                    Intent(Intent.ACTION_VIEW, Uri.EMPTY, context, ImmortalActivity::class.java).apply {
-                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    },
+            P.SC_ID_IMMORTAL ->
+                ShortcutBuildRes(
+                    Intent(Intent.ACTION_DEFAULT)
+                        // FLAG_ACTIVITY_NEW_TASK + taskAffinity to launch in a separate task
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        .setClass(context, ImmortalActivity::class.java)
+                        .putExtra("immortalLaunchMode", "mortal"),
                     "Immortal", "Immortal", null
-            )
+                )
             else -> null
         }
     }
