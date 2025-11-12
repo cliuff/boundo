@@ -18,6 +18,7 @@ package com.madness.collision.ui.conn
 
 import android.content.pm.PackageManager
 import android.os.Build
+import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -62,18 +63,21 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.madness.collision.R
 import com.madness.collision.chief.app.LocalPageNavController
 import com.madness.collision.chief.app.asInsets
+import com.madness.collision.chief.layout.isInFreeformMode
 import com.madness.collision.chief.layout.share
 import com.madness.collision.main.showPage
 import com.madness.collision.settings.DeviceControlsFragment
 import com.madness.collision.settings.SettingsRouteId
 import com.madness.collision.settings.instant.InstantFragment
 import com.madness.collision.ui.comp.MetaSurface
+import com.madness.collision.ui.settings.SettingsActivity
 import com.madness.collision.ui.theme.MetaAppTheme
 import com.madness.collision.ui.theme.PreviewAppTheme
 import com.madness.collision.unit.device_manager.list.DeviceListController
 import com.madness.collision.unit.device_manager.list.DeviceListUiState
 import com.madness.collision.util.config.LocaleUtils
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
+import com.madness.collision.util.os.OsUtils
 import racra.compose.smooth_corner_rect_library.AbsoluteSmoothCornerShape
 
 @Immutable
@@ -112,6 +116,7 @@ fun ConnectionsPage(eventHandler: ConnEventHandler, contentPadding: PaddingValue
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
+            val activity = LocalActivity.current
             val navController = LocalPageNavController.current
             ConnectionsAppBar(
                 title = {
@@ -121,7 +126,13 @@ fun ConnectionsPage(eventHandler: ConnEventHandler, contentPadding: PaddingValue
                         fontWeight = FontWeight.Medium,
                     )
                 },
-                onClickSettings = { navController.navigateTo(SettingsRouteId.Settings.asRoute()) },
+                onClickSettings = {
+                    if (OsUtils.satisfy(OsUtils.N) && activity?.isInFreeformMode() == true) {
+                        activity.startActivity(SettingsActivity.asNewTask())
+                    } else {
+                        navController.navigateTo(SettingsRouteId.Settings.asRoute())
+                    }
+                },
                 windowInsets = contentPadding.asInsets()
                     .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top)
                     .share(WindowInsets(top = 5.dp)),

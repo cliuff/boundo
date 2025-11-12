@@ -25,6 +25,10 @@ sealed interface DistroBuild {
     val specs: Map<DistroSpec.Id<*>, DistroSpec>
 
     @Suppress("UNCHECKED_CAST")
+    operator fun <Spec : DistroSpec> contains(spec: DistroSpec.Id<Spec>): Boolean =
+        specs.contains(spec)
+
+    @Suppress("UNCHECKED_CAST")
     operator fun <Spec : DistroSpec> get(spec: DistroSpec.Id<Spec>): Spec? {
         return specs[spec] as? Spec
     }
@@ -36,6 +40,11 @@ sealed interface DistroSpec {
     val id: Id<*>
 
     sealed interface Id<Spec : DistroSpec>
+
+    data class OneUI(val verCode: Int, val verName: String) : DistroSpec {
+        companion object Id : DistroSpec.Id<OneUI>
+        override val id: DistroSpec.Id<*> = Id
+    }
 
     data class EMUI(val apiLevel: Int) : DistroSpec {
         companion object Id : DistroSpec.Id<EMUI>
@@ -65,6 +74,11 @@ data object UndefDistro : DistroBuild {
     override val specs: Map<DistroSpec.Id<*>, DistroSpec> = emptyMap()
 }
 
+data class OneUiDistro(val oneUI: DistroSpec.OneUI) : DistroBuild {
+    override val displayName: String = "OneUI"
+    override val specs: Map<DistroSpec.Id<*>, DistroSpec> = specMapOf(oneUI)
+}
+
 data class EmuiDistro(val emui: DistroSpec.EMUI) : DistroBuild {
     override val displayName: String = "EMUI"
     override val specs: Map<DistroSpec.Id<*>, DistroSpec> = specMapOf(emui)
@@ -89,7 +103,20 @@ data class LineageOsDistro(val lineageOS: DistroSpec.LineageOS) : DistroBuild {
 private fun specMapOf(spec: DistroSpec) = mapOf(spec.id to spec)
 private fun specMapOf(vararg specs: DistroSpec) = specs.associateBy(DistroSpec::id)
 
+@Suppress("PrivateApi")
 private fun getBuild(): DistroBuild {
+    run oneUI@{
+        val semPlatformInt = runCatching {
+            android.os.Build.VERSION::class.java
+                .getDeclaredField("SEM_PLATFORM_INT")
+                .getInt(null)
+        }.onFailure(Throwable::printStackTrace)
+        val verCode = semPlatformInt.getOrDefault(-1)
+        if (verCode <= 90000) return@oneUI
+        val verName = (verCode - 90000).let { i -> "${i/10000}.${(i%10000)/100}" }
+        val oneUI = DistroSpec.OneUI(verCode, verName)
+        return OneUiDistro(oneUI)
+    }
     run emui@{
         val api = BuildProp["ro.build.hw_emui_api_level"]?.toIntOrNull() ?: return@emui
         val emui = DistroSpec.EMUI(api)

@@ -103,6 +103,7 @@
         android:label="@string/app_descriptive_name"
         android:localeConfig="@xml/locales_config"
         android:roundIcon="@mipmap/ic_launcher_round"
+        android:resizeableActivity="true"
         android:supportsRtl="true"
         android:theme="@style/LaunchScreen"
         android:enableOnBackInvokedCallback="@bool/appOnBackInvokedCallbackEnabled"
@@ -195,15 +196,19 @@
             </intent-filter>
         </activity>
 
-        <!--
-        <activity android:name=".settings.SettingsActivity">
+        <!-- Internal and external entrypoint. -->
+        <activity
+            android:name=".ui.settings.SettingsActivity"
+            android:launchMode="singleTop"
+            android:taskAffinity=".settings"
+            android:allowTaskReparenting="true"
+            android:exported="true"
+            android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        -->
         <activity
             android:name=".versatile.BarcodeScannerActivity"
             android:exported="false"
@@ -223,6 +228,8 @@
             android:name=".main.MainPageActivity"
             android:exported="false"
             android:enabled="true" />
+
+        <!-- Internal use only. -->
         <!-- Setting windowSoftInputMode, this overrides the one defined in styles.xml. -->
         <!-- IME/stateAlwaysHidden: always hide IME when opening or navigating back to this activity. -->
         <!-- IME/adjustResize: resize window and change window insets accordingly. -->
@@ -230,7 +237,11 @@
             android:name=".chief.app.ComposePageActivity"
             android:enabled="true"
             android:exported="false"
+            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+
+
+
         <!-- Tile Services -->
         <provider
             android:name="androidx.core.content.FileProvider"

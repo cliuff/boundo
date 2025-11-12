@@ -26,6 +26,7 @@ import com.madness.collision.chief.os.EmuiDistro
 import com.madness.collision.chief.os.HyperOsDistro
 import com.madness.collision.chief.os.LineageOsDistro
 import com.madness.collision.chief.os.MiuiDistro
+import com.madness.collision.chief.os.OneUiDistro
 import com.madness.collision.chief.os.PreviewBuild
 import com.madness.collision.chief.os.UndefDistro
 import com.madness.collision.chief.os.distro
@@ -59,6 +60,7 @@ internal class DeviceApi {
         val distro = distro.run {
             val name = displayName
             when (this) {
+                is OneUiDistro -> "$name ${oneUI.verName}"
                 is EmuiDistro -> "$name API ${emui.apiLevel}"
                 is MiuiDistro -> "$name ${miui.displayVersion ?: miui.verName}"
                 is HyperOsDistro -> "$name ${hyperOS.displayVersion ?: hyperOS.verName}"
