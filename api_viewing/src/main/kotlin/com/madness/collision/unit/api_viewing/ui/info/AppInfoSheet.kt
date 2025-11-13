@@ -26,16 +26,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
+import androidx.compose.material3.adaptive.currentWindowDpSize
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
 import com.madness.collision.chief.app.rememberColorScheme
@@ -45,7 +44,6 @@ import com.madness.collision.chief.layout.symmetricSheetMargin
 import com.madness.collision.ui.theme.MetaAppTheme
 import com.madness.collision.unit.api_viewing.data.ApiViewingApp
 import com.madness.collision.unit.api_viewing.ui.comp.StopPostScrollNestedScrollConnection
-import com.madness.collision.util.SystemUtil
 
 @Stable
 interface AppInfoEventHandler {
@@ -55,7 +53,7 @@ interface AppInfoEventHandler {
 
 val LocalAppInfoCallback = compositionLocalOf<AppInfoFragment.Callback?> { null }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun AppInfoSheet(
     onDismissRequest: () -> Unit,
@@ -65,13 +63,8 @@ fun AppInfoSheet(
     contentWindowInsets: @Composable () -> WindowInsets = { BottomSheetDefaults.windowInsets },
 ) {
     if (state.app != null) {
-        val context = LocalContext.current
-        val density = LocalDensity.current
         // retrieve host page's window size
-        val maxWidth = remember(context) {
-            val winWidthPx = SystemUtil.getRuntimeWindowSize(context).x
-            with(density) { winWidthPx.toDp() }
-        }
+        val maxWidth = currentWindowDpSize().width
         // todo use sheet's window's maxWidth
         // apply horizontal window insets as margin to sheet's surface
         val (maxSheetWidth, horizontalMargin) = symmetricSheetMargin(maxWidth, contentWindowInsets())

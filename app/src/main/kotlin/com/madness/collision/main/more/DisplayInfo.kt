@@ -22,7 +22,7 @@ import android.graphics.Point
 import android.hardware.display.DisplayManager
 import android.view.WindowManager
 import android.view.WindowMetrics
-import com.madness.collision.util.SystemUtil
+import androidx.window.layout.WindowMetricsCalculator
 import com.madness.collision.util.os.OsUtils
 import kotlin.math.roundToInt
 
@@ -49,10 +49,15 @@ internal object DisplayInfo {
         val densityDpi = resources.configuration.densityDpi
         val density = resources.displayMetrics.density
         append("Density: ").append("$densityDpi dpi").append(", ${density}x\n")
-        append("Runtime window size: ")
-        append(SystemUtil.getRuntimeWindowSize(context).getSizeString(resources)).append('\n')
-        append("Runtime maximum size: ")
-        append(SystemUtil.getRuntimeMaximumSize(context).getSizeString(resources)).append('\n')
+
+        val windowMetricsCalculator = WindowMetricsCalculator.getOrCreate()
+        val currentMetrics = windowMetricsCalculator.computeCurrentWindowMetrics(context)
+        val maximumMetrics = windowMetricsCalculator.computeMaximumWindowMetrics(context)
+        append("Current window size: ")
+        append(currentMetrics.bounds.run { Point(width(), height()) }.getSizeString(resources)).append('\n')
+        append("Maximum window size: ")
+        append(maximumMetrics.bounds.run { Point(width(), height()) }.getSizeString(resources)).append('\n')
+
         if (OsUtils.dissatisfy(OsUtils.R)) return
         val winMan = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager?
         if (winMan == null) {
