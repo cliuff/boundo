@@ -18,6 +18,7 @@ package com.madness.collision.unit.api_viewing.ui.home
 
 import android.graphics.RectF
 import android.os.Bundle
+import android.os.SystemClock
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -33,6 +34,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.commit
+import androidx.fragment.app.commitNow
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.flowWithLifecycle
@@ -89,6 +91,8 @@ class AppHomeNavFragment : Fragment(), AppHomeNav {
     private val navFgmClasses: Array<KClass<out Fragment>> =
         arrayOf(AppUpdatesFragment::class, AppListFragment::class, AppOrgFragment::class, ConnectionsFragment::class)
     private val navFgmTags = navFgmClasses.map { klass -> "AppHome_" + klass.simpleName }
+    private val navAccessTime = LongArray(navFgmClasses.size)
+
     private var lastContentPadding: PaddingValues? = null
     private val mutStatusBarDarkIcon = MutableStateFlow(false)
     override val statusBarDarkIcon: StateFlow<Boolean> = mutStatusBarDarkIcon.asStateFlow()
@@ -113,6 +117,27 @@ class AppHomeNavFragment : Fragment(), AppHomeNav {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         // container's id must be constant across configuration changes to restore fragments
         return FragmentContainerView(inflater.context).apply { id = HomeNavContainerId }
+    }
+
+    override fun onDestroyView() {
+        // clear references to statusBarDarkIcon in nav pages
+        statusBarDarkIconJobs.fill(null)
+        super.onDestroyView()
+    }
+
+    override fun onPause() {
+        optimizeNavFgmReferences(60_000)
+        super.onPause()
+    }
+
+    override fun onStop() {
+        optimizeNavFgmReferences(5000)
+        super.onStop()
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        optimizeNavFgmReferences(0, retainHome = false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -156,6 +181,12 @@ class AppHomeNavFragment : Fragment(), AppHomeNav {
         // already at the target page, abort
         if (targetFragment != null && targetFragment === lastVisFragment) return
 
+        // update access time for lastVisFragment before navigation
+        if (lastVisFragment != null) {
+            val lastVisIndex = navFgmClasses.indexOf(lastVisFragment::class)
+            if (lastVisIndex >= 0) navAccessTime[lastVisIndex] = SystemClock.uptimeMillis()
+        }
+
         fgmManager.commit {
             // hide other nav pages instead of removing them
             if (lastVisFragment != null) {
@@ -163,6 +194,9 @@ class AppHomeNavFragment : Fragment(), AppHomeNav {
             }
             if (targetFragment != null) {
                 if (targetFragment.run { isHidden && view != null }) {
+                    show(targetFragment)
+                } else if (targetFragment.isDetached) {
+                    attach(targetFragment)
                     show(targetFragment)
                 } else if (targetFragment.isAdded) {
                     remove(targetFragment)
@@ -195,6 +229,24 @@ class AppHomeNavFragment : Fragment(), AppHomeNav {
                 fgm.mainAppHome = (parentFragment as? MainAppHome) ?: (activity as? MainAppHome)
                 lastContentPadding?.let { fgm.navContentPadding = it }
                 collectStatusBarDarkIcon(fgm, index)
+            }
+        }
+    }
+
+    private fun optimizeNavFgmReferences(accessTimeout: Long, retainHome: Boolean = true) {
+        val fgmManager = childFragmentManager
+        val lastVisFragment = fgmManager.fragments.lastOrNull { it.isVisible }
+        for (index in navFgmTags.indices) {
+            // retain home page: todo it cannot recover data
+            if (index == 0 && retainHome) continue
+            val navFragment = fgmManager.findFragmentByTag(navFgmTags[index])
+            if (navFragment == null || navFragment === lastVisFragment) continue
+            val isStale = SystemClock.uptimeMillis() - navAccessTime[index] >= accessTimeout
+            if (isStale) {
+                // clear reference to statusBarDarkIcon in nav page
+                statusBarDarkIconJobs[index]?.cancel()
+                statusBarDarkIconJobs[index] = null
+                fgmManager.commitNow(true) { detach(navFragment) }
             }
         }
     }
