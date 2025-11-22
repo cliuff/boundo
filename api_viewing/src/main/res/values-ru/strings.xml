@@ -111,6 +111,8 @@
     <string name="av_settings_diff">История изменений записей приложений</string>
     <string name="av_settings_diff_title">История различий</string>
     <string name="av_settings_diff_minimized">%d пустых записей свернуто. Нажмите, чтобы показать их.</string>
+    <string name="av_settings_text_process">Запрос выбранного текста в Meta App</string>
+    <string name="av_settings_text_process_desc">Включить общесистемную интеграцию в контекстное меню текстового поля</string>
     <string name="av_tag_system_core">Основное системное приложение</string>
     <string name="av_tag_system_module">Компонент модульной системы</string>
     <string name="av_tag_type_overlay">Наложение ресурсов времени выполнения (RRO)</string>
@@ -164,6 +166,7 @@
     <string name="org_coll_option_del">Удалить коллекцию</string>
     <string name="org_coll_del_title">Удалить коллекцию</string>
     <string name="org_coll_installed_sum">Сводка установленных приложений (%s)</string>
+    <string name="org_coll_groups_sum">%d групп | %d записей приложений</string>
     <string name="org_coll_def_coll">Безымянная коллекция</string>
     <string name="org_coll_def_group">Безымянная группа</string>
     <string name="org_coll_cat_coll">Категории</string>
@@ -186,4 +189,5 @@
     <string name="home_nav_item_updates">Главная</string>
     <string name="home_nav_item_list">Приложения</string>
     <string name="home_nav_item_org">Библиотека</string>
+    <string name="home_nav_item_conn">Подключить</string>
 </resources>

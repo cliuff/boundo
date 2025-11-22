@@ -111,6 +111,8 @@
     <string name="av_settings_diff">अॅप रेकॉर्ड भिन्न इतिहास</string>
     <string name="av_settings_diff_title">भिन्न इतिहास</string>
     <string name="av_settings_diff_minimized">%d रिकामे रेकॉर्ड कमी केले, ते दाखवण्यासाठी टॅप करा</string>
+    <string name="av_settings_text_process">Meta App मध्ये निवडलेला मजकूर क्वेरी करा</string>
+    <string name="av_settings_text_process_desc">टेक्स्ट फील्ड संदर्भ मेनूमध्ये प्रणाली-व्यापी एकीकरण सक्षम करा</string>
     <string name="av_tag_system_core">सिस्टम कोर अॅप</string>
     <string name="av_tag_system_module">मॉड्यूलर सिस्टम घटक</string>
     <string name="av_tag_type_overlay">रनटाइम संसाधन आच्छादन (RRO)</string>
@@ -164,6 +166,7 @@
     <string name="org_coll_option_del">संग्रह हटवा</string>
     <string name="org_coll_del_title">संग्रह हटवा</string>
     <string name="org_coll_installed_sum">स्थापित केलेल्या ॲप्सचा सारांश (%s)</string>
+    <string name="org_coll_groups_sum">%d गट | %d ॲप रेकॉर्ड</string>
     <string name="org_coll_def_coll">अनामित संग्रह</string>
     <string name="org_coll_def_group">अनामित गट</string>
     <string name="org_coll_cat_coll">श्रेणी</string>
@@ -186,4 +189,5 @@
     <string name="home_nav_item_updates">होम</string>
     <string name="home_nav_item_list">अ‍ॅप्स</string>
     <string name="home_nav_item_org">लायब्ररी</string>
+    <string name="home_nav_item_conn">कनेक्ट करा</string>
 </resources>

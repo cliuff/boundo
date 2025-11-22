@@ -127,6 +127,8 @@
     <string name="av_settings_diff">应用列表维护记录</string>
     <string name="av_settings_diff_title">维护记录</string>
     <string name="av_settings_diff_minimized">%d条空记录已收起，点击展示</string>
+    <string name="av_settings_text_process">在元应用中查询选中的文本</string>
+    <string name="av_settings_text_process_desc">集成进系统级文本输入框上下文菜单</string>
     <string name="av_tag_system_core">系统核心应用</string>
     <string name="av_tag_system_module">模块化系统组件</string>
     <string name="av_tag_type_overlay">运行时资源叠加层 (RRO)</string>
@@ -184,6 +186,7 @@
     <string name="org_coll_option_del">删除应用集</string>
     <string name="org_coll_del_title">删除应用集</string>
     <string name="org_coll_installed_sum">已安装应用概览 (%s)</string>
+    <string name="org_coll_groups_sum">%d个分组 | %d条应用记录</string>
     <string name="org_coll_def_coll">未名应用集</string>
     <string name="org_coll_def_group">未名分组</string>
     <string name="org_coll_cat_coll">应用类别</string>
@@ -206,4 +209,5 @@
     <string name="home_nav_item_updates">首页动态</string>
     <string name="home_nav_item_list">所有应用</string>
     <string name="home_nav_item_org">应用库</string>
+    <string name="home_nav_item_conn">快捷连接</string>
 </resources>

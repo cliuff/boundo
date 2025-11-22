@@ -111,6 +111,8 @@
     <string name="av_settings_diff">앱 레코드 비교 기록</string>
     <string name="av_settings_diff_title">비교 기록</string>
     <string name="av_settings_diff_minimized">%d개의 빈 레코드가 최소화되었습니다. 탭하여 표시하세요.</string>
+    <string name="av_settings_text_process">Meta App에서 선택한 텍스트 쿼리</string>
+    <string name="av_settings_text_process_desc">텍스트 필드 컨텍스트 메뉴에 시스템 전체 통합 활성화</string>
     <string name="av_tag_system_core">시스템 코어 앱</string>
     <string name="av_tag_system_module">모듈식 시스템 구성요소</string>
     <string name="av_tag_type_overlay">런타임 리소스 오버레이(RRO)</string>
@@ -164,6 +166,7 @@
     <string name="org_coll_option_del">컬렉션 삭제</string>
     <string name="org_coll_del_title">컬렉션 삭제</string>
     <string name="org_coll_installed_sum">설치된 앱 요약 (%s)</string>
+    <string name="org_coll_groups_sum">%d개 그룹 | %d개 앱 기록</string>
     <string name="org_coll_def_coll">이름 없는 컬렉션</string>
     <string name="org_coll_def_group">이름 없는 그룹</string>
     <string name="org_coll_cat_coll">카테고리</string>
@@ -186,4 +189,5 @@
     <string name="home_nav_item_updates">홈</string>
     <string name="home_nav_item_list">앱</string>
     <string name="home_nav_item_org">라이브러리</string>
+    <string name="home_nav_item_conn">연결</string>
 </resources>

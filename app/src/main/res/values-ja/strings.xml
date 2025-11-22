@@ -152,13 +152,15 @@
     <string name="unit_desc_pin">修繕</string>
     <string name="sdk_search_hint"><font size="12">アプリケーション名パッケージ名APIレベルAndroidバージョン</font></string>
     <string name="advice_license_details">Boundoの誕生は、オープンソースソフトウェアのサポートに依存しています</string>
-    <string name="activityTextProcessingApp">Bndアプリを表示</string>
     <string name="unit_desc_im">•解像度の変更\n•形式png jpg webp heifの変更\n•画像のぼかし</string>
     <string name="immortalMessage">ああ！\n少し問題がありました。\nしかし、犯人は捕まった！\n詳細な分析のためにログを送ってください！</string>
     <string name="textAsk4Notification">通知の表示を許可してください。最高のエクスペリエンスを提供するには、トースト通知を表示する必要があります。 一部の操作手順、プロンプト情報、提案情報、操作成功のリマインダー、およびエラーメッセージのリマインダーを表示するために使用します。 通知権限の付与を拒否すると、アプリで混乱する可能性があります。</string>
     <string name="instantManual">デスクトップのアプリケーションアイコンを長押しすると、「App Shortcuts」が表示されます。\n通知バーをプルダウンすると、通知領域の上にある設定スイッチが「クイック設定タイル」になります。</string>
     <string name="unit_desc_av">•デバイス上のすべてのアプリケーションとインストールパッケージのターゲットSDKバージョンと最小SDKバージョンの表示\n•アプリケーションがアダプティブアイコンをサポートしているかどうかの確認\n•アプリケーションAPI統計\n•インストールパッケージの抽出、アイコンの抽出\n•パッケージの詳細情報の表示、署名情報の表示</string>
     <string name="prefExteriorForceDarkDescDetail">Force Darkは、開発者がダークモードをすばやく実装できるように開発者向けに設計された機能です。 アプリケーションのforceDarkAllowed値をtrueに設定すると、アプリケーションは自動的にダークモードを実装できます。 開発者はさらに、ダークモードを改善するためにいくつかのインターフェイスをさらに調整し、このインターフェイスのforceDarkAllowed値をfalseに設定する必要があります。 Override force-darkをオンにすると、システムはforceDarkAllowed値を無視し、それ以外の場合は完全なダークモードが機能しなくなります。</string>
+    <string name="conn_content_title">接続</string>
+    <string name="conn_dev_controls">デバイス コントロールからのクイック アクセス</string>
+    <string name="conn_dev_controls_desc">デバイス コントロール パネルのシステム統合</string>
     <string name="versatile_device_controls_at_hint_on">スライドして調整</string>
     <string name="text_access_denied">アクセスが拒否されました</string>
     <string name="versatile_device_controls_at_hint_off">クリックして開始</string>

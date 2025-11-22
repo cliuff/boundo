@@ -111,6 +111,8 @@
     <string name="av_settings_diff">ประวัติความแตกต่างของบันทึกแอป</string>
     <string name="av_settings_diff_title">ประวัติความแตกต่าง</string>
     <string name="av_settings_diff_minimized">ย่อ %d บันทึกว่าง แตะเพื่อแสดง</string>
+    <string name="av_settings_text_process">สอบถามข้อความที่เลือกใน Meta App</string>
+    <string name="av_settings_text_process_desc">เปิดใช้งานการรวมระบบทั่วทั้งระบบในเมนูบริบทของช่องข้อความ</string>
     <string name="av_tag_system_core">แอปหลักของระบบ</string>
     <string name="av_tag_system_module">ส่วนประกอบของระบบโมดูลาร์</string>
     <string name="av_tag_type_overlay">การซ้อนทับทรัพยากรรันไทม์ (RRO)</string>
@@ -164,6 +166,7 @@
     <string name="org_coll_option_del">ลบคอลเลกชัน</string>
     <string name="org_coll_del_title">ลบคอลเลกชัน</string>
     <string name="org_coll_installed_sum">สรุปแอปที่ติดตั้ง (%s)</string>
+    <string name="org_coll_groups_sum">%d กลุ่ม | %d รายการบันทึกแอป</string>
     <string name="org_coll_def_coll">คอลเลกชันที่ไม่มีชื่อ</string>
     <string name="org_coll_def_group">กลุ่มที่ไม่มีชื่อ</string>
     <string name="org_coll_cat_coll">หมวดหมู่</string>
@@ -186,4 +189,5 @@
     <string name="home_nav_item_updates">หน้าแรก</string>
     <string name="home_nav_item_list">แอป</string>
     <string name="home_nav_item_org">คลัง</string>
+    <string name="home_nav_item_conn">เชื่อมต่อ</string>
 </resources>

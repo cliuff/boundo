@@ -77,7 +77,6 @@
     <string name="menuApiSortApiTime">Baru-baru ini diperbarui</string>
     <string name="apiSdkTarget">SDK Target</string>
     <string name="apiSdkMin">SDK Minimum</string>
-    <string name="activityTextProcessingApp">Lihat aplikasi Bnd</string>
     <string name="res_invalid_input">Masukan tidak valid</string>
     <string name="text_sort">Menyortir</string>
     <string name="text_refresh">Menyegarkan</string>
@@ -161,6 +160,9 @@
     <string name="unit_desc_pin">Pin</string>
     <string name="app_device_controls">Kontrol Batas</string>
     <string name="access_sys_usage">Izinkan Bondo mengakses data penggunaan</string>
+    <string name="conn_content_title">Koneksi</string>
+    <string name="conn_dev_controls">Akses cepat dari kontrol perangkat</string>
+    <string name="conn_dev_controls_desc">Integrasi sistem panel kontrol perangkat</string>
     <string name="text_access_denied">Akses ditolak</string>
     <string name="versatile_device_controls_at_hint_on">Geser untuk menyesuaikan</string>
     <string name="versatile_device_controls_at_hint_off">Ketuk untuk memulai</string>

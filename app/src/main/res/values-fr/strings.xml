@@ -77,7 +77,6 @@
     <string name="menuApiSortApiTime">Récemment mis à jour</string>
     <string name="apiSdkTarget">SDK cible</string>
     <string name="apiSdkMin">SDK minimum</string>
-    <string name="activityTextProcessingApp">Voir les applications Bnd</string>
     <string name="res_invalid_input">Entrée invalide</string>
     <string name="text_sort">Trier</string>
     <string name="text_refresh">Rafraîchir</string>
@@ -158,6 +157,9 @@
     <string name="unit_desc_tw">• Faites en sorte que votre papier peint soit conforme au thème sombre d\'Android 10 en appliquant automatiquement un papier peint de couleur sombre</string>
     <string name="unit_desc_at">• Arrêter la lecture audio</string>
     <string name="unit_desc_pin">Épingle</string>
+    <string name="conn_content_title">Connexions</string>
+    <string name="conn_dev_controls">Accès rapide depuis les commandes de l\'appareil</string>
+    <string name="conn_dev_controls_desc">Intégration au système du panneau des commandes de l\'appareil</string>
     <string name="text_access_denied">Accès refusé</string>
     <string name="versatile_device_controls_at_hint_on">Balayez pour ajuster</string>
     <string name="versatile_device_controls_at_hint_off">Appuyez pour commencer</string>

@@ -77,7 +77,6 @@
     <string name="menuApiSortApiTime">ਹਾਲ ਹੀ ਵਿੱਚ ਅੱਪਡੇਟ ਕੀਤਾ ਗਿਆ</string>
     <string name="apiSdkTarget">ਟੀਚਾ SDK</string>
     <string name="apiSdkMin">ਨਿਊਨਤਮ SDK</string>
-    <string name="activityTextProcessingApp">Bnd ਐਪਾਂ ਦੇਖੋ</string>
     <string name="res_invalid_input">ਅਵੈਧ ਇਨਪੁਟ</string>
     <string name="text_sort">ਲੜੀਬੱਧ</string>
     <string name="text_refresh">ਤਾਜ਼ਾ ਕਰੋ</string>
@@ -161,6 +160,9 @@
     <string name="unit_desc_pin">ਪਿੰਨ</string>
     <string name="app_device_controls">ਬਾਉਂਡੋ ਨਿਯੰਤਰਣ</string>
     <string name="access_sys_usage">Boundo ਨੂੰ ਵਰਤੋਂ ਡੇਟਾ ਤੱਕ ਪਹੁੰਚ ਕਰਨ ਦਿਓ</string>
+    <string name="conn_content_title">ਕਨੈਕਸ਼ਨਾਂ</string>
+    <string name="conn_dev_controls">ਡਿਵਾਈਸ ਕੰਟਰੋਲਾਂ ਤੋਂ ਤੁਰੰਤ ਪਹੁੰਚ</string>
+    <string name="conn_dev_controls_desc">ਡਿਵਾਈਸ ਕੰਟਰੋਲ ਪੈਨਲ ਦਾ ਸਿਸਟਮ ਏਕੀਕਰਨ</string>
     <string name="text_access_denied">ਐਕਸੇਸ ਡਿਨਾਇਡ</string>
     <string name="versatile_device_controls_at_hint_on">ਵਿਵਸਥਿਤ ਕਰਨ ਲਈ ਸਵਾਈਪ ਕਰੋ</string>
     <string name="versatile_device_controls_at_hint_off">ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਟੈਪ ਕਰੋ</string>

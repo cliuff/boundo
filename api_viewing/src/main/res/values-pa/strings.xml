@@ -111,6 +111,8 @@
     <string name="av_settings_diff">ਐਪ ਰਿਕਾਰਡ ਅੰਤਰ ਇਤਿਹਾਸ</string>
     <string name="av_settings_diff_title">ਵੱਖਰਾ ਇਤਿਹਾਸ</string>
     <string name="av_settings_diff_minimized">%d ਖਾਲੀ ਰਿਕਾਰਡ ਘੱਟ ਕੀਤੇ ਗਏ, ਉਹਨਾਂ ਨੂੰ ਦਿਖਾਉਣ ਲਈ ਟੈਪ ਕਰੋ</string>
+    <string name="av_settings_text_process">Meta App ਵਿੱਚ ਚੁਣੇ ਗਏ ਟੈਕਸਟ ਨੂੰ ਪੁੱਛੋ</string>
+    <string name="av_settings_text_process_desc">ਟੈਕਸਟ ਖੇਤਰ ਸੰਦਰਭ ਮੀਨੂ ਵਿੱਚ ਸਿਸਟਮ-ਵਿਆਪਕ ਏਕੀਕਰਨ ਸਮਰੱਥ ਕਰੋ</string>
     <string name="av_tag_system_core">ਸਿਸਟਮ ਕੋਰ ਐਪ</string>
     <string name="av_tag_system_module">ਮਾਡਿਊਲਰ ਸਿਸਟਮ ਕੰਪੋਨੈਂਟ</string>
     <string name="av_tag_type_overlay">ਰਨਟਾਈਮ ਸਰੋਤ ਓਵਰਲੇ (RRO)</string>
@@ -164,6 +166,7 @@
     <string name="org_coll_option_del">ਸੰਗ੍ਰਹਿ ਮਿਟਾਓ</string>
     <string name="org_coll_del_title">ਸੰਗ੍ਰਹਿ ਮਿਟਾਓ</string>
     <string name="org_coll_installed_sum">ਇੰਸਟਾਲ ਕੀਤੇ ਐਪਸ ਦਾ ਸਾਰ (%s)</string>
+    <string name="org_coll_groups_sum">%d ਗਰੁੱਪ | %d ਐਪ ਰਿਕਾਰਡ</string>
     <string name="org_coll_def_coll">ਬਿਨਾਂ ਨਾਮ ਵਾਲਾ ਸੰਗ੍ਰਹਿ</string>
     <string name="org_coll_def_group">ਬਿਨਾਂ ਨਾਮ ਵਾਲਾ ਸਮੂਹ</string>
     <string name="org_coll_cat_coll">ਸ਼੍ਰੇਣੀਆਂ</string>
@@ -186,4 +189,5 @@
     <string name="home_nav_item_updates">ਹੋਮ</string>
     <string name="home_nav_item_list">ਐਪਸ</string>
     <string name="home_nav_item_org">ਲਾਇਬ੍ਰੇਰੀ</string>
+    <string name="home_nav_item_conn">ਕਨੈਕਟ ਕਰੋ</string>
 </resources>

@@ -111,6 +111,8 @@
     <string name="av_settings_diff">Riwayat perbedaan catatan aplikasi</string>
     <string name="av_settings_diff_title">Sejarah Perbedaan</string>
     <string name="av_settings_diff_minimized">%d catatan kosong diminimalkan, ketuk untuk menampilkannya</string>
+    <string name="av_settings_text_process">Kueri teks yang dipilih di Meta App</string>
+    <string name="av_settings_text_process_desc">Aktifkan integrasi seluruh sistem ke dalam menu konteks kolom teks</string>
     <string name="av_tag_system_core">Aplikasi inti sistem</string>
     <string name="av_tag_system_module">Komponen sistem modular</string>
     <string name="av_tag_type_overlay">Hamparan sumber daya runtime (RRO)</string>
@@ -164,6 +166,7 @@
     <string name="org_coll_option_del">Hapus koleksi</string>
     <string name="org_coll_del_title">Hapus Koleksi</string>
     <string name="org_coll_installed_sum">Ringkasan aplikasi terinstal (%s)</string>
+    <string name="org_coll_groups_sum">%d grup | %d catatan aplikasi</string>
     <string name="org_coll_def_coll">Koleksi Tanpa Nama</string>
     <string name="org_coll_def_group">Grup Tanpa Nama</string>
     <string name="org_coll_cat_coll">Kategori</string>
@@ -186,4 +189,5 @@
     <string name="home_nav_item_updates">Beranda</string>
     <string name="home_nav_item_list">Aplikasi</string>
     <string name="home_nav_item_org">Pustaka</string>
+    <string name="home_nav_item_conn">Hubungkan</string>
 </resources>

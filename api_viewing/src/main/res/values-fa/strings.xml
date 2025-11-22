@@ -138,6 +138,8 @@
     <string name="av_settings_diff">سابقه تفاوت رکورد برنامه</string>
     <string name="av_settings_diff_title">تاریخچه تفاوت</string>
     <string name="av_settings_diff_minimized">%d رکورد خالی به حداقل رسید، برای نمایش آنها ضربه بزنید</string>
+    <string name="av_settings_text_process">جستجوی متن انتخاب شده در Meta App</string>
+    <string name="av_settings_text_process_desc">فعال‌سازی یکپارچه‌سازی سیستمی در منوی زمینه‌ای فیلد متنی</string>
     <string name="av_tag_system_core">برنامه هسته سیستم</string>
     <string name="av_tag_system_module">جزء سیستم مدولار</string>
     <string name="av_tag_type_overlay">پوشش منابع زمان اجرا (RRO)</string>
@@ -191,6 +193,7 @@
     <string name="org_coll_option_del">حذف مجموعه</string>
     <string name="org_coll_del_title">حذف مجموعه</string>
     <string name="org_coll_installed_sum">خلاصه برنامه‌های نصب‌شده (%s)</string>
+    <string name="org_coll_groups_sum">%d گروه | %d رکورد برنامه</string>
     <string name="org_coll_def_coll">مجموعه بی‌نام</string>
     <string name="org_coll_def_group">گروه بی‌نام</string>
     <string name="org_coll_cat_coll">دسته‌ها</string>
@@ -213,4 +216,5 @@
     <string name="home_nav_item_updates">خانه</string>
     <string name="home_nav_item_list">برنامه‌ها</string>
     <string name="home_nav_item_org">کتابخانه</string>
+    <string name="home_nav_item_conn">اتصال</string>
 </resources>

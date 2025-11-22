@@ -139,6 +139,8 @@
     <string name="av_settings_diff">سجل فرق التطبيق التاريخ</string>
     <string name="av_settings_diff_title">تاريخ الفرق</string>
     <string name="av_settings_diff_minimized">تم تصغير٪ d سجل فارغ ، انقر لإظهارها</string>
+    <string name="av_settings_text_process">الاستعلام عن النص المحدد في Meta App</string>
+    <string name="av_settings_text_process_desc">تمكين التكامل على مستوى النظام في قائمة السياق لحقل النص</string>
     <string name="av_tag_system_core">تطبيق النظام الأساسي</string>
     <string name="av_tag_system_module">مكون النظام المعياري</string>
     <string name="av_tag_type_overlay">تراكب موارد وقت التشغيل (RRO)</string>
@@ -192,6 +194,7 @@
     <string name="org_coll_option_del">حذف المجموعة</string>
     <string name="org_coll_del_title">حذف المجموعة</string>
     <string name="org_coll_installed_sum">ملخص التطبيقات المثبتة (%s)</string>
+    <string name="org_coll_groups_sum">%d مجموعات | %d سجل تطبيقات</string>
     <string name="org_coll_def_coll">مجموعة بدون اسم</string>
     <string name="org_coll_def_group">مجموعة بدون اسم</string>
     <string name="org_coll_cat_coll">الفئات</string>
@@ -214,4 +217,5 @@
     <string name="home_nav_item_updates">الصفحة الرئيسية</string>
     <string name="home_nav_item_list">التطبيقات</string>
     <string name="home_nav_item_org">المكتبة</string>
+    <string name="home_nav_item_conn">اتصال</string>
 </resources>

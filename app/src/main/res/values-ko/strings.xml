@@ -152,13 +152,15 @@
     <string name="unit_desc_pin">결정된</string>
     <string name="sdk_search_hint"><font size="12">애플리케이션 이름 패키지 이름 API 레벨 Android 버전</font></string>
     <string name="advice_license_details">Boundo의 탄생은 오픈 소스 소프트웨어의 지원에 의존합니다</string>
-    <string name="activityTextProcessingApp">Bnd 앱보기</string>
     <string name="unit_desc_im">• 해상도 수정\n• png jpg webp heif 형식 수정\n• 사진 흐림</string>
     <string name="immortalMessage">오!\n약간의 문제가있었습니다.\n그러나 범인은 잡혔다!\n추가 분석을 위해 로그를 보내주십시오!</string>
     <string name="textAsk4Notification">알림을 표시 할 수있는 권한을 부여하십시오. 최상의 품질을 제공하려면 토스트 알림을 표시해야합니다. 우리는 몇 가지 작동 지침, 프롬프트 정보, 제안 정보, 작동 성공 알림 및 가끔 오류 메시지 알림을 표시하는 데 사용합니다. 알림 권한 부여를 거부하면 앱이 혼동 될 수 있습니다.</string>
     <string name="instantManual">바탕 화면에서 응용 프로그램 아이콘을 길게 누르면 \"앱 바로 가기\"가 나타납니다.\n알림 표시 줄을 아래로 내리면 알림 영역 위의 설정 스위치는 \"빠른 설정 타일\"입니다.</string>
     <string name="unit_desc_av">• 장치에서 모든 응용 프로그램 및 설치 패키지의 대상 SDK 버전 및 최소 SDK 버전을 봅니다.\n• 응용 프로그램이 적응 형 아이콘을 지원하는지 확인합니다.\n• 응용 프로그램 API 통계\n• 설치 패키지 추출, 아이콘 추출\n• 패키지 세부 정보보기, 서명 정보보기</string>
     <string name="prefExteriorForceDarkDescDetail">Force Dark는 개발자가 개발자가 어두운 모드를 빠르게 구현할 수 있도록 설계된 기능입니다. 응용 프로그램의 forceDarkAllowed 값을 true로 설정하면 응용 프로그램이 자동으로 다크 모드를 구현할 수 있습니다. 개발자는 여전히 어두운 모드를 개선하기 위해 일부 인터페이스를 추가로 조정하고이 인터페이스의 forceDarkAllowed 값을 false로 설정해야합니다. 강제 어둡게 무시를 설정하면 시스템이 forceDarkAllowed 값을 무시하여 완벽한 어두운 모드가 중단됩니다.</string>
+    <string name="conn_content_title">연결</string>
+    <string name="conn_dev_controls">기기 컨트롤에서 빠른 액세스</string>
+    <string name="conn_dev_controls_desc">기기 컨트롤 패널의 시스템 통합</string>
     <string name="versatile_device_controls_at_hint_on">조정하려면 슬라이드하세요.</string>
     <string name="text_access_denied">접근 불가</string>
     <string name="versatile_device_controls_at_hint_off">시작하려면 클릭하세요</string>

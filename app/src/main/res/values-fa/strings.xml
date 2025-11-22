@@ -79,7 +79,6 @@
     <string name="menuApiSortApiTime">به تازگی به روز شده است</string>
     <string name="apiSdkTarget">هدف SDK&#8207;</string>
     <string name="apiSdkMin">حداقل SDK&#8207;</string>
-    <string name="activityTextProcessingApp">مشاهده برنامه های Bnd</string>
     <string name="res_invalid_input">ورودی نامعتبر</string>
     <string name="text_sort">مرتب سازی</string>
     <string name="text_refresh">تازه کردن</string>
@@ -163,6 +162,9 @@
     <string name="unit_desc_pin">سنجاق</string>
     <string name="app_device_controls">کنترل های Boundo</string>
     <string name="access_sys_usage">به Boundo اجازه دسترسی به داده‌های استفاده را بدهید</string>
+    <string name="conn_content_title">اتصالات</string>
+    <string name="conn_dev_controls">دسترسی سریع از کنترل‌های دستگاه</string>
+    <string name="conn_dev_controls_desc">یکپارچه‌سازی سیستمی پنل کنترل‌های دستگاه</string>
     <string name="text_access_denied">دسترسی رد شد</string>
     <string name="versatile_device_controls_at_hint_on">برای تنظیم، انگشت خود را بکشید</string>
     <string name="versatile_device_controls_at_hint_off">برای شروع ضربه بزنید</string>

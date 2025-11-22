@@ -25,7 +25,6 @@
     <string name="Settings_Language_Button_Cancel">Cancelar</string>
     <string name="Settings_Language_Dialog_Title">Idiomas</string>
     <string name="activityApkSharing">Comprobar API</string>
-    <string name="activityTextProcessingApp">Ver apps de Bnd</string>
     <string name="activity_av_search">API de la app</string>
     <string name="advice_license">Licencias de código abierto</string>
     <string name="advice_license_details">Detalles de la licencia para software abierto que ayuda a Boundo a tomar forma</string>
@@ -159,6 +158,9 @@
     <string name="unit_desc_available">Disponible</string>
     <string name="unit_desc_unavailable">Indisponible</string>
     <string name="unit_desc_pin">prender con alfileres</string>
+    <string name="conn_content_title">Conexiones</string>
+    <string name="conn_dev_controls">Acceso rápido desde los controles del dispositivo</string>
+    <string name="conn_dev_controls_desc">Integración en el sistema del panel de controles del dispositivo</string>
     <string name="text_access_denied">Acceso denegado</string>
     <string name="versatile_device_controls_at_hint_on">Desliza para ajustar</string>
     <string name="versatile_device_controls_at_hint_off">Toca para empezar</string>

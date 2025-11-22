@@ -111,6 +111,8 @@
     <string name="av_settings_diff">অ্যাপ রেকর্ডের পার্থক্য ইতিহাস</string>
     <string name="av_settings_diff_title">ভিন্ন ইতিহাস</string>
     <string name="av_settings_diff_minimized">%dটি খালি রেকর্ড ছোট করা হয়েছে, সেগুলি দেখানোর জন্য আলতো চাপুন৷</string>
+    <string name="av_settings_text_process">Meta App-এ নির্বাচিত টেক্সট কোয়েরি করুন</string>
+    <string name="av_settings_text_process_desc">টেক্সট ফিল্ডের কনটেক্সট মেনুতে সিস্টেম-ব্যাপী ইন্টিগ্রেশন সক্ষম করুন</string>
     <string name="av_tag_system_core">সিস্টেম কোর অ্যাপ</string>
     <string name="av_tag_system_module">মডুলার সিস্টেম উপাদান</string>
     <string name="av_tag_type_overlay">রানটাইম রিসোর্স ওভারলে (RRO)</string>
@@ -164,6 +166,7 @@
     <string name="org_coll_option_del">সংগ্রহ মুছে ফেলুন</string>
     <string name="org_coll_del_title">সংগ্রহ মুছুন</string>
     <string name="org_coll_installed_sum">ইনস্টল করা অ্যাপ্লিকেশানগুলির সারসংক্ষেপ (%s)</string>
+    <string name="org_coll_groups_sum">%d গ্রুপ | %d অ্যাপ রেকর্ড</string>
     <string name="org_coll_def_coll">নামবিহীন সংগ্রহ</string>
     <string name="org_coll_def_group">নামবিহীন দল</string>
     <string name="org_coll_cat_coll">বিভাগ</string>
@@ -186,4 +189,5 @@
     <string name="home_nav_item_updates">হোম</string>
     <string name="home_nav_item_list">অ্যাপস</string>
     <string name="home_nav_item_org">লাইব্রেরি</string>
+    <string name="home_nav_item_conn">সংযোগ</string>
 </resources>

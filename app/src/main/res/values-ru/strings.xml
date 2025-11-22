@@ -45,7 +45,6 @@
     <string name="Main_TextView_Launcher">Мгновенное</string>
     <string name="Settings_LanguagePicker_Auto">Следуйте системе</string>
     <string name="activityApkSharing">Проверьте API</string>
-    <string name="activityTextProcessingApp">Посмотреть Bnd приложения</string>
     <string name="activity_av_search">API приложения</string>
     <string name="advice_license">Лицензии с открытым исходным кодом</string>
     <string name="advice_license_details">Сведения о лицензии для открытого программного обеспечения, которое помогает Boundo прийти в форму</string>
@@ -159,6 +158,9 @@
     <string name="unit_desc_available">Доступный</string>
     <string name="unit_desc_unavailable">Недоступен</string>
     <string name="unit_desc_pin">приколоть</string>
+    <string name="conn_content_title">Подключения</string>
+    <string name="conn_dev_controls">Быстрый доступ из элементов управления устройством</string>
+    <string name="conn_dev_controls_desc">Системная интеграция панели элементов управления устройством</string>
     <string name="text_access_denied">В доступе отказано</string>
     <string name="versatile_device_controls_at_hint_on">Проведите, чтобы настроить</string>
     <string name="versatile_device_controls_at_hint_off">Нажмите, чтобы начать</string>

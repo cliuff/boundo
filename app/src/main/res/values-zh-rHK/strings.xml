@@ -101,7 +101,6 @@
     <string name="apiInfoSubAiDes">自適應圖標可自由變換為任意形狀</string>
     <string name="textBugLog">已記錄下錯誤</string>
     <string name="tileColorful">莫黑屏</string>
-    <string name="activityTextProcessingApp">查看斑朵應用</string>
     <string name="res_invalid_input">無效的輸入</string>
     <string name="text_sort">排序</string>
     <string name="textShareApk">與他人分享該應用的安裝包</string>
@@ -161,6 +160,10 @@
     <string name="instantManual">在桌面上長按應用圖標以調出“應用 Shortcuts”。\n下拉通知欄，通知區域上面的那些設置開關便是“快捷設置磁貼”。</string>
     <string name="unit_desc_av">• 查看設備上所有應用及安裝包的目標 SDK 版本和最低 SDK 版本\n• 查看應用是否支持自適應圖標\n• 應用 API 統計\n• 安裝包提取、圖標提取\n• 包詳細信息查看、簽名信息查看</string>
     <string name="prefExteriorForceDarkDescDetail">Force Dark 是專為開發者設計的功能，能夠使開發者快速地實現黑暗模式。將應用的 forceDarkAllowed 值設為 true，應用便能自動實現黑暗模式。開發者仍需進一步調整部分界面以完善黑暗模式，並將這部分界面的 forceDarkAllowed 值設為 false。開啟 Override force-dark 會使系統忽視 forceDarkAllowed 值，致使本來完善的黑暗模式變得破爛。</string>
+    <string name="app_activity_text_process">Meta App</string>
+    <string name="conn_content_title">連線</string>
+    <string name="conn_dev_controls">從裝置控制項快速存取</string>
+    <string name="conn_dev_controls_desc">裝置控制項面板的系統整合</string>
     <string name="versatile_device_controls_at_hint_on">滑動調整</string>
     <string name="text_access_denied">訪問被拒</string>
     <string name="versatile_device_controls_at_hint_off">點擊開始</string>

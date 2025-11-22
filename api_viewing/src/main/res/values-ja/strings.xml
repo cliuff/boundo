@@ -111,6 +111,8 @@
     <string name="av_settings_diff">アプリの差分履歴を記録する</string>
     <string name="av_settings_diff_title">差分履歴</string>
     <string name="av_settings_diff_minimized">%d 個の空のレコードが最小化されました。タップして表示します</string>
+    <string name="av_settings_text_process">Meta App で選択したテキストを照会</string>
+    <string name="av_settings_text_process_desc">テキストフィールドのコンテキストメニューへのシステム全体にわたる統合を有効にする</string>
     <string name="av_tag_system_core">システムコアアプリ</string>
     <string name="av_tag_system_module">モジュール式システムコンポーネント</string>
     <string name="av_tag_type_overlay">ランタイム リソース オーバーレイ (RRO)</string>
@@ -164,6 +166,7 @@
     <string name="org_coll_option_del">コレクションを削除</string>
     <string name="org_coll_del_title">コレクションの削除</string>
     <string name="org_coll_installed_sum">インストール済みアプリの概要 (%s)</string>
+    <string name="org_coll_groups_sum">%d グループ | %d アプリの記録</string>
     <string name="org_coll_def_coll">名前のないコレクション</string>
     <string name="org_coll_def_group">名前のないグループ</string>
     <string name="org_coll_cat_coll">カテゴリ</string>
@@ -186,4 +189,5 @@
     <string name="home_nav_item_updates">ホーム</string>
     <string name="home_nav_item_list">アプリ</string>
     <string name="home_nav_item_org">ライブラリ</string>
+    <string name="home_nav_item_conn">接続</string>
 </resources>

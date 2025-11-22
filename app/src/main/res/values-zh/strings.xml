@@ -79,7 +79,6 @@
     <string name="apiSdkTarget">目标 SDK</string>
     <string name="apiSdkMin">最低 SDK</string>
     <string name="apiDisplayAPK">设备安装包</string>
-    <string name="activityTextProcessingApp">查看斑朵应用</string>
     <string name="res_invalid_input">无效的输入</string>
     <string name="text_refresh">刷新</string>
     <string name="text_sort">排序</string>
@@ -161,6 +160,10 @@
     <string name="unit_desc_available">可用</string>
     <string name="unit_desc_unavailable">不可用</string>
     <string name="unit_desc_pin">固定</string>
+    <string name="app_activity_text_process">元应用</string>
+    <string name="conn_content_title">连接</string>
+    <string name="conn_dev_controls">从控制中心快捷访问</string>
+    <string name="conn_dev_controls_desc">集成进系统级设备控制中心</string>
     <string name="text_access_denied">访问被拒</string>
     <string name="versatile_device_controls_at_hint_on">滑动调整</string>
     <string name="versatile_device_controls_at_hint_off">点击开始</string>

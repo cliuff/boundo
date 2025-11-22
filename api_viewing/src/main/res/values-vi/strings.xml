@@ -111,6 +111,8 @@
     <string name="av_settings_diff">Lịch sử khác của bản ghi ứng dụng</string>
     <string name="av_settings_diff_title">Lịch sử khác biệt</string>
     <string name="av_settings_diff_minimized">Đã thu nhỏ %d bản ghi trống, nhấn để hiển thị chúng</string>
+    <string name="av_settings_text_process">Truy vấn văn bản đã chọn trong Meta App</string>
+    <string name="av_settings_text_process_desc">Bật tính năng tích hợp toàn hệ thống vào menu ngữ cảnh của trường văn bản</string>
     <string name="av_tag_system_core">Ứng dụng lõi hệ thống</string>
     <string name="av_tag_system_module">Thành phần hệ thống mô-đun</string>
     <string name="av_tag_type_overlay">Lớp phủ tài nguyên thời gian chạy (RRO)</string>
@@ -164,6 +166,7 @@
     <string name="org_coll_option_del">Xóa bộ sưu tập</string>
     <string name="org_coll_del_title">Xóa bộ sưu tập</string>
     <string name="org_coll_installed_sum">Tóm tắt các ứng dụng đã cài đặt (%s)</string>
+    <string name="org_coll_groups_sum">%d nhóm | %d bản ghi ứng dụng</string>
     <string name="org_coll_def_coll">Bộ sưu tập không tên</string>
     <string name="org_coll_def_group">Nhóm không tên</string>
     <string name="org_coll_cat_coll">Danh mục</string>
@@ -186,4 +189,5 @@
     <string name="home_nav_item_updates">Trang chủ</string>
     <string name="home_nav_item_list">Ứng dụng</string>
     <string name="home_nav_item_org">Thư viện</string>
+    <string name="home_nav_item_conn">Kết nối</string>
 </resources>

@@ -126,6 +126,8 @@
     <string name="av_settings_diff">App record diff history</string>
     <string name="av_settings_diff_title">Diff History</string>
     <string name="av_settings_diff_minimized">%d empty records minimised, tap to show them</string>
+    <string name="av_settings_text_process">Query selected text in Meta App</string>
+    <string name="av_settings_text_process_desc">Enable system-wide integration into text field context menu</string>
     <string name="av_tag_system_core">System core app</string>
     <string name="av_tag_system_module">Modular system component</string>
     <string name="av_tag_type_overlay">Runtime resource overlay (RRO)</string>
@@ -183,6 +185,7 @@
     <string name="org_coll_option_del">Delete collection</string>
     <string name="org_coll_del_title">Delete Collection</string>
     <string name="org_coll_installed_sum">Installed apps summary (%s)</string>
+    <string name="org_coll_groups_sum">%d groups | %d app records</string>
     <string name="org_coll_def_coll">Unnamed Collection</string>
     <string name="org_coll_def_group">Unnamed Group</string>
     <string name="org_coll_cat_coll">Categories</string>
@@ -205,4 +208,5 @@
     <string name="home_nav_item_updates">Home</string>
     <string name="home_nav_item_list">Apps</string>
     <string name="home_nav_item_org">Library</string>
+    <string name="home_nav_item_conn">Connect</string>
 </resources>

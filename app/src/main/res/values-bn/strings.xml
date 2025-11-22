@@ -77,7 +77,6 @@
     <string name="menuApiSortApiTime">সম্প্রতি আপডেট করা হয়েছে</string>
     <string name="apiSdkTarget">টার্গেট SDK</string>
     <string name="apiSdkMin">ন্যূনতম SDK</string>
-    <string name="activityTextProcessingApp">Bnd অ্যাপস দেখুন</string>
     <string name="res_invalid_input">ভুল ইনপুট</string>
     <string name="text_sort">সাজান</string>
     <string name="text_refresh">রিফ্রেশ</string>
@@ -161,6 +160,9 @@
     <string name="unit_desc_pin">পিন</string>
     <string name="app_device_controls">বাউন্ডো কন্ট্রোল</string>
     <string name="access_sys_usage">বাউন্ডোকে ব্যবহারের ডেটা অ্যাক্সেস করার অনুমতি দিন</string>
+    <string name="conn_content_title">সংযোগগুলি</string>
+    <string name="conn_dev_controls">ডিভাইস নিয়ন্ত্রণ থেকে দ্রুত অ্যাক্সেস</string>
+    <string name="conn_dev_controls_desc">ডিভাইস নিয়ন্ত্রণ প্যানেলের সিস্টেম ইন্টিগ্রেশন</string>
     <string name="text_access_denied">অ্যাক্সেস অস্বীকার করা হয়েছে৷</string>
     <string name="versatile_device_controls_at_hint_on">সামঞ্জস্য করতে সোয়াইপ করুন</string>
     <string name="versatile_device_controls_at_hint_off">শুরু করতে আলতো চাপুন</string>

@@ -76,7 +76,6 @@
     <string name="menuApiSortApiTime">Kürzlich aktualisiert</string>
     <string name="apiSdkTarget">Ziel-SDK</string>
     <string name="apiSdkMin">Minimales SDK</string>
-    <string name="activityTextProcessingApp">Anzeigen von Bnd-Apps</string>
     <string name="res_invalid_input">Ungültige Eingabe</string>
     <string name="text_sort">Sortieren</string>
     <string name="text_refresh">Aktualisierung</string>
@@ -159,6 +158,9 @@
     <string name="unit_desc_at">• Stoppen Sie die Audiowiedergabe</string>
     <string name="unit_desc_av">• Überprüfen Sie die Android-API-Ebene aller Apps und Apks auf dem Gerät.\n• Überprüfen Sie die Unterstützung für adaptive Symbole aller Apps.\n• App-API-Statistiken.\n• Extraktion von APKs und Symbolen.\n• Paketdetails und Signaturdetails</string>
     <string name="unit_desc_im">• Ändern Sie die Auflösung.\n• Ändern Sie das Format: png jpg webp heif.\n• Bild verwischen</string>
+    <string name="conn_content_title">Verbindungen</string>
+    <string name="conn_dev_controls">Schneller Zugriff über die Gerätesteuerung</string>
+    <string name="conn_dev_controls_desc">Systemintegration des Gerätesteuerungsfelds</string>
     <string name="text_access_denied">Zugriff abgelehnt</string>
     <string name="versatile_device_controls_at_hint_on">Wischen Sie zum Anpassen</string>
     <string name="versatile_device_controls_at_hint_off">Tippe, um zu starten</string>

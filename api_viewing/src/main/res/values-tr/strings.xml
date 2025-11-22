@@ -111,6 +111,8 @@
     <string name="av_settings_diff">Uygulama kaydı fark geçmişi</string>
     <string name="av_settings_diff_title">Fark Geçmişi</string>
     <string name="av_settings_diff_minimized">%d boş kayıt simge durumuna küçültüldü, onları göstermek için dokunun</string>
+    <string name="av_settings_text_process">Meta App\'te seçili metni sorgula</string>
+    <string name="av_settings_text_process_desc">Metin alanı bağlam menüsüne sistem çapında entegrasyonu etkinleştir</string>
     <string name="av_tag_system_core">Sistem çekirdek uygulaması</string>
     <string name="av_tag_system_module">Modüler sistem bileşeni</string>
     <string name="av_tag_type_overlay">Çalışma zamanı kaynak yerleşimi (RRO)</string>
@@ -164,6 +166,7 @@
     <string name="org_coll_option_del">Koleksiyonu sil</string>
     <string name="org_coll_del_title">Koleksiyonu Sil</string>
     <string name="org_coll_installed_sum">Yüklü uygulamalar özeti (%s)</string>
+    <string name="org_coll_groups_sum">%d grup | %d uygulama kaydı</string>
     <string name="org_coll_def_coll">Adsız Koleksiyon</string>
     <string name="org_coll_def_group">Adsız Grup</string>
     <string name="org_coll_cat_coll">Kategoriler</string>
@@ -186,4 +189,5 @@
     <string name="home_nav_item_updates">Ana Sayfa</string>
     <string name="home_nav_item_list">Uygulamalar</string>
     <string name="home_nav_item_org">Kütüphane</string>
+    <string name="home_nav_item_conn">Bağlan</string>
 </resources>

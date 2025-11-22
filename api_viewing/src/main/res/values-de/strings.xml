@@ -111,6 +111,8 @@
     <string name="av_settings_diff">App-Datensatz-Differenzverlauf</string>
     <string name="av_settings_diff_title">Diff-Verlauf</string>
     <string name="av_settings_diff_minimized">%d leere Datensätze minimiert, tippen Sie, um sie anzuzeigen</string>
+    <string name="av_settings_text_process">Ausgewählten Text in Meta App abfragen</string>
+    <string name="av_settings_text_process_desc">Systemweite Integration in das Kontextmenü von Textfeldern aktivieren</string>
     <string name="av_tag_system_core">Systemkern-App</string>
     <string name="av_tag_system_module">Modulare Systemkomponente</string>
     <string name="av_tag_type_overlay">Laufzeitressourcen-Overlay (RRO)</string>
@@ -164,6 +166,7 @@
     <string name="org_coll_option_del">Sammlung löschen</string>
     <string name="org_coll_del_title">Sammlung löschen</string>
     <string name="org_coll_installed_sum">Zusammenfassung der installierten Apps (%s)</string>
+    <string name="org_coll_groups_sum">%d Gruppen | %d App-Einträge</string>
     <string name="org_coll_def_coll">Unbenannte Sammlung</string>
     <string name="org_coll_def_group">Unbenannte Gruppe</string>
     <string name="org_coll_cat_coll">Kategorien</string>
@@ -186,4 +189,5 @@
     <string name="home_nav_item_updates">Startseite</string>
     <string name="home_nav_item_list">Apps</string>
     <string name="home_nav_item_org">Bibliothek</string>
+    <string name="home_nav_item_conn">Verbinden</string>
 </resources>

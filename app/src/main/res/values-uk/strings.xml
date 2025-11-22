@@ -78,7 +78,6 @@
     <string name="menuApiSortApiTime">Нещодавно оновлено</string>
     <string name="apiSdkTarget">Цільовий SDK</string>
     <string name="apiSdkMin">Мінімальний пакет SDK</string>
-    <string name="activityTextProcessingApp">Перегляд додатків Bnd</string>
     <string name="res_invalid_input">Неправильні дані</string>
     <string name="text_sort">Сортувати</string>
     <string name="text_refresh">Оновити</string>
@@ -161,6 +160,9 @@
     <string name="unit_desc_pin">шпилька</string>
     <string name="app_device_controls">Елементи керування Boundo</string>
     <string name="access_sys_usage">Дозволити Boundo отримати доступ до даних використання</string>
+    <string name="conn_content_title">З’єднання</string>
+    <string name="conn_dev_controls">Швидкий доступ з елементів керування пристроєм</string>
+    <string name="conn_dev_controls_desc">Системна інтеграція панелі елементів керування пристроєм</string>
     <string name="text_access_denied">Доступ заборонено</string>
     <string name="versatile_device_controls_at_hint_on">Проведіть пальцем, щоб налаштувати</string>
     <string name="versatile_device_controls_at_hint_off">Торкніться, щоб почати</string>

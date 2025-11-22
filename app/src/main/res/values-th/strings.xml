@@ -92,7 +92,6 @@
     <string name="menuApiSortApiTime">อัพเดทล่าสุด</string>
     <string name="apiSdkTarget">SDK เป้าหมาย</string>
     <string name="apiSdkMin">SDK ขั้นต่ำ</string>
-    <string name="activityTextProcessingApp">ดูแอพ Bnd</string>
     <string name="res_invalid_input">อินพุตไม่ถูกต้อง</string>
     <string name="text_sort">ประเภท</string>
     <string name="text_refresh">รีเฟรช</string>
@@ -159,6 +158,9 @@
     <string name="unit_desc_unavailable">ไม่มี</string>
     <string name="unit_desc_available">ที่มีจำหน่าย</string>
     <string name="unit_desc_pin">ปัก</string>
+    <string name="conn_content_title">การเชื่อมต่อ</string>
+    <string name="conn_dev_controls">การเข้าถึงด่วนจากส่วนควบคุมอุปกรณ์</string>
+    <string name="conn_dev_controls_desc">การผสานรวมระบบของแผงควบคุมอุปกรณ์</string>
     <string name="text_access_denied">ปฏิเสธการเข้าใช้</string>
     <string name="versatile_device_controls_at_hint_on">ปัดเพื่อปรับ</string>
     <string name="versatile_device_controls_at_hint_off">แตะเพื่อเริ่ม</string>

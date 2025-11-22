@@ -99,7 +99,6 @@
     <string name="apiInfoSubAiDes">Το Adaptive Icon προσαρμόζεται σε οποιοδήποτε σχήμα αντί να περιορίζεται σε ένα προκαθορισμένο</string>
     <string name="textBugLog">Το σφάλμα εντοπίστηκε στο αρχείο καταγραφής</string>
     <string name="tileColorful">Μείνετε πολύχρωμοι</string>
-    <string name="activityTextProcessingApp">Προβολή εφαρμογών Bnd</string>
     <string name="res_invalid_input">Μη έγκυρη εισαγωγή</string>
     <string name="text_sort">Είδος</string>
     <string name="textShareApk">Μοιραστείτε το APK αυτής της εφαρμογής με άλλους</string>
@@ -159,6 +158,9 @@
     <string name="instantManual">Πατήστε παρατεταμένα το εικονίδιο της εφαρμογής στο πρόγραμμα εκκίνησης για να εμφανίσετε συντομεύσεις εφαρμογών.\nΤραβήξτε προς τα κάτω τη σκιά ειδοποιήσεων, οι ρυθμίσεις εναλλαγής πάνω από την περιοχή ειδοποιήσεων είναι τα πλακίδια γρήγορων ρυθμίσεων που αναζητάτε.</string>
     <string name="unit_desc_av">• Ελέγξτε το επίπεδο API Android όλων των εφαρμογών και των εφαρμογών στη συσκευή\n• Ελέγξτε την υποστήριξη προσαρμοστικών εικονιδίων όλων των εφαρμογών\n• Στατιστικά API εφαρμογών\n• Εξαγωγή APK και εικονιδίων\n• Λεπτομέρειες πακέτου και λεπτομέρειες υπογραφής</string>
     <string name="prefExteriorForceDarkDescDetail">Το Force Dark είναι μια δυνατότητα για προγραμματιστές να εφαρμόζουν γρήγορα ένα σκοτεινό θέμα Με τη ρύθμιση forceDarkAllowed σε αληθινή, μια εφαρμογή λαμβάνει αυτόματα ένα σκοτεινό θέμα. Και ο προγραμματιστής θα τροποποιήσει περαιτέρω ορισμένα τμήματα της διεπαφής που δεν είναι ιδανικά και θα ορίσει forceDarkAllowed σε false σε αυτά τα τμήματα. Η ενεργοποίηση της παράκαμψης Force-dark θα κάνει το σύστημα να αγνοήσει την τιμή forceDarkAllowed, προκαλώντας μια καλή εφαρμογή σκοτεινού θέματος σε δυσλειτουργία.</string>
+    <string name="conn_content_title">Συνδέσεις</string>
+    <string name="conn_dev_controls">Γρήγορη πρόσβαση από τα στοιχεία ελέγχου συσκευής</string>
+    <string name="conn_dev_controls_desc">Ενσωμάτωση συστήματος του πίνακα στοιχείων ελέγχου συσκευής</string>
     <string name="text_access_denied">Δεν επιτρέπεται η πρόσβαση</string>
     <string name="versatile_device_controls_at_hint_on">Σύρετε για προσαρμογή</string>
     <string name="versatile_device_controls_at_hint_off">Πατήστε για να ξεκινήσετε</string>

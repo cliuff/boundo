@@ -92,7 +92,6 @@
     <string name="menuApiSortApiTime">Cập nhật gần đây</string>
     <string name="apiSdkTarget">SDK mục tiêu</string>
     <string name="apiSdkMin">SDK tối thiểu</string>
-    <string name="activityTextProcessingApp">Xem ứng dụng Bnd</string>
     <string name="res_invalid_input">Đâu vao không hợp lệ</string>
     <string name="text_sort">Sắp xếp</string>
     <string name="text_refresh">Làm tươi</string>
@@ -159,6 +158,9 @@
     <string name="unit_desc_unavailable">Không có sẵn</string>
     <string name="unit_desc_available">Có sẵn</string>
     <string name="unit_desc_pin">xỏ chốt</string>
+    <string name="conn_content_title">Kết nối</string>
+    <string name="conn_dev_controls">Truy cập nhanh từ các nút điều khiển thiết bị</string>
+    <string name="conn_dev_controls_desc">Tích hợp hệ thống bảng điều khiển thiết bị</string>
     <string name="text_access_denied">Quyền truy cập bị từ chối</string>
     <string name="versatile_device_controls_at_hint_on">Vuốt để điều chỉnh</string>
     <string name="versatile_device_controls_at_hint_off">Nhấn để bắt đầu</string>

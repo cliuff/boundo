@@ -110,6 +110,8 @@
     <string name="av_settings_diff">Історія розбіжностей запису програми</string>
     <string name="av_settings_diff_title">Історія відмінностей</string>
     <string name="av_settings_diff_minimized">%d порожніх записів згорнуто, торкніться, щоб показати їх</string>
+    <string name="av_settings_text_process">Запит вибраного тексту в Meta App</string>
+    <string name="av_settings_text_process_desc">Увімкнути загальносистемну інтеграцію в контекстне меню текстового поля</string>
     <string name="av_tag_system_core">Основний додаток системи</string>
     <string name="av_tag_system_module">Модульна складова системи</string>
     <string name="av_tag_type_overlay">Накладання ресурсів виконання (RRO)</string>
@@ -163,6 +165,7 @@
     <string name="org_coll_option_del">Видалити колекцію</string>
     <string name="org_coll_del_title">Видалити колекцію</string>
     <string name="org_coll_installed_sum">Зведення встановлених програм (%s)</string>
+    <string name="org_coll_groups_sum">%d груп | %d записів застосунків</string>
     <string name="org_coll_def_coll">Безіменна колекція</string>
     <string name="org_coll_def_group">Безіменна група</string>
     <string name="org_coll_cat_coll">Категорії</string>
@@ -185,4 +188,5 @@
     <string name="home_nav_item_updates">Головна</string>
     <string name="home_nav_item_list">Програми</string>
     <string name="home_nav_item_org">Бібліотека</string>
+    <string name="home_nav_item_conn">Підключити</string>
 </resources>

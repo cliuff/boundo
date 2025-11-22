@@ -111,6 +111,8 @@
     <string name="av_settings_diff">Ιστορικό διαφορών εγγραφής εφαρμογής</string>
     <string name="av_settings_diff_title">Ιστορία Διαφορών</string>
     <string name="av_settings_diff_minimized">Ελαχιστοποιήθηκαν %d κενές εγγραφές, πατήστε για να τις εμφανίσετε</string>
+    <string name="av_settings_text_process">Αναζήτηση επιλεγμένου κειμένου στο Meta App</string>
+    <string name="av_settings_text_process_desc">Ενεργοποίηση ενσωμάτωσης σε όλο το σύστημα στο μενού περιβάλλοντος πεδίου κειμένου</string>
     <string name="av_tag_system_core">Βασική εφαρμογή συστήματος</string>
     <string name="av_tag_system_module">Αρθρωτό εξάρτημα συστήματος</string>
     <string name="av_tag_type_overlay">Επικάλυψη πόρων χρόνου εκτέλεσης (RRO)</string>
@@ -164,6 +166,7 @@
     <string name="org_coll_option_del">Διαγραφή συλλογής</string>
     <string name="org_coll_del_title">Διαγραφή συλλογής</string>
     <string name="org_coll_installed_sum">Σύνοψη εγκατεστημένων εφαρμογών (%s)</string>
+    <string name="org_coll_groups_sum">%d ομάδες | %d εγγραφές εφαρμογών</string>
     <string name="org_coll_def_coll">Ανώνυμη συλλογή</string>
     <string name="org_coll_def_group">Ανώνυμη ομάδα</string>
     <string name="org_coll_cat_coll">Κατηγορίες</string>
@@ -186,4 +189,5 @@
     <string name="home_nav_item_updates">Αρχική</string>
     <string name="home_nav_item_list">Εφαρμογές</string>
     <string name="home_nav_item_org">Βιβλιοθήκη</string>
+    <string name="home_nav_item_conn">Σύνδεση</string>
 </resources>

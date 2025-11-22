@@ -111,6 +111,8 @@
     <string name="av_settings_diff">Histórico de diferenças de registro de aplicativo</string>
     <string name="av_settings_diff_title">Histórico de diferenças</string>
     <string name="av_settings_diff_minimized">%d registros vazios minimizados, toque para mostrá-los</string>
+    <string name="av_settings_text_process">Consultar texto selecionado no Meta App</string>
+    <string name="av_settings_text_process_desc">Ativar integração em todo o sistema no menu de contexto do campo de texto</string>
     <string name="av_tag_system_core">Aplicativo principal do sistema</string>
     <string name="av_tag_system_module">Componente do sistema modular</string>
     <string name="av_tag_type_overlay">Sobreposição de recursos de tempo de execução (RRO)</string>
@@ -164,6 +166,7 @@
     <string name="org_coll_option_del">Excluir coleção</string>
     <string name="org_coll_del_title">Excluir coleção</string>
     <string name="org_coll_installed_sum">Resumo de aplicativos instalados (%s)</string>
+    <string name="org_coll_groups_sum">%d grupos | %d registos de aplicações</string>
     <string name="org_coll_def_coll">Coleção sem nome</string>
     <string name="org_coll_def_group">Grupo sem nome</string>
     <string name="org_coll_cat_coll">Categorias</string>
@@ -186,4 +189,5 @@
     <string name="home_nav_item_updates">Início</string>
     <string name="home_nav_item_list">Aplicativos</string>
     <string name="home_nav_item_org">Biblioteca</string>
+    <string name="home_nav_item_conn">Ligar</string>
 </resources>

@@ -94,7 +94,6 @@
     <string name="menuApiSortApiTime">تم تحديثه مؤخرا</string>
     <string name="apiSdkTarget">الهدف SDK</string>
     <string name="apiSdkMin">الحد الأدنى من SDK</string>
-    <string name="activityTextProcessingApp">عرض تطبيقات Bnd</string>
     <string name="res_invalid_input">مدخل غير صالح</string>
     <string name="text_sort">فرز</string>
     <string name="text_refresh">تحديث</string>
@@ -161,6 +160,9 @@
     <string name="unit_desc_available">متاح</string>
     <string name="unit_desc_unavailable">غير متوفره</string>
     <string name="unit_desc_pin">ثابت</string>
+    <string name="conn_content_title">الاتصالات</string>
+    <string name="conn_dev_controls">وصول سريع من عناصر التحكم بالجهاز</string>
+    <string name="conn_dev_controls_desc">دمج نظام لوحة عناصر التحكم بالجهاز</string>
     <string name="text_access_denied">تم الرفض</string>
     <string name="versatile_device_controls_at_hint_on">انتقد لضبط</string>
     <string name="versatile_device_controls_at_hint_off">انقر للبدء</string>

@@ -99,7 +99,6 @@
     <string name="apiInfoSubAiDes">Uyarlanabilir Simge, önceden tanımlanmış bir şekil ile sınırlanmak yerine herhangi bir şekle uyum sağlar</string>
     <string name="textBugLog">Günlükte yakalanan hata</string>
     <string name="tileColorful">Renkli Kalın</string>
-    <string name="activityTextProcessingApp">Bnd uygulamalarını görüntüleme</string>
     <string name="res_invalid_input">Geçersiz Giriş</string>
     <string name="text_sort">Çeşit</string>
     <string name="textShareApk">Bu uygulamanın APK\'sını başkalarıyla paylaşın</string>
@@ -159,6 +158,9 @@
     <string name="instantManual">Uygulama Kısayollarını göstermek için başlatıcıdaki uygulama simgesine uzun basın.\nBildirim gölgesini aşağı çekin, bildirim alanının üstündeki ayarlar arasında aradığınız Hızlı Ayarlar Döşemeleri bulunur.</string>
     <string name="unit_desc_av">• Cihazdaki tüm uygulamaların ve uygulamaların Android API seviyesini kontrol edin\n• Tüm uygulamaların Uyarlanabilir Simge desteğini kontrol edin\n• Uygulama API\'sı istatistikleri\n• APK ve simge çıkarma\n• Paket ayrıntıları ve imza ayrıntıları</string>
     <string name="prefExteriorForceDarkDescDetail">Force Dark, geliştiricilerin karanlık bir temayı hızla uygulamalarını sağlayan bir özelliktir. ForceDarkAllowed değerini true olarak ayarlayarak bir uygulama otomatik olarak karanlık bir tema alır. Ve geliştirici ayrıca arabirimin ideal olmayan bazı bölümlerini değiştirecek ve forceDarkAllowed\'i bu bölümlerde false olarak ayarlayacaktır. Geçersiz Kılmayı Zorla seçeneğinin etkinleştirilmesi, sistemin forceDarkAllowed değerini yoksaymasına neden olarak iyi uygulanmış bir karanlık temanın arızalanmasına neden olur.</string>
+    <string name="conn_content_title">Bağlantılar</string>
+    <string name="conn_dev_controls">Cihaz kontrollerinden hızlı erişim</string>
+    <string name="conn_dev_controls_desc">Cihaz kontrolleri panelinin sistem entegrasyonu</string>
     <string name="text_access_denied">Erişim reddedildi</string>
     <string name="versatile_device_controls_at_hint_on">Ayarlamak için kaydırın</string>
     <string name="versatile_device_controls_at_hint_off">Başlamak için dokun</string>

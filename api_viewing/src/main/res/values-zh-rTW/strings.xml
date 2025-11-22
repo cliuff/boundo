@@ -127,6 +127,8 @@
     <string name="av_settings_diff">應用列表維護記錄</string>
     <string name="av_settings_diff_title">維護記錄</string>
     <string name="av_settings_diff_minimized">%d條空記錄已收起，點擊展示</string>
+    <string name="av_settings_text_process">在 Meta App 中查詢所選文字</string>
+    <string name="av_settings_text_process_desc">整合至系統範圍文字欄位內容選單</string>
     <string name="av_tag_system_core">系統核心應用</string>
     <string name="av_tag_system_module">模塊化系統組件</string>
     <string name="av_tag_type_overlay">運行時資源疊加層 (RRO)</string>
@@ -184,6 +186,7 @@
     <string name="org_coll_option_del">刪除應用程式集</string>
     <string name="org_coll_del_title">刪除應用程式集</string>
     <string name="org_coll_installed_sum">已安裝應用程式總覽 (%s)</string>
+    <string name="org_coll_groups_sum">%d 個群組 | %d 個應用程式記錄</string>
     <string name="org_coll_def_coll">未命名應用程式集</string>
     <string name="org_coll_def_group">未命名群組</string>
     <string name="org_coll_cat_coll">應用程式類別</string>
@@ -206,4 +209,5 @@
     <string name="home_nav_item_updates">首頁動態</string>
     <string name="home_nav_item_list">所有應用程式</string>
     <string name="home_nav_item_org">應用程式庫</string>
+    <string name="home_nav_item_conn">快捷連線</string>
 </resources>

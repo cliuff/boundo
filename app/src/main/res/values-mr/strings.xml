@@ -77,7 +77,6 @@
     <string name="menuApiSortApiTime">अलीकडे अद्यतनित</string>
     <string name="apiSdkTarget">लक्ष्य SDK</string>
     <string name="apiSdkMin">किमान SDK</string>
-    <string name="activityTextProcessingApp">Bnd अॅप्स पहा</string>
     <string name="res_invalid_input">अवैध इनपुट</string>
     <string name="text_sort">क्रमवारी लावा</string>
     <string name="text_refresh">रिफ्रेश करा</string>
@@ -161,6 +160,9 @@
     <string name="unit_desc_pin">पिन</string>
     <string name="app_device_controls">Boundo नियंत्रणे</string>
     <string name="access_sys_usage">बौंडोला वापर डेटामध्ये प्रवेश करण्याची अनुमती द्या</string>
+    <string name="conn_content_title">कनेक्शन</string>
+    <string name="conn_dev_controls">डिव्हाइस नियंत्रणांमधून जलद ॲक्सेस</string>
+    <string name="conn_dev_controls_desc">डिव्हाइस नियंत्रण पॅनलची सिस्टम इंटिग्रेशन</string>
     <string name="text_access_denied">प्रवेश नाकारला</string>
     <string name="versatile_device_controls_at_hint_on">समायोजित करण्यासाठी स्वाइप करा</string>
     <string name="versatile_device_controls_at_hint_off">सुरू करण्यासाठी टॅप करा</string>

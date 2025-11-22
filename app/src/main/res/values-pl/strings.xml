@@ -77,7 +77,6 @@
     <string name="menuApiSortApiTime">Ostatnio zaktualizowane</string>
     <string name="apiSdkTarget">Docelowy pakiet SDK</string>
     <string name="apiSdkMin">Minimalny pakiet SDK</string>
-    <string name="activityTextProcessingApp">Zobacz aplikacje Bnd</string>
     <string name="res_invalid_input">Nieprawidłowe dane wejściowe</string>
     <string name="text_sort">Sortować</string>
     <string name="text_refresh">Odświeżać</string>
@@ -161,6 +160,9 @@
     <string name="unit_desc_pin">Szpilka</string>
     <string name="app_device_controls">Kontrola Boundo</string>
     <string name="access_sys_usage">Zezwól Boundo na dostęp do danych użytkowania</string>
+    <string name="conn_content_title">Połączenia</string>
+    <string name="conn_dev_controls">Szybki dostęp z poziomu elementów sterowania urządzeniem</string>
+    <string name="conn_dev_controls_desc">Integracja systemowa panelu elementów sterowania urządzeniem</string>
     <string name="text_access_denied">Brak dostępu</string>
     <string name="versatile_device_controls_at_hint_on">Przesuń, aby dostosować</string>
     <string name="versatile_device_controls_at_hint_off">Naciśnij aby zacząć</string>

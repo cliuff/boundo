@@ -92,7 +92,6 @@
     <string name="menuApiSortApiTime">Atualizado recentemente</string>
     <string name="apiSdkTarget">SDK de destino</string>
     <string name="apiSdkMin">SDK mínimo</string>
-    <string name="activityTextProcessingApp">Ver aplicações Bnd</string>
     <string name="res_invalid_input">Entrada inválida</string>
     <string name="text_sort">Ordenar</string>
     <string name="text_refresh">Atualizar</string>
@@ -159,6 +158,9 @@
     <string name="unit_desc_available">acessível</string>
     <string name="unit_desc_unavailable">Indisponível</string>
     <string name="unit_desc_pin">fixar</string>
+    <string name="conn_content_title">Conexões</string>
+    <string name="conn_dev_controls">Acesso rápido a partir dos controles do dispositivo</string>
+    <string name="conn_dev_controls_desc">Integração do sistema do painel de controles do dispositivo</string>
     <string name="text_access_denied">Acesso negado</string>
     <string name="versatile_device_controls_at_hint_on">Deslize para ajustar</string>
     <string name="versatile_device_controls_at_hint_off">Clique para começar</string>
