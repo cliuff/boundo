@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Meta App</string>
+    <string name="app_name">元应用</string>
     <string name="avPrefSweet">显示甜点</string>
     <string name="avPrefIncludeDisabled">包含已禁用的应用</string>
     <string name="apiViewing">应用 API</string>
