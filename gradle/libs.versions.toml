@@ -13,17 +13,16 @@ androidxTestEspresso = "3.6.1"
 
 androidxCore = "1.17.0"
 androidxCoreSplashScreen = "1.1.0-rc01"
-androidxComposeBom = "2025.09.00"
+androidxComposeBom = "2025.11.01"
 androidxActivity = "1.11.0"
 androidxFragment = "1.8.9"
 androidxLifecycle = "2.9.4"
 
 androidxAppcompat = "1.7.1"
 androidxRoom = "2.7.2"
-androidxNavigation = "2.9.4"
+androidxNavigation = "2.9.6"
 androidxCoreTesting = "2.2.0"
-androidxWindow = "1.4.0"
-androidxMaterial3Adaptive = "1.2.0-rc01"
+androidxWindow = "1.5.1"
 
 androidxDrawerLayout = "1.2.0"
 androidxSwipeRefreshLayout = "1.1.0"
@@ -42,7 +41,7 @@ androidxDocumentFile = "1.1.0"
 # This dependency is for the Wear UI Library,
 # which has classes that exemplify best practices
 androidxWear = "1.3.0"
-androidxWearCompose = "1.5.1"
+androidxWearCompose = "1.5.5"
 googleHorologist = "0.7.15"
 
 googleTruth = "1.1.3"
@@ -82,7 +81,7 @@ androidxTestEspresso = { module = "androidx.test.espresso:espresso-core", versio
 androidxCore = { module = "androidx.core:core", version.ref = "androidxCore" }
 androidxCoreKtx = { module = "androidx.core:core-ktx", version.ref = "androidxCore" }
 androidxCoreSplashScreen = { module = "androidx.core:core-splashscreen", version.ref = "androidxCoreSplashScreen" }
-androidxComposeBom = { module = "androidx.compose:compose-bom-beta", version.ref = "androidxComposeBom" }
+androidxComposeBom = { module = "androidx.compose:compose-bom", version.ref = "androidxComposeBom" }
 androidxComposeRuntimeLiveData = { module = "androidx.compose.runtime:runtime-livedata" }
 androidxComposeFoundation = { module = "androidx.compose.foundation:foundation" }
 androidxComposeUi = { module = "androidx.compose.ui:ui" }
@@ -104,9 +103,9 @@ androidxAppcompat = { module = "androidx.appcompat:appcompat", version.ref = "an
 androidxFragment = { module = "androidx.fragment:fragment-ktx", version.ref = "androidxFragment" }
 androidxFragmentCompose = { module = "androidx.fragment:fragment-compose", version.ref = "androidxFragment" }
 androidxWindow = { module = "androidx.window:window", version.ref = "androidxWindow" }
-androidx-material3-adaptive = { module = "androidx.compose.material3.adaptive:adaptive", version.ref = "androidxMaterial3Adaptive" }
-androidx-material3-adaptive-layout = { module = "androidx.compose.material3.adaptive:adaptive-layout", version.ref = "androidxMaterial3Adaptive" }
-androidx-material3-adaptive-navigation = { module = "androidx.compose.material3.adaptive:adaptive-navigation", version.ref = "androidxMaterial3Adaptive" }
+androidx-material3-adaptive = { module = "androidx.compose.material3.adaptive:adaptive" }
+androidx-material3-adaptive-layout = { module = "androidx.compose.material3.adaptive:adaptive-layout" }
+androidx-material3-adaptive-navigation = { module = "androidx.compose.material3.adaptive:adaptive-navigation" }
 
 androidxDrawerLayout = { module = "androidx.drawerlayout:drawerlayout", version.ref = "androidxDrawerLayout" }
 androidxSwipeRefreshLayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "androidxSwipeRefreshLayout" }

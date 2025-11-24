@@ -36,7 +36,9 @@ google-services.json
 doconfig/custom.properties
 doconfig/bundletool.jar
 !**/src/**/build
+.idea/AndroidProjectSystem.xml
 .idea/deploymentTargetSelector.xml
+.idea/deviceManager.xml
 .idea/inspectionProfiles
 .idea/migrations.xml
 .idea/markdown-navigator
