@@ -31,7 +31,6 @@ jobs:
         with:
           java-version: '17'
           distribution: 'zulu'
-          cache: gradle
 
       - name: Setup Gradle wrapper
         run: chmod +x ./gradlew
@@ -54,32 +53,17 @@ jobs:
         uses: actions/cache@v4
         with:
           path: doconfig/bundletool.jar
-          key: ${{ runner.os }}-bundletool-v1.18.1
+          key: ${{ runner.os }}-bundletool-v1.18.2
 
       - name: Setup BundleTool
         if: steps.bundletool-cache.outputs.cache-hit != 'true'
         uses: dsaltares/fetch-gh-release-asset@master
         with:
           repo: 'google/bundletool'
-          version: 'tags/1.18.1'
-          file: 'bundletool-all-1.18.1.jar'
+          version: 'tags/1.18.2'
+          file: 'bundletool-all-1.18.2.jar'
           target: 'doconfig/bundletool.jar'
           token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Cache Gradle Wrapper
-        uses: actions/cache@v4
-        with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
-
-      # Cache Gradle dependencies to speed up builds
-      - name: Cache Gradle dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
 
       - name: Get commit hash and count
         run: |
