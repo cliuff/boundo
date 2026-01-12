@@ -15,6 +15,7 @@ dependencyResolutionManagement {
     }
 }
 
+include(":mods:art")
 include(":mods:core")
 include(":mods:org")
 include(":app", ":api_viewing", ":wearable")
