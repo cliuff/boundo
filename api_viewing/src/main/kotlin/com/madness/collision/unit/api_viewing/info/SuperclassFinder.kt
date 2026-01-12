@@ -48,14 +48,17 @@ class DexLibSuperFinder : SuperclassFinder {
     override fun resolve(apks: List<String>, names: Set<String>): Set<String> {
         if (apks.isEmpty()) return names
         if (names.isEmpty()) return emptySet()
+        val typeNames = names.mapTo(HashSet(names.size)) { n ->
+            "L" + n.replace('.', '/') + ";"
+        }
         val superclasses = ArrayList<String>(names.size)
         try {
             apk@ for (apkPath in apks) {
                 dex@ for (ent in DexContainerFactory.load(apkPath).dexEntrySeq) {
                     klass@ for (classDef in ent.dexFile.classes) {
-                        val name = mapToName(classDef.type) ?: continue@klass
-                        if (name in names) {
-                            val superOrThis = classDef.superclass?.let(::mapToName) ?: name
+                        if (classDef.type in typeNames) {
+                            val superOrThis = classDef.superclass?.let(::mapToName)
+                                ?: mapToName(classDef.type) ?: continue@klass
                             superclasses.add(superOrThis)
                         }
                         if (superclasses.size == names.size) break@apk

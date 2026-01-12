@@ -20,5 +20,8 @@ android {
 
 dependencies {
     implementation(libs.androidxCoreKtx)
+
+    implementation(libs.google.smali)
+
     testImplementation(libs.junit4)
 }
