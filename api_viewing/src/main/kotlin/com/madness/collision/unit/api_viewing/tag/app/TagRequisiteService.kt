@@ -29,6 +29,7 @@ import android.util.Log
 import com.madness.collision.unit.api_viewing.info.LoadSuperFinder
 
 /** Service to run in a separate process to isolate native exceptions. */
+@Deprecated("")
 class TagRequisiteService : Service() {
     private val tagMessenger = kotlin.run {
         val looper = Looper.myLooper()

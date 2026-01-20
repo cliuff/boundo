@@ -38,6 +38,7 @@ import kotlin.concurrent.thread
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
+@Deprecated("")
 class TagRequisiteRunner(private val context: Context) {
     private var serviceMessenger: Messenger? = null
     private val serviceConn = object : ServiceConnection {
