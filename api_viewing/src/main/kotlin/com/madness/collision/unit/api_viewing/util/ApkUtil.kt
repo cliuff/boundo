@@ -26,6 +26,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.runBlocking
 import java.io.File
 import java.util.TreeSet
 import java.util.zip.ZipFile
@@ -70,22 +71,7 @@ object ApkUtil {
         return "R.$type.$targetEntry" to resultList
     }
 
-    fun getThirdPartyPkg(path: String, ownPkg: String): List<String> {
-        return getThirdPartyPkg(File(path), ownPkg)
-    }
-
-    fun getThirdPartyPkg(file: File, ownPkg: String, removeInternals: Boolean = true): List<String> {
-        val pkgFilter = ThirdPartyPkgFilter(ownPkg, removeInternals)
-        val rewriteReverser = R8RewriteReverser()
-        return DexResolver.loadDexLib(file.path) { pkgFilter.map(it)?.let(rewriteReverser::map) }
-            .logApkError(file.path, ownPkg).getOrNull().orEmpty()
-    }
-
     data class PkgPartitions(val filtered: List<String>, val self: List<String>, val minimized: List<String>)
-
-    fun getThirdPartyPkgPartitions(path: String, ownPkg: String): PkgPartitions {
-        return getThirdPartyPkgPartitions(File(path), ownPkg)
-    }
 
     suspend fun getThirdPartyPkgPartitions(pathList: List<String>, ownPkg: String): PkgPartitions {
         val files = pathList.mapNotNull { p -> File(p).takeIf { it.exists() && it.canRead() } }
@@ -105,7 +91,7 @@ object ApkUtil {
         }
     }
 
-    fun getThirdPartyPkgPartitions(file: File, ownPkg: String, removeInternals: Boolean = true): PkgPartitions {
+    suspend fun getThirdPartyPkgPartitions(file: File, ownPkg: String, removeInternals: Boolean = true): PkgPartitions {
         val pkgFilter = ThirdPartyPkgFilter(ownPkg, removeInternals)
         val rewriteReverser = R8RewriteReverser()
         val pkgList = DexResolver.loadDexLib(file.path, rewriteReverser::map)
@@ -141,7 +127,7 @@ object ApkUtil {
     }
 
     fun checkPkg(file: File, packageName: String): Boolean {
-        return DexResolver.findPackage(file.path, packageName)
+        return runBlocking(Dispatchers.IO) { DexResolver.findPackage(file.path, packageName) }
             .onFailure { e ->
                 val eMsg = e::class.simpleName + ": " + e.message
                 val cause = e.cause?.message?.let { " BY $it" } ?: ""
@@ -152,7 +138,7 @@ object ApkUtil {
     }
 
     fun checkPkg(path: String, vararg packageName: String): BooleanArray {
-        return DexResolver.findPackages(path, *packageName)
+        return runBlocking(Dispatchers.IO) { DexResolver.findPackages(path, *packageName) }
             .onFailure { e ->
                 val eMsg = e::class.simpleName + ": " + e.message
                 val cause = e.cause?.message?.let { " BY $it" } ?: ""

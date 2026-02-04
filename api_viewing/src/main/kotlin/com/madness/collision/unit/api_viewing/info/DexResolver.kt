@@ -19,6 +19,8 @@ package com.madness.collision.unit.api_viewing.info
 import com.android.tools.smali.dexlib2.DexFileFactory
 import com.android.tools.smali.dexlib2.Opcodes
 import com.android.tools.smali.dexlib2.dexbacked.ZipDexContainer
+import io.cliuff.boundo.art.apk.dex.AsyncDexContainer
+import kotlinx.coroutines.flow.any
 import java.io.File
 import java.util.LinkedList
 import java.util.TreeSet
@@ -56,26 +58,38 @@ object DexContainerFactory {
         return EnumDexContainer(file, opcodes).takeIf { it.isZipFile }
             ?: throw RuntimeException("not a zip file")
     }
+
+    fun loadAsync(apkPath: String, minSdk: Int = -1): AsyncDexContainer {
+        val file = File(apkPath)
+        if (file.exists().not()) throw RuntimeException("file does not exist")
+        val opcodes = if (minSdk >= 0) Opcodes.forApi(minSdk) else Opcodes.getDefault()
+        return AsyncDexContainer(file, opcodes)
+    }
 }
 
 object DexResolver {
+    private object DexContainerFactory {
+        fun load(apkPath: String) =
+            com.madness.collision.unit.api_viewing.info.DexContainerFactory.loadAsync(apkPath)
+    }
+
     // microbenchmark results, smali-dexlib2 vs. apk-parser:
     //   reduction in execution time: over 20% on Pixel 4, Pixel 3
     //   reduction in allocations   : over 55% on Pixel 4, Pixel 3
-    fun loadDexLib(apkPath: String) = kotlin.runCatching {
+    suspend fun loadDexLib(apkPath: String) = kotlin.runCatching {
         val pkgSet = TreeSet<String>()
-        DexContainerFactory.load(apkPath).dexEntrySeq.forEach { entry ->
-            entry.dexFile.classes.mapNotNullTo(pkgSet) { mapToPackage(it.type) }
+        DexContainerFactory.load(apkPath).getDexFileFlow().collect { dexFile ->
+            dexFile.classes.mapNotNullTo(pkgSet) { mapToPackage(it.type) }
         }
         pkgSet.toList()
     }
 
-    fun loadDexLib(apkPath: String, convert: (String) -> String?) = kotlin.runCatching {
+    suspend fun loadDexLib(apkPath: String, convert: (String) -> String?) = kotlin.runCatching {
         // many class types will share the same package name,
         // use a tree set to eliminate duplicates and sort them
         val pkgSet = TreeSet<String>()
-        DexContainerFactory.load(apkPath).dexEntrySeq.forEach { entry ->
-            entry.dexFile.classes.mapNotNullTo(pkgSet) { mapToPackage(it.type) }
+        DexContainerFactory.load(apkPath).getDexFileFlow().collect { dexFile ->
+            dexFile.classes.mapNotNullTo(pkgSet) { mapToPackage(it.type) }
         }
         // apply data conversion on the distinct set to avoid duplicated operations,
         // use the tree set again to get distinct and sorted data set after conversion
@@ -93,21 +107,21 @@ object DexResolver {
         pkgSet.toList()
     }
 
-    fun findPackage(apkPath: String, targetPkg: String) = kotlin.runCatching {
-        DexContainerFactory.load(apkPath).dexEntrySeq.forEach { entry ->
-            for (classDef in entry.dexFile.classes) {
+    suspend fun findPackage(apkPath: String, targetPkg: String) = kotlin.runCatching {
+        DexContainerFactory.load(apkPath).getDexFileFlow().any { dexFile ->
+            for (classDef in dexFile.classes) {
                 val pkg = mapToPackage(classDef.type) ?: continue
-                if (pkg.startsWith(targetPkg)) return@runCatching true
+                if (pkg.startsWith(targetPkg)) return@any true
             }
+            false
         }
-        false
     }
 
-    fun findPackages(apkPath: String, vararg targetPkg: String) = kotlin.runCatching {
+    suspend fun findPackages(apkPath: String, vararg targetPkg: String) = kotlin.runCatching {
         val result = BooleanArray(targetPkg.size)
-        DexContainerFactory.load(apkPath).dexEntrySeq.forEach { entry ->
+        DexContainerFactory.load(apkPath).getDexFileFlow().any { dexFile ->
             var complete: Boolean
-            for (classDef in entry.dexFile.classes) {
+            for (classDef in dexFile.classes) {
                 val pkg = mapToPackage(classDef.type) ?: continue
                 complete = true
                 for (i in targetPkg.indices) {
@@ -115,8 +129,9 @@ object DexResolver {
                     if (pkg.startsWith(targetPkg[i])) result[i] = true
                     else complete = false
                 }
-                if (complete) return@runCatching result
+                if (complete) return@any true
             }
+            false
         }
         result
     }
