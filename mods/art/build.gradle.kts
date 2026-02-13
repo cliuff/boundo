@@ -21,6 +21,9 @@ android {
 dependencies {
     implementation(libs.androidxCoreKtx)
 
+    // override the version of transitive dependency in androidx.core, etc.
+    implementation(libs.kotlinCoroutines)
+    implementation(libs.kotlinStdlib)
     implementation(libs.google.smali)
 
     testImplementation(libs.junit4)

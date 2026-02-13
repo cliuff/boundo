@@ -17,6 +17,9 @@ android {
 dependencies {
     implementation(libs.androidxCoreKtx)
 
+    // override the version of transitive dependency in androidx.core, coil, etc.
+    implementation(libs.kotlinCoroutines)
+    implementation(libs.kotlinStdlib)
     implementation(libs.coil)
     implementation(libs.appIconLoader)
 

@@ -1,5 +1,4 @@
 import com.cliuff.boundo.build.getCustomConfig
-import java.io.ByteArrayOutputStream
 
 plugins {
     alias(libs.plugins.android)
@@ -26,18 +25,14 @@ android {
     // ver.inc: property used by CI to enable incremental version by commit count
     val isIncVer = (findProperty("ver.inc") as? String)?.toBooleanStrictOrNull()
     if (isIncVer == true) {
-        val commitIncOutput = ByteArrayOutputStream()
-        val commitHashOutput = ByteArrayOutputStream()
-        exec {
+        val commitIncOutput = providers.exec {
             commandLine("git", "rev-list", "--count", "HEAD")
-            standardOutput = commitIncOutput
-        }
-        exec {
+        }.standardOutput.asText
+        val commitHashOutput = providers.exec {
             commandLine("git", "rev-parse", "--short", "HEAD")
-            standardOutput = commitHashOutput
-        }
-        verInc = commitIncOutput.toString().trim().toInt()
-        verCommit = commitHashOutput.toString().trim()
+        }.standardOutput.asText
+        verInc = commitIncOutput.get().trim().toInt()
+        verCommit = commitHashOutput.get().trim()
     }
 
     // higher version supports older SDK versions

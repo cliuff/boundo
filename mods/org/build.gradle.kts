@@ -27,5 +27,9 @@ dependencies {
     implementation(libs.androidxRoom)
     ksp(libs.androidxRoomCompiler)
 
+    // override the version of transitive dependency in androidx.core, etc.
+    implementation(libs.kotlinCoroutines)
+    implementation(libs.kotlinStdlib)
+
     testImplementation(libs.junit4)
 }
