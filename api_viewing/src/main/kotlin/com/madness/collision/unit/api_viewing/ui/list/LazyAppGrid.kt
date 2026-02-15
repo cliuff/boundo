@@ -90,7 +90,8 @@ fun LazyAppGrid(
             3.dp + paddingStart.coerceAtLeast(7.dp) to 3.dp + paddingEnd.coerceAtLeast(7.dp)
         itemsIndexed(
             apps,
-            key = { _, app -> app.appPackage.basePath },
+            // caution: archived apps have empty path, use pkg name in such case
+            key = { _, app -> app.appPackage.basePath.ifEmpty(app::packageName) },
             contentType = { _, _ -> "App" }) { i, app ->
             val idxInLine = if (maxSpan <= 1) 0 else i % maxSpan
             AppListItem(

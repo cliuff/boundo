@@ -24,6 +24,7 @@ import com.madness.collision.util.os.OsUtils
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
 import kotlin.collections.set
 import kotlin.coroutines.resume
@@ -63,7 +64,15 @@ class DeviceManager(useProxy: Boolean = true): AutoCloseable {
                 OP_CONNECT -> if (device in proxy.connectedDevices) continue
                 OP_DISCONNECT -> if (device !in proxy.connectedDevices) continue
             }
-            val re = methods[profile]?.get(operation)?.invoke(proxy, device) == true
+            val re = try {
+                methods[profile]?.get(operation)?.invoke(proxy, device) == true
+            } catch (e: InvocationTargetException) {
+                // Reported by Samsung SM-S921B, SM-S156V, Xiaomi 25060RK16C, Moto G (API 36).
+                // Caused by: java.lang.SecurityException:
+                // Neither user xxxx nor current process has android.permission.MODIFY_PHONE_STATE.
+                e.printStackTrace()
+                false
+            }
             isSuccess = if (isSuccess == null) re else (re && isSuccess == true)
         }
         return isSuccess ?: false

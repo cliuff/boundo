@@ -107,9 +107,14 @@ private fun specMapOf(vararg specs: DistroSpec) = specs.associateBy(DistroSpec::
 private fun getBuild(): DistroBuild {
     run oneUI@{
         val semPlatformInt = runCatching {
-            android.os.Build.VERSION::class.java
-                .getDeclaredField("SEM_PLATFORM_INT")
-                .getInt(null)
+            try {
+                android.os.Build.VERSION::class.java
+                    .getDeclaredField("SEM_PLATFORM_INT")
+                    .getInt(null)
+            } catch (e: NoSuchFieldException) {
+                System.err.println("DistroBuild: ${e.message}")
+                -1
+            }
         }.onFailure(Throwable::printStackTrace)
         val verCode = semPlatformInt.getOrDefault(-1)
         if (verCode <= 90000) return@oneUI
