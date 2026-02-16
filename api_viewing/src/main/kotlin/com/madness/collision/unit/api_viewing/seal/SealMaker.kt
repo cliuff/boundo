@@ -42,6 +42,7 @@ object SealMaker {
 
     fun getAndroidCodenameImageRes(letter: Char): Int {
         return when (letter) {
+            'C' -> MyR.drawable.seal_cinnamon_bun
             'b' -> MyR.drawable.seal_baklava
             'v' -> MyR.drawable.seal_v
             'u' -> MyR.drawable.seal_u
@@ -82,6 +83,7 @@ object SealMaker {
     private fun itemColorInfo(context: Context, apiLevel: Int, isAccent: Boolean, isForIllustration: Boolean = false): Int {
         val level = when (apiLevel) {
             OsUtils.DEV -> when (Utils.getDevCodenameLetter()) {
+                'C' -> OsUtils.CinnamonBun
                 'b' -> OsUtils.Baklava
                 'v' -> OsUtils.V
                 'u' -> OsUtils.U
@@ -94,6 +96,7 @@ object SealMaker {
             OsUtils.DEV -> when (Utils.getDevCodenameLetter()) {
                 else -> if (isAccent) "c5e8b0" else X.getColorHex(context, R.color.androidRobotGreenBack)
             }
+            OsUtils.CinnamonBun -> if (isAccent) "d9ade3" else "f8dafc"
             OsUtils.Baklava -> if (isAccent) "a3d1d5" else "d7f8fc"
             OsUtils.V -> if (isAccent) "bde1a4" else "e0ffd0"
             OsUtils.U -> if (isAccent) "a3c1d5" else "d7f0fb"

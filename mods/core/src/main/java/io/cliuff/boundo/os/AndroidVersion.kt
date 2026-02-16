@@ -56,6 +56,7 @@ enum class OS(val api: Int, val versionName: String, val codename: String) {
     U         (Code.UPSIDE_DOWN_CAKE,       "14",          "Upside Down Cake"),
     V         (Code.VANILLA_ICE_CREAM,      "15",          "Vanilla Ice Cream"),
     Baklava   (Code.BAKLAVA,                "16",          "Baklava"),
+    CinnamonBun (37,                        "17",          "Cinnamon Bun"),
 ;
 
     fun getMajorVersionName(): Int =

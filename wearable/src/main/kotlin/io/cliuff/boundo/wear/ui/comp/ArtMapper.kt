@@ -28,6 +28,7 @@ object ArtMapper {
 
     fun getItemColorAccent(os: OS?): Int =
         when (os) {
+            OS.CinnamonBun -> 0xffd9ade3
             OS.Baklava -> 0xffa3d1d5
             OS.V -> 0xffbde1a4
             OS.U -> 0xffa3c1d5
