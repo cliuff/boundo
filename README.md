@@ -15,8 +15,8 @@ Designed for Android enthusiasts, Meta-app is available on **Android** and **Wea
 **1.1 Requirements**
 
 1.1.1 Versions
-- Android Studio `Narwhal` (AGP `8.11`)
-- Java `17`, Kotlin `2.1.21`, Gradle `8.13`
+- Android Studio `Otter 3` (AGP `9.0`)
+- Java `17`, Kotlin `2.3.20`, Gradle `9.4`
 
 1.1.2 Configure project JDK for Android Studio
 - Open the Gradle settings from **Settings > Build, Execution, Deployment > Build Tools > Gradle**

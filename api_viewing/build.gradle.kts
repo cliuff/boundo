@@ -2,7 +2,6 @@ import com.cliuff.boundo.build.configLibCheckerRules
 
 plugins {
     alias(libs.plugins.android.dynamic.feature)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.ksp)
     // implement parcelable interface by using annotation
@@ -14,9 +13,6 @@ ksp {
 }
 
 android {
-    sourceSets {
-        getByName("main").java.srcDir("src/main/kotlin")
-    }
     // namespace is used by R and BuildConfig classes
     namespace = "com.madness.collision.unit.api_viewing"
     compileSdk = 36

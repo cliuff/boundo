@@ -2,15 +2,11 @@ import com.cliuff.boundo.build.getCustomConfig
 
 plugins {
     alias(libs.plugins.android)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 }
 
 android {
     buildToolsVersion = "36.0.0"
-    sourceSets {
-        getByName("main").java.srcDir("src/main/kotlin")
-    }
     val customConfig = getCustomConfig(project)
     val buildPackage = customConfig.buildPackage
     val configSigning = customConfig.signing != null
@@ -45,7 +41,7 @@ android {
         buildConfigField("String", "BUILD_PACKAGE", "\"$buildPackage\"")
         resValue("string", "buildPackage", buildPackage)
         // below: fix multi-locale support
-        resourceConfigurations.addAll(arrayOf(
+        androidResources.localeFilters.addAll(arrayOf(
             "ar",
             "bn", "bn-rBD",
             "de", "de-rDE",
@@ -113,6 +109,7 @@ android {
     }
     buildFeatures {
         buildConfig = true
+        resValues = true
         viewBinding = true
         compose = true
     }

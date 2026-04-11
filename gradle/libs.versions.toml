@@ -1,8 +1,8 @@
 [versions]
 # plugins
-androidGradlePlugin = "8.11.2"  # 8.11-Narwhal
-kotlin = "2.1.21"
-googleKsp = "2.1.21-2.0.1"
+androidGradlePlugin = "9.0.1"  # 9.0-Otter 3
+kotlin = "2.3.20"
+googleKsp = "2.3.6"
 
 kotlinCoroutines = "1.10.2"
 
@@ -189,7 +189,6 @@ googleWearable = { module = "com.google.android.wearable:wearable", version.ref 
 android = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 android-dynamic-feature = { id = "com.android.dynamic-feature", version.ref = "androidGradlePlugin" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 google-ksp = { id = "com.google.devtools.ksp", version.ref = "googleKsp" }
 room = { id = "androidx.room", version.ref = "androidxRoom" }
