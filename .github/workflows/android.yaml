@@ -89,11 +89,11 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: app-foss-apks-g${{ env.COMMIT_COUNT }}-${{ env.COMMIT_HASH }}
-          path: app/build/outputs/app-universal-foss.apks
+          path: app/build/outputs/apks/foss/universal.apk
 
       # If you want to upload the APK as an artifact
       - name: Upload APK as an artifact
         uses: actions/upload-artifact@v4
         with:
           name: app-release-apks-g${{ env.COMMIT_COUNT }}-${{ env.COMMIT_HASH }}
-          path: app/build/outputs/app-universal-release.apks
+          path: app/build/outputs/apks/release/universal.apk

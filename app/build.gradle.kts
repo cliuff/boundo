@@ -240,13 +240,19 @@ dependencies {
 }
 
 // Generate universal APK from AAB that includes necessary dynamic modules (dist:module in manifests).
-tasks.register("genUniversalApks") {
+tasks.register<Copy>("genUniversalApks") {
+    from(zipTree(file("build/outputs/app-universal-release.apks")))
+    into(file("build/outputs/apks/release"))
+
     tasks["printBundleToolVersion"].mustRunAfter("buildUniversalApks")
     dependsOn("buildUniversalApks", "printBundleToolVersion")
 }
 
 // Generate universal APK from AAB that includes necessary dynamic modules (dist:module in manifests).
-tasks.register("genFossApks") {
+tasks.register<Copy>("genFossApks") {
+    from(zipTree(file("build/outputs/app-universal-foss.apks")))
+    into(file("build/outputs/apks/foss"))
+
     tasks["printBundleToolVersion"].mustRunAfter("buildFossApks")
     dependsOn("buildFossApks", "printBundleToolVersion")
 }

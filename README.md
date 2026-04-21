@@ -33,12 +33,12 @@ Designed for Android enthusiasts, Meta-app is available on **Android** and **Wea
 **1.3 Build universal APKs (App API feature included, release variant)**
 - Follow section 1.2: configure signing & BundleTool
 - Run Gradle task from commandline `gradlew :app:genUniversalApks`
-- Look for `app/build/outputs/app-universal-release.apks` in this project
+- Look for `app/build/outputs/apks/release/universal.apk` in this project
 
 **1.4 Build FOSS version (less feature)**
 - Follow section 1.2: configure signing & BundleTool
 - Run Gradle task from commandline `gradlew :app:genFossApks`
-- Look for `app/build/outputs/app-universal-foss.apks` in this project
+- Look for `app/build/outputs/apks/foss/universal.apk` in this project
 
 **1.5 Commandline build environment**
 
