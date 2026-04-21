@@ -20,12 +20,15 @@ import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.only
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.madness.collision.R
 import com.madness.collision.chief.app.BoundoTheme
 import com.madness.collision.chief.layout.scaffoldWindowInsets
 import com.madness.collision.ui.comp.ClassicTopAppBar
 import com.madness.collision.util.dev.PreviewCombinedColorLayout
+import com.mikepenz.aboutlibraries.ui.compose.android.produceLibraries
 import com.mikepenz.aboutlibraries.ui.compose.m3.LibrariesContainer
 
 @Composable
@@ -42,7 +45,8 @@ fun OssLibsPage() {
         },
         contentWindowInsets = contentInsets,
     ) { innerPadding ->
-        LibrariesContainer(modifier = Modifier, contentPadding = innerPadding)
+        val libs by produceLibraries(R.raw.aboutlibraries)
+        LibrariesContainer(libraries = libs, modifier = Modifier, contentPadding = innerPadding)
     }
 }
 
