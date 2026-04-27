@@ -46,8 +46,17 @@ interface AppDao {
     /**
      * Retain records matching [packageNames] and delete all others
      */
-    @Query("DELETE FROM app WHERE packageName NOT IN (:packageNames)")
-    fun deleteNonExistPackageNames(packageNames: List<String>)
+    @Transaction
+    fun deleteNonExistPackageNames(packageNames: List<String>) {
+        val retainPkgNames = packageNames.toSet()
+        val existingPkgNames = selectAllPackageNames()
+        val nonExistPkgNames = existingPkgNames.filterNot(retainPkgNames::contains)
+        when {
+            nonExistPkgNames.isEmpty() -> return
+            nonExistPkgNames.size < 1000 -> deletePackageNames(nonExistPkgNames)
+            else -> nonExistPkgNames.chunked(999).forEach(::deletePackageNames)
+        }
+    }
 
     @Query("DELETE FROM app")
     fun deleteAll()
@@ -66,6 +75,9 @@ interface AppDao {
 
     @Query("SELECT * FROM app WHERE packageName IN (:packageNames)")
     fun selectApps(packageNames: List<String>): List<AppEntity>
+
+    @Query("SELECT packageName FROM app")
+    fun selectAllPackageNames(): List<String>
 
     @Query("SELECT COUNT(*) > 1 FROM app WHERE packageName = :packageName")
     fun selectIsExist(packageName: String): Boolean
